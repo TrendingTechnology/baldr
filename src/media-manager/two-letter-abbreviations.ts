@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { MetaSpec } from '@bldr/type-definitions'
+
 const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
@@ -46,4 +48,14 @@ export function checkForTwoLetterDir(filePath: string): boolean {
     return isValidTwoLetterAbbreviation(twoLetterDir)
   }
   return false
+}
+
+export function checkTypeAbbreviations(typeSpecs: MetaSpec.TypeCollection) {
+  for (const typeName in typeSpecs) {
+    const typeSpec = typeSpecs[<MetaSpec.TypeName>typeName]
+
+    if (typeSpec.abbreviation && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
+      throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`)
+    }
+  }
 }

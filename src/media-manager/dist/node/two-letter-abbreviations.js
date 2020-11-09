@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkForTwoLetterDir = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = void 0;
+exports.checkTypeAbbreviations = exports.checkForTwoLetterDir = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = void 0;
 const path_1 = __importDefault(require("path"));
 const abbreviations = {
     AB: 'Arbeitsblatt',
@@ -52,3 +52,12 @@ function checkForTwoLetterDir(filePath) {
     return false;
 }
 exports.checkForTwoLetterDir = checkForTwoLetterDir;
+function checkTypeAbbreviations(typeSpecs) {
+    for (const typeName in typeSpecs) {
+        const typeSpec = typeSpecs[typeName];
+        if (typeSpec.abbreviation && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
+            throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`);
+        }
+    }
+}
+exports.checkTypeAbbreviations = checkTypeAbbreviations;

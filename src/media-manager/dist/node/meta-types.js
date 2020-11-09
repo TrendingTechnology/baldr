@@ -22,6 +22,8 @@ const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
 const titles_1 = require("./titles");
 const meta_type_specs_1 = __importDefault(require("./meta-type-specs"));
+const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
+two_letter_abbreviations_1.checkTypeAbbreviations(meta_type_specs_1.default);
 /**
  * Check a file path against a regular expression to get the type name.
  *

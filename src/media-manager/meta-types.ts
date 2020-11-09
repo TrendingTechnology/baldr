@@ -21,6 +21,9 @@ import { MetaSpec, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
 import { DeepTitle } from './titles'
 import typeSpecs from './meta-type-specs'
+import { checkTypeAbbreviations } from './two-letter-abbreviations'
+
+checkTypeAbbreviations(typeSpecs)
 
 /**
  * Check a file path against a regular expression to get the type name.
