@@ -987,7 +987,7 @@ const general = <MetaSpec.Type> {
     }
   },
   initialize: function({ typeData, typeSpec }) {
-    if (!checkForTwoLetterDir(typeData.filePath)) {
+    if (typeData.filePath && !checkForTwoLetterDir(typeData.filePath)) {
       console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`)
       process.exit()
     }

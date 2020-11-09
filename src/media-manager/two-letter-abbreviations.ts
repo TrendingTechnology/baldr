@@ -44,7 +44,7 @@ export function checkForTwoLetterDir(filePath: string): boolean {
   // HB
   const twoLetterDir = pathSegments[pathSegments.length - 2]
   // Match asset type abbreviations, like AB, HB, NB
-  if (twoLetterDir.length == 2 || twoLetterDir.match(/[A-Z]{2,}/)) {
+  if (twoLetterDir && twoLetterDir.length == 2 && twoLetterDir.match(/[A-Z]{2,}/)) {
     return isValidTwoLetterAbbreviation(twoLetterDir)
   }
   return false

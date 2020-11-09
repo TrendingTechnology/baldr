@@ -966,7 +966,7 @@ const general = {
         }
     },
     initialize: function ({ typeData, typeSpec }) {
-        if (!two_letter_abbreviations_1.checkForTwoLetterDir(typeData.filePath)) {
+        if (typeData.filePath && !two_letter_abbreviations_1.checkForTwoLetterDir(typeData.filePath)) {
             console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`);
             process.exit();
         }
