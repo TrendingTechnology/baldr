@@ -26,7 +26,7 @@ const appNames = [
  */
 function buildElectronApp(cmd, appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        const appPath = path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'apps', appName);
         if (!fs_1.default.existsSync(appPath)) {
             throw new Error(`App path doesn’t exist for app “${appName}”.`);
         }

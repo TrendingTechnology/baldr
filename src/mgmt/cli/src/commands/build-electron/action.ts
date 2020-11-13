@@ -15,7 +15,7 @@ const appNames = [
  *   as the parent directory.
  */
 async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<void> {
-  const appPath = path.join(config.localRepo, 'src', appName)
+  const appPath = path.join(config.localRepo, 'src', 'vue', 'apps', appName)
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
