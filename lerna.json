@@ -1,6 +1,11 @@
 {
   "packages": [
-    "src/*"
+    "src/api/*",
+    "src/lib/browser/*",
+    "src/lib/node/*",
+    "src/mgmt/*",
+    "src/vue/apps/*",
+    "src/vue/components/*"
   ],
   "version": "independent"
 }

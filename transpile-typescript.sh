@@ -1,6 +1,5 @@
 #! /bin/sh
 
-
 _transpile() {
   echo "cd $1"
   cd "$1";
@@ -15,18 +14,18 @@ _transpile() {
 }
 
 # First low level modules
-DIRS="type-definitions
-presentation-masters
-presentation-parser
-config
-core-browser
-core-node
-tex-markdown-converter
-wikidata
-cli-utils
-media-manager
-media-server
-cli"
+DIRS="lib/browser/type-definitions
+lib/browser/presentation-masters
+lib/browser/presentation-parser
+lib/browser/core-browser
+lib/browser/tex-markdown-converter
+lib/node/core-node
+lib/node/config
+lib/node/wikidata
+lib/node/cli-utils
+lib/node/media-manager
+api/media-server
+mgmt/cli"
 
 for DIR in $DIRS; do
   DIR="$HOME/git-repositories/github/Josef-Friedrich/baldr/src/$DIR"
