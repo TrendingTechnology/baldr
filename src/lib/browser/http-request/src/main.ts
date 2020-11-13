@@ -10,7 +10,11 @@
 
 /* globals config location */
 
-import axios from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+
+import { Configuration } from '@bldr/type-definitions'
+
+declare const config: Configuration
 
 const restEndPoints = {
   local: {
@@ -29,8 +33,14 @@ const restEndPoints = {
  * A wrapper around Axios.
  */
 export class HttpRequest {
+
+  urlFillIn: string
+  baseUrl: string | null
+
+  private axiosInstance_: AxiosInstance
+
   /**
-   * @param {String} urlFillIn - A URL segment that is inserted between the base
+   * @param urlFillIn - A URL segment that is inserted between the base
    * URL and the last part of  the URL. For example
    *
    * - `baseUrl`: `localhost`
@@ -39,9 +49,9 @@ export class HttpRequest {
    *
    * results in the URL `http://localhost/api/media/query`.
    *
-   * @param {Boolean} remote - Connect to a remote REST endpoint.
+   * @param remote - Connect to a remote REST endpoint.
    */
-  constructor (urlFillIn, remote = false) {
+  constructor (urlFillIn: string, remote: boolean = false) {
     /**
      * A URL segment that is inserted between the base URL and the last part of
      * the URL. For example
@@ -71,10 +81,9 @@ export class HttpRequest {
       this.baseUrl = `https://${restEndPoints.remote.domain}`
     }
 
-    const axiosConfig = {
+    const axiosConfig: AxiosRequestConfig = {
       baseURL: this.baseUrl,
-      timeout: 10000,
-      crossDomain: true
+      timeout: 10000
     }
 
     if (remote) {
@@ -92,14 +101,10 @@ export class HttpRequest {
   }
 
   /**
-   * @property {String} url - A path relative to REST endpoints base URL. if
+   * @property url - A path relative to REST endpoints base URL. if
    *   `url` starts with `/` the `urlFillin` is not used.
-   *
-   * @private
-   *
-   * @returns {String}
    */
-  formatUrl_ (url) {
+  private formatUrl_ (url: string): string {
     if (this.urlFillIn && url.substr(0, 1) !== '/') {
       return `${this.urlFillIn}/${url}`
     }
@@ -118,19 +123,18 @@ export class HttpRequest {
    * }
    * </code></pre>
    *
-   * @param {Object} config - An Axios Request Config
-   *   (see {@link https://github.com/axios/axios#request-config})
-   * @property {String} method - For example `get`.
-   * @property {String} url - A path relative to the REST endpoints’ base URL.
-   *   If `url` starts with `/` the `urlFillin` is not used.
+   * @param config - An important property is `url`: A path relative to the REST
+   *   endpoints’ base URL. If `url` starts with `/` the `urlFillin` is not
+   *   used.
    */
-  request (config) {
+  request (config: string | AxiosRequestConfig): Promise<AxiosResponse<any>> {
     if (typeof config === 'string') {
       config = { method: 'get', url: config }
     }
     if (!('method' in config)) {
       config.method = 'get'
     }
+    if (config.url)
     config.url = this.formatUrl_(config.url)
     return this.axiosInstance_.request(config)
   }

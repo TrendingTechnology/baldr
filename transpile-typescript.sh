@@ -18,6 +18,7 @@ DIRS="lib/browser/type-definitions
 lib/browser/presentation-masters
 lib/browser/presentation-parser
 lib/browser/core-browser
+lib/browser/http-request
 lib/browser/tex-markdown-converter
 lib/node/core-node
 lib/node/config

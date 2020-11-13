@@ -11,7 +11,7 @@ import config from '@bldr/config'
  * @param appName - The name of the Vue app = parent folder of the app.
  */
 async function action (appName: string = 'lamp') {
-  const appPath = path.join(config.localRepo, 'src', appName)
+  const appPath = path.join(config.localRepo, 'src', 'vue', 'apps', appName)
   const cmd = new CommandRunner({ verbose: true })
   await cmd.exec(['npm', 'run', 'serve:webapp'], { cwd: appPath })
 }

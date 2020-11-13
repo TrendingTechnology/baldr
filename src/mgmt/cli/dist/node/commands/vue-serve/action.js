@@ -23,7 +23,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  */
 function action(appName = 'lamp') {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        const appPath = path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'apps', appName);
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         yield cmd.exec(['npm', 'run', 'serve:webapp'], { cwd: appPath });
     });
