@@ -11,10 +11,10 @@
  */
 
 // Third party packages.
-const WebSocket = require('ws')
+import WebSocket from 'ws'
 
 // Globals.
-const config = require('@bldr/config')
+import config from '@bldr/config'
 
 /**
  * Launch the web socket server.
@@ -35,6 +35,7 @@ function main () {
   })
 }
 
+// @ts-ignore
 if (require.main === module) {
   main()
 }

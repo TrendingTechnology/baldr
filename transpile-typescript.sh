@@ -20,12 +20,14 @@ lib/browser/presentation-parser
 lib/browser/core-browser
 lib/browser/http-request
 lib/browser/tex-markdown-converter
+lib/browser/songbook-core
 lib/node/core-node
 lib/node/config
 lib/node/wikidata
 lib/node/cli-utils
 lib/node/media-manager
 api/media-server
+api/wire
 mgmt/cli"
 
 for DIR in $DIRS; do
