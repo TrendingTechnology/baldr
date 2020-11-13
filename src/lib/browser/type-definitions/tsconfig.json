@@ -7,6 +7,5 @@
     "strict": true,
     "lib": ["es2020"]
   },
-  "include": ["main.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": ["src/*.ts"]
 }
