@@ -9,6 +9,5 @@
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["*.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": ["src/*.ts"]
 }

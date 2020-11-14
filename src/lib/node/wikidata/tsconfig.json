@@ -9,6 +9,5 @@
     "noImplicitAny": true,
     "moduleResolution": "node"
   },
-  "include": ["*.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": ["src/*.ts"]
 }
