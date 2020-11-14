@@ -37,25 +37,25 @@ interface SelectionSubsetOption {
     /**
      * `numeric`, or a truety value.
      */
-    sort: string | boolean;
+    sort?: string | boolean;
     /**
      * An array of elements to build a subset
      */
-    elements: any[];
+    elements?: any[];
     /**
      * If `elements` is undefined, an array with integers is created und
      * used as `elements`.
      */
-    elementsCount: number;
+    elementsCount?: number;
     /**
      *
      */
-    firstElementNo: number;
+    firstElementNo?: number;
     /**
      * Shift all selector numbers by this number: For example `-1`: `2-5`
      *   is internally treated as `1-4`
      */
-    shiftSelector: number;
+    shiftSelector?: number;
 }
 /**
  * Select a subset of elements by a string (`subsetSelector`). `1` is the first
@@ -71,8 +71,6 @@ interface SelectionSubsetOption {
  * - `7-`: All elements starting from `7` (`7-end`).
  *
  * @param options
- *
- * @returns {Array}
  */
 export declare function selectSubset(subsetSelector: string, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[];
 /**

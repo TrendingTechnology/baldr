@@ -284,6 +284,9 @@ export function formatToLocalDateTime(timeStampMsec) {
  * @param duration
  */
 export function convertDurationToSeconds(duration) {
+    if (typeof duration === 'number') {
+        return duration;
+    }
     if (typeof duration === 'string' && duration.match(/:/)) {
         const segments = duration.split(':');
         if (segments.length === 3) {

@@ -51,29 +51,29 @@ interface SelectionSubsetOption {
   /**
    * `numeric`, or a truety value.
    */
-  sort: string | boolean
+  sort?: string | boolean
 
   /**
    * An array of elements to build a subset
    */
-  elements: any[]
+  elements?: any[]
 
   /**
    * If `elements` is undefined, an array with integers is created und
    * used as `elements`.
    */
-  elementsCount: number
+  elementsCount?: number
 
   /**
    *
    */
-  firstElementNo: number
+  firstElementNo?: number
 
   /**
    * Shift all selector numbers by this number: For example `-1`: `2-5`
    *   is internally treated as `1-4`
    */
-  shiftSelector: number
+  shiftSelector?: number
 }
 
 /**
@@ -90,8 +90,6 @@ interface SelectionSubsetOption {
  * - `7-`: All elements starting from `7` (`7-end`).
  *
  * @param options
- *
- * @returns {Array}
  */
 export function selectSubset (subsetSelector: string, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[] {
   const subset = []
@@ -112,6 +110,7 @@ export function selectSubset (subsetSelector: string, { sort, elements, elements
     }
   }
 
+  if (!elements) elements = []
   if (!subsetSelector) return elements
 
   // 1, 3, 5 -> 1,3,5

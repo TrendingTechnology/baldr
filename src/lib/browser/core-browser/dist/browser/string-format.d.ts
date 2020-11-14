@@ -148,7 +148,7 @@ export declare function formatToLocalDateTime(timeStampMsec: number): string;
  *
  * @param duration
  */
-export declare function convertDurationToSeconds(duration: string): number;
+export declare function convertDurationToSeconds(duration: string | number): number;
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
  *

@@ -71,8 +71,6 @@ exports.msleep = msleep;
  * - `7-`: All elements starting from `7` (`7-end`).
  *
  * @param options
- *
- * @returns {Array}
  */
 function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
     const subset = [];
@@ -93,6 +91,8 @@ function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElem
             elements.push(i);
         }
     }
+    if (!elements)
+        elements = [];
     if (!subsetSelector)
         return elements;
     // 1, 3, 5 -> 1,3,5

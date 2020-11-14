@@ -1,0 +1,35 @@
+{
+  "name": "@bldr/test",
+  "version": "0.1.0",
+  "description": "Run some tests against some packages.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "ts-mocha --paths  test.ts"
+  },
+  "dependencies": {
+    "mocha": "8.1.3",
+    "@bldr/core-browser": "0.11.3"
+  },
+  "devDependencies": {
+    "@types/node": "12.12.2",
+    "@types/mocha": "5.2.7",
+    "ts-mocha": "8.0.0"
+  }
+}
