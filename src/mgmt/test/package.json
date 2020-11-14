@@ -21,7 +21,9 @@
     "access": "public"
   },
   "scripts": {
-    "test": "ts-mocha --paths  test.ts"
+    "test": "ts-mocha --paths src/specs/test.ts",
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
     "mocha": "8.1.3",
