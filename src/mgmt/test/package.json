@@ -27,8 +27,9 @@
   },
   "dependencies": {
     "mocha": "8.1.3",
-    "@bldr/core-browser": "0.11.3",
-    "@bldr/config": "^0.1.0"
+    "@bldr/core-browser": "*",
+    "@bldr/config": "*",
+    "@bldr/http-request": "*"
   },
   "devDependencies": {
     "@types/node": "12.12.2",
