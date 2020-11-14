@@ -30,7 +30,7 @@ export interface CliCommandSpec {
   /**
    * For example: `n`
    */
-  alias?: string,
+  alias?: string
 
   /**
    * For example:

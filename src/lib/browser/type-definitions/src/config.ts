@@ -102,7 +102,7 @@ export interface IconFontConfiguration {
 }
 
 interface AssetType {
-  allowedExtensions: string[],
+  allowedExtensions: string[]
   targetExtension: string
   color: string
 }

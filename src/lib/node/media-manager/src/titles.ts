@@ -57,7 +57,7 @@ class FolderTitle {
     if (subtitle) this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
-    this.hasPraesentation = hasPraesentation ? true : false
+    this.hasPraesentation = !!hasPraesentation
     this.level = level
   }
 }
@@ -67,17 +67,16 @@ class FolderTitle {
  * structure.
  */
 export class DeepTitle {
-
   /**
    * An array of folder titles. The last element is the folder title of
    * the `filePath`.
    */
-  private titles: FolderTitle[]
+  private readonly titles: FolderTitle[]
 
   /**
    * An array of folder names. This array is used to descent the folder tree.
    */
-  private folderNames: string[]
+  private readonly folderNames: string[]
 
   /**
    * @param filePath - The path of a file in a folder with `title.txt`
@@ -92,7 +91,7 @@ export class DeepTitle {
   /**
    * Get the first folder name and remove it from the array.
    */
-  shiftFolderName() {
+  shiftFolderName () {
     return this.folderNames.shift()
   }
 
@@ -212,7 +211,7 @@ export class DeepTitle {
    * The title. It is the first line in the text file `title.txt` in the
    * same folder as the constructor `filePath` file.
    */
-  get title (): string  {
+  get title (): string {
     return this.lastFolderTitleObject.title
   }
 
@@ -277,7 +276,6 @@ export class DeepTitle {
     if (!result.subtitle) delete result.subtitle
     return result
   }
-
 }
 
 interface SubTree {
@@ -343,7 +341,7 @@ export class TitleTree {
   /**
    * Get the tree.
    */
-  get (): SubTree  {
+  get (): SubTree {
     return this.subTree
   }
 }

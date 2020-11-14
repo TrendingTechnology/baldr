@@ -27,7 +27,7 @@ class FolderTitle {
             this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
-        this.hasPraesentation = hasPraesentation ? true : false;
+        this.hasPraesentation = !!hasPraesentation;
         this.level = level;
     }
 }

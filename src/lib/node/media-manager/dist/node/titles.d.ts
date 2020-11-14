@@ -46,11 +46,11 @@ export declare class DeepTitle {
      * An array of folder titles. The last element is the folder title of
      * the `filePath`.
      */
-    private titles;
+    private readonly titles;
     /**
      * An array of folder names. This array is used to descent the folder tree.
      */
-    private folderNames;
+    private readonly folderNames;
     /**
      * @param filePath - The path of a file in a folder with `title.txt`
      *   files.

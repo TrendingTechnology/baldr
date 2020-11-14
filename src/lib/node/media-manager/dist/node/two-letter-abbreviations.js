@@ -26,7 +26,7 @@ const abbreviations = {
     YT: 'YouTube-Video'
 };
 function isValidTwoLetterAbbreviation(abbreviation) {
-    return abbreviations[abbreviation] ? true : false;
+    return !!abbreviations[abbreviation];
 }
 exports.isValidTwoLetterAbbreviation = isValidTwoLetterAbbreviation;
 function getTwoLetterAbbreviations() {

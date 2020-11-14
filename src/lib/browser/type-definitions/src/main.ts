@@ -11,6 +11,6 @@ export * from './meta-spec'
 export * from './presentation'
 export * from './titles'
 
-export type StringIndexedObject = { [key: string]: any }
+export interface StringIndexedObject { [key: string]: any }
 
-export type StringIndexedStringObject = { [key: string]: string }
+export interface StringIndexedStringObject { [key: string]: string }

@@ -23,11 +23,11 @@ const abbreviations: { [key: string]: string } = {
   YT: 'YouTube-Video'
 }
 
-export function isValidTwoLetterAbbreviation(abbreviation: string): boolean {
-  return abbreviations[abbreviation] ? true : false
+export function isValidTwoLetterAbbreviation (abbreviation: string): boolean {
+  return !!abbreviations[abbreviation]
 }
 
-export function getTwoLetterAbbreviations(): string[] {
+export function getTwoLetterAbbreviations (): string[] {
   return Object.keys(abbreviations)
 }
 
@@ -39,7 +39,7 @@ export function getTwoLetterAbbreviations(): string[] {
  *
  * @return True if the file path is in a valid two letter directory, else false.
  */
-export function checkForTwoLetterDir(filePath: string): boolean {
+export function checkForTwoLetterDir (filePath: string): boolean {
   const pathSegments = filePath.split(path.sep)
   // HB
   const twoLetterDir = pathSegments[pathSegments.length - 2]
@@ -50,7 +50,7 @@ export function checkForTwoLetterDir(filePath: string): boolean {
   return false
 }
 
-export function checkTypeAbbreviations(typeSpecs: MetaSpec.TypeCollection) {
+export function checkTypeAbbreviations (typeSpecs: MetaSpec.TypeCollection) {
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[<MetaSpec.TypeName>typeName]
 
