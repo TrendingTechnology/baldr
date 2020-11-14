@@ -1,13 +1,16 @@
-process.env.TS_NODE_PROJECT = '../tsconfig.json';
-import 'ts-mocha'
+import path from 'path'
+
 import Mocha from  'mocha'
+
+import config from '@bldr/config'
 
 export function runTests() {
   const mocha = new Mocha();
-  mocha.addFile('./specs/test.ts')
+  config.localRepo
+  mocha.addFile(path.join(config.localRepo, 'src/mgmt/test/dist/node/specs/test.js'))
   mocha.run((failures) => {
     process.on('exit', () => {
-      process.exit(failures) // exit with non-zero status if there were failures
+      process.exit(failures)
     })
   })
 }

@@ -21,17 +21,17 @@
     "access": "public"
   },
   "scripts": {
-    "test": "ts-mocha --paths src/specs/test.ts",
+    "test": "npm run build && mocha dist/node/specs/test.js",
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
     "mocha": "8.1.3",
-    "@bldr/core-browser": "0.11.3"
+    "@bldr/core-browser": "0.11.3",
+    "@bldr/config": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "12.12.2",
-    "@types/mocha": "5.2.7",
-    "ts-mocha": "8.0.0"
+    "@types/mocha": "5.2.7"
   }
 }

@@ -28,7 +28,8 @@ lib/node/cli-utils
 lib/node/media-manager
 api/media-server
 api/wire
-mgmt/cli"
+mgmt/cli
+mgmt/test"
 
 for DIR in $DIRS; do
   DIR="$HOME/git-repositories/github/Josef-Friedrich/baldr/src/$DIR"

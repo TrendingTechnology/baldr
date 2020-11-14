@@ -149,6 +149,11 @@ export interface Configuration {
   doc: DocConfiguration
   http: HttpConfiguration
   iconFont: IconFontConfiguration
+
+  /**
+   * The path of the local development repository, for example
+   * `/home/jf/git-repositories/github/Josef-Friedrich/baldr`.
+   */
   localRepo: string
   mediaServer: MediaServerConfiguration
   songbook: SongbookConfiguration

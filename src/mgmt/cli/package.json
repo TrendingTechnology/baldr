@@ -37,6 +37,7 @@
     "@bldr/wikidata": "^0.1.0",
     "@bldr/type-definitions": "^0.1.0",
     "@bldr/audio-metadata": "^0.1.0",
+    "@bldr/test": "^0.1.0",
     "axios": "^0.21.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",
