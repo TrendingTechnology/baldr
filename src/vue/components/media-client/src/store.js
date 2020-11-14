@@ -2,10 +2,12 @@
  * @module @bldr/media-client/store
  */
 
+/* globals config */
+
 import Vue from 'vue'
 
-import { HttpRequest } from '@bldr/http-request'
-const httpRequest = new HttpRequest('/api/media')
+import { makeHttpRequestInstance } from '@bldr/http-request'
+const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 
 const state = {
   multiPartUris: new Set(),

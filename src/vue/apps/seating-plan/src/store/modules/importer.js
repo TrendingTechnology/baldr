@@ -2,10 +2,10 @@
 /* globals localStorage config */
 
 import { formatToLocalDateTime } from '../../lib.js'
-import { HttpRequest } from '@bldr/http-request'
+import { makeHttpRequestInstance } from '@bldr/http-request'
 
-const httpRequestLocal = new HttpRequest('/api/seating-plan', false)
-const httpRequestRemote = new HttpRequest('/api/seating-plan', true)
+const httpRequestLocal = makeHttpRequestInstance(config, 'local','/api/seating-plan')
+const httpRequestRemote = makeHttpRequestInstance(config, 'remote','/api/seating-plan')
 
 class InitState {
   constructor () {

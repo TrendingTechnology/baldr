@@ -26,7 +26,7 @@
 
 /* globals config document Audio Image File */
 
-import { HttpRequest } from '@bldr/http-request'
+import { makeHttpRequestInstance } from '@bldr/http-request'
 import {
   MediaCategoriesManager,
   convertDurationToSeconds,
@@ -47,7 +47,7 @@ import ComponentMediaCanvas from './MediaCanvas.vue'
 import ComponentPlayButton from './PlayButton.vue'
 import storeModule from './store.js'
 
-export const httpRequest = new HttpRequest('/api/media')
+export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/media')
 
 /**
  * The {@link https://vuex.vuejs.org/ vuex} store instance.

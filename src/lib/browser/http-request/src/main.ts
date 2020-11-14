@@ -8,77 +8,72 @@
  * @module @bldr/http-request
  */
 
-/* globals config location */
+/* globals location */
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { Configuration } from '@bldr/type-definitions'
 
-declare const config: Configuration
-
-const restEndPoints = {
-  local: {
-    domain: config.http.domainLocal
-  },
-  remote: {
-    domain: config.http.domainRemote,
-    auth: {
-      username: config.http.username,
-      password: config.http.password
-    }
-  }
-}
+type RestEndPoint = 'local' | 'remote' | 'automatic'
 
 /**
  * A wrapper around Axios.
  */
-export class HttpRequest {
-
-  urlFillIn: string
-  baseUrl: string | null
-
-  private axiosInstance_: AxiosInstance
-
+class HttpRequest {
   /**
-   * @param urlFillIn - A URL segment that is inserted between the base
-   * URL and the last part of  the URL. For example
+   * A URL segment that is inserted between the base URL and the last part of
+   * the URL. For example
    *
    * - `baseUrl`: `localhost`
    * - `urlFillIn`: `/api/media`
    * - `url`: `query`
    *
    * results in the URL `http://localhost/api/media/query`.
-   *
-   * @param remote - Connect to a remote REST endpoint.
    */
-  constructor (urlFillIn: string, remote: boolean = false) {
-    /**
-     * A URL segment that is inserted between the base URL and the last part of
-     * the URL. For example
-     *
-     * - `baseUrl`: `localhost`
-     * - `urlFillIn`: `/api/media`
-     * - `url`: `query`
-     *
-     * results in the URL `http://localhost/api/media/query`.
-     *
-     * @type {String}
-     */
+  private readonly urlFillIn: string
+
+  /**
+   * The base URL of the REST endpoint.
+   */
+  private readonly baseUrl: string | null
+
+  /**
+   * An Axios instance.
+   *
+   * @see {@link https://github.com/axios/axios#axioscreateconfig}
+   */
+  private readonly axiosInstance: AxiosInstance
+
+  /**
+   * Make an configured instance of the `HttpRequest()` class.
+   *
+   * @param config: The parsed configuration file `/etc/baldr.json`.
+   * @param restEndPoint: Possible values are `local`, `remote` and `automatic`.
+   *   The value `automatic` needs the global object `location`.
+   * @param urlFillIn - A URL segment that is inserted between the base
+   *   URL and the last part of  the URL. For example
+   *
+   *   - `baseUrl`: `localhost`
+   *   - `urlFillIn`: `/api/media`
+   *   - `url`: `query`
+   *
+   *   results in the URL `http://localhost/api/media/query`.
+   */
+  constructor (config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string) {
     this.urlFillIn = urlFillIn
 
-    /**
-     * The base URL of the REST endpoint.
-     *
-     * @type {String}
-     */
-    this.baseUrl = null
+    let isRemote: boolean = false
 
     // Electron (build version): location.hostname: '.'
-    if ((location.hostname === 'localhost' || location.hostname === '.') && !remote) {
-      // Electron (build version): location.protocol: 'app'
-      this.baseUrl = `http://${restEndPoints.local.domain}`
+    // Electron (build version): location.protocol: 'app'
+    if (restEndPoint === 'remote' || (restEndPoint === 'automatic' && (location.hostname !== 'localhost' && location.hostname !== '.'))) {
+      isRemote = true
+    }
+
+    if (!isRemote) {
+      this.baseUrl = config.http.domainLocal
     } else {
-      this.baseUrl = `https://${restEndPoints.remote.domain}`
+      this.baseUrl = config.http.domainRemote
     }
 
     const axiosConfig: AxiosRequestConfig = {
@@ -86,26 +81,22 @@ export class HttpRequest {
       timeout: 10000
     }
 
-    if (remote) {
-      axiosConfig.auth = restEndPoints.remote.auth
+    if (isRemote) {
+      axiosConfig.auth = {
+        username: config.http.username,
+        password: config.http.password
+      }
     }
 
-    /**
-     * An Axios instance.
-     *
-     * @see {@link https://github.com/axios/axios#axioscreateconfig}
-     *
-     * @type {Object}
-     */
-    this.axiosInstance_ = axios.create(axiosConfig)
+    this.axiosInstance = axios.create(axiosConfig)
   }
 
   /**
    * @property url - A path relative to REST endpoints base URL. if
    *   `url` starts with `/` the `urlFillin` is not used.
    */
-  private formatUrl_ (url: string): string {
-    if (this.urlFillIn && url.substr(0, 1) !== '/') {
+  private formatUrl (url: string): string {
+    if (url.substr(0, 1) !== '/') {
       return `${this.urlFillIn}/${url}`
     }
     return url
@@ -123,19 +114,41 @@ export class HttpRequest {
    * }
    * </code></pre>
    *
-   * @param config - An important property is `url`: A path relative to the REST
+   * @param requestConfig - An important property is `url`: A path relative to the REST
    *   endpoints’ base URL. If `url` starts with `/` the `urlFillin` is not
    *   used.
    */
-  request (config: string | AxiosRequestConfig): Promise<AxiosResponse<any>> {
-    if (typeof config === 'string') {
-      config = { method: 'get', url: config }
+  async request (requestConfig: string | AxiosRequestConfig): Promise<AxiosResponse<any>> {
+    if (typeof requestConfig === 'string') {
+      requestConfig = { method: 'get', url: requestConfig }
     }
-    if (!('method' in config)) {
-      config.method = 'get'
+    if (!('method' in requestConfig)) {
+      requestConfig.method = 'get'
     }
-    if (config.url)
-    config.url = this.formatUrl_(config.url)
-    return this.axiosInstance_.request(config)
+    if (requestConfig.url === null) {
+      requestConfig.url = this.formatUrl(requestConfig.url)
+    }
+    return await this.axiosInstance.request(requestConfig)
   }
+}
+
+/**
+ * Make an configured instance of the `HttpRequest()` class.
+ *
+ * @param config: The parsed configuration file `/etc/baldr.json`.
+ * @param restEndPoint: Possible values are `local`, `remote` and `automatic`.
+ *   The value `automatic` needs the global object `location`.
+ * @param urlFillIn - A URL segment that is inserted between the base
+ *   URL and the last part of  the URL. For example
+ *
+ *   - `baseUrl`: `localhost`
+ *   - `urlFillIn`: `/api/media`
+ *   - `url`: `query`
+ *
+ *   results in the URL `http://localhost/api/media/query`.
+ *
+ * @returns A instance of the class `HttpRequest()`.
+ */
+export function makeHttpRequestInstance (config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string): HttpRequest {
+  return new HttpRequest(config, restEndPoint, urlFillIn)
 }

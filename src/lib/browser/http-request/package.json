@@ -16,13 +16,15 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/browser/main.js",
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "npm run build:browser",
-    "build:browser": "tsc --module es2015 --outDir dist/browser"
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
     "axios": "^0.21.0"

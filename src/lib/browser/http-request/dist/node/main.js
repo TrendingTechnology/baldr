@@ -1,3 +1,4 @@
+"use strict";
 /**
  * A wrapper around Axios. This module bundles the configuration and selects the
  * right configuration according to the Browsers global `location` object.
@@ -16,8 +17,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.makeHttpRequestInstance = void 0;
 /* globals location */
-import axios from 'axios';
+const axios_1 = require("axios");
 /**
  * A wrapper around Axios.
  */
@@ -61,7 +64,7 @@ class HttpRequest {
                 password: config.http.password
             };
         }
-        this.axiosInstance = axios.create(axiosConfig);
+        this.axiosInstance = axios_1.default.create(axiosConfig);
     }
     /**
      * @property url - A path relative to REST endpoints base URL. if
@@ -121,6 +124,7 @@ class HttpRequest {
  *
  * @returns A instance of the class `HttpRequest()`.
  */
-export function makeHttpRequestInstance(config, restEndPoint, urlFillIn) {
+function makeHttpRequestInstance(config, restEndPoint, urlFillIn) {
     return new HttpRequest(config, restEndPoint, urlFillIn);
 }
+exports.makeHttpRequestInstance = makeHttpRequestInstance;

@@ -20,13 +20,38 @@ interface DocConfiguration {
     dest: string;
     configFile: string;
 }
+/**
+ * The HTTP configuration for the media server and the REST API.
+ */
 interface HttpConfiguration {
+    /**
+     * The username is only required for remote connections.
+     */
     username: string;
+    /**
+     * The password is only required for remote connections.
+     */
     password: string;
+    /**
+     * The local domain without `http://`, for example `localhost`.
+     */
     domainLocal: string;
+    /**
+     * The remote domain without `https://`, for example `baldr.friedrich.rocks`.
+     */
     domainRemote: string;
+    /**
+     * The base directory for content thats delivered over HTTP, for example
+     * `/var/www/baldr`.
+     */
     webRoot: string;
+    /**
+     * `www-data` on Debian based systems.
+     */
     webServerUser: string;
+    /**
+     * `www-data` on Debian based systems.
+     */
     webServerGroup: string;
 }
 /**

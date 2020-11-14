@@ -50,11 +50,16 @@
 </template>
 
 <script>
-import { HttpRequest } from '@bldr/http-request'
+/* globals config */
 
-import { formatToLocalDateTime } from '@bldr/core-browser'
+// Third party packages.
 import { createNamespacedHelpers } from 'vuex'
-const httpRequest = new HttpRequest('/api/media')
+
+// Project packages.
+import { makeHttpRequestInstance } from '@bldr/http-request'
+import { formatToLocalDateTime } from '@bldr/core-browser'
+
+const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 const { mapGetters } = createNamespacedHelpers('media')
 
 export default {
