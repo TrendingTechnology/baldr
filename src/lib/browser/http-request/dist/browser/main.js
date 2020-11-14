@@ -46,10 +46,10 @@ class HttpRequest {
             isRemote = true;
         }
         if (!isRemote) {
-            this.baseUrl = config.http.domainLocal;
+            this.baseUrl = `http://${config.http.domainLocal}`;
         }
         else {
-            this.baseUrl = config.http.domainRemote;
+            this.baseUrl = `https://${config.http.domainRemote}`;
         }
         const axiosConfig = {
             baseURL: this.baseUrl,
@@ -68,7 +68,7 @@ class HttpRequest {
      *   `url` starts with `/` the `urlFillin` is not used.
      */
     formatUrl(url) {
-        if (url.substr(0, 1) !== '/') {
+        if (this.urlFillIn && url.substr(0, 1) !== '/') {
             return `${this.urlFillIn}/${url}`;
         }
         return url;
@@ -97,7 +97,7 @@ class HttpRequest {
             if (!('method' in requestConfig)) {
                 requestConfig.method = 'get';
             }
-            if (requestConfig.url === null) {
+            if (requestConfig.url) {
                 requestConfig.url = this.formatUrl(requestConfig.url);
             }
             return yield this.axiosInstance.request(requestConfig);
