@@ -9,10 +9,10 @@ import chalk from 'chalk'
 import { locationIndicator } from '@bldr/media-manager'
 import config from '@bldr/config'
 
-function action () {
+function action (): void {
   // In the archive folder are no two letter folders like 'YT'.
   // We try to detect the parent folder where the presentation lies in.
-  let presDir = locationIndicator.getPresParentDir(process.cwd())
+  const presDir = locationIndicator.getPresParentDir(process.cwd())
   let mirroredPath = locationIndicator.getMirroredPath(presDir)
   // If no mirrored path could be detected we show the base path of the
   // media server.

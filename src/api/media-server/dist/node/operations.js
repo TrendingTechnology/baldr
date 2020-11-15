@@ -178,7 +178,9 @@ function mirrorFolderStructure(currentPath) {
     }
     var relPaths = walkSync(currentPath);
     for (var index = 0; index < relPaths.length; index++) {
-        relPaths[index] = media_manager_1.locationIndicator.getRelPath(relPaths[index]);
+        var relPath = media_manager_1.locationIndicator.getRelPath(relPaths[index]);
+        if (relPath !== undefined)
+            relPaths[index] = relPath;
     }
     var created = [];
     var existing = [];

@@ -7,9 +7,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.locationIndicator = void 0;
-const config_1 = __importDefault(require("@bldr/config"));
+// Node packages.
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+// Project packages.
+const config_1 = __importDefault(require("@bldr/config"));
 const helper_1 = require("./helper");
 /**
  * Indicate where a file is located in the media folder structure.
@@ -37,7 +39,7 @@ class LocationIndicator {
      * not in den main media folder.
      */
     isInArchive(currentPath) {
-        if (path_1.default.resolve(currentPath).indexOf(this.main) > -1) {
+        if (path_1.default.resolve(currentPath).includes(this.main)) {
             return false;
         }
         return true;
@@ -110,6 +112,8 @@ class LocationIndicator {
     isInDeactivatedDir(currentPath) {
         currentPath = path_1.default.dirname(currentPath);
         const relPath = this.getRelPath(currentPath);
+        if (!relPath)
+            return true;
         const segments = relPath.split(path_1.default.sep);
         for (const segment of segments) {
             if (!segment.match(/^\d\d/)) {
@@ -142,9 +146,8 @@ class LocationIndicator {
                 break;
             }
         }
-        if (relPath)
+        if (relPath !== undefined)
             return relPath.replace(new RegExp(`^${path_1.default.sep}`), '');
-        return '';
     }
     /**
      * Get the path relative to one of the base paths and `currentPath`.
@@ -161,11 +164,20 @@ class LocationIndicator {
                 break;
             }
         }
-        if (basePath)
+        if (basePath !== undefined)
             return basePath.replace(new RegExp(`${path_1.default.sep}$`), '');
-        return '';
     }
     /**
+     * The mirrored path of the current give file path, for example:
+     *
+     * This folder in the main media folder structure
+     *
+     * `/var/data/baldr/media/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau/TX`
+     *
+     * gets converted to
+     *
+     * `/mnt/xpsschulearchiv/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau`.
+     *
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
      */
@@ -179,9 +191,8 @@ class LocationIndicator {
                 break;
             }
         }
-        if (mirroredBasePath && relPath)
+        if (mirroredBasePath !== undefined && relPath !== undefined)
             return path_1.default.join(mirroredBasePath, relPath);
-        return '';
     }
 }
 exports.locationIndicator = new LocationIndicator();

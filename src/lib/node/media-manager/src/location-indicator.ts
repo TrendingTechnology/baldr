@@ -2,9 +2,12 @@
  * @module @bldr/media-manager/location-indicator
  */
 
-import config from '@bldr/config'
+// Node packages.
 import path from 'path'
 import fs from 'fs'
+
+// Project packages.
+import config from '@bldr/config'
 
 import { untildify } from './helper'
 
@@ -15,11 +18,17 @@ import { untildify } from './helper'
  * `config.mediaServer.archivePaths`. Store only the accessible ones.
  */
 class LocationIndicator {
+  /**
+   * The base path of the main media folder.
+   */
   public main: string
 
-  private paths: string[]
+  /**
+   * Multiple base paths of media collections (the main base path and some
+   * archive base paths)
+   */
+  private readonly paths: string[]
   constructor () {
-
     this.main = config.mediaServer.basePath
     const basePaths = [
       config.mediaServer.basePath,
@@ -40,7 +49,7 @@ class LocationIndicator {
    * not in den main media folder.
    */
   isInArchive (currentPath: string): boolean {
-    if (path.resolve(currentPath).indexOf(this.main) > -1) {
+    if (path.resolve(currentPath).includes(this.main)) {
       return false
     }
     return true
@@ -118,6 +127,7 @@ class LocationIndicator {
   isInDeactivatedDir (currentPath: string): boolean {
     currentPath = path.dirname(currentPath)
     const relPath = this.getRelPath(currentPath)
+    if (!relPath) return true
     const segments = relPath.split(path.sep)
     for (const segment of segments) {
       if (!segment.match(/^\d\d/)) {
@@ -143,17 +153,16 @@ class LocationIndicator {
    * @param currentPath - The path of a file or a directory inside
    *   a media server folder structure or inside its archive folders.
    */
-  getRelPath (currentPath: string): string {
+  getRelPath (currentPath: string): string | undefined {
     currentPath = path.resolve(currentPath)
-    let relPath
+    let relPath: string | undefined
     for (const basePath of this.paths) {
       if (currentPath.indexOf(basePath) === 0) {
         relPath = currentPath.replace(basePath, '')
         break
       }
     }
-    if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
-    return ''
+    if (relPath !== undefined) return relPath.replace(new RegExp(`^${path.sep}`), '')
   }
 
   /**
@@ -162,35 +171,43 @@ class LocationIndicator {
    * @param currentPath - The path of a file or a directory inside
    *   a media server folder structure or inside its archive folders.
    */
-  getBasePath (currentPath: string): string {
+  getBasePath (currentPath: string): string | undefined {
     currentPath = path.resolve(currentPath)
-    let basePath
+    let basePath: string | undefined
     for (const bPath of this.paths) {
       if (currentPath.indexOf(bPath) === 0) {
         basePath = bPath
         break
       }
     }
-    if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
-    return ''
+    if (basePath !== undefined) return basePath.replace(new RegExp(`${path.sep}$`), '')
   }
 
   /**
+   * The mirrored path of the current give file path, for example:
+   *
+   * This folder in the main media folder structure
+   *
+   * `/var/data/baldr/media/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau/TX`
+   *
+   * gets converted to
+   *
+   * `/mnt/xpsschulearchiv/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau`.
+   *
    * @param currentPath - The path of a file or a directory inside
    *   a media server folder structure or inside its archive folders.
    */
-  getMirroredPath (currentPath: string): string {
+  getMirroredPath (currentPath: string): string | undefined {
     const basePath = this.getBasePath(currentPath)
     const relPath = this.getRelPath(currentPath)
-    let mirroredBasePath
+    let mirroredBasePath: string | undefined
     for (const bPath of this.paths) {
       if (basePath !== bPath) {
         mirroredBasePath = bPath
         break
       }
     }
-    if (mirroredBasePath && relPath) return path.join(mirroredBasePath, relPath)
-    return ''
+    if (mirroredBasePath !== undefined && relPath !== undefined) return path.join(mirroredBasePath, relPath)
   }
 }
 

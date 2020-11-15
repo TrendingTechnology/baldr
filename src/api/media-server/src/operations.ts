@@ -127,7 +127,8 @@ function mirrorFolderStructure (currentPath: string): StringIndexedObject {
 
   const relPaths = walkSync(currentPath)
   for (let index = 0; index < relPaths.length; index++) {
-    relPaths[index] = locationIndicator.getRelPath(relPaths[index])
+    const relPath = locationIndicator.getRelPath(relPaths[index])
+    if (relPath !== undefined) relPaths[index] = relPath
   }
 
   const created = []

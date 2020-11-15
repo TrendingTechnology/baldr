@@ -101,6 +101,8 @@ function moveTexImage(oldPathTex, baseName, cmdObj) {
         const presParentDir = media_manager_1.locationIndicator.getPresParentDir(oldPath);
         // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
         const presParentDirMirrored = media_manager_1.locationIndicator.getMirroredPath(presParentDir);
+        if (presParentDirMirrored === undefined)
+            return;
         let imgParentDir;
         if (ext === 'png' || ext === 'eps') {
             imgParentDir = 'NB';
@@ -221,6 +223,8 @@ function moveMp3(oldPath, newPath, cmdObj) {
 function moveReference(oldPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         let newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
+        if (newPath === undefined)
+            return;
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'QL');
         media_manager_1.moveAsset(oldPath, newPath, cmdObj);
         if (cmdObj.dryRun)
@@ -253,6 +257,8 @@ function moveFromArchive(oldPath, extension, cmdObj) {
         if (media_manager_1.locationIndicator.isInDeactivatedDir(oldPath))
             return;
         let newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
+        if (newPath === undefined)
+            return;
         console.log(`${chalk_1.default.yellow(oldPath)} -> ${chalk_1.default.green(newPath)}`);
         if (extension === 'tex') {
             moveTex(oldPath, newPath, cmdObj);

@@ -8,8 +8,15 @@
  * `config.mediaServer.archivePaths`. Store only the accessible ones.
  */
 declare class LocationIndicator {
+    /**
+     * The base path of the main media folder.
+     */
     main: string;
-    private paths;
+    /**
+     * Multiple base paths of media collections (the main base path and some
+     * archive base paths)
+     */
+    private readonly paths;
     constructor();
     /**
      * Check if the `currentPath` is inside a archive folder structure and
@@ -64,19 +71,29 @@ declare class LocationIndicator {
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
      */
-    getRelPath(currentPath: string): string;
+    getRelPath(currentPath: string): string | undefined;
     /**
      * Get the path relative to one of the base paths and `currentPath`.
      *
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
      */
-    getBasePath(currentPath: string): string;
+    getBasePath(currentPath: string): string | undefined;
     /**
+     * The mirrored path of the current give file path, for example:
+     *
+     * This folder in the main media folder structure
+     *
+     * `/var/data/baldr/media/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau/TX`
+     *
+     * gets converted to
+     *
+     * `/mnt/xpsschulearchiv/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau`.
+     *
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
      */
-    getMirroredPath(currentPath: string): string;
+    getMirroredPath(currentPath: string): string | undefined;
 }
 export declare const locationIndicator: LocationIndicator;
 export default locationIndicator;

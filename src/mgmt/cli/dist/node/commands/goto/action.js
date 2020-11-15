@@ -13,7 +13,7 @@ const config_1 = __importDefault(require("@bldr/config"));
 function action() {
     // In the archive folder are no two letter folders like 'YT'.
     // We try to detect the parent folder where the presentation lies in.
-    let presDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
+    const presDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
     let mirroredPath = media_manager_1.locationIndicator.getMirroredPath(presDir);
     // If no mirrored path could be detected we show the base path of the
     // media server.

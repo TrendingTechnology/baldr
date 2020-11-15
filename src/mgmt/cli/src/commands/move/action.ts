@@ -97,6 +97,8 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: str
     const presParentDir = locationIndicator.getPresParentDir(oldPath)
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
     const presParentDirMirrored = locationIndicator.getMirroredPath(presParentDir)
+    if (presParentDirMirrored === undefined) return
+
     let imgParentDir
     if (ext === 'png' || ext === 'eps') {
       imgParentDir = 'NB'
@@ -223,6 +225,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
  */
 async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
   let newPath = locationIndicator.getMirroredPath(oldPath)
+  if (newPath === undefined) return
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
   moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun) return
@@ -244,13 +247,14 @@ async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
  * @param extension - The extension of the file.
  * @param cmdObj - See commander docs.
  */
-async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [key: string]: any }) {
+async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [key: string]: any }): Promise<void> {
   if (oldPath.indexOf('Tonart.pdf') > -1) {
     await moveReference(oldPath, cmdObj)
     return
   }
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
   let newPath = locationIndicator.getMirroredPath(oldPath)
+  if (newPath === undefined) return
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
