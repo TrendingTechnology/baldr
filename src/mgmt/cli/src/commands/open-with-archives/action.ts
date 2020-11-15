@@ -9,7 +9,8 @@ import { locationIndicator } from '@bldr/media-manager'
 import { openWithFileManagerWithArchives } from '@bldr/media-server'
 
 /**
- * Normalize the metadata files in the YAML format (sort, clean up).
+ * Create a relative path in different base paths. Open this relative paths in
+ * the file manager.
  *
  * @param filePaths - An array of input files. This parameter comes from
  *   the commanders’ variadic parameter `[files...]`.

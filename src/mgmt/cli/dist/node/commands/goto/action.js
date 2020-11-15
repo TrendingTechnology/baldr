@@ -9,8 +9,15 @@ const fs_1 = __importDefault(require("fs"));
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const open_with_1 = require("@bldr/open-with");
 const config_1 = __importDefault(require("@bldr/config"));
-function action() {
+function openShell(filePath) {
+    child_process_1.default.spawn('zsh', ['-i'], {
+        cwd: filePath,
+        stdio: 'inherit'
+    });
+}
+function action(cmdObj) {
     // In the archive folder are no two letter folders like 'YT'.
     // We try to detect the parent folder where the presentation lies in.
     const presDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
@@ -24,9 +31,12 @@ function action() {
         process.exit(1);
     }
     console.log(`Go to: ${chalk_1.default.green(mirroredPath)}`);
-    child_process_1.default.spawn('zsh', ['-i'], {
-        cwd: mirroredPath,
-        stdio: 'inherit'
-    });
+    if (cmdObj.fileManager) {
+        console.log('fileManger');
+        open_with_1.openWithFileManager(mirroredPath, true);
+    }
+    else {
+        openShell(mirroredPath);
+    }
 }
 module.exports = action;

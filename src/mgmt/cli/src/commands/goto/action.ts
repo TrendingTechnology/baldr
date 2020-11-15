@@ -7,9 +7,17 @@ import chalk from 'chalk'
 
 // Project packages.
 import { locationIndicator } from '@bldr/media-manager'
+import { openWithFileManager } from '@bldr/open-with'
 import config from '@bldr/config'
 
-function action (): void {
+function openShell (filePath: string): void {
+  childProcess.spawn('zsh', ['-i'], {
+    cwd: filePath,
+    stdio: 'inherit'
+  })
+}
+
+function action (cmdObj: { [key: string]: any }): void {
   // In the archive folder are no two letter folders like 'YT'.
   // We try to detect the parent folder where the presentation lies in.
   const presDir = locationIndicator.getPresParentDir(process.cwd())
@@ -22,11 +30,13 @@ function action (): void {
     console.log(`The path “${chalk.red(mirroredPath)}” doesn’t exist.`)
     process.exit(1)
   }
+
   console.log(`Go to: ${chalk.green(mirroredPath)}`)
-  childProcess.spawn('zsh', ['-i'], {
-    cwd: mirroredPath,
-    stdio: 'inherit'
-  })
+  if (cmdObj.fileManager) {
+    openWithFileManager(mirroredPath, true)
+  } else {
+    openShell(mirroredPath)
+  }
 }
 
 export = action

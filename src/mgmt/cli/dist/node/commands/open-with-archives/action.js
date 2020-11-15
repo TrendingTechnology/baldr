@@ -11,7 +11,8 @@ const chalk_1 = __importDefault(require("chalk"));
 const media_manager_1 = require("@bldr/media-manager");
 const media_server_1 = require("@bldr/media-server");
 /**
- * Normalize the metadata files in the YAML format (sort, clean up).
+ * Create a relative path in different base paths. Open this relative paths in
+ * the file manager.
  *
  * @param filePaths - An array of input files. This parameter comes from
  *   the commanders’ variadic parameter `[files...]`.
