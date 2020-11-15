@@ -9,8 +9,8 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/icons": "^0.2.2",
-    "@bldr/themes": "^0.2.3",
+    "@bldr/icons": "*",
+    "@bldr/themes": "*",
     "core-js": "^3.6.5",
     "vue": "^2.6.12"
   },

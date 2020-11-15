@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/core-browser",
-  "version": "0.11.3",
-  "description": "Base core functionality for the code running in the browser without node (typescript version).",
+  "name": "@bldr/open-with",
+  "version": "0.1.0",
+  "description": "Open files and path in the shell, the file manager etc (using child_process.spawn)",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -17,21 +17,18 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:browser && npm run build:node",
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node"
-  },
-  "browser": "dist/browser/main.js",
-  "main": "dist/node/main.js",
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "@bldr/type-definitions": "*",
-    "js-yaml": "^3.14.0"
+    "@bldr/config": "*"
   },
   "devDependencies": {
-    "@types/js-yaml": "^3.12.5"
+    "@types/node": "^14.11.8"
   },
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  }
 }

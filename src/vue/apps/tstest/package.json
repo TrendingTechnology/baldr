@@ -11,8 +11,8 @@
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
-    "@bldr/components-collection": "^0.2.2",
-    "@bldr/themes": "^0.2.3"
+    "@bldr/components-collection": "*",
+    "@bldr/themes": "*"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",

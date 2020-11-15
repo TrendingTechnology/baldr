@@ -21,13 +21,13 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "@bldr/config": "0.1.0",
-    "@bldr/core-browser": "0.11.3",
-    "@bldr/core-node": "0.2.2",
-    "@bldr/type-definitions": "^0.1.0",
-    "@bldr/audio-metadata": "^0.1.0",
-    "@bldr/wikidata": "^0.1.0",
-    "@bldr/tex-markdown-converter": "^0.1.0",
+    "@bldr/config": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/core-node": "*",
+    "@bldr/type-definitions": "*",
+    "@bldr/audio-metadata": "*",
+    "@bldr/wikidata": "*",
+    "@bldr/tex-markdown-converter": "*",
     "js-yaml": "^3.14.0",
     "transliteration": "^2.1.11",
     "uuid": "^8.3.0"

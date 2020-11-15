@@ -21,7 +21,7 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "@bldr/config": "^0.1.0",
+    "@bldr/config": "*",
     "ws": "^7.4.0",
     "@types/ws": "^7.4.0"
   }

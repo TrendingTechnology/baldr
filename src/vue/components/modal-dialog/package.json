@@ -14,7 +14,7 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/icons": "^0.2.2",
+    "@bldr/icons": "*",
     "core-js": "^3.6.5",
     "vue": "^2.6.12"
   },

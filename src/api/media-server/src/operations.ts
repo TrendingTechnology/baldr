@@ -6,6 +6,7 @@ import path from 'path'
 // Project packages.
 import config from '@bldr/config'
 import { locationIndicator } from '@bldr/media-manager'
+import { openWith, openWithFileManager } from '@bldr/open-with'
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
 import { database } from './main'
@@ -46,27 +47,6 @@ async function getAbsPathFromId (id: string, mediaType: string = 'presentations'
 }
 
 /**
- * Open a file path using the linux command `xdg-open`.
- *
- * @param currentPath
- * @param create - Create the directory structure of
- *   the given `currentPath` in a recursive manner.
- */
-function openFolder (currentPath: string, create: boolean): StringIndexedObject {
-  const result: StringIndexedObject = {}
-  if (create && !fs.existsSync(currentPath)) {
-    fs.mkdirSync(currentPath, { recursive: true })
-    result.create = true
-  }
-  if (fs.existsSync(currentPath)) {
-    // xdg-open opens a mounted root folder in vs code.
-    openWith(config.mediaServer.fileManager, currentPath)
-    result.open = true
-  }
-  return result
-}
-
-/**
  * Open the current path multiple times.
  *
  * 1. In the main media server directory
@@ -77,15 +57,15 @@ function openFolder (currentPath: string, create: boolean): StringIndexedObject 
  * @param {Boolean} create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openFolderWithArchives (currentPath: string, create: boolean): StringIndexedObject {
+function openWithFileManagerWithArchives (currentPath: string, create: boolean): StringIndexedObject {
   const result: StringIndexedObject = {}
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
     if (relPath) {
       const currentPath = path.join(basePath, relPath)
-      result[currentPath] = openFolder(currentPath, create)
+      result[currentPath] = openWithFileManager(currentPath, create)
     } else {
-      result[basePath] = openFolder(basePath, create)
+      result[basePath] = openWithFileManager(basePath, create)
     }
   }
   return result
@@ -159,36 +139,6 @@ function mirrorFolderStructure (currentPath: string): StringIndexedObject {
 }
 
 /**
- * Open a file path with an executable.
- *
- * To launch apps via the REST API the systemd unit file must run as
- * the user you login in in your desktop environment. You also have to set
- * to environment variables: `DISPLAY=:0` and
- * `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus`
- *
- * ```
- * Environment=DISPLAY=:0
- * Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
- * User=1000
- * Group=1000
- * ```
- *
- * @param executable - Name or path of an executable.
- * @param filePath - The path of a file or a folder.
- *
- * @see node module on npmjs.org “open”
- * @see {@link https://unix.stackexchange.com/a/537848}
- */
-function openWith (executable: string, filePath: string): void {
-  // See node module on npmjs.org “open”
-  const subprocess = childProcess.spawn(executable, [filePath], {
-    stdio: 'ignore',
-    detached: true
-  })
-  subprocess.unref()
-}
-
-/**
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
  *
@@ -231,9 +181,9 @@ export async function openParentFolder (id: string, mediaType: string, archive: 
 
   let result: StringIndexedObject
   if (archive) {
-    result = openFolderWithArchives(parentFolder, create)
+    result = openWithFileManagerWithArchives(parentFolder, create)
   } else {
-    result = openFolder(parentFolder, create)
+    result = openWithFileManager(parentFolder, create)
   }
   return {
     id,

@@ -6,7 +6,7 @@ import chalk from 'chalk'
 
 // Project packages:
 import { locationIndicator } from '@bldr/media-manager'
-import { openFolderWithArchives } from '@bldr/media-server'
+import { openWithFileManagerWithArchives } from '@bldr/media-server'
 
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
@@ -31,7 +31,7 @@ function action (filePath: string, cmdObj: { [key: string]: any }): void {
     filePath = presParentDir
     console.log(chalk.red('Open parent folder instead'))
   }
-  console.log(openFolderWithArchives(filePath, cmdObj.createDirs))
+  console.log(openWithFileManagerWithArchives(filePath, cmdObj.createDirs))
 }
 
 module.exports = action

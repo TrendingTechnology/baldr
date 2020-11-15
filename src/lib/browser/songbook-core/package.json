@@ -24,10 +24,10 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "@bldr/core-browser": "^0.11.3"
+    "@bldr/core-browser": "*"
   },
   "devDependencies": {
-    "@bldr/type-definitions": "^0.1.0"
+    "@bldr/type-definitions": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

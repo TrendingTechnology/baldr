@@ -33,6 +33,6 @@ function action(filePath, cmdObj) {
         filePath = presParentDir;
         console.log(chalk_1.default.red('Open parent folder instead'));
     }
-    console.log(media_server_1.openFolderWithArchives(filePath, cmdObj.createDirs));
+    console.log(media_server_1.openWithFileManagerWithArchives(filePath, cmdObj.createDirs));
 }
 module.exports = action;

@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/core-node": "0.2.2",
-    "@bldr/type-definitions": "0.1.0",
+    "@bldr/core-node": "*",
+    "@bldr/type-definitions": "*",
     "node-fetch": "^2.6.1",
     "wikibase-sdk": "^7.7.1"
   },

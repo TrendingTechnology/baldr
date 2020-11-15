@@ -24,7 +24,7 @@
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "dependencies": {
-    "@bldr/core-browser": "^0.11.3"
+    "@bldr/core-browser": "*"
   },
   "standard.enable": false,
   "standard.options": {

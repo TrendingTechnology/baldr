@@ -40,13 +40,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openParentFolder = exports.openEditor = exports.validateMediaType = void 0;
-// Node packages.
-var child_process_1 = __importDefault(require("child_process"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 // Project packages.
 var config_1 = __importDefault(require("@bldr/config"));
 var media_manager_1 = require("@bldr/media-manager");
+var open_with_1 = require("@bldr/open-with");
 var main_1 = require("./main");
 /**
  * Throw an error if the media type is unkown. Provide a default value.
@@ -97,26 +96,6 @@ function getAbsPathFromId(id, mediaType) {
     });
 }
 /**
- * Open a file path using the linux command `xdg-open`.
- *
- * @param currentPath
- * @param create - Create the directory structure of
- *   the given `currentPath` in a recursive manner.
- */
-function openFolder(currentPath, create) {
-    var result = {};
-    if (create && !fs_1.default.existsSync(currentPath)) {
-        fs_1.default.mkdirSync(currentPath, { recursive: true });
-        result.create = true;
-    }
-    if (fs_1.default.existsSync(currentPath)) {
-        // xdg-open opens a mounted root folder in vs code.
-        openWith(config_1.default.mediaServer.fileManager, currentPath);
-        result.open = true;
-    }
-    return result;
-}
-/**
  * Open the current path multiple times.
  *
  * 1. In the main media server directory
@@ -127,17 +106,17 @@ function openFolder(currentPath, create) {
  * @param {Boolean} create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openFolderWithArchives(currentPath, create) {
+function openWithFileManagerWithArchives(currentPath, create) {
     var result = {};
     var relPath = media_manager_1.locationIndicator.getRelPath(currentPath);
     for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
         var basePath = _a[_i];
         if (relPath) {
             var currentPath_1 = path_1.default.join(basePath, relPath);
-            result[currentPath_1] = openFolder(currentPath_1, create);
+            result[currentPath_1] = open_with_1.openWithFileManager(currentPath_1, create);
         }
         else {
-            result[basePath] = openFolder(basePath, create);
+            result[basePath] = open_with_1.openWithFileManager(basePath, create);
         }
     }
     return result;
@@ -212,35 +191,6 @@ function mirrorFolderStructure(currentPath) {
     };
 }
 /**
- * Open a file path with an executable.
- *
- * To launch apps via the REST API the systemd unit file must run as
- * the user you login in in your desktop environment. You also have to set
- * to environment variables: `DISPLAY=:0` and
- * `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus`
- *
- * ```
- * Environment=DISPLAY=:0
- * Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
- * User=1000
- * Group=1000
- * ```
- *
- * @param executable - Name or path of an executable.
- * @param filePath - The path of a file or a folder.
- *
- * @see node module on npmjs.org “open”
- * @see {@link https://unix.stackexchange.com/a/537848}
- */
-function openWith(executable, filePath) {
-    // See node module on npmjs.org “open”
-    var subprocess = child_process_1.default.spawn(executable, [filePath], {
-        stdio: 'ignore',
-        detached: true
-    });
-    subprocess.unref();
-}
-/**
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
  *
@@ -262,7 +212,7 @@ function openEditor(id, mediaType) {
                                 error: "Editor \u201C" + editor + "\u201D can\u2019t be found."
                             }];
                     }
-                    openWith(config_1.default.mediaServer.editor, parentFolder);
+                    open_with_1.openWith(config_1.default.mediaServer.editor, parentFolder);
                     return [2 /*return*/, {
                             id: id,
                             mediaType: mediaType,
@@ -296,10 +246,10 @@ function openParentFolder(id, mediaType, archive, create) {
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
                     if (archive) {
-                        result = openFolderWithArchives(parentFolder, create);
+                        result = openWithFileManagerWithArchives(parentFolder, create);
                     }
                     else {
-                        result = openFolder(parentFolder, create);
+                        result = open_with_1.openWithFileManager(parentFolder, create);
                     }
                     return [2 /*return*/, {
                             id: id,
