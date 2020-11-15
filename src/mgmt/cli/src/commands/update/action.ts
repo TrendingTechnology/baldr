@@ -16,7 +16,7 @@ type whatType = 'api' | 'config' | 'media' | 'vue'
  *  This parameter comes from `commander.Command.opts()`
  */
 async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<void> {
-  const cmd = new CommandRunner()
+  const cmd = new CommandRunner({ verbose: true })
   cmd.checkRoot()
 
   cmd.startSpin()
@@ -85,6 +85,9 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
 
     cmd.log('Restarting the systemd service named “baldr_api.service” locally.')
     await cmd.exec(['systemctl', 'restart', 'baldr_api.service'])
+
+    cmd.log('Restarting the systemd service named “baldr_wire.service” locally.')
+    await cmd.exec(['systemctl', 'restart', 'baldr_wire.service'])
   }
 
   if (opts.remote && opts.api) {

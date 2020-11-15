@@ -25,7 +25,7 @@ const action_js_2 = __importDefault(require("../build/action.js"));
  */
 function action(what, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cmd = new cli_utils_1.CommandRunner();
+        const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         cmd.checkRoot();
         cmd.startSpin();
         const opts = {
