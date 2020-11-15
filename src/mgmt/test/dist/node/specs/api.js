@@ -30,4 +30,56 @@ describe('local: /api/media', function () {
             assert_1.default.strictEqual(result.data.errors.length, 0);
         });
     });
+    it('/media/query?type=assets&field=id&method=exactMatch&search=IN_Cembalo', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'assets',
+                    field: 'id',
+                    method: 'exactMatch',
+                    search: 'IN_Cembalo'
+                }
+            });
+            const data = result.data;
+            assert_1.default.strictEqual(data.id, 'IN_Cembalo');
+            assert_1.default.strictEqual(data.uuid, '0f741f26-f861-4c17-a4a4-c12dcd8375d9');
+            assert_1.default.strictEqual(data.wikidata, 'Q81982');
+        });
+    });
+    it('/media/query?type=assets&field=id&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'assets',
+                    field: 'uuid',
+                    method: 'exactMatch',
+                    search: 'c64047d2-983d-4009-a35f-02c95534cb53'
+                }
+            });
+            const data = result.data;
+            assert_1.default.strictEqual(data.composer, 'Modest Petrowitsch Mussorgski');
+            assert_1.default.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53');
+        });
+    });
+    it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'presentations',
+                    field: 'id',
+                    method: 'exactMatch',
+                    search: 'Marmotte'
+                }
+            });
+            const data = result.data;
+            assert_1.default.strictEqual(data.meta.id, 'Marmotte');
+            assert_1.default.ok(typeof data.path === 'string');
+            assert_1.default.ok(typeof data.filename === 'string');
+        });
+    });
+    // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
+    // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
 });

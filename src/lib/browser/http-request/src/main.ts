@@ -107,6 +107,10 @@ class HttpRequest {
    *
    * @see {@link https://github.com/axios/axios#axiosrequestconfig}
    *
+   * @param requestConfig - An important property is `url`: A path relative to the REST
+   *   endpoints’ base URL. If `url` starts with `/` the `urlFillin` is not
+   *   used.
+   *
    * <pre><code>
    * {
    *   method: 'get',
@@ -114,9 +118,16 @@ class HttpRequest {
    * }
    * </code></pre>
    *
-   * @param requestConfig - An important property is `url`: A path relative to the REST
-   *   endpoints’ base URL. If `url` starts with `/` the `urlFillin` is not
-   *   used.
+   * <pre><code>
+   * {
+   * url: 'query',
+   * params: {
+   *   type: 'assets',
+   *   field: 'id',
+   *   method: 'exactMatch',
+   *   search: 'IN_Cembalo'
+   * }
+   * </code></pre>
    */
   async request (requestConfig: string | AxiosRequestConfig): Promise<AxiosResponse<any>> {
     if (typeof requestConfig === 'string') {
