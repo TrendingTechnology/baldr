@@ -32,7 +32,6 @@ function action(cmdObj) {
     }
     console.log(`Go to: ${chalk_1.default.green(mirroredPath)}`);
     if (cmdObj.fileManager) {
-        console.log('fileManger');
         open_with_1.openWithFileManager(mirroredPath, true);
     }
     else {
