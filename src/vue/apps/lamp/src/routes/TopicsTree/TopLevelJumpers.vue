@@ -24,8 +24,6 @@ export default {
     ...mapGetters(['folderTitleTree']),
     topTopics () {
       let tree = this.folderTitleTree
-      // console.log(tree)
-      // console.log(this.path)
       if (this.path && this.path !== 'Musik') {
         const segments = this.path.split('/')
         for (const folderName of segments) {
@@ -36,7 +34,6 @@ export default {
       }
       const topics = []
       if (!tree || !tree.subTree) return
-      console.log(tree.subTree)
       for (const folderName of Object.keys(tree.subTree).sort()) {
         const topic = tree.subTree[folderName].title
         if (topic) {
