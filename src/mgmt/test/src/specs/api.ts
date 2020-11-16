@@ -75,12 +75,45 @@ describe('local: /api/media', function () {
         search: 'Marmotte'
       }
     })
-    const data = result.data
-    assert.strictEqual(data.meta.id, 'Marmotte')
-    assert.ok(typeof data.path === 'string')
-    assert.ok(typeof data.filename === 'string')
+    assert.strictEqual(result.data.meta.id, 'Marmotte')
+    assert.ok(typeof result.data.path === 'string')
+    assert.ok(typeof result.data.filename === 'string')
   })
 
-  // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
-  // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
+  it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', async function () {
+    const result = await localHttpRequest.request({
+      url: 'query',
+      params: {
+        type: 'assets',
+        field: 'path',
+        method: 'substringSearch',
+        search: 'Ausstellung',
+        result: 'fullObjects'
+      }
+    })
+    assert.ok(typeof result.data[0].uuid === 'string')
+  })
+
+  it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=dynamicSelect', async function () {
+    const result = await localHttpRequest.request({
+      url: 'query',
+      params: {
+        type: 'assets',
+        field: 'path',
+        method: 'substringSearch',
+        search: 'Ausstellung',
+        result: 'dynamicSelect'
+      }
+    })
+    assert.ok(!result.data[0].uuid)
+    assert.ok(result.data[0].id)
+    assert.ok(result.data[0].name)
+  })
+
+  it('/media/stats/count', async function () {
+    const result = await localHttpRequest.request('stats/count')
+    assert.ok(result.data.assets > 0)
+    assert.ok(result.data.presentations > 0)
+  })
+
 })

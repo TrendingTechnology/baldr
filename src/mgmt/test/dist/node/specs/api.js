@@ -80,6 +80,60 @@ describe('local: /api/media', function () {
             assert_1.default.ok(typeof data.filename === 'string');
         });
     });
-    // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
-    // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
+    it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'presentations',
+                    field: 'id',
+                    method: 'exactMatch',
+                    search: 'Marmotte'
+                }
+            });
+            assert_1.default.strictEqual(result.data.meta.id, 'Marmotte');
+            assert_1.default.ok(typeof result.data.path === 'string');
+            assert_1.default.ok(typeof result.data.filename === 'string');
+        });
+    });
+    it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'assets',
+                    field: 'path',
+                    method: 'substringSearch',
+                    search: 'Ausstellung',
+                    result: 'fullObjects'
+                }
+            });
+            assert_1.default.ok(typeof result.data[0].uuid === 'string');
+        });
+    });
+    it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=dynamicSelect', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request({
+                url: 'query',
+                params: {
+                    type: 'assets',
+                    field: 'path',
+                    method: 'substringSearch',
+                    search: 'Ausstellung',
+                    result: 'dynamicSelect'
+                }
+            });
+            console.log(result.data);
+            assert_1.default.ok(!result.data[0].uuid);
+            assert_1.default.ok(result.data[0].id);
+            assert_1.default.ok(result.data[0].name);
+        });
+    });
+    it('/media/stats/count', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield localHttpRequest.request('stats/count');
+            assert_1.default.ok(result.data.assets > 0);
+            assert_1.default.ok(result.data.presentations > 0);
+        });
+    });
 });
