@@ -123,7 +123,6 @@ describe('local: /api/media', function () {
                     result: 'dynamicSelect'
                 }
             });
-            console.log(result.data);
             assert_1.default.ok(!result.data[0].uuid);
             assert_1.default.ok(result.data[0].id);
             assert_1.default.ok(result.data[0].name);

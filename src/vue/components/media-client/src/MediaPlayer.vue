@@ -82,6 +82,7 @@ export default {
   },
   watch: {
     mediaElement() {
+      if (!this.mediaElement) return
       this.mediaElement.ontimeupdate = event => {
         this.currentTimeSec = event.target.currentTime;
       };
@@ -103,6 +104,7 @@ export default {
       }
     },
     currentTimeSec() {
+      if (!this.$refs.elapsed) return
       this.$refs.elapsed.style.width = `${this.sample.progress * 100}%`;
     }
   },
