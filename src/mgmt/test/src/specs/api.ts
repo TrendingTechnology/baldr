@@ -65,6 +65,22 @@ describe('local: /api/media', function () {
     assert.ok(typeof data.filename === 'string')
   })
 
+  it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', async function () {
+    const result = await localHttpRequest.request({
+      url: 'query',
+      params: {
+        type: 'presentations',
+        field: 'id',
+        method: 'exactMatch',
+        search: 'Marmotte'
+      }
+    })
+    const data = result.data
+    assert.strictEqual(data.meta.id, 'Marmotte')
+    assert.ok(typeof data.path === 'string')
+    assert.ok(typeof data.filename === 'string')
+  })
+
   // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
   // '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
 })

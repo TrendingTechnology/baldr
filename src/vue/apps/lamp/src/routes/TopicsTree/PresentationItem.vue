@@ -70,7 +70,7 @@ export default {
       return ''
     },
     hasChilds () {
-      return this.item && this.item.subTree && Object.keys(this.item.subTree).length > 1
+      return this.item && this.item.subTree && Object.keys(this.item.subTree).length >= 1
     },
     childs () {
       if (!this.item || !this.item.subTree) return []
