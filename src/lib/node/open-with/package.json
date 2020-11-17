@@ -25,7 +25,7 @@
     "@bldr/config": "*"
   },
   "devDependencies": {
-    "@types/node": "^14.11.8"
+    "@types/node": "^14.14.7"
   },
   "main": "dist/node/main.js",
   "publishConfig": {

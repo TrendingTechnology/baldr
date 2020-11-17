@@ -25,10 +25,10 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "music-metadata": "7.4.0"
+    "music-metadata": "7.5.0"
   },
   "devDependencies": {
-    "@types/js-yaml": "3.11.1",
-    "@types/node": "12.12.2"
+    "@types/js-yaml": "3.12.5",
+    "@types/node": "14.14.7"
   }
 }
