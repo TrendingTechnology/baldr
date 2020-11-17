@@ -59,20 +59,16 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { icons } from '@bldr/icons'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'MaterialIconView',
-  data () {
-    return {
-      size: '2.5vw'
-    }
-  },
-  computed: {
-    icons () {
-      return icons
-    }
+@Component
+export default class MaterialIconView extends Vue {
+  size = '2.5vw'
+
+  get icons (): string[] {
+    return icons
   }
 }
 </script>

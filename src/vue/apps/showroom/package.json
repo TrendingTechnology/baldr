@@ -13,29 +13,40 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@bldr/core-node": "*",
-    "@bldr/themes": "*",
     "@bldr/components-collection": "*",
+    "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/icons": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
+    "@bldr/themes": "*",
     "core-js": "^3.7.0",
-    "vue": "^2.6.12",
     "vue-router": "^3.4.9",
+    "vue": "^2.6.12",
+    "vue-class-component": "^7.2.6",
+    "vue-property-decorator": "^9.0.2",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@bldr/config": "*",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
     "@vue/cli-plugin-babel": "^4.5.9",
-    "@vue/cli-plugin-eslint": "^4.5.9",
-    "@vue/cli-service": "^4.5.9",
-    "babel-eslint": "^10.1.0",
+    "@vue/cli-plugin-eslint": "~4.5.9",
+    "@vue/cli-plugin-typescript": "~4.5.9",
+    "@vue/cli-service": "~4.5.9",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^7.1.0",
     "eslint": "^7.13.0",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "style-resources-loader": "^1.4.1",
+    "typescript": "~4.0.5",
     "vue-cli-plugin-style-resources-loader": "^0.1.4",
     "vue-template-compiler": "^2.6.12"
   },
@@ -46,11 +57,12 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "@vue/standard",
+      "@vue/typescript/recommended"
     ],
     "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
+      "ecmaVersion": 2020
     }
   },
   "postcss": {
@@ -60,7 +72,8 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    "not dead"
   ],
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

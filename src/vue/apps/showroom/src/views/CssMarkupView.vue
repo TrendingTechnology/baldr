@@ -22,13 +22,14 @@
   </main>
 </template>
 
-<script>
-import MarkupSample from '@/components/MarkupSample'
+<script lang="ts">
+import MarkupSample from '@/components/MarkupSample.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'CssMarkupView',
+@Component({
   components: {
     MarkupSample
   }
-}
+})
+export default class CssMarkupView extends Vue {}
 </script>

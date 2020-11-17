@@ -55,8 +55,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoremIpsum'
-}
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class LoremIpsum extends Vue {}
+
 </script>

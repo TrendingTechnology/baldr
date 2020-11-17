@@ -4,13 +4,14 @@
   </main>
 </template>
 
-<script>
-import LoremIpsum from '@/components/LoremIpsum'
+<script lang="ts">
+import LoremIpsum from '@/components/LoremIpsum.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'TypographyView',
+@Component({
   components: {
     LoremIpsum
   }
-}
+})
+export default class TypographyView extends Vue {}
 </script>

@@ -14,18 +14,13 @@
   </main>
 </template>
 
-<script>
-import LoremIpsum from '@/components/LoremIpsum'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'ModalView',
-  components: {
-    LoremIpsum
-  },
-  methods: {
-    showModal (name) {
-      this.$modal.show(name)
-    }
+@Component
+export default class ModalView extends Vue {
+  public showModal (name: string): void {
+    this.$modal.show(name)
   }
 }
 </script>

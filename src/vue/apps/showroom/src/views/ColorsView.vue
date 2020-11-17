@@ -14,25 +14,23 @@
   </main>
 </template>
 
-<script>
-export default {
-  name: 'ColorsView',
-  data () {
-    return  {
-      colors: [
-        'white',
-        'yellow',
-        'orange',
-        'red',
-        'brown',
-        'gray',
-        'green',
-        'blue',
-        'purple',
-        'black'
-      ]
-    }
-  }
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class ColorsView extends Vue {
+  colors: string[] = [
+    'white',
+    'yellow',
+    'orange',
+    'red',
+    'brown',
+    'gray',
+    'green',
+    'blue',
+    'purple',
+    'black'
+  ]
 }
 </script>
 

@@ -14,19 +14,19 @@
   </div>
 </template>
 
-<script>
-import packageJson from '@/../package.json'
+<script lang="ts">
+// import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/components-collection'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'MainApp',
+@Component({
   components: {
     AppInfo
-  },
-  computed: {
-    version () {
-      return packageJson.version
-    }
+  }
+})
+export default class MainApp extends Vue {
+  get version (): string {
+    return '1.1.1'
   }
 }
 </script>

@@ -12,13 +12,14 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'MarkupSample',
-  props: {
-    title: String,
-    markup: String
-  }
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
+
+@Component
+export default class MarkupSample extends Vue {
+  @Prop() readonly title!: string
+
+  @Prop() readonly markup!: string
 }
 </script>
 <style lang="scss" scoped>

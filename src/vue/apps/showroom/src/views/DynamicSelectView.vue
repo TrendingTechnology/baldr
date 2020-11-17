@@ -8,7 +8,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'DynamicSelectView',
   data: function () {
