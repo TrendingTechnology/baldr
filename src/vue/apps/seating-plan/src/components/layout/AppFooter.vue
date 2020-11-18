@@ -12,7 +12,7 @@
   </footer>
 </template>
 
-<script>
+<script lang="ts">
 import packageJson from '@/../package.json'
 import { mapGetters } from 'vuex'
 import { AppInfo } from '@bldr/components-collection'

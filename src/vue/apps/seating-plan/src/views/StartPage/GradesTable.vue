@@ -41,11 +41,11 @@
   </table>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'GradesTable',
+@Component({
   computed: mapGetters([
     'gradeNames',
     'isGradePlaced'
@@ -54,13 +54,15 @@ export default {
     ...mapActions([
       'deleteGrade'
     ]),
-    rename (oldGradeName, event) {
-      const newGradeName = event.target.innerText
-      this.$store.commit('renameGrade', {
-        oldGradeName: oldGradeName,
-        newGradeName: newGradeName
-      })
-    }
+  }
+})
+export default class GradesTable extends Vue {
+  rename (oldGradeName, event) {
+    const newGradeName = event.target.innerText
+    this.$store.commit('renameGrade', {
+      oldGradeName: oldGradeName,
+      newGradeName: newGradeName
+    })
   }
 }
 </script>

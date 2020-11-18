@@ -9,19 +9,16 @@ Mustermann\tMax\t\t05a</pre>
   </main>
 </template>
 
-<script>
-export default {
-  name: 'SpreadsheetImport',
-  data () {
-    return {
-      importString: ''
-    }
-  },
-  methods: {
-    importFromSpreadsheet (event) {
-      console.log(this.importString)
-      this.$store.dispatch('importFromSpreadsheet', this.importString)
-    }
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+
+@Component
+export default class SpreadsheetImport extends Vue {
+  importString: ''
+
+  importFromSpreadsheet (event) {
+    console.log(this.importString)
+    this.$store.dispatch('importFromSpreadsheet', this.importString)
   }
 }
 </script>

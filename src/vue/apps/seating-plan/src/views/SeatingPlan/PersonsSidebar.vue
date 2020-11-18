@@ -12,27 +12,26 @@
   </aside>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 
 // Components
 import PersonsList from './PersonsList.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsSidebar',
+@Component({
   components: {
     PersonsList
-  },
-  data: function () {
-    return {
-      lastName: '',
-      firstName: ''
-    }
   },
   computed: mapGetters([
     'gradeNameCurrent',
     'personsByGradeAsListSortedCurrent'
   ])
+})
+export default class PersonsSidebar extends Vue {
+  lastName: ''
+
+  firstName: ''
 }
 </script>
 

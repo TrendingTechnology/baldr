@@ -14,26 +14,23 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // Components
 import GradesTable from './GradesTable.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'GradesOverview',
+@Component({
   components: {
     GradesTable
-  },
-  data: function () {
-    return {
-      gradeName: ''
-    }
-  },
-  methods: {
-    createGrade () {
-      if (this.gradeName) {
-        this.$store.dispatch('createGrade', this.gradeName)
-        this.gradeName = ''
-      }
+  }
+})
+export default class GradesOverview extends Vue {
+  gradeName: ''
+
+  createGrade () {
+    if (this.gradeName) {
+      this.$store.dispatch('createGrade', this.gradeName)
+      this.gradeName = ''
     }
   }
 }

@@ -12,7 +12,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import FormAddPerson from './FormAddPerson.vue'
 import PersonsTable from './PersonsTable.vue'
 import { mapGetters } from 'vuex'

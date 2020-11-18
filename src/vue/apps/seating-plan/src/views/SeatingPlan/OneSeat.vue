@@ -44,72 +44,81 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 
 // Components
 import AddJobIcons from '@/components/AddJobIcons.vue'
 import PersonsJobs from '@/components/PersonsJobs.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'OneSeat',
+@Component({
   components: {
     AddJobIcons,
     PersonsJobs
-  },
-  props: {
-    seat: Object
   },
   computed: {
     ...mapGetters([
       'jobsAsArray',
       'seats'
-    ]),
-    draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
-        return 'true'
-      }
-      return 'false'
-    },
-    gradeIsNotPlaced () {
-      return !this.$store.getters.isGradePlacedCurrent
-    },
-    person () {
-      return this.$store.getters.personByGradeAndSeatNoCurrent(this.seat.no)
-    },
-    style () {
-      return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
+    ])
+  }
+})
+export default class OneSeat extends Vue {
+  @Prop()
+  seat: object
+
+  get draggable () {
+    if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
+      return 'true'
     }
-  },
-  methods: {
-    dragDrop (event) {
-      const personId = event.dataTransfer.getData('text/plain')
-      this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
-      if (event.currentTarget.classList) {
-        event.currentTarget.classList.remove('dragover')
-      }
-    },
-    dragLeave (event) {
-      if (event.currentTarget.classList) {
-        event.currentTarget.classList.remove('dragover')
-      }
-    },
-    dragOver (event) {
-      event.currentTarget.classList.add('dragover')
-    },
-    dragStart (event) {
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/plain', event.currentTarget.title)
-    },
-    openModalPersonSelect (event) {
-      if (this.person) return
-      this.$store.commit('setSeatNoCurrent', this.seat.no)
-      this.$modal.show('person-select')
-      this.$dynamicSelect.focus()
-    },
-    unplacePerson (event) {
-      this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
+    return 'false'
+  }
+
+  get gradeIsNotPlaced () {
+    return !this.$store.getters.isGradePlacedCurrent
+  }
+
+  get person () {
+    return this.$store.getters.personByGradeAndSeatNoCurrent(this.seat.no)
+  }
+
+  get style () {
+    return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
+  }
+
+  dragDrop (event) {
+    const personId = event.dataTransfer.getData('text/plain')
+    this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
+    if (event.currentTarget.classList) {
+      event.currentTarget.classList.remove('dragover')
     }
+  }
+
+  dragLeave (event) {
+    if (event.currentTarget.classList) {
+      event.currentTarget.classList.remove('dragover')
+    }
+  }
+
+  dragOver (event) {
+    event.currentTarget.classList.add('dragover')
+  }
+
+  dragStart (event) {
+    event.dataTransfer.dropEffect = 'move'
+    event.dataTransfer.setData('text/plain', event.currentTarget.title)
+  }
+
+  openModalPersonSelect (event) {
+    if (this.person) return
+    this.$store.commit('setSeatNoCurrent', this.seat.no)
+    this.$modal.show('person-select')
+    this.$dynamicSelect.focus()
+  }
+
+  unplacePerson (event) {
+    this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
   }
 }
 </script>

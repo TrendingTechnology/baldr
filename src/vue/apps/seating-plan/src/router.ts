@@ -2,13 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Page components
-import JobsManager from '@/views/JobsManager'
-import JsonImport from '@/views/JsonImport'
-import AdministerPersons from '@/views/AdministerPersons'
-import SeatingPlan from '@/views/SeatingPlan'
-import SpreadsheetImport from '@/views/SpreadsheetImport'
-import StartPage from '@/views/StartPage'
-import TimeTravel from '@/views/TimeTravel'
+import JobsManager from '@/views/JobsManager.vue'
+import JsonImport from '@/views/JsonImport.vue'
+import AdministerPersons from '@/views/AdministerPersons.vue'
+import SeatingPlan from '@/views/SeatingPlan.vue'
+import SpreadsheetImport from '@/views/SpreadsheetImport.vue'
+import StartPage from '@/views/StartPage.vue'
+import TimeTravel from '@/views/TimeTravel.vue'
 
 Vue.use(Router)
 
@@ -18,7 +18,7 @@ export default new Router({
       name: 'start-page',
       path: '/',
       component: StartPage,
-      shortcut: 'h',
+      // shortcut: 'h',
       meta: {
         title: 'Sitzpläne Musiksaal E 17'
       }
@@ -36,7 +36,7 @@ export default new Router({
     {
       name: 'spreadsheet-import',
       path: '/spreadsheet-import',
-      shortcut: 's',
+      // shortcut: 's',
       component: SpreadsheetImport,
       meta: {
         title: 'Aus Excel / Calc importieren'
@@ -45,7 +45,7 @@ export default new Router({
     {
       name: 'json-import',
       path: '/json-import',
-      shortcut: 'j',
+      // shortcut: 'j',
       component: JsonImport,
       meta: {
         title: 'JSON-Dump importieren'
@@ -54,7 +54,7 @@ export default new Router({
     {
       name: 'time-travel',
       path: '/time-travel',
-      shortcut: 't',
+      // shortcut: 't',
       component: TimeTravel,
       meta: {
         title: 'Zeitreise'
@@ -63,7 +63,7 @@ export default new Router({
     {
       name: 'jobs-manager',
       path: '/jobs-manager',
-      shortcut: 'm',
+      // shortcut: 'm',
       component: JobsManager,
       meta: {
         title: 'Dienste verwalten'

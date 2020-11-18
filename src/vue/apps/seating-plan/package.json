@@ -24,41 +24,48 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "@bldr/core-node": "*",
-    "@bldr/config": "*",
-    "@bldr/http-request": "*",
-    "@bldr/themes": "*",
     "@bldr/components-collection": "*",
+    "@bldr/config": "*",
+    "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",
+    "@bldr/http-request": "*",
     "@bldr/icons": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
-    "vue": "^2.6.12",
+    "@bldr/themes": "*",
     "vue-headful": "^2.1.0",
+    "vue-class-component": "^7.2.6",
+    "vue-property-decorator": "^9.0.2",
     "vue-router": "^3.4.9",
+    "vue": "^2.6.12",
     "vuex": "^3.5.1"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
     "@vue/cli-plugin-e2e-cypress": "^4.5.9",
-    "@vue/cli-plugin-eslint": "^4.5.9",
+    "@vue/cli-plugin-eslint": "~4.5.9",
+    "@vue/cli-plugin-typescript": "~4.5.9",
     "@vue/cli-plugin-unit-mocha": "^4.5.9",
     "@vue/cli-service": "^4.5.9",
     "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^7.13.0",
-    "eslint-plugin-vue": "^7.1.0",
-    "node-sass": "^5.0.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.1.0",
+    "eslint-plugin-vue": "^7.1.0",
+    "eslint": "^7.13.0",
+    "node-sass": "^5.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^10.1.0",
     "style-resources-loader": "^1.4.1",
+    "typescript": "~4.0.5",
     "vue-cli-plugin-style-resources-loader": "^0.1.4",
     "vue-template-compiler": "^2.6.12"
   },
@@ -67,10 +74,6 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
   "eslintConfig": {
     "root": true,
     "env": {
@@ -78,12 +81,18 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "@vue/standard"
+      "@vue/standard",
+      "@vue/typescript/recommended"
     ],
-    "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
-    }
+      "ecmaVersion": 2020
+    },
+    "rules": {}
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

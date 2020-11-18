@@ -21,31 +21,30 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'JobsManager',
-  data: function () {
-    return {
-      newName: '',
-      newIcon: ''
-    }
-  },
+@Component({
   computed: mapGetters([
     'jobsAsArray'
-  ]),
-  methods: {
-    createJob () {
-      if (this.newName && this.newIcon) {
-        this.$store.dispatch('createJob', { name: this.newName, icon: this.newIcon })
-        this.newName = ''
-        this.newIcon = ''
-      }
-    },
-    deleteJob (name) {
-      this.$store.dispatch('deleteJob', name)
+  ])
+})
+export default class JobsManager extends Vue {
+  newName: ''
+
+  newIcon: ''
+
+  createJob () {
+    if (this.newName && this.newIcon) {
+      this.$store.dispatch('createJob', { name: this.newName, icon: this.newIcon })
+      this.newName = ''
+      this.newIcon = ''
     }
+  }
+
+  deleteJob (name) {
+    this.$store.dispatch('deleteJob', name)
   }
 }
 </script>

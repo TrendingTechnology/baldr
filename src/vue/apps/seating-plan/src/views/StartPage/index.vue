@@ -12,18 +12,19 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 // Components
 import GradesOverview from './GradesOverview.vue'
 import MetaTable from './MetaTable.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'StartPage',
+@Component({
   components: {
     GradesOverview,
     MetaTable
   }
-}
+})
+export default class StartPage extends Vue {}
 </script>
 
 <style lang="scss">

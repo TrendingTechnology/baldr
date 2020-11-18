@@ -15,7 +15,7 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 
 // Components
@@ -24,9 +24,9 @@ import PersonsSidebar from './PersonsSidebar.vue'
 import PlanFooter from './PlanFooter.vue'
 import PlanHeader from './PlanHeader.vue'
 import PlanSeats from './PlanSeats.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'SeatingPlanView',
+@Component({
   components: {
     PersonSelect,
     PersonsSidebar,
@@ -36,17 +36,21 @@ export default {
   },
   computed: mapGetters([
     'gradeNameCurrent'
-  ]),
-  beforeCreate: function () {
+  ])
+})
+export default class SeatingPlanView extends Vue {
+  beforeCreate () {
     const grade = this.$route.params.grade
     if (!this.$store.getters.grade(grade)) {
       this.$router.push('/')
     }
-  },
-  created: function () {
+  }
+
+  created () {
     const gradeName = this.$route.params.grade
     this.$store.commit('setGradeNameCurrent', gradeName)
-  },
+  }
+
   beforeRouteUpdate (to, from, next) {
     this.$store.commit('setGradeNameCurrent', to.params.grade)
     next()

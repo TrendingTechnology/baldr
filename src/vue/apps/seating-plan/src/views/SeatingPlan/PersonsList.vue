@@ -9,21 +9,22 @@
   </ol>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 
 // Components
 import PersonsListItem from './PersonsListItem.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsTable',
+@Component({
   components: {
     PersonsListItem
   },
   computed: mapGetters([
     'personsByGradeAsListSortedCurrent'
   ])
-}
+})
+export default class PersonsTable extends Vue {}
 </script>
 
 <style lang="scss">

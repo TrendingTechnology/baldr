@@ -6,36 +6,36 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // Components
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'app',
+@Component({
   components: {
     AppHeader,
     AppFooter
-  },
-  computed: {
-    title () {
-      if (this.$route.meta.title) {
-        return this.$route.meta.title
-      }
-      return null
+  }
+})
+export default class App extends Vue {
+  get title () {
+    if (this.$route.meta.title) {
+      return this.$route.meta.title
     }
-  },
-  created: function () {
-    this.$store.dispatch('importLatestState')
+    return null
+  }
 
+  created () {
+    this.$store.dispatch('importLatestState')
     window.addEventListener('beforeunload', event => {
       event.preventDefault()
       event.returnValue = ''
     })
-
     this.$store.dispatch('checkApi')
-  },
-  mounted: function () {
+  }
+
+  mounted () {
     this.$shortcuts.add('ctrl+f', () => { this.$fullscreen() }, 'Fullscreen')
     this.$shortcuts.add('ctrl+s', () => { this.$store.dispatch('save') }, 'save')
   }

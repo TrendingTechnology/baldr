@@ -19,11 +19,11 @@
   </footer>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PlanFooter',
+@Component({
   computed: mapGetters([
     'jobsOfGradeCurrent',
     'personsCountCurrent'
@@ -31,10 +31,12 @@ export default {
   methods: {
     ...mapActions([
       'removeJobFromPerson'
-    ]),
-    getJobIconFromName (jobName) {
-      return this.$store.getters.jobIconFromName(jobName)
-    }
+    ])
+  }
+})
+export default class PlanFooter extends Vue {
+  getJobIconFromName (jobName) {
+    return this.$store.getters.jobIconFromName(jobName)
   }
 }
 </script>

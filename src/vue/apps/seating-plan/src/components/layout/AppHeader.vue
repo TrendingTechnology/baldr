@@ -9,7 +9,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import vueHeadful from 'vue-headful'
 
 // Components

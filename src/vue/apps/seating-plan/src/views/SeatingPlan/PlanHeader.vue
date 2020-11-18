@@ -10,21 +10,23 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PlanHeader',
+@Component({
   computed: {
     ...mapGetters([
       'gradeNameCurrent',
       'metaLocation',
       'metaYear',
       'stateDateCurrent'
-    ]),
-    title () {
-      return `Sitzplan der Klasse „${this.gradeNameCurrent}“ (Schuljahr ${this.metaYear})`
-    }
+    ])
+  }
+})
+export default class PlanHeader extends Vue {
+  title () {
+    return `Sitzplan der Klasse „${this.gradeNameCurrent}“ (Schuljahr ${this.metaYear})`
   }
 }
 </script>

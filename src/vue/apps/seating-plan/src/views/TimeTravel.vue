@@ -46,20 +46,16 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
 import { formatToLocalDateTime } from '../lib.js'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'TimeTravel',
+@Component({
   computed: mapGetters([
     'externalStateDates',
     'localStateDates'
   ]),
-  beforeCreate: function () {
-    this.$store.dispatch('fetchExternalStateDates')
-    this.$store.dispatch('fetchLocalStateDates')
-  },
   methods: {
     ...mapActions([
       'deleteFromExternalByTime',
@@ -68,6 +64,12 @@ export default {
       'importFromLocalByTime'
     ]),
     formatToLocalDateTime
+  }
+})
+export default class TimeTravel extends Vue {
+  beforeCreate () {
+    this.$store.dispatch('fetchExternalStateDates')
+    this.$store.dispatch('fetchLocalStateDates')
   }
 }
 </script>

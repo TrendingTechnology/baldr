@@ -21,23 +21,23 @@
   </table>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'MetaTable',
-  methods: {
-    getMeta (key) {
-      const value = this.$store.getters.meta(key)
-      if (!value) return '_'
-      return value
-    },
-    setMeta (key, event) {
-      const value = event.target.innerText
-      this.$store.commit('setMeta', {
-        key: key,
-        value: value
-      })
-    }
+@Component
+export default class MetaTable extends Vue {
+  getMeta (key) {
+    const value = this.$store.getters.meta(key)
+    if (!value) return '_'
+    return value
+  }
+
+  setMeta (key, event) {
+    const value = event.target.innerText
+    this.$store.commit('setMeta', {
+      key: key,
+      value: value
+    })
   }
 }
 </script>

@@ -9,42 +9,45 @@
   </table>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
 
 // Components
 import PersonsTableRow from './PersonsTableRow.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsTable',
-  props: {
-    start: {
-      type: Number,
-      default: 1
-    },
-    count: {
-      type: Number,
-      default: undefined
-    }
-  },
+@Component({
   components: {
     PersonsTableRow
   },
   computed: mapGetters([
     'personsByGradeAsListSortedCurrent'
-  ]),
-  methods: {
-    persons () {
-      const persons = this.personsByGradeAsListSortedCurrent
-      const start = this.start - 1
-      let end
-      if (!this.count) {
-        end = undefined
-      } else {
-        end = start + this.count
-      }
-      return persons.slice(start, end)
+  ])
+})
+export default class PersonsTable extends Vue {
+
+  @Prop({
+    type: Number,
+    default: 1
+  })
+  start: number
+
+  @Prop({
+    type: Number,
+    default: undefined
+  })
+  count: number
+
+  persons () {
+    const persons = this.personsByGradeAsListSortedCurrent
+    const start = this.start - 1
+    let end
+    if (!this.count) {
+      end = undefined
+    } else {
+      end = start + this.count
     }
+    return persons.slice(start, end)
   }
 }
 </script>

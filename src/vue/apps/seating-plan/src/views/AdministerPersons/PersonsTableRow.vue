@@ -36,37 +36,41 @@
   </tr>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions } from 'vuex'
 
 // Components
 import PersonsJobs from '@/components/PersonsJobs.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsTableRow',
-  props: {
-    person: Object,
-    no: Number
-  },
+@Component({
   components: {
     PersonsJobs
   },
   methods: {
     ...mapActions([
       'deletePerson'
-    ]),
-    rename (person, property, event) {
-      const newValue = event.target.innerText
-      const payload = {
-        person: person
-      }
-      if (property === 'firstName') {
-        payload.newFirstName = newValue
-      } else if (property === 'lastName') {
-        payload.newLastName = newValue
-      }
-      this.$store.commit('renamePerson', payload)
+    ])
+  }
+})
+export default class PersonsTableRow extends Vue {
+  @Prop()
+  person: Object
+
+  @Prop()
+  no: Number
+
+  rename (person, property, event) {
+    const newValue = event.target.innerText
+    const payload = {
+      person: person
     }
+    if (property === 'firstName') {
+      payload.newFirstName = newValue
+    } else if (property === 'lastName') {
+      payload.newLastName = newValue
+    }
+    this.$store.commit('renamePerson', payload)
   }
 }
 </script>

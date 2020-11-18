@@ -8,9 +8,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ResizeObserver from 'resize-observer-polyfill'
 import { mapGetters } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
 // Components
 import OneSeat from './OneSeat.vue'
@@ -43,14 +44,15 @@ const resizeObserver = new ResizeObserver(entries => {
   }
 })
 
-export default {
-  name: 'PlanSeats',
+@Component({
   components: {
     OneSeat
   },
   computed: mapGetters([
     'seatPositions'
-  ]),
+  ])
+})
+export default class PlanSeats extends Vue {
   mounted () {
     resizeObserver.observe(this.$el)
   }

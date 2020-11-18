@@ -11,25 +11,25 @@
   </li>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsListItem',
-  props: {
-    person: Object,
-    no: Number
-  },
-  computed: {
-    draggable () {
-      if (!this.person.seatNo) return 'true'
-      return 'false'
-    }
-  },
-  methods: {
-    dragStart (event) {
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/plain', event.currentTarget.title)
-    }
+@Component
+export default class PersonsListItem extends Vue {
+  @Prop()
+  person: Object
+
+  @Prop()
+  no: Number
+
+  get draggable () {
+    if (!this.person.seatNo) return 'true'
+    return 'false'
+  }
+
+  dragStart (event) {
+    event.dataTransfer.dropEffect = 'move'
+    event.dataTransfer.setData('text/plain', event.currentTarget.title)
   }
 }
 </script>
