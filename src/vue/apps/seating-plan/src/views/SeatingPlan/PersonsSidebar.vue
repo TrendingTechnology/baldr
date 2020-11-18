@@ -28,11 +28,7 @@ import { Component, Vue } from 'vue-property-decorator'
     'personsByGradeAsListSortedCurrent'
   ])
 })
-export default class PersonsSidebar extends Vue {
-  lastName: ''
-
-  firstName: ''
-}
+export default class PersonsSidebar extends Vue {}
 </script>
 
 <style lang="scss">

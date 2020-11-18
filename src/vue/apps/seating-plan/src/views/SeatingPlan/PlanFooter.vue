@@ -35,7 +35,7 @@ import { Component, Vue } from 'vue-property-decorator'
   }
 })
 export default class PlanFooter extends Vue {
-  getJobIconFromName (jobName) {
+  getJobIconFromName (jobName: string) {
     return this.$store.getters.jobIconFromName(jobName)
   }
 }

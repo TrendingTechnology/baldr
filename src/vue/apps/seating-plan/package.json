@@ -17,7 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "serve:webapp": "vue-cli-service serve",
+    "serve:webapp": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
@@ -27,6 +27,7 @@
     "@bldr/components-collection": "*",
     "@bldr/config": "*",
     "@bldr/core-node": "*",
+    "@bldr/core-browser": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/http-request": "*",
     "@bldr/icons": "*",

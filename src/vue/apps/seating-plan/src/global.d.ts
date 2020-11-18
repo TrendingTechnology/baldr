@@ -3,3 +3,13 @@ declare module '@bldr/shortcuts'
 declare module '@bldr/icons'
 declare module '@bldr/dynamic-select'
 declare module '@bldr/modal-dialog'
+
+interface DOMEvent<T extends EventTarget> extends Event {
+  target: T
+}
+
+interface Person {
+  firstName: string
+  lastName: string
+  seatNo: number
+}

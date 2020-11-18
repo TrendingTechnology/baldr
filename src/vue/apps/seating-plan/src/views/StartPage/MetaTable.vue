@@ -26,13 +26,14 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class MetaTable extends Vue {
-  getMeta (key) {
+  getMeta (key: string) {
     const value = this.$store.getters.meta(key)
     if (!value) return '_'
     return value
   }
 
-  setMeta (key, event) {
+  setMeta (key: string, event: DOMEvent<HTMLInputElement>) {
+    if (!event) return
     const value = event.target.innerText
     this.$store.commit('setMeta', {
       key: key,

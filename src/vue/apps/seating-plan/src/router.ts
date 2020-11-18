@@ -4,10 +4,10 @@ import Router from 'vue-router'
 // Page components
 import JobsManager from '@/views/JobsManager.vue'
 import JsonImport from '@/views/JsonImport.vue'
-import AdministerPersons from '@/views/AdministerPersons.vue'
-import SeatingPlan from '@/views/SeatingPlan.vue'
+import AdministerPersons from '@/views/AdministerPersons/index.vue'
+import SeatingPlan from '@/views/SeatingPlan/index.vue'
 import SpreadsheetImport from '@/views/SpreadsheetImport.vue'
-import StartPage from '@/views/StartPage.vue'
+import StartPage from '@/views/StartPage/index.vue'
 import TimeTravel from '@/views/TimeTravel.vue'
 
 Vue.use(Router)

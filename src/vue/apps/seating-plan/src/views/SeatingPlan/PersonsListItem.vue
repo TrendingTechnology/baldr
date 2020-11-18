@@ -17,19 +17,20 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 @Component
 export default class PersonsListItem extends Vue {
   @Prop()
-  person: Object
+  person!: Person
 
   @Prop()
-  no: Number
+  no!: number
 
   get draggable () {
     if (!this.person.seatNo) return 'true'
     return 'false'
   }
 
-  dragStart (event) {
-    event.dataTransfer.dropEffect = 'move'
-    event.dataTransfer.setData('text/plain', event.currentTarget.title)
+  dragStart (event: DragEvent) {
+    event!.dataTransfer!.dropEffect = 'move'
+    const element = <HTMLElement> event.currentTarget
+    event!.dataTransfer!.setData('text/plain', element.title)
   }
 }
 </script>

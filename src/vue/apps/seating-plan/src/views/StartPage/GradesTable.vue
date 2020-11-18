@@ -57,7 +57,7 @@ import { Component, Vue } from 'vue-property-decorator'
   }
 })
 export default class GradesTable extends Vue {
-  rename (oldGradeName, event) {
+  rename (oldGradeName: string, event: DOMEvent<HTMLInputElement>) {
     const newGradeName = event.target.innerText
     this.$store.commit('renameGrade', {
       oldGradeName: oldGradeName,

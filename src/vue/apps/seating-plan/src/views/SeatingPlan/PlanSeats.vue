@@ -34,11 +34,13 @@ const resizeObserver = new ResizeObserver(entries => {
     // DIN A 4 Landscape: width: 297 height: 210
     const aspectRatio = { width: 297, height: 210 }
     for (const entry of entries) {
+
       const height = aspectRatio.height / aspectRatio.width * entry.contentRect.width
+      const element = <HTMLElement> entry.target
       if (height > maxHeight) {
-        entry.target.style.height = `${maxHeight}px`
+        element.style.height = `${maxHeight}px`
       } else {
-        entry.target.style.height = `${height}px`
+        element.style.height = `${height}px`
       }
     }
   }

@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
-import { formatToLocalDateTime } from '../lib.js'
+import { formatToLocalDateTime } from '@bldr/core-browser'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
