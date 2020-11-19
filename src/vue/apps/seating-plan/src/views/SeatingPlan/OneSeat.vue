@@ -66,7 +66,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 })
 export default class OneSeat extends Vue {
   @Prop()
-  seat: object
+  seat: Seat
+  seats: Room
 
   get draggable () {
     if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
@@ -87,37 +88,41 @@ export default class OneSeat extends Vue {
     return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
   }
 
-  dragDrop (event) {
-    const personId = event.dataTransfer.getData('text/plain')
+  dragDrop (event: DragEvent) {
+    const personId = event!.dataTransfer!.getData('text/plain')
+    const element = <HTMLElement> event.currentTarget
     this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
-    if (event.currentTarget.classList) {
-      event.currentTarget.classList.remove('dragover')
+    if (element.classList) {
+      element.classList.remove('dragover')
     }
   }
 
-  dragLeave (event) {
-    if (event.currentTarget.classList) {
-      event.currentTarget.classList.remove('dragover')
+  dragLeave (event: DragEvent) {
+    const element = <HTMLElement> event.currentTarget
+    if (element.classList) {
+      element.classList.remove('dragover')
     }
   }
 
-  dragOver (event) {
-    event.currentTarget.classList.add('dragover')
+  dragOver (event: DragEvent) {
+    const element = <HTMLElement> event.currentTarget
+    element.classList.add('dragover')
   }
 
-  dragStart (event) {
-    event.dataTransfer.dropEffect = 'move'
-    event.dataTransfer.setData('text/plain', event.currentTarget.title)
+  dragStart (event: DragEvent) {
+    event!.dataTransfer!.dropEffect = 'move'
+    const element = <HTMLElement> event.currentTarget
+    event!.dataTransfer!.setData('text/plain', element.title)
   }
 
-  openModalPersonSelect (event) {
+  openModalPersonSelect (event: DragEvent) {
     if (this.person) return
     this.$store.commit('setSeatNoCurrent', this.seat.no)
     this.$modal.show('person-select')
     this.$dynamicSelect.focus()
   }
 
-  unplacePerson (event) {
+  unplacePerson (event: DragEvent) {
     this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
   }
 }

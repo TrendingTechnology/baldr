@@ -16,37 +16,39 @@
 import FormAddPerson from './FormAddPerson.vue'
 import PersonsTable from './PersonsTable.vue'
 import { mapGetters } from 'vuex'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'AdministerPersons',
+@Component({
   components: {
     FormAddPerson,
     PersonsTable
   },
-  beforeCreate: function () {
+  computed: mapGetters(['gradeNameCurrent'])
+})
+export default class AdministerPersons extends Vue {
+  beforeCreate () {
     const grade = this.$route.params.grade
     if (!this.$store.getters.grade(grade)) {
       this.$router.push('/')
     }
-  },
-  computed: mapGetters(['gradeNameCurrent']),
-  created: function () {
+  }
+
+  created () {
     const gradeName = this.$route.params.grade
     this.$store.commit('setGradeNameCurrent', gradeName)
-  },
-  methods: {
-    rename (person, property, event) {
-      const newValue = event.target.innerText
-      const payload = {
-        person: person
-      }
-      if (property === 'firstName') {
-        payload.newFirstName = newValue
-      } else if (property === 'lastName') {
-        payload.newLastName = newValue
-      }
-      this.$store.commit('renamePerson', payload)
+  }
+
+  rename (person, property, event) {
+    const newValue = event.target.innerText
+    const payload = {
+      person: person
     }
+    if (property === 'firstName') {
+      payload.newFirstName = newValue
+    } else if (property === 'lastName') {
+      payload.newLastName = newValue
+    }
+    this.$store.commit('renamePerson', payload)
   }
 }
 </script>
