@@ -18,7 +18,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeHttpRequestInstance = void 0;
+exports.makeHttpRequestInstance = exports.HttpRequest = void 0;
 /* globals location */
 const axios_1 = require("axios");
 /**
@@ -118,6 +118,7 @@ class HttpRequest {
         });
     }
 }
+exports.HttpRequest = HttpRequest;
 /**
  * Make an configured instance of the `HttpRequest()` class.
  *

@@ -16,11 +16,13 @@ const assert_1 = __importDefault(require("assert"));
 const config_1 = __importDefault(require("@bldr/config"));
 const http_request_1 = require("@bldr/http-request");
 const localHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'local', '/api/media');
-describe('local: /api/media', function () {
-    this.timeout(10000);
+const remoteHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'remote', '/api/media');
+let httpRequest = localHttpRequest;
+function runTests() {
+    this.timeout(1000000);
     it('/api/media/mgmt/update', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request('mgmt/update');
+            const result = yield httpRequest.request('mgmt/update');
             assert_1.default.strictEqual(result.data.finished, true);
             assert_1.default.ok(typeof result.data.begin === 'number');
             assert_1.default.ok(typeof result.data.end === 'number');
@@ -32,7 +34,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=assets&field=id&method=exactMatch&search=IN_Cembalo', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'assets',
@@ -49,7 +51,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=assets&field=id&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'assets',
@@ -65,7 +67,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'presentations',
@@ -82,7 +84,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'presentations',
@@ -98,7 +100,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'assets',
@@ -113,7 +115,7 @@ describe('local: /api/media', function () {
     });
     it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=dynamicSelect', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request({
+            const result = yield httpRequest.request({
                 url: 'query',
                 params: {
                     type: 'assets',
@@ -130,9 +132,12 @@ describe('local: /api/media', function () {
     });
     it('/media/stats/count', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield localHttpRequest.request('stats/count');
+            const result = yield httpRequest.request('stats/count');
             assert_1.default.ok(result.data.assets > 0);
             assert_1.default.ok(result.data.presentations > 0);
         });
     });
-});
+}
+describe('local: /api/media', runTests);
+httpRequest = remoteHttpRequest;
+describe('remote: /api/media', runTests);

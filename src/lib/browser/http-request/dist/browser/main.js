@@ -21,7 +21,7 @@ import axios from 'axios';
 /**
  * A wrapper around Axios.
  */
-class HttpRequest {
+export class HttpRequest {
     /**
      * Make an configured instance of the `HttpRequest()` class.
      *

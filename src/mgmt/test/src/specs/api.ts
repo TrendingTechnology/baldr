@@ -1,14 +1,17 @@
 import assert from 'assert'
 
 import config from '@bldr/config'
-import { makeHttpRequestInstance } from '@bldr/http-request'
+import { makeHttpRequestInstance, HttpRequest } from '@bldr/http-request'
 
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
+const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
 
-describe('local: /api/media', function () {
-  this.timeout(10000)
+let httpRequest: HttpRequest = localHttpRequest
+
+function runTests (this: Mocha.Suite) {
+  this.timeout(1000000)
   it('/api/media/mgmt/update', async function () {
-    const result = await localHttpRequest.request('mgmt/update')
+    const result = await httpRequest.request('mgmt/update')
     assert.strictEqual(result.data.finished, true)
     assert.ok(typeof result.data.begin === 'number')
     assert.ok(typeof result.data.end === 'number')
@@ -19,7 +22,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=assets&field=id&method=exactMatch&search=IN_Cembalo', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'assets',
@@ -35,7 +38,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=assets&field=id&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'assets',
@@ -50,7 +53,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'presentations',
@@ -66,7 +69,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'presentations',
@@ -81,7 +84,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'assets',
@@ -95,7 +98,7 @@ describe('local: /api/media', function () {
   })
 
   it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=dynamicSelect', async function () {
-    const result = await localHttpRequest.request({
+    const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'assets',
@@ -111,9 +114,13 @@ describe('local: /api/media', function () {
   })
 
   it('/media/stats/count', async function () {
-    const result = await localHttpRequest.request('stats/count')
+    const result = await httpRequest.request('stats/count')
     assert.ok(result.data.assets > 0)
     assert.ok(result.data.presentations > 0)
   })
 
-})
+}
+
+describe('local: /api/media', runTests)
+httpRequest = remoteHttpRequest
+describe('remote: /api/media', runTests)

@@ -13,7 +13,7 @@ declare type RestEndPoint = 'local' | 'remote' | 'automatic';
 /**
  * A wrapper around Axios.
  */
-declare class HttpRequest {
+export declare class HttpRequest {
     /**
      * A URL segment that is inserted between the base URL and the last part of
      * the URL. For example
