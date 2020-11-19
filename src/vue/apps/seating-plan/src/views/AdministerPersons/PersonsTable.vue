@@ -30,13 +30,15 @@ export default class PersonsTable extends Vue {
     type: Number,
     default: 1
   })
-  start: number
+  start!: number
 
   @Prop({
     type: Number,
     default: undefined
   })
-  count: number
+  count!: number
+
+  personsByGradeAsListSortedCurrent!: Person[]
 
   persons () {
     const persons = this.personsByGradeAsListSortedCurrent

@@ -10,14 +10,15 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'SaveLink',
+@Component({
   computed: mapGetters([
     'stateChanged'
   ]),
   methods: mapActions([
     'save'
   ])
-}
+})
+export default class SaveLink extends Vue {}
 </script>

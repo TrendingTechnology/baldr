@@ -38,10 +38,13 @@ export default class AdministerPersons extends Vue {
     this.$store.commit('setGradeNameCurrent', gradeName)
   }
 
-  rename (person, property, event) {
-    const newValue = event.target.innerText
+  rename (person: Person, property: string, event: Event) {
+    const element = <HTMLElement> event.target
+    const newValue = element.innerText
     const payload = {
-      person: person
+      person: person,
+      newFirstName: '',
+      newLastName: ''
     }
     if (property === 'firstName') {
       payload.newFirstName = newValue

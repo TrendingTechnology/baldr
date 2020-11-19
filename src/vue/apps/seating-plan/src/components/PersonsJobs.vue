@@ -13,12 +13,9 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'PersonsJob',
-  props: {
-    person: [Object, Boolean]
-  },
+@Component({
   computed: mapGetters([
     'jobsAsArray'
   ]),
@@ -29,6 +26,13 @@ export default {
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }
+  }
+})
+export default class PersonsJob extends Vue {
+  person!: Person
+
+  hasPersonJob (personId: string, jobName: string): boolean {
+    return this.$store.getters.hasPersonJob(personId, jobName)
   }
 }
 </script>

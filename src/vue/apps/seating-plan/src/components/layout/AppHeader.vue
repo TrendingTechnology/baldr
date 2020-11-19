@@ -13,24 +13,25 @@
 import vueHeadful from 'vue-headful'
 
 // Components
-import MainMenu from '@/components/layout/MainMenu'
+import MainMenu from '@/components/layout/MainMenu/index.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'AppHeader',
-  props: {
-    title: String
-  },
+@Component({
   components: {
     MainMenu,
     vueHeadful
-  },
-  computed: {
-    isNotHome () {
-      if (this.$route.path !== '/') {
-        return true
-      }
-      return false
+  }
+})
+export default class AppHeader extends Vue {
+  @Prop()
+  title!: string
+
+
+  get isNotHome () {
+    if (this.$route.path !== '/') {
+      return true
     }
+    return false
   }
 }
 </script>

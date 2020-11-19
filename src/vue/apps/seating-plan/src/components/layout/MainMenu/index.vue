@@ -52,12 +52,12 @@
 import { mapActions, mapGetters } from 'vuex'
 
 // Components
-import ExportLink from './ExportLink'
-import GradesItems from './GradesItems'
-import SaveLink from './SaveLink'
+import ExportLink from './ExportLink.vue'
+import GradesItems from './GradesItems.vue'
+import SaveLink from './SaveLink.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'MainMenu',
+@Component({
   components: {
     ExportLink,
     GradesItems,
@@ -71,7 +71,8 @@ export default {
       'createTestData'
     ])
   }
-}
+})
+export default class MainMenu extends Vue {}
 </script>
 
 <style lang="scss">

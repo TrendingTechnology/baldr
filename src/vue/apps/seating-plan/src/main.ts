@@ -8,7 +8,7 @@ import App from './App.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import store from './store'
+import store from './store/index.js'
 import router from './router'
 import ModalDialog from '@bldr/modal-dialog'
 import DynamicSelect from '@bldr/dynamic-select'
@@ -24,7 +24,7 @@ Vue.use(MaterialIcon)
 Vue.use(shortcuts, router, store)
 
 Vue.prototype.$fullscreen = function () {
-  document.querySelector('#app').requestFullscreen()
+  document.querySelector('#app')!.requestFullscreen()
 }
 
 new Vue({

@@ -66,8 +66,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 })
 export default class OneSeat extends Vue {
   @Prop()
-  seat: Seat
-  seats: Room
+  seat!: Seat
+
+  seats!: Room
 
   get draggable () {
     if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {

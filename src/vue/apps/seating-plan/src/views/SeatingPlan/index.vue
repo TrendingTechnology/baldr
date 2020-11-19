@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
+import { Route, NavigationGuardNext } from 'vue-router'
 
 // Components
 import PersonSelect from '@/components/PersonSelect.vue'
@@ -51,7 +52,7 @@ export default class SeatingPlanView extends Vue {
     this.$store.commit('setGradeNameCurrent', gradeName)
   }
 
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
     this.$store.commit('setGradeNameCurrent', to.params.grade)
     next()
   }

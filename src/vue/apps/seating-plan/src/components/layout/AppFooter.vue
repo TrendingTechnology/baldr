@@ -16,23 +16,27 @@
 import packageJson from '@/../package.json'
 import { mapGetters } from 'vuex'
 import { AppInfo } from '@bldr/components-collection'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'AppFooter',
+@Component({
   components: {
     AppInfo
   },
   computed: {
-    ...mapGetters(['apiVersion']),
-    npmPackageLink () {
-      return `https://www.npmjs.com/package/${this.packageJson.name}`
-    },
-    packageJson () {
-      return packageJson
-    },
-    version () {
-      return this.packageJson.version
-    }
+    ...mapGetters(['apiVersion'])
+  }
+})
+export default class AppFooter extends Vue {
+  get npmPackageLink () {
+    return `https://www.npmjs.com/package/${this.packageJson.name}`
+  }
+
+  get packageJson () {
+    return packageJson
+  }
+
+  get version () {
+    return this.packageJson.version
   }
 }
 </script>

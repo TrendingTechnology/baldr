@@ -1,3 +1,5 @@
+declare module 'vue-headful'
+
 declare module '@bldr/components-collection'
 declare module '@bldr/shortcuts'
 declare module '@bldr/icons'
@@ -12,6 +14,7 @@ interface Person {
   firstName: string
   lastName: string
   seatNo: number
+  id: string
 }
 
 interface Seat {

@@ -11,19 +11,21 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'ExportLink',
+@Component({
   computed: {
     ...mapGetters([
       'stateAsUriComponent'
-    ]),
-    dateTime () {
-      const date = new Date()
-      let isoString = date.toISOString()
-      isoString = isoString.replace(/\.\d+Z/, '')
-      return isoString.replace(new RegExp(':', 'g'), '-')
-    }
+    ])
+  }
+})
+export default class ExportLink extends Vue {
+  get dateTime () {
+    const date = new Date()
+    let isoString = date.toISOString()
+    isoString = isoString.replace(/\.\d+Z/, '')
+    return isoString.replace(new RegExp(':', 'g'), '-')
   }
 }
 </script>

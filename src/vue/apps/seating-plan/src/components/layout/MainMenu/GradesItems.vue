@@ -13,14 +13,15 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'GradesItems',
+@Component({
   computed: mapGetters([
     'gradeNames',
     'isGradePlaced'
   ])
-}
+})
+export default class GradesItems extends Vue {}
 </script>
 
 <style lang="scss">

@@ -13,22 +13,24 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-export default {
-  name: 'AddJobIcons',
-  props: {
-    person: [Object, Boolean]
-  },
+@Component({
   computed: mapGetters([
     'jobsAsArray'
   ]),
   methods: {
     ...mapActions([
       'addJobToPerson'
-    ]),
-    hasPersonJob (personId, jobName) {
-      return this.$store.getters.hasPersonJob(personId, jobName)
-    }
+    ])
+  }
+})
+export default class AddJobIcons extends Vue {
+  @Prop()
+  person!: Person
+
+  hasPersonJob (personId: string, jobName: string) {
+    return this.$store.getters.hasPersonJob(personId, jobName)
   }
 }
 </script>
