@@ -13,7 +13,12 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class PersonSelect extends Vue {
-  selectedPerson!: Person
+  selectedPerson: Person | null
+
+  constructor () {
+    super()
+    this.selectedPerson = null
+  }
 
   get persons () {
     const personsOrig = this.$store.getters.personsByGradeAsListSortedCurrent

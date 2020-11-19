@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({
   computed: mapGetters([
@@ -29,6 +29,7 @@ import { Component, Vue } from 'vue-property-decorator'
   }
 })
 export default class PersonsJob extends Vue {
+  @Prop()
   person!: Person
 
   hasPersonJob (personId: string, jobName: string): boolean {

@@ -28,7 +28,7 @@ export default class PlanHeader extends Vue {
   gradeNameCurrent!: string
   metaYear!: string
 
-  title () {
+  get title () {
     return `Sitzplan der Klasse „${this.gradeNameCurrent}“ (Schuljahr ${this.metaYear})`
   }
 }
