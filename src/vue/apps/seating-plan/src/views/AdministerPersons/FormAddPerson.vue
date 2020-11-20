@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { mapGetters } from 'vuex'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   computed: mapGetters([
@@ -26,12 +26,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
   ])
 })
 export default class FormAddPerson extends Vue {
-
-  lastName: string = ''
-  firstName: string = ''
+  lastName = ''
+  firstName = ''
   gradeNameCurrent!: string
 
-  createPerson () {
+  createPerson (): void {
     if (this.lastName && this.firstName) {
       this.$store.dispatch('createPerson', {
         firstName: this.firstName,

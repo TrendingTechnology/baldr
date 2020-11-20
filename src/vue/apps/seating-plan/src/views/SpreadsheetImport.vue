@@ -14,9 +14,9 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class SpreadsheetImport extends Vue {
-  importString: string = ''
+  importString = ''
 
-  importFromSpreadsheet (event: DOMEvent<HTMLInputElement>) {
+  importFromSpreadsheet (): void {
     console.log(this.importString)
     this.$store.dispatch('importFromSpreadsheet', this.importString)
   }

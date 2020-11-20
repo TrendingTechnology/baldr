@@ -31,11 +31,11 @@ import { Component, Vue } from 'vue-property-decorator'
   ])
 })
 export default class JobsManager extends Vue {
-  newName: string = ''
+  newName = ''
 
-  newIcon: string = ''
+  newIcon = ''
 
-  createJob () {
+  createJob (): void {
     if (this.newName && this.newIcon) {
       this.$store.dispatch('createJob', { name: this.newName, icon: this.newIcon })
       this.newName = ''
@@ -43,7 +43,7 @@ export default class JobsManager extends Vue {
     }
   }
 
-  deleteJob (name: string) {
+  deleteJob (name: string): void {
     this.$store.dispatch('deleteJob', name)
   }
 }

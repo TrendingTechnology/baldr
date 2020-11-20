@@ -25,9 +25,9 @@ import { Component, Vue } from 'vue-property-decorator'
   }
 })
 export default class GradesOverview extends Vue {
-  gradeName: string = ''
+  gradeName = ''
 
-  createGrade () {
+  createGrade (): void {
     if (this.gradeName) {
       this.$store.dispatch('createGrade', this.gradeName)
       this.gradeName = ''

@@ -15,6 +15,7 @@ import { mapGetters } from 'vuex'
 // Components
 import PersonsTableRow from './PersonsTableRow.vue'
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Person } from '@/types'
 
 @Component({
   components: {
@@ -25,7 +26,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
   ])
 })
 export default class PersonsTable extends Vue {
-
   @Prop({
     type: Number,
     default: 1

@@ -44,6 +44,7 @@
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
 import { Component, Vue } from 'vue-property-decorator'
+import { DOMEvent } from '@/types'
 
 @Component({
   computed: mapGetters([
@@ -53,11 +54,11 @@ import { Component, Vue } from 'vue-property-decorator'
   methods: {
     ...mapActions([
       'deleteGrade'
-    ]),
+    ])
   }
 })
 export default class GradesTable extends Vue {
-  rename (oldGradeName: string, event: DOMEvent<HTMLInputElement>) {
+  rename (oldGradeName: string, event: DOMEvent<HTMLInputElement>): void {
     const newGradeName = event.target.innerText
     this.$store.commit('renameGrade', {
       oldGradeName: oldGradeName,

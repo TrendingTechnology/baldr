@@ -23,16 +23,17 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { DOMEvent } from '@/types'
 
 @Component
 export default class MetaTable extends Vue {
-  getMeta (key: string) {
+  getMeta (key: string): string {
     const value = this.$store.getters.meta(key)
     if (!value) return '_'
     return value
   }
 
-  setMeta (key: string, event: DOMEvent<HTMLInputElement>) {
+  setMeta (key: string, event: DOMEvent<HTMLInputElement>): void {
     if (!event) return
     const value = event.target.innerText
     this.$store.commit('setMeta', {

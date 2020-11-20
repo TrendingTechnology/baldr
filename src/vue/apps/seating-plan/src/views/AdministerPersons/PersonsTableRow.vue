@@ -42,6 +42,7 @@ import { mapActions } from 'vuex'
 // Components
 import PersonsJobs from '@/components/PersonsJobs.vue'
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Person } from '@/types'
 
 @Component({
   components: {

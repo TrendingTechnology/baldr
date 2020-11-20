@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Person } from '@/types'
 
 @Component
 export default class PersonSelect extends Vue {
@@ -37,7 +38,7 @@ export default class PersonSelect extends Vue {
   placePerson () {
     this.$store.dispatch('placePerson', {
       seatNo: this.$store.getters.seatNoCurrent,
-      personId: this.selectedPerson.id
+      personId: this.selectedPerson!.id
     })
     this.$modal.hide('person-select')
   }
