@@ -59,7 +59,7 @@
  *
  * @module @bldr/media-server
  */
-import { Database } from './database.js';
+import { Database } from '@bldr/mongodb-connector';
 /**
  * @type {module:@bldr/media-server/database.Database}
  */

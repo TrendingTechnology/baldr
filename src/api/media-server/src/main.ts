@@ -76,9 +76,10 @@ import config from '@bldr/config'
 import { MediaCategoriesManager, convertPropertiesSnakeToCamel, getExtension, stripTags, deepCopy } from '@bldr/core-browser'
 import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-manager'
 import type { StringIndexedObject } from '@bldr/type-definitions'
+import { connectDb, Database } from '@bldr/mongodb-connector'
+
 
 // Submodules.
-import { connectDb, Database } from './database.js'
 import { registerSeatingPlan } from './seating-plan'
 import { openParentFolder, openEditor, validateMediaType } from './operations'
 

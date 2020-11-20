@@ -126,8 +126,8 @@ var js_yaml_1 = __importDefault(require("js-yaml"));
 var config_1 = __importDefault(require("@bldr/config"));
 var core_browser_1 = require("@bldr/core-browser");
 var media_manager_1 = require("@bldr/media-manager");
+var mongodb_connector_1 = require("@bldr/mongodb-connector");
 // Submodules.
-var database_js_1 = require("./database.js");
 var seating_plan_1 = require("./seating-plan");
 var operations_1 = require("./operations");
 /**
@@ -960,10 +960,10 @@ function runRestApi(port) {
             switch (_a.label) {
                 case 0:
                     app = express_1.default();
-                    return [4 /*yield*/, database_js_1.connectDb()];
+                    return [4 /*yield*/, mongodb_connector_1.connectDb()];
                 case 1:
                     db = _a.sent();
-                    exports.database = new database_js_1.Database(db);
+                    exports.database = new mongodb_connector_1.Database(db);
                     return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();

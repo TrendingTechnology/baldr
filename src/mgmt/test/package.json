@@ -29,7 +29,8 @@
     "mocha": "8.2.1",
     "@bldr/core-browser": "*",
     "@bldr/config": "*",
-    "@bldr/http-request": "*"
+    "@bldr/http-request": "*",
+    "@bldr/mongodb-connector": "*"
   },
   "devDependencies": {
     "@types/node": "14.14.7",

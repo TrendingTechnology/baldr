@@ -7,7 +7,7 @@
 // Third party packages.
 import express, { Express } from 'express'
 
-import { Database } from './database'
+import { Database } from '@bldr/mongodb-connector'
 
 export function registerSeatingPlan (database: Database): Express {
   const app = express()

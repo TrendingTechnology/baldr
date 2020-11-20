@@ -3,5 +3,5 @@
  * @module @bldr/api-seating-plan
  */
 import { Express } from 'express';
-import { Database } from './database';
+import { Database } from '@bldr/mongodb-connector';
 export declare function registerSeatingPlan(database: Database): Express;

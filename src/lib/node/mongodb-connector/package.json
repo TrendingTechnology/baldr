@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/media-server",
-  "version": "0.2.3",
-  "description": "The REST API of the BALDR media server.",
+  "name": "@bldr/mongodb-connector",
+  "version": "0.1.0",
+  "description": "Connect to the MongoDB server and provide a wrapper around the Db instance.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
@@ -14,25 +14,13 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
-    "@bldr/core-browser": "*",
-    "@bldr/core-node": "*",
-    "@bldr/config": "*",
-    "@bldr/media-manager": "*",
-    "@bldr/open-with": "*",
-    "@bldr/mongodb-connector": "*",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "js-yaml": "^3.14.0",
-    "saslprep": "^1.0.3",
-    "transliteration": "^2.2.0",
-    "uuid": "^8.3.1"
+    "mongodb": "^3.6.3",
+    "@bldr/config": "*"
   },
   "devDependencies": {
     "@types/node": "^14.14.7",
-    "@types/express": "^4.17.9",
-    "@bldr/type-definitions": "*",
-    "@types/cors": "2.8.8",
-    "@types/js-yaml": "^3.12.5"
+    "@types/mongodb": "^3.5.33",
+    "@bldr/type-definitions": "*"
   },
   "scripts": {
     "build": "npm run build:node",

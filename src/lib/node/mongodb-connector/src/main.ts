@@ -7,6 +7,9 @@ import mongodb from 'mongodb'
 import config from '@bldr/config'
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
+/**
+ * Connect to the MongoDB server.
+ */
 export async function connectDb (): Promise<mongodb.Db> {
   const conf = config.databases.mongodb
   const user = encodeURIComponent(conf.user)
@@ -23,20 +26,31 @@ export async function connectDb (): Promise<mongodb.Db> {
   return mongoClient.db(config.databases.mongodb.dbName)
 }
 
+interface IndexDefinition {
+  field: string
+  unique: boolean
+}
+
+interface CollectionDefinition {
+  indexes: IndexDefinition[]
+  drop: boolean
+}
+
+interface DbSchema {
+  [key: string]: CollectionDefinition
+}
+
 /**
  * A wrapper around MongoDB.
  */
 export class Database {
-  schema: StringIndexedObject
+  schema: DbSchema
 
   db: mongodb.Db
 
   constructor (db: mongodb.Db) {
     this.db = db
 
-    /**
-     * @type {Object}
-     */
     this.schema = {
       assets: {
         indexes: [
@@ -60,20 +74,20 @@ export class Database {
       },
       folderTitleTree: {
         indexes: [
-          { field: 'id', unique: true },
+          { field: 'id', unique: true }
         ],
         drop: true
       },
       seatingPlan: {
         indexes: [
-          { timeStampMsec: 'path', unique: true }
+          { field: 'timeStampMsec', unique: true }
         ],
         drop: false
       }
     }
   }
 
-  async connect(): Promise<void> {
+  async connect (): Promise<void> {
     this.db = await connectDb()
   }
 
@@ -129,7 +143,7 @@ export class Database {
   async drop (): Promise<{ [key: string]: any }> {
     const droppedCollections = []
     for (const collectionName in this.schema) {
-      if (this.schema[collectionName].drop === true) {
+      if (this.schema[collectionName].drop) {
         await this.db.dropCollection(collectionName)
         droppedCollections.push(collectionName)
       }
@@ -142,7 +156,7 @@ export class Database {
   /**
    * Reinitialize the MongoDB database (Drop all collections and initialize).
    */
-  async reInitialize (): Promise<{ [key: string]: any }>  {
+  async reInitialize (): Promise<{ [key: string]: any }> {
     const resultdropDb = await this.drop()
     const resultInitializeDb = await this.initialize()
     return {
@@ -154,7 +168,7 @@ export class Database {
   /**
    * Delete all media files (assets, presentations) from the database.
    */
-  async flushMediaFiles (): Promise<{ [key: string]: any }>  {
+  async flushMediaFiles (): Promise<{ [key: string]: any }> {
     const countDroppedAssets = await this.assets.countDocuments()
     const countDroppedPresentations = await this.presentations.countDocuments()
     await this.assets.deleteMany({})
@@ -165,23 +179,23 @@ export class Database {
     }
   }
 
-  get assets () {
+  get assets (): mongodb.Collection<any> {
     return this.db.collection('assets')
   }
 
-  get presentations () {
+  get presentations (): mongodb.Collection<any> {
     return this.db.collection('presentations')
   }
 
-  get updates () {
+  get updates (): mongodb.Collection<any> {
     return this.db.collection('updates')
   }
 
-  get folderTitleTree () {
+  get folderTitleTree (): mongodb.Collection<any> {
     return this.db.collection('folderTitleTree')
   }
 
-  get seatingPlan () {
+  get seatingPlan (): mongodb.Collection<any> {
     return this.db.collection('seatingPlan')
   }
 }
