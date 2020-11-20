@@ -1,451 +1,569 @@
+import { MasterTypes } from '@bldr/type-definitions'
 
-type StringObject = { [key: string]: any }
+/**
+ * The
+ * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+ * a function is called with.
+ */
+type ThisArg = object
 
-interface PropsAndSlide {
-  props: StringObject
-  propsMain: StringObject
-  slide: object
-}
+/**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+class MasterIcon {
+  constructor ({ name, color, size, showOnSlides }) {
+    if (size && !['small', 'large'].includes(size)) {
+      throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
+    }
 
-interface PropsSlideAndMaster extends PropsAndSlide {
-  propsPreview: StringObject
-  master: object
-}
+    if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
+      throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`)
+    }
+    /**
+     * For allowed icon names the materical icon font. The nasizeme of an icon
+     * of the {@link module:@bldr/icons baldr icon font}
+     *
+     * @type {String}
+     */
+    this.name = name
 
-interface PropsBundle {
-  props: StringObject
-  propsMain: StringObject
-  propsPreview: StringObject
-}
+    /**
+     * A color name (CSS color class name) to colorize the master icon.
+     * @see {@link module:@bldr/themes}
+     *
+     * @type {String}
+     */
+    this.color = color || 'orange'
 
-interface OldAndNewPropsAndSlide {
-  oldSlide: object
-  oldProps: StringObject
-  newSlide: object
-  newProps: StringObject
-}
+    /**
+     * Show the icon the on slide view.
+     *
+     * @type {Boolean}
+     */
+    this.showOnSlides = showOnSlides !== false
 
-interface OldAndNewStepNo {
-  oldStepNo: number
-  newStepNo: number
-}
-
-interface OldAndNewStepNoAndSlideNoChange extends OldAndNewStepNo {
-  slideNoChange: boolean
+    /**
+     * `small` or `large`
+     *
+     * @type {String}
+     */
+    this.size = size || 'small'
+  }
 }
 
 /**
- * Hooks (exported master methods)
- *
- * The hooks are listed in call order.
+ * Each master slide is a instance of this class. This class has many dummy
+ * methods. They are there for documentation reasons. On the other side they
+ * are useful as default methods. You have not to check if a master slide
+ * implements a specific hook.
  */
-interface MasterHooks {
-  /**
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // result must fit to props
-   *     normalizeProps (props) {
-   *       if (typeof props === 'string') {
-   *         return {
-   *           markup: props
-   *         }
-   *       }
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  normalizeProps?: (props: any) => StringObject
+class Master {
+
+    /**
+     * A instance of `MasterIcon` which holds information about the master icon.
+     *
+     * @type {module:@bldr/lamp/masters~MasterIcon}
+     */
+    icon: MasterIcon
+
+    /**
+     * A style configuration object.
+     */
+    styleConfig: MasterTypes.StyleConfig
+
+    /**
+     * Some markdown formated string to document this master slide.
+     */
+    documentation?: string
+
+    /**
+     * A vuex object containing `state`, `getters`, `actions`, `mutations`
+     * properties which buildes a submodule vuex store for each master.
+     */
+    store: object
+
+    /**
+     * The definition of the slide properties (`props`) (aka `props` of a
+     * `master`).
+     */
+    propsDef: MasterTypes.PropsDefintion
+
+    private spec: MasterTypes.MasterSpec
 
   /**
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
-   *     resolveMediaUris (props) {
-   *       return props.src
-   *     }
-   *   }
-   * }
-   * ```
+   * @param spec - The default exported object from the `main.js`
+   * file.
    */
-  resolveMediaUris?: (props: StringObject) => string | string[]
+  constructor (spec: MasterTypes.MasterSpec) {
+    this.spec = spec
+  }
 
   /**
-   * Check if the handed over media URIs can be resolved. Throw no
-   * errors, if the media assets are not present. This hook is used in
-   * the YouTube master slide. This master slide uses the online
-   * version, if no offline video could be resolved.
-   *
-   * Called during the parsing the YAML file
-   * (`Praesentation.baldr.yml`).
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
-   *     resolveOptionalMediaUris (props) {
-   *       return props.src
-   *     }
-   *   }
-   * }
-   * ```
+   * The short name of the master slide. Should be a shorter string without
+   * spaces in the camelCase format.
    */
-  resolveOptionalMediaUris?: (props: StringObject) => string | string[]
+  get name(): string {
+    return this.spec.name
+  }
 
-  /**
-   * Goes in the background.
-   *
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-   *
-   * - `this`: is the main Vue instance.
-   * - `return`: void.
-   *
-   * ```js
-   * export const default = {
-   *   hooks {
-   *     async afterLoading ({ props, master }) {
-   *       const body = await getHtmlBody(props.title, props.language)
-   *       master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  afterLoading?: () => Promise<void>
-
-  /**
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-   *
-   * Blocks
-   *
-   * - `this`: is the main Vue instance.
-   * - `return`: void.
-   *
-   * ```js
-   * export const default = {
-   *   hooks {
-   *     async afterMediaResolution ({ props, master }) {
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  afterMediaResolution?: () => Promise<void>
-
-  /**
-   *
-   * ### 6. `collectPropsMain(props)`
-   *
-   * - `this`: is the main Vue instance.
-   * - `return`: an object.
-   *
-   * ```js
-   * export const default = {
-   * }
-   * ```
-   */
-  collectPropsMain?: (payload: PropsAndSlide) => StringObject
-
-  /**
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-   *
-   * - `this`: is the main Vue instance.
-   * - `return`: an object.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     collectPropsPreview({ props, propsMain, slide }) {
-   *       return props.src.length
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  collectPropsPreview?: (payload: PropsAndSlide) => StringObject
-
-  /**
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-   *
-   * - `this`: is the main Vue instance.
-   * - `return`: a number or an array of slide steps.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     calculateStepCount ({ props, propsMain, propsPreview, slide }) {
-   *       return props.src.length
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  calculateStepCount?: (payload: PropsSlideAndMaster) => number
-
-  /**
-   * Getter on the slide object.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     titleFromProps ({ props, propsMain }) {
-   *       if (props.title) return props.title
-   *       const asset = propsMain.mediaAsset
-   *       if (asset.title) return asset.title
-   *     }
-   *   }
-   * }
-   *  ```
-   */
-  titleFromProps?: (payload: PropsBundle) => string
-
-  /**
-   * Getter on the slide object.
-   *
-   * - `return`: a string
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     plainTextFromProps (props) {
-   *       const output = []
-   *       for (const markup of props.markup) {
-   *         output.push(convertHtmlToPlainText(markup))
-   *       }
-   *       return output.join(' | ')
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  plainTextFromProps?: (props: StringObject) => string
-
-  /**
-   * Slide change.
-   *
-   * This hook is only called on the public master component (the one that is
-   * visible for the audience), not on further secondary master components (for
-   * example the ad hoc slides or the future slide view in the speakers view.)
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from within the Vuex store in the file  `store.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // Called when leaving a slide.
-   *     leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
-   *     }
-   *   }
-   * }
-   *
-   * ```
-   */
-  leaveSlide?: (payload: OldAndNewPropsAndSlide) => void
-
-  /**
-   * Slide change
-   *
-   * This hook is only called on the public master component (the one that is
-   * visible for the audience), not on further secondary master components (for
-   * example the ad hoc slides or the future slide view in the speakers view.)
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from within the Vuex store in the file  `store.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // Called when entering a slide.
-   *     enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  enterSlide?: (payload: OldAndNewPropsAndSlide) => void
-
-  /**
-   * Slide change
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the master component mixin in the file `masters.js`.
-   */
-  afterSlideNoChangeOnComponent?: (payload: OldAndNewPropsAndSlide) => void
-
-  /**
-   * Step change
-   *
-   * This hook is only called on the public master component (the one that is
-   * visible for the audience), not on further secondary master components (for
-   * example the ad hoc slides or the future slide view in the speakers view.)
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // Called when leaving a step.
-   *     leaveStep ({ oldStepNo, newStepNo }) {
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  leaveStep?: (payload: OldAndNewPropsAndSlide) => void
-
-  /**
-   * Step change
-   * ### 2. ``
-   *
-   * This hook is only called on the public master component (the one that is
-   * visible for the audience), not on further secondary master components (for
-   * example the ad hoc slides or the future slide view in the speakers view.)
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     // Called when entering a step.
-   *     enterStep ({ oldStepNo, newStepNo }) {
-   *       if (this.stepMode) {
-   *         this.domSteps.displayByNo({
-   *           oldStepNo,
-   *           stepNo: this.stepNo
-   *         })
-   *       }
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  enterStep?: (payload: OldAndNewPropsAndSlide) => void
-
-  /**
-   * Step change
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the master component mixin in the file `masters.js`.
-   * - `return`: void
-   */
-  afterStepNoChangeOnComponent?: (payload: OldAndNewStepNoAndSlideNoChange) => void
-
-}
-
-/**
- * An extended version of the Vue `props` defintion.
- * Additional `props` keys (in comparison to the Vue props)
- *
- * ```js
- *  const props = {
- *    src: {
- *      default: 'id:Fuer-Elise'
- *      description: 'Den URI zu einer Video-Datei.',
- *      inlineMarkup: false
- *      markup: false
- *      assetUri: true,
- *      required: true,
- *      type: String,
- *    }
- *  }
- * ```
- */
-interface MasterProp {
-  /**
-   * A default value.
-   */
-  default?: 'id:Fuer-Elise'
-
-  /**
-   * Text to describe the property. A descriptive text shown in the
-   * documentation.
-   */
-  description?: string
-
-  /**
-   * Indicates that this `prop` is text for extracting inline media URIs
-   * like `[id:Beethoven_Ludwig-van]`.
-   */
-  inlineMarkup?: boolean
-
-  /**
-   * The specified value can contain markup. The value can be written in
-   * Markdown and or in HTML. Markdown is converted into HTML. The key
-   * `type` has to be `String`.
-   */
-  markup?: boolean
-
-  /**
-   * Indicates that this `prop` contains a media file URI.
-   */
-  assetUri?: boolean
-
-  /**
-   * Must be specifed.
-   */
-  required?: boolean
-
-  /**
-   * The same as Vue `type`.
-   */
-  type?: object
-}
-
-/**
- * Specification of the master slide icon that is normally displayed on the
- * top left corner of a slide.
- *
- * ```js
- * icon: {
- *   name: 'comment-quote',
- *   color: 'brown',
- *   size: 'large'
- * }
- * ```
- */
-interface MasterIconSpec {
-  name: string
-  color: string
-  size?: 'large' | 'normal'
-}
-
-interface StyleConfig {
-  centerVertically?: boolean
-  darkMode?: boolean
-  contentTheme?: string
-  uiTheme?: string
-}
-
-export interface MasterSpec {
   /**
    * The human readable title of the master slide.
    */
-  title: string
-
-  icon: MasterIconSpec
-
-  styleConfig: StyleConfig
+  get title(): string {
+    return this.spec.name
+  }
 
   /**
-   * The properties of the master slide.
+   * Call a master hook. Master hooks are definied in the `main.js`
+   * files.
+   *
+   * @param hookName - The name of the master hook / function.
+   * @param payload - The argument the master hook / function is called
+   *   with.
    */
-  props: { [key: string]: MasterProp }
+  private callHook (hookName: string, payload: any, thisArg?: ThisArg): any {
+    if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+      if (thisArg) {
+        return this.spec.hooks[hookName].call(thisArg, payload)
+      }
+      return this.spec.hooks[hookName](payload)
+    }
+  }
 
   /**
-   * A collection of the master hooks (exported master methods.)
+   * Asynchronous version. Call a master hook. Master hooks are definied in the
+   * `main.js` files.
+   *
+   * @param hookName - The name of the master hook / function.
+   * @param payload - The argument the master hook / function is called
+   *   with.
    */
-  hooks?: MasterHooks
+  private async callHookAsync (hookName: string, payload: any, thisArg?: ThisArg): Promise<any> {
+    if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+      if (thisArg) {
+        return this.spec.hooks[hookName].call(thisArg, payload)
+      }
+      return this.spec.hooks[hookName](payload)
+    }
+  }
+
+  /**
+   * result must fit to props
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {object}
+   */
+  normalizeProps (props: any) {
+    return this.callHook('normalizeProps', props)
+  }
+
+  /**
+   * Calculate from the given props the step count. This hook method is called
+   * after media resolution.
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @param {Object} payload
+   * @property {Object} payload.props - The props of the master slide.
+   * @property {Object} payload.propsMain - The props of the main Vue component.
+   * @property {Object} payload.propsPreview - The props of the preview Vue component.
+   * @property {Object} payload.slide - The slide object.
+   *
+   * @returns {Number} - The number of steps.
+   */
+  calculateStepCount (payload, thisArg: ThisArg) {
+    return this.callHook('calculateStepCount', payload, thisArg)
+  }
+
+  /**
+   * The name of the props which are supporting inline media (for example
+   * `markup`)
+   */
+  get propNamesInlineMedia () {
+    const inlineMarkupProps = []
+    for (const propName in this.propsDef) {
+      const propDef = this.propsDef[propName]
+      if (propDef.inlineMarkup) {
+        inlineMarkupProps.push(propName)
+      }
+    }
+    return inlineMarkupProps
+  }
+
+  /**
+   * Filter the master props for props which are supporting inline media.
+   *
+   * @param {module:@bldr/lamp~props}
+   *
+   * @returns {Set}
+   */
+  extractInlineMediaUris (props) {
+    const uris = new Set()
+    /**
+     * @param {String} text
+     */
+    function extractUrisInText (text) {
+      const matches = text.matchAll(new RegExp(inlineMarkup.regExp, 'g'))
+      for (const match of matches) {
+        //  12    3            4
+        // [((id):(Fuer-Elise))( caption="Für Elise")]
+        if (match[2] === 'id') uris.add(match[1])
+      }
+    }
+
+    for (const propName of this.propNamesInlineMedia) {
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          extractUrisInText(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (const item of prop) {
+            extractUrisInText(item)
+          }
+        }
+      }
+    }
+    return uris
+  }
+
+  /**
+   * Replace the inline media tags `[id:Beethoven]` in certain props with
+   * HTML. This function must be called after the media resolution.
+   *
+   * @param {module:@bldr/lamp~props}
+   */
+  renderInlineMedia (props) {
+    /**
+     * @param {String} text
+     */
+    function renderOneMediaUri (text) {
+      return text.replace(new RegExp(inlineMarkup.regExp, 'g'), function (match) {
+        const item = new inlineMarkup.Item(match)
+        return inlineMarkup.render(item)
+      })
+    }
+
+    for (const propName of this.propNamesInlineMedia) {
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          props[propName] = renderOneMediaUri(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (let i = 0; i < prop.length; i++) {
+            props[propName][i] = renderOneMediaUri(prop[i])
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Retrieve the media URIs which have to be resolved.
+   *
+   * Call the master funtion `resolveMediaUris` and collect the media URIs.
+   * (like [id:beethoven, id:mozart]). Extract media URIs from
+   * the text props.
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {Set}
+   */
+  resolveMediaUris (props) {
+    let uris = this.callHook('resolveMediaUris', props)
+
+    // To allow undefined return values of the hooks.
+    if (!uris) {
+      uris = new Set()
+    } else if (typeof uris === 'string') {
+      uris = new Set([uris])
+    } else if (Array.isArray(uris)) {
+      uris = new Set(uris)
+    }
+
+    const inlineUris = this.extractInlineMediaUris(props)
+    for (const uri of inlineUris) {
+      uris.add(uri)
+    }
+
+    if (uris.size) return uris
+  }
+
+  /**
+   * Check if the handed over media URIs can be resolved. Throw no errors, if
+   * the media assets are not present. This hook is used in the YouTube master
+   * slide. This master slide uses the online version, if no offline video could
+   * be resolved.
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {Set}
+   */
+  resolveOptionalMediaUris (props) {
+    let uris = this.callHook('resolveOptionalMediaUris', props)
+
+    // To allow undefined return values of the hooks.
+    if (!uris) {
+      uris = new Set()
+    } else if (typeof uris === 'string') {
+      uris = new Set([uris])
+    }
+    if (uris.size) return uris
+  }
+
+  /**
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {String}
+   */
+  plainTextFromProps (props) {
+    return this.callHook('plainTextFromProps', props)
+  }
+
+  /**
+   * @param {object} payload
+   * @property {module:@bldr/lamp~props} payload.props
+   * @property {module:@bldr/lamp~props} payload.propsMain
+   * @property {module:@bldr/lamp~props} payload.propPreview
+   *
+   * @returns {String}
+   */
+  titleFromProps (payload) {
+    return this.callHook('titleFromProps', payload)
+  }
+
+  /**
+   * Convert in the props certain strings containing markup to HTML.
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {object}
+   */
+  markupToHtml (props) {
+    if (!this.propsDef) return props
+    for (const propName in props) {
+      const prop = this.propsDef[propName]
+      if ('markup' in prop && prop.markup) {
+        props[propName] = markupToHtml(props[propName])
+      }
+    }
+    return props
+  }
+
+  /**
+   * Raise an error if there is an unkown prop - a not in the `props` section
+   * defined prop.
+   *
+   * @param {module:@bldr/lamp~props} props
+   */
+  detectUnkownProps (props) {
+    for (const propName in props) {
+      if (this.propsDef && !(propName in this.propsDef)) {
+        throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
+      }
+    }
+  }
+
+  /**
+   * Validate all media file URIs in the props of a certain slide.
+   *
+   * @param {module:@bldr/lamp~props} props
+   */
+  validateUris (props) {
+    if (!this.propsDef) return props
+    for (const propName in props) {
+      const prop = this.propsDef[propName]
+      if ('assetUri' in prop && prop.assetUri) {
+        props[propName] = validateUri(props[propName])
+      }
+    }
+    return props
+  }
+
+  /**
+   * Collect the props (properties) for the main Vue component.
+   *
+   * @param {object} props - The props of the master slide.
+   * @returns {Object} - The props for the main component as a object.
+   */
+  collectPropsMain (props, thisArg: ThisArg) {
+    const propsMain = this.callHook('collectPropsMain', props, thisArg)
+    if (propsMain) return propsMain
+    if (props) return props
+  }
+
+  /**
+   * Collect the props (properties) for the preview Vue component.
+   *
+   * @param {Object} payload
+   * @property {Object} payload.props - The props of the master slide.
+   * @property {Object} payload.propsMain - The props of the main Vue component.
+   *
+   * @returns {Object} - The props for the preview component as a object.
+   */
+  collectPropsPreview (payload, thisArg: ThisArg) {
+    const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
+    if (propsPreview) return propsPreview
+    if (payload.propsMain) return payload.propsMain
+    if (payload.props) return payload.props
+  }
+
+  /**
+   * Hook after loading. To load resources in the background.
+   *
+   * @param {Object} props - The properties of the slide.
+   */
+  afterLoading (props, thisArg: ThisArg) {
+    this.callHook('afterLoading', { props, master: this }, thisArg)
+  }
+
+  /**
+   * This hook gets executed after the media resolution. Wait for this hook to
+   * finish. Go not in the background.
+   *
+   * @param {Object} props - The properties of the slide.
+   */
+  async afterMediaResolution (props, thisArg: ThisArg) {
+    await this.callHookAsync('afterMediaResolution', { props, master: this }, thisArg)
+  }
+
+  /**
+   * Called when leaving a slide. This hook is triggered by the Vue lifecycle
+   * hook `beforeDestroy`.
+   */
+  leaveSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
+    this.callHook('leaveSlide', payload, thisArg)
+  }
+
+  /**
+   * Called when entering a slide. This hook is only called on the public master
+   * component (the one that is visible for the audience), not on further
+   * secondary master components (for example the ad hoc slides or the future
+   * slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from within the Vuex store in the file  `store.js`.
+   */
+  enterSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg):void {
+    this.callHook('enterSlide', payload, thisArg)
+  }
+
+  /**
+   * This hook gets executed after the slide number has changed on the
+   * component. Use `const slide = this.$get('slide')` to get the current slide
+   * object.
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the master component mixin in the file `masters.js`.
+   */
+  afterSlideNoChangeOnComponent (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
+    this.callHook('afterSlideNoChangeOnComponent', payload, thisArg)
+  }
+
+  /**
+   * Called when leaving a step. This hook is only called on the public master
+   * component (the one that is visible for the audience), not on further
+   * secondary master components (for example the ad hoc slides or the future
+   * slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+   */
+  leaveStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg) {
+    return this.callHook('leaveStep', payload, thisArg)
+  }
+
+  /**
+   * Called when entering a step. This hook is only called on the public
+   * master component (the one that is visible for the audience), not on
+   * further secondary master components (for example the ad hoc slides or the
+   * future slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+   */
+  enterStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void {
+    return this.callHook('enterStep', payload, thisArg)
+  }
+
+  /**
+   * This hook gets executed after the step number has changed on the
+   * component.
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the master component mixin in the file `masters.js`.
+   */
+  afterStepNoChangeOnComponent (payload: MasterTypes.OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg): void {
+    this.callHook('afterStepNoChangeOnComponent', payload, thisArg)
+  }
 }
 
-export function validateMasterSpec(masterSpec: MasterSpec) {
-  return masterSpec
+/**
+ * Container for all registered master slides.
+ */
+class MasterCollection {
+  constructor () {
+    /**
+     * A container object for all master objects.
+     *
+     * @type {Object}
+     */
+    this.masters_ = {}
+  }
+
+  /**
+   * Add a master to the masters container.
+   *
+   * @param {module:@bldr/lamp/masters~Master} master
+   */
+  add (master) {
+    this.masters_[master.name] = master
+  }
+
+  /**
+   * Get a master object by the master name.
+   *
+   * @param {string} name - The name of the master slide.
+   *
+   * @returns {module:@bldr/lamp/masters~Master}
+   */
+  get (name) {
+    if (!(name in this.masters_)) {
+      throw new Error(`Class Masters.get(): No master named “${name}”`)
+    }
+    return this.masters_[name]
+  }
+
+  /**
+   * Get all master objects as an object with the master name as properties.
+   *
+   * @returns {object}
+   */
+  get all () {
+    return this.masters_
+  }
+
+  /**
+   * Get all master names as an array.
+   *
+   * @returns {Array}
+   */
+  get allNames () {
+    return Object.keys(this.masters_)
+  }
+
+  /**
+   * Check if a master exist.
+   *
+   * @param {string} name - The name of the master slide.
+   *
+   * @returns {Boolean}
+   */
+  exists (name) {
+    if (name in this.masters_) return true
+    return false
+  }
 }

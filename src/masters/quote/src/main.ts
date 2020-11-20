@@ -3,7 +3,7 @@
  */
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 
-import { validateMasterSpec } from '@bldr/presentation-masters'
+import { validateMasterSpec } from '@bldr/type-definitions'
 
 export default validateMasterSpec({
   title: 'Zitat',

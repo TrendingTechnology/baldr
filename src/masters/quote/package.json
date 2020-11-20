@@ -22,8 +22,7 @@
   },
   "main": "dist/browser/main.js",
   "dependencies": {
-    "@bldr/type-definitions": "*",
     "@bldr/core-browser": "*",
-    "@bldr/presentation-masters": "*"
+    "@bldr/type-definitions": "*"
   }
 }
