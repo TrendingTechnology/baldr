@@ -5,7 +5,9 @@ import Mocha from 'mocha'
 import config from '@bldr/config'
 
 export function runTests (): void {
-  const mocha = new Mocha()
+  const mocha = new Mocha({
+    timeout: 100000
+  })
 
   const testSpecsPath = path.join(config.localRepo, 'src/mgmt/test/dist/node/specs')
   fs.readdirSync(testSpecsPath).filter(function (file) {

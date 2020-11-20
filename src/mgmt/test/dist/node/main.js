@@ -9,7 +9,9 @@ const fs_1 = __importDefault(require("fs"));
 const mocha_1 = __importDefault(require("mocha"));
 const config_1 = __importDefault(require("@bldr/config"));
 function runTests() {
-    const mocha = new mocha_1.default();
+    const mocha = new mocha_1.default({
+        timeout: 100000
+    });
     const testSpecsPath = path_1.default.join(config_1.default.localRepo, 'src/mgmt/test/dist/node/specs');
     fs_1.default.readdirSync(testSpecsPath).filter(function (file) {
         return file.substr(-3) === '.js';
