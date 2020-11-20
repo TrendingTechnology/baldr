@@ -1,0 +1,27 @@
+{
+  "name": "@bldr/meta-data-kind",
+  "version": "0.1.0",
+  "description": "The metadata files (filename.ext.yml) can be from different kinds (type, formats, categories).",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "npm run build:browser",
+    "build:browser": "tsc --module es2015 --outDir dist/browser"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/browser/main.js",
+  "dependencies": {
+    "@bldr/type-definitions": "*"
+  }
+}
