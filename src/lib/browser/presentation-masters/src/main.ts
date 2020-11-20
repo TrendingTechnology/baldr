@@ -400,18 +400,40 @@ interface MasterProp {
   type?: object
 }
 
+/**
+ * Specification of the master slide icon that is normally displayed on the
+ * top left corner of a slide.
+ *
+ * ```js
+ * icon: {
+ *   name: 'comment-quote',
+ *   color: 'brown',
+ *   size: 'large'
+ * }
+ * ```
+ */
 interface MasterIconSpec {
   name: string
   color: string
+  size?: 'large' | 'normal'
 }
 
-interface MasterSpec {
+interface StyleConfig {
+  centerVertically?: boolean
+  darkMode?: boolean
+  contentTheme?: string
+  uiTheme?: string
+}
+
+export interface MasterSpec {
   /**
    * The human readable title of the master slide.
    */
   title: string
 
   icon: MasterIconSpec
+
+  styleConfig: StyleConfig
 
   /**
    * The properties of the master slide.
@@ -422,4 +444,8 @@ interface MasterSpec {
    * A collection of the master hooks (exported master methods.)
    */
   hooks?: MasterHooks
+}
+
+export function validateMasterSpec(masterSpec: MasterSpec) {
+  return masterSpec
 }
