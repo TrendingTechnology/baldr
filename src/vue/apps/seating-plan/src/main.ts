@@ -4,6 +4,9 @@
  * @module @bldr/seating-plan
  */
 
+// Make sure to register before importing any components
+import './class-component-hooks'
+
 import App from './App.vue'
 import Vue from 'vue'
 import VueRouter from 'vue-router'

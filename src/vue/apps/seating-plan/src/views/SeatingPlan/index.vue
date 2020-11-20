@@ -53,6 +53,7 @@ export default class SeatingPlanView extends Vue {
   }
 
   beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
+    console.log(to)
     this.$store.commit('setGradeNameCurrent', to.params.grade)
     next()
   }
