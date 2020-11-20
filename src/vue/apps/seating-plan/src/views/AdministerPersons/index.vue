@@ -17,7 +17,7 @@ import FormAddPerson from './FormAddPerson.vue'
 import PersonsTable from './PersonsTable.vue'
 import { mapGetters } from 'vuex'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Person } from '@/types'
+import { Person } from '../../types'
 
 @Component({
   components: {

@@ -14,7 +14,7 @@
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Person } from '@/types'
+import { Person } from '../types'
 
 @Component({
   computed: mapGetters([

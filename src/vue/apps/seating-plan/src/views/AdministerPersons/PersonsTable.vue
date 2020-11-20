@@ -15,7 +15,7 @@ import { mapGetters } from 'vuex'
 // Components
 import PersonsTableRow from './PersonsTableRow.vue'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Person } from '@/types'
+import { Person } from '../../types'
 
 @Component({
   components: {

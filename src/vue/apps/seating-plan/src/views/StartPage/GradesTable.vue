@@ -44,7 +44,7 @@
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
 import { Component, Vue } from 'vue-property-decorator'
-import { DOMEvent } from '@/types'
+import { DOMEvent } from '../../types'
 
 @Component({
   computed: mapGetters([

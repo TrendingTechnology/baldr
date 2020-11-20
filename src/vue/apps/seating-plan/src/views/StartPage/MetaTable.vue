@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { DOMEvent } from '@/types'
+import { DOMEvent } from '../../types'
 
 @Component
 export default class MetaTable extends Vue {
