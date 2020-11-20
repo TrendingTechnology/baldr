@@ -9,15 +9,14 @@ const fs_1 = __importDefault(require("fs"));
 const mocha_1 = __importDefault(require("mocha"));
 const config_1 = __importDefault(require("@bldr/config"));
 function runTests() {
-    const mocha = new mocha_1.default({
-        timeout: 100000
-    });
+    const mocha = new mocha_1.default();
     const testSpecsPath = path_1.default.join(config_1.default.localRepo, 'src/mgmt/test/dist/node/specs');
     fs_1.default.readdirSync(testSpecsPath).filter(function (file) {
         return file.substr(-3) === '.js';
     }).forEach(function (file) {
         mocha.addFile(path_1.default.join(testSpecsPath, file));
     });
+    mocha.timeout(0);
     mocha.run((failures) => {
         process.on('exit', () => {
             process.exit(failures);
@@ -25,3 +24,6 @@ function runTests() {
     });
 }
 exports.runTests = runTests;
+if (require.main === module) {
+    runTests();
+}

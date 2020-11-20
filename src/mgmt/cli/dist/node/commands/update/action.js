@@ -87,6 +87,8 @@ function action(what, cmdObj) {
             yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config_1.default.localRepo });
             cmd.log('Restarting the systemd service named “baldr_api.service” locally.');
             yield cmd.exec(['systemctl', 'restart', 'baldr_api.service']);
+            cmd.log('Restarting the systemd service named “baldr_wire.service” locally.');
+            yield cmd.exec(['systemctl', 'restart', 'baldr_wire.service']);
         }
         if (opts.remote && opts.api) {
             cmd.log('Updating the remote BALDR repository.');

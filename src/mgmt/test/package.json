@@ -21,7 +21,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "rm -rf dist && npm run build && mocha dist/node/specs/*.js",
+    "test": "rm -rf dist && npm run build && node ./dist/node/main.js",
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node"
   },

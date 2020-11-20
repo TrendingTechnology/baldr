@@ -5,10 +5,7 @@ import Mocha from 'mocha'
 import config from '@bldr/config'
 
 export function runTests (): void {
-  const mocha = new Mocha({
-    timeout: 100000
-  })
-
+  const mocha = new Mocha()
   const testSpecsPath = path.join(config.localRepo, 'src/mgmt/test/dist/node/specs')
   fs.readdirSync(testSpecsPath).filter(function (file) {
     return file.substr(-3) === '.js'
@@ -18,9 +15,14 @@ export function runTests (): void {
     )
   })
 
+  mocha.timeout(0)
   mocha.run((failures) => {
     process.on('exit', () => {
       process.exit(failures)
     })
   })
+}
+
+if (require.main === module) {
+  runTests()
 }

@@ -23,6 +23,7 @@ lib/browser/tex-markdown-converter
 lib/browser/songbook-core
 lib/node/core-node
 lib/node/config
+lib/node/mongodb-connector
 lib/node/wikidata
 lib/node/cli-utils
 lib/node/media-manager

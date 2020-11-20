@@ -117,7 +117,6 @@ function runTests () {
     assert.ok(result.data.assets > 0)
     assert.ok(result.data.presentations > 0)
   })
-
 }
 
 describe('local: /api/media', runTests)
