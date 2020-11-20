@@ -9,6 +9,8 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
@@ -28,7 +30,7 @@
     ]
   },
   "files": [
-    "src/vue-shims.d.ts"
+    "src/shims-vue.d.ts"
   ],
   "include": [
     "src/**/*.ts",

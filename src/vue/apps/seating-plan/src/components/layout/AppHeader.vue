@@ -26,8 +26,7 @@ export default class AppHeader extends Vue {
   @Prop()
   title!: string
 
-
-  get isNotHome () {
+  get isNotHome (): boolean {
     if (this.$route.path !== '/') {
       return true
     }

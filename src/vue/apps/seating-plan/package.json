@@ -18,7 +18,7 @@
   },
   "scripts": {
     "serve:webapp": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e"
@@ -81,6 +81,7 @@
       "node": true
     },
     "extends": [
+      "plugin:vue/base",
       "plugin:vue/essential",
       "@vue/standard",
       "@vue/typescript/recommended"

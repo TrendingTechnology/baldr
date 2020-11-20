@@ -51,7 +51,7 @@ import { mapGetters } from 'vuex'
 import AddJobIcons from '@/components/AddJobIcons.vue'
 import PersonsJobs from '@/components/PersonsJobs.vue'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Seat, Room } from '../../types'
+import { Seat, Room } from '@/types'
 
 @Component({
   components: {
