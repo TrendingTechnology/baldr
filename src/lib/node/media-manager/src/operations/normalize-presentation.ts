@@ -1,4 +1,4 @@
-import { PresentationType } from '@bldr/type-definitions'
+import { PresentationTypes } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
 import { convertObjectToYamlString } from '@bldr/core-browser'
 
@@ -47,7 +47,7 @@ function shortedMediaUris(rawYamlString: string, presentationId: string): string
  */
 export function normalizePresentationFile(filePath: string) {
   let textContent = readFile(filePath)
-  const presentation = <PresentationType.FileFormat> loadYaml(filePath)
+  const presentation = <PresentationTypes.FileFormat> loadYaml(filePath)
 
   // Generate meta.
   const title = new DeepTitle(filePath)

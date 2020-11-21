@@ -36,7 +36,7 @@ export function convertObjectToYamlString (data: any): string {
  * Load a YAML string and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function
  * returns a object with string properties to save Visual Studio Code
- * type checks (Not AssetType, PresentationType etc).
+ * type checks (Not AssetType, PresentationTypes etc).
  *
  * @param yamlString - A string in the YAML format..
  *

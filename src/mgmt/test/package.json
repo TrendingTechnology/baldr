@@ -30,7 +30,8 @@
     "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
     "@bldr/mongodb-connector": "*",
-    "@bldr/presentation-masters": "*",
+    "@bldr/master-collection": "*",
+    "@bldr/markdown-to-html": "*",
     "mocha": "8.2.1"
   },
   "devDependencies": {

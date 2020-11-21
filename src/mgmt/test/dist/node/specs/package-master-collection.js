@@ -12,18 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const presentation_masters_1 = __importDefault(require("@bldr/presentation-masters"));
+const master_collection_1 = __importDefault(require("@bldr/master-collection"));
 const assert_1 = __importDefault(require("assert"));
-describe('Package “@bldr/presentation-masters”', function () {
+describe('Package “@bldr/master-collection”', function () {
     it('Class “Master()”: name', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const master = presentation_masters_1.default.get('quote');
+            const master = master_collection_1.default.get('quote');
             assert_1.default.strictEqual(master.name, 'quote');
         });
     });
     it('Class “Master()”: title', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            const master = presentation_masters_1.default.get('quote');
+            const master = master_collection_1.default.get('quote');
             assert_1.default.strictEqual(master.title, 'Zitat');
         });
     });

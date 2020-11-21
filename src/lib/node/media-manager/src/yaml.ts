@@ -15,7 +15,7 @@ import metaTypes from './meta-types'
  * Load a YAML file and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function
  * returns a object with string properties to save Visual Studio Code
- * type checks (Not AssetType, PresentationType etc).
+ * type checks (Not AssetType, PresentationTypes etc).
  *
  * @param filePath - The path of a YAML file.
  *
