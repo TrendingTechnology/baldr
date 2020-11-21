@@ -17,10 +17,13 @@ function runTests() {
         mocha.addFile(path_1.default.join(testSpecsPath, file));
     });
     mocha.timeout(0);
-    mocha.run((failures) => {
+    const runner = mocha.run((failures) => {
         process.on('exit', () => {
             process.exit(failures);
         });
+    });
+    runner.on('end', function () {
+        process.exit();
     });
 }
 exports.runTests = runTests;

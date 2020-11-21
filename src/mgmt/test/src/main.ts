@@ -16,10 +16,14 @@ export function runTests (): void {
   })
 
   mocha.timeout(0)
-  mocha.run((failures) => {
+  const runner = mocha.run((failures) => {
     process.on('exit', () => {
       process.exit(failures)
     })
+  })
+
+  runner.on('end', function () {
+    process.exit()
   })
 }
 
