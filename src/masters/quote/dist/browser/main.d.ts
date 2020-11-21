@@ -1,3 +1,3 @@
-import { MasterSpec } from '@bldr/presentation-masters';
-declare const _default: MasterSpec;
+import { MasterTypes } from '@bldr/type-definitions';
+declare const _default: MasterTypes.MasterSpec;
 export default _default;

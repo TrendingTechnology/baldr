@@ -2,9 +2,11 @@
  * @module @bldr/master-quote
  */
 import { convertHtmlToPlainText } from '@bldr/core-browser';
-export default {
+import { MasterTypes } from '@bldr/type-definitions';
+export default MasterTypes.validateMasterSpec({
+    name: 'quote',
     title: 'Zitat',
-    props: {
+    propsDef: {
         text: {
             type: String,
             required: true,
@@ -61,4 +63,4 @@ export default {
             return convertHtmlToPlainText(Object.values(props).join(' | '));
         }
     }
-};
+});
