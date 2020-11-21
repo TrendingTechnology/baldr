@@ -11,8 +11,30 @@ type ThisArg = object
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
  */
-class MasterIcon {
-  constructor ({ name, color, size, showOnSlides }) {
+class MasterIcon implements MasterTypes.MasterIconSpec {
+  /**
+   * For allowed icon names see the
+   * {@link module:@bldr/icons Baldr icon font}.
+   */
+  name: string
+
+  /**
+   * A color name (CSS color class name) to colorize the master icon.
+   * @see {@link module:@bldr/themes}
+   */
+  color: string
+
+  /**
+   * The size of a master icon: `small` or `large`.
+   */
+  size?: 'large' | 'small'
+
+  /**
+   * Show the icon on the slide view.
+   */
+  showOnSlides: boolean
+
+  constructor ({ name, color, size, showOnSlides }: MasterTypes.MasterIconSpec) {
     if (size && !['small', 'large'].includes(size)) {
       throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
     }
@@ -20,34 +42,10 @@ class MasterIcon {
     if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
       throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`)
     }
-    /**
-     * For allowed icon names the materical icon font. The nasizeme of an icon
-     * of the {@link module:@bldr/icons baldr icon font}
-     *
-     * @type {String}
-     */
+
     this.name = name
-
-    /**
-     * A color name (CSS color class name) to colorize the master icon.
-     * @see {@link module:@bldr/themes}
-     *
-     * @type {String}
-     */
     this.color = color || 'orange'
-
-    /**
-     * Show the icon the on slide view.
-     *
-     * @type {Boolean}
-     */
     this.showOnSlides = showOnSlides !== false
-
-    /**
-     * `small` or `large`
-     *
-     * @type {String}
-     */
     this.size = size || 'small'
   }
 }
@@ -59,35 +57,15 @@ class MasterIcon {
  * implements a specific hook.
  */
 class Master {
-
     /**
      * A instance of `MasterIcon` which holds information about the master icon.
-     *
-     * @type {module:@bldr/lamp/masters~MasterIcon}
      */
     icon: MasterIcon
-
-    /**
-     * A style configuration object.
-     */
-    styleConfig: MasterTypes.StyleConfig
 
     /**
      * Some markdown formated string to document this master slide.
      */
     documentation?: string
-
-    /**
-     * A vuex object containing `state`, `getters`, `actions`, `mutations`
-     * properties which buildes a submodule vuex store for each master.
-     */
-    store: object
-
-    /**
-     * The definition of the slide properties (`props`) (aka `props` of a
-     * `master`).
-     */
-    propsDef: MasterTypes.PropsDefintion
 
     private spec: MasterTypes.MasterSpec
 
@@ -97,6 +75,7 @@ class Master {
    */
   constructor (spec: MasterTypes.MasterSpec) {
     this.spec = spec
+    this.icon = new MasterIcon(spec.icon)
   }
 
   /**
@@ -112,6 +91,122 @@ class Master {
    */
   get title(): string {
     return this.spec.name
+  }
+
+  /**
+   * The name of the props which are supporting inline media (for example
+   * `markup`)
+   */
+  get propNamesInlineMedia (): string[] {
+    const inlineMarkupProps = []
+    for (const propName in this.spec.propsDef) {
+      const propDef = this.spec.propsDef[propName]
+      if (propDef.inlineMarkup) {
+        inlineMarkupProps.push(propName)
+      }
+    }
+    return inlineMarkupProps
+  }
+
+  /**
+   * Filter the master props for props which are supporting inline media.
+   */
+  extractInlineMediaUris (props: MasterTypes.StringObject): Set<string> {
+    const uris = new Set<string>()
+
+    function extractUrisInText (text: string) {
+      const matches = text.matchAll(new RegExp(inlineMarkup.regExp, 'g'))
+      for (const match of matches) {
+        //  12    3            4
+        // [((id):(Fuer-Elise))( caption="Für Elise")]
+        if (match[2] === 'id') uris.add(match[1])
+      }
+    }
+
+    for (const propName of this.propNamesInlineMedia) {
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          extractUrisInText(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (const item of prop) {
+            extractUrisInText(item)
+          }
+        }
+      }
+    }
+    return uris
+  }
+
+  /**
+   * Replace the inline media tags `[id:Beethoven]` in certain props with
+   * HTML. This function must be called after the media resolution.
+   */
+  renderInlineMedia (props: MasterTypes.StringObject) {
+    /**
+     * @param {String} text
+     */
+    function renderOneMediaUri (text) {
+      return text.replace(new RegExp(inlineMarkup.regExp, 'g'), function (match) {
+        const item = new inlineMarkup.Item(match)
+        return inlineMarkup.render(item)
+      })
+    }
+
+    for (const propName of this.propNamesInlineMedia) {
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          props[propName] = renderOneMediaUri(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (let i = 0; i < prop.length; i++) {
+            props[propName][i] = renderOneMediaUri(prop[i])
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Convert in the props certain strings containing markup to HTML.
+   */
+  markupToHtml (props: MasterTypes.StringObject): MasterTypes.StringObject {
+    if (!this.propsDef) return props
+    for (const propName in props) {
+      const prop = this.propsDef[propName]
+      if ('markup' in prop && prop.markup) {
+        props[propName] = markupToHtml(props[propName])
+      }
+    }
+    return props
+  }
+
+  /**
+   * Raise an error if there is an unkown prop - a not in the `props` section
+   * defined prop.
+   */
+  detectUnkownProps (props: MasterTypes.StringObject) {
+    for (const propName in props) {
+      if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
+        throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
+      }
+    }
+  }
+
+  /**
+   * Validate all media file URIs in the props of a certain slide.
+   */
+  validateUris (props: MasterTypes.StringObject): MasterTypes.StringObject {
+    if (!this.spec.propsDef) return props
+    for (const propName in props) {
+      const prop = this.spec.propsDef[propName]
+      if ('assetUri' in prop && prop.assetUri) {
+        props[propName] = validateUri(props[propName])
+      }
+    }
+    return props
   }
 
   /**
@@ -149,116 +244,12 @@ class Master {
   }
 
   /**
-   * result must fit to props
-   *
-   * @param {module:@bldr/lamp~props} props
-   *
-   * @returns {object}
+   * Normalize the properties so the result fits to props defintion of the
+   * master slide.. Called during the parsing the YAML file
+   * (`Praesentation.baldr.yml`)
    */
-  normalizeProps (props: any) {
-    return this.callHook('normalizeProps', props)
-  }
-
-  /**
-   * Calculate from the given props the step count. This hook method is called
-   * after media resolution.
-   *
-   * @param {module:@bldr/lamp~props} props
-   *
-   * @param {Object} payload
-   * @property {Object} payload.props - The props of the master slide.
-   * @property {Object} payload.propsMain - The props of the main Vue component.
-   * @property {Object} payload.propsPreview - The props of the preview Vue component.
-   * @property {Object} payload.slide - The slide object.
-   *
-   * @returns {Number} - The number of steps.
-   */
-  calculateStepCount (payload, thisArg: ThisArg) {
-    return this.callHook('calculateStepCount', payload, thisArg)
-  }
-
-  /**
-   * The name of the props which are supporting inline media (for example
-   * `markup`)
-   */
-  get propNamesInlineMedia () {
-    const inlineMarkupProps = []
-    for (const propName in this.propsDef) {
-      const propDef = this.propsDef[propName]
-      if (propDef.inlineMarkup) {
-        inlineMarkupProps.push(propName)
-      }
-    }
-    return inlineMarkupProps
-  }
-
-  /**
-   * Filter the master props for props which are supporting inline media.
-   *
-   * @param {module:@bldr/lamp~props}
-   *
-   * @returns {Set}
-   */
-  extractInlineMediaUris (props) {
-    const uris = new Set()
-    /**
-     * @param {String} text
-     */
-    function extractUrisInText (text) {
-      const matches = text.matchAll(new RegExp(inlineMarkup.regExp, 'g'))
-      for (const match of matches) {
-        //  12    3            4
-        // [((id):(Fuer-Elise))( caption="Für Elise")]
-        if (match[2] === 'id') uris.add(match[1])
-      }
-    }
-
-    for (const propName of this.propNamesInlineMedia) {
-      const prop = props[propName]
-      if (prop) {
-        if (typeof prop === 'string') {
-          extractUrisInText(prop)
-        // `markup` in `generic` is an array.
-        } else if (Array.isArray(prop)) {
-          for (const item of prop) {
-            extractUrisInText(item)
-          }
-        }
-      }
-    }
-    return uris
-  }
-
-  /**
-   * Replace the inline media tags `[id:Beethoven]` in certain props with
-   * HTML. This function must be called after the media resolution.
-   *
-   * @param {module:@bldr/lamp~props}
-   */
-  renderInlineMedia (props) {
-    /**
-     * @param {String} text
-     */
-    function renderOneMediaUri (text) {
-      return text.replace(new RegExp(inlineMarkup.regExp, 'g'), function (match) {
-        const item = new inlineMarkup.Item(match)
-        return inlineMarkup.render(item)
-      })
-    }
-
-    for (const propName of this.propNamesInlineMedia) {
-      const prop = props[propName]
-      if (prop) {
-        if (typeof prop === 'string') {
-          props[propName] = renderOneMediaUri(prop)
-        // `markup` in `generic` is an array.
-        } else if (Array.isArray(prop)) {
-          for (let i = 0; i < prop.length; i++) {
-            props[propName][i] = renderOneMediaUri(prop[i])
-          }
-        }
-      }
-    }
+  normalizeProps (propsRaw: any): MasterTypes.StringObject {
+    return this.callHook('normalizeProps', propsRaw)
   }
 
   /**
@@ -267,12 +258,8 @@ class Master {
    * Call the master funtion `resolveMediaUris` and collect the media URIs.
    * (like [id:beethoven, id:mozart]). Extract media URIs from
    * the text props.
-   *
-   * @param {module:@bldr/lamp~props} props
-   *
-   * @returns {Set}
    */
-  resolveMediaUris (props) {
+  resolveMediaUris (props: MasterTypes.StringObject): Set<string> | undefined {
     let uris = this.callHook('resolveMediaUris', props)
 
     // To allow undefined return values of the hooks.
@@ -296,13 +283,10 @@ class Master {
    * Check if the handed over media URIs can be resolved. Throw no errors, if
    * the media assets are not present. This hook is used in the YouTube master
    * slide. This master slide uses the online version, if no offline video could
-   * be resolved.
-   *
-   * @param {module:@bldr/lamp~props} props
-   *
-   * @returns {Set}
+   * be resolved. Called during the parsing the YAML file
+   * (`Praesentation.baldr.yml`).
    */
-  resolveOptionalMediaUris (props) {
+  resolveOptionalMediaUris (props: MasterTypes.StringObject): Set<string> | undefined {
     let uris = this.callHook('resolveOptionalMediaUris', props)
 
     // To allow undefined return values of the hooks.
@@ -315,119 +299,85 @@ class Master {
   }
 
   /**
-   * @param {module:@bldr/lamp~props} props
+   * This hook after is called after loading. To load resources in the
+   * background. Goes in the background. Called during the parsing the YAML file
+   * (`Praesentation.baldr.yml`).
    *
-   * @returns {String}
+   * - `this`: is the main Vue instance.
+   *
+   * @param props - The properties of the slide.
    */
-  plainTextFromProps (props) {
-    return this.callHook('plainTextFromProps', props)
-  }
-
-  /**
-   * @param {object} payload
-   * @property {module:@bldr/lamp~props} payload.props
-   * @property {module:@bldr/lamp~props} payload.propsMain
-   * @property {module:@bldr/lamp~props} payload.propPreview
-   *
-   * @returns {String}
-   */
-  titleFromProps (payload) {
-    return this.callHook('titleFromProps', payload)
-  }
-
-  /**
-   * Convert in the props certain strings containing markup to HTML.
-   *
-   * @param {module:@bldr/lamp~props} props
-   *
-   * @returns {object}
-   */
-  markupToHtml (props) {
-    if (!this.propsDef) return props
-    for (const propName in props) {
-      const prop = this.propsDef[propName]
-      if ('markup' in prop && prop.markup) {
-        props[propName] = markupToHtml(props[propName])
-      }
-    }
-    return props
-  }
-
-  /**
-   * Raise an error if there is an unkown prop - a not in the `props` section
-   * defined prop.
-   *
-   * @param {module:@bldr/lamp~props} props
-   */
-  detectUnkownProps (props) {
-    for (const propName in props) {
-      if (this.propsDef && !(propName in this.propsDef)) {
-        throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
-      }
-    }
-  }
-
-  /**
-   * Validate all media file URIs in the props of a certain slide.
-   *
-   * @param {module:@bldr/lamp~props} props
-   */
-  validateUris (props) {
-    if (!this.propsDef) return props
-    for (const propName in props) {
-      const prop = this.propsDef[propName]
-      if ('assetUri' in prop && prop.assetUri) {
-        props[propName] = validateUri(props[propName])
-      }
-    }
-    return props
-  }
-
-  /**
-   * Collect the props (properties) for the main Vue component.
-   *
-   * @param {object} props - The props of the master slide.
-   * @returns {Object} - The props for the main component as a object.
-   */
-  collectPropsMain (props, thisArg: ThisArg) {
-    const propsMain = this.callHook('collectPropsMain', props, thisArg)
-    if (propsMain) return propsMain
-    if (props) return props
-  }
-
-  /**
-   * Collect the props (properties) for the preview Vue component.
-   *
-   * @param {Object} payload
-   * @property {Object} payload.props - The props of the master slide.
-   * @property {Object} payload.propsMain - The props of the main Vue component.
-   *
-   * @returns {Object} - The props for the preview component as a object.
-   */
-  collectPropsPreview (payload, thisArg: ThisArg) {
-    const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
-    if (propsPreview) return propsPreview
-    if (payload.propsMain) return payload.propsMain
-    if (payload.props) return payload.props
-  }
-
-  /**
-   * Hook after loading. To load resources in the background.
-   *
-   * @param {Object} props - The properties of the slide.
-   */
-  afterLoading (props, thisArg: ThisArg) {
+  afterLoading (props: MasterTypes.StringObject, thisArg: ThisArg): void {
     this.callHook('afterLoading', { props, master: this }, thisArg)
   }
 
   /**
    * This hook gets executed after the media resolution. Wait for this hook to
-   * finish. Go not in the background.
+   * finish. Go not in the background. Called during the parsing the YAML file
+   * (`Praesentation.baldr.yml`). Blocks.
    *
-   * @param {Object} props - The properties of the slide.
+   * - `this`: is the main Vue instance.
+   *
+   * @param props - The properties of the slide.
    */
-  async afterMediaResolution (props, thisArg: ThisArg) {
+  async afterMediaResolution (props: MasterTypes.StringObject, thisArg: ThisArg) {
     await this.callHookAsync('afterMediaResolution', { props, master: this }, thisArg)
+  }
+
+  /**
+   * Collect the props (properties) for the main Vue component.
+   *
+   * @param props - The props of the master slide.
+   *
+   * @returns The props for the main component as a object.
+   */
+  collectPropsMain (props: MasterTypes.StringObject, thisArg: ThisArg): MasterTypes.StringObject {
+    const propsMain = this.callHook('collectPropsMain', props, thisArg)
+    if (propsMain) return propsMain
+    return props
+  }
+
+  /**
+   * Collect the props (properties) for the preview Vue component. Called
+   * during the parsing the YAML file (`Praesentation.baldr.yml`).
+   *
+   * - `this`: is the main Vue instance.
+   *
+   * @returns The props for the preview component as a object.
+   */
+  collectPropsPreview (payload: MasterTypes.PropsAndSlide, thisArg: ThisArg): MasterTypes.StringObject {
+    const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
+    if (propsPreview) return propsPreview
+    if (payload.propsMain) return payload.propsMain
+    return payload.props
+  }
+
+  /**
+   * Calculate from the given props the step count. This hook method is called
+   * after media resolution. Called during the parsing the YAML file
+   * (`Praesentation.baldr.yml`).
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: a number or an array of slide steps.
+   *
+   * @returns The steps count.
+   */
+  calculateStepCount (payload: MasterTypes.PropsSlideAndMaster, thisArg: ThisArg): number {
+    return this.callHook('calculateStepCount', payload, thisArg)
+  }
+
+  /**
+   * Determine a title from the properties.
+   */
+  titleFromProps (payload: MasterTypes.PropsBundle): string {
+    return this.callHook('titleFromProps', payload)
+  }
+
+  /**
+   * Extract a plain text from the props (properties) of a slide.
+   */
+  plainTextFromProps (props: any): string {
+    return this.callHook('plainTextFromProps', props)
   }
 
   /**

@@ -6,8 +6,9 @@ import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { validateMasterSpec } from '@bldr/type-definitions'
 
 export default validateMasterSpec({
+  name: 'quote',
   title: 'Zitat',
-  props: {
+  propsDef: {
     text: {
       type: String,
       required: true,

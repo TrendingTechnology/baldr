@@ -1,7 +1,13 @@
 export declare namespace MasterTypes {
-    type StringObject = {
+    export type StringObject = {
         [key: string]: any;
     };
+    interface Master {
+    }
+    export interface PropsAndMaster {
+        props: StringObject;
+        master: Master;
+    }
     export interface PropsAndSlide {
         props: StringObject;
         propsMain: StringObject;
@@ -55,6 +61,12 @@ export declare namespace MasterTypes {
          */
         normalizeProps?: (props: any) => StringObject;
         /**
+         * Retrieve the media URIs which have to be resolved.
+         *
+         * Call the master funtion `resolveMediaUris` and collect the media URIs.
+         * (like [id:beethoven, id:mozart]). Extract media URIs from
+         * the text props.
+         *
          * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
          *
          * ```js
@@ -70,12 +82,10 @@ export declare namespace MasterTypes {
          */
         resolveMediaUris?: (props: StringObject) => string | string[];
         /**
-         * Check if the handed over media URIs can be resolved. Throw no
-         * errors, if the media assets are not present. This hook is used in
-         * the YouTube master slide. This master slide uses the online
-         * version, if no offline video could be resolved.
-         *
-         * Called during the parsing the YAML file
+         * Check if the handed over media URIs can be resolved. Throw no errors, if
+         * the media assets are not present. This hook is used in the YouTube master
+         * slide. This master slide uses the online version, if no offline video
+         * could be resolved. Called during the parsing the YAML file
          * (`Praesentation.baldr.yml`).
          *
          * ```js
@@ -91,12 +101,11 @@ export declare namespace MasterTypes {
          */
         resolveOptionalMediaUris?: (props: StringObject) => string | string[];
         /**
-         * Goes in the background.
-         *
-         * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
+         * This hook after is called after loading. To load resources in the
+         * background. Goes in the background. Called during the parsing the YAML file
+         * (`Praesentation.baldr.yml`).
          *
          * - `this`: is the main Vue instance.
-         * - `return`: void.
          *
          * ```js
          * export const default = {
@@ -111,12 +120,11 @@ export declare namespace MasterTypes {
          */
         afterLoading?: () => Promise<void>;
         /**
-         * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-         *
-         * Blocks
+         * This hook gets executed after the media resolution. Wait for this hook to
+         * finish. Go not in the background. Called during the parsing the YAML file
+         * (`Praesentation.baldr.yml`). Blocks.
          *
          * - `this`: is the main Vue instance.
-         * - `return`: void.
          *
          * ```js
          * export const default = {
@@ -127,25 +135,35 @@ export declare namespace MasterTypes {
          * }
          * ```
          */
-        afterMediaResolution?: () => Promise<void>;
+        afterMediaResolution?: (payload: PropsAndMaster) => Promise<void>;
         /**
-         *
-         * ### 6. `collectPropsMain(props)`
+         * Collect the props (properties) for the main Vue component.
          *
          * - `this`: is the main Vue instance.
          * - `return`: an object.
          *
          * ```js
          * export const default = {
+         *   collectPropsMain (props) {
+         *     const asset = this.$store.getters['media/assetByUri'](props.src)
+         *     return {
+         *       src: props.src,
+         *       svgPath: asset.path,
+         *       svgTitle: asset.title,
+         *       svgHttpUrl: asset.httpUrl,
+         *       stepSelector: props.stepSelector,
+         *       stepSubset: props.stepSubset
+         *     }
+         *   }
          * }
          * ```
          */
         collectPropsMain?: (payload: PropsAndSlide) => StringObject;
         /**
-         * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+         * Collect the props (properties) for the preview Vue component. Called
+         * during the parsing the YAML file (`Praesentation.baldr.yml`).
          *
          * - `this`: is the main Vue instance.
-         * - `return`: an object.
          *
          * ```js
          * export const default = {
@@ -159,7 +177,9 @@ export declare namespace MasterTypes {
          */
         collectPropsPreview?: (payload: PropsAndSlide) => StringObject;
         /**
-         * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+         * Calculate from the given props the step count. This hook method is called
+         * after media resolution. Called during the parsing the YAML file
+         * (`Praesentation.baldr.yml`).
          *
          * - `this`: is the main Vue instance.
          * - `return`: a number or an array of slide steps.
@@ -176,7 +196,7 @@ export declare namespace MasterTypes {
          */
         calculateStepCount?: (payload: PropsSlideAndMaster) => number;
         /**
-         * Getter on the slide object.
+         * Determine a title from the properties. Getter on the slide object.
          *
          * ```js
          * export const default = {
@@ -192,7 +212,8 @@ export declare namespace MasterTypes {
          */
         titleFromProps?: (payload: PropsBundle) => string;
         /**
-         * Getter on the slide object.
+         * Extract a plain text from the props (properties) of a slide. Getter on
+         * the slide object.
          *
          * - `return`: a string
          *
@@ -212,14 +233,8 @@ export declare namespace MasterTypes {
          */
         plainTextFromProps?: (props: StringObject) => string;
         /**
-         * Slide change.
-         *
-         * This hook is only called on the public master component (the one that is
-         * visible for the audience), not on further secondary master components (for
-         * example the ad hoc slides or the future slide view in the speakers view.)
-         *
-         * - `this`: is the Vue instance of the current main master component.
-         * - called from within the Vuex store in the file  `store.js`.
+         * Called when leaving a slide. This hook is triggered by the Vue lifecycle
+         * hook `beforeDestroy`.
          *
          * ```js
          * export const default = {
@@ -234,11 +249,10 @@ export declare namespace MasterTypes {
          */
         leaveSlide?: (payload: OldAndNewPropsAndSlide) => void;
         /**
-         * Slide change
-         *
-         * This hook is only called on the public master component (the one that is
-         * visible for the audience), not on further secondary master components (for
-         * example the ad hoc slides or the future slide view in the speakers view.)
+         * Called when entering a slide. This hook is only called on the public master
+         * component (the one that is visible for the audience), not on further
+         * secondary master components (for example the ad hoc slides or the future
+         * slide view in the speakers view.)
          *
          * - `this`: is the Vue instance of the current main master component.
          * - called from within the Vuex store in the file  `store.js`.
@@ -255,7 +269,9 @@ export declare namespace MasterTypes {
          */
         enterSlide?: (payload: OldAndNewPropsAndSlide) => void;
         /**
-         * Slide change
+         * This hook gets executed after the slide number has changed on the
+         * component. Use `const slide = this.$get('slide')` to get the current
+         * slide object.
          *
          * - `this`: is the Vue instance of the current main master component.
          * - called from the master component mixin in the file `masters.js`.
@@ -381,13 +397,29 @@ export declare namespace MasterTypes {
      *   name: 'comment-quote',
      *   color: 'brown',
      *   size: 'large'
+     *   showOnSlides: true
      * }
      * ```
      */
-    interface MasterIconSpec {
+    export interface MasterIconSpec {
+        /**
+         * For allowed icon names see the
+         * {@link module:@bldr/icons Baldr icon font}.
+         */
         name: string;
-        color: string;
-        size?: 'large' | 'normal';
+        /**
+         * A color name (CSS color class name) to colorize the master icon.
+         * @see {@link module:@bldr/themes}
+         */
+        color?: string;
+        /**
+         * The size of a master icon: `small` or `large`.
+         */
+        size?: 'large' | 'small';
+        /**
+         * Show the icon on the slide view.
+         */
+        showOnSlides?: boolean;
     }
     export interface StyleConfig {
         centerVertically?: boolean;
@@ -398,10 +430,16 @@ export declare namespace MasterTypes {
     export interface PropsDefintion {
         [key: string]: MasterProp;
     }
+    interface Store {
+        state: object;
+        getters?: object;
+        actions?: object;
+        mutations?: object;
+    }
     export interface MasterSpec {
         /**
-         * A name or short name of the master slide. Should be a short name
-         * in lowercase letters.
+         * The short name of the master slide. Should be a shorter string without
+         * spaces in the camelCase format.
          */
         name: string;
         /**
@@ -413,11 +451,16 @@ export declare namespace MasterTypes {
         /**
          * The properties of the master slide.
          */
-        props: PropsDefintion;
+        propsDef: PropsDefintion;
         /**
          * A collection of the master hooks (exported master methods.)
          */
         hooks?: MasterHooks;
+        /**
+         * A vuex object containing `state`, `getters`, `actions`, `mutations`
+         * properties which buildes a submodule vuex store for each master.
+         */
+        store?: Store;
     }
     export {};
 }
