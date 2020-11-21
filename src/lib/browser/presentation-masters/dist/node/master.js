@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Master = void 0;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -28,7 +31,7 @@ class MasterIcon {
 /**
  * Each master slide has an instance of this class.
  */
-export class Master {
+class Master {
     /**
      * @param spec - The specification of the master slide provided by a master
      * package.
@@ -264,3 +267,4 @@ export class Master {
         this.callHook('afterStepNoChangeOnComponent', payload, thisArg);
     }
 }
+exports.Master = Master;

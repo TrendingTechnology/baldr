@@ -30,7 +30,8 @@
     "@bldr/core-browser": "*",
     "@bldr/config": "*",
     "@bldr/http-request": "*",
-    "@bldr/mongodb-connector": "*"
+    "@bldr/mongodb-connector": "*",
+    "@bldr/presentation-masters": "*"
   },
   "devDependencies": {
     "@types/node": "14.14.7",

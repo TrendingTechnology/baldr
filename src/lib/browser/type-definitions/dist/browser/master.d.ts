@@ -1,8 +1,12 @@
-export declare type StringObject = {
+export interface StringObject {
     [key: string]: any;
-};
-interface Master {
 }
+/**
+ * The
+ * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+ * a function is called with.
+ */
+declare type ThisArg = object;
 export interface PropsAndMaster {
     props: StringObject;
     master: Master;
@@ -464,6 +468,162 @@ export interface MasterSpec {
      * properties which buildes a submodule vuex store for each master.
      */
     store?: Store;
+}
+interface MasterIcon {
+}
+/**
+ * Each master slide has an instance of this class.
+ */
+export interface Master {
+    /**
+     * A instance of `MasterIcon` which holds information about the master icon.
+     */
+    icon: MasterIcon;
+    /**
+     * Some markdown formated string to document this master slide.
+     */
+    documentation?: string;
+    /**
+     * The short name of the master slide. Should be a shorter string without
+     * spaces in the camelCase format.
+     */
+    name: string;
+    /**
+     * The human readable title of the master slide.
+     */
+    title: string;
+    /**
+     * The name of the props which are supporting inline media (for example
+     * `markup`)
+     */
+    propNamesInlineMedia: string[];
+    /**
+     * Raise an error if there is an unkown prop - a not in the `props` section
+     * defined prop.
+     */
+    detectUnkownProps: (props: StringObject) => void;
+    /**
+     * Normalize the properties so the result fits to props defintion of the
+     * master slide.. Called during the parsing the YAML file
+     * (`Praesentation.baldr.yml`)
+     */
+    normalizeProps: (propsRaw: any) => StringObject;
+    /**
+     * Check if the handed over media URIs can be resolved. Throw no errors, if
+     * the media assets are not present. This hook is used in the YouTube master
+     * slide. This master slide uses the online version, if no offline video could
+     * be resolved. Called during the parsing the YAML file
+     * (`Praesentation.baldr.yml`).
+     */
+    resolveOptionalMediaUris: (props: StringObject) => Set<string> | undefined;
+    /**
+     * This hook after is called after loading. To load resources in the
+     * background. Goes in the background. Called during the parsing the YAML file
+     * (`Praesentation.baldr.yml`).
+     *
+     * - `this`: is the main Vue instance.
+     *
+     * @param props - The properties of the slide.
+     */
+    afterLoading: (props: StringObject, thisArg: ThisArg) => void;
+    /**
+     * This hook gets executed after the media resolution. Wait for this hook to
+     * finish. Go not in the background. Called during the parsing the YAML file
+     * (`Praesentation.baldr.yml`). Blocks.
+     *
+     * - `this`: is the main Vue instance.
+     *
+     * @param props - The properties of the slide.
+     */
+    afterMediaResolution: (props: StringObject, thisArg: ThisArg) => Promise<void>;
+    /**
+     * Collect the props (properties) for the main Vue component.
+     *
+     * @param props - The props of the master slide.
+     *
+     * @returns The props for the main component as a object.
+     */
+    collectPropsMain: (props: StringObject, thisArg: ThisArg) => StringObject;
+    /**
+     * Collect the props (properties) for the preview Vue component. Called
+     * during the parsing the YAML file (`Praesentation.baldr.yml`).
+     *
+     * - `this`: is the main Vue instance.
+     *
+     * @returns The props for the preview component as a object.
+     */
+    collectPropsPreview: (payload: PropsAndSlide, thisArg: ThisArg) => StringObject;
+    /**
+     * Calculate from the given props the step count. This hook method is called
+     * after media resolution. Called during the parsing the YAML file
+     * (`Praesentation.baldr.yml`).
+     *
+     * - `this`: is the main Vue instance.
+     * - `return`: a number or an array of slide steps.
+     *
+     * @returns The steps count.
+     */
+    calculateStepCount: (payload: PropsSlideAndMaster, thisArg: ThisArg) => number;
+    /**
+     * Determine a title from the properties.
+     */
+    titleFromProps: (payload: PropsBundle) => string;
+    /**
+     * Extract a plain text from the props (properties) of a slide.
+     */
+    plainTextFromProps: (props: any) => string;
+    /**
+     * Called when leaving a slide. This hook is triggered by the Vue lifecycle
+     * hook `beforeDestroy`.
+     */
+    leaveSlide: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
+    /**
+     * Called when entering a slide. This hook is only called on the public master
+     * component (the one that is visible for the audience), not on further
+     * secondary master components (for example the ad hoc slides or the future
+     * slide view in the speakers view.)
+     *
+     * - `this`: is the Vue instance of the current main master component.
+     * - called from within the Vuex store in the file  `store.js`.
+     */
+    enterSlide: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
+    /**
+     * This hook gets executed after the slide number has changed on the
+     * component. Use `const slide = this.$get('slide')` to get the current slide
+     * object.
+     *
+     * - `this`: is the Vue instance of the current main master component.
+     * - called from the master component mixin in the file `masters.js`.
+     */
+    afterSlideNoChangeOnComponent: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
+    /**
+     * Called when leaving a step. This hook is only called on the public master
+     * component (the one that is visible for the audience), not on further
+     * secondary master components (for example the ad hoc slides or the future
+     * slide view in the speakers view.)
+     *
+     * - `this`: is the Vue instance of the current main master component.
+     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+     */
+    leaveStep: (payload: OldAndNewStepNo, thisArg: ThisArg) => any;
+    /**
+     * Called when entering a step. This hook is only called on the public
+     * master component (the one that is visible for the audience), not on
+     * further secondary master components (for example the ad hoc slides or the
+     * future slide view in the speakers view.)
+     *
+     * - `this`: is the Vue instance of the current main master component.
+     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+     */
+    enterStep: (payload: OldAndNewStepNo, thisArg: ThisArg) => void;
+    /**
+     * This hook gets executed after the step number has changed on the
+     * component.
+     *
+     * - `this`: is the Vue instance of the current main master component.
+     * - called from the master component mixin in the file `masters.js`.
+     */
+    afterStepNoChangeOnComponent: (payload: OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg) => void;
 }
 export declare function validateMasterSpec(masterSpec: MasterSpec): MasterSpec;
 export {};
