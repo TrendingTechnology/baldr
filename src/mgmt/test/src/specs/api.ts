@@ -9,7 +9,7 @@ const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media'
 let httpRequest: HttpRequest = localHttpRequest
 
 function runTests () {
-  it('/api/media/mgmt/update', async function () {
+  it.skip('/api/media/mgmt/update', async function () {
     const result = await httpRequest.request('mgmt/update')
     assert.strictEqual(result.data.finished, true)
     assert.ok(typeof result.data.begin === 'number')

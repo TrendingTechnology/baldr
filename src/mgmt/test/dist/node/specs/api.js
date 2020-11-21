@@ -19,7 +19,7 @@ const localHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default
 const remoteHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'remote', '/api/media');
 let httpRequest = localHttpRequest;
 function runTests() {
-    it('/api/media/mgmt/update', function () {
+    it.skip('/api/media/mgmt/update', function () {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield httpRequest.request('mgmt/update');
             assert_1.default.strictEqual(result.data.finished, true);

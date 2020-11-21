@@ -11,16 +11,18 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build": "npm run build:browser",
-    "build:browser": "tsc --module es2015 --outDir dist/browser"
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/browser/main.js",
   "dependencies": {
     "@bldr/core-browser": "*",
     "@bldr/type-definitions": "*"

@@ -26,12 +26,12 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "mocha": "8.2.1",
-    "@bldr/core-browser": "*",
     "@bldr/config": "*",
+    "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
     "@bldr/mongodb-connector": "*",
-    "@bldr/presentation-masters": "*"
+    "@bldr/presentation-masters": "*",
+    "mocha": "8.2.1"
   },
   "devDependencies": {
     "@types/node": "14.14.7",
