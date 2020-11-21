@@ -54,14 +54,13 @@ class MasterIcon implements MasterTypes.MasterIconSpec {
  * Each master slide has an instance of this class.
  */
 export class Master implements MasterTypes.Master {
+  icon: MasterIcon
+  documentation?: string
 
-    icon: MasterIcon
-    documentation?: string
-
-    /**
+  /**
      * The specification of the master slide provided by a master package.
      */
-    private spec: MasterTypes.MasterSpec
+  private readonly spec: MasterTypes.MasterSpec
 
   /**
    * @param spec - The specification of the master slide provided by a master
@@ -72,11 +71,11 @@ export class Master implements MasterTypes.Master {
     this.icon = new MasterIcon(spec.icon)
   }
 
-  get name(): string {
+  get name (): string {
     return this.spec.name
   }
 
-  get title(): string {
+  get title (): string {
     return this.spec.title
   }
 
@@ -166,7 +165,7 @@ export class Master implements MasterTypes.Master {
   //   return props
   // }
 
-  detectUnkownProps (props: MasterTypes.StringObject) {
+  detectUnkownProps (props: MasterTypes.StringObject): void {
     for (const propName in props) {
       if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
         throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
@@ -269,7 +268,7 @@ export class Master implements MasterTypes.Master {
     this.callHook('afterLoading', { props, master: this }, thisArg)
   }
 
-  async afterMediaResolution (props: MasterTypes.StringObject, thisArg: ThisArg) {
+  async afterMediaResolution (props: MasterTypes.StringObject, thisArg: ThisArg): Promise<void> {
     await this.callHookAsync('afterMediaResolution', { props, master: this }, thisArg)
   }
 
@@ -302,7 +301,7 @@ export class Master implements MasterTypes.Master {
     this.callHook('leaveSlide', payload, thisArg)
   }
 
-  enterSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg):void {
+  enterSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
     this.callHook('enterSlide', payload, thisArg)
   }
 
@@ -310,7 +309,7 @@ export class Master implements MasterTypes.Master {
     this.callHook('afterSlideNoChangeOnComponent', payload, thisArg)
   }
 
-  leaveStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg) {
+  leaveStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void {
     return this.callHook('leaveStep', payload, thisArg)
   }
 

@@ -8,8 +8,9 @@
  */
 
 import { GrabFromObjects } from '@/lib.js'
+import { MasterTypes } from '@bldr/type-definitions'
 
-export default {
+export default MasterTypes.validateMasterSpec({
   title: 'Hörbeispiel',
   props: {
     src: {
@@ -130,4 +131,4 @@ export default {
       }
     }
   }
-}
+})

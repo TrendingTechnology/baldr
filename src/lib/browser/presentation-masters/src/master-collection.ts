@@ -9,6 +9,7 @@ export class MasterCollection {
    * A container object for all master objects.
    */
   private masters: { [key: string]: Master }
+
   constructor () {
     /**
      * A container object for all master objects.
@@ -21,11 +22,11 @@ export class MasterCollection {
   /**
    * Add a master to the masters container.
    */
-  add (master: Master) {
+  add (master: Master): void {
     this.masters[master.name] = master
   }
 
-  createMasterBySpec(masterSpec: MasterTypes.MasterSpec) {
+  createMasterBySpec (masterSpec: MasterTypes.MasterSpec): void {
     const master = new Master(masterSpec)
     this.add(master)
   }
