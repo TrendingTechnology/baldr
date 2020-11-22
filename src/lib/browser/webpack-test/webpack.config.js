@@ -16,10 +16,10 @@ const nodeConfig = {
             }
           },
           {
-            loader: "ifdef-loader",
+            loader: 'ifdef-loader',
             options: {
-              IS_NODE: true,
-           }
+              IS_NODE: true
+            }
           }
         ],
         exclude: /node_modules/
@@ -51,10 +51,10 @@ const browserConfig = {
             }
           },
           {
-            loader: "ifdef-loader",
+            loader: 'ifdef-loader',
             options: {
-              IS_NODE: false,
-           }
+              IS_NODE: false
+            }
           }
         ],
         exclude: /node_modules/
