@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "ES6",
+    "module": "CommonJS",
+    "outDir": "./dist/node/",
     "declaration": true,
-    "outDir": "./dist/browser/",
     "strict": true,
     "lib": ["es2020", "DOM"],
     "removeComments": false,

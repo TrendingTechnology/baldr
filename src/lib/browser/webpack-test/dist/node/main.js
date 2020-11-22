@@ -18,6 +18,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "helloWorld": () => /* binding */ helloWorld,
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+// https://webpack.js.org/plugins/normal-module-replacement-plugin/
+// https://github.com/nippur72/ifdef-loader
+// import { JSDOM } from 'jsdom'
+// export const DOMParser = new JSDOM().window.DOMParser
+///////////////
+console.log("Code for node!");
+//////////
 /**
  * Say Hello, World!
  */
