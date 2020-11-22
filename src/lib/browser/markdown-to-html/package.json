@@ -29,9 +29,10 @@
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "dependencies": {
     "marked": "^1.2.4",
-    "xmldom": "^0.4.0"
+    "jsdom": "^16.4.0"
   },
   "devDependencies": {
-    "@types/marked": "0.3.0"
+    "@types/marked": "0.3.0",
+    "@types/jsdom":" ^16.2.5"
   }
 }

@@ -1,5 +1,6 @@
 import * as marked from 'marked';
-import { DOMParser } from 'xmldom';
+import { JSDOM } from 'jsdom';
+const DOMParser = new JSDOM().window.DOMParser;
 /**
  * @param text - The raw input text coming directly form YAML
  */
@@ -13,16 +14,20 @@ function convertCustomMarkup(text) {
         .replace(/<-/g, '←');
 }
 /**
- * Maybe long texts are not converted? Had to use marked() function in editor.
- * Surpress wrapping in <p> tag.
- * Other no so stable solution: https://github.com/markedjs/marked/issues/395
+ * Convert a string from Markdown to HTML. Automatically generate a
+ * inline version (without surrounding `<p></p>`) if the text consists
+ * of only one paragraph.
  *
- * @param text - The raw input text coming directly form YAML
+ * Other no so stable solution:
+ * https://github.com/markedjs/marked/issues/395
+ *
+ * @param text - The raw input text coming directly from YAML.
  */
 function convertMarkdown(text) {
     text = marked(text);
     const dom = new DOMParser().parseFromString(text, 'text/html');
-    if (dom.body.childElementCount !== undefined && dom.body.childElementCount === 1 && dom.body.childNodes[0].tagName === 'P') {
+    // Solution using the browser only implementation.
+    if (dom.body.childElementCount === 1 && dom.body.childNodes[0].tagName === 'P') {
         return dom.body.childNodes[0].innerHTML;
     }
     else {

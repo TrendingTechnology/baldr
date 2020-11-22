@@ -1,1 +1,1 @@
-declare module 'xmldom'
+declare module 'jsdom'

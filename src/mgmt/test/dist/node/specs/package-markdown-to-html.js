@@ -17,7 +17,12 @@ const markdown_to_html_1 = require("@bldr/markdown-to-html");
 describe('Package “@bldr/markdown-to-html”', function () {
     it('arrows', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            assert_1.default.strictEqual(markdown_to_html_1.convertMarkdownFromString('test -> test'), 'quote');
+            assert_1.default.strictEqual(markdown_to_html_1.convertMarkdownFromString('test -> test'), 'test → test');
+        });
+    });
+    it('inline HTML', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            assert_1.default.strictEqual(markdown_to_html_1.convertMarkdownFromString('test <strong>strong</strong> test'), 'test <strong>strong</strong> test');
         });
     });
 });
