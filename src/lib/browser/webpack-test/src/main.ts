@@ -2,11 +2,15 @@
 
 // https://github.com/nippur72/ifdef-loader
 
-// import { JSDOM } from 'jsdom'
-
-// export const DOMParser = new JSDOM().window.DOMParser
-
 /// #if IS_NODE
+import { JSDOM } from 'jsdom'
+
+export const DOMParser = new JSDOM().window.DOMParser
+
+export function convertMarkdown (text: string): Document {
+  return new DOMParser().parseFromString(text, 'text/html')
+}
+
 console.log("Code for node!");
 /// #endif
 

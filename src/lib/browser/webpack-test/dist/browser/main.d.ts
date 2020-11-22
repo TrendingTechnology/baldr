@@ -1,3 +1,8 @@
+export declare const DOMParser: {
+    new (): DOMParser;
+    prototype: DOMParser;
+};
+export declare function convertMarkdown(text: string): Document;
 /**
  * Say Hello, World!
  */

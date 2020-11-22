@@ -1,4 +1,5 @@
 const path = require('path')
+const nodeExternals = require('webpack-node-externals')
 
 const nodeConfig = {
   target: 'node',
@@ -6,6 +7,10 @@ const nodeConfig = {
   devtool: 'source-map',
   module: {
     rules: [
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
       {
         test: /\.ts$/,
         use: [
@@ -32,7 +37,8 @@ const nodeConfig = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist', 'node')
-  }
+  },
+  externals: [nodeExternals()],
 }
 
 const browserConfig = {
