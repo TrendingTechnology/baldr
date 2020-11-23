@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["ES2020", "DOM"],
-    "module": "ES6",
+    "lib": ["es2020", "DOM"],
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "./dist/browser/",
+    "outDir": "./dist/node/",
     "removeComments": false,
     "sourceMap": true,
     "strict": true,
     "target": "ES6",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["src/*.ts"]
 }

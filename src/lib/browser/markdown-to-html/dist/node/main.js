@@ -1,9 +1,28 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+module.exports =
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/main.ts":
+/*!*********************!*\
+  !*** ./src/main.ts ***!
+  \*********************/
+/*! flagged exports */
+/*! export __esModule [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
+/*! export convertMarkdownFromAny [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
+/*! export convertMarkdownFromString [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
+/*! other exports [not provided] [maybe used in main (runtime-defined)] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.convertMarkdownFromAny = exports.convertMarkdownFromString = void 0;
-const marked = require("marked");
-const jsdom_1 = require("jsdom");
+const marked = __webpack_require__(/*! marked */ "marked");
+///////////////
+const jsdom_1 = __webpack_require__(/*! jsdom */ "jsdom");
 const DOMParser = new jsdom_1.JSDOM().window.DOMParser;
+//////////
 /**
  * @param text - The raw input text coming directly form YAML
  */
@@ -30,8 +49,8 @@ function convertMarkdown(text) {
     text = marked(text);
     const dom = new DOMParser().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
-    if (dom.body.childElementCount === 1 && dom.body.childNodes[0].tagName === 'P') {
-        return dom.body.childNodes[0].innerHTML;
+    if (dom.body.childElementCount === 1 && dom.body.children[0].tagName === 'P') {
+        return dom.body.children[0].innerHTML;
     }
     else {
         return dom.body.innerHTML;
@@ -85,3 +104,66 @@ function convertMarkdownFromAny(input) {
     return input;
 }
 exports.convertMarkdownFromAny = convertMarkdownFromAny;
+
+
+/***/ }),
+
+/***/ "jsdom":
+/*!************************!*\
+  !*** external "jsdom" ***!
+  \************************/
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
+
+module.exports = require("jsdom");;
+
+/***/ }),
+
+/***/ "marked":
+/*!*************************!*\
+  !*** external "marked" ***!
+  \*************************/
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
+
+module.exports = require("marked");;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__("./src/main.ts");
+/******/ })()
+;
+//# sourceMappingURL=main.js.map

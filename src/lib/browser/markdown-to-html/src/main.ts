@@ -1,7 +1,10 @@
 import * as marked from 'marked'
+
+/// #if IS_NODE
 import { JSDOM } from 'jsdom'
 
 const DOMParser = new JSDOM().window.DOMParser
+/// #endif
 
 /**
  * @param text - The raw input text coming directly form YAML
@@ -30,8 +33,8 @@ function convertMarkdown (text: string): string {
   text = marked(text)
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // Solution using the browser only implementation.
-  if (dom.body.childElementCount === 1 && dom.body.childNodes[0].tagName === 'P') {
-    return dom.body.childNodes[0].innerHTML
+  if (dom.body.childElementCount === 1 && dom.body.children[0].tagName === 'P') {
+    return dom.body.children[0].innerHTML
   } else {
     return dom.body.innerHTML
   }

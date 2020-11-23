@@ -10,7 +10,8 @@
     "types": [
       "node",
       "mocha"
-    ]
+    ],
+    "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]

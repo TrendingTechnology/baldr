@@ -17,9 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:browser && npm run build:node",
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node"
+    "build": "webpack --mode development"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
@@ -29,10 +27,18 @@
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "dependencies": {
     "marked": "^1.2.4",
-    "jsdom": "^16.4.0"
+    "jsdom": "^16.4.0",
+    "canvas": "2.6.1"
   },
   "devDependencies": {
+    "@types/jsdom":" ^16.2.5",
     "@types/marked": "0.3.0",
-    "@types/jsdom":" ^16.2.5"
+    "ifdef-loader": "2.1.5",
+    "node-loader": "1.0.2",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "webpack-cli": "^4.2.0",
+    "webpack-node-externals": "2.5.2",
+    "webpack": "^5.6.0"
   }
 }
