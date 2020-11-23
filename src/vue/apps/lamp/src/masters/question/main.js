@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/question
  */
 
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import steps from '@/steps.js'
 
@@ -12,8 +12,8 @@ import steps from '@/steps.js'
  * quick and dirty hack. Disable some renderer
  * https://marked.js.org/#/USING_PRO.md may be better.
  */
-function markupToHtmlNoLists (text) {
-  text = markupToHtml(text)
+function convertMarkdownToHtmlNoLists (text) {
+  text = convertMarkdownToHtml(text)
   // <ol start="2">
   text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '')
   return text.trim()
@@ -89,10 +89,10 @@ class Question {
           if (typeof spec[prop] === 'string') {
             // list are allowed
             if (spec[prop] === 'answer') {
-              this[prop] = markupToHtml(spec[prop])
+              this[prop] = convertMarkdownToHtml(spec[prop])
             // no lists are allowed
             } else {
-              this[prop] = markupToHtmlNoLists(spec[prop])
+              this[prop] = convertMarkdownToHtmlNoLists(spec[prop])
             }
           } else {
             throw new Error(`Unsupported type for questions ${prop} ${spec[prop]}`)

@@ -7,7 +7,9 @@ const DOMParser = new JSDOM().window.DOMParser
 /// #endif
 
 /**
- * @param text - The raw input text coming directly form YAML
+ * Convert some custom markup like arrows.
+ *
+ * @param text - The raw input text coming directly form YAML.
  */
 function convertCustomMarkup (text: string): string {
   return text
@@ -29,7 +31,7 @@ function convertCustomMarkup (text: string): string {
  *
  * @param text - The raw input text coming directly from YAML.
  */
-function convertMarkdown (text: string): string {
+function convertMarkdownAutoInline (text: string): string {
   text = marked(text)
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // Solution using the browser only implementation.
@@ -45,32 +47,33 @@ function convertMarkdown (text: string): string {
  *
  * @param text - A string in the Markdown format.
  */
-export function convertMarkdownFromString (text: string): string {
-  return convertMarkdown(convertCustomMarkup(text))
+function convertMarkdown (text: string): string {
+  return convertMarkdownAutoInline(convertCustomMarkup(text))
 }
 
 type Any = string | string[] | { [key: string]: Any }
 
 /**
- * Convert the specifed text to HTML. At the moment Markdown and HTML formats
- * are supported. The conversion is done in a recursive fashion, that means
+ * Convert Mardown texts into HTML texts.
+ *
+ * The conversion is done in a recursive fashion, that means in object or array
  * nested strings are also converted.
  *
  * @param input - Various input types
  */
-export function convertMarkdownFromAny (input: Any): Any {
+export function convertMarkdownToHtml (input: Any): Any {
   // string
   if (typeof input === 'string') {
-    return convertMarkdownFromString(input)
+    return convertMarkdown(input)
 
   // array
   } else if (Array.isArray(input)) {
     for (let index = 0; index < input.length; index++) {
       const value = input[index]
       if (typeof value === 'string') {
-        input[index] = convertMarkdownFromString(value)
+        input[index] = convertMarkdown(value)
       } else {
-        convertMarkdownFromAny(value)
+        convertMarkdownToHtml(value)
       }
     }
 
@@ -79,9 +82,9 @@ export function convertMarkdownFromAny (input: Any): Any {
     for (const key in input) {
       const value = input[key]
       if (typeof value === 'string') {
-        input[key] = convertMarkdownFromString(value)
+        input[key] = convertMarkdown(value)
       } else {
-        convertMarkdownFromAny(value)
+        convertMarkdownToHtml(value)
       }
     }
   }

@@ -2737,8 +2737,7 @@
   !*** ./src/main.ts ***!
   \*********************/
 /*! namespace exports */
-/*! export convertMarkdownFromAny [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export convertMarkdownFromString [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export convertMarkdownToHtml [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -2746,8 +2745,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "convertMarkdownFromString": () => /* binding */ convertMarkdownFromString,
-/* harmony export */   "convertMarkdownFromAny": () => /* binding */ convertMarkdownFromAny
+/* harmony export */   "convertMarkdownToHtml": () => /* binding */ convertMarkdownToHtml
 /* harmony export */ });
 /* harmony import */ var marked__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! marked */ "./node_modules/marked/lib/marked.js");
 /* harmony import */ var marked__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(marked__WEBPACK_IMPORTED_MODULE_0__);
@@ -2757,7 +2755,9 @@ __webpack_require__.r(__webpack_exports__);
 //////////////////////////////////////////////
 //////////
 /**
- * @param text - The raw input text coming directly form YAML
+ * Convert some custom markup like arrows.
+ *
+ * @param text - The raw input text coming directly form YAML.
  */
 function convertCustomMarkup(text) {
     return text
@@ -2778,7 +2778,7 @@ function convertCustomMarkup(text) {
  *
  * @param text - The raw input text coming directly from YAML.
  */
-function convertMarkdown(text) {
+function convertMarkdownAutoInline(text) {
     text = marked__WEBPACK_IMPORTED_MODULE_0__(text);
     const dom = new DOMParser().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
@@ -2794,30 +2794,31 @@ function convertMarkdown(text) {
  *
  * @param text - A string in the Markdown format.
  */
-function convertMarkdownFromString(text) {
-    return convertMarkdown(convertCustomMarkup(text));
+function convertMarkdown(text) {
+    return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
 /**
- * Convert the specifed text to HTML. At the moment Markdown and HTML formats
- * are supported. The conversion is done in a recursive fashion, that means
+ * Convert Mardown texts into HTML texts.
+ *
+ * The conversion is done in a recursive fashion, that means in object or array
  * nested strings are also converted.
  *
  * @param input - Various input types
  */
-function convertMarkdownFromAny(input) {
+function convertMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdownFromString(input);
+        return convertMarkdown(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdownFromString(value);
+                input[index] = convertMarkdown(value);
             }
             else {
-                convertMarkdownFromAny(value);
+                convertMarkdownToHtml(value);
             }
         }
         // object
@@ -2826,10 +2827,10 @@ function convertMarkdownFromAny(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdownFromString(value);
+                input[key] = convertMarkdown(value);
             }
             else {
-                convertMarkdownFromAny(value);
+                convertMarkdownToHtml(value);
             }
         }
     }

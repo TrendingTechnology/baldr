@@ -3,7 +3,7 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import steps from '@/steps.js'
 
 function scroll (element) {
@@ -78,7 +78,7 @@ export default {
       }
       props.markup = markupSections + hr + markupItems + props.markup
 
-      props.markup = markupToHtml(props.markup)
+      props.markup = convertMarkdownToHtml(props.markup)
 
       // hr tag
       if (props.markup.indexOf('<hr>') > -1) {

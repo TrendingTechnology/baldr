@@ -9,7 +9,7 @@
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
-import { markupToHtml } from '@/lib'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
 import { router } from '@/routes.js'
@@ -157,7 +157,7 @@ export class MetaData {
 
   grabProperty_ (property) {
     const text = this.rawSlideObject_.cut(property)
-    if (text) return markupToHtml(text)
+    if (text) return convertMarkdownToHtml(text)
     return null
   }
 }
@@ -323,7 +323,7 @@ export class Slide {
       this.props = normalizedProps
     }
     this.master.detectUnkownProps(this.props)
-    this.master.markupToHtml(this.props)
+    this.master.convertMarkdownToHtml(this.props)
     this.master.validateUris(this.props)
 
     const mediaUris = this.master.resolveMediaUris(this.props)

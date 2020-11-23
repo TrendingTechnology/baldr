@@ -6,7 +6,7 @@
  * @module @bldr/lamp/masters/youtube
  */
 
-import { markupToHtml } from '@/lib'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 function youtubeIdToUri (youtubeId) {
   return `id:YT_${youtubeId}`
@@ -55,14 +55,14 @@ export default {
       propsMain.asset = asset
       if (asset) {
         if (!props.heading && asset.heading) {
-          propsMain.heading = markupToHtml(asset.heading)
+          propsMain.heading = convertMarkdownToHtml(asset.heading)
         } else if (!props.heading && asset.originalHeading) {
-          propsMain.heading = markupToHtml(asset.originalHeading)
+          propsMain.heading = convertMarkdownToHtml(asset.originalHeading)
         }
         if (!props.info && asset.info) {
-          propsMain.info = markupToHtml(asset.info)
+          propsMain.info = convertMarkdownToHtml(asset.info)
         } else if (!props.info && asset.originalInfo) {
-          propsMain.info = markupToHtml(asset.originalInfo)
+          propsMain.info = convertMarkdownToHtml(asset.originalInfo)
         }
       }
       return propsMain

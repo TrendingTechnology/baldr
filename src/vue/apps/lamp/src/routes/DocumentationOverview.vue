@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 /* globals rawYamlExamples */
 
@@ -109,7 +109,7 @@ export default {
   name: 'DocumentationOverview',
   computed: {
     documentation () {
-      return markupToHtml(documentation)
+      return convertMarkdownToHtml(documentation)
     },
     examples () {
       return rawYamlExamples

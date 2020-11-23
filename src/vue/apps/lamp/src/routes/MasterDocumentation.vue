@@ -11,7 +11,7 @@
           :key="name"
         >
           <code>{{ name }}</code>
-          <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description) + formatPropSpec(spec)">:</span>
+          <span v-if="spec.description" v-html="': ' + convertMarkdownToHtml(spec.description) + formatPropSpec(spec)">:</span>
         </li>
       </ul>
     </section>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 export default {
   name: 'MasterDocumentation',
@@ -48,13 +48,13 @@ export default {
     },
     documentation () {
       if ('documentation' in this.master) {
-        return markupToHtml(this.master.documentation)
+        return convertMarkdownToHtml(this.master.documentation)
       }
       return ''
     }
   },
   methods: {
-    markupToHtml,
+    convertMarkdownToHtml,
     formatPropSpec (spec) {
       const options = []
       if (spec.required) options.push('required')

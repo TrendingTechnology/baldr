@@ -3,7 +3,7 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import steps from '@/steps.js'
 
 const placeholder = '…'
@@ -47,7 +47,7 @@ export default {
         }
       }
 
-      props.markup = markupToHtml(props.markup)
+      props.markup = convertMarkdownToHtml(props.markup)
       props.markup = props.markup.replace(
         />…</g,
         ` contenteditable>${placeholderTag}<`

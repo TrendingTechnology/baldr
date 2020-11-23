@@ -9,22 +9,23 @@ module.exports =
   \*********************/
 /*! flagged exports */
 /*! export __esModule [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
-/*! export convertMarkdownFromAny [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
-/*! export convertMarkdownFromString [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
+/*! export convertMarkdownToHtml [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
 /*! other exports [not provided] [maybe used in main (runtime-defined)] */
 /*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.convertMarkdownFromAny = exports.convertMarkdownFromString = void 0;
+exports.convertMarkdownToHtml = void 0;
 const marked = __webpack_require__(/*! marked */ "marked");
 ///////////////
 const jsdom_1 = __webpack_require__(/*! jsdom */ "jsdom");
 const DOMParser = new jsdom_1.JSDOM().window.DOMParser;
 //////////
 /**
- * @param text - The raw input text coming directly form YAML
+ * Convert some custom markup like arrows.
+ *
+ * @param text - The raw input text coming directly form YAML.
  */
 function convertCustomMarkup(text) {
     return text
@@ -45,7 +46,7 @@ function convertCustomMarkup(text) {
  *
  * @param text - The raw input text coming directly from YAML.
  */
-function convertMarkdown(text) {
+function convertMarkdownAutoInline(text) {
     text = marked(text);
     const dom = new DOMParser().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
@@ -61,31 +62,31 @@ function convertMarkdown(text) {
  *
  * @param text - A string in the Markdown format.
  */
-function convertMarkdownFromString(text) {
-    return convertMarkdown(convertCustomMarkup(text));
+function convertMarkdown(text) {
+    return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
-exports.convertMarkdownFromString = convertMarkdownFromString;
 /**
- * Convert the specifed text to HTML. At the moment Markdown and HTML formats
- * are supported. The conversion is done in a recursive fashion, that means
+ * Convert Mardown texts into HTML texts.
+ *
+ * The conversion is done in a recursive fashion, that means in object or array
  * nested strings are also converted.
  *
  * @param input - Various input types
  */
-function convertMarkdownFromAny(input) {
+function convertMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdownFromString(input);
+        return convertMarkdown(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdownFromString(value);
+                input[index] = convertMarkdown(value);
             }
             else {
-                convertMarkdownFromAny(value);
+                convertMarkdownToHtml(value);
             }
         }
         // object
@@ -94,16 +95,16 @@ function convertMarkdownFromAny(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdownFromString(value);
+                input[key] = convertMarkdown(value);
             }
             else {
-                convertMarkdownFromAny(value);
+                convertMarkdownToHtml(value);
             }
         }
     }
     return input;
 }
-exports.convertMarkdownFromAny = convertMarkdownFromAny;
+exports.convertMarkdownToHtml = convertMarkdownToHtml;
 
 
 /***/ }),

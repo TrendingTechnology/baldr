@@ -14,15 +14,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert_1 = __importDefault(require("assert"));
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
+function assertEqual(actual, expected) {
+    assert_1.default.deepStrictEqual(markdown_to_html_1.convertMarkdownToHtml(actual), expected);
+}
 describe('Package “@bldr/markdown-to-html”', function () {
     it('arrows', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            assert_1.default.strictEqual(markdown_to_html_1.convertMarkdownFromString('test -> test'), 'test → test');
+            assertEqual('test -> test', 'test → test');
         });
     });
     it('inline HTML', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            assert_1.default.strictEqual(markdown_to_html_1.convertMarkdownFromString('test <strong>strong</strong> test'), 'test <strong>strong</strong> test');
+            assertEqual('test <strong>strong</strong> test', 'test <strong>strong</strong> test');
+        });
+    });
+    it('Paragraph', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            assertEqual('test\n\ntest', '<p>test</p>\n<p>test</p>\n');
+        });
+    });
+    it('Array', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            assertEqual(['test *emph* test', 'test'], ['test <em>emph</em> test', 'test']);
+        });
+    });
+    it('Object', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            assertEqual({ one: '__one__', two: '__two__' }, { one: '<strong>one</strong>', two: '<strong>two</strong>' });
         });
     });
 });

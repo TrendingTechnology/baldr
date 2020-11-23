@@ -3,7 +3,7 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import steps from '@/steps.js'
 
 const CHARACTERS_ON_SLIDE = 400
@@ -128,7 +128,7 @@ export default {
       // Convert into HTML
       const converted = []
       for (const markup of props.markup) {
-        converted.push(markupToHtml(markup))
+        converted.push(convertMarkdownToHtml(markup))
       }
 
       // Split by <hr>
