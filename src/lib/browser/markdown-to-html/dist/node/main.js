@@ -1,27 +1,10 @@
-module.exports =
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/main.ts":
-/*!*********************!*\
-  !*** ./src/main.ts ***!
-  \*********************/
-/*! flagged exports */
-/*! export __esModule [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
-/*! export convertMarkdownToHtml [provided] [maybe used in main (runtime-defined)] [usage prevents renaming] */
-/*! other exports [not provided] [maybe used in main (runtime-defined)] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertMarkdownToHtml = void 0;
-const marked = __webpack_require__(/*! marked */ "marked");
-///////////////
-const jsdom_1 = __webpack_require__(/*! jsdom */ "jsdom");
-const DOMParser = new jsdom_1.JSDOM().window.DOMParser;
-//////////
+const marked = require("marked");
+// Do not remove gets patched by the build script
+const { JSDOM } = require('jsdom')
+const DOMParser = new JSDOM().window.DOMParser
 /**
  * Convert some custom markup like arrows.
  *
@@ -105,66 +88,3 @@ function convertMarkdownToHtml(input) {
     return input;
 }
 exports.convertMarkdownToHtml = convertMarkdownToHtml;
-
-
-/***/ }),
-
-/***/ "jsdom":
-/*!************************!*\
-  !*** external "jsdom" ***!
-  \************************/
-/*! dynamic exports */
-/*! exports [maybe provided (runtime-defined)] [no usage info] */
-/*! runtime requirements: module */
-/***/ ((module) => {
-
-module.exports = require("jsdom");;
-
-/***/ }),
-
-/***/ "marked":
-/*!*************************!*\
-  !*** external "marked" ***!
-  \*************************/
-/*! dynamic exports */
-/*! exports [maybe provided (runtime-defined)] [no usage info] */
-/*! runtime requirements: module */
-/***/ ((module) => {
-
-module.exports = require("marked");;
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("./src/main.ts");
-/******/ })()
-;
-//# sourceMappingURL=main.js.map
