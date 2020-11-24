@@ -1,5 +1,6 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
+const EsmWebpackPlugin = require("@purtuga/esm-webpack-plugin")
 
 const nodeConfig = {
   target: 'node',
@@ -68,13 +69,18 @@ const browserConfig = {
       }
     ]
   },
+  library: "LIB",
+  libraryTarget: "var",
   resolve: {
     extensions: ['.ts', '.js']
   },
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist', 'browser')
-  }
+  },
+  plugins: [
+    new EsmWebpackPlugin()
+  ]
 }
 
 module.exports = [nodeConfig, browserConfig]
