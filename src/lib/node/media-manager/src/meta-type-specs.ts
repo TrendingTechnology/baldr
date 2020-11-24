@@ -252,7 +252,7 @@ const group = <MetaSpec.Type> {
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
   relPath: function ({ typeData, typeSpec }) {
-    return path.join(typeData.id.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
+    return path.join(typeData.groupId.substr(0, 1).toLowerCase(), typeData.groupId, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
