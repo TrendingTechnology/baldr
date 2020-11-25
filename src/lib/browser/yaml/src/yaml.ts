@@ -8,7 +8,7 @@ import {
 /**
  * @link {@see https://www.npmjs.com/package/js-yaml}
  */
-export const jsYamlConfig = {
+const jsYamlConfig = {
   noArrayIndent: true,
   lineWidth: 72,
   noCompatMode: true
@@ -23,7 +23,7 @@ export const jsYamlConfig = {
  * @returns A string in the YAML format ready to be written into a text
  *   file. The result string begins with `---`.
  */
-export function convertObjectToYamlString (data: any): string {
+export function convertToYaml (data: any): string {
   data = convertPropertiesCamelToSnake(data)
   const yamlMarkup = [
     '---',
@@ -43,7 +43,7 @@ export function convertObjectToYamlString (data: any): string {
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-export function convertYamlStringToObject (yamlString: string): { [key: string]: any } {
+export function convertFromYaml (yamlString: string): { [key: string]: any } {
   const result = safeLoad(yamlString)
   if (typeof result !== 'object') {
     return { result }
