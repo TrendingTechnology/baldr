@@ -1,6 +1,9 @@
-import { convertFromYaml } from '@bldr/yaml';
-import { Slide } from './slide';
-import { Presentation } from './presentation';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parse = void 0;
+const yaml_1 = require("@bldr/yaml");
+const slide_1 = require("./slide");
+const presentation_1 = require("./presentation");
 /**
  * Parse the slide objects in a recursive fashion. Child slides can be specified
  * under the `slides` property.
@@ -18,7 +21,7 @@ function parseSlidesRecursive(slidesRaw, slidesFlat, slidesTree, level = 1) {
         if (slideRaw.state !== 'absent') {
             const childSlides = slideRaw.slides;
             delete slideRaw.slides;
-            const slide = new Slide(slideRaw);
+            const slide = new slide_1.Slide(slideRaw);
             slidesFlat.push(slide);
             slidesTree.push(slide);
             slide.no = slidesFlat.length;
@@ -35,11 +38,12 @@ function parseSlidesRecursive(slidesRaw, slidesFlat, slidesTree, level = 1) {
  * @property rawYamlString - The raw YAML string of the YAML file
  *   `Praesentation.baldr.yml`
  */
-export function parse(rawYamlString) {
-    const rawPresentationData = convertFromYaml(rawYamlString);
+function parse(rawYamlString) {
+    const rawPresentationData = yaml_1.convertFromYaml(rawYamlString);
     const slides = [];
     const slidesTree = [];
     parseSlidesRecursive(rawPresentationData.slides, slides, slidesTree);
-    const presentation = new Presentation(slides, slidesTree);
+    const presentation = new presentation_1.Presentation(slides, slidesTree);
     return presentation;
 }
+exports.parse = parse;

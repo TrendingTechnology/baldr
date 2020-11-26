@@ -17,12 +17,17 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:browser",
-    "build:browser": "tsc --module es2015 --outDir dist/browser"
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@bldr/yaml": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

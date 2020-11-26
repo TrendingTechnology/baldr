@@ -35,11 +35,10 @@ export class SlideMetaData {
  * A slide.
  */
 export interface Slide {
-
   /**
    * A deep copy of the raw slide data.
    */
-  rawData: object
+  rawData: any
 
   /**
    * The slide number
@@ -49,44 +48,44 @@ export interface Slide {
   /**
    * The name of the master slide.
    */
-  masterName: string
+  // masterName: string
 
   /**
    * Data in various types to pass to a master slide.
    * Normalized master data. This data gets passed through the master slides,
    * to the props of the Vue components.
    */
-  props: StringIndexedObject
+  // props: StringIndexedObject
 
   /**
    * Props (properties) to send to the main Vue master component.
    */
-  propsMain: StringIndexedObject
+  // propsMain: StringIndexedObject
 
   /**
    * Props (properties) to send to the preview Vue master component.
    */
-  propsPreview: StringIndexedObject
+  // propsPreview: StringIndexedObject
 
   /**
    * A list of media URIs.
    */
-  mediaUris: string[]
+  // mediaUris: string[]
 
   /**
    * Media URIs that do not have to exist.
    */
-  optionalMediaUris: string[]
+  // optionalMediaUris: string[]
 
   /**
    * How many steps the slide provides.
    */
-  stepCount: number
+  // stepCount: number
 
   /**
    * The current step number. The first number is 1 not 0.
    */
-  stepNo: number
+  // stepNo: number
 
   /**
    * Css properties in camelCase for the style property of the vue js
@@ -106,7 +105,7 @@ export interface Slide {
    *
    * @type {Object}
    */
-  style: StringIndexedObject
+  // style: StringIndexedObject
 
   /**
    * The level in the hierarchial slide tree.
@@ -118,7 +117,12 @@ export interface Slide {
    * the font size of parent HTML container. All visual elements of the slide
    * have to react on different font sizes to get a scale factor.
    */
-  scaleFactor: number
+  // scaleFactor: number
+
+  /**
+   * A list of child slides.
+   */
+  slides: Slide[]
 }
 
 /**
@@ -163,4 +167,21 @@ export interface Meta {
 export interface FileFormat {
   meta: Meta
   slides: object
+}
+
+/**
+ * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
+ * A presentation contains slides and meta data.
+ */
+export interface Presentation {
+  /**
+   * A flat list of slide objects. All child slides are included in this array.
+   */
+  slides: Slide[]
+
+  /**
+   * Only the top level slide objects are included in this array. Child slides
+   * can be accessed under the `slides` property of the Slide instances.
+   */
+  slidesTree: Slide[]
 }
