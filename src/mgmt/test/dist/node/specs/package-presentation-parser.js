@@ -31,4 +31,15 @@ describe('Package “@bldr/presentation-parser”', function () {
             assert_1.default.strictEqual(presentation.slides[1].no, 2);
         });
     });
+    it('Property „meta“', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const presentation = parseExample('metaData');
+            assert_1.default.strictEqual(presentation.meta.id, 'EP_common_metaData');
+            assert_1.default.strictEqual(presentation.meta.title, 'Slide meta data');
+            assert_1.default.strictEqual(presentation.meta.subtitle, 'A subtitle');
+            assert_1.default.strictEqual(presentation.meta.grade, 7);
+            assert_1.default.strictEqual(presentation.meta.curriculum, 'Topic 1 / Topic 2');
+            assert_1.default.strictEqual(presentation.meta.curriculumUrl, 'https://de.wikipedia.org');
+        });
+    });
 });

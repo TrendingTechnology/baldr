@@ -95,8 +95,16 @@ export interface Slide {
     slides: Slide[];
 }
 /**
-  * The meta informations of a presentation file.
-  */
+ * The meta informations of a presentation file.
+ *
+ * ```yaml
+ * meta:
+ *   title: A title
+ *   id: An unique id
+ *   grade: The grade the presentation belongs to.
+ *   curriculum: Relation to the curriculum.
+ * ```
+ */
 export interface Meta {
     /**
      * An unique ID.
@@ -135,6 +143,10 @@ export interface FileFormat {
  * A presentation contains slides and meta data.
  */
 export interface Presentation {
+    /**
+     * The meta informations of a presentation file.
+     */
+    meta: Meta;
     /**
      * A flat list of slide objects. All child slides are included in this array.
      */

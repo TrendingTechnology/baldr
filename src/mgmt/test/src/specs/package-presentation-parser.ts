@@ -21,4 +21,14 @@ describe('Package “@bldr/presentation-parser”', function () {
     assert.strictEqual(presentation.slides[0].no, 1)
     assert.strictEqual(presentation.slides[1].no, 2)
   })
+
+  it('Property „meta“', async function () {
+    const presentation = parseExample('metaData')
+    assert.strictEqual(presentation.meta.id, 'EP_common_metaData')
+    assert.strictEqual(presentation.meta.title, 'Slide meta data')
+    assert.strictEqual(presentation.meta.subtitle, 'A subtitle')
+    assert.strictEqual(presentation.meta.grade, 7)
+    assert.strictEqual(presentation.meta.curriculum, 'Topic 1 / Topic 2')
+    assert.strictEqual(presentation.meta.curriculumUrl, 'https://de.wikipedia.org')
+  })
 })

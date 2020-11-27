@@ -2,6 +2,10 @@
 meta:
   id: EP_common_metaData
   title: Slide meta data
+  subtitle: A subtitle
+  grade: 7
+  curriculum: Topic 1 / Topic 2
+  curriculum_url: https://de.wikipedia.org
 
 slides:
 - id: slide_first
