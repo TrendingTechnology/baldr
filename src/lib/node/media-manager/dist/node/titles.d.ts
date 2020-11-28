@@ -1,7 +1,7 @@
 /**
  * @module @bldr/media-manager/titles
  */
-import { PresentationType, StringIndexedObject } from '@bldr/type-definitions';
+import { PresentationTypes, StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Hold some meta data about a folder and its title.
  */
@@ -141,7 +141,7 @@ export declare class DeepTitle {
     /**
      * Generate a object containing the meta informations of a presentation.
      */
-    generatePresetationMeta(): PresentationType.Meta;
+    generatePresetationMeta(): PresentationTypes.PresentationMeta;
 }
 interface SubTree {
     [key: string]: TitleTree;

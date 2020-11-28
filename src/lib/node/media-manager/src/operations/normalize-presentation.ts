@@ -5,6 +5,12 @@ import { convertObjectToYamlString } from '@bldr/core-browser'
 import { DeepTitle } from '../titles'
 import { loadYaml } from '../yaml'
 
+const comment = `
+#-----------------------------------------------------------------------
+#
+#-----------------------------------------------------------------------
+`
+
 /**
  * Remove unnecessary single quotes.
  *
@@ -57,7 +63,7 @@ export function normalizePresentationFile(filePath: string) {
     if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
   }
   const metaString = convertObjectToYamlString({ meta })
-  textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:')
+  textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
 
   // Shorten media URIs with `./`
   if (meta.id) {

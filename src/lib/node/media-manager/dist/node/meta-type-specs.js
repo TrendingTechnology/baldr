@@ -246,7 +246,7 @@ const group = {
     abbreviation: 'GR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Gruppen'),
     relPath: function ({ typeData, typeSpec }) {
-        return path_1.default.join(typeData.id.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`);
+        return path_1.default.join(typeData.groupId.substr(0, 1).toLowerCase(), typeData.groupId, `main.${typeData.extension}`);
     },
     detectTypeByPath: function (typeSpec) {
         return new RegExp('^' + typeSpec.basePath + '/.*');

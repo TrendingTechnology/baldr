@@ -5,6 +5,11 @@ const core_node_1 = require("@bldr/core-node");
 const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("../titles");
 const yaml_1 = require("../yaml");
+const comment = `
+#-----------------------------------------------------------------------
+#
+#-----------------------------------------------------------------------
+`;
 /**
  * Remove unnecessary single quotes.
  *
@@ -56,7 +61,7 @@ function normalizePresentationFile(filePath) {
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
     const metaString = core_browser_1.convertObjectToYamlString({ meta });
-    textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:');
+    textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.id) {
         textContent = shortedMediaUris(textContent, meta.id);

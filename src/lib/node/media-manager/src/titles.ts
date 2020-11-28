@@ -265,8 +265,8 @@ export class DeepTitle {
   /**
    * Generate a object containing the meta informations of a presentation.
    */
-  generatePresetationMeta (): PresentationTypes.Meta {
-    const result: PresentationTypes.Meta = {
+  generatePresetationMeta (): PresentationTypes.PresentationMeta {
+    const result: PresentationTypes.PresentationMeta = {
       id: this.id,
       subtitle: this.subtitle,
       title: this.title,
