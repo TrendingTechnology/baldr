@@ -361,7 +361,7 @@ interface MasterProp {
     /**
      * A default value.
      */
-    default?: 'id:Fuer-Elise';
+    default?: any;
     /**
      * Text to describe the property. A descriptive text shown in the
      * documentation.

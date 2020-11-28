@@ -39,6 +39,7 @@ export class Slide implements PresentationTypes.Slide {
   meta: PresentationTypes.SlideMeta
   slides: Slide[]
   master: MasterTypes.Master
+  props: MasterTypes.StringObject
   constructor(rawData: any) {
     const raw = new RawDataObject(rawData)
     this.meta = new SlideMetaData(raw)
@@ -47,5 +48,6 @@ export class Slide implements PresentationTypes.Slide {
     this.level = 0
     this.slides = []
     this.master = masterCollection.findMaster(rawData)
+    this.props = this.master.normalizeProps(raw.cut(this.master.name))
   }
 }

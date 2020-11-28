@@ -23,6 +23,9 @@ function readPresentationFile(filePath) {
 function parseExample(fileBaseName) {
     return presentation_parser_1.parse(readPresentationFile(`src/vue/apps/lamp/examples/${fileBaseName}.baldr.yml`));
 }
+function parseMasterExample(masterName) {
+    return presentation_parser_1.parse(readPresentationFile(`src/masters/${masterName}/src/example.baldr.yml`));
+}
 describe('Package “@bldr/presentation-parser”', function () {
     it('simple', function () {
         return __awaiter(this, void 0, void 0, function* () {
@@ -65,6 +68,13 @@ describe('Package “@bldr/presentation-parser”', function () {
                 '<li>two</li>\n' +
                 '<li>three</li>\n' +
                 '</ol>\n');
+        });
+    });
+    it('Master „quote“', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const presentation = parseMasterExample('quote');
+            const slides = presentation.slides;
+            assert_1.default.strictEqual(slides[0].props.text, '<span class="quotation-mark">»</span> Short form quote. <span class="quotation-mark">«</span>');
         });
     });
 });

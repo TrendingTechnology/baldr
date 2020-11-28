@@ -1,8 +1,14 @@
+/**
+ * Convert a string from the Markdown format into the HTML format.
+ *
+ * @param text - A string in the Markdown format.
+ */
+export declare function convertMarkdownStringToHTML(text: string): string;
 declare type Any = string | string[] | {
     [key: string]: Any;
 };
 /**
- * Convert Mardown texts into HTML texts.
+ * Convert Markdown texts into HTML texts.
  *
  * The conversion is done in a recursive fashion, that means in object or array
  * nested strings are also converted.

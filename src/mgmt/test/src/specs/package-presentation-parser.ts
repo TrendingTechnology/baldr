@@ -15,6 +15,10 @@ function parseExample(fileBaseName: string): PresentationTypes.Presentation {
   return parse(readPresentationFile(`src/vue/apps/lamp/examples/${fileBaseName}.baldr.yml`))
 }
 
+function parseMasterExample(masterName: string): PresentationTypes.Presentation {
+  return parse(readPresentationFile(`src/masters/${masterName}/src/example.baldr.yml`))
+}
+
 describe('Package “@bldr/presentation-parser”', function () {
   it('simple', async function () {
     const presentation = parseExample('minimal')
@@ -63,4 +67,11 @@ describe('Package “@bldr/presentation-parser”', function () {
       '</ol>\n'
     )
   })
+
+  it('Master „quote“', async function () {
+    const presentation = parseMasterExample('quote')
+    const slides = presentation.slides
+    assert.strictEqual(slides[0].props.text, '<span class="quotation-mark">»</span> Short form quote. <span class="quotation-mark">«</span>')
+  })
+
 })

@@ -1,8 +1,11 @@
 ---
+meta:
+  id: EP_master_quote
+
 slides:
 
 - title: short from
-  quote: Short form quote
+  quote: Short form quote.
 
 - title: All properties
   quote:

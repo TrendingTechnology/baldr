@@ -32,5 +32,6 @@ export class Slide {
         this.level = 0;
         this.slides = [];
         this.master = masterCollection.findMaster(rawData);
+        this.props = this.master.normalizeProps(raw.cut(this.master.name));
     }
 }

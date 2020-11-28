@@ -9,5 +9,6 @@ export declare class Slide implements PresentationTypes.Slide {
     meta: PresentationTypes.SlideMeta;
     slides: Slide[];
     master: MasterTypes.Master;
+    props: MasterTypes.StringObject;
     constructor(rawData: any);
 }

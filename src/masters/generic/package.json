@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/master-collection",
+  "name": "@bldr/master-generic",
   "version": "0.1.0",
-  "description": "A master loader and a collection of master slides for the presentation software lamp.",
+  "description": "The master slide “generic” for the presentation software “lamp”.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -10,27 +10,23 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
+  "scripts": {
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#///-/ ##' ./dist/node/main.js"
+  },
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "scripts": {
-    "build": "npm run build:browser && npm run build:node",
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node"
-  },
-  "browser": "dist/browser/main.js",
-  "main": "dist/node/main.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "dependencies": {
+    "@bldr/core-browser": "*",
     "@bldr/type-definitions": "*",
-    "@bldr/master-quote": "*",
-    "@bldr/master-generic": "*",
-    "@bldr/core-browser": "*"
+    "@bldr/markdown-to-html": "*",
+    "jsdom": "16.4.0"
   }
 }

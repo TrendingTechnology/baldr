@@ -3,7 +3,7 @@
  *
  * @module @bldr/type-definitions/presentation
  */
-import { Master } from './master';
+import { Master, StringObject } from './master';
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
@@ -48,10 +48,10 @@ export interface Slide {
      */
     master: Master;
     /**
-     * Data in various types to pass to a master slide.
-     * Normalized master data. This data gets passed through the master slides,
-     * to the props of the Vue components.
+     * The normalized slide data. This data gets passed through the master slide
+     * and then to the props of the Vue components.
      */
+    props: StringObject;
     /**
      * Props (properties) to send to the main Vue master component.
      */

@@ -1,5 +1,5 @@
 import * as marked from 'marked';
-// Do not remove gets patched by the build script
+// Do not remove this lines. The comments are removed by the build script.
 ///-/ const { JSDOM } = require('jsdom')
 ///-/ const DOMParser = new JSDOM().window.DOMParser
 /**
@@ -42,11 +42,11 @@ function convertMarkdownAutoInline(text) {
  *
  * @param text - A string in the Markdown format.
  */
-function convertMarkdown(text) {
+export function convertMarkdownStringToHTML(text) {
     return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
 /**
- * Convert Mardown texts into HTML texts.
+ * Convert Markdown texts into HTML texts.
  *
  * The conversion is done in a recursive fashion, that means in object or array
  * nested strings are also converted.
@@ -56,14 +56,14 @@ function convertMarkdown(text) {
 export function convertMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdown(input);
+        return convertMarkdownStringToHTML(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdown(value);
+                input[index] = convertMarkdownStringToHTML(value);
             }
             else {
                 convertMarkdownToHtml(value);
@@ -75,7 +75,7 @@ export function convertMarkdownToHtml(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdown(value);
+                input[key] = convertMarkdownStringToHTML(value);
             }
             else {
                 convertMarkdownToHtml(value);
