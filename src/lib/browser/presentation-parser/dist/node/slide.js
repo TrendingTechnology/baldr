@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Slide = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
+const master_collection_1 = require("@bldr/master-collection");
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
@@ -33,6 +34,7 @@ class Slide {
         this.no = 0;
         this.level = 0;
         this.slides = [];
+        this.master = master_collection_1.default.findMaster(rawData);
     }
 }
 exports.Slide = Slide;

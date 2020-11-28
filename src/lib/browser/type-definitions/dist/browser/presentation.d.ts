@@ -3,25 +3,27 @@
  *
  * @module @bldr/type-definitions/presentation
  */
+import { Master } from './master';
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
  */
 export declare class SlideMeta {
     /**
-     * The ID of a slide (Used for links)
+     * The ID of a slide (Used for links). Markdown is supported in this property.
      */
     id?: string;
     /**
-     * The title of a slide.
+     * The title of a slide. Markdown is supported in this property.
      */
     title?: string;
     /**
-     * Some text that describes the slide.
+     * Some text that describes the slide. Markdown is supported in this property.
      */
     description?: string;
     /**
-     * The source of the slide, for example a HTTP URL.
+     * The source of the slide, for example a HTTP URL. Markdown is supported in
+     * this property.
      */
     source?: string;
 }
@@ -42,8 +44,9 @@ export interface Slide {
      */
     meta: SlideMeta;
     /**
-     * The name of the master slide.
+     * The corresponding master slide.
      */
+    master: Master;
     /**
      * Data in various types to pass to a master slide.
      * Normalized master data. This data gets passed through the master slides,

@@ -37,9 +37,9 @@ export declare class Master implements MasterTypes.Master {
     icon: MasterIcon;
     documentation?: string;
     /**
-     * The specification of the master slide provided by a master package.
-     */
-    private spec;
+       * The specification of the master slide provided by a master package.
+       */
+    private readonly spec;
     /**
      * @param spec - The specification of the master slide provided by a master
      * package.
@@ -99,7 +99,7 @@ export declare class Master implements MasterTypes.Master {
     leaveSlide(payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void;
     enterSlide(payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void;
     afterSlideNoChangeOnComponent(payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void;
-    leaveStep(payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): any;
+    leaveStep(payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void;
     enterStep(payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void;
     afterStepNoChangeOnComponent(payload: MasterTypes.OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg): void;
 }

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MasterCollection = void 0;
 const master_1 = require("./master");
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * Container for all registered master slides.
  */
@@ -58,6 +59,31 @@ class MasterCollection {
         if (name in this.masters)
             return true;
         return false;
+    }
+    /**
+     * Find the name of the master by getting the intersection between all master
+     * names and the slide keys.
+     *
+     * This method can be used to check that a slide object uses only one master
+     * slide.
+     *
+     * @param data - The raw object of one slide unmodified from the YAML file.
+     *
+     * @returns An instance of the master.
+     *
+     * @throws If no master can be found and if more than one master name are
+     * found.
+     */
+    findMaster(data) {
+        const rawProperties = Object.keys(data);
+        const intersection = this.allNames.filter((masterName) => rawProperties.includes(masterName));
+        if (intersection.length === 0) {
+            throw Error(`No master slide found: ${core_browser_1.convertToString(data)}`);
+        }
+        if (intersection.length > 1) {
+            throw Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data)}`);
+        }
+        return this.get(intersection[0]);
     }
 }
 exports.MasterCollection = MasterCollection;

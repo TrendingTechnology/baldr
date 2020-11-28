@@ -4,6 +4,8 @@
  * @module @bldr/type-definitions/presentation
  */
 
+import { Master } from './master'
+
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
@@ -51,9 +53,9 @@ export interface Slide {
   meta: SlideMeta
 
   /**
-   * The name of the master slide.
+   * The corresponding master slide.
    */
-  // masterName: string
+  master: Master
 
   /**
    * Data in various types to pass to a master slide.

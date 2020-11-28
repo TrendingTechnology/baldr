@@ -1,5 +1,6 @@
 import { RawDataObject } from '@bldr/core-browser';
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
+import masterCollection from '@bldr/master-collection';
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
@@ -30,5 +31,6 @@ export class Slide {
         this.no = 0;
         this.level = 0;
         this.slides = [];
+        this.master = masterCollection.findMaster(rawData);
     }
 }

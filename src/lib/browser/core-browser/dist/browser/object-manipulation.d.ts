@@ -4,11 +4,12 @@
  * @module @bldr/core-browser/object-manipulation
  */
 /**
- * Convert various data to a string. Meant for error messages.
+ * Convert various data to a string. Meant for error messages. Objects
+ * are converted to a string using `JSON.stringify`
  *
  * @param data - Various data in various types.
  */
-export declare function toString(data: any): string;
+export declare function convertToString(data: any): string;
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.

@@ -5,11 +5,12 @@
  */
 import { convertSnakeToCamel, convertCamelToSnake } from './string-format';
 /**
- * Convert various data to a string. Meant for error messages.
+ * Convert various data to a string. Meant for error messages. Objects
+ * are converted to a string using `JSON.stringify`
  *
  * @param data - Various data in various types.
  */
-export function toString(data) {
+export function convertToString(data) {
     if (data === null) {
         return 'null';
     }
@@ -144,7 +145,7 @@ export class RawDataObject {
      */
     throwExecptionIfNotEmpty() {
         if (!this.isEmpty()) {
-            throw Error(`Unknown properties in raw object: ${toString(this.raw)}`);
+            throw Error(`Unknown properties in raw object: ${convertToString(this.raw)}`);
         }
     }
 }

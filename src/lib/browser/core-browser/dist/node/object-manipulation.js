@@ -5,14 +5,15 @@
  * @module @bldr/core-browser/object-manipulation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RawDataObject = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.deepCopy = exports.toString = void 0;
+exports.RawDataObject = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.deepCopy = exports.convertToString = void 0;
 const string_format_1 = require("./string-format");
 /**
- * Convert various data to a string. Meant for error messages.
+ * Convert various data to a string. Meant for error messages. Objects
+ * are converted to a string using `JSON.stringify`
  *
  * @param data - Various data in various types.
  */
-function toString(data) {
+function convertToString(data) {
     if (data === null) {
         return 'null';
     }
@@ -29,7 +30,7 @@ function toString(data) {
         return JSON.stringify(data);
     }
 }
-exports.toString = toString;
+exports.convertToString = convertToString;
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
@@ -152,7 +153,7 @@ class RawDataObject {
      */
     throwExecptionIfNotEmpty() {
         if (!this.isEmpty()) {
-            throw Error(`Unknown properties in raw object: ${toString(this.raw)}`);
+            throw Error(`Unknown properties in raw object: ${convertToString(this.raw)}`);
         }
     }
 }

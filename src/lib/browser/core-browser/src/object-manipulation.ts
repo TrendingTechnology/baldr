@@ -12,7 +12,7 @@ import { convertSnakeToCamel, convertCamelToSnake } from './string-format'
  *
  * @param data - Various data in various types.
  */
-export function toString (data: any): string {
+export function convertToString (data: any): string {
   if (data === null) {
     return 'null'
   } else if (!data) {
@@ -156,7 +156,7 @@ export class RawDataObject {
    */
   throwExecptionIfNotEmpty (): void {
     if (!this.isEmpty()) {
-      throw Error(`Unknown properties in raw object: ${toString(this.raw)}`)
+      throw Error(`Unknown properties in raw object: ${convertToString(this.raw)}`)
     }
   }
 }

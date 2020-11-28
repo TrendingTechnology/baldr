@@ -1,5 +1,5 @@
 import { Master } from './master';
-import { MasterTypes } from '@bldr/type-definitions';
+import { MasterTypes, StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Container for all registered master slides.
  */
@@ -38,4 +38,19 @@ export declare class MasterCollection {
      * @param name - The name of the master slide.
      */
     exists(name: string): boolean;
+    /**
+     * Find the name of the master by getting the intersection between all master
+     * names and the slide keys.
+     *
+     * This method can be used to check that a slide object uses only one master
+     * slide.
+     *
+     * @param data - The raw object of one slide unmodified from the YAML file.
+     *
+     * @returns An instance of the master.
+     *
+     * @throws If no master can be found and if more than one master name are
+     * found.
+     */
+    findMaster(data: StringIndexedObject): Master;
 }

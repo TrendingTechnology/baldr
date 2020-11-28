@@ -1,6 +1,7 @@
-import { PresentationTypes } from '@bldr/type-definitions'
+import { PresentationTypes, MasterTypes } from '@bldr/type-definitions'
 import { RawDataObject } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import masterCollection from '@bldr/master-collection'
 
 /**
  * Meta informations can be added to each slide. All properties are possibly
@@ -37,6 +38,7 @@ export class Slide implements PresentationTypes.Slide {
   level: number
   meta: PresentationTypes.SlideMeta
   slides: Slide[]
+  master: MasterTypes.Master
   constructor(rawData: any) {
     const raw = new RawDataObject(rawData)
     this.meta = new SlideMetaData(raw)
@@ -44,5 +46,6 @@ export class Slide implements PresentationTypes.Slide {
     this.no = 0
     this.level = 0
     this.slides = []
+    this.master = masterCollection.findMaster(rawData)
   }
 }

@@ -29,7 +29,8 @@
   "dependencies": {
     "@bldr/yaml": "*",
     "@bldr/core-browser": "*",
-    "@bldr/markdown-to-html": "*"
+    "@bldr/markdown-to-html": "*",
+    "@bldr/master-collection": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

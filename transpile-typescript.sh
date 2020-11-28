@@ -15,7 +15,7 @@ _transpile() {
 
 # First low level modules
 DIRS="lib/browser/type-definitions
-lib/browser/presentation-masters
+lib/browser/master-collection
 lib/browser/presentation-parser
 lib/browser/core-browser
 lib/browser/http-request

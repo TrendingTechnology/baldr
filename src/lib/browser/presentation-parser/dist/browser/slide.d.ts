@@ -1,4 +1,4 @@
-import { PresentationTypes } from '@bldr/type-definitions';
+import { PresentationTypes, MasterTypes } from '@bldr/type-definitions';
 /**
  * A slide.
  */
@@ -8,5 +8,6 @@ export declare class Slide implements PresentationTypes.Slide {
     level: number;
     meta: PresentationTypes.SlideMeta;
     slides: Slide[];
+    master: MasterTypes.Master;
     constructor(rawData: any);
 }
