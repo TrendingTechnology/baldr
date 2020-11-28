@@ -27,7 +27,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/yaml": "*"
+    "@bldr/yaml": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/markdown-to-html": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

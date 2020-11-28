@@ -11,16 +11,17 @@ slides:
 - id: slide_first
   generic: This slide has an ID.
 
-- title: This slide has a title.
+- title: This slide has a *title*.
   generic: This slide has a title.
 
-- description: This slide has a description.
+- description: This slide has a *description*.
   generic: This slide has a description.
 
-- source: This slide has a source.
+- source: http://example.com
   generic: This slide has a source.
 
-- title: This slide has a title.
+- id: all
+  title: This slide has a title.
   description: This slide has a description.
   source: This slide has a source.
   generic: This slide has all meta data.

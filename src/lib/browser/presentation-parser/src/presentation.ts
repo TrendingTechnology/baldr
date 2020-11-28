@@ -1,9 +1,10 @@
 import { PresentationTypes } from '@bldr/type-definitions'
 import { convertFromYaml } from '@bldr/yaml'
+import { RawDataObject } from '@bldr/core-browser'
 
 import { Slide } from './slide'
 
-class Meta implements PresentationTypes.Meta {
+class Meta implements PresentationTypes.PresentationMeta {
   id: string
   title: string
   subtitle?: string
@@ -11,13 +12,15 @@ class Meta implements PresentationTypes.Meta {
   curriculum: string
   curriculumUrl?: string
 
-  constructor({ id, title, subtitle, grade, curriculum, curriculumUrl }: PresentationTypes.Meta) {
-    this.id = id
-    this.title = title
-    this.subtitle = subtitle
-    this.grade = grade
-    this.curriculum = curriculum
-    this.curriculumUrl = curriculumUrl
+  constructor(data: PresentationTypes.PresentationMeta) {
+    const raw = new RawDataObject(data)
+    this.id = raw.cut('id')
+    this.title = raw.cut('title')
+    this.subtitle = raw.cut('subtitle')
+    this.grade = raw.cut('grade')
+    this.curriculum = raw.cut('curriculum')
+    this.curriculumUrl = raw.cut('curriculumUrl')
+    raw.throwExecptionIfNotEmpty()
   }
 }
 
@@ -28,7 +31,7 @@ class Meta implements PresentationTypes.Meta {
 export class Presentation implements PresentationTypes.Presentation {
   slides: Slide[]
   slidesTree: Slide[]
-  meta: PresentationTypes.Meta
+  meta: PresentationTypes.PresentationMeta
 
   /**
    * Parse the YAML file `Praesentation.baldr.yml`.

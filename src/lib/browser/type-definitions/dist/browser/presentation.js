@@ -4,7 +4,8 @@
  * @module @bldr/type-definitions/presentation
  */
 /**
- * The meta data of a slide. Each slide object owns one meta data object.
+ * Meta informations can be added to each slide. All properties are possibly
+ * undefined.
  */
-export class SlideMetaData {
+export class SlideMeta {
 }

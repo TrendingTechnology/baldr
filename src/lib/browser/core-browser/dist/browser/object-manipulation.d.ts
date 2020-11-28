@@ -4,6 +4,12 @@
  * @module @bldr/core-browser/object-manipulation
  */
 /**
+ * Convert various data to a string. Meant for error messages.
+ *
+ * @param data - Various data in various types.
+ */
+export declare function toString(data: any): string;
+/**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
  *
@@ -46,7 +52,8 @@ export declare function convertPropertiesSnakeToCamel(data: any): object;
  */
 export declare function convertPropertiesCamelToSnake(data: any): object;
 /**
- * Create a deep copy of and object.
+ * A container class to store a deep copy of an object. This class can be
+ * used to detect unexpected properties in an object indexed by strings.
  */
 export declare class RawDataObject {
     /**
@@ -69,5 +76,9 @@ export declare class RawDataObject {
      * Assert if the raw data object is empty.
      */
     isEmpty(): boolean;
+    /**
+     * Throw an exception if the stored raw data is not empty yet.
+     */
+    throwExecptionIfNotEmpty(): void;
 }
 export {};

@@ -2,15 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Presentation = void 0;
 const yaml_1 = require("@bldr/yaml");
+const core_browser_1 = require("@bldr/core-browser");
 const slide_1 = require("./slide");
 class Meta {
-    constructor({ id, title, subtitle, grade, curriculum, curriculumUrl }) {
-        this.id = id;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.grade = grade;
-        this.curriculum = curriculum;
-        this.curriculumUrl = curriculumUrl;
+    constructor(data) {
+        const raw = new core_browser_1.RawDataObject(data);
+        this.id = raw.cut('id');
+        this.title = raw.cut('title');
+        this.subtitle = raw.cut('subtitle');
+        this.grade = raw.cut('grade');
+        this.curriculum = raw.cut('curriculum');
+        this.curriculumUrl = raw.cut('curriculumUrl');
+        raw.throwExecptionIfNotEmpty();
     }
 }
 /**

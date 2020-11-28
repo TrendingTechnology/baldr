@@ -7,7 +7,7 @@ import { Slide } from './slide';
 export declare class Presentation implements PresentationTypes.Presentation {
     slides: Slide[];
     slidesTree: Slide[];
-    meta: PresentationTypes.Meta;
+    meta: PresentationTypes.PresentationMeta;
     /**
      * Parse the YAML file `Praesentation.baldr.yml`.
      *

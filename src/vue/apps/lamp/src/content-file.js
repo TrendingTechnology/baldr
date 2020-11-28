@@ -7,7 +7,7 @@
 /* globals defaultThemeSassVars FileReader */
 
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
+import { toString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
@@ -41,27 +41,6 @@ import vm from '@/main.js'
  * @typedef rawSlideData
  * @type {Object}
  */
-
-/**
- * Convert various data to a string. Meant for error messages.
- *
- * @param {mixed} data - various data
- *
- * @return {string}
- */
-function toString (data) {
-  if (data === null) {
-    return 'null'
-  } else if (!data) {
-    return typeof data
-  } else if (typeof data === 'string') {
-    return data
-  } else if (Array.isArray(data)) {
-    return data.toString()
-  } else {
-    return JSON.stringify(data)
-  }
-}
 
 /**
  * Extended version of typeof

@@ -6,6 +6,7 @@ export declare class Slide implements PresentationTypes.Slide {
     rawData: any;
     no: number;
     level: number;
+    meta: PresentationTypes.SlideMeta;
     slides: Slide[];
     constructor(rawData: any);
 }

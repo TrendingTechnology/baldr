@@ -31,7 +31,7 @@ describe('Package “@bldr/presentation-parser”', function () {
             assert_1.default.strictEqual(presentation.slides[1].no, 2);
         });
     });
-    it('Property „meta“', function () {
+    it('Property „presentation.meta“', function () {
         return __awaiter(this, void 0, void 0, function* () {
             const presentation = parseExample('metaData');
             assert_1.default.strictEqual(presentation.meta.id, 'EP_common_metaData');
@@ -40,6 +40,31 @@ describe('Package “@bldr/presentation-parser”', function () {
             assert_1.default.strictEqual(presentation.meta.grade, 7);
             assert_1.default.strictEqual(presentation.meta.curriculum, 'Topic 1 / Topic 2');
             assert_1.default.strictEqual(presentation.meta.curriculumUrl, 'https://de.wikipedia.org');
+        });
+    });
+    it('Property „slide.meta“', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const presentation = parseExample('metaData');
+            const slides = presentation.slides;
+            assert_1.default.strictEqual(slides[0].meta.id, 'slide_first');
+            assert_1.default.strictEqual(slides[0].meta.title, undefined);
+            assert_1.default.strictEqual(slides[0].meta.source, undefined);
+            assert_1.default.strictEqual(slides[0].meta.description, undefined);
+            assert_1.default.strictEqual(slides[1].meta.title, 'This slide has a <em>title</em>.');
+            assert_1.default.strictEqual(slides[2].meta.description, 'This slide has a <em>description</em>.');
+            assert_1.default.strictEqual(slides[3].meta.source, '<a href="http://example.com">http://example.com</a>');
+            assert_1.default.strictEqual(slides[4].meta.id, 'all');
+            assert_1.default.strictEqual(slides[4].meta.title, 'This slide has a title.');
+            assert_1.default.strictEqual(slides[4].meta.source, 'This slide has a source.');
+            assert_1.default.strictEqual(slides[4].meta.description, 'This slide has a description.');
+            assert_1.default.strictEqual(slides[5].meta.title, 'This is <em>starred (italic)</em>.');
+            assert_1.default.strictEqual(slides[5].meta.source, 'This is <strong>bold</strong>.');
+            assert_1.default.strictEqual(slides[5].meta.description, '<h1 id="heading-1">Heading 1</h1>\n' +
+                '<ol>\n' +
+                '<li>one</li>\n' +
+                '<li>two</li>\n' +
+                '<li>three</li>\n' +
+                '</ol>\n');
         });
     });
 });

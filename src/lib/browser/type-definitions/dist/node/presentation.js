@@ -5,10 +5,11 @@
  * @module @bldr/type-definitions/presentation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SlideMetaData = void 0;
+exports.SlideMeta = void 0;
 /**
- * The meta data of a slide. Each slide object owns one meta data object.
+ * Meta informations can be added to each slide. All properties are possibly
+ * undefined.
  */
-class SlideMetaData {
+class SlideMeta {
 }
-exports.SlideMetaData = SlideMetaData;
+exports.SlideMeta = SlideMeta;

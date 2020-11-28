@@ -4,29 +4,29 @@
  * @module @bldr/type-definitions/presentation
  */
 
-import { StringIndexedObject } from './main'
-
 /**
- * The meta data of a slide. Each slide object owns one meta data object.
+ * Meta informations can be added to each slide. All properties are possibly
+ * undefined.
  */
-export class SlideMetaData {
+export class SlideMeta {
   /**
-   * The ID of a slide (Used for links)
+   * The ID of a slide (Used for links). Markdown is supported in this property.
    */
   id?: string
 
   /**
-   * The title of a slide.
+   * The title of a slide. Markdown is supported in this property.
    */
   title?: string
 
   /**
-   * Some text that describes the slide.
+   * Some text that describes the slide. Markdown is supported in this property.
    */
   description?: string
 
   /**
-   * The source of the slide, for example a HTTP URL.
+   * The source of the slide, for example a HTTP URL. Markdown is supported in
+   * this property.
    */
   source?: string
 }
@@ -44,6 +44,11 @@ export interface Slide {
    * The slide number
    */
   no: number
+
+  /**
+   * The additional meta data of a slide.
+   */
+  meta: SlideMeta
 
   /**
    * The name of the master slide.
@@ -130,41 +135,44 @@ export interface Slide {
  *
  * ```yaml
  * meta:
- *   title: A title
  *   id: An unique id
+ *   title: A title
+ *   sub_title: A subtitle
  *   grade: The grade the presentation belongs to.
  *   curriculum: Relation to the curriculum.
+ *   curriculum_url: http://curriculum.com
  * ```
  */
-export interface Meta {
+export interface PresentationMeta {
 
   /**
-   * An unique ID.
+   * An unique ID. (for example: `Wiener-Klassik`)
    */
   id: string
 
   /**
-   * The title of the presentation.
+   * The title of the presentation. (for example: `Das orchestrale Klangbild bei Beethoven`)
    */
   title: string
 
   /**
-   * The subtitle of the presentation.
+   * The subtitle of the presentation in the form: `<em class="person">Composer</em>: <em class="piece">Piece</em> (year)`.
+   * (for example: `<em class="person">Ludwig van Beethoven</em>: <em class="piece">Sinfonie Nr. 8 F-Dur op. 93</em> (1812)`)
    */
   subtitle?: string
 
   /**
-   * The grade the presentation belongs to.
+   * The grade the presentation belongs to. (for example: `11`)
    */
   grade: number
 
   /**
-   * Relation to the curriculum.
+   * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das Klangbild der Klassik`)
    */
   curriculum: string
 
   /**
-   * URL of the curriculum web page.
+   * URL of the curriculum web page. (for example: `https://www.lehrplanplus.bayern.de/fachlehrplan/gymnasium/5/musik`)
    */
   curriculumUrl?: string
 }
@@ -173,7 +181,7 @@ export interface Meta {
  * The type of the YAML file format of a presentation `Praesentation.baldr.yml`
  */
 export interface FileFormat {
-  meta: Meta
+  meta: PresentationMeta
   slides: object
 }
 
@@ -185,7 +193,7 @@ export interface Presentation {
   /**
    * The meta informations of a presentation file.
    */
-  meta: Meta
+  meta: PresentationMeta
 
   /**
    * A flat list of slide objects. All child slides are included in this array.
