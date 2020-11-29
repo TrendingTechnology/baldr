@@ -498,16 +498,32 @@ export interface Master {
      */
     propNamesInlineMedia: string[];
     /**
+     * Convert in the props certain strings containing markup to HTML.
+     */
+    convertMarkdownToHtml: (props: StringObject) => StringObject;
+    /**
      * Raise an error if there is an unkown prop - a not in the `props` section
      * defined prop.
      */
     detectUnkownProps: (props: StringObject) => void;
+    /**
+     * Validate all media file URIs in the props of a certain slide.
+     */
+    validateUris: (props: StringObject) => StringObject;
     /**
      * Normalize the properties so the result fits to props defintion of the
      * master slide.. Called during the parsing the YAML file
      * (`Praesentation.baldr.yml`)
      */
     normalizeProps: (propsRaw: any) => StringObject;
+    /**
+     * Retrieve the media URIs which have to be resolved.
+     *
+     * Call the master funtion `resolveMediaUris` and collect the media URIs.
+     * (like [id:beethoven, id:mozart]). Extract media URIs from
+     * the text props.
+     */
+    resolveMediaUris: (props: StringObject) => Set<string> | undefined;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master

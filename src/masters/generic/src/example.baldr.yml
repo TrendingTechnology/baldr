@@ -1,4 +1,7 @@
 ---
+meta:
+  id: EP_master_generic
+
 slides:
 
 - title: Inline media

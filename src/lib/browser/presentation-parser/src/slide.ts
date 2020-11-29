@@ -40,6 +40,12 @@ export class Slide implements PresentationTypes.Slide {
   slides: Slide[]
   master: MasterTypes.Master
   props: MasterTypes.StringObject
+  propsMain?: MasterTypes.StringObject
+  propsPreview?: MasterTypes.StringObject
+  mediaUris?: Set<string>
+  optionalMediaUris?: Set<string>
+  stepCount?: number
+  stepNo?: number
   constructor(rawData: any) {
     const raw = new RawDataObject(rawData)
     this.meta = new SlideMetaData(raw)
@@ -49,5 +55,10 @@ export class Slide implements PresentationTypes.Slide {
     this.slides = []
     this.master = masterCollection.findMaster(rawData)
     this.props = this.master.normalizeProps(raw.cut(this.master.name))
+    this.master.detectUnkownProps(this.props)
+    this.master.convertMarkdownToHtml(this.props)
+    this.master.validateUris(this.props)
+    this.mediaUris = this.master.resolveMediaUris(this.props)
+    this.optionalMediaUris = this.master.resolveOptionalMediaUris(this.props)
   }
 }

@@ -70,6 +70,16 @@ describe('Package “@bldr/presentation-parser”', function () {
                 '</ol>\n');
         });
     });
+    it('Master „generic“', function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            const presentation = parseMasterExample('generic');
+            const slides = presentation.slides;
+            assert_1.default.deepStrictEqual(slides[4].props.markup, [
+                '<p>step 1</p>\n',
+                '\n<p>step 2</p>\n'
+            ]);
+        });
+    });
     it('Master „quote“', function () {
         return __awaiter(this, void 0, void 0, function* () {
             const presentation = parseMasterExample('quote');

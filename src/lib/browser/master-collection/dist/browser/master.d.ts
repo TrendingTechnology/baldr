@@ -55,13 +55,9 @@ export declare class Master implements MasterTypes.Master {
      * Replace the inline media tags `[id:Beethoven]` in certain props with
      * HTML. This function must be called after the media resolution.
      */
-    /**
-     * Convert in the props certain strings containing markup to HTML.
-     */
+    convertMarkdownToHtml(props: MasterTypes.StringObject): MasterTypes.StringObject;
     detectUnkownProps(props: MasterTypes.StringObject): void;
-    /**
-     * Validate all media file URIs in the props of a certain slide.
-     */
+    validateUris(props: MasterTypes.StringObject): MasterTypes.StringObject;
     /**
      * Call a master hook. Master hooks are definied in the `main.js`
      * files.
@@ -81,13 +77,7 @@ export declare class Master implements MasterTypes.Master {
      */
     private callHookAsync;
     normalizeProps(propsRaw: any): MasterTypes.StringObject;
-    /**
-     * Retrieve the media URIs which have to be resolved.
-     *
-     * Call the master funtion `resolveMediaUris` and collect the media URIs.
-     * (like [id:beethoven, id:mozart]). Extract media URIs from
-     * the text props.
-     */
+    resolveMediaUris(props: MasterTypes.StringObject): Set<string> | undefined;
     resolveOptionalMediaUris(props: MasterTypes.StringObject): Set<string> | undefined;
     afterLoading(props: MasterTypes.StringObject, thisArg: ThisArg): void;
     afterMediaResolution(props: MasterTypes.StringObject, thisArg: ThisArg): Promise<void>;

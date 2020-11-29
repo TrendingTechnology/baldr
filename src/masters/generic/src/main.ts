@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/generic
  */
 
-import { MasterTypes } from '@bldr/type-definitions'
+import { validateMasterSpec, mapStepProps } from '@bldr/master-toolkit'
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownStringToHTML } from '@bldr/markdown-to-html'
@@ -79,7 +79,7 @@ function splitHtmlintoChunks (htmlString: string, charactersOnSlide?: Number): s
 //   rootElement.style.fontSize = `${size - 0.2}em`
 // }
 
-export default MasterTypes.validateMasterSpec({
+export default validateMasterSpec({
   name: 'generic',
   title: 'Folie',
   propsDef: {
@@ -100,8 +100,8 @@ export default MasterTypes.validateMasterSpec({
       description: 'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
       type: Boolean,
       default: false
-    }
-    //...steps.mapProps(['mode', 'subset'])
+    },
+    ...mapStepProps(['mode', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',

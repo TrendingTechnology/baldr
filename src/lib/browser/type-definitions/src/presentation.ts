@@ -66,32 +66,32 @@ export interface Slide {
   /**
    * Props (properties) to send to the main Vue master component.
    */
-  // propsMain: StringIndexedObject
+  propsMain?: StringObject
 
   /**
    * Props (properties) to send to the preview Vue master component.
    */
-  // propsPreview: StringIndexedObject
+  propsPreview?: StringObject
 
   /**
    * A list of media URIs.
    */
-  // mediaUris: string[]
+  mediaUris?: Set<string>
 
   /**
    * Media URIs that do not have to exist.
    */
-  // optionalMediaUris: string[]
+  optionalMediaUris?: Set<string>
 
   /**
    * How many steps the slide provides.
    */
-  // stepCount: number
+  stepCount?: number
 
   /**
    * The current step number. The first number is 1 not 0.
    */
-  // stepNo: number
+  stepNo?: number
 
   /**
    * Css properties in camelCase for the style property of the vue js

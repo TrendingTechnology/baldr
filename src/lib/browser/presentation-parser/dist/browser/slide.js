@@ -33,5 +33,10 @@ export class Slide {
         this.slides = [];
         this.master = masterCollection.findMaster(rawData);
         this.props = this.master.normalizeProps(raw.cut(this.master.name));
+        this.master.detectUnkownProps(this.props);
+        this.master.convertMarkdownToHtml(this.props);
+        this.master.validateUris(this.props);
+        this.mediaUris = this.master.resolveMediaUris(this.props);
+        this.optionalMediaUris = this.master.resolveOptionalMediaUris(this.props);
     }
 }

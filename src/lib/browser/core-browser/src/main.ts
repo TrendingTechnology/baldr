@@ -183,3 +183,18 @@ export function sortObjectsByProperty (property: string) {
     return a[property].localeCompare(b[property])
   }
 }
+
+/**
+ * Check if the input is a valid URI. Prefix with `id:` if necessary.
+ *
+ * @param uri - The URI to validate.
+ */
+export function validateUri (uri: string): string {
+  if (typeof uri !== 'string') throw new Error(`”${uri}“ is not a string.`)
+  const segments = uri.split(':')
+  // To allow URI with out a URI scheme. This defaults to `id`.
+  if (segments.length === 1) {
+    uri = `id:${uri}`
+  }
+  return uri
+}

@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@bldr/core-browser": "*",
-    "@bldr/type-definitions": "*",
     "@bldr/markdown-to-html": "*",
-    "jsdom": "16.4.0"
+    "jsdom": "16.4.0",
+    "@bldr/master-toolkit": "*"
   }
 }

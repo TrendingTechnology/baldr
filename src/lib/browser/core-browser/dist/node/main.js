@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.getExtension = void 0;
+exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.getExtension = void 0;
 __exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -162,3 +162,19 @@ function sortObjectsByProperty(property) {
     };
 }
 exports.sortObjectsByProperty = sortObjectsByProperty;
+/**
+ * Check if the input is a valid URI. Prefix with `id:` if necessary.
+ *
+ * @param uri - The URI to validate.
+ */
+function validateUri(uri) {
+    if (typeof uri !== 'string')
+        throw new Error(`”${uri}“ is not a string.`);
+    const segments = uri.split(':');
+    // To allow URI with out a URI scheme. This defaults to `id`.
+    if (segments.length === 1) {
+        uri = `id:${uri}`;
+    }
+    return uri;
+}
+exports.validateUri = validateUri;

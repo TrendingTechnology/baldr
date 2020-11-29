@@ -3,9 +3,9 @@
  */
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 
-import { MasterTypes } from '@bldr/type-definitions'
+import { validateMasterSpec } from '@bldr/master-toolkit'
 
-export default MasterTypes.validateMasterSpec({
+export default validateMasterSpec({
   name: 'quote',
   title: 'Zitat',
   propsDef: {

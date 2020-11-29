@@ -1,7 +1,7 @@
 /**
  * @module @bldr/lamp/masters/generic
  */
-import { MasterTypes } from '@bldr/type-definitions';
+import { validateMasterSpec, mapStepProps } from '@bldr/master-toolkit';
 import { convertHtmlToPlainText } from '@bldr/core-browser';
 import { convertMarkdownStringToHTML } from '@bldr/markdown-to-html';
 // import steps from '@/steps.js'
@@ -67,30 +67,25 @@ function splitHtmlintoChunks(htmlString, charactersOnSlide) {
 //   } while (rootWidth > wrapperWidth * 1.5 && rootHeight > wrapperHeight * 1.5)
 //   rootElement.style.fontSize = `${size - 0.2}em`
 // }
-export default MasterTypes.validateMasterSpec({
+export default validateMasterSpec({
     name: 'generic',
     title: 'Folie',
-    propsDef: {
-        markup: {
+    propsDef: Object.assign({ markup: {
             type: [String, Array],
             required: true,
             // It is complicated to convert to prop based markup conversion.
             // markup: true
             inlineMarkup: true,
             description: 'Markup im HTML oder Markdown-Format'
-        },
-        charactersOnSlide: {
+        }, charactersOnSlide: {
             type: Number,
             description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
             default: CHARACTERS_ON_SLIDE
-        },
-        onOne: {
+        }, onOne: {
             description: 'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
             type: Boolean,
             default: false
-        }
-        //...steps.mapProps(['mode', 'subset'])
-    },
+        } }, mapStepProps(['mode', 'subset'])),
     icon: {
         name: 'file-presentation-box',
         color: 'gray',

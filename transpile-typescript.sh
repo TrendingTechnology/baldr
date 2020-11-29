@@ -29,6 +29,8 @@ lib/node/cli-utils
 lib/node/media-manager
 api/media-server
 api/wire
+masters/generic
+masters/quote
 mgmt/cli
 mgmt/test"
 

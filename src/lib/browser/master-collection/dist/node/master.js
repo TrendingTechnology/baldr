@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Master = void 0;
+const markdown_to_html_1 = require("@bldr/markdown-to-html");
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -112,19 +114,17 @@ class Master {
     //     }
     //   }
     // }
-    /**
-     * Convert in the props certain strings containing markup to HTML.
-     */
-    // markupToHtml (props: MasterTypes.StringObject): MasterTypes.StringObject {
-    //   if (!this.propsDef) return props
-    //   for (const propName in props) {
-    //     const prop = this.propsDef[propName]
-    //     if ('markup' in prop && prop.markup) {
-    //       props[propName] = markupToHtml(props[propName])
-    //     }
-    //   }
-    //   return props
-    // }
+    convertMarkdownToHtml(props) {
+        if (!this.spec.propsDef)
+            return props;
+        for (const propName in props) {
+            const prop = this.spec.propsDef[propName];
+            if ('markup' in prop && prop.markup) {
+                props[propName] = markdown_to_html_1.convertMarkdownToHtml(props[propName]);
+            }
+        }
+        return props;
+    }
     detectUnkownProps(props) {
         for (const propName in props) {
             if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
@@ -132,19 +132,17 @@ class Master {
             }
         }
     }
-    /**
-     * Validate all media file URIs in the props of a certain slide.
-     */
-    // validateUris (props: MasterTypes.StringObject): MasterTypes.StringObject {
-    //   if (!this.spec.propsDef) return props
-    //   for (const propName in props) {
-    //     const prop = this.spec.propsDef[propName]
-    //     if ('assetUri' in prop && prop.assetUri) {
-    //       props[propName] = validateUri(props[propName])
-    //     }
-    //   }
-    //   return props
-    // }
+    validateUris(props) {
+        if (!this.spec.propsDef)
+            return props;
+        for (const propName in props) {
+            const prop = this.spec.propsDef[propName];
+            if ('assetUri' in prop && prop.assetUri) {
+                props[propName] = core_browser_1.validateUri(props[propName]);
+            }
+        }
+        return props;
+    }
     /**
      * Call a master hook. Master hooks are definied in the `main.js`
      * files.
@@ -182,29 +180,25 @@ class Master {
     normalizeProps(propsRaw) {
         return this.callHook('normalizeProps', propsRaw);
     }
-    /**
-     * Retrieve the media URIs which have to be resolved.
-     *
-     * Call the master funtion `resolveMediaUris` and collect the media URIs.
-     * (like [id:beethoven, id:mozart]). Extract media URIs from
-     * the text props.
-     */
-    // resolveMediaUris (props: MasterTypes.StringObject): Set<string> | undefined {
-    //   let uris = this.callHook('resolveMediaUris', props)
-    //   // To allow undefined return values of the hooks.
-    //   if (!uris) {
-    //     uris = new Set()
-    //   } else if (typeof uris === 'string') {
-    //     uris = new Set([uris])
-    //   } else if (Array.isArray(uris)) {
-    //     uris = new Set(uris)
-    //   }
-    //   const inlineUris = this.extractInlineMediaUris(props)
-    //   for (const uri of inlineUris) {
-    //     uris.add(uri)
-    //   }
-    //   if (uris.size) return uris
-    // }
+    resolveMediaUris(props) {
+        let uris = this.callHook('resolveMediaUris', props);
+        // To allow undefined return values of the hooks.
+        if (!uris) {
+            uris = new Set();
+        }
+        else if (typeof uris === 'string') {
+            uris = new Set([uris]);
+        }
+        else if (Array.isArray(uris)) {
+            uris = new Set(uris);
+        }
+        // const inlineUris = this.extractInlineMediaUris(props)
+        // for (const uri of inlineUris) {
+        //   uris.add(uri)
+        // }
+        if (uris.size)
+            return uris;
+    }
     resolveOptionalMediaUris(props) {
         let uris = this.callHook('resolveOptionalMediaUris', props);
         // To allow undefined return values of the hooks.

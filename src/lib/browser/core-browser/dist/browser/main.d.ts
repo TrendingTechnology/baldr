@@ -84,3 +84,9 @@ export declare function sortObjectsByProperty(property: string): (a: {
 }, b: {
     [key: string]: any;
 }) => any;
+/**
+ * Check if the input is a valid URI. Prefix with `id:` if necessary.
+ *
+ * @param uri - The URI to validate.
+ */
+export declare function validateUri(uri: string): string;

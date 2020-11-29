@@ -68,6 +68,15 @@ describe('Package “@bldr/presentation-parser”', function () {
     )
   })
 
+  it('Master „generic“', async function () {
+    const presentation = parseMasterExample('generic')
+    const slides = presentation.slides
+    assert.deepStrictEqual(slides[4].props.markup, [
+      '<p>step 1</p>\n',
+      '\n<p>step 2</p>\n'
+    ])
+  })
+
   it('Master „quote“', async function () {
     const presentation = parseMasterExample('quote')
     const slides = presentation.slides
