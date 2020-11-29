@@ -36,7 +36,7 @@ export default validateMasterSpec({
     epilog: {
       type: String,
       markup: true,
-      description: 'Längerer Text, der name dem Zitat erscheint.'
+      description: 'Längerer Text, der nach dem Zitat erscheint.'
     }
   },
   icon: {

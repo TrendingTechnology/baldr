@@ -15,29 +15,20 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    text: {
-      type: String,
-      required: true
-    },
-    author: {
-      type: String
-    },
-    date: {
-      type: [String, Number]
-    },
-    source: {
-      type: String
-    },
-    prolog: {
-      type: String
-    },
-    epilog: {
-      type: String
-    }
-  }
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
+
+@Component
+export default class MasterQuoteMain extends Vue {
+    @Prop({ required: true })
+    text: string = ''
+
+    @Prop() author?: string
+    @Prop() date?: string | number
+    @Prop() source?: string
+    @Prop() prolog?: string
+    @Prop() epilog?: string
+
 }
 </script>
 <style lang="scss">

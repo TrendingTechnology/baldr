@@ -2,8 +2,8 @@
  * @module @bldr/master-quote
  */
 import { convertHtmlToPlainText } from '@bldr/core-browser';
-import { MasterTypes } from '@bldr/type-definitions';
-export default MasterTypes.validateMasterSpec({
+import { validateMasterSpec } from '@bldr/master-toolkit';
+export default validateMasterSpec({
     name: 'quote',
     title: 'Zitat',
     propsDef: {
@@ -34,7 +34,7 @@ export default MasterTypes.validateMasterSpec({
         epilog: {
             type: String,
             markup: true,
-            description: 'Längerer Text, der name dem Zitat erscheint.'
+            description: 'Längerer Text, der nach dem Zitat erscheint.'
         }
     },
     icon: {
@@ -64,3 +64,4 @@ export default MasterTypes.validateMasterSpec({
         }
     }
 });
+//# sourceMappingURL=main.js.map
