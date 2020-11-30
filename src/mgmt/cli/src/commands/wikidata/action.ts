@@ -9,6 +9,7 @@ import wikidata from '@bldr/wikidata'
 // Project packages.
 import { writeYamlFile, metaTypes } from '@bldr/media-manager'
 import type { AssetType } from '@bldr/type-definitions'
+import config from '@bldr/config'
 
 /**
  * @param {String} metaType - For example `group`, `instrument`, `person`,
@@ -45,7 +46,7 @@ async function action (metaType: string, itemId: string, arg1: string, arg2: str
   }
 
   if (!cmdObj.dryRun && !fs.existsSync(dest)) {
-    const src = path.join(__dirname, '..', '..', 'blank.jpg')
+    const src = path.join(config.localRepo, 'src', 'mgmt', 'cli', 'src', 'blank.jpg')
     console.log(src)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.copyFileSync(src, dest)

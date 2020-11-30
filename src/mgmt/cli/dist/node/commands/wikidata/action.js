@@ -19,6 +19,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const config_1 = __importDefault(require("@bldr/config"));
 /**
  * @param {String} metaType - For example `group`, `instrument`, `person`,
  *   `song`
@@ -53,7 +54,7 @@ function action(metaType, itemId, arg1, arg2, cmdObj) {
             }
         }
         if (!cmdObj.dryRun && !fs_1.default.existsSync(dest)) {
-            const src = path_1.default.join(__dirname, '..', '..', 'blank.jpg');
+            const src = path_1.default.join(config_1.default.localRepo, 'src', 'mgmt', 'cli', 'src', 'blank.jpg');
             console.log(src);
             fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
             fs_1.default.copyFileSync(src, dest);
