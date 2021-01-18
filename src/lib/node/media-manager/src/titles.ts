@@ -118,6 +118,51 @@ export class DeepTitle {
   }
 
   /**
+   * Generate the path of the title.txt file `/var/data/baldr/media/05/title.txt`
+   *
+   * @param pathSegments An array of path segments `['', 'var', 'data', 'baldr',
+   *   'media', '05']` without the filename `title.txt` itself.
+   *
+   * @returns The path of a title.txt file
+   */
+  private generateTitleTxtPath (pathSegments: string[]): string {
+    return [...pathSegments, 'title.txt'].join(path.sep)
+  }
+
+  /**
+   * Find the deepest title.txt or the title.txt file with the shortest path of
+   * a given path.
+   *
+   * @param filePath A file path from which to descend into the folder
+   *   structure.
+   *
+   * @returns The deepest title.txt or the title.txt file with the shortest
+   *   path. `/var/data/baldr/media/05/title.txt`
+   */
+  private findDeepestTitleTxt (filePath: string): string {
+    const parentDir = path.dirname(filePath)
+    const segments = parentDir.split(path.sep)
+
+    let deepestTitleTxt: string = ''
+
+    for (let index = segments.length; index > 0; index--) {
+      const pathSegments = segments.slice(0, index)
+      // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/20_Biographie-Salzburg-Wien/title.txt
+      // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/title.txt
+      // /var/data/baldr/media/05/20_Mensch-Zeit/title.txt
+      // /var/data/baldr/media/05/title.txt
+      // -> BREAK
+      const titleTxt = this.generateTitleTxtPath(pathSegments)
+      if (!fs.existsSync(titleTxt)) {
+        break
+      } else {
+        deepestTitleTxt = titleTxt
+      }
+    }
+    return deepestTitleTxt
+  }
+
+  /**
    * Read all `title.txt` files. Descend to all parent folders which contain
    * a `title.txt` file.
    *
@@ -128,14 +173,13 @@ export class DeepTitle {
     filePath = path.resolve(filePath)
     // ['', 'var', 'data', 'baldr', 'media', '12', ..., 'Praesentation.baldr.yml']
     const segments = filePath.split(path.sep)
-    // 10, 11
     const depth = segments.length
-    // 5
-    const minDepth = config.mediaServer.basePath.split(path.sep).length
+    const deepestTitleTxt = this.findDeepestTitleTxt(filePath)
+    const minDepth = deepestTitleTxt.split(path.sep).length
     // To build the path property of the FolderTitle class.
     const folderNames = []
     let level: number = 1
-    for (let index = minDepth + 1; index < depth; index++) {
+    for (let index = minDepth; index < depth; index++) {
       const folderName = segments[index - 1]
       folderNames.push(folderName)
       // [ '', 'var', 'data', 'baldr', 'media', '05' ]
@@ -144,7 +188,7 @@ export class DeepTitle {
       // /var/data/baldr/media/05/20_Mensch-Zeit/title.txt
       // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/title.txt
       // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/20_Biographie-Salzburg-Wien/title.txt
-      const titleTxt = [...pathSegments, 'title.txt'].join(path.sep)
+      const titleTxt = this.generateTitleTxtPath(pathSegments)
       if (fs.existsSync(titleTxt)) {
         const folderTitle = this.readTitleTxt(titleTxt)
         folderTitle.path = folderNames.join(path.sep)

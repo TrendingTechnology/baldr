@@ -25,6 +25,7 @@ const core_node_1 = require("@bldr/core-node");
 function patchTexFileWithTitles(filePath) {
     console.log(`\nReplace titles in TeX file “${chalk_1.default.yellow(filePath)}”\n`);
     const titles = new media_manager_1.DeepTitle(filePath);
+    console.log(titles);
     const setzeTitle = {
         jahrgangsstufe: titles.grade.toString()
     };

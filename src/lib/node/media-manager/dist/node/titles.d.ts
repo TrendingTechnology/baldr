@@ -68,6 +68,26 @@ export declare class DeepTitle {
      */
     private readTitleTxt;
     /**
+     * Generate the path of the title.txt file `/var/data/baldr/media/05/title.txt`
+     *
+     * @param pathSegments An array of path segments `['', 'var', 'data', 'baldr',
+     *   'media', '05']` without the filename `title.txt` itself.
+     *
+     * @returns The path of a title.txt file
+     */
+    private generateTitleTxtPath;
+    /**
+     * Find the deepest title.txt or the title.txt file with the shortest path of
+     * a given path.
+     *
+     * @param filePath A file path from which to descend into the folder
+     *   structure.
+     *
+     * @returns The deepest title.txt or the title.txt file with the shortest
+     *   path. `/var/data/baldr/media/05/title.txt`
+     */
+    private findDeepestTitleTxt;
+    /**
      * Read all `title.txt` files. Descend to all parent folders which contain
      * a `title.txt` file.
      *
