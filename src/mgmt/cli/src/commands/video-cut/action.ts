@@ -16,7 +16,7 @@ async function action (videoFilePath: string, time1: string, time2: string, cmdO
   }
 
   cmd.startSpin()
-  await cmd.exec(['MP4Box', '-splitx', `${startSec}:${endSec}` , videoFilePath])
+  await cmd.exec(['MP4Box', '-splitx', `${startSec}:${endSec}`, videoFilePath])
   cmd.stopSpin()
 }
 
