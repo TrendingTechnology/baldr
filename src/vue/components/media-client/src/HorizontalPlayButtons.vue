@@ -44,6 +44,11 @@ export default {
   },
   computed: {
     samplesNormalized () {
+      for (const wrappedSample of this.wrappedSampleListNormalized.samples) {
+        if (!wrappedSample.sample) {
+          throw new Error(`Object has no sample object. Maybe it is no audio file. URI: ${wrappedSample.uri}`)
+        }
+      }
       return this.wrappedSampleListNormalized.samples
     },
     wrappedSampleListNormalized () {
