@@ -11,7 +11,13 @@
         v-html="title"
       />
       <p
-        v-if="description && !noMeta"
+        v-if="descriptionTeaser && !showLongDescription && !noMeta"
+        class="description-teaser font-shadow"
+        v-html="descriptionTeaser"
+      />
+      <span v-if="isLongDescription" @click="toggleDescription()">…</span>
+      <p
+        v-if="description && showLongDescription && !noMeta"
         class="description font-shadow"
         v-html="description"
       />
@@ -31,8 +37,24 @@ export default {
     description: {
       type: String
     },
+    descriptionTeaser: {
+      type: String
+    },
+    isLongDescription: {
+      type: Boolean
+    },
     noMeta: {
       type: Boolean
+    }
+  },
+  data () {
+    return {
+      showLongDescription: false
+    }
+  },
+  methods: {
+    toggleDescription () {
+      this.showLongDescription = !this.showLongDescription
     }
   }
 }
@@ -54,8 +76,9 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
 
-    .description, .title {
+    .description, .description-teaser, .title {
       padding: 0 1vw;
+      margin: 0;
     }
   }
 
@@ -83,7 +106,7 @@ export default {
       width: 100%;
       justify-content: flex-end;
 
-      .title, .description {
+      .title, .description, .description-teaser {
         background: rgba(170, 170, 170, 0.3);
       }
 
@@ -91,8 +114,8 @@ export default {
         padding-left: 5vw;
       }
 
-      .description {
-        padding: 1vw 5vw;
+      .description, .description-teaser {
+        padding: 0.5vw 5vw;
       }
     }
   }

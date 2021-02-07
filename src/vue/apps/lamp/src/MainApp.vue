@@ -104,9 +104,9 @@ export default {
     hideMouseAfterSec(3)
 
     // Update the media server on startup.
-    setTimeout(() => {
-      actions.update()
-    }, 2000)
+    // setTimeout(() => {
+    //   actions.update()
+    // }, 2000)
   }
 }
 </script>

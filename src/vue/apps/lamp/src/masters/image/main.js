@@ -4,6 +4,10 @@
 
 import { GrabFromObjects } from '@/lib.js'
 
+import { splitHtmlIntoChunks } from '@bldr/core-browser'
+
+const DESCRIPTION_TEASER_LENGTH = 200
+
 export default {
   title: 'Bild',
   props: {
@@ -55,9 +59,24 @@ export default {
       const title = grab.property('title')
       const description = grab.property('description')
 
+      let descriptionTeaser = description
+      let isLongDescription = false
+      if (description) {
+        let htmlChunks
+        if (description.length > DESCRIPTION_TEASER_LENGTH) {
+          htmlChunks = splitHtmlIntoChunks(description, DESCRIPTION_TEASER_LENGTH)
+          descriptionTeaser = htmlChunks[0]
+          if (htmlChunks.length > 1) {
+            isLongDescription = true
+          }
+        }
+      }
+
       return {
         title,
         description,
+        descriptionTeaser,
+        isLongDescription,
         imageHttpUrl: asset.httpUrl,
         noMeta: props.noMeta,
         mediaAsset: asset
