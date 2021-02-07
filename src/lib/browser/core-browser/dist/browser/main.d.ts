@@ -100,3 +100,11 @@ export declare function validateUri(uri: string): string;
  * @returns An array of HTML chunks.
  */
 export declare function splitHtmlIntoChunks(htmlString: string, charactersOnSlide: number): string[];
+/**
+ * Convert various data to a string. Meant for error messages.
+ *
+ * @param data - various data
+ *
+ * @return A string version of the data.
+ */
+export declare function toString(data: any): string;

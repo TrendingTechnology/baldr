@@ -253,3 +253,24 @@ export function splitHtmlIntoChunks (htmlString: string, charactersOnSlide: numb
   addHtml(htmlChunks, text)
   return htmlChunks
 }
+
+/**
+ * Convert various data to a string. Meant for error messages.
+ *
+ * @param data - various data
+ *
+ * @return A string version of the data.
+ */
+export function toString (data: any): string {
+  if (data === null) {
+    return 'null'
+  } else if (!data) {
+    return typeof data
+  } else if (typeof data === 'string') {
+    return data
+  } else if (Array.isArray(data)) {
+    return data.toString()
+  } else {
+    return JSON.stringify(data)
+  }
+}
