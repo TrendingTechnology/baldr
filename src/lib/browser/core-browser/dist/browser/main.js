@@ -160,3 +160,54 @@ export function validateUri(uri) {
     }
     return uri;
 }
+/**
+ * Split a HTML text into smaller chunks by looping over the children.
+ *
+ * @param htmlString - A HTML string.
+ * @param charactersOnSlide - The maximum number of characters that may be
+ *   contained in a junk.
+ *
+ * @returns An array of HTML chunks.
+ */
+export function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
+    /**
+     * Add text to the chunks array. Add only text with real letters not with
+     * whitespaces.
+     *
+     * @param htmlChunks - The array to be filled with HTML chunks.
+     * @param htmlString - A HTML string to be added to the array.
+     */
+    function addHtml(htmlChunks, htmlString) {
+        if (htmlString && !htmlString.match(/^\s*$/)) {
+            htmlChunks.push(htmlString);
+        }
+    }
+    if (htmlString.length < charactersOnSlide)
+        return [htmlString];
+    const domParser = new DOMParser();
+    let dom = domParser.parseFromString(htmlString, 'text/html');
+    // If htmlString is a text without tags
+    if (!dom.body.children.length) {
+        dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html');
+    }
+    let text = '';
+    const htmlChunks = [];
+    // childNodes not children!
+    for (const children of dom.body.childNodes) {
+        const element = children;
+        // If htmlString is a text with inner tags
+        if (children.nodeName === '#text') {
+            text += element.textContent;
+        }
+        else {
+            text += element.outerHTML;
+        }
+        if (text.length > charactersOnSlide) {
+            addHtml(htmlChunks, text);
+            text = '';
+        }
+    }
+    // Add last not full text
+    addHtml(htmlChunks, text);
+    return htmlChunks;
+}

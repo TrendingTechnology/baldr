@@ -2,67 +2,11 @@
  * @module @bldr/lamp/masters/generic
  */
 
-import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText, splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import steps from '@/steps.js'
 
 const CHARACTERS_ON_SLIDE = 400
-
-/* globals DOMParser */
-
-/**
- * Split a HTML text into smaller chunks by looping over the children.
- *
- * @param {String} htmlString
- * @param {Number} charactersOnSlide
- *
- * @returns {Array}
- */
-function splitHtmlintoChunks (htmlString, charactersOnSlide) {
-  /**
-   * Add text to the chunks array. Add only text with real letters not with
-   * whitespaces.
-   *
-   * @param {Array} chunks
-   * @param {String} text
-   */
-  function addText (chunks, text) {
-    if (text && !text.match(/^\s*$/)) {
-      chunks.push(text)
-    }
-  }
-
-  if (!charactersOnSlide) charactersOnSlide = CHARACTERS_ON_SLIDE
-  if (htmlString.length < charactersOnSlide) return [htmlString]
-
-  const domParser = new DOMParser()
-  let dom = domParser.parseFromString(htmlString, 'text/html')
-
-  // If htmlString is a text without tags
-  if (!dom.body.children.length) {
-    dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html')
-  }
-
-  let text = ''
-  const chunks = []
-
-  // childNodes not children!
-  for (const children of dom.body.childNodes) {
-    // If htmlString is a text with inner tags
-    if (children.nodeName === '#text') {
-      text += children.textContent
-    } else {
-      text += children.outerHTML
-    }
-    if (text.length > charactersOnSlide) {
-      addText(chunks, text)
-      text = ''
-    }
-  }
-  // Add last not full text
-  addText(chunks, text)
-  return chunks
-}
 
 // function adjustSlideSize (rootElement, wrapperElement) {
 //   let size = 1
@@ -147,7 +91,7 @@ export default {
       // Split large texts into smaller chunks
       let markup = []
       for (const html of splittedByHr) {
-        const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
+        const chunks = splitHtmlIntoChunks(html, props.charactersOnSlide)
         for (const chunk of chunks) {
           markup.push(chunk)
         }

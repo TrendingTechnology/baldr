@@ -5,7 +5,7 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
-    "lib": ["ES6", "ES2017", "DOM"],
+    "lib": ["ES6", "ES2017", "DOM", "DOM.Iterable"],
     "moduleResolution": "node"
   },
   "include": ["src/*.ts"],
