@@ -360,7 +360,7 @@ Vue.prototype.$notifyError = function (text, title) {
   const notification = {
     group: 'default',
     text,
-    duration: -1, // forever
+    duration: 10000,
     type: 'error'
   }
   if (title) notification.title = title
