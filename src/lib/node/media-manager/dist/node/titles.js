@@ -127,7 +127,7 @@ class DeepTitle {
         // To build the path property of the FolderTitle class.
         const folderNames = [];
         let level = 1;
-        for (let index = minDepth; index < depth; index++) {
+        for (let index = minDepth - 1; index < depth; index++) {
             const folderName = segments[index - 1];
             folderNames.push(folderName);
             // [ '', 'var', 'data', 'baldr', 'media', '05' ]
