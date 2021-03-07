@@ -26,6 +26,9 @@ function convertMenuItem (raw) {
     click = () => {
       router.push({ name: raw.arguments })
     }
+  } else if (raw.action === 'clearCache') {
+    // Only in the electron app. Clear HTTP Cache.
+    return
   } else if (raw.action === 'executeCallback') {
     click = actions[raw.arguments]
   } else {

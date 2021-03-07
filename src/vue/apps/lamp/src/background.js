@@ -125,6 +125,12 @@ if (isDevelopment) {
   }
 }
 
+//
+
+// var remote = require('remote');
+// var win = remote.getCurrentWindow();
+// );
+
 /**
  * @param {module:@bldr/lamp/menu.RawMenuItem} raw
  */
@@ -148,6 +154,14 @@ function convertMenuItem (raw) {
   } else if (raw.action === 'executeCallback') {
     click = () => {
       win.webContents.send('action', raw.arguments)
+    }
+  } else if (raw.action === 'clearCache') {
+    click = () => {
+      // Sometimes some images are not updated.
+      // We have to delete the http cache.
+      // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
+      win.webContents.session.clearCache()
+      win.webContents.session.clearStorageData()
     }
   } else {
     throw new Error(`Unkown action for raw menu entry: ${raw}`)

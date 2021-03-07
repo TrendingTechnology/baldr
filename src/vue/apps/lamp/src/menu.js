@@ -371,6 +371,11 @@ const menuTemplate = [
       { role: 'forcereload' },
       { role: 'toggledevtools' },
       {
+        label: 'Cache löschen',
+        action: 'clearCache',
+        keyboardShortcut: 'Ctrl + Alt + c'
+      },
+      {
         label: 'REST-API',
         action: 'executeCallback',
         arguments: 'toggleRestApi',

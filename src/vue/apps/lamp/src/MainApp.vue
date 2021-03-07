@@ -84,6 +84,9 @@ export default {
         action = () => {
           window.open(raw.arguments, '_blank')
         }
+      } else if (raw.action === 'clearCache') {
+        // Only in the electron app. Clear HTTP Cache.
+        return
       } else {
         throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
       }
