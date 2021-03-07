@@ -125,6 +125,10 @@ $link-color: scale-color($gray, $lightness: -40%);
       @include important;
     }
 
+    td, th {
+      padding: 0.1em 0.6em;
+    }
+
     thead {
       tr {
         border-bottom: 2px solid $black;
