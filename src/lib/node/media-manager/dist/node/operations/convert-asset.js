@@ -76,7 +76,8 @@ function convertAsset(filePath, cmdObj = {}) {
                 '-i', filePath,
                 // '-c:a', 'aac', '-b:a', '128k',
                 // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
-                '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
+                '-c:a', 'libfdk_aac', '-vbr', '2',
+                // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
                 '-vn',
                 '-map_metadata', '-1',
                 '-y',
@@ -123,7 +124,13 @@ function convertAsset(filePath, cmdObj = {}) {
             }
             if (process.status === 0) {
                 if (assetType === 'audio') {
-                    const metaData = yield audio_metadata_1.default(filePath);
+                    let metaData;
+                    try {
+                        metaData = yield audio_metadata_1.default(filePath);
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
                     if (metaData) {
                         yaml_1.writeMetaDataYaml(outputFile, metaData);
                     }

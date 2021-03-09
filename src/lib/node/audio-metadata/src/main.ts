@@ -1,4 +1,4 @@
-import musicMetadata from 'music-metadata'
+import * as musicMetadata from 'music-metadata'
 
 interface AudioMetadataContainer {
   title: string

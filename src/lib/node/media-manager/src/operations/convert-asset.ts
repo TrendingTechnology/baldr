@@ -69,7 +69,8 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
       '-i', filePath,
       // '-c:a', 'aac', '-b:a', '128k',
       // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
-      '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
+      '-c:a', 'libfdk_aac', '-vbr', '2',
+      // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
       '-vn', // Disable video recording
       '-map_metadata', '-1', // remove metadata
       '-y', // Overwrite output files without asking
@@ -118,7 +119,12 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
 
     if (process.status === 0) {
       if (assetType === 'audio') {
-        const metaData = await collectAudioMetaData(filePath)
+        let metaData
+        try {
+          metaData = await collectAudioMetaData(filePath)
+        } catch (error) {
+          console.log(error)
+        }
         if (metaData) {
           writeMetaDataYaml(outputFile, metaData)
         }
