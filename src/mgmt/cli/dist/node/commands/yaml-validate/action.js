@@ -14,7 +14,7 @@ const media_manager_1 = require("@bldr/media-manager");
  */
 function validateYamlOneFile(filePath) {
     try {
-        js_yaml_1.default.safeLoad(fs_1.default.readFileSync(filePath, 'utf8'));
+        js_yaml_1.default.load(fs_1.default.readFileSync(filePath, 'utf8'));
         console.log(`${chalk_1.default.green('ok')}: ${chalk_1.default.yellow(filePath)}`);
     }
     catch (error) {

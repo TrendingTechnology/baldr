@@ -13,7 +13,7 @@ import { walk } from '@bldr/media-manager'
  */
 function validateYamlOneFile (filePath: string): void {
   try {
-    yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    yaml.load(fs.readFileSync(filePath, 'utf8'))
     console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
   } catch (error) {
     console.log(`${chalk.red('error')}: ${chalk.red(error.name)}: ${error.message}`)
