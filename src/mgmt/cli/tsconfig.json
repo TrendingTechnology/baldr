@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "module": "CommonJS",
     "allowJs": true,
-    "target": "ES6",
     "esModuleInterop": true,
     "lib": ["ES2020.String"],
-    "strict": true
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "strict": true,
+    "target": "ES6"
   },
   "include": ["./src/**/*"]
 }

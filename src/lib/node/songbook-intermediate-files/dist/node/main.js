@@ -7,20 +7,42 @@
  *
  * @module @bldr/songbook-intermediate-files
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildVueApp = exports.exportToMediaServer = exports.IntermediateLibrary = exports.PianoScore = void 0;
 // Node packages.
-const childProcess = require("child_process");
-const crypto = require("crypto");
-const os = require("os");
-const path = require("path");
-const util = require("util");
+const childProcess = __importStar(require("child_process"));
+const crypto = __importStar(require("crypto"));
+const os = __importStar(require("os"));
+const path = __importStar(require("path"));
+const util = __importStar(require("util"));
 // Third party packages.
-const chalk_1 = require("chalk");
-const fs = require("fs-extra");
-const glob_1 = require("glob");
-const better_sqlite3_1 = require("better-sqlite3");
-const js_yaml_1 = require("js-yaml");
+const chalk_1 = __importDefault(require("chalk"));
+const fs = __importStar(require("fs-extra"));
+const glob_1 = __importDefault(require("glob"));
+const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
+const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
 const core_node_1 = require("@bldr/core-node");
@@ -28,7 +50,7 @@ const core_browser_1 = require("@bldr/core-browser");
 /**
  * See `/etc/baldr.json`.
  */
-const config_1 = require("@bldr/config");
+const config_1 = __importDefault(require("@bldr/config"));
 /*******************************************************************************
  * Functions
  ******************************************************************************/
