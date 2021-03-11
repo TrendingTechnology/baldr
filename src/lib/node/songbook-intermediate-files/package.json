@@ -19,11 +19,11 @@
         "@bldr/core-node": "*",
         "@bldr/songbook-core": "*",
         "@bldr/config": "*",
-        "better-sqlite3": "^7.1.1",
-        "chalk": "^4.1.0",
-        "fs-extra": "^9.0.1",
-        "glob": "^7.1.6",
-        "js-yaml": "^3.14.0"
+        "better-sqlite3": "7.1.1",
+        "chalk": "4.1.0",
+        "fs-extra": "9.0.1",
+        "glob": "7.1.6",
+        "js-yaml": "3.14.0"
     },
     "publishConfig": {
         "access": "public"

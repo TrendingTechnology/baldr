@@ -21,19 +21,19 @@
     "code:vue": "code .vscode/vue.code-workspace"
   },
   "devDependencies": {
-    "lerna": "^3.16.4",
-    "@vue/cli-plugin-babel": "^3.12.0",
-    "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-service": "^3.12.0",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.5.1",
-    "eslint-plugin-vue": "^5.2.3",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "style-resources-loader": "^1.2.1",
-    "vue-cli-plugin-style-resources-loader": "^0.1.3",
-    "vue-template-compiler": "^2.6.10"
+    "lerna": "3.16.4",
+    "@vue/cli-plugin-babel": "3.12.0",
+    "@vue/cli-plugin-eslint": "3.12.0",
+    "@vue/cli-service": "3.12.0",
+    "@vue/eslint-config-standard": "4.0.0",
+    "babel-eslint": "10.0.3",
+    "eslint": "6.5.1",
+    "eslint-plugin-vue": "5.2.3",
+    "node-sass": "4.12.0",
+    "sass-loader": "8.0.0",
+    "style-resources-loader": "1.2.1",
+    "vue-cli-plugin-style-resources-loader": "0.1.3",
+    "vue-template-compiler": "2.6.10"
   },
   "publishConfig": {
     "access": "public"
@@ -60,7 +60,7 @@
     "@bldr/api": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/modal-dialog": "*",
-    "sleep": "^6.1.0",
+    "sleep": "6.1.0",
     "electron": "10.1.1",
     "electron-rebuild": "2.0.3"
   }

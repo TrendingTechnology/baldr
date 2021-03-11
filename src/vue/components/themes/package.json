@@ -22,7 +22,7 @@
   "main": "src/main.js",
   "style": "src/default.scss",
   "dependencies": {
-    "sass-export": "^1.0.6"
+    "sass-export": "1.0.6"
   },
   "publishConfig": {
     "access": "public"

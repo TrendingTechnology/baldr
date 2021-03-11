@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@bldr/config": "*",
-    "ws": "^7.4.0",
-    "@types/ws": "^7.4.0"
+    "ws": "7.4.0",
+    "@types/ws": "7.4.0"
   }
 }

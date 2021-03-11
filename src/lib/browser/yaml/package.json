@@ -28,10 +28,10 @@
   },
   "dependencies": {
     "@bldr/type-definitions": "*",
-    "js-yaml": "^3.14.0"
+    "js-yaml": "3.14.0"
   },
   "devDependencies": {
-    "@types/js-yaml": "^3.12.5"
+    "@types/js-yaml": "3.12.5"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

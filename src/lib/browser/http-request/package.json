@@ -27,7 +27,7 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "axios": "^0.21.0"
+    "axios": "0.21.0"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"
