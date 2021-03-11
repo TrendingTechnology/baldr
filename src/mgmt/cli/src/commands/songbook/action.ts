@@ -7,7 +7,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { log } from '@bldr/core-node'
-import songbook from '@bldr/songbook-intermediate-files'
+import { IntermediateLibrary, PianoScore, exportToMediaServer, buildVueApp } from '@bldr/songbook-intermediate-files'
 import config from '@bldr/config'
 
 /**
@@ -65,7 +65,7 @@ function action (cmdObj: { [key: string]: any }): void {
     )
   }
 
-  const library = new songbook.IntermediateLibrary(
+  const library = new IntermediateLibrary(
     config.songbook.path,
     config.songbook.projectorPath,
     config.songbook.pianoPath
@@ -81,10 +81,10 @@ function action (cmdObj: { [key: string]: any }): void {
     library.updateSongBySongId(cmdObj.songId, mode)
   } else {
     library.update(mode, cmdObj.force)
-    songbook.exportToMediaServer(library)
+    exportToMediaServer(library)
 
     if (mode === 'piano' || mode === 'all') {
-      const pianoScore = new songbook.PianoScore(
+      const pianoScore = new PianoScore(
         library,
         cmdObj.groupAlphabetically,
         cmdObj.pageTurnOptimized
@@ -99,7 +99,7 @@ function action (cmdObj: { [key: string]: any }): void {
       )
       log('Create JSON file: %s', chalk.yellow(projectorPath))
     }
-    songbook.buildVueApp()
+    buildVueApp()
   }
 }
 

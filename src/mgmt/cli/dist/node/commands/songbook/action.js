@@ -9,7 +9,7 @@ const path_1 = __importDefault(require("path"));
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const core_node_1 = require("@bldr/core-node");
-const songbook_intermediate_files_1 = __importDefault(require("@bldr/songbook-intermediate-files"));
+const songbook_intermediate_files_1 = require("@bldr/songbook-intermediate-files");
 const config_1 = __importDefault(require("@bldr/config"));
 /**
  * @param cmdObj - An object containing options as key-value pairs.
@@ -57,7 +57,7 @@ function action(cmdObj) {
     if (config_1.default.songbook.pianoPath) {
         core_node_1.log('The folder where all piano related files are stored is:\n    %s\n', chalk_1.default.green(config_1.default.songbook.pianoPath));
     }
-    const library = new songbook_intermediate_files_1.default.IntermediateLibrary(config_1.default.songbook.path, config_1.default.songbook.projectorPath, config_1.default.songbook.pianoPath);
+    const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path, config_1.default.songbook.projectorPath, config_1.default.songbook.pianoPath);
     core_node_1.log('Found %s songs.', library.countSongs());
     if (cmdObj.list)
         library.loadSongList(cmdObj.list);
@@ -72,9 +72,9 @@ function action(cmdObj) {
     }
     else {
         library.update(mode, cmdObj.force);
-        songbook_intermediate_files_1.default.exportToMediaServer(library);
+        songbook_intermediate_files_1.exportToMediaServer(library);
         if (mode === 'piano' || mode === 'all') {
-            const pianoScore = new songbook_intermediate_files_1.default.PianoScore(library, cmdObj.groupAlphabetically, cmdObj.pageTurnOptimized);
+            const pianoScore = new songbook_intermediate_files_1.PianoScore(library, cmdObj.groupAlphabetically, cmdObj.pageTurnOptimized);
             pianoScore.compile();
         }
         if (config_1.default.songbook.projectorPath) {
@@ -82,7 +82,7 @@ function action(cmdObj) {
             fs_1.default.writeFileSync(projectorPath, JSON.stringify(library, null, '  '));
             core_node_1.log('Create JSON file: %s', chalk_1.default.yellow(projectorPath));
         }
-        songbook_intermediate_files_1.default.buildVueApp();
+        songbook_intermediate_files_1.buildVueApp();
     }
 }
 module.exports = action;
