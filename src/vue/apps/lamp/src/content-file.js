@@ -601,7 +601,7 @@ export class Presentation {
         if (rawObject && rawObject.meta && rawObject.meta.id) {
           rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.id)
         }
-        rawYamlObject = yaml.safeLoad(rawYamlString)
+        rawYamlObject = yaml.load(rawYamlString)
       } catch (error) {
         throw new Error(`${error.name}: ${error.message}`)
       }
