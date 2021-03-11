@@ -40,7 +40,7 @@ export class AlphabeticalSongsTree {
  * - composer: composer, artist, genre
  * - lyricist: lyricist
  */
-class SongMetaDataCombined {
+export class SongMetaDataCombined {
     /**
      * @param songMetaData - A song
      * metadata object.

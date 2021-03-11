@@ -222,7 +222,7 @@ export class AlphabeticalSongsTree {
  * - composer: composer, artist, genre
  * - lyricist: lyricist
  */
-class SongMetaDataCombined {
+export class SongMetaDataCombined {
   private metaData_: StringIndexedObject
   public allProperties: string[]
   /**

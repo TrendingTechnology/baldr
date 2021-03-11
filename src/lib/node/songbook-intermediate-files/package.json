@@ -1,32 +1,43 @@
 {
-    "name": "@bldr/songbook-intermediate-files",
-    "version": "0.2.3",
-    "description": "A collection of classes and functions to generate the intermediate files for the BALDR songbook.",
-    "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Josef-Friedrich/baldr.git"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Josef Friedrich",
-        "email": "josef@friedrich.rocks",
-        "url": "https://josef.friedrich.rocks"
-    },
-    "main": "src/main.js",
-    "dependencies": {
-        "@bldr/core-browser": "*",
-        "@bldr/core-node": "*",
-        "@bldr/songbook-core": "*",
-        "@bldr/config": "*",
-        "better-sqlite3": "7.1.1",
-        "chalk": "4.1.0",
-        "fs-extra": "9.0.1",
-        "glob": "7.1.6",
-        "js-yaml": "3.14.0"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+  "name": "@bldr/songbook-intermediate-files",
+  "version": "0.2.3",
+  "description": "A collection of classes and functions to generate the intermediate files for the BALDR songbook.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "src/node/main.js",
+  "dependencies": {
+    "@bldr/config": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/core-node": "*",
+    "@bldr/songbook-core": "*",
+    "better-sqlite3": "7.1.2",
+    "chalk": "4.1.0",
+    "fs-extra": "9.1.0",
+    "glob": "7.1.6",
+    "js-yaml": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "14.14.33",
+    "@types/fs-extra": "9.0.8",
+    "@types/better-sqlite3": "5.4.1",
+    "@types/glob": "5.0.35",
+    "@types/js-yaml": "4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
+  }
 }

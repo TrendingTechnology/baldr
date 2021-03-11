@@ -178,7 +178,7 @@ export declare class AlphabeticalSongsTree {
  * - composer: composer, artist, genre
  * - lyricist: lyricist
  */
-declare class SongMetaDataCombined {
+export declare class SongMetaDataCombined {
     private metaData_;
     allProperties: string[];
     /**

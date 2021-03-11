@@ -4,7 +4,7 @@
  * @module @bldr/songbook-core
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CoreLibrary = exports.AlphabeticalSongsTree = void 0;
+exports.CoreLibrary = exports.SongMetaDataCombined = exports.AlphabeticalSongsTree = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * A tree of songs where the song arrays are placed in alphabetical properties.
@@ -187,6 +187,7 @@ class SongMetaDataCombined {
         };
     }
 }
+exports.SongMetaDataCombined = SongMetaDataCombined;
 /**
  * The song library - a collection of songs
  */

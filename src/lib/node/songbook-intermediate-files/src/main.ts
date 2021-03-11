@@ -8,28 +8,28 @@
  */
 
 // Node packages.
-const childProcess = require('child_process')
-const crypto = require('crypto')
-const os = require('os')
-const path = require('path')
-const util = require('util')
+import * as childProcess from 'child_process'
+import * as crypto  from 'crypto'
+import * as os from 'os'
+import * as path from 'path'
+import * as util from 'util'
 
 // Third party packages.
-const chalk = require('chalk')
-const fs = require('fs-extra')
-const glob = require('glob')
-const Sqlite3 = require('better-sqlite3')
-const yaml = require('js-yaml')
+import chalk from 'chalk'
+import * as fs from 'fs-extra'
+import glob from 'glob'
+import Sqlite3, { Database } from 'better-sqlite3'
+import yaml from 'js-yaml'
 
 // Project packages.
-const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
-const { log } = require('@bldr/core-node')
-const { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig,  } = require('@bldr/core-browser')
+import { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } from '@bldr/songbook-core'
+import { log } from '@bldr/core-node'
+import { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig } from '@bldr/core-browser'
 
 /**
  * See `/etc/baldr.json`.
  */
-const config = require('@bldr/config')
+import config from '@bldr/config'
 
 /**
  * An array of song objects.
@@ -40,7 +40,7 @@ const config = require('@bldr/config')
  * Functions
  ******************************************************************************/
 
-function parseSongIDList (listPath) {
+function parseSongIDList (listPath: string): string[] {
   const content = fs.readFileSync(listPath, { encoding: 'utf-8' })
   return content.split(/\s+/).filter(songId => songId)
 }
@@ -49,12 +49,12 @@ function parseSongIDList (listPath) {
  * List files in a a directory. You have to use a filter to
  * select the files.
  *
- * @param {string} basePath - A directory
- * @param {string} filter - String to filter, e. g. “.eps”
+ * @param basePath - A directory
+ * @param filter - String to filter, e. g. “.eps”
  *
  * @return {array} An array of file names.
  */
-function listFiles (basePath, filter) {
+function listFiles (basePath: string, filter: string): string[] {
   if (fs.existsSync(basePath)) {
     return fs.readdirSync(basePath).filter((file) => {
       return file.indexOf(filter) > -1
@@ -63,11 +63,66 @@ function listFiles (basePath, filter) {
   return []
 }
 
+interface StatusInfo {
+  /**
+   * "Auf der Mauer, auf der Lauer"
+   */
+  title: string
+}
+
+interface StatusChanged {
+  piano: boolean
+  slides: boolean
+}
+
+/**
+ * "generated": {
+ *     "piano": [
+ *       "piano_1.eps",
+ *       "piano_2.eps"
+ *     ],
+ *     "projector": "projector.pdf",
+ *     "slides": [
+ *       "01.svg",
+ *       "02.svg"
+ *     ],
+ *   },
+ */
+interface StatusGenerated {
+  piano: string[]
+  projektor: string
+  slides: string []
+}
+
+interface Status {
+
+  changed: StatusChanged
+
+  generated: StatusGenerated
+
+  /**
+   * "songs/a/Auf-der-Mauer"
+   */
+  folder: string
+
+  /**
+   * "Auf-der-Mauer"
+   */
+  folderName: string
+  force: boolean
+
+  info: StatusInfo
+
+}
+
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
 
 class Message {
+  error: string
+  finished: string
+  progress: string
   constructor () {
     this.error = chalk.red('☒')
     this.finished = chalk.green('☑')
@@ -79,7 +134,7 @@ class Message {
    *
    * @param {string} text - Text to display.
    */
-  print (text) {
+  print (text: string): string {
     console.log(text)
     return text
   }
@@ -101,35 +156,7 @@ class Message {
     throw new Error('No configuration file found.')
   }
 
-  /**
-   * @param {object} status
-   * <pre><code>
-   * {
-   *   "changed": {
-   *     "piano": false,
-   *     "slides": false
-   *   },
-   *   "folder": "songs/a/Auf-der-Mauer",
-   *   "folderName": "Auf-der-Mauer",
-   *   "force": true,
-   *   "generated": {
-   *     "piano": [
-   *       "piano_1.eps",
-   *       "piano_2.eps"
-   *     ],
-   *     "projector": "projector.pdf",
-   *     "slides": [
-   *       "01.svg",
-   *       "02.svg"
-   *     ],
-   *   },
-   *   "info": {
-   *     "title": "Auf der Mauer, auf der Lauer"
-   *   }
-   * }
-   * </code></pre>
-   */
-  songFolder (status, song) {
+  songFolder (status: Status, song: Song) {
     let forced
     if (status.force) {
       forced = ' ' + chalk.red('(forced)')
@@ -181,10 +208,11 @@ const message = new Message()
  * A wrapper class for a folder.
  */
 class Folder {
+  folderPath: string
   /**
    * @param {...string} folderPath - The path segments of the folder
    */
-  constructor (folderPath) {
+  constructor (...folderPath: string[]) {
     /**
      * The path of the folder.
      * @type {string}
@@ -197,10 +225,8 @@ class Folder {
 
   /**
    * Return the path of the folder.
-   *
-   * @returns {string}
    */
-  get () {
+  get (): string {
     return this.folderPath
   }
 
@@ -224,6 +250,26 @@ class Folder {
  * Song classes
  ******************************************************************************/
 
+interface RawYamlData {
+  alias: string
+  arranger: string
+  artist: string
+  audio: string
+  composer: string
+  country: string
+  description: string
+  genre: string
+  lyricist: string
+  musescore: string
+  source: string
+  subtitle: string
+  title: string
+  wikidata: string
+  wikipedia: string
+  year: string
+  youtube: string
+}
+
 /**
  * Metadata of a song catched from the info.yml file.
  *
@@ -245,171 +291,139 @@ class Folder {
  */
 class SongMetaData {
   /**
-   * @param {string} folder - Path of the song folder.
+   * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
+   * lieber Mai, und mache”
    */
-  constructor (folder) {
-    /**
-     * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
-     * lieber Mai, und mache”
-     *
-     * @type {string}
-     */
-    this.alias = null
+  alias: string | null = null
 
-    /**
-     * The arranger of a song.
-     *
-     * @type {string}
-     */
-    this.arranger = null
+  /**
+   * The arranger of a song.
+   */
+  arranger: string | null = null
 
-    /**
-     * The artist of a song.
-     *
-     * @type {string}
-     */
-    this.artist = null
+  /**
+   * The artist of a song.
+   */
+  artist: string | null = null
 
-    /**
-     * A media server URI of a audio file for example (id:A_Song).
-     *
-     * @type {string}
-     */
-    this.audio = null
+  /**
+   * A media server URI of a audio file for example (id:A_Song).
+   */
+  audio: string | null = null
 
-    /**
-     * The composer of a song.
-     *
-     * @type {string}
-     */
-    this.composer = null
+  /**
+   * The composer of a song.
+   */
+  composer: string | null = null
 
-    /**
-     * The country the song is from.
-     *
-     * @type {string}
-     */
-    this.country = null
+  /**
+   * The country the song is from.
+   */
+  country: string | null = null
 
-    /**
-     * A longer text which describes the song.
-     *
-     * @type {string}
-     */
-    this.description = null
+  /**
+   * A longer text which describes the song.
+   */
+  description: string | null = null
 
-    /**
-     * The genre of the song.
-     *
-     * @type {string}
-     */
-    this.genre = null
+  /**
+   * The genre of the song.
+   */
+  genre: string | null = null
 
-    /**
-     * The lyricist of the song.
-     *
-     * @type {string}
-     */
-    this.lyricist = null
+  /**
+   * The lyricist of the song.
+   */
+  lyricist: string | null = null
 
-    /**
-     * The MuseScore score ID from musescore.com, for example the score ID
-     * from https://musescore.com/user/1601631/scores/1299601 is 1299601.
-     *
-     * @type {string}
-     */
-    this.musescore = null
+  /**
+   * The MuseScore score ID from musescore.com, for example the score ID
+   * from https://musescore.com/user/1601631/scores/1299601 is 1299601.
+   */
+  musescore: string | null = null
 
-    /**
-     * A text or a URL which describes the source of a song.
-     *
-     * @type {string}
-     */
-    this.source = null
+  /**
+   * A text or a URL which describes the source of a song.
+   */
+  source: string | null = null
 
-    /**
-     * The subtitle of a song.
-     *
-     * @type {string}
-     */
-    this.subtitle = null
+  /**
+   * The subtitle of a song.
+   */
+  subtitle: string | null = null
 
-    /**
-     * The title of a song.
-     *
-     * @type {string}
-     */
-    this.title = null
+  /**
+   * The title of a song.
+   */
+  title: string | null = null
 
-    /**
-     * The Wikidata data item ID (without the Q prefix)
-     *
-     * @type {string}
-     */
-    this.wikidata = null
+  /**
+   * The Wikidata data item ID (without the Q prefix)
+   */
+  wikidata: string | null = null
 
-    /**
-     * ID of a wikipedia article (e. g. en:A_Article)
-     *
-     * @type {string}
-     */
-    this.wikipedia = null
+  /**
+   * ID of a wikipedia article (e. g. en:A_Article)
+   */
+  wikipedia: string | null = null
 
-    /**
-     * The year the song was released.
-     *
-     * @type {string}
-     */
-    this.year = null
+  /**
+   * The year the song was released.
+   */
+  year: string | null = null
 
-    /**
-     * The youtube ID (e. g. CQYypFMTQcE)
-     *
-     * @type {string}
-     */
-    this.youtube = null
+  /**
+   * The youtube ID (e. g. CQYypFMTQcE)
+   */
+  youtube: string | null = null
 
-    /**
-     * The file name of the YAML file.
-     *
-     * @type {string}
-     */
-    this.yamlFile = 'info.yml'
+  /**
+   * The file name of the YAML file.
+   */
+  yamlFile: string = 'info.yml'
 
-    /**
-     * All in the YAML file “info.yml” allowed properties (keys).
-     *
-     * @type {array}
-     */
-    this.allowedProperties = [
-      'alias',
-      'arranger',
-      'artist',
-      'audio',
-      'composer',
-      'country',
-      'description',
-      'genre',
-      'lyricist',
-      'musescore',
-      'source',
-      'subtitle',
-      'title',
-      'wikidata',
-      'wikipedia',
-      'year',
-      'youtube'
-    ]
+  /**
+   * All in the YAML file “info.yml” allowed properties (keys).
+   */
+  allowedProperties: string[] = [
+    'alias',
+    'arranger',
+    'artist',
+    'audio',
+    'composer',
+    'country',
+    'description',
+    'genre',
+    'lyricist',
+    'musescore',
+    'source',
+    'subtitle',
+    'title',
+    'wikidata',
+    'wikipedia',
+    'year',
+    'youtube'
+  ]
+
+  /**
+   * The path of then parent song folder.
+   */
+  folder: string
+
+  /**
+   * A Javascript object representation of the `info.yml` file.
+   */
+  private rawYaml_: RawYamlData
+
+  /**
+   * @param folder - Path of the song folder.
+   */
+  constructor (folder: string) {
 
     if (!fs.existsSync(folder)) {
       throw new Error(util.format('Song folder doesn’t exist: %s', folder))
     }
 
-    /**
-     * The path of then parent song folder.
-     *
-     * @type {string}
-     */
     this.folder = folder
 
     const ymlFile = path.join(folder, this.yamlFile)
@@ -417,20 +431,31 @@ class SongMetaData {
       throw new Error(util.format('YAML file could not be found: %s', ymlFile))
     }
 
-    /**
-     * A Javascript object representation of the `info.yml` file.
-     *
-     * @type {Object}
-     * @private
-     */
-    this.rawYaml_ = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+    this.rawYaml_ = <RawYamlData> yaml.load(fs.readFileSync(ymlFile, 'utf8'))
 
     for (const key in this.rawYaml_) {
       if (!this.allowedProperties.includes(key)) {
         throw new Error(util.format('Unsupported key: %s', key))
       }
-      this[key] = this.rawYaml_[key]
     }
+
+    this.alias = this.rawYaml_.alias
+    this.arranger =  this.rawYaml_.arranger
+    this.artist =  this.rawYaml_.artist
+    this.audio = this.rawYaml_.audio
+    this.composer =  this.rawYaml_.composer
+    this.country = this.rawYaml_.country
+    this.description = this.rawYaml_.description
+    this.genre = this.rawYaml_.genre
+    this.lyricist =  this.rawYaml_.lyricist
+    this.musescore = this.rawYaml_.musescore
+    this.source =  this.rawYaml_.source
+    this.subtitle =  this.rawYaml_.subtitle
+    this.title = this.rawYaml_.title
+    this.wikidata =  this.rawYaml_.wikidata
+    this.wikipedia = this.rawYaml_.wikipedia
+    this.year =  this.rawYaml_.year
+    this.youtube =  this.rawYaml_.youtube
 
     if (this.wikidata) {
       const wikidataID = parseInt(this.wikidata)
@@ -443,7 +468,6 @@ class SongMetaData {
           )
         )
       }
-      return wikidataID
     }
   }
 
@@ -463,57 +487,93 @@ class SongMetaData {
  */
 class Song {
   /**
-   * @param {string} songPath - The path of the directory containing the song
+   * The directory containing the song files. For example
+   * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
+   */
+  folder: string
+
+  /**
+   * The character of the alphabetical folder. The song folders must
+   * be placed in alphabetical folders.
+   */
+  abc: string
+
+  /**
+   * The songId is the name of the directory which contains all song
+   * files. It is used to sort the songs. It must be unique along all
+   * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
+   */
+  songId: string
+
+  /**
+   * An instance of the class SongMetaData().
+   */
+  metaData: SongMetaData
+
+  /**
+   * An instance of the class SongMetaDataCombined().
+   */
+  metaDataCombined: SongMetaDataCombined
+
+  /**
+   * The slides folder
+   */
+  folderSlides: Folder
+
+  /**
+   * Directory to store intermediate files for the projector app
+   * (*.svg, *.json).
+   */
+  projectorPath: string
+
+  /**
+   * The piano folder
+   */
+  folderPiano: Folder | null
+
+  /**
+   * Directory to store intermediate files for the piano score (*.eps).
+   */
+  pianoPath: string
+
+  /**
+   * Path of the MuseScore file 'projector.mscx', relative to the base folder
+   * of the song collection.
+   */
+  mscxProjector: string
+
+  /**
+   * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
+   * or 'lead.mscx', relative to the base folder
+   * of the song collection.
+   */
+  mscxPiano: string
+
+  /**
+   * An array of piano score pages in the EPS format.
+   */
+  pianoFiles: string[]
+
+  /**
+   * An array of slides file in the SVG format. For example:
+   * `[ '01.svg', '02.svg' ]`
+   */
+  slidesFiles: string[]
+
+  /**
+   * @param songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
-   * @param {string} projectorPath - Directory to store intermediate files for
+   * @param projectorPath - Directory to store intermediate files for
    *   the projector app (*.svg, *.json).
-   * @param {string} pianoPath - Directory to store intermediate files for
+   * @param pianoPath - Directory to store intermediate files for
    *   the piano score (*.eps).
    */
-  constructor (songPath, projectorPath, pianoPath) {
-    /**
-     * The directory containing the song files. For example
-     * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
-     *
-     * @type {string}
-     */
+  constructor (songPath: string, projectorPath: string, pianoPath: string) {
     this.folder = this.getSongFolder_(songPath)
-
-    /**
-     * The character of the alphabetical folder. The song folders must
-     * be placed in alphabetical folders.
-     *
-     * @type {string}
-     */
     this.abc = this.recognizeABCFolder_(this.folder)
-
-    /**
-     * The songId is the name of the directory which contains all song
-     * files. It is used to sort the songs. It must be unique along all
-     * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
-     *
-     * @type {string}
-     */
     this.songId = path.basename(this.folder)
-
-    /**
-     * An instance of the class SongMetaData().
-     * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
-     */
     this.metaData = new SongMetaData(this.folder)
-
-    /**
-     * An instance of the class SongMetaDataCombined().
-     * @type {module:@bldr/songbook-intermediate-files~SongMetaDataCombined}
-     */
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
-
-    /**
-     * The slides folder
-     *
-     * @type {module:@bldr/songbook-intermediate-files~Folder}
-     */
-    this.folderSlides = null
 
     /**
      * Directory to store intermediate files for the projector app
@@ -585,15 +645,13 @@ class Song {
   /**
    * Get the song folder.
    *
-   * @param {string} songPath - The path of the directory containing the song
+   * @param songPath - The path of the directory containing the song
    *   files or a path of a file inside the song folder (not nested in
    *   subfolders) or a non-existing song path.
    *
-   * @return {string} The path of the parent directory of the song.
-   *
-   * @private
+   * @return The path of the parent directory of the song.
    */
-  getSongFolder_ (songPath) {
+  private getSongFolder_ (songPath: string): string {
     try {
       const stat = fs.lstatSync(songPath)
       if (stat.isDirectory()) {
@@ -601,19 +659,16 @@ class Song {
       } else if (stat.isFile()) {
         return path.dirname(songPath)
       }
-    } catch (error) {
-      return songPath.replace(`${path.sep}info.yml`, '')
-    }
+    } catch (error) {}
+    return songPath.replace(`${path.sep}info.yml`, '')
   }
 
   /**
-   * @param {string} folder - The directory containing the song files.
+   * @param folder - The directory containing the song files.
    *
-   * @return {string} A single character
-   *
-   * @private
+   * @return A single character
    */
-  recognizeABCFolder_ (folder) {
+  private recognizeABCFolder_ (folder: string): string {
     const pathSegments = folder.split(path.sep)
     const abc = pathSegments[pathSegments.length - 2]
     return abc
@@ -623,14 +678,12 @@ class Song {
    * Detect a file inside the song folder. Throw an exception if the
    * file doesn’t exist.
    *
-   * @param {string} file - A filename of a file inside the song folder.
+   * @param file - A filename of a file inside the song folder.
    *
    * @return A joined path of the file relative to the song collection
    *   base dir.
-   *
-   * @private
    */
-  detectFile_ (file) {
+  private detectFile_ (...file: string[]): string {
     let absPath
     for (const argument of arguments) {
       absPath = path.join(this.folder, argument)
@@ -641,7 +694,7 @@ class Song {
     throw new Error(util.format('File doesn’t exist: %s', absPath))
   }
 
-  toJSON () {
+  toJSON (): object {
     return {
       abc: this.abc,
       folder: this.folder,
@@ -659,7 +712,7 @@ class Song {
  * @returns {object} An object indexed with the song ID containing the song
  * objects.
  */
-function collectSongs (basePath) {
+function collectSongs (basePath: string) {
   const songsPaths = glob.sync('info.yml', { cwd: basePath, matchBase: true })
   const songs = {}
   for (const songPath of songsPaths) {
@@ -683,34 +736,31 @@ function collectSongs (basePath) {
  */
 class Library extends CoreLibrary {
   /**
-   * @param {string} - The base path of the song library
+   * The base path of the song library
    */
-  constructor (basePath) {
-    super(collectSongs(basePath))
+  basePath: string
 
-    /**
-     * The base path of the song library
-     *
-     * @type {string}
-     */
+  /**
+   * @param basePath - The base path of the song library
+   */
+  constructor (basePath: string) {
+    super(collectSongs(basePath))
     this.basePath = basePath
   }
 
   /**
    * Identify a song folder by searching for a file named “info.yml.”
-   *
-   * @private
    */
-  detectSongs_ () {
+  private detectSongs_ () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
   }
 
   /**
-   * @param {string} listFile
+   * @param listFile
    *
-   * @returns {pbject}
+   * @returns {object}
    */
-  loadSongList (listFile) {
+  loadSongList (listFile: string) {
     const songIds = parseSongIDList(listFile)
     const songs = {}
     for (const songId of songIds) {
@@ -726,10 +776,8 @@ class Library extends CoreLibrary {
 
   /**
    * Return only the existing ABC folders.
-   *
-   * @return {Array}
    */
-  getABCFolders_ () {
+  getABCFolders_ (): string[] {
     const abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
     return abc.filter((file) => {
       const folder = path.join(this.basePath, file)
@@ -747,13 +795,14 @@ class Library extends CoreLibrary {
  */
 class TextFile {
   /**
-   * @param {string} path The path of the text file.
+   * The path of the text file.
    */
-  constructor (path) {
-    /**
-     * The path of the text file.
-     * @type {string}
-     */
+  path: string
+
+  /**
+   * @param path The path of the text file.
+   */
+  constructor (path: string) {
     this.path = path
     this.flush()
   }
@@ -761,18 +810,16 @@ class TextFile {
   /**
    * Append content to the text file.
    *
-   * @param {string} content - Content to append to the text file.
+   * @param content - Content to append to the text file.
    */
-  append (content) {
+  append (content: string) {
     fs.appendFileSync(this.path, content)
   }
 
   /**
    * Read the whole text file.
-   *
-   * @return {string}
    */
-  read () {
+  read (): string {
     return fs.readFileSync(this.path, { encoding: 'utf8' })
   }
 
@@ -797,14 +844,20 @@ class TextFile {
  */
 class Sqlite {
   /**
-   * @param {string} dbFile - The path of the Sqlite database.
+   * The path of the Sqlite database.
    */
-  constructor (dbFile) {
-    /**
-     * The path of the Sqlite database.
-     *
-     * @type {string}
-     */
+  dbFile: string
+
+  /**
+   * A instance of the class “Sqlite3”.
+   */
+  db: Database
+
+  /**
+   * @param dbFile - The path of the Sqlite database.
+   */
+  constructor (dbFile: string) {
+
     this.dbFile = dbFile
 
     /**
@@ -827,10 +880,10 @@ class Sqlite {
   /**
    * Insert a hash value of a file.
    *
-   * @param {string} filename - Name or path of a file.
-   * @param {string} hash - The sha1 hash of the content of the file.
+   * @param filename - Name or path of a file.
+   * @param hash - The sha1 hash of the content of the file.
    */
-  insert (filename, hash) {
+  insert (filename: string, hash: string) {
     this.db
       .prepare('INSERT INTO hashes values ($filename, $hash)')
       .run({ filename: filename, hash: hash })
@@ -839,9 +892,9 @@ class Sqlite {
   /**
    * Get the hast value of a file.
    *
-   * @param {string} filename - Name or path of a file.
+   * @param filename - Name or path of a file.
    */
-  select (filename) {
+  select (filename: string) {
     return this.db
       .prepare('SELECT * FROM hashes WHERE filename = $filename')
       .get({ filename: filename })
@@ -850,10 +903,10 @@ class Sqlite {
   /**
    * Update the hash value of a file.
    *
-   * @param {string} filename - Name or path of a file.
-   * @param {string} hash - The sha1 hash of the content of the file.
+   * @param filename - Name or path of a file.
+   * @param hash - The sha1 hash of the content of the file.
    */
-  update (filename, hash) {
+  update (filename: string, hash: string) {
     this.db
       .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
       .run({ filename: filename, hash: hash })
@@ -871,19 +924,21 @@ class Sqlite {
  * Monitor files changes
  */
 class FileMonitor {
+
+  db: Sqlite
   /**
-   * @param {string} dbFile - The path where to store the Sqlite database.
+   * @param dbFile - The path where to store the Sqlite database.
    */
-  constructor (dbFile) {
+  constructor (dbFile: string) {
     this.db = new Sqlite(dbFile)
   }
 
   /**
    * Build the sha1 hash of a file.
    *
-   * @param {string} filename - The path of the file.
+   * @param filename - The path of the file.
    */
-  hashSHA1 (filename) {
+  hashSHA1 (filename: string) {
     return crypto
       .createHash('sha1')
       .update(
@@ -895,11 +950,9 @@ class FileMonitor {
   /**
    * Check for file modifications
    *
-   * @param {string} filename - Path to the file.
-   *
-   * @returns {boolean}
+   * @param filename - Path to the file.
    */
-  isModified (filename) {
+  isModified (filename: string): boolean {
     filename = path.resolve(filename)
     if (!fs.existsSync(filename)) {
       return false
@@ -946,13 +999,27 @@ class FileMonitor {
  * within a song a piano accompaniment must not have more than four
  * EPS files.
  */
-class PianoScore {
+export class PianoScore {
+
   /**
-   * @param {module:@bldr/songbook-intermediate-files~Library} library - An instance of the class “Library()”
-   * @param {boolean} groupAlphabetically
-   * @param {boolean} pageTurnOptimized
+   * A temporary file path where the content of the TeX file gets stored.
    */
-  constructor (library, groupAlphabetically = true, pageTurnOptimized = true) {
+  texFile: TextFile
+
+  /**
+   * An instance of the class “Library()”.
+   */
+  library: Library
+
+  groupAlphabetically: boolean
+  pageTurnOptimized: boolean
+
+  /**
+   * @param library - An instance of the class “Library()”
+   * @param groupAlphabetically
+   * @param pageTurnOptimized
+   */
+  constructor (library: Library, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
     /**
      * A temporary file path where the content of the TeX file gets stored.
      *
@@ -981,12 +1048,12 @@ class PianoScore {
   /**
    * Generate TeX markup. Generate a TeX command prefixed with \tmp.
    *
-   * @param {string} command
-   * @param {string} value
+   * @param command
+   * @param value
    *
-   * @return {string} A TeX markup, for example: \tmpcommand{value}\n
+   * @return A TeX markup, for example: \tmpcommand{value}\n
    */
-  static texCmd (command, value) {
+  static texCmd (command: string, value: string): string {
     let markupValue
     if (value) {
       markupValue = `{${value}}`
@@ -996,7 +1063,7 @@ class PianoScore {
     return `\\tmp${command}${markupValue}\n`
   }
 
-  static sanitize (markup) {
+  static sanitize (markup: string): string {
     if (!markup) return ''
     return markup.replace('&', '\\&')
   }
@@ -1004,13 +1071,13 @@ class PianoScore {
   /**
    * Fill a certain number of pages with piano score files.
    *
-   * @param {module:@bldr/songbook-intermediate-files~PianoFilesCountTree} countTree - Piano scores grouped by page number.
+   * @param countTree - Piano scores grouped by page number.
    * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
-   * @param {number} pageCount - Number of pages to group together.
+   * @param pageCount - Number of pages to group together.
    *
    * @returns {module:@bldr/songbook-intermediate-files~songs} An array of song objects, which fit in a given page number
    */
-  static selectSongs (countTree, songs, pageCount) {
+  static selectSongs (countTree: PianoFilesCountTree, songs, pageCount: number) {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
         const song = countTree.shift(i)
@@ -1103,20 +1170,13 @@ class PianoScore {
   /**
    * Read the content of a text file.
    *
-   * @param {filename} The name of the text (TeX) file inside this package
-   *
-   * @returns {string}
-   *
-   * @private
+   * @param The name of the text (TeX) file inside this package
    */
-  read_ (filename) {
+  private read_ (filename: string): string {
     return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
   }
 
-  /**
-   * @private
-   */
-  spawnTex_ (texFile, cwd) {
+  private spawnTex_ (texFile: string, cwd: string) {
     // Error on Mac OS: conversion of the eps files to pdf files doesn’t work.
     // not allowed in restricted mode.
     // --shell-escape
@@ -1194,36 +1254,33 @@ class PianoScore {
  */
 class IntermediateSong extends Song {
   /**
-   * @param {string} songPath - The path of the directory containing the song
+   * A instance of the FileMonitor class.
+   */
+  fileMonitor: FileMonitor
+
+  /**
+   * @param songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
-   * @param {string} projectorPath - Directory to store intermediate files for
+   * @param projectorPath - Directory to store intermediate files for
    *   the projector app (*.svg, *.json).
-   * @param {string} pianoPath - Directory to store intermediate files for
+   * @param pianoPath - Directory to store intermediate files for
    *   the piano score (*.eps).
-   * @param {module:@bldr/songbook-intermediate-files~FileMonitor} fileMonitor - A instance
+   * @param fileMonitor - A instance
    * of the FileMonitor() class.
    */
-  constructor (songPath, projectorPath, pianoPath, fileMonitor) {
+  constructor (songPath: string, projectorPath: string, pianoPath: string, fileMonitor: FileMonitor) {
     super(songPath, projectorPath, pianoPath)
-
-    /**
-     * A instance of the FileMonitor class.
-     *
-     * @type {module:@bldr/songbook-intermediate-files~FileMonitor}
-     */
     this.fileMonitor = fileMonitor
   }
 
   /**
    * Format one image file of a piano score in the TeX format.
    *
-   * @param {number} index The index number of the array position
+   * @param index The index number of the array position
    *
-   * @return {string} TeX markup for one EPS image file of a piano score.
-   *
-   * @private
+   * @return TeX markup for one EPS image file of a piano score.
    */
-  formatPianoTeXEpsFile_ (index) {
+  private formatPianoTeXEpsFile_ (index: number): string {
     let subFolder
     if (!this.pianoPath) {
       subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
@@ -1251,7 +1308,7 @@ class IntermediateSong extends Song {
    * \tmpimage{s/Swing-low/piano/piano_3.eps}
    * </pre><code>
    */
-  formatPianoTex () {
+  formatPianoTex (): string {
     if (this.pianoFiles.length === 0) {
       throw new Error(util.format(
         'The song “%s” has no EPS piano score files.',
@@ -1290,7 +1347,7 @@ class IntermediateSong extends Song {
    *
    * @private
    */
-  generatePDF_ (source, destination = '') {
+  generatePDF_ (source: string, destination: string = '') {
     if (destination === '') {
       destination = source
     }
@@ -1364,7 +1421,7 @@ class IntermediateSong extends Song {
    * @param {boolean} force - Force the regeneration of intermediate files.
    */
   generateIntermediateFiles (mode = 'all', force = false) {
-    const status = { changed: {}, generated: {} }
+    const status: Status = { changed: <StatusChanged> {}, generated: <StatusGenerated> {} }
 
     status.folder = this.folder
     status.folderName = path.basename(this.folder)
@@ -1509,15 +1566,37 @@ class PianoFilesCountTree {
   }
 }
 
-class IntermediateLibrary extends Library {
+export class IntermediateLibrary extends Library {
+
   /**
-   * @param {string} basePath - The base path of the song library
-   * @param {string} projectorPath - Directory to store intermediate files for
+   * Directory to store intermediate files for the projector app
+   * (*.svg, *.json).
+   */
+  projectorPath: string
+
+  /**
+   * Directory to store intermediate files for the piano score (*.eps).
+   */
+  pianoPath: string
+
+  /**
+   * A instance of the FileMonitor class.
+   */
+  fileMonitor: FileMonitor
+
+  /**
+   * @type {object}
+   */
+  songs = this.collectSongs_()
+
+  /**
+   * @param basePath - The base path of the song library
+   * @param projectorPath - Directory to store intermediate files for
    *   the projector app (*.svg, *.json).
-   * @param {string} pianoPath - Directory to store intermediate files for
+   * @param pianoPath - Directory to store intermediate files for
    *   the piano score (*.eps).
    */
-  constructor (basePath, projectorPath, pianoPath) {
+  constructor (basePath: string, projectorPath: string, pianoPath: string) {
     super(basePath)
 
     /**
@@ -1682,7 +1761,7 @@ class IntermediateLibrary extends Library {
  * Export the intermediate SVG files to the media server. Adjust the
  * `info.yml` and copy it to the destination folder of the media server.
  */
-function exportToMediaServer (library) {
+export function exportToMediaServer (library: IntermediateLibrary) {
   // NB = Notenbeispiele -> SVG
   // /var/data/baldr/media/Lieder/NB
   // There exists a folder for the audio files: HB (Hörbeispiele)
@@ -1692,7 +1771,7 @@ function exportToMediaServer (library) {
   } catch (error) {}
   fs.ensureDirSync(dirBase)
 
-  function exportSong (song) {
+  function exportSong (song: Song) {
     // /var/data/baldr/media/Lieder/NB/a
     const dirAbc = path.join(dirBase, song.abc)
     fs.ensureDirSync(dirAbc)
@@ -1717,7 +1796,7 @@ function exportToMediaServer (library) {
       }
     }
 
-    const yamlMarkup = ['---', yaml.safeDump(rawYaml, jsYamlConfig)]
+    const yamlMarkup = ['---', yaml.dump(rawYaml, jsYamlConfig)]
     fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
   }
 
@@ -1730,7 +1809,7 @@ function exportToMediaServer (library) {
  * Build the Vue app. All image files must be copied into the Vue working
  * directory.
  */
-function buildVueApp () {
+export function buildVueApp () {
   const process = childProcess.spawnSync('npm', ['run', 'build'], {
     cwd: config.songbook.vueAppPath,
     encoding: 'utf-8',
@@ -1739,8 +1818,3 @@ function buildVueApp () {
   console.log(process.stdout)
   console.log(process.stderr)
 }
-
-exports.buildVueApp = buildVueApp
-exports.exportToMediaServer = exportToMediaServer
-exports.IntermediateLibrary = IntermediateLibrary
-exports.PianoScore = PianoScore
