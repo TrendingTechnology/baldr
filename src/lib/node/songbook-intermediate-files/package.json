@@ -19,6 +19,7 @@
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/songbook-core": "*",
+    "@bldr/type-definitions": "*",
     "better-sqlite3": "7.1.2",
     "chalk": "4.1.0",
     "fs-extra": "9.1.0",

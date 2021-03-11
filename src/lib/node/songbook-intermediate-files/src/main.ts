@@ -22,8 +22,16 @@ import Sqlite3, { Database } from 'better-sqlite3'
 import yaml from 'js-yaml'
 
 // Project packages.
-import { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } from '@bldr/songbook-core'
+import {
+  AlphabeticalSongsTree,
+  SongMetaDataCombined,
+  CoreLibrary,
+  SongCollection,
+  Song,
+  SongMetaData
+} from '@bldr/songbook-core'
 import { log } from '@bldr/core-node'
+import { StringIndexedObject } from '@bldr/type-definitions'
 import { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig } from '@bldr/core-browser'
 
 /**
@@ -35,6 +43,15 @@ import config from '@bldr/config'
  * An array of song objects.
  * @typedef {module:@bldr/songbook-intermediate-files~Song[]} songs
  */
+
+type ExtendedSongList = ExtendedSong[]
+type IntermediateSongList = IntermediateSong[]
+type ExtendedSongCollection = {
+  [songId: string]: ExtendedSong
+}
+type IntermediaSongCollection = {
+  [songId: string]: IntermediateSong
+}
 
 /*******************************************************************************
  * Functions
@@ -90,7 +107,7 @@ interface StatusChanged {
  */
 interface StatusGenerated {
   piano: string[]
-  projektor: string
+  projector: string | undefined
   slides: string []
 }
 
@@ -156,7 +173,7 @@ class Message {
     throw new Error('No configuration file found.')
   }
 
-  songFolder (status: Status, song: Song) {
+  songFolder (status: Status, song: ExtendedSong) {
     let forced
     if (status.force) {
       forced = ' ' + chalk.red('(forced)')
@@ -289,93 +306,24 @@ interface RawYamlData {
  *     title: Lemon tree
  *     year: 1965
  */
-class SongMetaData {
-  /**
-   * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
-   * lieber Mai, und mache”
-   */
-  alias: string | null = null
-
-  /**
-   * The arranger of a song.
-   */
-  arranger: string | null = null
-
-  /**
-   * The artist of a song.
-   */
-  artist: string | null = null
-
-  /**
-   * A media server URI of a audio file for example (id:A_Song).
-   */
-  audio: string | null = null
-
-  /**
-   * The composer of a song.
-   */
-  composer: string | null = null
-
-  /**
-   * The country the song is from.
-   */
-  country: string | null = null
-
-  /**
-   * A longer text which describes the song.
-   */
-  description: string | null = null
-
-  /**
-   * The genre of the song.
-   */
-  genre: string | null = null
-
-  /**
-   * The lyricist of the song.
-   */
-  lyricist: string | null = null
-
-  /**
-   * The MuseScore score ID from musescore.com, for example the score ID
-   * from https://musescore.com/user/1601631/scores/1299601 is 1299601.
-   */
-  musescore: string | null = null
-
-  /**
-   * A text or a URL which describes the source of a song.
-   */
-  source: string | null = null
-
-  /**
-   * The subtitle of a song.
-   */
-  subtitle: string | null = null
-
-  /**
-   * The title of a song.
-   */
-  title: string | null = null
-
-  /**
-   * The Wikidata data item ID (without the Q prefix)
-   */
-  wikidata: string | null = null
-
-  /**
-   * ID of a wikipedia article (e. g. en:A_Article)
-   */
-  wikipedia: string | null = null
-
-  /**
-   * The year the song was released.
-   */
-  year: string | null = null
-
-  /**
-   * The youtube ID (e. g. CQYypFMTQcE)
-   */
-  youtube: string | null = null
+class ExtendedSongMetaData implements SongMetaData {
+  alias: string
+  arranger: string
+  artist: string
+  audio: string
+  composer: string
+  country: string
+  description: string
+  genre: string
+  lyricist: string
+  musescore: string
+  source: string
+  subtitle: string
+  title: string
+  wikidata: string
+  wikipedia: string
+  year: string
+  youtube: string
 
   /**
    * The file name of the YAML file.
@@ -413,7 +361,7 @@ class SongMetaData {
   /**
    * A Javascript object representation of the `info.yml` file.
    */
-  private rawYaml_: RawYamlData
+  rawYaml_: RawYamlData
 
   /**
    * @param folder - Path of the song folder.
@@ -471,13 +419,24 @@ class SongMetaData {
     }
   }
 
-  toJSON () {
-    const output = {}
-    for (const key of this.allowedProperties) {
-      if (this[key]) {
-        output[key] = this[key]
-      }
-    }
+  toJSON (): { [index: string]: string } {
+    const output: { [index: string]: string } = {}
+    if (this.alias) output.alias = this.alias
+    if (this.arranger) output.arranger = this.arranger
+    if (this.artist) output.artist = this.artist
+    if (this.audio) output.audio = this.audio
+    if (this.composer) output.composer = this.composer
+    if (this.country) output.country = this.country
+    if (this.description) output.description = this.description
+    if (this.genre) output.genre = this.genre
+    if (this.lyricist) output.lyricist = this.lyricist
+    if (this.musescore) output.musescore = this.musescore
+    if (this.source) output.source = this.source
+    if (this.subtitle) output.subtitle = this.subtitle
+    if (this.wikidata) output.wikidata = this.wikidata
+    if (this.wikipedia) output.wikipedia = this.wikipedia
+    if (this.year) output.year = this.year
+    if (this.youtube) output.youtube = this.youtube
     return output
   }
 }
@@ -485,36 +444,36 @@ class SongMetaData {
 /**
  * One song
  */
-class Song {
+class ExtendedSong implements Song {
   /**
    * The directory containing the song files. For example
    * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
    */
-  folder: string
+   folder: string
 
-  /**
-   * The character of the alphabetical folder. The song folders must
-   * be placed in alphabetical folders.
-   */
-  abc: string
+   /**
+    * The character of the alphabetical folder. The song folders must
+    * be placed in alphabetical folders.
+    */
+   abc: string
 
-  /**
-   * The songId is the name of the directory which contains all song
-   * files. It is used to sort the songs. It must be unique along all
-   * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
-   */
-  songId: string
+   /**
+    * The songId is the name of the directory which contains all song
+    * files. It is used to sort the songs. It must be unique along all
+    * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
+    */
+   songId: string
 
-  /**
-   * An instance of the class SongMetaData().
-   */
-  metaData: SongMetaData
+   /**
+    * An instance of the class SongMetaData().
+    * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
+    */
+   metaData: ExtendedSongMetaData
 
-  /**
-   * An instance of the class SongMetaDataCombined().
-   */
-  metaDataCombined: SongMetaDataCombined
-
+   /**
+    * An instance of the class SongMetaDataCombined().
+    */
+   metaDataCombined: SongMetaDataCombined
   /**
    * The slides folder
    */
@@ -524,17 +483,17 @@ class Song {
    * Directory to store intermediate files for the projector app
    * (*.svg, *.json).
    */
-  projectorPath: string
+  projectorPath: string | null
 
   /**
    * The piano folder
    */
-  folderPiano: Folder | null
+  folderPiano: Folder
 
   /**
    * Directory to store intermediate files for the piano score (*.eps).
    */
-  pianoPath: string
+  pianoPath: string | null
 
   /**
    * Path of the MuseScore file 'projector.mscx', relative to the base folder
@@ -568,19 +527,13 @@ class Song {
    * @param pianoPath - Directory to store intermediate files for
    *   the piano score (*.eps).
    */
-  constructor (songPath: string, projectorPath: string, pianoPath: string) {
+  constructor (songPath: string, projectorPath: string | null = null, pianoPath: string | null = null) {
     this.folder = this.getSongFolder_(songPath)
     this.abc = this.recognizeABCFolder_(this.folder)
     this.songId = path.basename(this.folder)
-    this.metaData = new SongMetaData(this.folder)
+    this.metaData = new ExtendedSongMetaData(this.folder)
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
-    /**
-     * Directory to store intermediate files for the projector app
-     * (*.svg, *.json).
-     *
-     * @type {string}
-     */
     this.projectorPath = projectorPath
     if (this.projectorPath) {
       this.projectorPath = this.getSongFolder_(this.projectorPath)
@@ -589,18 +542,6 @@ class Song {
       this.folderSlides = new Folder(this.folder, 'slides')
     }
 
-    /**
-     * The piano folder
-     *
-     * @type {module:@bldr/songbook-intermediate-files~Folder}
-     */
-    this.folderPiano = null
-
-    /**
-     * Directory to store intermediate files for the piano score (*.eps).
-     *
-     * @type {string}
-     */
     this.pianoPath = pianoPath
     if (this.pianoPath) {
       this.pianoPath = this.getSongFolder_(this.pianoPath)
@@ -608,37 +549,9 @@ class Song {
     } else {
       this.folderPiano = new Folder(this.folder, 'piano')
     }
-
-    /**
-     * Path of the MuseScore file 'projector.mscx', relative to the base folder
-     * of the song collection.
-     *
-     * @type string
-     */
     this.mscxProjector = this.detectFile_('projector.mscx')
-
-    /**
-     * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
-     * or 'lead.mscx', relative to the base folder
-     * of the song collection.
-     *
-     * @type string
-     */
     this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
-
-    /**
-     * An array of piano score pages in the EPS format.
-     *
-     * @type {array}
-     */
     this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
-
-    /**
-     * An array of slides file in the SVG format. For example:
-     * `[ '01.svg', '02.svg' ]`
-     *
-     * @type {array}
-     */
     this.slidesFiles = listFiles(this.folderSlides.get(), '.svg')
   }
 
@@ -709,14 +622,14 @@ class Song {
  * Collect all songs of a song tree by walking through the folder tree
  * structur.
  *
- * @returns {object} An object indexed with the song ID containing the song
+ * @returns An object indexed with the song ID containing the song
  * objects.
  */
-function collectSongs (basePath: string) {
+function collectSongs (basePath: string): ExtendedSongCollection {
   const songsPaths = glob.sync('info.yml', { cwd: basePath, matchBase: true })
-  const songs = {}
+  const songs: ExtendedSongCollection = {}
   for (const songPath of songsPaths) {
-    const song = new Song(path.join(basePath, songPath))
+    const song = new ExtendedSong(path.join(basePath, songPath))
     if (song.songId in songs) {
       throw new Error(
         util.format('A song with the same songId already exists: %s',
@@ -744,14 +657,14 @@ class Library extends CoreLibrary {
    * @param basePath - The base path of the song library
    */
   constructor (basePath: string) {
-    super(collectSongs(basePath))
+    super(<SongCollection> collectSongs(basePath))
     this.basePath = basePath
   }
 
   /**
    * Identify a song folder by searching for a file named “info.yml.”
    */
-  private detectSongs_ () {
+  protected detectSongs_ () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
   }
 
@@ -762,7 +675,7 @@ class Library extends CoreLibrary {
    */
   loadSongList (listFile: string) {
     const songIds = parseSongIDList(listFile)
-    const songs = {}
+    const songs: SongCollection = {}
     for (const songId of songIds) {
       if ({}.hasOwnProperty.call(this.songs, songId)) {
         songs[songId] = this.songs[songId]
@@ -777,7 +690,7 @@ class Library extends CoreLibrary {
   /**
    * Return only the existing ABC folders.
    */
-  getABCFolders_ (): string[] {
+  private getABCFolders_ (): string[] {
     const abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
     return abc.filter((file) => {
       const folder = path.join(this.basePath, file)
@@ -1000,17 +913,11 @@ class FileMonitor {
  * EPS files.
  */
 export class PianoScore {
-
   /**
    * A temporary file path where the content of the TeX file gets stored.
    */
   texFile: TextFile
-
-  /**
-   * An instance of the class “Library()”.
-   */
-  library: Library
-
+  library: IntermediateLibrary
   groupAlphabetically: boolean
   pageTurnOptimized: boolean
 
@@ -1019,7 +926,7 @@ export class PianoScore {
    * @param groupAlphabetically
    * @param pageTurnOptimized
    */
-  constructor (library: Library, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
+  constructor (library: IntermediateLibrary, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
     /**
      * A temporary file path where the content of the TeX file gets stored.
      *
@@ -1053,7 +960,7 @@ export class PianoScore {
    *
    * @return A TeX markup, for example: \tmpcommand{value}\n
    */
-  static texCmd (command: string, value: string): string {
+  static texCmd (command: string, value?: string): string {
     let markupValue
     if (value) {
       markupValue = `{${value}}`
@@ -1072,12 +979,12 @@ export class PianoScore {
    * Fill a certain number of pages with piano score files.
    *
    * @param countTree - Piano scores grouped by page number.
-   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
+   * @param songs - An array of song objects.
    * @param pageCount - Number of pages to group together.
    *
-   * @returns {module:@bldr/songbook-intermediate-files~songs} An array of song objects, which fit in a given page number
+   * @returns An array of song objects, which fit in a given page number
    */
-  static selectSongs (countTree: PianoFilesCountTree, songs, pageCount: number) {
+  static selectSongs (countTree: PianoFilesCountTree, songs: IntermediateSongList, pageCount: number): IntermediateSongList {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
         const song = countTree.shift(i)
@@ -1098,11 +1005,11 @@ export class PianoScore {
   /**
    * Build the TeX markup of an array of song objects
    *
-   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
+   * @param songs - An array of song objects.
    *
    * @return {string}
    */
-  static buildSongList (songs, pageTurnOptimized = false) {
+  static buildSongList (songs: IntermediateSongList, pageTurnOptimized = false): string {
     const doublePages = []
     if (pageTurnOptimized) {
       let firstPage = true
@@ -1152,17 +1059,17 @@ export class PianoScore {
    *
    * @returns {string}
    */
-  build () {
+  build (): string {
     const output = []
     const songs = this.library.toArray()
     if (this.groupAlphabetically) {
       const abcTree = new AlphabeticalSongsTree(songs)
       Object.keys(abcTree).forEach((abc) => {
         output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-        output.push(PianoScore.buildSongList(abcTree[abc], this.pageTurnOptimized))
+        output.push(PianoScore.buildSongList(<IntermediateSongList> abcTree[abc], this.pageTurnOptimized))
       })
     } else {
-      output.push(PianoScore.buildSongList(songs, this.pageTurnOptimized))
+      output.push(PianoScore.buildSongList(<IntermediateSongList> songs, this.pageTurnOptimized))
     }
     return output.join('')
   }
@@ -1252,7 +1159,7 @@ export class PianoScore {
 /**
  * Extended version of the Song class to build intermediate files.
  */
-class IntermediateSong extends Song {
+class IntermediateSong extends ExtendedSong {
   /**
    * A instance of the FileMonitor class.
    */
@@ -1268,7 +1175,7 @@ class IntermediateSong extends Song {
    * @param fileMonitor - A instance
    * of the FileMonitor() class.
    */
-  constructor (songPath: string, projectorPath: string, pianoPath: string, fileMonitor: FileMonitor) {
+  constructor (songPath: string, projectorPath: string | null, pianoPath: string | null, fileMonitor: FileMonitor) {
     super(songPath, projectorPath, pianoPath)
     this.fileMonitor = fileMonitor
   }
@@ -1342,12 +1249,10 @@ class IntermediateSong extends Song {
   /**
    * Generate form a given *.mscx file a PDF file.
    *
-   * @param {string} source - Name of the *.mscx file without the extension.
-   * @param {string} destination - Name of the PDF without the extension.
-   *
-   * @private
+   * @param source - Name of the *.mscx file without the extension.
+   * @param destination - Name of the PDF without the extension.
    */
-  generatePDF_ (source: string, destination: string = '') {
+  private generatePDF_ (source: string, destination: string = ''): string | undefined {
     if (destination === '') {
       destination = source
     }
@@ -1359,19 +1264,13 @@ class IntermediateSong extends Song {
     ])
     if (fs.existsSync(pdf)) {
       return destination + '.pdf'
-    } else {
-      return false
     }
   }
 
   /**
    * Generate svg files in a 'slides' subfolder.
-   *
-   * @param {string} folder - A song folder.
-   *
-   * @private
    */
-  generateSlides_ () {
+  private generateSlides_ (): string[] {
     const dest = this.folderSlides.get()
     const oldSVGs = listFiles(dest, '.svg')
     for (const oldSVG of oldSVGs) {
@@ -1396,10 +1295,8 @@ class IntermediateSong extends Song {
    * Generate from the MuseScore file “piano/piano.mscx” EPS files.
    *
    * @return {array} An array of EPS piano score filenames.
-   *
-   * @private
    */
-  generatePiano_ () {
+  private generatePiano_ (): string[] {
     this.folderPiano.empty()
     const dest = this.folderPiano.get()
     const pianoFile = path.join(dest, 'piano.mscx')
@@ -1416,12 +1313,21 @@ class IntermediateSong extends Song {
   /**
    * Wrapper method for all process methods of one song folder.
    *
-   * @param {string} mode - Generate all intermediate media files or only slide
+   * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
-   * @param {boolean} force - Force the regeneration of intermediate files.
+   * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode = 'all', force = false) {
-    const status: Status = { changed: <StatusChanged> {}, generated: <StatusGenerated> {} }
+  generateIntermediateFiles (mode: string = 'all', force: boolean = false): Status {
+    const status: Status = {
+      folder: '',
+      folderName: '',
+      force: false,
+      changed: <StatusChanged> {},
+      generated: <StatusGenerated> {},
+      info: {
+        title: ''
+      }
+    }
 
     status.folder = this.folder
     status.folderName = path.basename(this.folder)
@@ -1480,20 +1386,26 @@ class IntermediateSong extends Song {
  * </code></pre>
  */
 class PianoFilesCountTree {
+  private validCounts_: number[]
+  private cache: { [key: number]: IntermediateSong[] }
   /**
-   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
+   * @param songs - An array of song objects.
    */
-  constructor (songs) {
+  constructor (songs: IntermediateSongList) {
     this.validCounts_ = [1, 2, 3, 4]
+    this.cache = {
+      1: [],
+      2: [],
+      3: [],
+      4: []
+    }
     this.build_(songs)
   }
 
   /**
-   * @param {number} count - 1, 2, 3, 4
-   *
-   * @private
+   * @param count - 1, 2, 3, 4
    */
-  checkCount_ (count) {
+  private checkCount_ (count: number) {
     if (this.validCounts_.includes(count)) {
       return true
     } else {
@@ -1502,26 +1414,24 @@ class PianoFilesCountTree {
   }
 
   /**
-   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
-   *
-   * @private
+   * @param songs - An array of song objects.
    */
-  build_ (songs) {
+  private build_ (songs: IntermediateSongList) {
     for (const song of songs) {
       const count = song.pianoFiles.length
-      if (!(count in this)) this[count] = []
-      this[count].push(song)
+      if (!(count in this)) this.cache[count] = []
+      this.cache[count].push(song)
     }
   }
 
   /**
    * Sum up the number of all songs in all count categories.
    */
-  sum () {
+  sum (): number {
     let count = 0
     for (const validCount of this.validCounts_) {
       if ({}.hasOwnProperty.call(this, validCount)) {
-        count = count + this[validCount].length
+        count = count + this.cache[validCount].length
       }
     }
     return count
@@ -1530,11 +1440,11 @@ class PianoFilesCountTree {
   /**
    * Sum up the number of files of all songs in all count categories.
    */
-  sumFiles () {
+  sumFiles (): number {
     let count = 0
     for (const validCount of this.validCounts_) {
-      if ({}.hasOwnProperty.call(this, validCount)) {
-        count += validCount * this[validCount].length
+      if ({}.hasOwnProperty.call(this.cache, validCount)) {
+        count += validCount * this.cache[validCount].length
       }
     }
     return count
@@ -1545,7 +1455,7 @@ class PianoFilesCountTree {
    *
    * @return {boolean}
    */
-  isEmpty () {
+  isEmpty (): boolean {
     if (this.sum() === 0) {
       return true
     } else {
@@ -1556,18 +1466,17 @@ class PianoFilesCountTree {
   /**
    * Shift the array of songs that has ”count” number of piano files.
    *
-   * @param {number} count - 1, 2, 3, 4
+   * @param count - 1, 2, 3, 4
    *
-   * @returns {module:@bldr/songbook-intermediate-files~Song}
+   * @returns Song
    */
-  shift (count) {
+  shift (count: number) {
     this.checkCount_(count)
-    if ({}.hasOwnProperty.call(this, count)) return this[count].shift()
+    if ({}.hasOwnProperty.call(this, count)) return this.cache[count].shift()
   }
 }
 
 export class IntermediateLibrary extends Library {
-
   /**
    * Directory to store intermediate files for the projector app
    * (*.svg, *.json).
@@ -1584,10 +1493,7 @@ export class IntermediateLibrary extends Library {
    */
   fileMonitor: FileMonitor
 
-  /**
-   * @type {object}
-   */
-  songs = this.collectSongs_()
+  songs: IntermediaSongCollection = this.collectSongs_()
 
   /**
    * @param basePath - The base path of the song library
@@ -1638,11 +1544,8 @@ export class IntermediateLibrary extends Library {
     return false
   }
 
-  /**
-   * @private
-   */
-  collectSongs_ () {
-    const songs = {}
+  private collectSongs_ (): IntermediaSongCollection {
+    const songs: IntermediaSongCollection = {}
     for (const songPath of this.detectSongs_()) {
       let projectorPath = null
       if (this.projectorPath) projectorPath = path.join(this.projectorPath, songPath)
@@ -1667,14 +1570,12 @@ export class IntermediateLibrary extends Library {
   /**
    * Delete multiple files.
    *
-   * @param {array} files - An array of files to delete.
-   *
-   * @private
+   * @param files - An array of files to delete.
    */
-  deleteFiles_ (files) {
+  private deleteFiles_ (files: string[]) {
     files.forEach(
-      (file) => {
-        fs.removeSync(path.join(this.basePath, file))
+      (filePath) => {
+        fs.removeSync(path.join(this.basePath, filePath))
       }
     )
   }
@@ -1695,11 +1596,11 @@ export class IntermediateLibrary extends Library {
   /**
    * Calls the method generateIntermediateFiles on each song
    *
-   * @param {string} mode - Generate all intermediate media files or only slide
+   * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
-   * @param {boolean} force - Force the regeneration of intermediate files.
+   * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode = 'all', force = false) {
+  generateIntermediateFiles (mode: string = 'all', force: boolean = false) {
     for (const songId in this.songs) {
       const song = this.songs[songId]
       const status = song.generateIntermediateFiles(mode, force)
@@ -1710,11 +1611,11 @@ export class IntermediateLibrary extends Library {
   /**
    * Generate all intermediate media files for one song.
    *
-   * @param {string} folder - The path of the parent song folder.
-   * @param {string} mode - Generate all intermediate media files or only slide
+   * @param folder - The path of the parent song folder.
+   * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongByPath (folder, mode = 'all') {
+  updateSongByPath (folder: string, mode: string = 'all') {
     // To throw an error if the folder doesn’t exist.
     fs.lstatSync(folder)
     const song = new IntermediateSong(folder, null, null, this.fileMonitor)
@@ -1725,11 +1626,11 @@ export class IntermediateLibrary extends Library {
   /**
    * Generate all intermediate media files for one song.
    *
-   * @param {string} songId - The ID of the song (the name of the parent song folder)
+   * @param songId - The ID of the song (the name of the parent song folder)
    * @param {string} mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongBySongId (songId, mode = 'all') {
+  updateSongBySongId (songId: string, mode: string = 'all') {
     let song
     if ({}.hasOwnProperty.call(this.songs, songId)) {
       song = this.songs[songId]
@@ -1743,11 +1644,11 @@ export class IntermediateLibrary extends Library {
   /**
    * Update the whole song library.
    *
-   * @param {string} mode - Generate all intermediate media files or only slide
+   * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
-   * @param {boolean} force - Force the regeneration of intermediate files.
+   * @param force - Force the regeneration of intermediate files.
    */
-  update (mode = 'all', force = false) {
+  update (mode: string = 'all', force: boolean = false) {
     if (!['all', 'slides', 'piano'].includes(mode)) {
       throw new Error('The parameter “mode” must be one of this strings: ' +
         '“all”, “slides” or “piano”.')
@@ -1771,7 +1672,7 @@ export function exportToMediaServer (library: IntermediateLibrary) {
   } catch (error) {}
   fs.ensureDirSync(dirBase)
 
-  function exportSong (song: Song) {
+  function exportSong (song: IntermediateSong) {
     // /var/data/baldr/media/Lieder/NB/a
     const dirAbc = path.join(dirBase, song.abc)
     fs.ensureDirSync(dirAbc)
@@ -1786,22 +1687,22 @@ export function exportToMediaServer (library: IntermediateLibrary) {
       console.log(`Copy ${chalk.yellow(src)} to ${chalk.green(dest)}.`)
     }
 
-    const rawYaml = song.metaData.rawYaml_
+    const rawYaml: StringIndexedObject = <StringIndexedObject> song.metaData.rawYaml_
     rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
 
-    for (const property of song.metaDataCombined.allProperties) {
-      if (song.metaDataCombined[property]) {
-        rawYaml[`${convertCamelToSnake(property)}_combined`] = song.metaDataCombined[property]
-      }
-    }
+    // for (const property of song.metaDataCombined.allProperties) {
+    //   if (song.metaDataCombined[property]) {
+    //     rawYaml[`${convertCamelToSnake(property)}_combined`] = song.metaDataCombined[property]
+    //   }
+    // }
 
     const yamlMarkup = ['---', yaml.dump(rawYaml, jsYamlConfig)]
     fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
   }
 
   for (const song of library.toArray()) {
-    exportSong(song)
+    exportSong(<IntermediateSong> song)
   }
 }
 

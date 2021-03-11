@@ -22,7 +22,7 @@ import type { StringIndexedObject } from '@bldr/type-definitions';
  *     title: Lemon tree
  *     year: 1965
  */
-interface SongMetaData {
+export interface SongMetaData {
     /**
      * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
      * lieber Mai, und mache”
@@ -122,7 +122,7 @@ interface SongMetaData {
  *
  *
  */
-interface Song {
+export interface Song {
     /**
      * The directory containing the song files. For example
      * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
@@ -238,7 +238,7 @@ export declare class SongMetaDataCombined {
     get youtubeUrl(): string | undefined;
     toJSON(): StringIndexedObject;
 }
-declare type SongCollection = {
+export declare type SongCollection = {
     [key: string]: Song;
 };
 /**
@@ -305,4 +305,3 @@ export declare class CoreLibrary {
     getRandomSong(): Song;
     toJSON(): SongCollection;
 }
-export {};

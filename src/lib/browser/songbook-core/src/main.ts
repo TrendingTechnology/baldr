@@ -31,7 +31,7 @@ import type { StringIndexedObject } from '@bldr/type-definitions'
  *     title: Lemon tree
  *     year: 1965
  */
-interface SongMetaData {
+export interface SongMetaData {
 
   /**
    * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
@@ -149,7 +149,7 @@ interface SongMetaData {
  *
  *
  */
-interface Song {
+export interface Song {
 
   /**
    * The directory containing the song files. For example
@@ -387,7 +387,7 @@ export class SongMetaDataCombined {
   }
 }
 
-type SongCollection = { [key: string]: Song }
+export type SongCollection = { [key: string]: Song }
 
 /**
  * The song library - a collection of songs
