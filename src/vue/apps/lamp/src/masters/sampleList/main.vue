@@ -32,7 +32,6 @@ export default {
   },
   computed: {
     cssClassNotNumbered () {
-      console.log(this.samples)
       return {
         'not-numbered': this.notNumbered
       }
