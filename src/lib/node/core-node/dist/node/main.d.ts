@@ -5,7 +5,11 @@
  * @module @bldr/core-node
  */
 /**
- * Wrapper around `util.format()` and `console.log()`
+ * A wrapper function around the functions `util.format()` and `console.log()`.
+ *
+ * ```js
+ * util.format('%s:%s', 'foo', 'bar');
+ * ```
  */
 export declare function log(format: string, ...args: any): void;
 interface GitHead {

@@ -29,7 +29,11 @@ const url_1 = require("url");
 const git_rev_sync_1 = __importDefault(require("git-rev-sync"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 /**
- * Wrapper around `util.format()` and `console.log()`
+ * A wrapper function around the functions `util.format()` and `console.log()`.
+ *
+ * ```js
+ * util.format('%s:%s', 'foo', 'bar');
+ * ```
  */
 function log(format, ...args) {
     console.log(util_1.default.format(format, ...args));

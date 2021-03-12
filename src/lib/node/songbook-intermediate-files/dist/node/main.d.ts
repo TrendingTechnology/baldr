@@ -460,7 +460,7 @@ declare class IntermediateSong extends ExtendedSong {
     /**
      * Format one image file of a piano score in the TeX format.
      *
-     * @param index The index number of the array position
+     * @param index - The index number of the array position
      *
      * @return TeX markup for one EPS image file of a piano score.
      */
@@ -493,9 +493,19 @@ declare class IntermediateSong extends ExtendedSong {
      */
     private generateSlides;
     /**
+     * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
+     *
+     * @param folder - The folder containing the files to be renamed.
+     * @param filter - A string to filter the list of file names.
+     * @param newMultipartFilename - The new base name of the multipart files.
+     *
+     * @returns An array of the renamed multipart files names.
+     */
+    private renameMultipartFiles;
+    /**
      * Generate from the MuseScore file “piano/piano.mscx” EPS files.
      *
-     * @return {array} An array of EPS piano score filenames.
+     * @return An array of EPS piano score filenames.
      */
     private generatePiano_;
     /**
@@ -581,7 +591,7 @@ export declare class IntermediateLibrary extends Library {
      *
      * @param files - An array of files to delete.
      */
-    private deleteFiles_;
+    private deleteFiles;
     /**
      * Clean all intermediate media files.
      */

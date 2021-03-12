@@ -1109,7 +1109,7 @@ class IntermediateSong extends ExtendedSong {
   /**
    * Format one image file of a piano score in the TeX format.
    *
-   * @param index The index number of the array position
+   * @param index - The index number of the array position
    *
    * @return TeX markup for one EPS image file of a piano score.
    */
@@ -1192,33 +1192,45 @@ class IntermediateSong extends ExtendedSong {
    * Generate SVG files in the slides subfolder.
    */
   private generateSlides (): string[] {
-    const dest = this.folderSlides.get()
-    const oldSVGs = listFiles(dest, '.svg')
+    const subFolder = this.folderSlides.get()
+    const oldSVGs = listFiles(subFolder, '.svg')
     for (const oldSVG of oldSVGs) {
-      fs.unlinkSync(path.join(dest, oldSVG))
+      fs.unlinkSync(path.join(subFolder, oldSVG))
     }
-    const src = path.join(dest, 'projector.pdf')
+    const src = path.join(subFolder, 'projector.pdf')
     childProcess.spawnSync('pdf2svg', [
       src,
-      path.join(dest, '%02d.svg'),
+      path.join(subFolder, '%02d.svg'),
       'all'
     ])
     fs.unlinkSync(src)
 
-    const intermediateFiles = listFiles(dest, '.svg')
-    let no = 1
-    for (const oldName of intermediateFiles) {
-      const newName = formatMultiPartAssetFileName('Projector.svg', no)
-      fs.renameSync(path.join(dest, oldName), path.join(dest, newName))
-      no++
-    }
-
-    const result = listFiles(dest, '.svg')
+    const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg')
     if (!result) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
     this.slidesFiles = result
     return result
+  }
+
+  /**
+   * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
+   *
+   * @param folder - The folder containing the files to be renamed.
+   * @param filter - A string to filter the list of file names.
+   * @param newMultipartFilename - The new base name of the multipart files.
+   *
+   * @returns An array of the renamed multipart files names.
+   */
+  private renameMultipartFiles (folder: string, filter: string, newMultipartFilename: string): string[] {
+    const intermediateFiles = listFiles(folder, filter)
+    let no = 1
+    for (const oldName of intermediateFiles) {
+      const newName = formatMultiPartAssetFileName(newMultipartFilename, no)
+      fs.renameSync(path.join(folder, oldName), path.join(folder, newName))
+      no++
+    }
+    return listFiles(folder, filter)
   }
 
   /**
@@ -1287,16 +1299,13 @@ class IntermediateSong extends ExtendedSong {
    * Delete all generated files of a song folder.
    */
   cleanIntermediateFiles () {
-    const files = [
-      'piano',
-      'slides',
-      'projector.pdf'
-    ]
-    files.forEach(
-      (file) => {
-        fs.removeSync(path.join(this.folder, file))
-      }
-    )
+    this.folderSlides.remove()
+    this.folderPiano.remove()
+    fs.removeSync(path.join(this.folder, 'projector.pdf'))
+    // Old slides folder
+    fs.removeSync(path.join(this.folder, 'slides'))
+    // Old piano folder
+    fs.removeSync(path.join(this.folder, 'slides'))
   }
 }
 
@@ -1456,7 +1465,7 @@ export class IntermediateLibrary extends Library {
    *
    * @param files - An array of files to delete.
    */
-  private deleteFiles_ (files: string[]) {
+  private deleteFiles (files: string[]) {
     files.forEach(
       (filePath) => {
         fs.removeSync(path.join(this.basePath, filePath))
@@ -1471,7 +1480,13 @@ export class IntermediateLibrary extends Library {
     for (const songId in this.songs) {
       this.songs[songId].cleanIntermediateFiles()
     }
-    this.deleteFiles_([
+
+    glob.sync('**/.*.mscx,', { cwd: this.basePath }).forEach(relativePath => {
+      const tmpMscx = path.join(this.basePath, relativePath)
+      console.log(`Delete temporary MuseScore file: ${chalk.yellow(tmpMscx)}`)
+      fs.unlinkSync(tmpMscx)
+    });
+    this.deleteFiles([
       'songs.tex',
       'filehashes.db'
     ])
