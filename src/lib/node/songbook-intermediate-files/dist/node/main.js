@@ -59,19 +59,19 @@ function parseSongIDList(listPath) {
     return content.split(/\s+/).filter(songId => songId);
 }
 /**
- * List files in a a directory. You have to use a filter to
- * select the files.
+ * List files in a directory. You have to use a filter string to
+ * select the files. The resulting array of file names is sorted.
  *
- * @param basePath - A directory
- * @param filter - String to filter, e. g. “.eps”
+ * @param basePath - A directory.
+ * @param filter - String to filter, e. g. “.eps”.
  *
- * @return {array} An array of file names.
+ * @return An array of file names.
  */
 function listFiles(basePath, filter) {
     if (fs.existsSync(basePath)) {
         return fs.readdirSync(basePath).filter((file) => {
             return file.indexOf(filter) > -1;
-        });
+        }).sort();
     }
     return [];
 }
@@ -153,17 +153,14 @@ class Message {
 }
 const message = new Message();
 /**
- * A wrapper class for a folder.
+ * A wrapper class for a folder. If the folder does not exist, it will be
+ * created during instantiation.
  */
 class Folder {
     /**
-     * @param {...string} folderPath - The path segments of the folder
+     * @param folderPath - The path segments of the folder.
      */
     constructor(...folderPath) {
-        /**
-         * The path of the folder.
-         * @type {string}
-         */
         this.folderPath = path.join(...arguments);
         if (!fs.existsSync(this.folderPath)) {
             fs.mkdirSync(this.folderPath, { recursive: true });
@@ -919,9 +916,9 @@ class IntermediateSong extends ExtendedSong {
         }
     }
     /**
-     * Generate svg files in a 'slides' subfolder.
+     * Generate SVG files in the slides subfolder.
      */
-    generateSlides_() {
+    generateSlides() {
         const dest = this.folderSlides.get();
         const oldSVGs = listFiles(dest, '.svg');
         for (const oldSVG of oldSVGs) {
@@ -934,6 +931,13 @@ class IntermediateSong extends ExtendedSong {
             'all'
         ]);
         fs.unlinkSync(src);
+        const intermediateFiles = listFiles(dest, '.svg');
+        let no = 1;
+        for (const oldName of intermediateFiles) {
+            const newName = core_browser_1.formatMultiPartAssetFileName(this.songId + '_projector.svg', no);
+            fs.renameSync(path.join(dest, oldName), path.join(dest, newName));
+            no++;
+        }
         const result = listFiles(dest, '.svg');
         if (!result) {
             throw new Error('The SVG files for the slides couldn’t be generated.');
@@ -985,7 +989,7 @@ class IntermediateSong extends ExtendedSong {
         if ((mode === 'all' || mode === 'slides') &&
             (force || status.changed.slides || !this.slidesFiles.length)) {
             status.generated.projector = this.generatePDF_('projector');
-            status.generated.slides = this.generateSlides_();
+            status.generated.slides = this.generateSlides();
         }
         status.changed.piano = this.fileMonitor.isModified(this.mscxPiano);
         // piano
@@ -1117,15 +1121,7 @@ class IntermediateLibrary extends Library {
     constructor(basePath) {
         super(basePath);
         this.songs = this.collectSongs_();
-        /**
-         * A instance of the FileMonitor class.
-         *
-         * @type {module:@bldr/songbook-intermediate-files~FileMonitor}
-         */
         this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'));
-        /**
-         * @type {object}
-         */
         this.songs = this.collectSongs_();
     }
     /**

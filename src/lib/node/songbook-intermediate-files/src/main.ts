@@ -39,11 +39,6 @@ import { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig } from 
  */
 import config from '@bldr/config'
 
-/**
- * An array of song objects.
- * @typedef {module:@bldr/songbook-intermediate-files~Song[]} songs
- */
-
 type ExtendedSongList = ExtendedSong[]
 type IntermediateSongList = IntermediateSong[]
 type ExtendedSongCollection = {
@@ -52,6 +47,12 @@ type ExtendedSongCollection = {
 type IntermediaSongCollection = {
   [songId: string]: IntermediateSong
 }
+
+/**
+ * Generate all intermediate media files or only slide
+ * or piano files. Possible values: “all”, “slides” or “piano”.
+ */
+type GenerationMode = 'all' | 'slides' | 'piano'
 
 /*******************************************************************************
  * Functions
@@ -63,19 +64,19 @@ function parseSongIDList (listPath: string): string[] {
 }
 
 /**
- * List files in a a directory. You have to use a filter to
- * select the files.
+ * List files in a directory. You have to use a filter string to
+ * select the files. The resulting array of file names is sorted.
  *
- * @param basePath - A directory
- * @param filter - String to filter, e. g. “.eps”
+ * @param basePath - A directory.
+ * @param filter - String to filter, e. g. “.eps”.
  *
- * @return {array} An array of file names.
+ * @return An array of file names.
  */
 function listFiles (basePath: string, filter: string): string[] {
   if (fs.existsSync(basePath)) {
     return fs.readdirSync(basePath).filter((file) => {
       return file.indexOf(filter) > -1
-    })
+    }).sort()
   }
   return []
 }
@@ -129,7 +130,6 @@ interface Status {
   force: boolean
 
   info: StatusInfo
-
 }
 
 /*******************************************************************************
@@ -222,18 +222,18 @@ class Message {
 const message = new Message()
 
 /**
- * A wrapper class for a folder.
+ * A wrapper class for a folder. If the folder does not exist, it will be
+ * created during instantiation.
  */
 class Folder {
+  /**
+   * The path of the folder.
+   */
   folderPath: string
   /**
-   * @param {...string} folderPath - The path segments of the folder
+   * @param folderPath - The path segments of the folder.
    */
   constructor (...folderPath: string[]) {
-    /**
-     * The path of the folder.
-     * @type {string}
-     */
     this.folderPath = path.join(...arguments)
     if (!fs.existsSync(this.folderPath)) {
       fs.mkdirSync(this.folderPath, { recursive: true })
@@ -1093,9 +1093,6 @@ export class PianoScore {
  * Extended version of the Song class to build intermediate files.
  */
 class IntermediateSong extends ExtendedSong {
-  /**
-   * A instance of the FileMonitor class.
-   */
   fileMonitor: FileMonitor
 
   /**
@@ -1192,9 +1189,9 @@ class IntermediateSong extends ExtendedSong {
   }
 
   /**
-   * Generate svg files in a 'slides' subfolder.
+   * Generate SVG files in the slides subfolder.
    */
-  private generateSlides_ (): string[] {
+  private generateSlides (): string[] {
     const dest = this.folderSlides.get()
     const oldSVGs = listFiles(dest, '.svg')
     for (const oldSVG of oldSVGs) {
@@ -1207,6 +1204,15 @@ class IntermediateSong extends ExtendedSong {
       'all'
     ])
     fs.unlinkSync(src)
+
+    const intermediateFiles = listFiles(dest, '.svg')
+    let no = 1
+    for (const oldName of intermediateFiles) {
+      const newName = formatMultiPartAssetFileName('Projector.svg', no)
+      fs.renameSync(path.join(dest, oldName), path.join(dest, newName))
+      no++
+    }
+
     const result = listFiles(dest, '.svg')
     if (!result) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
@@ -1218,7 +1224,7 @@ class IntermediateSong extends ExtendedSong {
   /**
    * Generate from the MuseScore file “piano/piano.mscx” EPS files.
    *
-   * @return {array} An array of EPS piano score filenames.
+   * @return An array of EPS piano score filenames.
    */
   private generatePiano_ (): string[] {
     this.folderPiano.empty()
@@ -1241,7 +1247,7 @@ class IntermediateSong extends ExtendedSong {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: string = 'all', force: boolean = false): Status {
+  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): Status {
     const status: Status = {
       folder: '',
       folderName: '',
@@ -1263,7 +1269,7 @@ class IntermediateSong extends ExtendedSong {
     if ((mode === 'all' || mode === 'slides') &&
         (force || status.changed.slides || !this.slidesFiles.length)) {
       status.generated.projector = this.generatePDF_('projector')
-      status.generated.slides = this.generateSlides_()
+      status.generated.slides = this.generateSlides()
     }
 
     status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
@@ -1401,9 +1407,7 @@ class PianoFilesCountTree {
 }
 
 export class IntermediateLibrary extends Library {
-  /**
-   * A instance of the FileMonitor class.
-   */
+
   fileMonitor: FileMonitor
 
   songs: IntermediaSongCollection = this.collectSongs_()
@@ -1414,17 +1418,9 @@ export class IntermediateLibrary extends Library {
   constructor (basePath: string) {
     super(basePath)
 
-    /**
-     * A instance of the FileMonitor class.
-     *
-     * @type {module:@bldr/songbook-intermediate-files~FileMonitor}
-     */
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
 
-    /**
-     * @type {object}
-     */
     this.songs = this.collectSongs_()
   }
 
@@ -1488,7 +1484,7 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: string = 'all', force: boolean = false) {
+  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false) {
     for (const songId in this.songs) {
       const song = this.songs[songId]
       const status = song.generateIntermediateFiles(mode, force)
@@ -1503,7 +1499,7 @@ export class IntermediateLibrary extends Library {
    * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongByPath (folder: string, mode: string = 'all') {
+  updateSongByPath (folder: string, mode: GenerationMode = 'all') {
     // To throw an error if the folder doesn’t exist.
     fs.lstatSync(folder)
     const song = new IntermediateSong(folder, this.fileMonitor)
@@ -1518,7 +1514,7 @@ export class IntermediateLibrary extends Library {
    * @param {string} mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongBySongId (songId: string, mode: string = 'all') {
+  updateSongBySongId (songId: string, mode: GenerationMode = 'all') {
     let song
     if ({}.hasOwnProperty.call(this.songs, songId)) {
       song = this.songs[songId]
@@ -1536,7 +1532,7 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  update (mode: string = 'all', force: boolean = false) {
+  update (mode: GenerationMode = 'all', force: boolean = false) {
     if (!['all', 'slides', 'piano'].includes(mode)) {
       throw new Error('The parameter “mode” must be one of this strings: ' +
         '“all”, “slides” or “piano”.')

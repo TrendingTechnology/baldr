@@ -14,6 +14,11 @@ declare type IntermediateSongList = IntermediateSong[];
 declare type IntermediaSongCollection = {
     [songId: string]: IntermediateSong;
 };
+/**
+ * Generate all intermediate media files or only slide
+ * or piano files. Possible values: “all”, “slides” or “piano”.
+ */
+declare type GenerationMode = 'all' | 'slides' | 'piano';
 interface StatusInfo {
     /**
      * "Auf der Mauer, auf der Lauer"
@@ -57,12 +62,16 @@ interface Status {
     info: StatusInfo;
 }
 /**
- * A wrapper class for a folder.
+ * A wrapper class for a folder. If the folder does not exist, it will be
+ * created during instantiation.
  */
 declare class Folder {
+    /**
+     * The path of the folder.
+     */
     folderPath: string;
     /**
-     * @param {...string} folderPath - The path segments of the folder
+     * @param folderPath - The path segments of the folder.
      */
     constructor(...folderPath: string[]);
     /**
@@ -440,9 +449,6 @@ export declare class PianoScore {
  * Extended version of the Song class to build intermediate files.
  */
 declare class IntermediateSong extends ExtendedSong {
-    /**
-     * A instance of the FileMonitor class.
-     */
     fileMonitor: FileMonitor;
     /**
      * @param songPath - The path of the directory containing the song
@@ -483,9 +489,9 @@ declare class IntermediateSong extends ExtendedSong {
      */
     private generatePDF_;
     /**
-     * Generate svg files in a 'slides' subfolder.
+     * Generate SVG files in the slides subfolder.
      */
-    private generateSlides_;
+    private generateSlides;
     /**
      * Generate from the MuseScore file “piano/piano.mscx” EPS files.
      *
@@ -499,7 +505,7 @@ declare class IntermediateSong extends ExtendedSong {
      *   and piano files. Possible values: “all”, “slides” or “piano”
      * @param force - Force the regeneration of intermediate files.
      */
-    generateIntermediateFiles(mode?: string, force?: boolean): Status;
+    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): Status;
     /**
      * Delete all generated files of a song folder.
      */
@@ -559,9 +565,6 @@ declare class PianoFilesCountTree {
     shift(count: number): IntermediateSong | undefined;
 }
 export declare class IntermediateLibrary extends Library {
-    /**
-     * A instance of the FileMonitor class.
-     */
     fileMonitor: FileMonitor;
     songs: IntermediaSongCollection;
     /**
@@ -590,7 +593,7 @@ export declare class IntermediateLibrary extends Library {
      *   and piano files. Possible values: “all”, “slides” or “piano”
      * @param force - Force the regeneration of intermediate files.
      */
-    generateIntermediateFiles(mode?: string, force?: boolean): void;
+    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): void;
     /**
      * Generate all intermediate media files for one song.
      *
@@ -598,7 +601,7 @@ export declare class IntermediateLibrary extends Library {
      * @param mode - Generate all intermediate media files or only slide
      *   and piano files. Possible values: “all”, “slides” or “piano”
      */
-    updateSongByPath(folder: string, mode?: string): void;
+    updateSongByPath(folder: string, mode?: GenerationMode): void;
     /**
      * Generate all intermediate media files for one song.
      *
@@ -606,7 +609,7 @@ export declare class IntermediateLibrary extends Library {
      * @param {string} mode - Generate all intermediate media files or only slide
      *   and piano files. Possible values: “all”, “slides” or “piano”
      */
-    updateSongBySongId(songId: string, mode?: string): void;
+    updateSongBySongId(songId: string, mode?: GenerationMode): void;
     /**
      * Update the whole song library.
      *
@@ -614,7 +617,7 @@ export declare class IntermediateLibrary extends Library {
      *   and piano files. Possible values: “all”, “slides” or “piano”
      * @param force - Force the regeneration of intermediate files.
      */
-    update(mode?: string, force?: boolean): void;
+    update(mode?: GenerationMode, force?: boolean): void;
 }
 /**
  * Export the intermediate SVG files to the media server. Adjust the

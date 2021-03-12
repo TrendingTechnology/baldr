@@ -80,26 +80,29 @@ export function convertHtmlToPlainText (html: string): string {
 }
 
 /**
- * Generate from the file name or the url of the first element of a
- * multipart asset the nth file name or the url. The parameter
- * `firstFileName` must have a extension (for example `.jpg`). The
- * parameter `no` must be smaller then 100. Only two digit or smaller
- * integers are allowed.
+ * Generate the n-th file name or the URL from a file name or a URL of the first
+ * element of a multipart asset. The parameter `firstFileName` must have a
+ * extension (for example `.jpg`). The parameter `no` must be less then 1000.
+ * Only tree digit or smaller integers are allowed.
  *
  * 1. `multipart-asset.jpg`
- * 2. `multipart-asset_no02.jpg`
- * 3. `multipart-asset_no03.jpg`
+ * 2. `multipart-asset_no002.jpg`
+ * 3. `multipart-asset_no003.jpg`
  * 4. ...
  *
  * @param firstFileName - A file name, a path or a URL.
- * @param no - The number in the multipart asset list. The
- *   first element has the number 1.
+ * @param no - The number in the multipart asset list. The first element has the
+ *   number 1.
  */
 export function formatMultiPartAssetFileName (firstFileName: string, no: string | number): string {
   if (!Number.isInteger(no)) {
-    // throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`)
     no = 1
   }
+
+  if (no > 999) {
+    throw new Error(`${firstFileName}: The multipart asset number must not be greater than 999.`)
+  }
+
   let suffix
   if (no === 1) {
     return firstFileName
@@ -107,10 +110,8 @@ export function formatMultiPartAssetFileName (firstFileName: string, no: string 
     suffix = `_no00${no}`
   } else if (no < 100) {
     suffix = `_no0${no}`
-  } else if (no < 1000) {
-    suffix = `_no${no}`
   } else {
-    throw new Error(`${firstFileName} multipart asset counts greater than 100 are not supported.`)
+    suffix = `_no${no}`
   }
   return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`)
 }
