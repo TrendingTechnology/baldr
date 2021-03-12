@@ -445,55 +445,22 @@ class ExtendedSongMetaData implements SongMetaData {
  * One song
  */
 class ExtendedSong implements Song {
-  /**
-   * The directory containing the song files. For example
-   * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
-   */
    folder: string
-
-   /**
-    * The character of the alphabetical folder. The song folders must
-    * be placed in alphabetical folders.
-    */
    abc: string
-
-   /**
-    * The songId is the name of the directory which contains all song
-    * files. It is used to sort the songs. It must be unique along all
-    * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
-    */
    songId: string
-
-   /**
-    * An instance of the class SongMetaData().
-    * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
-    */
    metaData: ExtendedSongMetaData
 
-   /**
-    * An instance of the class SongMetaDataCombined().
-    */
    metaDataCombined: SongMetaDataCombined
+
   /**
    * The slides folder
    */
   folderSlides: Folder
 
   /**
-   * Directory to store intermediate files for the projector app
-   * (*.svg, *.json).
-   */
-  projectorPath: string | null
-
-  /**
    * The piano folder
    */
   folderPiano: Folder
-
-  /**
-   * Directory to store intermediate files for the piano score (*.eps).
-   */
-  pianoPath: string | null
 
   /**
    * Path of the MuseScore file 'projector.mscx', relative to the base folder
@@ -522,33 +489,17 @@ class ExtendedSong implements Song {
   /**
    * @param songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
-   * @param projectorPath - Directory to store intermediate files for
-   *   the projector app (*.svg, *.json).
-   * @param pianoPath - Directory to store intermediate files for
-   *   the piano score (*.eps).
    */
-  constructor (songPath: string, projectorPath: string | null = null, pianoPath: string | null = null) {
+  constructor (songPath: string) {
     this.folder = this.getSongFolder_(songPath)
     this.abc = this.recognizeABCFolder_(this.folder)
     this.songId = path.basename(this.folder)
     this.metaData = new ExtendedSongMetaData(this.folder)
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
-    this.projectorPath = projectorPath
-    if (this.projectorPath) {
-      this.projectorPath = this.getSongFolder_(this.projectorPath)
-      this.folderSlides = new Folder(this.projectorPath)
-    } else {
-      this.folderSlides = new Folder(this.folder, 'slides')
-    }
+    this.folderSlides = new Folder(this.folder, 'NB')
+    this.folderPiano = new Folder(this.folder, 'piano')
 
-    this.pianoPath = pianoPath
-    if (this.pianoPath) {
-      this.pianoPath = this.getSongFolder_(this.pianoPath)
-      this.folderPiano = new Folder(this.pianoPath)
-    } else {
-      this.folderPiano = new Folder(this.folder, 'piano')
-    }
     this.mscxProjector = this.detectFile_('projector.mscx')
     this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
     this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
@@ -929,26 +880,12 @@ export class PianoScore {
   constructor (library: IntermediateLibrary, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
     /**
      * A temporary file path where the content of the TeX file gets stored.
-     *
-     * @type {string}
      */
     this.texFile = new TextFile(path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-songbook-')), 'songbook.tex'))
 
-    /**
-     * An instance of the class “Library()”.
-     *
-     * @type {module:@bldr/songbook-intermediate-files~Library}
-     */
     this.library = library
 
-    /**
-     * @type {boolean}
-     */
     this.groupAlphabetically = groupAlphabetically
-
-    /**
-     * @type {boolean}
-     */
     this.pageTurnOptimized = pageTurnOptimized
   }
 
@@ -1110,11 +1047,7 @@ export class PianoScore {
     let texMarkup = mainTexMarkup.replace('//style//', style)
     texMarkup = texMarkup.replace('//songs//', songs)
     texMarkup = texMarkup.replace('//created//', new Date().toLocaleString())
-    let basePath = this.library.basePath
-    if (this.library.pianoPath) {
-      basePath = this.library.pianoPath
-    }
-    texMarkup = texMarkup.replace('//basepath//', basePath)
+    texMarkup = texMarkup.replace('//basepath//', this.library.basePath)
 
     // Write contents to the text file.
     log(
@@ -1168,15 +1101,11 @@ class IntermediateSong extends ExtendedSong {
   /**
    * @param songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
-   * @param projectorPath - Directory to store intermediate files for
-   *   the projector app (*.svg, *.json).
-   * @param pianoPath - Directory to store intermediate files for
-   *   the piano score (*.eps).
    * @param fileMonitor - A instance
    * of the FileMonitor() class.
    */
-  constructor (songPath: string, projectorPath: string | null, pianoPath: string | null, fileMonitor: FileMonitor) {
-    super(songPath, projectorPath, pianoPath)
+  constructor (songPath: string, fileMonitor: FileMonitor) {
+    super(songPath)
     this.fileMonitor = fileMonitor
   }
 
@@ -1188,12 +1117,7 @@ class IntermediateSong extends ExtendedSong {
    * @return TeX markup for one EPS image file of a piano score.
    */
   private formatPianoTeXEpsFile_ (index: number): string {
-    let subFolder
-    if (!this.pianoPath) {
-      subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
-    } else {
-      subFolder = path.join(this.abc, this.songId, this.pianoFiles[index])
-    }
+    let subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
     return PianoScore.texCmd(
       'image',
       subFolder
@@ -1478,17 +1402,6 @@ class PianoFilesCountTree {
 
 export class IntermediateLibrary extends Library {
   /**
-   * Directory to store intermediate files for the projector app
-   * (*.svg, *.json).
-   */
-  projectorPath: string
-
-  /**
-   * Directory to store intermediate files for the piano score (*.eps).
-   */
-  pianoPath: string
-
-  /**
    * A instance of the FileMonitor class.
    */
   fileMonitor: FileMonitor
@@ -1497,28 +1410,9 @@ export class IntermediateLibrary extends Library {
 
   /**
    * @param basePath - The base path of the song library
-   * @param projectorPath - Directory to store intermediate files for
-   *   the projector app (*.svg, *.json).
-   * @param pianoPath - Directory to store intermediate files for
-   *   the piano score (*.eps).
    */
-  constructor (basePath: string, projectorPath: string, pianoPath: string) {
+  constructor (basePath: string) {
     super(basePath)
-
-    /**
-     * Directory to store intermediate files for the projector app
-     * (*.svg, *.json).
-     *
-     * @type {string}
-     */
-    this.projectorPath = projectorPath
-
-    /**
-     * Directory to store intermediate files for the piano score (*.eps).
-     *
-     * @type {string}
-     */
-    this.pianoPath = pianoPath
 
     /**
      * A instance of the FileMonitor class.
@@ -1547,14 +1441,8 @@ export class IntermediateLibrary extends Library {
   private collectSongs_ (): IntermediaSongCollection {
     const songs: IntermediaSongCollection = {}
     for (const songPath of this.detectSongs_()) {
-      let projectorPath = null
-      if (this.projectorPath) projectorPath = path.join(this.projectorPath, songPath)
-      let pianoPath = null
-      if (this.pianoPath) pianoPath = path.join(this.pianoPath, songPath)
       const song = new IntermediateSong(
         path.join(this.basePath, songPath),
-        projectorPath,
-        pianoPath,
         this.fileMonitor
       )
       if (song.songId in songs) {
@@ -1618,7 +1506,7 @@ export class IntermediateLibrary extends Library {
   updateSongByPath (folder: string, mode: string = 'all') {
     // To throw an error if the folder doesn’t exist.
     fs.lstatSync(folder)
-    const song = new IntermediateSong(folder, null, null, this.fileMonitor)
+    const song = new IntermediateSong(folder, this.fileMonitor)
     const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }

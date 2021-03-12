@@ -40,24 +40,7 @@ function action(cmdObj) {
         cmdObj.pageTurnOptimized = false;
     }
     core_node_1.log('The base path of the song collection is located at:\n    %s\n', chalk_1.default.cyan(config_1.default.songbook.path));
-    if (cmdObj.projectorPath)
-        config_1.default.songbook.projectorPath = cmdObj.projectorPath;
-    if (config_1.default.songbook.projectorPath === 'none')
-        config_1.default.songbook.projectorPath = '';
-    if (config_1.default.songbook.projectorPath) {
-        core_node_1.log('The folder where all projector related files are stored is:\n    %s\n', chalk_1.default.green(config_1.default.songbook.projectorPath));
-    }
-    // Maybe bug in commander ?
-    if (cmdObj.piapath)
-        cmdObj.pianoPath = cmdObj.piapath;
-    if (cmdObj.pianoPath)
-        config_1.default.songbook.pianoPath = cmdObj.pianoPath;
-    if (config_1.default.songbook.pianoPath === 'none')
-        config_1.default.songbook.pianoPath = '';
-    if (config_1.default.songbook.pianoPath) {
-        core_node_1.log('The folder where all piano related files are stored is:\n    %s\n', chalk_1.default.green(config_1.default.songbook.pianoPath));
-    }
-    const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path, config_1.default.songbook.projectorPath, config_1.default.songbook.pianoPath);
+    const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path);
     core_node_1.log('Found %s songs.', library.countSongs());
     if (cmdObj.list)
         library.loadSongList(cmdObj.list);

@@ -7,7 +7,12 @@ import chalk from 'chalk'
 
 // Project packages.
 import { log } from '@bldr/core-node'
-import { IntermediateLibrary, PianoScore, exportToMediaServer, buildVueApp } from '@bldr/songbook-intermediate-files'
+import {
+  IntermediateLibrary,
+  PianoScore,
+  exportToMediaServer,
+  buildVueApp
+} from '@bldr/songbook-intermediate-files'
 import config from '@bldr/config'
 
 /**
@@ -45,31 +50,7 @@ function action (cmdObj: { [key: string]: any }): void {
     chalk.cyan(config.songbook.path)
   )
 
-  if (cmdObj.projectorPath) config.songbook.projectorPath = cmdObj.projectorPath
-  if (config.songbook.projectorPath === 'none') config.songbook.projectorPath = ''
-  if (config.songbook.projectorPath) {
-    log(
-      'The folder where all projector related files are stored is:\n    %s\n',
-      chalk.green(config.songbook.projectorPath)
-    )
-  }
-
-  // Maybe bug in commander ?
-  if (cmdObj.piapath) cmdObj.pianoPath = cmdObj.piapath
-  if (cmdObj.pianoPath) config.songbook.pianoPath = cmdObj.pianoPath
-  if (config.songbook.pianoPath === 'none') config.songbook.pianoPath = ''
-  if (config.songbook.pianoPath) {
-    log(
-      'The folder where all piano related files are stored is:\n    %s\n',
-      chalk.green(config.songbook.pianoPath)
-    )
-  }
-
-  const library = new IntermediateLibrary(
-    config.songbook.path,
-    config.songbook.projectorPath,
-    config.songbook.pianoPath
-  )
+  const library = new IntermediateLibrary(config.songbook.path)
   log('Found %s songs.', library.countSongs())
   if (cmdObj.list) library.loadSongList(cmdObj.list)
 

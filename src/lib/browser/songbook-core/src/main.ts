@@ -170,15 +170,8 @@ export interface Song {
    */
   songId: string
 
-  /**
-   * An instance of the class SongMetaData().
-   * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
-   */
   metaData: SongMetaData
 
-  /**
-   * An instance of the class SongMetaDataCombined().
-   */
   metaDataCombined: SongMetaDataCombined
 }
 

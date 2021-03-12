@@ -12,14 +12,6 @@ module.exports = {
             'Base path of a song collection.'
         ],
         [
-            '-B, --projector-path <projector-path>',
-            'Directory to store intermediate files for the projector app (*.svg, *.json],. Special value: “none”.'
-        ],
-        [
-            '-P, --piano-path <piano-path>',
-            'Directory to store intermediate files for the piano score (*.eps],. Special value: “none”.'
-        ],
-        [
             '-c, --clean',
             'Clean up (delete all generated files],'
         ],
