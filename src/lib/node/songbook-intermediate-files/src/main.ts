@@ -81,145 +81,9 @@ function listFiles (basePath: string, filter: string): string[] {
   return []
 }
 
-interface StatusInfo {
-  /**
-   * "Auf der Mauer, auf der Lauer"
-   */
-  title: string
-}
-
-interface StatusChanged {
-  piano: boolean
-  slides: boolean
-}
-
-/**
- * "generated": {
- *     "piano": [
- *       "piano_1.eps",
- *       "piano_2.eps"
- *     ],
- *     "projector": "projector.pdf",
- *     "slides": [
- *       "01.svg",
- *       "02.svg"
- *     ],
- *   },
- */
-interface StatusGenerated {
-  piano: string[]
-  projector: string | undefined
-  slides: string []
-}
-
-interface Status {
-
-  changed: StatusChanged
-
-  generated: StatusGenerated
-
-  /**
-   * "songs/a/Auf-der-Mauer"
-   */
-  folder: string
-
-  /**
-   * "Auf-der-Mauer"
-   */
-  folderName: string
-  force: boolean
-
-  info: StatusInfo
-}
-
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
-
-class Message {
-  error: string
-  finished: string
-  progress: string
-  constructor () {
-    this.error = chalk.red('☒')
-    this.finished = chalk.green('☑')
-    this.progress = chalk.yellow('☐')
-  }
-
-  /**
-   * Print out and return text.
-   *
-   * @param {string} text - Text to display.
-   */
-  print (text: string): string {
-    log.info(text)
-    return text
-  }
-
-  /**
-   *
-   */
-  noConfigPath () {
-    let output = this.error + '  Configuration file ' +
-      '“~/.baldr.json” not found!\n' +
-      'Create such a config file or use the “--base-path” option!'
-
-    const sampleConfig = fs.readFileSync(
-      path.resolve(__dirname, '..', 'sample.config.json'), 'utf8'
-    )
-    output += '\n\nExample configuration file:\n' + sampleConfig
-
-    this.print(output)
-    throw new Error('No configuration file found.')
-  }
-
-  songFolder (status: Status, song: ExtendedSong) {
-    let forced
-    if (status.force) {
-      forced = ' ' + chalk.red('(forced)')
-    } else {
-      forced = ''
-    }
-
-    let symbol
-    if (!song.metaData.title) {
-      symbol = this.error
-    } else if (!status.changed.slides && !status.changed.piano) {
-      symbol = this.finished
-    } else {
-      symbol = this.progress
-    }
-
-    let title
-    if (!song.metaData.title) {
-      title = chalk.red(status.folderName)
-    } else if (!status.changed.slides && !status.changed.piano) {
-      title = chalk.green(status.folderName) + ': ' + song.metaData.title
-    } else {
-      title = chalk.yellow(status.folderName) + ': ' + song.metaData.title
-    }
-
-    let output = symbol + '  ' + title + forced
-    if (status.generated.slides) {
-      output +=
-        '\n\t' +
-        chalk.yellow('slides') +
-        ': ' +
-        status.generated.slides.join(', ')
-    }
-
-    if (status.generated.piano) {
-      output +=
-        '\n\t' +
-        chalk.yellow('piano') +
-        ': ' +
-        status.generated.piano.join(', ')
-    }
-    this.print(output)
-  }
-}
-
-const message = new Message()
 
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
@@ -1241,40 +1105,19 @@ class IntermediateSong extends ExtendedSong {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): Status {
-    const status: Status = {
-      folder: '',
-      folderName: '',
-      force: false,
-      changed: {} as StatusChanged,
-      generated: {} as StatusGenerated,
-      info: {
-        title: ''
-      }
-    }
-
-    status.folder = this.folder
-    status.folderName = path.basename(this.folder)
-
-    status.force = force
-    status.changed.slides = this.fileMonitor.isModified(this.mscxProjector)
-
+  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
     // slides
     if ((mode === 'all' || mode === 'slides') &&
-        (force || status.changed.slides || (this.slidesFiles.length === 0))) {
-      status.generated.projector = this.generatePDF('projector')
-      status.generated.slides = this.generateSlides()
+        (force || this.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
+      this.generatePDF('projector')
+      this.generateSlides()
     }
-
-    status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
     // piano
     if ((mode === 'all' || mode === 'piano') &&
-        (force || status.changed.piano || (this.pianoFiles.length === 0))) {
-      status.generated.piano = this.generatePiano()
+        (force || this.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
+      this.generatePiano()
     }
-
-    return status
   }
 
   /**
@@ -1479,8 +1322,7 @@ export class IntermediateLibrary extends Library {
   generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
     for (const songId in this.songs) {
       const song = this.songs[songId]
-      const status = song.generateIntermediateFiles(mode, force)
-      message.songFolder(status, song)
+      song.generateIntermediateFiles(mode, force)
     }
   }
 
@@ -1495,8 +1337,7 @@ export class IntermediateLibrary extends Library {
     // To throw an error if the folder doesn’t exist.
     fs.lstatSync(folder)
     const song = new IntermediateSong(folder, this.fileMonitor)
-    const status = song.generateIntermediateFiles(mode, true)
-    message.songFolder(status, song)
+    song.generateIntermediateFiles(mode, true)
   }
 
   /**
@@ -1513,8 +1354,7 @@ export class IntermediateLibrary extends Library {
     } else {
       throw new Error(log.format('The song with the song ID “%s” is unkown.', songId))
     }
-    const status = song.generateIntermediateFiles(mode, true)
-    message.songFolder(status, song)
+    song.generateIntermediateFiles(mode, true)
   }
 
   /**

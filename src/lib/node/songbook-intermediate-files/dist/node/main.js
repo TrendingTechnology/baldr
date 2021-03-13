@@ -36,8 +36,6 @@ const childProcess = __importStar(require("child_process"));
 const crypto = __importStar(require("crypto"));
 const os = __importStar(require("os"));
 const path = __importStar(require("path"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 const fs = __importStar(require("fs-extra"));
 const glob_1 = __importDefault(require("glob"));
 const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
@@ -78,80 +76,6 @@ function listFiles(basePath, filter) {
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
-class Message {
-    constructor() {
-        this.error = chalk_1.default.red('☒');
-        this.finished = chalk_1.default.green('☑');
-        this.progress = chalk_1.default.yellow('☐');
-    }
-    /**
-     * Print out and return text.
-     *
-     * @param {string} text - Text to display.
-     */
-    print(text) {
-        log.info(text);
-        return text;
-    }
-    /**
-     *
-     */
-    noConfigPath() {
-        let output = this.error + '  Configuration file ' +
-            '“~/.baldr.json” not found!\n' +
-            'Create such a config file or use the “--base-path” option!';
-        const sampleConfig = fs.readFileSync(path.resolve(__dirname, '..', 'sample.config.json'), 'utf8');
-        output += '\n\nExample configuration file:\n' + sampleConfig;
-        this.print(output);
-        throw new Error('No configuration file found.');
-    }
-    songFolder(status, song) {
-        let forced;
-        if (status.force) {
-            forced = ' ' + chalk_1.default.red('(forced)');
-        }
-        else {
-            forced = '';
-        }
-        let symbol;
-        if (!song.metaData.title) {
-            symbol = this.error;
-        }
-        else if (!status.changed.slides && !status.changed.piano) {
-            symbol = this.finished;
-        }
-        else {
-            symbol = this.progress;
-        }
-        let title;
-        if (!song.metaData.title) {
-            title = chalk_1.default.red(status.folderName);
-        }
-        else if (!status.changed.slides && !status.changed.piano) {
-            title = chalk_1.default.green(status.folderName) + ': ' + song.metaData.title;
-        }
-        else {
-            title = chalk_1.default.yellow(status.folderName) + ': ' + song.metaData.title;
-        }
-        let output = symbol + '  ' + title + forced;
-        if (status.generated.slides) {
-            output +=
-                '\n\t' +
-                    chalk_1.default.yellow('slides') +
-                    ': ' +
-                    status.generated.slides.join(', ');
-        }
-        if (status.generated.piano) {
-            output +=
-                '\n\t' +
-                    chalk_1.default.yellow('piano') +
-                    ': ' +
-                    status.generated.piano.join(', ');
-        }
-        this.print(output);
-    }
-}
-const message = new Message();
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -968,33 +892,17 @@ class IntermediateSong extends ExtendedSong {
      * @param force - Force the regeneration of intermediate files.
      */
     generateIntermediateFiles(mode = 'all', force = false) {
-        const status = {
-            folder: '',
-            folderName: '',
-            force: false,
-            changed: {},
-            generated: {},
-            info: {
-                title: ''
-            }
-        };
-        status.folder = this.folder;
-        status.folderName = path.basename(this.folder);
-        status.force = force;
-        status.changed.slides = this.fileMonitor.isModified(this.mscxProjector);
         // slides
         if ((mode === 'all' || mode === 'slides') &&
-            (force || status.changed.slides || (this.slidesFiles.length === 0))) {
-            status.generated.projector = this.generatePDF('projector');
-            status.generated.slides = this.generateSlides();
+            (force || this.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
+            this.generatePDF('projector');
+            this.generateSlides();
         }
-        status.changed.piano = this.fileMonitor.isModified(this.mscxPiano);
         // piano
         if ((mode === 'all' || mode === 'piano') &&
-            (force || status.changed.piano || (this.pianoFiles.length === 0))) {
-            status.generated.piano = this.generatePiano();
+            (force || this.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
+            this.generatePiano();
         }
-        return status;
     }
     /**
      * Delete all generated files of a song folder.
@@ -1176,8 +1084,7 @@ class IntermediateLibrary extends Library {
     generateIntermediateFiles(mode = 'all', force = false) {
         for (const songId in this.songs) {
             const song = this.songs[songId];
-            const status = song.generateIntermediateFiles(mode, force);
-            message.songFolder(status, song);
+            song.generateIntermediateFiles(mode, force);
         }
     }
     /**
@@ -1191,8 +1098,7 @@ class IntermediateLibrary extends Library {
         // To throw an error if the folder doesn’t exist.
         fs.lstatSync(folder);
         const song = new IntermediateSong(folder, this.fileMonitor);
-        const status = song.generateIntermediateFiles(mode, true);
-        message.songFolder(status, song);
+        song.generateIntermediateFiles(mode, true);
     }
     /**
      * Generate all intermediate media files for one song.
@@ -1209,8 +1115,7 @@ class IntermediateLibrary extends Library {
         else {
             throw new Error(log.format('The song with the song ID “%s” is unkown.', songId));
         }
-        const status = song.generateIntermediateFiles(mode, true);
-        message.songFolder(status, song);
+        song.generateIntermediateFiles(mode, true);
     }
     /**
      * Update the whole song library.

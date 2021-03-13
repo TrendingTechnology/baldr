@@ -19,48 +19,9 @@ interface IntermediaSongCollection {
  * or piano files. Possible values: “all”, “slides” or “piano”.
  */
 declare type GenerationMode = 'all' | 'slides' | 'piano';
-interface StatusInfo {
-    /**
-     * "Auf der Mauer, auf der Lauer"
-     */
-    title: string;
-}
-interface StatusChanged {
-    piano: boolean;
-    slides: boolean;
-}
-/**
- * "generated": {
- *     "piano": [
- *       "piano_1.eps",
- *       "piano_2.eps"
- *     ],
- *     "projector": "projector.pdf",
- *     "slides": [
- *       "01.svg",
- *       "02.svg"
- *     ],
- *   },
- */
-interface StatusGenerated {
-    piano: string[];
-    projector: string | undefined;
-    slides: string[];
-}
-interface Status {
-    changed: StatusChanged;
-    generated: StatusGenerated;
-    /**
-     * "songs/a/Auf-der-Mauer"
-     */
-    folder: string;
-    /**
-     * "Auf-der-Mauer"
-     */
-    folderName: string;
-    force: boolean;
-    info: StatusInfo;
-}
+/*******************************************************************************
+ * Utility classes
+ ******************************************************************************/
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -511,7 +472,7 @@ declare class IntermediateSong extends ExtendedSong {
      *   and piano files. Possible values: “all”, “slides” or “piano”
      * @param force - Force the regeneration of intermediate files.
      */
-    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): Status;
+    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): void;
     /**
      * Delete all generated files of a song folder.
      */
