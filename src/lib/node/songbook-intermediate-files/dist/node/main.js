@@ -36,7 +36,6 @@ const childProcess = __importStar(require("child_process"));
 const crypto = __importStar(require("crypto"));
 const os = __importStar(require("os"));
 const path = __importStar(require("path"));
-const util = __importStar(require("util"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 const fs = __importStar(require("fs-extra"));
@@ -45,12 +44,13 @@ const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
 const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
-const core_node_1 = require("@bldr/core-node");
+const log = __importStar(require("@bldr/log"));
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * See `/etc/baldr.json`.
  */
 const config_1 = __importDefault(require("@bldr/config"));
+log.setLogLevel(3);
 /*******************************************************************************
  * Functions
  ******************************************************************************/
@@ -90,7 +90,7 @@ class Message {
      * @param {string} text - Text to display.
      */
     print(text) {
-        console.log(text);
+        log.info(text);
         return text;
     }
     /**
@@ -237,17 +237,17 @@ class ExtendedSongMetaData {
             'youtube'
         ];
         if (!fs.existsSync(folder)) {
-            throw new Error(util.format('Song folder doesn’t exist: %s', folder));
+            throw new Error(log.format('Song folder doesn’t exist: %s', folder));
         }
         this.folder = folder;
         const ymlFile = path.join(folder, this.yamlFile);
         if (!fs.existsSync(ymlFile)) {
-            throw new Error(util.format('YAML file could not be found: %s', ymlFile));
+            throw new Error(log.format('YAML file could not be found: %s', ymlFile));
         }
         this.rawYaml_ = js_yaml_1.default.load(fs.readFileSync(ymlFile, 'utf8'));
         for (const key in this.rawYaml_) {
             if (!this.allowedProperties.includes(key)) {
-                throw new Error(util.format('Unsupported key: %s', key));
+                throw new Error(log.format('Unsupported key: %s', key));
             }
         }
         this.alias = this.rawYaml_.alias;
@@ -270,7 +270,7 @@ class ExtendedSongMetaData {
         if (this.wikidata) {
             const wikidataID = parseInt(this.wikidata);
             if (isNaN(wikidataID)) {
-                throw new Error(util.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
+                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
             }
         }
     }
@@ -381,7 +381,7 @@ class ExtendedSong {
                 return absPath;
             }
         }
-        throw new Error(util.format('File doesn’t exist: %s', absPath));
+        throw new Error(log.format('File doesn’t exist: %s', absPath));
     }
     toJSON() {
         return {
@@ -406,7 +406,7 @@ function collectSongs(basePath) {
     for (const songPath of songsPaths) {
         const song = new ExtendedSong(path.join(basePath, songPath));
         if (song.songId in songs) {
-            throw new Error(util.format('A song with the same songId already exists: %s', song.songId));
+            throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
         }
         songs[song.songId] = song;
     }
@@ -445,7 +445,7 @@ class Library extends songbook_core_1.CoreLibrary {
                 songs[songId] = this.songs[songId];
             }
             else {
-                throw new Error(util.format('There is no song with song ID “%s”', songId));
+                throw new Error(log.format('There is no song with song ID “%s”', songId));
             }
         }
         this.songs = songs;
@@ -792,7 +792,7 @@ class PianoScore {
         texMarkup = texMarkup.replace('//created//', new Date().toLocaleString());
         texMarkup = texMarkup.replace('//basepath//', this.library.basePath);
         // Write contents to the text file.
-        core_node_1.log('The TeX markup was written to: %s', // Do not change text: This will break tests.
+        log.info('The TeX markup was written to: %s', // Do not change text: This will break tests.
         this.texFile.path // No color: This will break tests.
         );
         this.texFile.append(texMarkup);
@@ -803,7 +803,7 @@ class PianoScore {
         // Compile twice for the table of contents
         // The page numbers in the toc only matches after three runs.
         for (let index = 0; index < 3; index++) {
-            core_node_1.log('Compile the TeX file “%s” the %d time.', chalk_1.default.yellow(this.texFile.path), index + 1);
+            log.info('Compile the TeX file “%s” the %d time.', this.texFile.path, index + 1);
             this.spawnTex(this.texFile.path, cwd);
         }
         // Open the pdf file.
@@ -862,10 +862,10 @@ class IntermediateSong extends ExtendedSong {
      */
     formatPianoTex() {
         if (this.pianoFiles.length === 0) {
-            throw new Error(util.format('The song “%s” has no EPS piano score files.', this.metaData.title));
+            throw new Error(log.format('The song “%s” has no EPS piano score files.', this.metaData.title));
         }
         if (this.pianoFiles.length > 4) {
-            throw new Error(util.format('The song “%s” has more than 4 EPS piano score files.', this.metaData.title));
+            throw new Error(log.format('The song “%s” has more than 4 EPS piano score files.', this.metaData.title));
         }
         const template = `\n\\tmpmetadata
 {%s} % title
@@ -873,7 +873,7 @@ class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `;
-        const output = util.format(template, PianoScore.sanitize(this.metaDataCombined.title), PianoScore.sanitize(this.metaDataCombined.subtitle), PianoScore.sanitize(this.metaDataCombined.composer), PianoScore.sanitize(this.metaDataCombined.lyricist));
+        const output = log.format(template, PianoScore.sanitize(this.metaDataCombined.title), PianoScore.sanitize(this.metaDataCombined.subtitle), PianoScore.sanitize(this.metaDataCombined.composer), PianoScore.sanitize(this.metaDataCombined.lyricist));
         const epsFiles = [];
         for (let i = 0; i < this.pianoFiles.length; i++) {
             epsFiles.push(this.formatPianoTeXEpsFile(i));
@@ -1046,7 +1046,7 @@ class PianoFilesCountTree {
             return true;
         }
         else {
-            throw new Error(util.format('Invalid piano file count: %s', count));
+            throw new Error(log.format('Invalid piano file count: %s', count));
         }
     }
     /**
@@ -1133,7 +1133,7 @@ class IntermediateLibrary extends Library {
         for (const songPath of this.detectSongs()) {
             const song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor);
             if (song.songId in songs) {
-                throw new Error(util.format('A song with the same songId already exists: %s', song.songId));
+                throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
             }
             songs[song.songId] = song;
         }
@@ -1158,7 +1158,7 @@ class IntermediateLibrary extends Library {
         }
         glob_1.default.sync('**/.*.mscx,', { cwd: this.basePath }).forEach(relativePath => {
             const tmpMscx = path.join(this.basePath, relativePath);
-            console.log(`Delete temporary MuseScore file: ${chalk_1.default.yellow(tmpMscx)}`);
+            log.info('Delete temporary MuseScore file: %s', tmpMscx);
             fs.unlinkSync(tmpMscx);
         });
         this.deleteFiles([
@@ -1207,7 +1207,7 @@ class IntermediateLibrary extends Library {
             song = this.songs[songId];
         }
         else {
-            throw new Error(util.format('The song with the song ID “%s” is unkown.', songId));
+            throw new Error(log.format('The song with the song ID “%s” is unkown.', songId));
         }
         const status = song.generateIntermediateFiles(mode, true);
         message.songFolder(status, song);
@@ -1253,7 +1253,7 @@ function exportToMediaServer(library) {
             const src = path.join(song.folderSlides.get(), song.slidesFiles[index]);
             const dest = core_browser_1.formatMultiPartAssetFileName(firstFileName, index + 1);
             fs.copySync(src, dest);
-            console.log(`Copy ${chalk_1.default.yellow(src)} to ${chalk_1.default.green(dest)}.`);
+            log.info('Copy %s to %s.', src, dest);
         }
         const rawYaml = song.metaData.rawYaml_;
         rawYaml.id = `Lied_${song.songId}_NB`;
@@ -1281,7 +1281,7 @@ function buildVueApp() {
         encoding: 'utf-8',
         shell: true
     });
-    console.log(process.stdout);
-    console.log(process.stderr);
+    log.info(process.stdout);
+    log.error(process.stderr);
 }
 exports.buildVueApp = buildVueApp;

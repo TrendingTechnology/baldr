@@ -12,7 +12,6 @@ import * as childProcess from 'child_process'
 import * as crypto from 'crypto'
 import * as os from 'os'
 import * as path from 'path'
-import * as util from 'util'
 
 // Third party packages.
 import chalk from 'chalk'
@@ -30,7 +29,7 @@ import {
   Song,
   SongMetaData
 } from '@bldr/songbook-core'
-import { log } from '@bldr/core-node'
+import * as log from '@bldr/log'
 import { StringIndexedObject } from '@bldr/type-definitions'
 import { formatMultiPartAssetFileName, jsYamlConfig } from '@bldr/core-browser'
 
@@ -38,6 +37,8 @@ import { formatMultiPartAssetFileName, jsYamlConfig } from '@bldr/core-browser'
  * See `/etc/baldr.json`.
  */
 import config from '@bldr/config'
+
+log.setLogLevel(3)
 
 type IntermediateSongList = IntermediateSong[]
 interface ExtendedSongCollection {
@@ -151,7 +152,7 @@ class Message {
    * @param {string} text - Text to display.
    */
   print (text: string): string {
-    console.log(text)
+    log.info(text)
     return text
   }
 
@@ -367,21 +368,21 @@ class ExtendedSongMetaData implements SongMetaData {
    */
   constructor (folder: string) {
     if (!fs.existsSync(folder)) {
-      throw new Error(util.format('Song folder doesn’t exist: %s', folder))
+      throw new Error(log.format('Song folder doesn’t exist: %s', folder))
     }
 
     this.folder = folder
 
     const ymlFile = path.join(folder, this.yamlFile)
     if (!fs.existsSync(ymlFile)) {
-      throw new Error(util.format('YAML file could not be found: %s', ymlFile))
+      throw new Error(log.format('YAML file could not be found: %s', ymlFile))
     }
 
     this.rawYaml_ = <RawYamlData> yaml.load(fs.readFileSync(ymlFile, 'utf8'))
 
     for (const key in this.rawYaml_) {
       if (!this.allowedProperties.includes(key)) {
-        throw new Error(util.format('Unsupported key: %s', key))
+        throw new Error(log.format('Unsupported key: %s', key))
       }
     }
 
@@ -407,7 +408,7 @@ class ExtendedSongMetaData implements SongMetaData {
       const wikidataID = parseInt(this.wikidata)
       if (isNaN(wikidataID)) {
         throw new Error(
-          util.format(
+          log.format(
             'Wikidata entry “%s” of song “%s” must be an number (without Q).',
             this.title,
             this.wikidata
@@ -553,7 +554,7 @@ class ExtendedSong implements Song {
         return absPath
       }
     }
-    throw new Error(util.format('File doesn’t exist: %s', absPath))
+    throw new Error(log.format('File doesn’t exist: %s', absPath))
   }
 
   toJSON (): object {
@@ -581,7 +582,7 @@ function collectSongs (basePath: string): ExtendedSongCollection {
     const song = new ExtendedSong(path.join(basePath, songPath))
     if (song.songId in songs) {
       throw new Error(
-        util.format('A song with the same songId already exists: %s',
+        log.format('A song with the same songId already exists: %s',
           song.songId))
     }
     songs[song.songId] = song
@@ -629,7 +630,7 @@ class Library extends CoreLibrary {
       if ({}.hasOwnProperty.call(this.songs, songId)) {
         songs[songId] = this.songs[songId]
       } else {
-        throw new Error(util.format('There is no song with song ID “%s”', songId))
+        throw new Error(log.format('There is no song with song ID “%s”', songId))
       }
     }
     this.songs = songs
@@ -1031,7 +1032,7 @@ export class PianoScore {
     texMarkup = texMarkup.replace('//basepath//', this.library.basePath)
 
     // Write contents to the text file.
-    log(
+    log.info(
       'The TeX markup was written to: %s', // Do not change text: This will break tests.
       this.texFile.path // No color: This will break tests.
     )
@@ -1045,9 +1046,9 @@ export class PianoScore {
     // Compile twice for the table of contents
     // The page numbers in the toc only matches after three runs.
     for (let index = 0; index < 3; index++) {
-      log(
+      log.info(
         'Compile the TeX file “%s” the %d time.',
-        chalk.yellow(this.texFile.path),
+        this.texFile.path,
         index + 1
       )
       this.spawnTex(this.texFile.path, cwd)
@@ -1119,12 +1120,12 @@ class IntermediateSong extends ExtendedSong {
    */
   formatPianoTex (): string {
     if (this.pianoFiles.length === 0) {
-      throw new Error(util.format(
+      throw new Error(log.format(
         'The song “%s” has no EPS piano score files.',
         this.metaData.title))
     }
     if (this.pianoFiles.length > 4) {
-      throw new Error(util.format(
+      throw new Error(log.format(
         'The song “%s” has more than 4 EPS piano score files.',
         this.metaData.title))
     }
@@ -1134,7 +1135,7 @@ class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `
-    const output = util.format(
+    const output = log.format(
       template,
       PianoScore.sanitize(this.metaDataCombined.title),
       PianoScore.sanitize(this.metaDataCombined.subtitle),
@@ -1329,7 +1330,7 @@ class PianoFilesCountTree {
     if (this.validCounts.includes(count)) {
       return true
     } else {
-      throw new Error(util.format('Invalid piano file count: %s', count))
+      throw new Error(log.format('Invalid piano file count: %s', count))
     }
   }
 
@@ -1428,7 +1429,7 @@ export class IntermediateLibrary extends Library {
       )
       if (song.songId in songs) {
         throw new Error(
-          util.format('A song with the same songId already exists: %s',
+          log.format('A song with the same songId already exists: %s',
             song.songId))
       }
       songs[song.songId] = song
@@ -1459,7 +1460,7 @@ export class IntermediateLibrary extends Library {
 
     glob.sync('**/.*.mscx,', { cwd: this.basePath }).forEach(relativePath => {
       const tmpMscx = path.join(this.basePath, relativePath)
-      console.log(`Delete temporary MuseScore file: ${chalk.yellow(tmpMscx)}`)
+      log.info('Delete temporary MuseScore file: %s', tmpMscx)
       fs.unlinkSync(tmpMscx)
     })
     this.deleteFiles([
@@ -1510,7 +1511,7 @@ export class IntermediateLibrary extends Library {
     if ({}.hasOwnProperty.call(this.songs, songId)) {
       song = this.songs[songId]
     } else {
-      throw new Error(util.format('The song with the song ID “%s” is unkown.', songId))
+      throw new Error(log.format('The song with the song ID “%s” is unkown.', songId))
     }
     const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
@@ -1559,7 +1560,7 @@ export function exportToMediaServer (library: IntermediateLibrary): void {
       const src = path.join(song.folderSlides.get(), song.slidesFiles[index])
       const dest = formatMultiPartAssetFileName(firstFileName, index + 1)
       fs.copySync(src, dest)
-      console.log(`Copy ${chalk.yellow(src)} to ${chalk.green(dest)}.`)
+      log.info('Copy %s to %s.', src, dest)
     }
 
     const rawYaml: StringIndexedObject = song.metaData.rawYaml_ as StringIndexedObject
@@ -1591,6 +1592,6 @@ export function buildVueApp (): void {
     encoding: 'utf-8',
     shell: true
   })
-  console.log(process.stdout)
-  console.log(process.stderr)
+  log.info(process.stdout)
+  log.error(process.stderr)
 }
