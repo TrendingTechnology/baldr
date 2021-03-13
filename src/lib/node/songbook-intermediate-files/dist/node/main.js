@@ -33,12 +33,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildVueApp = exports.exportToMediaServer = exports.IntermediateLibrary = exports.PianoScore = void 0;
 // Node packages.
 const childProcess = __importStar(require("child_process"));
-const crypto = __importStar(require("crypto"));
 const os = __importStar(require("os"));
 const path = __importStar(require("path"));
+// Third party packages.
 const fs = __importStar(require("fs-extra"));
 const glob_1 = __importDefault(require("glob"));
-const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
 const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
@@ -48,6 +47,7 @@ const core_browser_1 = require("@bldr/core-browser");
  * See `/etc/baldr.json`.
  */
 const config_1 = __importDefault(require("@bldr/config"));
+const file_monitor_1 = require("./file-monitor");
 log.setLogLevel(3);
 /*******************************************************************************
  * Functions
@@ -415,130 +415,6 @@ class TextFile {
     }
 }
 /**
- * Sqlite database wrapper to store file contents hashes to detect
- * file modifications.
- */
-class Sqlite {
-    /**
-     * @param dbFile - The path of the Sqlite database.
-     */
-    constructor(dbFile) {
-        this.dbFile = dbFile;
-        /**
-         * A instance of the class “Sqlite3”.
-         *
-         * @type {module:@bldr/songbook-intermediate-files~Sqlite3}
-         */
-        this.db = new better_sqlite3_1.default(this.dbFile);
-        this.db
-            .prepare('CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)')
-            .run();
-        this.db
-            .prepare('CREATE INDEX IF NOT EXISTS filename ON hashes(filename)')
-            .run();
-    }
-    /**
-     * Insert a hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     * @param hash - The sha1 hash of the content of the file.
-     */
-    insert(filename, hash) {
-        this.db
-            .prepare('INSERT INTO hashes values ($filename, $hash)')
-            .run({ filename: filename, hash: hash });
-    }
-    /**
-     * Get the hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     */
-    select(filename) {
-        return this.db
-            .prepare('SELECT * FROM hashes WHERE filename = $filename')
-            .get({ filename: filename });
-    }
-    /**
-     * Update the hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     * @param hash - The sha1 hash of the content of the file.
-     */
-    update(filename, hash) {
-        this.db
-            .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
-            .run({ filename: filename, hash: hash });
-    }
-    /**
-     * Delete all rows from the table “hashes”.
-     */
-    flush() {
-        this.db.prepare('DELETE FROM hashes').run();
-    }
-}
-/**
- * Monitor files changes
- */
-class FileMonitor {
-    /**
-     * @param dbFile - The path where to store the Sqlite database.
-     */
-    constructor(dbFile) {
-        this.db = new Sqlite(dbFile);
-    }
-    /**
-     * Build the sha1 hash of a file.
-     *
-     * @param filename - The path of the file.
-     */
-    hashSHA1(filename) {
-        return crypto
-            .createHash('sha1')
-            .update(fs.readFileSync(filename))
-            .digest('hex');
-    }
-    /**
-     * Check for file modifications
-     *
-     * @param filename - Path to the file.
-     */
-    isModified(filename) {
-        filename = path.resolve(filename);
-        if (!fs.existsSync(filename)) {
-            return false;
-        }
-        const hash = this.hashSHA1(filename);
-        const row = this.db.select(filename);
-        let hashStored = '';
-        if (row) {
-            hashStored = row.hash;
-        }
-        else {
-            this.db.insert(filename, hash);
-        }
-        if (hash !== hashStored) {
-            this.db.update(filename, hash);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    /**
-     * Flush the file monitor database.
-     */
-    flush() {
-        this.db.flush();
-    }
-    /**
-     * Purge the file monitor database by deleting it.
-     */
-    purge() {
-        if (fs.existsSync(this.db.dbFile))
-            fs.unlinkSync(this.db.dbFile);
-    }
-}
-/**
  * The piano score.
  *
  * Generate the TeX file for the piano version of the songbook. The page
@@ -746,12 +622,9 @@ class IntermediateSong extends ExtendedSong {
     /**
      * @param songPath - The path of the directory containing the song
      * files or a path of a file inside the song folder (not nested in subfolders)
-     * @param fileMonitor - A instance
-     * of the FileMonitor() class.
      */
-    constructor(songPath, fileMonitor) {
+    constructor(songPath) {
         super(songPath);
-        this.fileMonitor = fileMonitor;
     }
     /**
      * Format one image file of a piano score in the TeX format.
@@ -892,13 +765,13 @@ class IntermediateSong extends ExtendedSong {
     generateIntermediateFiles(mode = 'all', force = false) {
         // slides
         if ((mode === 'all' || mode === 'slides') &&
-            (force || this.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
+            (force || file_monitor_1.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
             this.generatePDF('projector');
             this.generateSlides();
         }
         // piano
         if ((mode === 'all' || mode === 'piano') &&
-            (force || this.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
+            (force || file_monitor_1.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
             this.generatePiano();
         }
     }
@@ -1023,7 +896,6 @@ class IntermediateLibrary extends Library {
     constructor(basePath) {
         super(basePath);
         this.songs = this.collectSongs();
-        this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'));
         this.songs = this.collectSongs();
     }
     /**
@@ -1037,7 +909,7 @@ class IntermediateLibrary extends Library {
     collectSongs() {
         const songs = {};
         for (const songPath of this.detectSongs()) {
-            const song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor);
+            const song = new IntermediateSong(path.join(this.basePath, songPath));
             if (song.songId in songs) {
                 throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
             }
@@ -1095,7 +967,7 @@ class IntermediateLibrary extends Library {
     updateSongByPath(folder, mode = 'all') {
         // To throw an error if the folder doesn’t exist.
         fs.lstatSync(folder);
-        const song = new IntermediateSong(folder, this.fileMonitor);
+        const song = new IntermediateSong(folder);
         song.generateIntermediateFiles(mode, true);
     }
     /**

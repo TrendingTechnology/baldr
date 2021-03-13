@@ -8,7 +8,6 @@
  */
 /// <reference types="node" />
 import * as childProcess from 'child_process';
-import { Database } from 'better-sqlite3';
 import { SongMetaDataCombined, CoreLibrary, SongCollection, Song, SongMetaData } from '@bldr/songbook-core';
 declare type IntermediateSongList = IntermediateSong[];
 interface IntermediaSongCollection {
@@ -259,78 +258,6 @@ declare class TextFile {
     remove(): void;
 }
 /**
- * Sqlite database wrapper to store file contents hashes to detect
- * file modifications.
- */
-declare class Sqlite {
-    /**
-     * The path of the Sqlite database.
-     */
-    dbFile: string;
-    /**
-     * A instance of the class “Sqlite3”.
-     */
-    db: Database;
-    /**
-     * @param dbFile - The path of the Sqlite database.
-     */
-    constructor(dbFile: string);
-    /**
-     * Insert a hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     * @param hash - The sha1 hash of the content of the file.
-     */
-    insert(filename: string, hash: string): void;
-    /**
-     * Get the hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     */
-    select(filename: string): any;
-    /**
-     * Update the hash value of a file.
-     *
-     * @param filename - Name or path of a file.
-     * @param hash - The sha1 hash of the content of the file.
-     */
-    update(filename: string, hash: string): void;
-    /**
-     * Delete all rows from the table “hashes”.
-     */
-    flush(): void;
-}
-/**
- * Monitor files changes
- */
-declare class FileMonitor {
-    db: Sqlite;
-    /**
-     * @param dbFile - The path where to store the Sqlite database.
-     */
-    constructor(dbFile: string);
-    /**
-     * Build the sha1 hash of a file.
-     *
-     * @param filename - The path of the file.
-     */
-    hashSHA1(filename: string): string;
-    /**
-     * Check for file modifications
-     *
-     * @param filename - Path to the file.
-     */
-    isModified(filename: string): boolean;
-    /**
-     * Flush the file monitor database.
-     */
-    flush(): void;
-    /**
-     * Purge the file monitor database by deleting it.
-     */
-    purge(): void;
-}
-/**
  * The piano score.
  *
  * Generate the TeX file for the piano version of the songbook. The page
@@ -401,14 +328,11 @@ export declare class PianoScore {
  * Extended version of the Song class to build intermediate files.
  */
 declare class IntermediateSong extends ExtendedSong {
-    fileMonitor: FileMonitor;
     /**
      * @param songPath - The path of the directory containing the song
      * files or a path of a file inside the song folder (not nested in subfolders)
-     * @param fileMonitor - A instance
-     * of the FileMonitor() class.
      */
-    constructor(songPath: string, fileMonitor: FileMonitor);
+    constructor(songPath: string);
     /**
      * Format one image file of a piano score in the TeX format.
      *
@@ -528,7 +452,6 @@ declare class PianoFilesCountTree {
     shift(count: number): IntermediateSong | undefined;
 }
 export declare class IntermediateLibrary extends Library {
-    fileMonitor: FileMonitor;
     songs: IntermediaSongCollection;
     /**
      * @param basePath - The base path of the song library
