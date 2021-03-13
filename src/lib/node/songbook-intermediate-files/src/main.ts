@@ -9,7 +9,7 @@
 
 // Node packages.
 import * as childProcess from 'child_process'
-import * as crypto  from 'crypto'
+import * as crypto from 'crypto'
 import * as os from 'os'
 import * as path from 'path'
 import * as util from 'util'
@@ -32,19 +32,18 @@ import {
 } from '@bldr/songbook-core'
 import { log } from '@bldr/core-node'
 import { StringIndexedObject } from '@bldr/type-definitions'
-import { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, jsYamlConfig } from '@bldr/core-browser'
 
 /**
  * See `/etc/baldr.json`.
  */
 import config from '@bldr/config'
 
-type ExtendedSongList = ExtendedSong[]
 type IntermediateSongList = IntermediateSong[]
-type ExtendedSongCollection = {
+interface ExtendedSongCollection {
   [songId: string]: ExtendedSong
 }
-type IntermediaSongCollection = {
+interface IntermediaSongCollection {
   [songId: string]: IntermediateSong
 }
 
@@ -75,7 +74,7 @@ function parseSongIDList (listPath: string): string[] {
 function listFiles (basePath: string, filter: string): string[] {
   if (fs.existsSync(basePath)) {
     return fs.readdirSync(basePath).filter((file) => {
-      return file.indexOf(filter) > -1
+      return file.includes(filter)
     }).sort()
   }
   return []
@@ -250,7 +249,7 @@ class Folder {
   /**
    * Empty the folder (Delete all it’s files).
    */
-  empty () {
+  empty (): void {
     fs.removeSync(this.folderPath)
     fs.mkdirSync(this.folderPath)
   }
@@ -258,7 +257,7 @@ class Folder {
   /**
    * Remove the folder.
    */
-  remove () {
+  remove (): void {
     fs.removeSync(this.folderPath)
   }
 }
@@ -367,7 +366,6 @@ class ExtendedSongMetaData implements SongMetaData {
    * @param folder - Path of the song folder.
    */
   constructor (folder: string) {
-
     if (!fs.existsSync(folder)) {
       throw new Error(util.format('Song folder doesn’t exist: %s', folder))
     }
@@ -388,22 +386,22 @@ class ExtendedSongMetaData implements SongMetaData {
     }
 
     this.alias = this.rawYaml_.alias
-    this.arranger =  this.rawYaml_.arranger
-    this.artist =  this.rawYaml_.artist
+    this.arranger = this.rawYaml_.arranger
+    this.artist = this.rawYaml_.artist
     this.audio = this.rawYaml_.audio
-    this.composer =  this.rawYaml_.composer
+    this.composer = this.rawYaml_.composer
     this.country = this.rawYaml_.country
     this.description = this.rawYaml_.description
     this.genre = this.rawYaml_.genre
-    this.lyricist =  this.rawYaml_.lyricist
+    this.lyricist = this.rawYaml_.lyricist
     this.musescore = this.rawYaml_.musescore
-    this.source =  this.rawYaml_.source
-    this.subtitle =  this.rawYaml_.subtitle
+    this.source = this.rawYaml_.source
+    this.subtitle = this.rawYaml_.subtitle
     this.title = this.rawYaml_.title
-    this.wikidata =  this.rawYaml_.wikidata
+    this.wikidata = this.rawYaml_.wikidata
     this.wikipedia = this.rawYaml_.wikipedia
-    this.year =  this.rawYaml_.year
-    this.youtube =  this.rawYaml_.youtube
+    this.year = this.rawYaml_.year
+    this.youtube = this.rawYaml_.youtube
 
     if (this.wikidata) {
       const wikidataID = parseInt(this.wikidata)
@@ -445,12 +443,12 @@ class ExtendedSongMetaData implements SongMetaData {
  * One song
  */
 class ExtendedSong implements Song {
-   folder: string
-   abc: string
-   songId: string
-   metaData: ExtendedSongMetaData
+  folder: string
+  abc: string
+  songId: string
+  metaData: ExtendedSongMetaData
 
-   metaDataCombined: SongMetaDataCombined
+  metaDataCombined: SongMetaDataCombined
 
   /**
    * The slides folder
@@ -615,7 +613,7 @@ class Library extends CoreLibrary {
   /**
    * Identify a song folder by searching for a file named “info.yml.”
    */
-  protected detectSongs_ () {
+  protected detectSongs () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
   }
 
@@ -624,7 +622,7 @@ class Library extends CoreLibrary {
    *
    * @returns {object}
    */
-  loadSongList (listFile: string) {
+  loadSongList (listFile: string): SongCollection {
     const songIds = parseSongIDList(listFile)
     const songs: SongCollection = {}
     for (const songId of songIds) {
@@ -636,21 +634,6 @@ class Library extends CoreLibrary {
     }
     this.songs = songs
     return songs
-  }
-
-  /**
-   * Return only the existing ABC folders.
-   */
-  private getABCFolders_ (): string[] {
-    const abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
-    return abc.filter((file) => {
-      const folder = path.join(this.basePath, file)
-      if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
-        return true
-      } else {
-        return false
-      }
-    })
   }
 }
 
@@ -676,7 +659,7 @@ class TextFile {
    *
    * @param content - Content to append to the text file.
    */
-  append (content: string) {
+  append (content: string): void {
     fs.appendFileSync(this.path, content)
   }
 
@@ -690,14 +673,14 @@ class TextFile {
   /**
    * Delete the content of the text file, not the text file itself.
    */
-  flush () {
+  flush (): void {
     fs.writeFileSync(this.path, '')
   }
 
   /**
    * Remove the text file.
    */
-  remove () {
+  remove (): void {
     fs.unlinkSync(this.path)
   }
 }
@@ -721,7 +704,6 @@ class Sqlite {
    * @param dbFile - The path of the Sqlite database.
    */
   constructor (dbFile: string) {
-
     this.dbFile = dbFile
 
     /**
@@ -747,14 +729,14 @@ class Sqlite {
    * @param filename - Name or path of a file.
    * @param hash - The sha1 hash of the content of the file.
    */
-  insert (filename: string, hash: string) {
+  insert (filename: string, hash: string): void {
     this.db
       .prepare('INSERT INTO hashes values ($filename, $hash)')
       .run({ filename: filename, hash: hash })
   }
 
   /**
-   * Get the hast value of a file.
+   * Get the hash value of a file.
    *
    * @param filename - Name or path of a file.
    */
@@ -770,7 +752,7 @@ class Sqlite {
    * @param filename - Name or path of a file.
    * @param hash - The sha1 hash of the content of the file.
    */
-  update (filename: string, hash: string) {
+  update (filename: string, hash: string): void {
     this.db
       .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
       .run({ filename: filename, hash: hash })
@@ -779,7 +761,7 @@ class Sqlite {
   /**
    * Delete all rows from the table “hashes”.
    */
-  flush () {
+  flush (): void {
     this.db.prepare('DELETE FROM hashes').run()
   }
 }
@@ -788,7 +770,6 @@ class Sqlite {
  * Monitor files changes
  */
 class FileMonitor {
-
   db: Sqlite
   /**
    * @param dbFile - The path where to store the Sqlite database.
@@ -802,7 +783,7 @@ class FileMonitor {
    *
    * @param filename - The path of the file.
    */
-  hashSHA1 (filename: string) {
+  hashSHA1 (filename: string): string {
     return crypto
       .createHash('sha1')
       .update(
@@ -925,7 +906,7 @@ export class PianoScore {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
         const song = countTree.shift(i)
-        if (song) {
+        if (song != null) {
           const missingPages = pageCount - i
           songs.push(song)
           if (missingPages <= 0) {
@@ -1016,11 +997,11 @@ export class PianoScore {
    *
    * @param The name of the text (TeX) file inside this package
    */
-  private read_ (filename: string): string {
+  private read (filename: string): string {
     return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
   }
 
-  private spawnTex_ (texFile: string, cwd: string) {
+  private spawnTex (texFile: string, cwd: string): void {
     // Error on Mac OS: conversion of the eps files to pdf files doesn’t work.
     // not allowed in restricted mode.
     // --shell-escape
@@ -1039,10 +1020,10 @@ export class PianoScore {
   /**
    * Compile the TeX file using lualatex and open the compiled pdf.
    */
-  compile () {
+  compile (): void {
     // Assemble the Tex markup.
-    const style = this.read_('style.tex')
-    const mainTexMarkup = this.read_('piano-all.tex')
+    const style = this.read('style.tex')
+    const mainTexMarkup = this.read('piano-all.tex')
     const songs = this.build()
     let texMarkup = mainTexMarkup.replace('//style//', style)
     texMarkup = texMarkup.replace('//songs//', songs)
@@ -1069,7 +1050,7 @@ export class PianoScore {
         chalk.yellow(this.texFile.path),
         index + 1
       )
-      this.spawnTex_(this.texFile.path, cwd)
+      this.spawnTex(this.texFile.path, cwd)
     }
 
     // Open the pdf file.
@@ -1113,8 +1094,8 @@ class IntermediateSong extends ExtendedSong {
    *
    * @return TeX markup for one EPS image file of a piano score.
    */
-  private formatPianoTeXEpsFile_ (index: number): string {
-    let subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
+  private formatPianoTeXEpsFile (index: number): string {
+    const subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
     return PianoScore.texCmd(
       'image',
       subFolder
@@ -1162,7 +1143,7 @@ class IntermediateSong extends ExtendedSong {
     )
     const epsFiles = []
     for (let i = 0; i < this.pianoFiles.length; i++) {
-      epsFiles.push(this.formatPianoTeXEpsFile_(i))
+      epsFiles.push(this.formatPianoTeXEpsFile(i))
     }
     return output + epsFiles.join('\\tmpcolumnbreak\n')
   }
@@ -1173,7 +1154,7 @@ class IntermediateSong extends ExtendedSong {
    * @param source - Name of the *.mscx file without the extension.
    * @param destination - Name of the PDF without the extension.
    */
-  private generatePDF_ (source: string, destination: string = ''): string | undefined {
+  private generatePDF (source: string, destination: string = ''): string | undefined {
     if (destination === '') {
       destination = source
     }
@@ -1206,7 +1187,7 @@ class IntermediateSong extends ExtendedSong {
     fs.unlinkSync(src)
 
     const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg')
-    if (!result) {
+    if (result.length === 0) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
     this.slidesFiles = result
@@ -1238,14 +1219,14 @@ class IntermediateSong extends ExtendedSong {
    *
    * @return An array of EPS piano score filenames.
    */
-  private generatePiano_ (): string[] {
+  private generatePiano (): string[] {
     this.folderPiano.empty()
     const dest = this.folderPiano.get()
     const pianoFile = path.join(dest, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
     const result = listFiles(dest, '.eps')
-    if (!result) {
+    if (result.length === 0) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
     }
     this.pianoFiles = result
@@ -1264,8 +1245,8 @@ class IntermediateSong extends ExtendedSong {
       folder: '',
       folderName: '',
       force: false,
-      changed: <StatusChanged> {},
-      generated: <StatusGenerated> {},
+      changed: {} as StatusChanged,
+      generated: {} as StatusGenerated,
       info: {
         title: ''
       }
@@ -1279,8 +1260,8 @@ class IntermediateSong extends ExtendedSong {
 
     // slides
     if ((mode === 'all' || mode === 'slides') &&
-        (force || status.changed.slides || !this.slidesFiles.length)) {
-      status.generated.projector = this.generatePDF_('projector')
+        (force || status.changed.slides || (this.slidesFiles.length === 0))) {
+      status.generated.projector = this.generatePDF('projector')
       status.generated.slides = this.generateSlides()
     }
 
@@ -1288,8 +1269,8 @@ class IntermediateSong extends ExtendedSong {
 
     // piano
     if ((mode === 'all' || mode === 'piano') &&
-        (force || status.changed.piano || !this.pianoFiles.length)) {
-      status.generated.piano = this.generatePiano_()
+        (force || status.changed.piano || (this.pianoFiles.length === 0))) {
+      status.generated.piano = this.generatePiano()
     }
 
     return status
@@ -1298,7 +1279,7 @@ class IntermediateSong extends ExtendedSong {
   /**
    * Delete all generated files of a song folder.
    */
-  cleanIntermediateFiles () {
+  cleanIntermediateFiles (): void {
     this.folderSlides.remove()
     this.folderPiano.remove()
     fs.removeSync(path.join(this.folder, 'projector.pdf'))
@@ -1325,27 +1306,27 @@ class IntermediateSong extends ExtendedSong {
  * </code></pre>
  */
 class PianoFilesCountTree {
-  private validCounts_: number[]
+  private readonly validCounts: number[]
   private cache: { [key: number]: IntermediateSong[] }
   /**
    * @param songs - An array of song objects.
    */
   constructor (songs: IntermediateSongList) {
-    this.validCounts_ = [1, 2, 3, 4]
+    this.validCounts = [1, 2, 3, 4]
     this.cache = {
       1: [],
       2: [],
       3: [],
       4: []
     }
-    this.build_(songs)
+    this.build(songs)
   }
 
   /**
    * @param count - 1, 2, 3, 4
    */
-  private checkCount_ (count: number) {
-    if (this.validCounts_.includes(count)) {
+  private checkCount (count: number): boolean | undefined {
+    if (this.validCounts.includes(count)) {
       return true
     } else {
       throw new Error(util.format('Invalid piano file count: %s', count))
@@ -1355,7 +1336,7 @@ class PianoFilesCountTree {
   /**
    * @param songs - An array of song objects.
    */
-  private build_ (songs: IntermediateSongList) {
+  private build (songs: IntermediateSongList): void {
     for (const song of songs) {
       const count = song.pianoFiles.length
       if (!(count in this)) this.cache[count] = []
@@ -1368,7 +1349,7 @@ class PianoFilesCountTree {
    */
   sum (): number {
     let count = 0
-    for (const validCount of this.validCounts_) {
+    for (const validCount of this.validCounts) {
       if ({}.hasOwnProperty.call(this, validCount)) {
         count = count + this.cache[validCount].length
       }
@@ -1381,7 +1362,7 @@ class PianoFilesCountTree {
    */
   sumFiles (): number {
     let count = 0
-    for (const validCount of this.validCounts_) {
+    for (const validCount of this.validCounts) {
       if ({}.hasOwnProperty.call(this.cache, validCount)) {
         count += validCount * this.cache[validCount].length
       }
@@ -1409,43 +1390,38 @@ class PianoFilesCountTree {
    *
    * @returns Song
    */
-  shift (count: number) {
-    this.checkCount_(count)
+  shift (count: number): IntermediateSong | undefined {
+    this.checkCount(count)
     if ({}.hasOwnProperty.call(this, count)) return this.cache[count].shift()
   }
 }
 
 export class IntermediateLibrary extends Library {
-
   fileMonitor: FileMonitor
-
-  songs: IntermediaSongCollection = this.collectSongs_()
+  songs: IntermediaSongCollection = this.collectSongs()
 
   /**
    * @param basePath - The base path of the song library
    */
   constructor (basePath: string) {
     super(basePath)
-
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
-
-    this.songs = this.collectSongs_()
+    this.songs = this.collectSongs()
   }
 
   /**
    * Execute git pull if repository exists.
    */
-  gitPull () {
+  gitPull (): childProcess.SpawnSyncReturns<Buffer> | undefined {
     if (fs.existsSync(path.join(this.basePath, '.git'))) {
       return childProcess.spawnSync('git', ['pull'], { cwd: this.basePath })
     }
-    return false
   }
 
-  private collectSongs_ (): IntermediaSongCollection {
+  private collectSongs (): IntermediaSongCollection {
     const songs: IntermediaSongCollection = {}
-    for (const songPath of this.detectSongs_()) {
+    for (const songPath of this.detectSongs()) {
       const song = new IntermediateSong(
         path.join(this.basePath, songPath),
         this.fileMonitor
@@ -1465,7 +1441,7 @@ export class IntermediateLibrary extends Library {
    *
    * @param files - An array of files to delete.
    */
-  private deleteFiles (files: string[]) {
+  private deleteFiles (files: string[]): void {
     files.forEach(
       (filePath) => {
         fs.removeSync(path.join(this.basePath, filePath))
@@ -1476,7 +1452,7 @@ export class IntermediateLibrary extends Library {
   /**
    * Clean all intermediate media files.
    */
-  cleanIntermediateFiles () {
+  cleanIntermediateFiles (): void {
     for (const songId in this.songs) {
       this.songs[songId].cleanIntermediateFiles()
     }
@@ -1485,7 +1461,7 @@ export class IntermediateLibrary extends Library {
       const tmpMscx = path.join(this.basePath, relativePath)
       console.log(`Delete temporary MuseScore file: ${chalk.yellow(tmpMscx)}`)
       fs.unlinkSync(tmpMscx)
-    });
+    })
     this.deleteFiles([
       'songs.tex',
       'filehashes.db'
@@ -1499,7 +1475,7 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false) {
+  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
     for (const songId in this.songs) {
       const song = this.songs[songId]
       const status = song.generateIntermediateFiles(mode, force)
@@ -1514,7 +1490,7 @@ export class IntermediateLibrary extends Library {
    * @param mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongByPath (folder: string, mode: GenerationMode = 'all') {
+  updateSongByPath (folder: string, mode: GenerationMode = 'all'): void {
     // To throw an error if the folder doesn’t exist.
     fs.lstatSync(folder)
     const song = new IntermediateSong(folder, this.fileMonitor)
@@ -1529,7 +1505,7 @@ export class IntermediateLibrary extends Library {
    * @param {string} mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongBySongId (songId: string, mode: GenerationMode = 'all') {
+  updateSongBySongId (songId: string, mode: GenerationMode = 'all'): void {
     let song
     if ({}.hasOwnProperty.call(this.songs, songId)) {
       song = this.songs[songId]
@@ -1547,7 +1523,7 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  update (mode: GenerationMode = 'all', force: boolean = false) {
+  update (mode: GenerationMode = 'all', force: boolean = false): void {
     if (!['all', 'slides', 'piano'].includes(mode)) {
       throw new Error('The parameter “mode” must be one of this strings: ' +
         '“all”, “slides” or “piano”.')
@@ -1561,7 +1537,7 @@ export class IntermediateLibrary extends Library {
  * Export the intermediate SVG files to the media server. Adjust the
  * `info.yml` and copy it to the destination folder of the media server.
  */
-export function exportToMediaServer (library: IntermediateLibrary) {
+export function exportToMediaServer (library: IntermediateLibrary): void {
   // NB = Notenbeispiele -> SVG
   // /var/data/baldr/media/Lieder/NB
   // There exists a folder for the audio files: HB (Hörbeispiele)
@@ -1571,7 +1547,7 @@ export function exportToMediaServer (library: IntermediateLibrary) {
   } catch (error) {}
   fs.ensureDirSync(dirBase)
 
-  function exportSong (song: IntermediateSong) {
+  function exportSong (song: IntermediateSong): void {
     // /var/data/baldr/media/Lieder/NB/a
     const dirAbc = path.join(dirBase, song.abc)
     fs.ensureDirSync(dirAbc)
@@ -1586,7 +1562,7 @@ export function exportToMediaServer (library: IntermediateLibrary) {
       console.log(`Copy ${chalk.yellow(src)} to ${chalk.green(dest)}.`)
     }
 
-    const rawYaml: StringIndexedObject = <StringIndexedObject> song.metaData.rawYaml_
+    const rawYaml: StringIndexedObject = song.metaData.rawYaml_ as StringIndexedObject
     rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
 
@@ -1601,7 +1577,7 @@ export function exportToMediaServer (library: IntermediateLibrary) {
   }
 
   for (const song of library.toArray()) {
-    exportSong(<IntermediateSong> song)
+    exportSong(song as IntermediateSong)
   }
 }
 
@@ -1609,7 +1585,7 @@ export function exportToMediaServer (library: IntermediateLibrary) {
  * Build the Vue app. All image files must be copied into the Vue working
  * directory.
  */
-export function buildVueApp () {
+export function buildVueApp (): void {
   const process = childProcess.spawnSync('npm', ['run', 'build'], {
     cwd: config.songbook.vueAppPath,
     encoding: 'utf-8',

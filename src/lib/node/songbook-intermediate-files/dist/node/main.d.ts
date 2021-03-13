@@ -11,9 +11,9 @@ import * as childProcess from 'child_process';
 import { Database } from 'better-sqlite3';
 import { SongMetaDataCombined, CoreLibrary, SongCollection, Song, SongMetaData } from '@bldr/songbook-core';
 declare type IntermediateSongList = IntermediateSong[];
-declare type IntermediaSongCollection = {
+interface IntermediaSongCollection {
     [songId: string]: IntermediateSong;
-};
+}
 /**
  * Generate all intermediate media files or only slide
  * or piano files. Possible values: “all”, “slides” or “piano”.
@@ -258,17 +258,13 @@ declare class Library extends CoreLibrary {
     /**
      * Identify a song folder by searching for a file named “info.yml.”
      */
-    protected detectSongs_(): string[];
+    protected detectSongs(): string[];
     /**
      * @param listFile
      *
      * @returns {object}
      */
     loadSongList(listFile: string): SongCollection;
-    /**
-     * Return only the existing ABC folders.
-     */
-    private getABCFolders_;
 }
 /**
  * A text file.
@@ -326,7 +322,7 @@ declare class Sqlite {
      */
     insert(filename: string, hash: string): void;
     /**
-     * Get the hast value of a file.
+     * Get the hash value of a file.
      *
      * @param filename - Name or path of a file.
      */
@@ -438,8 +434,8 @@ export declare class PianoScore {
      *
      * @param The name of the text (TeX) file inside this package
      */
-    private read_;
-    private spawnTex_;
+    private read;
+    private spawnTex;
     /**
      * Compile the TeX file using lualatex and open the compiled pdf.
      */
@@ -464,7 +460,7 @@ declare class IntermediateSong extends ExtendedSong {
      *
      * @return TeX markup for one EPS image file of a piano score.
      */
-    private formatPianoTeXEpsFile_;
+    private formatPianoTeXEpsFile;
     /**
      * Generate TeX markup for one song.
      *
@@ -487,7 +483,7 @@ declare class IntermediateSong extends ExtendedSong {
      * @param source - Name of the *.mscx file without the extension.
      * @param destination - Name of the PDF without the extension.
      */
-    private generatePDF_;
+    private generatePDF;
     /**
      * Generate SVG files in the slides subfolder.
      */
@@ -507,7 +503,7 @@ declare class IntermediateSong extends ExtendedSong {
      *
      * @return An array of EPS piano score filenames.
      */
-    private generatePiano_;
+    private generatePiano;
     /**
      * Wrapper method for all process methods of one song folder.
      *
@@ -537,7 +533,7 @@ declare class IntermediateSong extends ExtendedSong {
  * </code></pre>
  */
 declare class PianoFilesCountTree {
-    private validCounts_;
+    private readonly validCounts;
     private cache;
     /**
      * @param songs - An array of song objects.
@@ -546,11 +542,11 @@ declare class PianoFilesCountTree {
     /**
      * @param count - 1, 2, 3, 4
      */
-    private checkCount_;
+    private checkCount;
     /**
      * @param songs - An array of song objects.
      */
-    private build_;
+    private build;
     /**
      * Sum up the number of all songs in all count categories.
      */
@@ -584,8 +580,8 @@ export declare class IntermediateLibrary extends Library {
     /**
      * Execute git pull if repository exists.
      */
-    gitPull(): false | childProcess.SpawnSyncReturns<Buffer>;
-    private collectSongs_;
+    gitPull(): childProcess.SpawnSyncReturns<Buffer> | undefined;
+    private collectSongs;
     /**
      * Delete multiple files.
      *

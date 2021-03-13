@@ -70,7 +70,7 @@ function parseSongIDList(listPath) {
 function listFiles(basePath, filter) {
     if (fs.existsSync(basePath)) {
         return fs.readdirSync(basePath).filter((file) => {
-            return file.indexOf(filter) > -1;
+            return file.includes(filter);
         }).sort();
     }
     return [];
@@ -429,7 +429,7 @@ class Library extends songbook_core_1.CoreLibrary {
     /**
      * Identify a song folder by searching for a file named “info.yml.”
      */
-    detectSongs_() {
+    detectSongs() {
         return glob_1.default.sync('info.yml', { cwd: this.basePath, matchBase: true });
     }
     /**
@@ -450,21 +450,6 @@ class Library extends songbook_core_1.CoreLibrary {
         }
         this.songs = songs;
         return songs;
-    }
-    /**
-     * Return only the existing ABC folders.
-     */
-    getABCFolders_() {
-        const abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
-        return abc.filter((file) => {
-            const folder = path.join(this.basePath, file);
-            if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        });
     }
 }
 /**
@@ -540,7 +525,7 @@ class Sqlite {
             .run({ filename: filename, hash: hash });
     }
     /**
-     * Get the hast value of a file.
+     * Get the hash value of a file.
      *
      * @param filename - Name or path of a file.
      */
@@ -689,7 +674,7 @@ class PianoScore {
         for (let i = pageCount; i > 0; i--) {
             if (!countTree.isEmpty()) {
                 const song = countTree.shift(i);
-                if (song) {
+                if (song != null) {
                     const missingPages = pageCount - i;
                     songs.push(song);
                     if (missingPages <= 0) {
@@ -779,10 +764,10 @@ class PianoScore {
      *
      * @param The name of the text (TeX) file inside this package
      */
-    read_(filename) {
+    read(filename) {
         return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' });
     }
-    spawnTex_(texFile, cwd) {
+    spawnTex(texFile, cwd) {
         // Error on Mac OS: conversion of the eps files to pdf files doesn’t work.
         // not allowed in restricted mode.
         // --shell-escape
@@ -799,8 +784,8 @@ class PianoScore {
      */
     compile() {
         // Assemble the Tex markup.
-        const style = this.read_('style.tex');
-        const mainTexMarkup = this.read_('piano-all.tex');
+        const style = this.read('style.tex');
+        const mainTexMarkup = this.read('piano-all.tex');
         const songs = this.build();
         let texMarkup = mainTexMarkup.replace('//style//', style);
         texMarkup = texMarkup.replace('//songs//', songs);
@@ -819,7 +804,7 @@ class PianoScore {
         // The page numbers in the toc only matches after three runs.
         for (let index = 0; index < 3; index++) {
             core_node_1.log('Compile the TeX file “%s” the %d time.', chalk_1.default.yellow(this.texFile.path), index + 1);
-            this.spawnTex_(this.texFile.path, cwd);
+            this.spawnTex(this.texFile.path, cwd);
         }
         // Open the pdf file.
         const pdfFile = this.texFile.path.replace('.tex', '.pdf');
@@ -856,8 +841,8 @@ class IntermediateSong extends ExtendedSong {
      *
      * @return TeX markup for one EPS image file of a piano score.
      */
-    formatPianoTeXEpsFile_(index) {
-        let subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index]);
+    formatPianoTeXEpsFile(index) {
+        const subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index]);
         return PianoScore.texCmd('image', subFolder);
     }
     /**
@@ -891,7 +876,7 @@ class IntermediateSong extends ExtendedSong {
         const output = util.format(template, PianoScore.sanitize(this.metaDataCombined.title), PianoScore.sanitize(this.metaDataCombined.subtitle), PianoScore.sanitize(this.metaDataCombined.composer), PianoScore.sanitize(this.metaDataCombined.lyricist));
         const epsFiles = [];
         for (let i = 0; i < this.pianoFiles.length; i++) {
-            epsFiles.push(this.formatPianoTeXEpsFile_(i));
+            epsFiles.push(this.formatPianoTeXEpsFile(i));
         }
         return output + epsFiles.join('\\tmpcolumnbreak\n');
     }
@@ -901,7 +886,7 @@ class IntermediateSong extends ExtendedSong {
      * @param source - Name of the *.mscx file without the extension.
      * @param destination - Name of the PDF without the extension.
      */
-    generatePDF_(source, destination = '') {
+    generatePDF(source, destination = '') {
         if (destination === '') {
             destination = source;
         }
@@ -932,7 +917,7 @@ class IntermediateSong extends ExtendedSong {
         ]);
         fs.unlinkSync(src);
         const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg');
-        if (!result) {
+        if (result.length === 0) {
             throw new Error('The SVG files for the slides couldn’t be generated.');
         }
         this.slidesFiles = result;
@@ -962,14 +947,14 @@ class IntermediateSong extends ExtendedSong {
      *
      * @return An array of EPS piano score filenames.
      */
-    generatePiano_() {
+    generatePiano() {
         this.folderPiano.empty();
         const dest = this.folderPiano.get();
         const pianoFile = path.join(dest, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
         const result = listFiles(dest, '.eps');
-        if (!result) {
+        if (result.length === 0) {
             throw new Error('The EPS files for the piano score couldn’t be generated.');
         }
         this.pianoFiles = result;
@@ -999,15 +984,15 @@ class IntermediateSong extends ExtendedSong {
         status.changed.slides = this.fileMonitor.isModified(this.mscxProjector);
         // slides
         if ((mode === 'all' || mode === 'slides') &&
-            (force || status.changed.slides || !this.slidesFiles.length)) {
-            status.generated.projector = this.generatePDF_('projector');
+            (force || status.changed.slides || (this.slidesFiles.length === 0))) {
+            status.generated.projector = this.generatePDF('projector');
             status.generated.slides = this.generateSlides();
         }
         status.changed.piano = this.fileMonitor.isModified(this.mscxPiano);
         // piano
         if ((mode === 'all' || mode === 'piano') &&
-            (force || status.changed.piano || !this.pianoFiles.length)) {
-            status.generated.piano = this.generatePiano_();
+            (force || status.changed.piano || (this.pianoFiles.length === 0))) {
+            status.generated.piano = this.generatePiano();
         }
         return status;
     }
@@ -1044,20 +1029,20 @@ class PianoFilesCountTree {
      * @param songs - An array of song objects.
      */
     constructor(songs) {
-        this.validCounts_ = [1, 2, 3, 4];
+        this.validCounts = [1, 2, 3, 4];
         this.cache = {
             1: [],
             2: [],
             3: [],
             4: []
         };
-        this.build_(songs);
+        this.build(songs);
     }
     /**
      * @param count - 1, 2, 3, 4
      */
-    checkCount_(count) {
-        if (this.validCounts_.includes(count)) {
+    checkCount(count) {
+        if (this.validCounts.includes(count)) {
             return true;
         }
         else {
@@ -1067,7 +1052,7 @@ class PianoFilesCountTree {
     /**
      * @param songs - An array of song objects.
      */
-    build_(songs) {
+    build(songs) {
         for (const song of songs) {
             const count = song.pianoFiles.length;
             if (!(count in this))
@@ -1080,7 +1065,7 @@ class PianoFilesCountTree {
      */
     sum() {
         let count = 0;
-        for (const validCount of this.validCounts_) {
+        for (const validCount of this.validCounts) {
             if ({}.hasOwnProperty.call(this, validCount)) {
                 count = count + this.cache[validCount].length;
             }
@@ -1092,7 +1077,7 @@ class PianoFilesCountTree {
      */
     sumFiles() {
         let count = 0;
-        for (const validCount of this.validCounts_) {
+        for (const validCount of this.validCounts) {
             if ({}.hasOwnProperty.call(this.cache, validCount)) {
                 count += validCount * this.cache[validCount].length;
             }
@@ -1120,7 +1105,7 @@ class PianoFilesCountTree {
      * @returns Song
      */
     shift(count) {
-        this.checkCount_(count);
+        this.checkCount(count);
         if ({}.hasOwnProperty.call(this, count))
             return this.cache[count].shift();
     }
@@ -1131,9 +1116,9 @@ class IntermediateLibrary extends Library {
      */
     constructor(basePath) {
         super(basePath);
-        this.songs = this.collectSongs_();
+        this.songs = this.collectSongs();
         this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'));
-        this.songs = this.collectSongs_();
+        this.songs = this.collectSongs();
     }
     /**
      * Execute git pull if repository exists.
@@ -1142,11 +1127,10 @@ class IntermediateLibrary extends Library {
         if (fs.existsSync(path.join(this.basePath, '.git'))) {
             return childProcess.spawnSync('git', ['pull'], { cwd: this.basePath });
         }
-        return false;
     }
-    collectSongs_() {
+    collectSongs() {
         const songs = {};
-        for (const songPath of this.detectSongs_()) {
+        for (const songPath of this.detectSongs()) {
             const song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor);
             if (song.songId in songs) {
                 throw new Error(util.format('A song with the same songId already exists: %s', song.songId));
