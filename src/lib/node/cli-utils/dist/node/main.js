@@ -121,7 +121,7 @@ class CommandRunner {
             }
             if (options && options.detached) {
                 command.unref();
-                resolve();
+                resolve({});
             }
             let stdout = '';
             let stderr = '';

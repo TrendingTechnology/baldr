@@ -10,6 +10,9 @@ export function format(template, ...args) {
         }
         return color.yellow(value);
     });
+    if (typeof template === 'number') {
+        template = template.toString();
+    }
     return printf(template, ...args);
 }
 /**

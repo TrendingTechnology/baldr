@@ -139,14 +139,7 @@ export interface Song {
      * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
      */
     songId: string;
-    /**
-     * An instance of the class SongMetaData().
-     * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
-     */
     metaData: SongMetaData;
-    /**
-     * An instance of the class SongMetaDataCombined().
-     */
     metaDataCombined: SongMetaDataCombined;
 }
 /**

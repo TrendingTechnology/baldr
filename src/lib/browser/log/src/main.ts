@@ -38,7 +38,7 @@ const ansiRegexp = /\u001b\[.*?m/
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-type FormatString = string
+type FormatString = string | number
 
 export function format (template: FormatString, ...args: any[]): string {
   args = args.map(value => {
@@ -47,6 +47,9 @@ export function format (template: FormatString, ...args: any[]): string {
     }
     return color.yellow(value)
   })
+  if (typeof template === 'number') {
+    template = template.toString()
+  }
   return printf(template, ...args)
 }
 

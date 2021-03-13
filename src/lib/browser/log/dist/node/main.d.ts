@@ -31,7 +31,7 @@ export declare const colorize: typeof color;
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-declare type FormatString = string;
+declare type FormatString = string | number;
 export declare function format(template: FormatString, ...args: any[]): string;
 /**
  * Log on level 5.

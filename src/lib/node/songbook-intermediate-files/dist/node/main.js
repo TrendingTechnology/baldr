@@ -244,15 +244,15 @@ class ExtendedSong {
      * files or a path of a file inside the song folder (not nested in subfolders)
      */
     constructor(songPath) {
-        this.folder = this.getSongFolder_(songPath);
-        this.abc = this.recognizeABCFolder_(this.folder);
+        this.folder = this.getSongFolder(songPath);
+        this.abc = this.recognizeABCFolder(this.folder);
         this.songId = path.basename(this.folder);
         this.metaData = new ExtendedSongMetaData(this.folder);
         this.metaDataCombined = new songbook_core_1.SongMetaDataCombined(this.metaData);
         this.folderSlides = new Folder(this.folder, 'NB');
         this.folderPiano = new Folder(this.folder, 'piano');
-        this.mscxProjector = this.detectFile_('projector.mscx');
-        this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx');
+        this.mscxProjector = this.detectFile('projector.mscx');
+        this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx');
         this.pianoFiles = listFiles(this.folderPiano.get(), '.eps');
         this.slidesFiles = listFiles(this.folderSlides.get(), '.svg');
     }
@@ -265,7 +265,7 @@ class ExtendedSong {
      *
      * @return The path of the parent directory of the song.
      */
-    getSongFolder_(songPath) {
+    getSongFolder(songPath) {
         try {
             const stat = fs.lstatSync(songPath);
             if (stat.isDirectory()) {
@@ -283,7 +283,7 @@ class ExtendedSong {
      *
      * @return A single character
      */
-    recognizeABCFolder_(folder) {
+    recognizeABCFolder(folder) {
         const pathSegments = folder.split(path.sep);
         const abc = pathSegments[pathSegments.length - 2];
         return abc;
@@ -297,7 +297,7 @@ class ExtendedSong {
      * @return A joined path of the file relative to the song collection
      *   base dir.
      */
-    detectFile_(...file) {
+    detectFile(...file) {
         let absPath;
         for (const argument of arguments) {
             absPath = path.join(this.folder, argument);
@@ -548,11 +548,6 @@ class FileMonitor {
  * EPS files.
  */
 class PianoScore {
-    /**
-     * @param library - An instance of the class “Library()”
-     * @param groupAlphabetically
-     * @param pageTurnOptimized
-     */
     constructor(library, groupAlphabetically = true, pageTurnOptimized = true) {
         /**
          * A temporary file path where the content of the TeX file gets stored.
@@ -825,29 +820,6 @@ class IntermediateSong extends ExtendedSong {
         }
     }
     /**
-     * Generate SVG files in the slides subfolder.
-     */
-    generateSlides() {
-        const subFolder = this.folderSlides.get();
-        const oldSVGs = listFiles(subFolder, '.svg');
-        for (const oldSVG of oldSVGs) {
-            fs.unlinkSync(path.join(subFolder, oldSVG));
-        }
-        const src = path.join(subFolder, 'projector.pdf');
-        childProcess.spawnSync('pdf2svg', [
-            src,
-            path.join(subFolder, '%02d.svg'),
-            'all'
-        ]);
-        fs.unlinkSync(src);
-        const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg');
-        if (result.length === 0) {
-            throw new Error('The SVG files for the slides couldn’t be generated.');
-        }
-        this.slidesFiles = result;
-        return result;
-    }
-    /**
      * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
      *
      * @param folder - The folder containing the files to be renamed.
@@ -867,17 +839,43 @@ class IntermediateSong extends ExtendedSong {
         return listFiles(folder, filter);
     }
     /**
-     * Generate from the MuseScore file “piano/piano.mscx” EPS files.
+     * Generate SVG files in the slides subfolder.
+     */
+    generateSlides() {
+        const subFolder = this.folderSlides.get();
+        const oldSVGs = listFiles(subFolder, '.svg');
+        for (const oldSVG of oldSVGs) {
+            fs.unlinkSync(path.join(subFolder, oldSVG));
+        }
+        const src = path.join(subFolder, 'projector.pdf');
+        childProcess.spawnSync('pdf2svg', [
+            src,
+            path.join(subFolder, '%02d.svg'),
+            'all'
+        ]);
+        fs.unlinkSync(src);
+        const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg');
+        log.info('Generate SVG files: %s', result);
+        if (result.length === 0) {
+            throw new Error('The SVG files for the slides couldn’t be generated.');
+        }
+        this.slidesFiles = result;
+        return result;
+    }
+    /**
+     * Generate EPS files for the piano score from the MuseScore file
+     * “piano/piano.mscx” .
      *
      * @return An array of EPS piano score filenames.
      */
     generatePiano() {
         this.folderPiano.empty();
-        const dest = this.folderPiano.get();
-        const pianoFile = path.join(dest, 'piano.mscx');
+        const subFolder = this.folderPiano.get();
+        const pianoFile = path.join(subFolder, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
-        const result = listFiles(dest, '.eps');
+        const result = this.renameMultipartFiles(subFolder, '.eps', 'Piano.eps');
+        log.info('Generate EPS files: %s', result);
         if (result.length === 0) {
             throw new Error('The EPS files for the piano score couldn’t be generated.');
         }

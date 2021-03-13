@@ -13,10 +13,13 @@ _transpile() {
   fi
 }
 
+# masters/generic
+# masters/quote
+# lib/browser/master-collection
+# lib/browser/presentation-parser
 # First low level modules
 DIRS="lib/browser/type-definitions
-lib/browser/master-collection
-lib/browser/presentation-parser
+lib/browser/log
 lib/browser/core-browser
 lib/browser/http-request
 lib/browser/tex-markdown-converter
@@ -29,8 +32,6 @@ lib/node/cli-utils
 lib/node/media-manager
 api/media-server
 api/wire
-masters/generic
-masters/quote
 mgmt/cli
 mgmt/test"
 

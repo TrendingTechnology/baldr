@@ -182,13 +182,13 @@ declare class ExtendedSong implements Song {
      *
      * @return The path of the parent directory of the song.
      */
-    private getSongFolder_;
+    private getSongFolder;
     /**
      * @param folder - The directory containing the song files.
      *
      * @return A single character
      */
-    private recognizeABCFolder_;
+    private recognizeABCFolder;
     /**
      * Detect a file inside the song folder. Throw an exception if the
      * file doesn’t exist.
@@ -198,7 +198,7 @@ declare class ExtendedSong implements Song {
      * @return A joined path of the file relative to the song collection
      *   base dir.
      */
-    private detectFile_;
+    private detectFile;
     toJSON(): object;
 }
 /*******************************************************************************
@@ -347,11 +347,6 @@ export declare class PianoScore {
     library: IntermediateLibrary;
     groupAlphabetically: boolean;
     pageTurnOptimized: boolean;
-    /**
-     * @param library - An instance of the class “Library()”
-     * @param groupAlphabetically
-     * @param pageTurnOptimized
-     */
     constructor(library: IntermediateLibrary, groupAlphabetically?: boolean, pageTurnOptimized?: boolean);
     /**
      * Generate TeX markup. Generate a TeX command prefixed with \tmp.
@@ -446,10 +441,6 @@ declare class IntermediateSong extends ExtendedSong {
      */
     private generatePDF;
     /**
-     * Generate SVG files in the slides subfolder.
-     */
-    private generateSlides;
-    /**
      * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
      *
      * @param folder - The folder containing the files to be renamed.
@@ -460,7 +451,12 @@ declare class IntermediateSong extends ExtendedSong {
      */
     private renameMultipartFiles;
     /**
-     * Generate from the MuseScore file “piano/piano.mscx” EPS files.
+     * Generate SVG files in the slides subfolder.
+     */
+    private generateSlides;
+    /**
+     * Generate EPS files for the piano score from the MuseScore file
+     * “piano/piano.mscx” .
      *
      * @return An array of EPS piano score filenames.
      */

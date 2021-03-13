@@ -144,7 +144,7 @@ export class CommandRunner {
 
       if (options && options.detached) {
         command.unref()
-        resolve()
+        resolve(<CommandRunnerResult> {})
       }
 
       let stdout: string = ''

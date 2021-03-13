@@ -354,8 +354,8 @@ class ExtendedSong implements Song {
    * files or a path of a file inside the song folder (not nested in subfolders)
    */
   constructor (songPath: string) {
-    this.folder = this.getSongFolder_(songPath)
-    this.abc = this.recognizeABCFolder_(this.folder)
+    this.folder = this.getSongFolder(songPath)
+    this.abc = this.recognizeABCFolder(this.folder)
     this.songId = path.basename(this.folder)
     this.metaData = new ExtendedSongMetaData(this.folder)
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
@@ -363,8 +363,8 @@ class ExtendedSong implements Song {
     this.folderSlides = new Folder(this.folder, 'NB')
     this.folderPiano = new Folder(this.folder, 'piano')
 
-    this.mscxProjector = this.detectFile_('projector.mscx')
-    this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
+    this.mscxProjector = this.detectFile('projector.mscx')
+    this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx')
     this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
     this.slidesFiles = listFiles(this.folderSlides.get(), '.svg')
   }
@@ -378,7 +378,7 @@ class ExtendedSong implements Song {
    *
    * @return The path of the parent directory of the song.
    */
-  private getSongFolder_ (songPath: string): string {
+  private getSongFolder (songPath: string): string {
     try {
       const stat = fs.lstatSync(songPath)
       if (stat.isDirectory()) {
@@ -395,7 +395,7 @@ class ExtendedSong implements Song {
    *
    * @return A single character
    */
-  private recognizeABCFolder_ (folder: string): string {
+  private recognizeABCFolder (folder: string): string {
     const pathSegments = folder.split(path.sep)
     const abc = pathSegments[pathSegments.length - 2]
     return abc
@@ -410,7 +410,7 @@ class ExtendedSong implements Song {
    * @return A joined path of the file relative to the song collection
    *   base dir.
    */
-  private detectFile_ (...file: string[]): string {
+  private detectFile (...file: string[]): string {
     let absPath
     for (const argument of arguments) {
       absPath = path.join(this.folder, argument)
@@ -718,11 +718,6 @@ export class PianoScore {
   groupAlphabetically: boolean
   pageTurnOptimized: boolean
 
-  /**
-   * @param library - An instance of the class “Library()”
-   * @param groupAlphabetically
-   * @param pageTurnOptimized
-   */
   constructor (library: IntermediateLibrary, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
     /**
      * A temporary file path where the content of the TeX file gets stored.
@@ -1035,6 +1030,26 @@ class IntermediateSong extends ExtendedSong {
   }
 
   /**
+   * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
+   *
+   * @param folder - The folder containing the files to be renamed.
+   * @param filter - A string to filter the list of file names.
+   * @param newMultipartFilename - The new base name of the multipart files.
+   *
+   * @returns An array of the renamed multipart files names.
+   */
+   private renameMultipartFiles (folder: string, filter: string, newMultipartFilename: string): string[] {
+    const intermediateFiles = listFiles(folder, filter)
+    let no = 1
+    for (const oldName of intermediateFiles) {
+      const newName = formatMultiPartAssetFileName(newMultipartFilename, no)
+      fs.renameSync(path.join(folder, oldName), path.join(folder, newName))
+      no++
+    }
+    return listFiles(folder, filter)
+  }
+
+  /**
    * Generate SVG files in the slides subfolder.
    */
   private generateSlides (): string[] {
@@ -1052,6 +1067,7 @@ class IntermediateSong extends ExtendedSong {
     fs.unlinkSync(src)
 
     const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg')
+    log.info('Generate SVG files: %s', result)
     if (result.length === 0) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
@@ -1060,37 +1076,19 @@ class IntermediateSong extends ExtendedSong {
   }
 
   /**
-   * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
-   *
-   * @param folder - The folder containing the files to be renamed.
-   * @param filter - A string to filter the list of file names.
-   * @param newMultipartFilename - The new base name of the multipart files.
-   *
-   * @returns An array of the renamed multipart files names.
-   */
-  private renameMultipartFiles (folder: string, filter: string, newMultipartFilename: string): string[] {
-    const intermediateFiles = listFiles(folder, filter)
-    let no = 1
-    for (const oldName of intermediateFiles) {
-      const newName = formatMultiPartAssetFileName(newMultipartFilename, no)
-      fs.renameSync(path.join(folder, oldName), path.join(folder, newName))
-      no++
-    }
-    return listFiles(folder, filter)
-  }
-
-  /**
-   * Generate from the MuseScore file “piano/piano.mscx” EPS files.
+   * Generate EPS files for the piano score from the MuseScore file
+   * “piano/piano.mscx” .
    *
    * @return An array of EPS piano score filenames.
    */
   private generatePiano (): string[] {
     this.folderPiano.empty()
-    const dest = this.folderPiano.get()
-    const pianoFile = path.join(dest, 'piano.mscx')
+    const subFolder = this.folderPiano.get()
+    const pianoFile = path.join(subFolder, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
-    const result = listFiles(dest, '.eps')
+    const result = this.renameMultipartFiles(subFolder, '.eps', 'Piano.eps')
+    log.info('Generate EPS files: %s', result)
     if (result.length === 0) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
     }

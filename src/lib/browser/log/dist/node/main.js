@@ -13,6 +13,9 @@ function format(template, ...args) {
         }
         return color.yellow(value);
     });
+    if (typeof template === 'number') {
+        template = template.toString();
+    }
     return fast_printf_1.printf(template, ...args);
 }
 exports.format = format;
