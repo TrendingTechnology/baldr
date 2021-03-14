@@ -779,7 +779,7 @@ class IntermediateSong extends ExtendedSong {
             (force || file_monitor_1.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
             this.generatePDF('projector');
         }
-        log.info('Generate intermediate files for the Song %s', this.songId);
+        log.info('Generate intermediate files for the Song “%s”.', this.songId);
         // piano
         if ((mode === 'all' || mode === 'piano') &&
             (force || file_monitor_1.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
@@ -797,9 +797,9 @@ class IntermediateSong extends ExtendedSong {
                 fs.removeSync(filePath);
             }
         }
-        removeFile('Remove temporary PDF file %s', path.join(this.folder, 'projector.pdf'));
-        removeFile('Remove old slides folder %s', path.join(this.folder, 'slides'));
-        removeFile('Remove old piano folder %s', path.join(this.folder, 'piano'));
+        removeFile('Remove temporary PDF file “%s”.', path.join(this.folder, 'projector.pdf'));
+        removeFile('Remove old slides folder “%s”.', path.join(this.folder, 'slides'));
+        removeFile('Remove old piano folder “%s”.', path.join(this.folder, 'piano'));
     }
 }
 /**

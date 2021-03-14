@@ -161,6 +161,10 @@ export declare class AlphabeticalSongsTree {
      */
     constructor(songs: Song[]);
 }
+interface DynamicSelectSong {
+    id: string;
+    name: string;
+}
 /**
  * Combine and transform some song metadata properties.
  *
@@ -172,7 +176,7 @@ export declare class AlphabeticalSongsTree {
  * - lyricist: lyricist
  */
 export declare class SongMetaDataCombined {
-    private metaData_;
+    private readonly metaData;
     allProperties: string[];
     /**
      * @param songMetaData - A song
@@ -193,7 +197,7 @@ export declare class SongMetaDataCombined {
      *
      * @private
      */
-    static collectProperties_(properties: string[], object: StringIndexedObject): any[];
+    private static collectProperties;
     /**
      * Format: `composer, artist, genre`
      */
@@ -231,9 +235,9 @@ export declare class SongMetaDataCombined {
     get youtubeUrl(): string | undefined;
     toJSON(): StringIndexedObject;
 }
-export declare type SongCollection = {
-    [key: string]: Song;
-};
+export interface SongCollection<T> {
+    [songId: string]: T;
+}
 /**
  * The song library - a collection of songs
  */
@@ -241,7 +245,7 @@ export declare class CoreLibrary {
     /**
      * The collection of songs
      */
-    songs: SongCollection;
+    songs: SongCollection<Song>;
     /**
      * An array of song IDs.
      */
@@ -251,15 +255,9 @@ export declare class CoreLibrary {
      * getNextSong and getPreviousSong
      */
     currentSongIndex: number;
-    constructor(songs: SongCollection);
+    constructor(songs: SongCollection<Song>);
     toArray(): Song[];
-    /**
-     * @returns {array}
-     */
-    toDynamicSelect(): {
-        id: string;
-        name: string;
-    }[];
+    toDynamicSelect(): DynamicSelectSong[];
     /**
      * Count the number of songs in the song library
      */
@@ -271,13 +269,6 @@ export declare class CoreLibrary {
      * @returns The index in the songIds array.
      */
     updateCurrentSongIndex(songId: string): number;
-    /**
-     * Sort alphabetically an array of objects by some specific property.
-     *
-     * @param property Key of the object to sort.
-     * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
-     */
-    private sortByProperty_;
     /**
      * Get the song object from the song ID.
      *
@@ -296,5 +287,6 @@ export declare class CoreLibrary {
      * Get a random song.
      */
     getRandomSong(): Song;
-    toJSON(): SongCollection;
+    toJSON(): SongCollection<Song>;
 }
+export {};

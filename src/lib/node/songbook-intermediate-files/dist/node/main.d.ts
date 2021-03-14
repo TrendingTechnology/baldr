@@ -9,10 +9,6 @@
 /// <reference types="node" />
 import * as childProcess from 'child_process';
 import { SongMetaDataCombined, CoreLibrary, SongCollection, Song, SongMetaData } from '@bldr/songbook-core';
-declare type IntermediateSongList = IntermediateSong[];
-interface IntermediaSongCollection {
-    [songId: string]: IntermediateSong;
-}
 /**
  * Generate all intermediate media files or only slide
  * or piano files. Possible values: “all”, “slides” or “piano”.
@@ -217,7 +213,7 @@ declare class Library extends CoreLibrary {
      *
      * @returns {object}
      */
-    loadSongList(listFile: string): SongCollection;
+    loadSongList(listFile: string): SongCollection<Song>;
 }
 /**
  * A text file.
@@ -287,7 +283,7 @@ export declare class PianoScore {
      *
      * @returns An array of song objects, which fit in a given page number
      */
-    static selectSongs(countTree: PianoFilesCountTree, songs: IntermediateSongList, pageCount: number): IntermediateSongList;
+    static selectSongs(countTree: PianoFilesCountTree, songs: IntermediateSong[], pageCount: number): IntermediateSong[];
     /**
      * Build the TeX markup of an array of song objects
      *
@@ -295,7 +291,7 @@ export declare class PianoScore {
      *
      * @return {string}
      */
-    static buildSongList(songs: IntermediateSongList, pageTurnOptimized?: boolean): string;
+    static buildSongList(songs: IntermediateSong[], pageTurnOptimized?: boolean): string;
     /**
      * Build the TeX markup for all songs.
      *
@@ -412,7 +408,7 @@ declare class PianoFilesCountTree {
     /**
      * @param songs - An array of song objects.
      */
-    constructor(songs: IntermediateSongList);
+    constructor(songs: IntermediateSong[]);
     /**
      * @param count - 1, 2, 3, 4
      */
@@ -445,7 +441,7 @@ declare class PianoFilesCountTree {
     shift(count: number): IntermediateSong | undefined;
 }
 export declare class IntermediateLibrary extends Library {
-    songs: IntermediaSongCollection;
+    songs: SongCollection<IntermediateSong>;
     /**
      * @param basePath - The base path of the song library
      */

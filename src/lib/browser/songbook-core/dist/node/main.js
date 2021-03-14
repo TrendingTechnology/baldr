@@ -53,7 +53,7 @@ class SongMetaDataCombined {
         /**
          * The raw metadata object originating from the info.yml file.
          */
-        this.metaData_ = songMetaData;
+        this.metaData = songMetaData;
         /**
          * All property names of all getters as an array.
          */
@@ -89,7 +89,7 @@ class SongMetaDataCombined {
      *
      * @private
      */
-    static collectProperties_(properties, object) {
+    static collectProperties(properties, object) {
         const parts = [];
         for (const property of properties) {
             if (property in object && object[property]) {
@@ -103,13 +103,13 @@ class SongMetaDataCombined {
      */
     get composer() {
         let properties;
-        if (this.metaData_.composer === this.metaData_.artist) {
+        if (this.metaData.composer === this.metaData.artist) {
             properties = ['composer', 'genre'];
         }
         else {
             properties = ['composer', 'artist', 'genre'];
         }
-        return SongMetaDataCombined.collectProperties_(properties, this.metaData_).join(', ');
+        return SongMetaDataCombined.collectProperties(properties, this.metaData).join(', ');
     }
     /**
      * Return the lyricist only if it is not the same as in the fields
@@ -118,39 +118,39 @@ class SongMetaDataCombined {
      * Format: `lyricist`
      */
     get lyricist() {
-        if (this.metaData_.lyricist &&
-            this.metaData_.lyricist !== this.metaData_.artist &&
-            this.metaData_.lyricist !== this.metaData_.composer) {
-            return this.metaData_.lyricist;
+        if (this.metaData.lyricist &&
+            this.metaData.lyricist !== this.metaData.artist &&
+            this.metaData.lyricist !== this.metaData.composer) {
+            return this.metaData.lyricist;
         }
     }
     /**
      * For example: `https://musescore.com/score/1234`
      */
     get musescoreUrl() {
-        if (this.metaData_.musescore) {
-            return `https://musescore.com/score/${this.metaData_.musescore}`;
+        if (this.metaData.musescore) {
+            return `https://musescore.com/score/${this.metaData.musescore}`;
         }
     }
     /**
      * Format: `subtitle - alias - country`
      */
     get subtitle() {
-        return SongMetaDataCombined.collectProperties_(['subtitle', 'alias', 'country'], this.metaData_).join(' - ');
+        return SongMetaDataCombined.collectProperties(['subtitle', 'alias', 'country'], this.metaData).join(' - ');
     }
     /**
      * title (year)
      */
     get title() {
         let out;
-        if (this.metaData_.title) {
-            out = this.metaData_.title;
+        if (this.metaData.title) {
+            out = this.metaData.title;
         }
         else {
             out = '';
         }
-        if (this.metaData_.year) {
-            return `${out} (${this.metaData_.year})`;
+        if (this.metaData.year) {
+            return `${out} (${this.metaData.year})`;
         }
         return out;
     }
@@ -158,24 +158,24 @@ class SongMetaDataCombined {
      * For example: `https://www.wikidata.org/wiki/Q42`
      */
     get wikidataUrl() {
-        if (this.metaData_.wikidata) {
-            return core_browser_1.formatWikidataUrl(this.metaData_.wikidata);
+        if (this.metaData.wikidata) {
+            return core_browser_1.formatWikidataUrl(this.metaData.wikidata);
         }
     }
     /**
      * For example: `https://en.wikipedia.org/wiki/A_Article`
      */
     get wikipediaUrl() {
-        if (this.metaData_.wikipedia) {
-            return core_browser_1.formatWikipediaUrl(this.metaData_.wikipedia);
+        if (this.metaData.wikipedia) {
+            return core_browser_1.formatWikipediaUrl(this.metaData.wikipedia);
         }
     }
     /**
      * For example: `https://youtu.be/CQYypFMTQcE`
      */
     get youtubeUrl() {
-        if (this.metaData_.youtube) {
-            return core_browser_1.formatYoutubeUrl(this.metaData_.youtube);
+        if (this.metaData.youtube) {
+            return core_browser_1.formatYoutubeUrl(this.metaData.youtube);
         }
     }
     toJSON() {
@@ -200,9 +200,6 @@ class CoreLibrary {
     toArray() {
         return Object.values(this.songs);
     }
-    /**
-     * @returns {array}
-     */
     toDynamicSelect() {
         const result = [];
         for (const songId of this.songIds) {
@@ -226,17 +223,6 @@ class CoreLibrary {
     updateCurrentSongIndex(songId) {
         this.currentSongIndex = this.songIds.indexOf(songId);
         return this.currentSongIndex;
-    }
-    /**
-     * Sort alphabetically an array of objects by some specific property.
-     *
-     * @param property Key of the object to sort.
-     * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
-     */
-    sortByProperty_(property) {
-        return function (a, b) {
-            return a[property].localeCompare(b[property]);
-        };
     }
     /**
      * Get the song object from the song ID.

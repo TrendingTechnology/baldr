@@ -188,7 +188,6 @@ export interface Song {
  * </code></pre>
  */
 export class AlphabeticalSongsTree {
-
   [key: string]: Song[]
 
   /**
@@ -205,6 +204,11 @@ export class AlphabeticalSongsTree {
   }
 }
 
+interface DynamicSelectSong {
+  id: string
+  name: string
+}
+
 /**
  * Combine and transform some song metadata properties.
  *
@@ -216,7 +220,7 @@ export class AlphabeticalSongsTree {
  * - lyricist: lyricist
  */
 export class SongMetaDataCombined {
-  private metaData_: StringIndexedObject
+  private readonly metaData: StringIndexedObject
   public allProperties: string[]
   /**
    * @param songMetaData - A song
@@ -226,7 +230,7 @@ export class SongMetaDataCombined {
     /**
      * The raw metadata object originating from the info.yml file.
      */
-    this.metaData_ = songMetaData
+    this.metaData = songMetaData
 
     /**
      * All property names of all getters as an array.
@@ -265,7 +269,7 @@ export class SongMetaDataCombined {
    *
    * @private
    */
-  static collectProperties_ (properties: string[], object: StringIndexedObject): any[] {
+  private static collectProperties (properties: string[], object: StringIndexedObject): any[] {
     const parts = []
     for (const property of properties) {
       if (property in object && object[property]) {
@@ -280,14 +284,14 @@ export class SongMetaDataCombined {
    */
   get composer () {
     let properties
-    if (this.metaData_.composer === this.metaData_.artist) {
+    if (this.metaData.composer === this.metaData.artist) {
       properties = ['composer', 'genre']
     } else {
       properties = ['composer', 'artist', 'genre']
     }
-    return SongMetaDataCombined.collectProperties_(
+    return SongMetaDataCombined.collectProperties(
       properties,
-      this.metaData_
+      this.metaData
     ).join(', ')
   }
 
@@ -299,11 +303,11 @@ export class SongMetaDataCombined {
    */
   get lyricist () {
     if (
-      this.metaData_.lyricist &&
-      this.metaData_.lyricist !== this.metaData_.artist &&
-      this.metaData_.lyricist !== this.metaData_.composer
+      this.metaData.lyricist &&
+      this.metaData.lyricist !== this.metaData.artist &&
+      this.metaData.lyricist !== this.metaData.composer
     ) {
-      return this.metaData_.lyricist
+      return this.metaData.lyricist
     }
   }
 
@@ -311,8 +315,8 @@ export class SongMetaDataCombined {
    * For example: `https://musescore.com/score/1234`
    */
   get musescoreUrl (): string | undefined {
-    if (this.metaData_.musescore) {
-      return `https://musescore.com/score/${this.metaData_.musescore}`
+    if (this.metaData.musescore) {
+      return `https://musescore.com/score/${this.metaData.musescore}`
     }
   }
 
@@ -320,9 +324,9 @@ export class SongMetaDataCombined {
    * Format: `subtitle - alias - country`
    */
   get subtitle () {
-    return SongMetaDataCombined.collectProperties_(
+    return SongMetaDataCombined.collectProperties(
       ['subtitle', 'alias', 'country'],
-      this.metaData_
+      this.metaData
     ).join(' - ')
   }
 
@@ -331,14 +335,14 @@ export class SongMetaDataCombined {
    */
   get title (): string {
     let out: string
-    if (this.metaData_.title) {
-      out = this.metaData_.title
+    if (this.metaData.title) {
+      out = this.metaData.title
     } else {
       out = ''
     }
 
-    if (this.metaData_.year) {
-      return `${out} (${this.metaData_.year})`
+    if (this.metaData.year) {
+      return `${out} (${this.metaData.year})`
     }
     return out
   }
@@ -347,8 +351,8 @@ export class SongMetaDataCombined {
    * For example: `https://www.wikidata.org/wiki/Q42`
    */
   get wikidataUrl (): string | undefined {
-    if (this.metaData_.wikidata) {
-      return formatWikidataUrl(this.metaData_.wikidata)
+    if (this.metaData.wikidata) {
+      return formatWikidataUrl(this.metaData.wikidata)
     }
   }
 
@@ -356,8 +360,8 @@ export class SongMetaDataCombined {
    * For example: `https://en.wikipedia.org/wiki/A_Article`
    */
   get wikipediaUrl (): string | undefined {
-    if (this.metaData_.wikipedia) {
-      return formatWikipediaUrl(this.metaData_.wikipedia)
+    if (this.metaData.wikipedia) {
+      return formatWikipediaUrl(this.metaData.wikipedia)
     }
   }
 
@@ -365,8 +369,8 @@ export class SongMetaDataCombined {
    * For example: `https://youtu.be/CQYypFMTQcE`
    */
   get youtubeUrl (): string | undefined {
-    if (this.metaData_.youtube) {
-      return formatYoutubeUrl(this.metaData_.youtube)
+    if (this.metaData.youtube) {
+      return formatYoutubeUrl(this.metaData.youtube)
     }
   }
 
@@ -380,7 +384,9 @@ export class SongMetaDataCombined {
   }
 }
 
-export type SongCollection = { [key: string]: Song }
+export interface SongCollection <T> {
+  [songId: string]: T
+}
 
 /**
  * The song library - a collection of songs
@@ -389,7 +395,7 @@ export class CoreLibrary {
   /**
    * The collection of songs
    */
-  songs: SongCollection
+  songs: SongCollection<Song>
 
   /**
    * An array of song IDs.
@@ -402,9 +408,9 @@ export class CoreLibrary {
    */
   currentSongIndex: number
 
-  constructor (songs: SongCollection) {
+  constructor (songs: SongCollection<Song>) {
     this.songs = songs
-    this.songIds = Object.keys(this.songs).sort()
+    this.songIds = Object.keys(this.songs).sort(undefined)
     this.currentSongIndex = 0
   }
 
@@ -412,10 +418,7 @@ export class CoreLibrary {
     return Object.values(this.songs)
   }
 
-  /**
-   * @returns {array}
-   */
-  toDynamicSelect () {
+  toDynamicSelect (): DynamicSelectSong[] {
     const result = []
     for (const songId of this.songIds) {
       const song = this.getSongById(songId)
@@ -443,24 +446,12 @@ export class CoreLibrary {
   }
 
   /**
-   * Sort alphabetically an array of objects by some specific property.
-   *
-   * @param property Key of the object to sort.
-   * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
-   */
-  private sortByProperty_ (property: string) {
-    return function (a: StringIndexedObject, b: StringIndexedObject) {
-      return a[property].localeCompare(b[property])
-    }
-  }
-
-  /**
    * Get the song object from the song ID.
    *
    * @param songId - The ID of the song. (The parent song folder)
    */
   getSongById (songId: string): Song {
-    if (songId in this.songs && this.songs[songId]) {
+    if (songId in this.songs) {
       return this.songs[songId]
     } else {
       throw new Error(`There is no song with the songId: ${songId}`)
@@ -503,7 +494,7 @@ export class CoreLibrary {
     }
   }
 
-  toJSON () {
+  toJSON (): StringIndexedObject {
     return this.songs
   }
 }

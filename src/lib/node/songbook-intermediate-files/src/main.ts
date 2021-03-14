@@ -38,14 +38,6 @@ import { fileMonitor } from './file-monitor'
 
 log.setLogLevel(3)
 
-type IntermediateSongList = IntermediateSong[]
-interface ExtendedSongCollection {
-  [songId: string]: ExtendedSong
-}
-interface IntermediaSongCollection {
-  [songId: string]: IntermediateSong
-}
-
 /**
  * Generate all intermediate media files or only slide
  * or piano files. Possible values: “all”, “slides” or “piano”.
@@ -439,9 +431,9 @@ class ExtendedSong implements Song {
  * @returns An object indexed with the song ID containing the song
  * objects.
  */
-function collectSongs (basePath: string): ExtendedSongCollection {
+function collectSongs (basePath: string): SongCollection<ExtendedSong> {
   const songsPaths = glob.sync('info.yml', { cwd: basePath, matchBase: true })
-  const songs: ExtendedSongCollection = {}
+  const songs: SongCollection<ExtendedSong> = {}
   for (const songPath of songsPaths) {
     const song = new ExtendedSong(path.join(basePath, songPath))
     if (song.songId in songs) {
@@ -471,7 +463,7 @@ class Library extends CoreLibrary {
    * @param basePath - The base path of the song library
    */
   constructor (basePath: string) {
-    super(<SongCollection> collectSongs(basePath))
+    super(<SongCollection<Song>> collectSongs(basePath))
     this.basePath = basePath
   }
 
@@ -487,9 +479,9 @@ class Library extends CoreLibrary {
    *
    * @returns {object}
    */
-  loadSongList (listFile: string): SongCollection {
+  loadSongList (listFile: string): SongCollection<Song> {
     const songIds = parseSongIDList(listFile)
-    const songs: SongCollection = {}
+    const songs: SongCollection<Song> = {}
     for (const songId of songIds) {
       if ({}.hasOwnProperty.call(this.songs, songId)) {
         songs[songId] = this.songs[songId]
@@ -612,7 +604,7 @@ export class PianoScore {
    *
    * @returns An array of song objects, which fit in a given page number
    */
-  static selectSongs (countTree: PianoFilesCountTree, songs: IntermediateSongList, pageCount: number): IntermediateSongList {
+  static selectSongs (countTree: PianoFilesCountTree, songs: IntermediateSong[], pageCount: number): IntermediateSong[] {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
         const song = countTree.shift(i)
@@ -637,7 +629,7 @@ export class PianoScore {
    *
    * @return {string}
    */
-  static buildSongList (songs: IntermediateSongList, pageTurnOptimized = false): string {
+  static buildSongList (songs: IntermediateSong[], pageTurnOptimized = false): string {
     const doublePages = []
     if (pageTurnOptimized) {
       let firstPage = true
@@ -694,10 +686,10 @@ export class PianoScore {
       const abcTree = new AlphabeticalSongsTree(songs)
       Object.keys(abcTree).forEach((abc) => {
         output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-        output.push(PianoScore.buildSongList(<IntermediateSongList> abcTree[abc], this.pageTurnOptimized))
+        output.push(PianoScore.buildSongList(<IntermediateSong[]> abcTree[abc], this.pageTurnOptimized))
       })
     } else {
-      output.push(PianoScore.buildSongList(<IntermediateSongList> songs, this.pageTurnOptimized))
+      output.push(PianoScore.buildSongList(<IntermediateSong[]> songs, this.pageTurnOptimized))
     }
     return output.join('')
   }
@@ -1004,7 +996,7 @@ class PianoFilesCountTree {
   /**
    * @param songs - An array of song objects.
    */
-  constructor (songs: IntermediateSongList) {
+  constructor (songs: IntermediateSong[]) {
     this.validCounts = [1, 2, 3, 4]
     this.cache = {
       1: [],
@@ -1029,7 +1021,7 @@ class PianoFilesCountTree {
   /**
    * @param songs - An array of song objects.
    */
-  private build (songs: IntermediateSongList): void {
+  private build (songs: IntermediateSong[]): void {
     for (const song of songs) {
       const count = song.pianoFiles.length
       if (!(count in this)) this.cache[count] = []
@@ -1090,7 +1082,7 @@ class PianoFilesCountTree {
 }
 
 export class IntermediateLibrary extends Library {
-  songs: IntermediaSongCollection = this.collectSongs()
+  songs: SongCollection<IntermediateSong> = this.collectSongs()
 
   /**
    * @param basePath - The base path of the song library
@@ -1109,8 +1101,8 @@ export class IntermediateLibrary extends Library {
     }
   }
 
-  private collectSongs (): IntermediaSongCollection {
-    const songs: IntermediaSongCollection = {}
+  private collectSongs (): SongCollection<IntermediateSong> {
+    const songs: SongCollection<IntermediateSong> = {}
     for (const songPath of this.detectSongs()) {
       const song = new IntermediateSong(
         path.join(this.basePath, songPath))
