@@ -28,6 +28,7 @@
     "@bldr/shortcuts": "*",
     "@bldr/markdown-to-html": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/master-toolkit": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
     "axios": "0.21.1",

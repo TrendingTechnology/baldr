@@ -8,9 +8,9 @@
  */
 
 import { GrabFromObjects } from '@/lib.js'
-import { MasterTypes } from '@bldr/type-definitions'
 
-export default MasterTypes.validateMasterSpec({
+import { validateMasterSpec } from '@bldr/master-toolkit'
+export default validateMasterSpec({
   title: 'Hörbeispiel',
   props: {
     src: {
