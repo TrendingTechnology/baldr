@@ -117,7 +117,7 @@ declare class ExtendedSongMetaData implements SongMetaData {
     /**
      * A Javascript object representation of the `info.yml` file.
      */
-    rawYaml_: RawYamlData;
+    readonly rawYaml: RawYamlData;
     /**
      * @param folder - Path of the song folder.
      */
@@ -317,11 +317,6 @@ export declare class PianoScore {
  * Extended version of the Song class to build intermediate files.
  */
 declare class IntermediateSong extends ExtendedSong {
-    /**
-     * @param songPath - The path of the directory containing the song
-     * files or a path of a file inside the song folder (not nested in subfolders)
-     */
-    constructor(songPath: string);
     /**
      * Format one image file of a piano score in the TeX format.
      *

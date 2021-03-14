@@ -66,7 +66,7 @@ function listFiles (folderPath: string, filter: string): string[] {
   if (fs.existsSync(folderPath)) {
     return fs.readdirSync(folderPath).filter((file) => {
       return file.includes(filter)
-    }).sort()
+    }).sort(undefined)
   }
   return []
 }
@@ -228,7 +228,7 @@ class ExtendedSongMetaData implements SongMetaData {
   /**
    * A Javascript object representation of the `info.yml` file.
    */
-  rawYaml_: RawYamlData
+  readonly rawYaml: RawYamlData
 
   /**
    * @param folder - Path of the song folder.
@@ -245,33 +245,33 @@ class ExtendedSongMetaData implements SongMetaData {
       throw new Error(log.format('YAML file could not be found: %s', ymlFile))
     }
 
-    this.rawYaml_ = <RawYamlData> yaml.load(fs.readFileSync(ymlFile, 'utf8'))
+    this.rawYaml = yaml.load(fs.readFileSync(ymlFile, 'utf8')) as RawYamlData
 
-    for (const key in this.rawYaml_) {
+    for (const key in this.rawYaml) {
       if (!this.allowedProperties.includes(key)) {
         throw new Error(log.format('Unsupported key: %s', key))
       }
     }
 
-    this.alias = this.rawYaml_.alias
-    this.arranger = this.rawYaml_.arranger
-    this.artist = this.rawYaml_.artist
-    this.audio = this.rawYaml_.audio
-    this.composer = this.rawYaml_.composer
-    this.country = this.rawYaml_.country
-    this.description = this.rawYaml_.description
-    this.genre = this.rawYaml_.genre
-    this.lyricist = this.rawYaml_.lyricist
-    this.musescore = this.rawYaml_.musescore
-    this.source = this.rawYaml_.source
-    this.subtitle = this.rawYaml_.subtitle
-    this.title = this.rawYaml_.title
-    this.wikidata = this.rawYaml_.wikidata
-    this.wikipedia = this.rawYaml_.wikipedia
-    this.year = this.rawYaml_.year
-    this.youtube = this.rawYaml_.youtube
+    this.alias = this.rawYaml.alias
+    this.arranger = this.rawYaml.arranger
+    this.artist = this.rawYaml.artist
+    this.audio = this.rawYaml.audio
+    this.composer = this.rawYaml.composer
+    this.country = this.rawYaml.country
+    this.description = this.rawYaml.description
+    this.genre = this.rawYaml.genre
+    this.lyricist = this.rawYaml.lyricist
+    this.musescore = this.rawYaml.musescore
+    this.source = this.rawYaml.source
+    this.subtitle = this.rawYaml.subtitle
+    this.title = this.rawYaml.title
+    this.wikidata = this.rawYaml.wikidata
+    this.wikipedia = this.rawYaml.wikipedia
+    this.year = this.rawYaml.year
+    this.youtube = this.rawYaml.youtube
 
-    if (this.wikidata) {
+    if (this.wikidata !== '') {
       const wikidataID = parseInt(this.wikidata)
       if (isNaN(wikidataID)) {
         throw new Error(
@@ -287,22 +287,22 @@ class ExtendedSongMetaData implements SongMetaData {
 
   toJSON (): { [index: string]: string } {
     const output: { [index: string]: string } = {}
-    if (this.alias) output.alias = this.alias
-    if (this.arranger) output.arranger = this.arranger
-    if (this.artist) output.artist = this.artist
-    if (this.audio) output.audio = this.audio
-    if (this.composer) output.composer = this.composer
-    if (this.country) output.country = this.country
-    if (this.description) output.description = this.description
-    if (this.genre) output.genre = this.genre
-    if (this.lyricist) output.lyricist = this.lyricist
-    if (this.musescore) output.musescore = this.musescore
-    if (this.source) output.source = this.source
-    if (this.subtitle) output.subtitle = this.subtitle
-    if (this.wikidata) output.wikidata = this.wikidata
-    if (this.wikipedia) output.wikipedia = this.wikipedia
-    if (this.year) output.year = this.year
-    if (this.youtube) output.youtube = this.youtube
+    if (this.alias !== '') output.alias = this.alias
+    if (this.arranger !== '') output.arranger = this.arranger
+    if (this.artist !== '') output.artist = this.artist
+    if (this.audio !== '') output.audio = this.audio
+    if (this.composer !== '') output.composer = this.composer
+    if (this.country !== '') output.country = this.country
+    if (this.description !== '') output.description = this.description
+    if (this.genre !== '') output.genre = this.genre
+    if (this.lyricist !== '') output.lyricist = this.lyricist
+    if (this.musescore !== '') output.musescore = this.musescore
+    if (this.source !== '') output.source = this.source
+    if (this.subtitle !== '') output.subtitle = this.subtitle
+    if (this.wikidata !== '') output.wikidata = this.wikidata
+    if (this.wikipedia !== '') output.wikipedia = this.wikipedia
+    if (this.year !== '') output.year = this.year
+    if (this.youtube !== '') output.youtube = this.youtube
     return output
   }
 }
@@ -463,14 +463,14 @@ class Library extends CoreLibrary {
    * @param basePath - The base path of the song library
    */
   constructor (basePath: string) {
-    super(<SongCollection<Song>> collectSongs(basePath))
+    super(collectSongs(basePath) as SongCollection<Song>)
     this.basePath = basePath
   }
 
   /**
    * Identify a song folder by searching for a file named “info.yml.”
    */
-  protected detectSongs () {
+  protected detectSongs (): string[] {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
   }
 
@@ -582,7 +582,7 @@ export class PianoScore {
    */
   static texCmd (command: string, value?: string): string {
     let markupValue
-    if (value) {
+    if (value != null) {
       markupValue = `{${value}}`
     } else {
       markupValue = ''
@@ -591,7 +591,6 @@ export class PianoScore {
   }
 
   static sanitize (markup: string): string {
-    if (!markup) return ''
     return markup.replace('&', '\\&')
   }
 
@@ -654,7 +653,7 @@ export class PianoScore {
           const placeholder = PianoScore.texCmd('placeholder')
           const countPlaceholders = maxPages - actualPages
           // To avoid empty entries in the list: We use join later on.
-          if (countPlaceholders) {
+          if (countPlaceholders > 0) {
             for (let index = 0; index < countPlaceholders; index++) {
               doublePage.push(placeholder)
             }
@@ -686,10 +685,10 @@ export class PianoScore {
       const abcTree = new AlphabeticalSongsTree(songs)
       Object.keys(abcTree).forEach((abc) => {
         output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-        output.push(PianoScore.buildSongList(<IntermediateSong[]> abcTree[abc], this.pageTurnOptimized))
+        output.push(PianoScore.buildSongList(abcTree[abc] as IntermediateSong[], this.pageTurnOptimized))
       })
     } else {
-      output.push(PianoScore.buildSongList(<IntermediateSong[]> songs, this.pageTurnOptimized))
+      output.push(PianoScore.buildSongList(songs as IntermediateSong[], this.pageTurnOptimized))
     }
     return output.join('')
   }
@@ -776,15 +775,6 @@ export class PianoScore {
  * Extended version of the Song class to build intermediate files.
  */
 class IntermediateSong extends ExtendedSong {
-
-  /**
-   * @param songPath - The path of the directory containing the song
-   * files or a path of a file inside the song folder (not nested in subfolders)
-   */
-  constructor (songPath: string) {
-    super(songPath)
-  }
-
   /**
    * Format one image file of a piano score in the TeX format.
    *
@@ -876,7 +866,7 @@ class IntermediateSong extends ExtendedSong {
    *
    * @returns An array of the renamed multipart files names.
    */
-   private renameMultipartFiles (folder: string, filter: string, newMultipartFilename: string): string[] {
+  private renameMultipartFiles (folder: string, filter: string, newMultipartFilename: string): string[] {
     const intermediateFiles = listFiles(folder, filter)
     let no = 1
     for (const oldName of intermediateFiles) {
@@ -1239,7 +1229,7 @@ export function exportToMediaServer (library: IntermediateLibrary): void {
       log.info('Copy %s to %s.', src, dest)
     }
 
-    const rawYaml: StringIndexedObject = song.metaData.rawYaml_ as StringIndexedObject
+    const rawYaml: StringIndexedObject = song.metaData.rawYaml as StringIndexedObject
     rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
 
