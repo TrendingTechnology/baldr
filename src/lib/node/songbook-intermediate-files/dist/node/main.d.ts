@@ -139,14 +139,7 @@ declare class ExtendedSong implements Song {
     songId: string;
     metaData: ExtendedSongMetaData;
     metaDataCombined: SongMetaDataCombined;
-    /**
-     * The slides folder
-     */
-    folderSlides: Folder;
-    /**
-     * The piano folder
-     */
-    folderPiano: Folder;
+    folderIntermediateFiles: Folder;
     /**
      * Path of the MuseScore file 'projector.mscx', relative to the base folder
      * of the song collection.
@@ -394,7 +387,7 @@ declare class IntermediateSong extends ExtendedSong {
      */
     generateIntermediateFiles(mode?: GenerationMode, force?: boolean): void;
     /**
-     * Delete all generated files of a song folder.
+     * Delete all generated intermediate files of a song folder.
      */
     cleanIntermediateFiles(): void;
 }

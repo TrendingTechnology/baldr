@@ -62,21 +62,34 @@ function parseSongIDList (listPath: string): string[] {
 }
 
 /**
- * List files in a directory. You have to use a filter string to
- * select the files. The resulting array of file names is sorted.
+ * List files in a folder. You have to use a filter string to select the files.
+ * The resulting array of file names is sorted.
  *
- * @param basePath - A directory.
+ * @param folderPath - The path of the directory.
  * @param filter - String to filter, e. g. “.eps”.
  *
  * @return An array of file names.
  */
-function listFiles (basePath: string, filter: string): string[] {
-  if (fs.existsSync(basePath)) {
-    return fs.readdirSync(basePath).filter((file) => {
+function listFiles (folderPath: string, filter: string): string[] {
+  if (fs.existsSync(folderPath)) {
+    return fs.readdirSync(folderPath).filter((file) => {
       return file.includes(filter)
     }).sort()
   }
   return []
+}
+
+/**
+ * Delete all files matching a filter string in a specified folder.
+ *
+ * @param folderPath - The path of the folder.
+ * @param filter - String to filter, e. g. “.eps”.
+ */
+function deleteFiles (folderPath: string, filter: string): void {
+  const oldFiles = listFiles(folderPath, filter)
+  for (const oldFile of oldFiles) {
+    fs.unlinkSync(path.join(folderPath, oldFile))
+  }
 }
 
 /*******************************************************************************
@@ -313,15 +326,7 @@ class ExtendedSong implements Song {
 
   metaDataCombined: SongMetaDataCombined
 
-  /**
-   * The slides folder
-   */
-  folderSlides: Folder
-
-  /**
-   * The piano folder
-   */
-  folderPiano: Folder
+  folderIntermediateFiles: Folder
 
   /**
    * Path of the MuseScore file 'projector.mscx', relative to the base folder
@@ -357,14 +362,11 @@ class ExtendedSong implements Song {
     this.songId = path.basename(this.folder)
     this.metaData = new ExtendedSongMetaData(this.folder)
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
-
-    this.folderSlides = new Folder(this.folder, 'NB')
-    this.folderPiano = new Folder(this.folder, 'piano')
-
+    this.folderIntermediateFiles = new Folder(this.folder, 'NB')
     this.mscxProjector = this.detectFile('projector.mscx')
     this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx')
-    this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
-    this.slidesFiles = listFiles(this.folderSlides.get(), '.svg')
+    this.pianoFiles = listFiles(this.folderIntermediateFiles.get(), '.eps')
+    this.slidesFiles = listFiles(this.folderIntermediateFiles.get(), '.svg')
   }
 
   /**
@@ -862,7 +864,7 @@ class IntermediateSong extends ExtendedSong {
     if (destination === '') {
       destination = source
     }
-    const pdf = path.join(this.folderSlides.get(), destination + '.pdf')
+    const pdf = path.join(this.folderIntermediateFiles.get(), destination + '.pdf')
     childProcess.spawnSync('mscore', [
       '--export-to',
       path.join(pdf),
@@ -897,7 +899,7 @@ class IntermediateSong extends ExtendedSong {
    * Generate SVG files in the slides subfolder.
    */
   private generateSlides (): string[] {
-    const subFolder = this.folderSlides.get()
+    const subFolder = this.folderIntermediateFiles.get()
     const oldSVGs = listFiles(subFolder, '.svg')
     for (const oldSVG of oldSVGs) {
       fs.unlinkSync(path.join(subFolder, oldSVG))
@@ -926,8 +928,8 @@ class IntermediateSong extends ExtendedSong {
    * @return An array of EPS piano score filenames.
    */
   private generatePiano (): string[] {
-    this.folderPiano.empty()
-    const subFolder = this.folderPiano.get()
+    const subFolder = this.folderIntermediateFiles.get()
+    deleteFiles(subFolder, '.eps')
     const pianoFile = path.join(subFolder, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
@@ -952,8 +954,9 @@ class IntermediateSong extends ExtendedSong {
     if ((mode === 'all' || mode === 'slides') &&
         (force || fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
       this.generatePDF('projector')
-      this.generateSlides()
     }
+
+    log.info('Generate intermediate files for the Song “%s”.', this.songId)
 
     // piano
     if ((mode === 'all' || mode === 'piano') &&
@@ -963,16 +966,20 @@ class IntermediateSong extends ExtendedSong {
   }
 
   /**
-   * Delete all generated files of a song folder.
+   * Delete all generated intermediate files of a song folder.
    */
   cleanIntermediateFiles (): void {
-    this.folderSlides.remove()
-    this.folderPiano.remove()
-    fs.removeSync(path.join(this.folder, 'projector.pdf'))
-    // Old slides folder
-    fs.removeSync(path.join(this.folder, 'slides'))
-    // Old piano folder
-    fs.removeSync(path.join(this.folder, 'slides'))
+    this.folderIntermediateFiles.remove()
+
+    function removeFile (message: string, filePath: string): void {
+      if (fs.existsSync(filePath)) {
+        log.info(message, filePath)
+        fs.removeSync(filePath)
+      }
+    }
+    removeFile('Remove temporary PDF file “%s”.', path.join(this.folder, 'projector.pdf'))
+    removeFile('Remove old slides folder “%s”.', path.join(this.folder, 'slides'))
+    removeFile('Remove old piano folder “%s”.', path.join(this.folder, 'piano'))
   }
 }
 
@@ -1234,7 +1241,7 @@ export function exportToMediaServer (library: IntermediateLibrary): void {
 
     // song.slidesFiles: ['01.svg', '02.svg']
     for (let index = 0; index < song.slidesFiles.length; index++) {
-      const src = path.join(song.folderSlides.get(), song.slidesFiles[index])
+      const src = path.join(song.folderIntermediateFiles.get(), song.slidesFiles[index])
       const dest = formatMultiPartAssetFileName(firstFileName, index + 1)
       fs.copySync(src, dest)
       log.info('Copy %s to %s.', src, dest)
