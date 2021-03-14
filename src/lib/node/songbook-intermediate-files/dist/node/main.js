@@ -43,6 +43,8 @@ const js_yaml_1 = __importDefault(require("js-yaml"));
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
 const core_browser_1 = require("@bldr/core-browser");
+const song_1 = require("./song");
+const utils_1 = require("./utils");
 /**
  * See `/etc/baldr.json`.
  */
@@ -50,284 +52,8 @@ const config_1 = __importDefault(require("@bldr/config"));
 const file_monitor_1 = require("./file-monitor");
 log.setLogLevel(3);
 /*******************************************************************************
- * Functions
+ * Classes for multiple songs
  ******************************************************************************/
-function parseSongIDList(listPath) {
-    const content = fs.readFileSync(listPath, { encoding: 'utf-8' });
-    return content.split(/\s+/).filter(songId => songId);
-}
-/**
- * List files in a folder. You have to use a filter string to select the files.
- * The resulting array of file names is sorted.
- *
- * @param folderPath - The path of the directory.
- * @param filter - String to filter, e. g. “.eps”.
- *
- * @return An array of file names.
- */
-function listFiles(folderPath, filter) {
-    if (fs.existsSync(folderPath)) {
-        return fs.readdirSync(folderPath).filter((file) => {
-            return file.includes(filter);
-        }).sort(undefined);
-    }
-    return [];
-}
-/**
- * Delete all files matching a filter string in a specified folder.
- *
- * @param folderPath - The path of the folder.
- * @param filter - String to filter, e. g. “.eps”.
- */
-function deleteFiles(folderPath, filter) {
-    const oldFiles = listFiles(folderPath, filter);
-    for (const oldFile of oldFiles) {
-        fs.unlinkSync(path.join(folderPath, oldFile));
-    }
-}
-/*******************************************************************************
- * Utility classes
- ******************************************************************************/
-/**
- * A wrapper class for a folder. If the folder does not exist, it will be
- * created during instantiation.
- */
-class Folder {
-    /**
-     * @param folderPath - The path segments of the folder.
-     */
-    constructor(...folderPath) {
-        this.folderPath = path.join(...arguments);
-        if (!fs.existsSync(this.folderPath)) {
-            fs.mkdirSync(this.folderPath, { recursive: true });
-        }
-    }
-    /**
-     * Return the path of the folder.
-     */
-    get() {
-        return this.folderPath;
-    }
-    /**
-     * Empty the folder (Delete all it’s files).
-     */
-    empty() {
-        fs.removeSync(this.folderPath);
-        fs.mkdirSync(this.folderPath);
-    }
-    /**
-     * Remove the folder.
-     */
-    remove() {
-        fs.removeSync(this.folderPath);
-    }
-}
-/**
- * Metadata of a song catched from the info.yml file.
- *
- * info.yml
- *
- *     ---
- *     alias: I’m sitting here
- *     arranger: Josef Friedrich
- *     artist: Fools Garden
- *     composer: Heinz Müller / Manfred Meier
- *     country: Deutschland
- *     genre: Spiritual
- *     lyricist: Goethe
- *     musescore: https://musescore.com/user/12559861/scores/4801717
- *     source: http://wikifonia.org/node/9928/revisions/13488/view
- *     subtitle: A very good song
- *     title: Lemon tree
- *     year: 1965
- */
-class ExtendedSongMetaData {
-    /**
-     * @param folder - Path of the song folder.
-     */
-    constructor(folder) {
-        /**
-         * The file name of the YAML file.
-         */
-        this.yamlFile = 'info.yml';
-        /**
-         * All in the YAML file “info.yml” allowed properties (keys).
-         */
-        this.allowedProperties = [
-            'alias',
-            'arranger',
-            'artist',
-            'audio',
-            'composer',
-            'country',
-            'description',
-            'genre',
-            'lyricist',
-            'musescore',
-            'source',
-            'subtitle',
-            'title',
-            'wikidata',
-            'wikipedia',
-            'year',
-            'youtube'
-        ];
-        if (!fs.existsSync(folder)) {
-            throw new Error(log.format('Song folder doesn’t exist: %s', folder));
-        }
-        this.folder = folder;
-        const ymlFile = path.join(folder, this.yamlFile);
-        if (!fs.existsSync(ymlFile)) {
-            throw new Error(log.format('YAML file could not be found: %s', ymlFile));
-        }
-        this.rawYaml = js_yaml_1.default.load(fs.readFileSync(ymlFile, 'utf8'));
-        for (const key in this.rawYaml) {
-            if (!this.allowedProperties.includes(key)) {
-                throw new Error(log.format('Unsupported key: %s', key));
-            }
-        }
-        this.alias = this.rawYaml.alias;
-        this.arranger = this.rawYaml.arranger;
-        this.artist = this.rawYaml.artist;
-        this.audio = this.rawYaml.audio;
-        this.composer = this.rawYaml.composer;
-        this.country = this.rawYaml.country;
-        this.description = this.rawYaml.description;
-        this.genre = this.rawYaml.genre;
-        this.lyricist = this.rawYaml.lyricist;
-        this.musescore = this.rawYaml.musescore;
-        this.source = this.rawYaml.source;
-        this.subtitle = this.rawYaml.subtitle;
-        this.title = this.rawYaml.title;
-        this.wikidata = this.rawYaml.wikidata;
-        this.wikipedia = this.rawYaml.wikipedia;
-        this.year = this.rawYaml.year;
-        this.youtube = this.rawYaml.youtube;
-        if (this.wikidata !== '') {
-            const wikidataID = parseInt(this.wikidata);
-            if (isNaN(wikidataID)) {
-                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
-            }
-        }
-    }
-    toJSON() {
-        const output = {};
-        if (this.alias !== '')
-            output.alias = this.alias;
-        if (this.arranger !== '')
-            output.arranger = this.arranger;
-        if (this.artist !== '')
-            output.artist = this.artist;
-        if (this.audio !== '')
-            output.audio = this.audio;
-        if (this.composer !== '')
-            output.composer = this.composer;
-        if (this.country !== '')
-            output.country = this.country;
-        if (this.description !== '')
-            output.description = this.description;
-        if (this.genre !== '')
-            output.genre = this.genre;
-        if (this.lyricist !== '')
-            output.lyricist = this.lyricist;
-        if (this.musescore !== '')
-            output.musescore = this.musescore;
-        if (this.source !== '')
-            output.source = this.source;
-        if (this.subtitle !== '')
-            output.subtitle = this.subtitle;
-        if (this.wikidata !== '')
-            output.wikidata = this.wikidata;
-        if (this.wikipedia !== '')
-            output.wikipedia = this.wikipedia;
-        if (this.year !== '')
-            output.year = this.year;
-        if (this.youtube !== '')
-            output.youtube = this.youtube;
-        return output;
-    }
-}
-/**
- * One song
- */
-class ExtendedSong {
-    /**
-     * @param songPath - The path of the directory containing the song
-     * files or a path of a file inside the song folder (not nested in subfolders)
-     */
-    constructor(songPath) {
-        this.folder = this.getSongFolder(songPath);
-        this.abc = this.recognizeABCFolder(this.folder);
-        this.songId = path.basename(this.folder);
-        this.metaData = new ExtendedSongMetaData(this.folder);
-        this.metaDataCombined = new songbook_core_1.SongMetaDataCombined(this.metaData);
-        this.folderIntermediateFiles = new Folder(this.folder, 'NB');
-        this.mscxProjector = this.detectFile('projector.mscx');
-        this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx');
-        this.pianoFiles = listFiles(this.folderIntermediateFiles.get(), '.eps');
-        this.slidesFiles = listFiles(this.folderIntermediateFiles.get(), '.svg');
-    }
-    /**
-     * Get the song folder.
-     *
-     * @param songPath - The path of the directory containing the song
-     *   files or a path of a file inside the song folder (not nested in
-     *   subfolders) or a non-existing song path.
-     *
-     * @return The path of the parent directory of the song.
-     */
-    getSongFolder(songPath) {
-        try {
-            const stat = fs.lstatSync(songPath);
-            if (stat.isDirectory()) {
-                return songPath;
-            }
-            else if (stat.isFile()) {
-                return path.dirname(songPath);
-            }
-        }
-        catch (error) { }
-        return songPath.replace(`${path.sep}info.yml`, '');
-    }
-    /**
-     * @param folder - The directory containing the song files.
-     *
-     * @return A single character
-     */
-    recognizeABCFolder(folder) {
-        const pathSegments = folder.split(path.sep);
-        const abc = pathSegments[pathSegments.length - 2];
-        return abc;
-    }
-    /**
-     * Detect a file inside the song folder. Throw an exception if the
-     * file doesn’t exist.
-     *
-     * @param file - A filename of a file inside the song folder.
-     *
-     * @return A joined path of the file relative to the song collection
-     *   base dir.
-     */
-    detectFile(...file) {
-        let absPath;
-        for (const argument of arguments) {
-            absPath = path.join(this.folder, argument);
-            if (fs.existsSync(absPath)) {
-                return absPath;
-            }
-        }
-        throw new Error(log.format('File doesn’t exist: %s', absPath));
-    }
-    toJSON() {
-        return {
-            abc: this.abc,
-            folder: this.folder,
-            metaData: this.metaData,
-            songId: this.songId,
-            slidesCount: this.slidesFiles.length
-        };
-    }
-}
 /**
  * Collect all songs of a song tree by walking through the folder tree
  * structur.
@@ -339,7 +65,7 @@ function collectSongs(basePath) {
     const songsPaths = glob_1.default.sync('info.yml', { cwd: basePath, matchBase: true });
     const songs = {};
     for (const songPath of songsPaths) {
-        const song = new ExtendedSong(path.join(basePath, songPath));
+        const song = new song_1.ExtendedSong(path.join(basePath, songPath));
         if (song.songId in songs) {
             throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
         }
@@ -347,9 +73,6 @@ function collectSongs(basePath) {
     }
     return songs;
 }
-/*******************************************************************************
- * Classes for multiple songs
- ******************************************************************************/
 /**
  * The song library - a collection of songs
  */
@@ -373,7 +96,7 @@ class Library extends songbook_core_1.CoreLibrary {
      * @returns {object}
      */
     loadSongList(listFile) {
-        const songIds = parseSongIDList(listFile);
+        const songIds = utils_1.parseSongIDList(listFile);
         const songs = {};
         for (const songId of songIds) {
             if ({}.hasOwnProperty.call(this.songs, songId)) {
@@ -627,7 +350,7 @@ exports.PianoScore = PianoScore;
 /**
  * Extended version of the Song class to build intermediate files.
  */
-class IntermediateSong extends ExtendedSong {
+class IntermediateSong extends song_1.ExtendedSong {
     /**
      * Format one image file of a piano score in the TeX format.
      *
@@ -704,21 +427,21 @@ class IntermediateSong extends ExtendedSong {
      * @returns An array of the renamed multipart files names.
      */
     renameMultipartFiles(folder, filter, newMultipartFilename) {
-        const intermediateFiles = listFiles(folder, filter);
+        const intermediateFiles = utils_1.listFiles(folder, filter);
         let no = 1;
         for (const oldName of intermediateFiles) {
             const newName = core_browser_1.formatMultiPartAssetFileName(newMultipartFilename, no);
             fs.renameSync(path.join(folder, oldName), path.join(folder, newName));
             no++;
         }
-        return listFiles(folder, filter);
+        return utils_1.listFiles(folder, filter);
     }
     /**
      * Generate SVG files in the slides subfolder.
      */
     generateSlides() {
         const subFolder = this.folderIntermediateFiles.get();
-        const oldSVGs = listFiles(subFolder, '.svg');
+        const oldSVGs = utils_1.listFiles(subFolder, '.svg');
         for (const oldSVG of oldSVGs) {
             fs.unlinkSync(path.join(subFolder, oldSVG));
         }
@@ -745,7 +468,7 @@ class IntermediateSong extends ExtendedSong {
      */
     generatePiano() {
         const subFolder = this.folderIntermediateFiles.get();
-        deleteFiles(subFolder, '.eps');
+        utils_1.deleteFiles(subFolder, '.eps');
         const pianoFile = path.join(subFolder, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
