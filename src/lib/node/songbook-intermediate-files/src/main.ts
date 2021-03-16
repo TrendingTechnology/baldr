@@ -22,7 +22,7 @@ import {
   AlphabeticalSongsTree,
   CoreLibrary,
   SongCollection,
-  Song,
+  Song
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
 import { StringIndexedObject } from '@bldr/type-definitions'
@@ -56,7 +56,7 @@ type GenerationMode = 'all' | 'slides' | 'piano'
  * @returns An object indexed with the song ID containing the song
  * objects.
  */
- function collectSongs (basePath: string): SongCollection<ExtendedSong> {
+function collectSongs (basePath: string): SongCollection<ExtendedSong> {
   const songsPaths = glob.sync('info.yml', { cwd: basePath, matchBase: true })
   const songs: SongCollection<ExtendedSong> = {}
   for (const songPath of songsPaths) {

@@ -154,9 +154,15 @@ class ExtendedSongMetaData {
         this.youtube = this.rawYaml.youtube;
         if (this.wikidata !== '') {
             const wikidataID = parseInt(this.wikidata);
-            if (isNaN(wikidataID)) {
-                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
-            }
+            // if (isNaN(wikidataID)) {
+            //   throw new Error(
+            //     log.format(
+            //       'Wikidata entry “%s” of song “%s” must be an number (without Q).',
+            //       this.title,
+            //       this.wikidata
+            //     )
+            //   )
+            // }
         }
     }
     toJSON() {

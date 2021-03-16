@@ -70,7 +70,7 @@ class Sqlite {
     select(filename) {
         return this.db
             .prepare('SELECT * FROM hashes WHERE filename = $filename')
-            .get({ filename: filename });
+            .get({ filename: 'Troll' });
     }
     /**
      * Update the hash value of a file.
@@ -124,6 +124,7 @@ class FileMonitor {
         const hash = this.hashSHA1(filename);
         const row = this.db.select(filename);
         let hashStored = '';
+        console.log(row);
         if (row) {
             hashStored = row.hash;
         }

@@ -25,7 +25,7 @@ import { listFiles } from './utils'
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
  */
- class Folder {
+class Folder {
   /**
    * The path of the folder.
    */
@@ -63,7 +63,7 @@ import { listFiles } from './utils'
   }
 }
 
- interface RawYamlData {
+interface RawYamlData {
   alias: string
   arranger: string
   artist: string

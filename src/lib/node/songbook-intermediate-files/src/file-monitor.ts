@@ -4,11 +4,15 @@ import * as fs from 'fs-extra'
 import * as path from 'path'
 import config from '@bldr/config'
 
+interface SelectResult {
+  hash: string
+}
+
 /**
  * Sqlite database wrapper to store file contents hashes to detect
  * file modifications.
  */
- class Sqlite {
+class Sqlite {
   /**
    * The path of the Sqlite database.
    */
@@ -59,7 +63,7 @@ import config from '@bldr/config'
    *
    * @param filename - Name or path of a file.
    */
-  select (filename: string) {
+  select (filename: string): SelectResult | undefined {
     return this.db
       .prepare('SELECT * FROM hashes WHERE filename = $filename')
       .get({ filename: filename })
@@ -126,7 +130,7 @@ class FileMonitor {
     const row = this.db.select(filename)
     let hashStored = ''
 
-    if (row) {
+    if (row !== undefined) {
       hashStored = row.hash
     } else {
       this.db.insert(filename, hash)
@@ -142,14 +146,14 @@ class FileMonitor {
   /**
    * Flush the file monitor database.
    */
-  flush () {
+  flush (): void {
     this.db.flush()
   }
 
   /**
    * Purge the file monitor database by deleting it.
    */
-  purge () {
+  purge (): void {
     if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
   }
 }
