@@ -4,6 +4,7 @@
  * @module @bldr/songbook-intermediate-files/song
  */
 import { SongMetaDataCombined, Song, SongMetaData } from '@bldr/songbook-core';
+import { GenerationMode } from './main';
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -153,5 +154,74 @@ export declare class ExtendedSong implements Song {
      */
     private detectFile;
     toJSON(): object;
+}
+/**
+ * Extended version of the Song class to build intermediate files.
+ */
+export declare class IntermediateSong extends ExtendedSong {
+    /**
+     * Format one image file of a piano score in the TeX format.
+     *
+     * @param index - The index number of the array position
+     *
+     * @return TeX markup for one EPS image file of a piano score.
+     */
+    private formatPianoTeXEpsFile;
+    /**
+     * Generate TeX markup for one song.
+     *
+     * @return {string} TeX markup for a single song.
+     * <code><pre>
+     * \tmpmetadata
+     * {title} % title
+     * {subtitle} % subtitle
+     * {composer} % composer
+     * {lyricist} % lyricist
+     * \tmpimage{s/Swing-low/piano/piano_1.eps}
+     * \tmpimage{s/Swing-low/piano/piano_2.eps}
+     * \tmpimage{s/Swing-low/piano/piano_3.eps}
+     * </pre><code>
+     */
+    formatPianoTex(): string;
+    /**
+     * Generate form a given *.mscx file a PDF file.
+     *
+     * @param source - Name of the *.mscx file without the extension.
+     * @param destination - Name of the PDF without the extension.
+     */
+    private generatePDF;
+    /**
+     * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
+     *
+     * @param folder - The folder containing the files to be renamed.
+     * @param filter - A string to filter the list of file names.
+     * @param newMultipartFilename - The new base name of the multipart files.
+     *
+     * @returns An array of the renamed multipart files names.
+     */
+    private renameMultipartFiles;
+    /**
+     * Generate SVG files in the slides subfolder.
+     */
+    private generateSlides;
+    /**
+     * Generate EPS files for the piano score from the MuseScore file
+     * “piano/piano.mscx” .
+     *
+     * @return An array of EPS piano score filenames.
+     */
+    private generatePiano;
+    /**
+     * Wrapper method for all process methods of one song folder.
+     *
+     * @param mode - Generate all intermediate media files or only slide
+     *   and piano files. Possible values: “all”, “slides” or “piano”
+     * @param force - Force the regeneration of intermediate files.
+     */
+    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): void;
+    /**
+     * Delete all generated intermediate files of a song folder.
+     */
+    cleanIntermediateFiles(): void;
 }
 export {};
