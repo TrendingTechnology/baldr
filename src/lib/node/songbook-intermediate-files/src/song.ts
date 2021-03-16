@@ -63,26 +63,6 @@ class Folder {
   }
 }
 
-interface RawYamlData {
-  alias: string
-  arranger: string
-  artist: string
-  audio: string
-  composer: string
-  country: string
-  description: string
-  genre: string
-  lyricist: string
-  musescore: string
-  source: string
-  subtitle: string
-  title: string
-  wikidata: string
-  wikipedia: string
-  year: string
-  youtube: string
-}
-
 /**
  * Metadata of a song catched from the info.yml file.
  *
@@ -103,23 +83,23 @@ interface RawYamlData {
  *     year: 1965
  */
 class ExtendedSongMetaData implements SongMetaData {
-  alias: string
-  arranger: string
-  artist: string
-  audio: string
-  composer: string
-  country: string
-  description: string
-  genre: string
-  lyricist: string
-  musescore: string
-  source: string
-  subtitle: string
+  alias?: string
+  arranger?: string
+  artist?: string
+  audio?: string
+  composer?: string
+  country?: string
+  description?: string
+  genre?: string
+  lyricist?: string
+  musescore?: string
+  source?: string
+  subtitle?: string
   title: string
-  wikidata: string
-  wikipedia: string
-  year: string
-  youtube: string
+  wikidata?: string
+  wikipedia?: string
+  year?: string
+  youtube?: string
 
   /**
    * The file name of the YAML file.
@@ -157,7 +137,7 @@ class ExtendedSongMetaData implements SongMetaData {
   /**
    * A Javascript object representation of the `info.yml` file.
    */
-  readonly rawYaml: RawYamlData
+  readonly rawYaml: SongMetaData
 
   /**
    * @param folder - Path of the song folder.
@@ -174,7 +154,7 @@ class ExtendedSongMetaData implements SongMetaData {
       throw new Error(log.format('YAML file could not be found: %s', ymlFile))
     }
 
-    this.rawYaml = yaml.load(fs.readFileSync(ymlFile, 'utf8')) as RawYamlData
+    this.rawYaml = yaml.load(fs.readFileSync(ymlFile, 'utf8')) as SongMetaData
 
     for (const key in this.rawYaml) {
       if (!this.allowedProperties.includes(key)) {
@@ -200,7 +180,7 @@ class ExtendedSongMetaData implements SongMetaData {
     this.year = this.rawYaml.year
     this.youtube = this.rawYaml.youtube
 
-    if (this.wikidata !== '') {
+    if (this.wikidata != null) {
       const wikidataID = parseInt(this.wikidata)
       if (isNaN(wikidataID)) {
         throw new Error(
@@ -215,24 +195,7 @@ class ExtendedSongMetaData implements SongMetaData {
   }
 
   toJSON (): { [index: string]: string } {
-    const output: { [index: string]: string } = {}
-    if (this.alias !== '') output.alias = this.alias
-    if (this.arranger !== '') output.arranger = this.arranger
-    if (this.artist !== '') output.artist = this.artist
-    if (this.audio !== '') output.audio = this.audio
-    if (this.composer !== '') output.composer = this.composer
-    if (this.country !== '') output.country = this.country
-    if (this.description !== '') output.description = this.description
-    if (this.genre !== '') output.genre = this.genre
-    if (this.lyricist !== '') output.lyricist = this.lyricist
-    if (this.musescore !== '') output.musescore = this.musescore
-    if (this.source !== '') output.source = this.source
-    if (this.subtitle !== '') output.subtitle = this.subtitle
-    if (this.wikidata !== '') output.wikidata = this.wikidata
-    if (this.wikipedia !== '') output.wikipedia = this.wikipedia
-    if (this.year !== '') output.year = this.year
-    if (this.youtube !== '') output.youtube = this.youtube
-    return output
+    return Object.assign(this)
   }
 }
 

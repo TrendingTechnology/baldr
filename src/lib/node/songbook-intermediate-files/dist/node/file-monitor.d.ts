@@ -1,4 +1,7 @@
 import { Database } from 'better-sqlite3';
+interface SelectResult {
+    hash: string;
+}
 /**
  * Sqlite database wrapper to store file contents hashes to detect
  * file modifications.
@@ -28,7 +31,7 @@ declare class Sqlite {
      *
      * @param filename - Name or path of a file.
      */
-    select(filename: string): any;
+    select(filename: string): SelectResult | undefined;
     /**
      * Update the hash value of a file.
      *

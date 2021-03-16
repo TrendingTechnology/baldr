@@ -152,54 +152,15 @@ class ExtendedSongMetaData {
         this.wikipedia = this.rawYaml.wikipedia;
         this.year = this.rawYaml.year;
         this.youtube = this.rawYaml.youtube;
-        if (this.wikidata !== '') {
+        if (this.wikidata != null) {
             const wikidataID = parseInt(this.wikidata);
-            // if (isNaN(wikidataID)) {
-            //   throw new Error(
-            //     log.format(
-            //       'Wikidata entry “%s” of song “%s” must be an number (without Q).',
-            //       this.title,
-            //       this.wikidata
-            //     )
-            //   )
-            // }
+            if (isNaN(wikidataID)) {
+                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
+            }
         }
     }
     toJSON() {
-        const output = {};
-        if (this.alias !== '')
-            output.alias = this.alias;
-        if (this.arranger !== '')
-            output.arranger = this.arranger;
-        if (this.artist !== '')
-            output.artist = this.artist;
-        if (this.audio !== '')
-            output.audio = this.audio;
-        if (this.composer !== '')
-            output.composer = this.composer;
-        if (this.country !== '')
-            output.country = this.country;
-        if (this.description !== '')
-            output.description = this.description;
-        if (this.genre !== '')
-            output.genre = this.genre;
-        if (this.lyricist !== '')
-            output.lyricist = this.lyricist;
-        if (this.musescore !== '')
-            output.musescore = this.musescore;
-        if (this.source !== '')
-            output.source = this.source;
-        if (this.subtitle !== '')
-            output.subtitle = this.subtitle;
-        if (this.wikidata !== '')
-            output.wikidata = this.wikidata;
-        if (this.wikipedia !== '')
-            output.wikipedia = this.wikipedia;
-        if (this.year !== '')
-            output.year = this.year;
-        if (this.youtube !== '')
-            output.youtube = this.youtube;
-        return output;
+        return Object.assign(this);
     }
 }
 /**

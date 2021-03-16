@@ -27,52 +27,52 @@ export interface SongMetaData {
      * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
      * lieber Mai, und mache”
      */
-    alias: string;
+    alias?: string;
     /**
      * The arranger of a song.
      */
-    arranger: string;
+    arranger?: string;
     /**
      * The artist of a song.
      */
-    artist: string;
+    artist?: string;
     /**
      * A media server URI of a audio file for example (id:A_Song).
      */
-    audio: string;
+    audio?: string;
     /**
      * The composer of a song.
      */
-    composer: string;
+    composer?: string;
     /**
      * The country the song is from.
      */
-    country: string;
+    country?: string;
     /**
      * A longer text which describes the song.
      */
-    description: string;
+    description?: string;
     /**
      * The genre of the song.
      */
-    genre: string;
+    genre?: string;
     /**
      * The lyricist of the song.
      */
-    lyricist: string;
+    lyricist?: string;
     /**
      * The MuseScore score ID from musescore.com, for example the score ID
      * from https://musescore.com/user/1601631/scores/1299601 is 1299601.
      */
-    musescore: string;
+    musescore?: string;
     /**
      * A text or a URL which describes the source of a song.
      */
-    source: string;
+    source?: string;
     /**
      * The subtitle of a song.
      */
-    subtitle: string;
+    subtitle?: string;
     /**
      * The title of a song.
      */
@@ -80,19 +80,19 @@ export interface SongMetaData {
     /**
      * The Wikidata data item ID (without the Q prefix)
      */
-    wikidata: string;
+    wikidata?: string;
     /**
      * ID of a wikipedia article (e. g. en:A_Article)
      */
-    wikipedia: string;
+    wikipedia?: string;
     /**
      * The year the song was released.
      */
-    year: string;
+    year?: string;
     /**
      * The youtube ID (e. g. CQYypFMTQcE)
      */
-    youtube: string;
+    youtube?: string;
 }
 /**
  * One song
@@ -287,6 +287,6 @@ export declare class CoreLibrary {
      * Get a random song.
      */
     getRandomSong(): Song;
-    toJSON(): SongCollection<Song>;
+    toJSON(): StringIndexedObject;
 }
 export {};

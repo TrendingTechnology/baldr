@@ -30,25 +30,6 @@ declare class Folder {
      */
     remove(): void;
 }
-interface RawYamlData {
-    alias: string;
-    arranger: string;
-    artist: string;
-    audio: string;
-    composer: string;
-    country: string;
-    description: string;
-    genre: string;
-    lyricist: string;
-    musescore: string;
-    source: string;
-    subtitle: string;
-    title: string;
-    wikidata: string;
-    wikipedia: string;
-    year: string;
-    youtube: string;
-}
 /**
  * Metadata of a song catched from the info.yml file.
  *
@@ -69,23 +50,23 @@ interface RawYamlData {
  *     year: 1965
  */
 declare class ExtendedSongMetaData implements SongMetaData {
-    alias: string;
-    arranger: string;
-    artist: string;
-    audio: string;
-    composer: string;
-    country: string;
-    description: string;
-    genre: string;
-    lyricist: string;
-    musescore: string;
-    source: string;
-    subtitle: string;
+    alias?: string;
+    arranger?: string;
+    artist?: string;
+    audio?: string;
+    composer?: string;
+    country?: string;
+    description?: string;
+    genre?: string;
+    lyricist?: string;
+    musescore?: string;
+    source?: string;
+    subtitle?: string;
     title: string;
-    wikidata: string;
-    wikipedia: string;
-    year: string;
-    youtube: string;
+    wikidata?: string;
+    wikipedia?: string;
+    year?: string;
+    youtube?: string;
     /**
      * The file name of the YAML file.
      */
@@ -101,7 +82,7 @@ declare class ExtendedSongMetaData implements SongMetaData {
     /**
      * A Javascript object representation of the `info.yml` file.
      */
-    readonly rawYaml: RawYamlData;
+    readonly rawYaml: SongMetaData;
     /**
      * @param folder - Path of the song folder.
      */

@@ -194,7 +194,7 @@ exports.SongMetaDataCombined = SongMetaDataCombined;
 class CoreLibrary {
     constructor(songs) {
         this.songs = songs;
-        this.songIds = Object.keys(this.songs).sort();
+        this.songIds = Object.keys(this.songs).sort(undefined);
         this.currentSongIndex = 0;
     }
     toArray() {
@@ -230,7 +230,7 @@ class CoreLibrary {
      * @param songId - The ID of the song. (The parent song folder)
      */
     getSongById(songId) {
-        if (songId in this.songs && this.songs[songId]) {
+        if (songId in this.songs) {
             return this.songs[songId];
         }
         else {
