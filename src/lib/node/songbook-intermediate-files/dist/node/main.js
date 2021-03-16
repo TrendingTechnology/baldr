@@ -30,7 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildVueApp = exports.exportToMediaServer = exports.IntermediateLibrary = exports.PianoScore = void 0;
+exports.IntermediateLibrary = exports.PianoScore = void 0;
 // Node packages.
 const childProcess = __importStar(require("child_process"));
 const os = __importStar(require("os"));
@@ -38,17 +38,11 @@ const path = __importStar(require("path"));
 // Third party packages.
 const fs = __importStar(require("fs-extra"));
 const glob_1 = __importDefault(require("glob"));
-const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
-const core_browser_1 = require("@bldr/core-browser");
 const song_1 = require("./song");
 const utils_1 = require("./utils");
-/**
- * See `/etc/baldr.json`.
- */
-const config_1 = __importDefault(require("@bldr/config"));
 log.setLogLevel(3);
 /*******************************************************************************
  * Classes for multiple songs
@@ -562,59 +556,3 @@ class IntermediateLibrary extends Library {
     }
 }
 exports.IntermediateLibrary = IntermediateLibrary;
-/**
- * Export the intermediate SVG files to the media server. Adjust the
- * `info.yml` and copy it to the destination folder of the media server.
- */
-function exportToMediaServer(library) {
-    // NB = Notenbeispiele -> SVG
-    // /var/data/baldr/media/Lieder/NB
-    // There exists a folder for the audio files: HB (Hörbeispiele)
-    const dirBase = path.join(config_1.default.mediaServer.basePath, 'Lieder', 'NB');
-    try {
-        fs.rmdirSync(dirBase);
-    }
-    catch (error) { }
-    fs.ensureDirSync(dirBase);
-    function exportSong(song) {
-        // /var/data/baldr/media/Lieder/NB/a
-        const dirAbc = path.join(dirBase, song.abc);
-        fs.ensureDirSync(dirAbc);
-        const firstFileName = path.join(dirAbc, `${song.songId}.svg`);
-        // song.slidesFiles: ['01.svg', '02.svg']
-        for (let index = 0; index < song.slidesFiles.length; index++) {
-            const src = path.join(song.folderIntermediateFiles.get(), song.slidesFiles[index]);
-            const dest = core_browser_1.formatMultiPartAssetFileName(firstFileName, index + 1);
-            fs.copySync(src, dest);
-            log.info('Copy %s to %s.', src, dest);
-        }
-        const rawYaml = song.metaData.rawYaml;
-        rawYaml.id = `Lied_${song.songId}_NB`;
-        rawYaml.title = `Lied „${song.metaData.title}“`;
-        // for (const property of song.metaDataCombined.allProperties) {
-        //   if (song.metaDataCombined[property]) {
-        //     rawYaml[`${convertCamelToSnake(property)}_combined`] = song.metaDataCombined[property]
-        //   }
-        // }
-        const yamlMarkup = ['---', js_yaml_1.default.dump(rawYaml, core_browser_1.jsYamlConfig)];
-        fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'));
-    }
-    for (const song of library.toArray()) {
-        exportSong(song);
-    }
-}
-exports.exportToMediaServer = exportToMediaServer;
-/**
- * Build the Vue app. All image files must be copied into the Vue working
- * directory.
- */
-function buildVueApp() {
-    const process = childProcess.spawnSync('npm', ['run', 'build'], {
-        cwd: config_1.default.songbook.vueAppPath,
-        encoding: 'utf-8',
-        shell: true
-    });
-    log.info(process.stdout);
-    log.error(process.stderr);
-}
-exports.buildVueApp = buildVueApp;

@@ -15,7 +15,6 @@ import * as path from 'path'
 // Third party packages.
 import * as fs from 'fs-extra'
 import glob from 'glob'
-import yaml from 'js-yaml'
 
 // Project packages.
 import {
@@ -25,16 +24,9 @@ import {
   Song
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
-import { StringIndexedObject } from '@bldr/type-definitions'
-import { formatMultiPartAssetFileName, jsYamlConfig } from '@bldr/core-browser'
 
 import { ExtendedSong, IntermediateSong } from './song'
 import { parseSongIDList } from './utils'
-
-/**
- * See `/etc/baldr.json`.
- */
-import config from '@bldr/config'
 
 log.setLogLevel(3)
 
@@ -624,66 +616,4 @@ export class IntermediateLibrary extends Library {
     this.gitPull()
     this.generateIntermediateFiles(mode, force)
   }
-}
-
-/**
- * Export the intermediate SVG files to the media server. Adjust the
- * `info.yml` and copy it to the destination folder of the media server.
- */
-export function exportToMediaServer (library: IntermediateLibrary): void {
-  // NB = Notenbeispiele -> SVG
-  // /var/data/baldr/media/Lieder/NB
-  // There exists a folder for the audio files: HB (Hörbeispiele)
-  const dirBase = path.join(config.mediaServer.basePath, 'Lieder', 'NB')
-  try {
-    fs.rmdirSync(dirBase)
-  } catch (error) {}
-  fs.ensureDirSync(dirBase)
-
-  function exportSong (song: IntermediateSong): void {
-    // /var/data/baldr/media/Lieder/NB/a
-    const dirAbc = path.join(dirBase, song.abc)
-    fs.ensureDirSync(dirAbc)
-
-    const firstFileName = path.join(dirAbc, `${song.songId}.svg`)
-
-    // song.slidesFiles: ['01.svg', '02.svg']
-    for (let index = 0; index < song.slidesFiles.length; index++) {
-      const src = path.join(song.folderIntermediateFiles.get(), song.slidesFiles[index])
-      const dest = formatMultiPartAssetFileName(firstFileName, index + 1)
-      fs.copySync(src, dest)
-      log.info('Copy %s to %s.', src, dest)
-    }
-
-    const rawYaml: StringIndexedObject = song.metaData.rawYaml as StringIndexedObject
-    rawYaml.id = `Lied_${song.songId}_NB`
-    rawYaml.title = `Lied „${song.metaData.title}“`
-
-    // for (const property of song.metaDataCombined.allProperties) {
-    //   if (song.metaDataCombined[property]) {
-    //     rawYaml[`${convertCamelToSnake(property)}_combined`] = song.metaDataCombined[property]
-    //   }
-    // }
-
-    const yamlMarkup = ['---', yaml.dump(rawYaml, jsYamlConfig)]
-    fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
-  }
-
-  for (const song of library.toArray()) {
-    exportSong(song as IntermediateSong)
-  }
-}
-
-/**
- * Build the Vue app. All image files must be copied into the Vue working
- * directory.
- */
-export function buildVueApp (): void {
-  const process = childProcess.spawnSync('npm', ['run', 'build'], {
-    cwd: config.songbook.vueAppPath,
-    encoding: 'utf-8',
-    shell: true
-  })
-  log.info(process.stdout)
-  log.error(process.stderr)
 }

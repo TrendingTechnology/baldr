@@ -41,6 +41,7 @@ const utils_1 = require("./utils");
 const main_1 = require("./main");
 const file_monitor_1 = require("./file-monitor");
 const core_browser_1 = require("@bldr/core-browser");
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -355,6 +356,7 @@ class IntermediateSong extends ExtendedSong {
         ]);
         fs.unlinkSync(src);
         const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg');
+        media_manager_1.writeYamlFile(path.join(subFolder, 'Projektor.svg.yml'), { title: this.metaData.title });
         log.info('  Generate SVG files: %s', result.toString());
         if (result.length === 0) {
             throw new Error('The SVG files for the slides couldn’t be generated.');

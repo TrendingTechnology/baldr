@@ -243,14 +243,4 @@ export declare class IntermediateLibrary extends Library {
      */
     update(mode?: GenerationMode, force?: boolean): void;
 }
-/**
- * Export the intermediate SVG files to the media server. Adjust the
- * `info.yml` and copy it to the destination folder of the media server.
- */
-export declare function exportToMediaServer(library: IntermediateLibrary): void;
-/**
- * Build the Vue app. All image files must be copied into the Vue working
- * directory.
- */
-export declare function buildVueApp(): void;
 export {};

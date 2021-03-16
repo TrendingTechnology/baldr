@@ -24,7 +24,7 @@ import { listFiles, deleteFiles } from './utils'
 import { PianoScore, GenerationMode } from './main'
 import { fileMonitor } from './file-monitor'
 import { formatMultiPartAssetFileName } from '@bldr/core-browser'
-
+import { writeYamlFile } from '@bldr/media-manager'
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -444,6 +444,9 @@ export class IntermediateSong extends ExtendedSong {
     fs.unlinkSync(src)
 
     const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg')
+
+    writeYamlFile(path.join(subFolder, 'Projektor.svg.yml'), { title: this.metaData.title })
+
     log.info('  Generate SVG files: %s', result.toString())
     if (result.length === 0) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
