@@ -516,7 +516,7 @@ class IntermediateSong extends ExtendedSong {
     fs.unlinkSync(src)
 
     const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg')
-    log.info('Generate SVG files: %s', result)
+    log.info('  Generate SVG files: %s', result.toString())
     if (result.length === 0) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
@@ -537,7 +537,7 @@ class IntermediateSong extends ExtendedSong {
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
     const result = this.renameMultipartFiles(subFolder, '.eps', 'Piano.eps')
-    log.info('Generate EPS files: %s', result)
+    log.info('  Generate EPS files: %s', result.toString())
     if (result.length === 0) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
     }
@@ -557,9 +557,10 @@ class IntermediateSong extends ExtendedSong {
     if ((mode === 'all' || mode === 'slides') &&
         (force || fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
       this.generatePDF('projector')
+      this.generateSlides()
     }
 
-    log.info('Generate intermediate files for the Song “%s”.', this.songId)
+    log.info('Check if the MuseScore files of the Song “%s” have changed.', log.colorize.green(this.songId))
 
     // piano
     if ((mode === 'all' || mode === 'piano') &&
