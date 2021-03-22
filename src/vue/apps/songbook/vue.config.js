@@ -29,7 +29,7 @@ module.exports = {
       new CopyPlugin({
         patterns: [
           {
-            from: config.songbook.projectorPath,
+            from: config.songbook.path,
             to: 'songs',
             globOptions: {
               ignore: ['.git/**']
@@ -43,7 +43,7 @@ module.exports = {
         compilationTime: new Date().getTime(),
         config: JSON.stringify(config),
         gitHead: JSON.stringify(gitHead()),
-        songsJson: JSON.stringify(require(path.join(config.songbook.projectorPath, 'songs.json')))
+        songsJson: JSON.stringify(require(path.join(config.songbook.path, 'songs.json')))
       })
     ]
   },

@@ -3,6 +3,12 @@ import * as logging from 'loglevel';
 import * as color from './color';
 export const colorize = color;
 const ansiRegexp = /\u001b\[.*?m/;
+export function formatWithoutColor(template, ...args) {
+    if (typeof template === 'number') {
+        template = template.toString();
+    }
+    return printf(template, ...args);
+}
 export function format(template, ...args) {
     args = args.map(value => {
         if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
@@ -10,10 +16,7 @@ export function format(template, ...args) {
         }
         return color.yellow(value);
     });
-    if (typeof template === 'number') {
-        template = template.toString();
-    }
-    return printf(template, ...args);
+    return formatWithoutColor(template, ...args);
 }
 /**
  * Log on level 5.

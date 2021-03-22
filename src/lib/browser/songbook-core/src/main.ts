@@ -261,15 +261,13 @@ export class SongMetaDataCombined {
   }
 
   /**
-   * Extract values of given properties of an object and collect it in
+   * Extract the values of given properties of an object and collect it into
    * an array.
    *
-   * @params {array} properties - Some object properties to collect strings from.
-   * @params {object} object - An object.
-   *
-   * @private
+   * @params properties - Some object properties to collect strings from.
+   * @params object - An object.
    */
-  private static collectProperties (properties: string[], object: StringIndexedObject): any[] {
+  private static collectProperties (properties: string[], object: StringIndexedObject): string[] {
     const parts = []
     for (const property of properties) {
       if (property in object && object[property]) {
@@ -282,7 +280,7 @@ export class SongMetaDataCombined {
   /**
    * Format: `composer, artist, genre`
    */
-  get composer () {
+  get composer (): string {
     let properties
     if (this.metaData.composer === this.metaData.artist) {
       properties = ['composer', 'genre']
@@ -301,7 +299,7 @@ export class SongMetaDataCombined {
    *
    * Format: `lyricist`
    */
-  get lyricist () {
+  get lyricist (): string | undefined {
     if (
       this.metaData.lyricist &&
       this.metaData.lyricist !== this.metaData.artist &&
@@ -323,7 +321,7 @@ export class SongMetaDataCombined {
   /**
    * Format: `subtitle - alias - country`
    */
-  get subtitle () {
+  get subtitle (): string {
     return SongMetaDataCombined.collectProperties(
       ['subtitle', 'alias', 'country'],
       this.metaData

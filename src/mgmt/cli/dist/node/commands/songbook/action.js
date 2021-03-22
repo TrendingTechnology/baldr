@@ -55,17 +55,15 @@ function action(cmdObj) {
     }
     else {
         library.update(mode, cmdObj.force);
-        songbook_intermediate_files_1.exportToMediaServer(library);
+        if (config_1.default.songbook.path) {
+            const projectorPath = path_1.default.join(config_1.default.songbook.path, 'songs.json');
+            fs_1.default.writeFileSync(projectorPath, JSON.stringify(library, null, '  '));
+            core_node_1.log('Create JSON file: %s', chalk_1.default.yellow(projectorPath));
+        }
         if (mode === 'piano' || mode === 'all') {
             const pianoScore = new songbook_intermediate_files_1.PianoScore(library, cmdObj.groupAlphabetically, cmdObj.pageTurnOptimized);
             pianoScore.compile();
         }
-        if (config_1.default.songbook.projectorPath) {
-            const projectorPath = path_1.default.join(config_1.default.songbook.projectorPath, 'songs.json');
-            fs_1.default.writeFileSync(projectorPath, JSON.stringify(library, null, '  '));
-            core_node_1.log('Create JSON file: %s', chalk_1.default.yellow(projectorPath));
-        }
-        songbook_intermediate_files_1.buildVueApp();
     }
 }
 module.exports = action;

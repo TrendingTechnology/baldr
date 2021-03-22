@@ -40,6 +40,13 @@ const ansiRegexp = /\u001b\[.*?m/
  */
 type FormatString = string | number
 
+export function formatWithoutColor (template: FormatString, ...args: any[]): string {
+  if (typeof template === 'number') {
+    template = template.toString()
+  }
+  return printf(template, ...args)
+}
+
 export function format (template: FormatString, ...args: any[]): string {
   args = args.map(value => {
     if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
@@ -47,10 +54,7 @@ export function format (template: FormatString, ...args: any[]): string {
     }
     return color.yellow(value)
   })
-  if (typeof template === 'number') {
-    template = template.toString()
-  }
-  return printf(template, ...args)
+  return formatWithoutColor(template, ...args)
 }
 
 /**

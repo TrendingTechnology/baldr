@@ -178,8 +178,17 @@ class PianoScore {
         }
         return `\\tmp${command}${markupValue}\n`;
     }
+    /**
+     * Escape `\&`.
+     *
+     * @param markup A input string
+     *
+     * @returns A TeX safe string with escaped `\&`.
+     */
     static sanitize(markup) {
-        return markup.replace('&', '\\&');
+        if (markup)
+            return markup.replace('&', '\\&');
+        return '';
     }
     /**
      * Fill a certain number of pages with piano score files.

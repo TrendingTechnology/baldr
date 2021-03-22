@@ -262,7 +262,7 @@ class IntermediateSong extends ExtendedSong {
      * @return TeX markup for one EPS image file of a piano score.
      */
     formatPianoTeXEpsFile(index) {
-        const subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index]);
+        const subFolder = path.join(this.abc, this.songId, 'NB', this.pianoFiles[index]);
         return main_1.PianoScore.texCmd('image', subFolder);
     }
     /**
@@ -293,7 +293,7 @@ class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `;
-        const output = log.format(template, main_1.PianoScore.sanitize(this.metaDataCombined.title), main_1.PianoScore.sanitize(this.metaDataCombined.subtitle), main_1.PianoScore.sanitize(this.metaDataCombined.composer), main_1.PianoScore.sanitize(this.metaDataCombined.lyricist));
+        const output = log.formatWithoutColor(template, main_1.PianoScore.sanitize(this.metaDataCombined.title), main_1.PianoScore.sanitize(this.metaDataCombined.subtitle), main_1.PianoScore.sanitize(this.metaDataCombined.composer), main_1.PianoScore.sanitize(this.metaDataCombined.lyricist));
         const epsFiles = [];
         for (let i = 0; i < this.pianoFiles.length; i++) {
             epsFiles.push(this.formatPianoTeXEpsFile(i));

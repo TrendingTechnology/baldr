@@ -10,8 +10,7 @@ import { log } from '@bldr/core-node'
 import {
   IntermediateLibrary,
   PianoScore,
-  exportToMediaServer,
-  buildVueApp
+  GenerationMode
 } from '@bldr/songbook-intermediate-files'
 import config from '@bldr/config'
 
@@ -24,7 +23,7 @@ function action (cmdObj: { [key: string]: any }): void {
     cmdObj.force = true
   }
 
-  let mode
+  let mode: GenerationMode
   if (cmdObj.slides) {
     mode = 'slides'
   } else if (cmdObj.piano) {
@@ -62,7 +61,15 @@ function action (cmdObj: { [key: string]: any }): void {
     library.updateSongBySongId(cmdObj.songId, mode)
   } else {
     library.update(mode, cmdObj.force)
-    exportToMediaServer(library)
+
+    if (config.songbook.path) {
+      const projectorPath = path.join(config.songbook.path, 'songs.json')
+      fs.writeFileSync(
+        projectorPath,
+        JSON.stringify(library, null, '  ')
+      )
+      log('Create JSON file: %s', chalk.yellow(projectorPath))
+    }
 
     if (mode === 'piano' || mode === 'all') {
       const pianoScore = new PianoScore(
@@ -72,15 +79,6 @@ function action (cmdObj: { [key: string]: any }): void {
       )
       pianoScore.compile()
     }
-    if (config.songbook.projectorPath) {
-      const projectorPath = path.join(config.songbook.projectorPath, 'songs.json')
-      fs.writeFileSync(
-        projectorPath,
-        JSON.stringify(library, null, '  ')
-      )
-      log('Create JSON file: %s', chalk.yellow(projectorPath))
-    }
-    buildVueApp()
   }
 }
 

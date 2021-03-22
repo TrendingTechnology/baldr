@@ -189,13 +189,11 @@ export declare class SongMetaDataCombined {
      */
     static externalSites(): string[];
     /**
-     * Extract values of given properties of an object and collect it in
+     * Extract the values of given properties of an object and collect it into
      * an array.
      *
-     * @params {array} properties - Some object properties to collect strings from.
-     * @params {object} object - An object.
-     *
-     * @private
+     * @params properties - Some object properties to collect strings from.
+     * @params object - An object.
      */
     private static collectProperties;
     /**
@@ -208,7 +206,7 @@ export declare class SongMetaDataCombined {
      *
      * Format: `lyricist`
      */
-    get lyricist(): any;
+    get lyricist(): string | undefined;
     /**
      * For example: `https://musescore.com/score/1234`
      */

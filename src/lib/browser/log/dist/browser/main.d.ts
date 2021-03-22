@@ -32,6 +32,7 @@ export declare const colorize: typeof color;
  * - `%2$s %1$s` positional arguments
  */
 declare type FormatString = string | number;
+export declare function formatWithoutColor(template: FormatString, ...args: any[]): string;
 export declare function format(template: FormatString, ...args: any[]): string;
 /**
  * Log on level 5.

@@ -332,7 +332,7 @@ export class IntermediateSong extends ExtendedSong {
    * @return TeX markup for one EPS image file of a piano score.
    */
   private formatPianoTeXEpsFile (index: number): string {
-    const subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
+    const subFolder = path.join(this.abc, this.songId, 'NB', this.pianoFiles[index])
     return PianoScore.texCmd(
       'image',
       subFolder
@@ -371,7 +371,7 @@ export class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `
-    const output = log.format(
+    const output = log.formatWithoutColor(
       template,
       PianoScore.sanitize(this.metaDataCombined.title),
       PianoScore.sanitize(this.metaDataCombined.subtitle),

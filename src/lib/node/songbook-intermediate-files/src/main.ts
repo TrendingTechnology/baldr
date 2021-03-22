@@ -202,8 +202,17 @@ export class PianoScore {
     return `\\tmp${command}${markupValue}\n`
   }
 
-  static sanitize (markup: string): string {
-    return markup.replace('&', '\\&')
+  /**
+   * Escape `\&`.
+   *
+   * @param markup A input string
+   *
+   * @returns A TeX safe string with escaped `\&`.
+   */
+  static sanitize (markup: string | undefined): string {
+    if (markup)
+      return markup.replace('&', '\\&')
+    return ''
   }
 
   /**

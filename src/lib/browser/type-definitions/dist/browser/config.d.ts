@@ -133,8 +133,6 @@ interface MediaServerConfiguration {
 }
 interface SongbookConfiguration {
     path: string;
-    projectorPath: string;
-    pianoPath: string;
     vueAppPath: string;
 }
 interface WireConfiguration {

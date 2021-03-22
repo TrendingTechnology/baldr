@@ -1,11 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.error = exports.warn = exports.info = exports.debug = exports.trace = exports.format = exports.colorize = void 0;
+exports.setLogLevel = exports.error = exports.warn = exports.info = exports.debug = exports.trace = exports.format = exports.formatWithoutColor = exports.colorize = void 0;
 const fast_printf_1 = require("fast-printf");
 const logging = require("loglevel");
 const color = require("./color");
 exports.colorize = color;
 const ansiRegexp = /\u001b\[.*?m/;
+function formatWithoutColor(template, ...args) {
+    if (typeof template === 'number') {
+        template = template.toString();
+    }
+    return fast_printf_1.printf(template, ...args);
+}
+exports.formatWithoutColor = formatWithoutColor;
 function format(template, ...args) {
     args = args.map(value => {
         if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
@@ -13,10 +20,7 @@ function format(template, ...args) {
         }
         return color.yellow(value);
     });
-    if (typeof template === 'number') {
-        template = template.toString();
-    }
-    return fast_printf_1.printf(template, ...args);
+    return formatWithoutColor(template, ...args);
 }
 exports.format = format;
 /**

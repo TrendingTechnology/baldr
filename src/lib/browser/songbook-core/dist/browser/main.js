@@ -77,13 +77,11 @@ export class SongMetaDataCombined {
         ];
     }
     /**
-     * Extract values of given properties of an object and collect it in
+     * Extract the values of given properties of an object and collect it into
      * an array.
      *
-     * @params {array} properties - Some object properties to collect strings from.
-     * @params {object} object - An object.
-     *
-     * @private
+     * @params properties - Some object properties to collect strings from.
+     * @params object - An object.
      */
     static collectProperties(properties, object) {
         const parts = [];

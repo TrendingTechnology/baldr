@@ -96,7 +96,14 @@ export declare class PianoScore {
      * @return A TeX markup, for example: \tmpcommand{value}\n
      */
     static texCmd(command: string, value?: string): string;
-    static sanitize(markup: string): string;
+    /**
+     * Escape `\&`.
+     *
+     * @param markup A input string
+     *
+     * @returns A TeX safe string with escaped `\&`.
+     */
+    static sanitize(markup: string | undefined): string;
     /**
      * Fill a certain number of pages with piano score files.
      *
