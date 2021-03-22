@@ -1,7 +1,7 @@
 import * as marked from 'marked';
 // Do not remove this lines. The comments are removed by the build script.
-///-/ const { JSDOM } = require('jsdom')
-///-/ const DOMParser = new JSDOM().window.DOMParser
+// /-/ const { JSDOM } = require('jsdom')
+// /-/ const DOMParser = new JSDOM().window.DOMParser
 /**
  * Convert some custom markup like arrows.
  *
