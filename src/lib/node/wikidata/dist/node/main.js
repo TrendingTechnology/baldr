@@ -65,17 +65,17 @@ let entity;
  * @param throwError - If there are more than values in an array.
  */
 function unpackArray(values, onlyOne, throwError) {
-    if (!values)
+    if (values == null)
         return '';
-    if (Array.isArray(values)) {
+    if (Array.isArray(values) != null) {
         if (values.length === 1) {
             return values[0];
         }
-        else if (throwError) {
-            throw new Error(`Array has more than one item: ${values}`);
+        else if (throwError != null && throwError) {
+            throw new Error(`Array has more than one item: ${values.toString()}`);
         }
     }
-    if (Array.isArray(values) && values.length > 1 && onlyOne) {
+    if (Array.isArray(values) != null && values.length > 1 && onlyOne != null && onlyOne) {
         return values[0];
     }
     return values;
@@ -104,10 +104,6 @@ function getEntities(itemIds, props) {
         return entities[itemIds];
     });
 }
-/**
- * @param url
- * @param dest
- */
 function fetchResizeFile(url, dest) {
     return __awaiter(this, void 0, void 0, function* () {
         yield core_node_1.fetchFile(url, dest);
@@ -131,31 +127,24 @@ function fetchResizeFile(url, dest) {
 /**
  * Download a file from wiki commonds.
  *
- * @param {String} fileName - The file name from wiki commonds.
- * @param {String} dest - A file path where to store the file locally.
+ * @param fileName - The file name from wiki commonds.
+ * @param dest - A file path where to store the file locally.
  */
 function fetchCommonsFile(fileName, dest) {
     return __awaiter(this, void 0, void 0, function* () {
         // wikicommons:George-W-Bush.jpeg
         fileName = fileName.replace('wikicommons:', '');
         const url = wikibase.getImageUrl(fileName);
-        yield fetchResizeFile(url, dest);
+        return fetchResizeFile(url, dest);
     });
 }
 /**
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
- *
- * @param entity
- * @param claims
  */
 function getClaim(entity, claims) {
-    /**
-     * @param {Object} entity
-     * @param {String} claim
-     */
     function getSingleClaim(entity, claim) {
-        if (entity.claims[claim]) {
+        if (entity.claims[claim] != null) {
             const typeData = entity.claims[claim];
             return unpackArray(typeData);
         }
@@ -163,7 +152,7 @@ function getClaim(entity, claims) {
     if (Array.isArray(claims)) {
         for (const claim of claims) {
             const typeData = getSingleClaim(entity, claim);
-            if (typeData)
+            if (typeData != null)
                 return typeData;
         }
     }
@@ -187,15 +176,13 @@ const functions = {
       *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
       * }
       * ```
-      *
-      * @param entity
       */
     getDescription: function (entity) {
         const desc = entity.descriptions;
-        if (desc.de) {
+        if (desc.de != null) {
             return desc.de;
         }
-        else if (desc.en) {
+        else if (desc.en != null) {
             return desc.en;
         }
         return '';
@@ -215,7 +202,7 @@ const functions = {
      * @returns {Array|String}
      */
     getLabel: function (entity) {
-        if (entity.labels.de) {
+        if (entity.labels.de != null) {
             return entity.labels.de;
         }
         else {
@@ -223,7 +210,6 @@ const functions = {
         }
     },
     /**
-     *
      * ```js
      * entity = {
      *   sitelinks: {
@@ -232,29 +218,27 @@ const functions = {
      *   }
      * }
      * ```
-     *
-     * @param entity
      */
     getWikipediaTitle: function (entity) {
         const sitelinks = entity.sitelinks;
         const keys = Object.keys(sitelinks);
-        if (!keys.length)
+        if (keys.length === 0)
             return '';
         let key;
-        if (sitelinks.dewiki) {
+        if (sitelinks.dewiki != null) {
             key = 'dewiki';
         }
-        else if (sitelinks.enwiki) {
+        else if (sitelinks.enwiki != null) {
             key = 'enwiki';
         }
         else {
             key = keys.shift();
         }
-        if (!key)
+        if (key == null)
             return '';
         // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
         const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] });
-        if (!siteLink)
+        if (siteLink == null)
             return '';
         // {
         //   lang: 'de',
@@ -278,7 +262,7 @@ const functions = {
         return __awaiter(this, void 0, void 0, function* () {
             itemIds = unpackArray(itemIds);
             const entities = yield getEntities(itemIds, ['labels']);
-            if (entities.id) {
+            if (entities.id != null) {
                 const entity = entities;
                 return functions.getLabel(entity);
             }
@@ -291,8 +275,8 @@ const functions = {
         });
     },
     /*******************************************************************************
-     * format
-     ******************************************************************************/
+   * format
+   ******************************************************************************/
     /**
       * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
       */
@@ -304,9 +288,6 @@ const functions = {
             return '';
         return date.replace(/T.+$/, '');
     },
-    /**
-     * @param list
-     */
     formatList: function (list) {
         if (Array.isArray(list)) {
             return list.join(', ');
@@ -316,9 +297,9 @@ const functions = {
     /**
      * Extract the 4 digit year from a date string
      *
-     * @param {String} dateSpec - For example `1968-01-01`
+     * @param dateSpec - For example `1968-01-01`
      *
-     * @returns {String} for example `1968`
+     * @returns for example `1968`
      */
     formatYear: function (dateSpec) {
         // Janis Joplin Cry Baby has two dates as an array.
@@ -327,8 +308,6 @@ const functions = {
     },
     /**
      * Replace all white spaces with an underscore and prefix “wikicommons:”.
-     *
-     * @param value
      */
     formatWikicommons: function (value) {
         value = pickFirst(value);
@@ -337,8 +316,6 @@ const functions = {
     },
     /**
      * Only return one value, not an array of values.
-     *
-     * @param value
      */
     formatSingleValue: function (value) {
         if (Array.isArray(value))
@@ -350,24 +327,21 @@ const functions = {
  * Merge two objects containing metadata: a original metadata object and a
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
- *
- * @param dataOrig
- * @param dataWiki
- * @param typeSpecs
  */
 function mergeData(data, dataWiki, typeSpecs) {
+    var _a;
     // Ẃe delete properties from this object -> make a flat copy.
     const dataOrig = Object.assign({}, data);
-    if (!dataOrig.metaTypes) {
+    if (dataOrig.metaTypes == null) {
         return Object.assign({}, dataOrig, dataWiki);
     }
     const typeData = {};
     for (const typeName of dataOrig.metaTypes.split(',')) {
         const propSpecs = typeSpecs[typeName].props;
         for (const propName in dataWiki) {
-            if (propSpecs[propName] && propSpecs[propName].wikidata) {
+            if (((_a = propSpecs === null || propSpecs === void 0 ? void 0 : propSpecs[propName]) === null || _a === void 0 ? void 0 : _a.wikidata) != null) {
                 const propSpec = propSpecs[propName].wikidata;
-                if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
+                if (propSpec != null && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
                     typeData[propName] = dataWiki[propName];
                     delete dataOrig[propName];
                 }
@@ -386,36 +360,34 @@ function mergeData(data, dataWiki, typeSpecs) {
  * Query wikidata.
  *
  * @param itemId - for example `Q123`
- * @param typeNames
- * @param typeSpecs
  */
 function query(itemId, typeNames, typeSpecs) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!wikibase.isItemId(itemId)) {
+        if (wikibase.isItemId(itemId) == null) {
             throw new Error(`No item id: ${itemId}`);
         }
         entity = (yield getEntities(itemId));
-        if (typeNames.indexOf('general') === -1)
+        if (!typeNames.includes('general'))
             typeNames = `general,${typeNames}`;
         const data = {};
         data.wikidata = itemId;
         for (const typeName of typeNames.split(',')) {
-            if (!typeSpecs[typeName]) {
+            if (typeSpecs[typeName] == null) {
                 throw new Error(`Unkown type name: “${typeName}”`);
             }
             const typeSpec = typeSpecs[typeName];
             for (const propName in typeSpec.props) {
-                if (typeSpec.props[propName].wikidata) {
+                if (typeSpec.props[propName].wikidata != null) {
                     const propSpec = typeSpec.props[propName].wikidata;
                     let value;
                     // source
-                    if (!propSpec.fromClaim && !propSpec.fromEntity) {
+                    if (propSpec.fromClaim == null && propSpec.fromEntity == null) {
                         throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`);
                     }
-                    if (propSpec.fromClaim) {
+                    if (propSpec.fromClaim != null) {
                         value = getClaim(entity, propSpec.fromClaim);
                     }
-                    if (!value && propSpec.fromEntity) {
+                    if (value == null && propSpec.fromEntity != null) {
                         const func = functions[propSpec.fromEntity];
                         if (typeof func !== 'function') {
                             throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`);
@@ -423,10 +395,10 @@ function query(itemId, typeNames, typeSpecs) {
                         value = func(entity);
                     }
                     // second query
-                    if (value && propSpec.secondQuery)
+                    if (value != null && propSpec.secondQuery != null)
                         value = yield functions[propSpec.secondQuery](value);
                     // format
-                    if (value && propSpec.format) {
+                    if (value != null && propSpec.format != null) {
                         if (typeof propSpec.format === 'function') {
                             value = propSpec.format(value, typeSpec);
                         }
@@ -440,11 +412,11 @@ function query(itemId, typeNames, typeSpecs) {
                             value = func(value);
                         }
                     }
-                    if (value)
+                    if (value != null)
                         data[propName] = value;
                 }
             }
-            if (typeSpec.normalizeWikidata) {
+            if (typeof typeSpec.normalizeWikidata === 'function') {
                 typeSpec.normalizeWikidata({ typeData: data, entity, functions });
             }
         }

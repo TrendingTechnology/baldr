@@ -81,7 +81,7 @@ interface EntityCollection {
   * }
   * ```
   */
- let entity: Entity
+let entity: Entity
 
 /**
  * If the array has only one item, return only this item, else return
@@ -93,15 +93,15 @@ interface EntityCollection {
  * @param throwError - If there are more than values in an array.
  */
 function unpackArray (values: string | string[], onlyOne?: boolean, throwError?: boolean): string | string[] {
-  if (!values) return ''
-  if (Array.isArray(values)) {
+  if (values == null) return ''
+  if (Array.isArray(values) != null) {
     if (values.length === 1) {
       return values[0]
-    } else if (throwError) {
-      throw new Error(`Array has more than one item: ${values}`)
+    } else if (throwError != null && throwError) {
+      throw new Error(`Array has more than one item: ${values.toString()}`)
     }
   }
-  if (Array.isArray(values) && values.length > 1 && onlyOne) {
+  if (Array.isArray(values) != null && values.length > 1 && onlyOne != null && onlyOne) {
     return values[0]
   }
   return values
@@ -113,7 +113,7 @@ function unpackArray (values: string | string[], onlyOne?: boolean, throwError?:
  * @param values
  */
 function pickFirst (values: string | string[]): string {
-  return <string> unpackArray(values, true, false)
+  return unpackArray(values, true, false) as string
 }
 
 /**
@@ -130,11 +130,7 @@ async function getEntities (itemIds: string[] | string, props?: string[]): Promi
   return entities[itemIds]
 }
 
-/**
- * @param url
- * @param dest
- */
-async function fetchResizeFile (url: string, dest: string) {
+async function fetchResizeFile (url: string, dest: string): Promise<void> {
   await fetchFile(url, dest)
   if (fs.existsSync(dest)) {
     const stat = fs.statSync(dest)
@@ -156,30 +152,23 @@ async function fetchResizeFile (url: string, dest: string) {
 /**
  * Download a file from wiki commonds.
  *
- * @param {String} fileName - The file name from wiki commonds.
- * @param {String} dest - A file path where to store the file locally.
+ * @param fileName - The file name from wiki commonds.
+ * @param dest - A file path where to store the file locally.
  */
-async function fetchCommonsFile (fileName: string, dest: string) {
+async function fetchCommonsFile (fileName: string, dest: string): Promise<void> {
   // wikicommons:George-W-Bush.jpeg
   fileName = fileName.replace('wikicommons:', '')
   const url = wikibase.getImageUrl(fileName)
-  await fetchResizeFile(url, dest)
+  return fetchResizeFile(url, dest)
 }
 
 /**
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
- *
- * @param entity
- * @param claims
  */
-function getClaim (entity: Entity, claims: string | string[]) {
-  /**
-   * @param {Object} entity
-   * @param {String} claim
-   */
-  function getSingleClaim (entity: Entity, claim: string) {
-    if (entity.claims[claim]) {
+function getClaim (entity: Entity, claims: string | string[]): string | string[] | undefined {
+  function getSingleClaim (entity: Entity, claim: string): string | string[] | undefined {
+    if (entity.claims[claim] != null) {
       const typeData = entity.claims[claim]
       return unpackArray(typeData)
     }
@@ -188,7 +177,7 @@ function getClaim (entity: Entity, claims: string | string[]) {
   if (Array.isArray(claims)) {
     for (const claim of claims) {
       const typeData = getSingleClaim(entity, claim)
-      if (typeData) return typeData
+      if (typeData != null) return typeData
     }
   } else {
     return getSingleClaim(entity, claims)
@@ -213,14 +202,12 @@ const functions: {[key: string]: Function } = {
     *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
     * }
     * ```
-    *
-    * @param entity
     */
   getDescription: function (entity: Entity): string {
     const desc = entity.descriptions
-    if (desc.de) {
+    if (desc.de != null) {
       return desc.de
-    } else if (desc.en) {
+    } else if (desc.en != null) {
       return desc.en
     }
     return ''
@@ -241,7 +228,7 @@ const functions: {[key: string]: Function } = {
    * @returns {Array|String}
    */
   getLabel: function (entity: Entity): string {
-    if (entity.labels.de) {
+    if (entity.labels.de != null) {
       return entity.labels.de
     } else {
       return entity.labels.en
@@ -249,7 +236,6 @@ const functions: {[key: string]: Function } = {
   },
 
   /**
-   *
    * ```js
    * entity = {
    *   sitelinks: {
@@ -258,25 +244,23 @@ const functions: {[key: string]: Function } = {
    *   }
    * }
    * ```
-   *
-   * @param entity
    */
   getWikipediaTitle: function (entity: Entity): string {
     const sitelinks = entity.sitelinks
     const keys = Object.keys(sitelinks)
-    if (!keys.length) return ''
+    if (keys.length === 0) return ''
     let key
-    if (sitelinks.dewiki) {
+    if (sitelinks.dewiki != null) {
       key = 'dewiki'
-    } else if (sitelinks.enwiki) {
+    } else if (sitelinks.enwiki != null) {
       key = 'enwiki'
     } else {
       key = keys.shift()
     }
-    if (!key) return ''
+    if (key == null) return ''
     // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
     const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
-    if (!siteLink) return ''
+    if (siteLink == null) return ''
     // {
     //   lang: 'de',
     //   project: 'wikipedia',
@@ -300,19 +284,19 @@ const functions: {[key: string]: Function } = {
   queryLabels: async function (itemIds: string | string[]): Promise<string | string[]> {
     itemIds = unpackArray(itemIds)
     const entities = await getEntities(itemIds, ['labels'])
-    if (entities.id) {
-      const entity = <Entity> entities
+    if (entities.id != null) {
+      const entity = entities as Entity
       return functions.getLabel(entity)
     }
     const result: string[] = []
     for (const itemId in entities) {
       const entity = (entities as EntityCollection)[itemId]
-      result.push(<string> functions.getLabel(entity))
+      result.push(functions.getLabel(entity) as string)
     }
     return result
   },
 
-/*******************************************************************************
+  /*******************************************************************************
  * format
  ******************************************************************************/
 
@@ -327,9 +311,6 @@ const functions: {[key: string]: Function } = {
     return date.replace(/T.+$/, '')
   },
 
-  /**
-   * @param list
-   */
   formatList: function (list: string | string[]): string {
     if (Array.isArray(list)) {
       return list.join(', ')
@@ -340,9 +321,9 @@ const functions: {[key: string]: Function } = {
   /**
    * Extract the 4 digit year from a date string
    *
-   * @param {String} dateSpec - For example `1968-01-01`
+   * @param dateSpec - For example `1968-01-01`
    *
-   * @returns {String} for example `1968`
+   * @returns for example `1968`
    */
   formatYear: function (dateSpec: string | string[]): string {
     // Janis Joplin Cry Baby has two dates as an array.
@@ -352,8 +333,6 @@ const functions: {[key: string]: Function } = {
 
   /**
    * Replace all white spaces with an underscore and prefix “wikicommons:”.
-   *
-   * @param value
    */
   formatWikicommons: function (value: string | string[]): string {
     value = pickFirst(value)
@@ -363,8 +342,6 @@ const functions: {[key: string]: Function } = {
 
   /**
    * Only return one value, not an array of values.
-   *
-   * @param value
    */
   formatSingleValue: function (value: string | string[]): string {
     if (Array.isArray(value)) return value[0]
@@ -376,27 +353,23 @@ const functions: {[key: string]: Function } = {
  * Merge two objects containing metadata: a original metadata object and a
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
- *
- * @param dataOrig
- * @param dataWiki
- * @param typeSpecs
  */
 function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: MetaSpec.TypeCollection): MetaSpec.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
-  if (!dataOrig.metaTypes) {
+  if (dataOrig.metaTypes == null) {
     return Object.assign({}, dataOrig, dataWiki)
   }
 
   const typeData: MetaSpec.Data = {}
 
   for (const typeName of dataOrig.metaTypes.split(',')) {
-    const propSpecs = typeSpecs[<MetaSpec.TypeName> typeName].props
+    const propSpecs = typeSpecs[typeName as MetaSpec.TypeName].props
     for (const propName in dataWiki) {
-      if (propSpecs[propName] && propSpecs[propName].wikidata) {
+      if (propSpecs?.[propName]?.wikidata != null) {
         const propSpec = propSpecs[propName].wikidata
-        if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
+        if (propSpec != null && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
           typeData[propName] = dataWiki[propName]
           delete dataOrig[propName]
         } else {
@@ -417,40 +390,38 @@ function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: Met
  * Query wikidata.
  *
  * @param itemId - for example `Q123`
- * @param typeNames
- * @param typeSpecs
  */
 async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<{ [key: string]: any }> {
-  if (!wikibase.isItemId(itemId)) {
+  if (wikibase.isItemId(itemId) == null) {
     throw new Error(`No item id: ${itemId}`)
   }
-  entity = <Entity> await getEntities(itemId)
+  entity = await getEntities(itemId) as Entity
 
-  if (typeNames.indexOf('general') === -1) typeNames = `general,${typeNames}`
+  if (!typeNames.includes('general')) typeNames = `general,${typeNames}`
 
   const data: { [key: string]: any } = {}
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
-    if (!typeSpecs[<MetaSpec.TypeName> typeName]) {
+    if (typeSpecs[typeName as MetaSpec.TypeName] == null) {
       throw new Error(`Unkown type name: “${typeName}”`)
     }
 
-    const typeSpec = typeSpecs[<MetaSpec.TypeName> typeName]
+    const typeSpec = typeSpecs[typeName as MetaSpec.TypeName]
 
     for (const propName in typeSpec.props) {
-      if (typeSpec.props[propName].wikidata) {
-        const propSpec = <MetaSpec.WikidataProp> typeSpec.props[propName].wikidata
+      if (typeSpec.props[propName].wikidata != null) {
+        const propSpec = typeSpec.props[propName].wikidata as MetaSpec.WikidataProp
         let value
 
         // source
-        if (!propSpec.fromClaim && !propSpec.fromEntity) {
+        if (propSpec.fromClaim == null && propSpec.fromEntity == null) {
           throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
         }
-        if (propSpec.fromClaim) {
+        if (propSpec.fromClaim != null) {
           value = getClaim(entity, propSpec.fromClaim)
         }
 
-        if (!value && propSpec.fromEntity) {
+        if (value == null && propSpec.fromEntity != null) {
           const func = functions[propSpec.fromEntity]
           if (typeof func !== 'function') {
             throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
@@ -459,10 +430,10 @@ async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: 
         }
 
         // second query
-        if (value && propSpec.secondQuery) value = await functions[propSpec.secondQuery](value)
+        if (value != null && propSpec.secondQuery != null) value = await functions[propSpec.secondQuery](value)
 
         // format
-        if (value && propSpec.format) {
+        if (value != null && propSpec.format != null) {
           if (typeof propSpec.format === 'function') {
             value = propSpec.format(value, typeSpec)
           } else {
@@ -476,10 +447,10 @@ async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: 
           }
         }
 
-        if (value) data[propName] = value
+        if (value != null) data[propName] = value
       }
     }
-    if (typeSpec.normalizeWikidata) {
+    if (typeof typeSpec.normalizeWikidata === 'function') {
       typeSpec.normalizeWikidata({ typeData: data, entity, functions })
     }
   }
