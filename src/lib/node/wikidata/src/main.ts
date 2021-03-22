@@ -51,6 +51,11 @@ interface EntityCollection {
   [key: string]: Entity
 }
 
+interface SitelinkData {
+  lang: string
+  title: string
+}
+
 /**
  * ```js
  * let entity = {
@@ -94,14 +99,14 @@ let entity: Entity
  */
 function unpackArray (values: string | string[], onlyOne?: boolean, throwError?: boolean): string | string[] {
   if (values == null) return ''
-  if (Array.isArray(values) != null) {
+  if (Array.isArray(values)) {
     if (values.length === 1) {
       return values[0]
     } else if (throwError != null && throwError) {
       throw new Error(`Array has more than one item: ${values.toString()}`)
     }
   }
-  if (Array.isArray(values) != null && values.length > 1 && onlyOne != null && onlyOne) {
+  if (Array.isArray(values) && values.length > 1 && onlyOne != null && onlyOne) {
     return values[0]
   }
   return values
@@ -117,8 +122,6 @@ function pickFirst (values: string | string[]): string {
 }
 
 /**
- *
- * @param itemIds
  * @param props - for example `['labels']`
  */
 async function getEntities (itemIds: string[] | string, props?: string[]): Promise<Entity | EntityCollection> {
@@ -159,7 +162,7 @@ async function fetchCommonsFile (fileName: string, dest: string): Promise<void> 
   // wikicommons:George-W-Bush.jpeg
   fileName = fileName.replace('wikicommons:', '')
   const url = wikibase.getImageUrl(fileName)
-  return fetchResizeFile(url, dest)
+  return await fetchResizeFile(url, dest)
 }
 
 /**
@@ -268,7 +271,7 @@ const functions: {[key: string]: Function } = {
     //   title: 'Ludwig_van_Beethoven',
     //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
     // }
-    const linkData = wikibase.getSitelinkData(siteLink)
+    const linkData = wikibase.getSitelinkData(siteLink) as SitelinkData
     return `${linkData.lang}:${linkData.title}`
   },
 
@@ -307,7 +310,7 @@ const functions: {[key: string]: Function } = {
     // Frederic Chopin has two birth dates.
     // throw no error
     date = pickFirst(date)
-    if (!date) return ''
+    if (date == null) return ''
     return date.replace(/T.+$/, '')
   },
 

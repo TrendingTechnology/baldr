@@ -67,7 +67,7 @@ let entity;
 function unpackArray(values, onlyOne, throwError) {
     if (values == null)
         return '';
-    if (Array.isArray(values) != null) {
+    if (Array.isArray(values)) {
         if (values.length === 1) {
             return values[0];
         }
@@ -75,7 +75,7 @@ function unpackArray(values, onlyOne, throwError) {
             throw new Error(`Array has more than one item: ${values.toString()}`);
         }
     }
-    if (Array.isArray(values) != null && values.length > 1 && onlyOne != null && onlyOne) {
+    if (Array.isArray(values) && values.length > 1 && onlyOne != null && onlyOne) {
         return values[0];
     }
     return values;
@@ -89,8 +89,6 @@ function pickFirst(values) {
     return unpackArray(values, true, false);
 }
 /**
- *
- * @param itemIds
  * @param props - for example `['labels']`
  */
 function getEntities(itemIds, props) {
@@ -135,7 +133,7 @@ function fetchCommonsFile(fileName, dest) {
         // wikicommons:George-W-Bush.jpeg
         fileName = fileName.replace('wikicommons:', '');
         const url = wikibase.getImageUrl(fileName);
-        return fetchResizeFile(url, dest);
+        return yield fetchResizeFile(url, dest);
     });
 }
 /**
@@ -284,7 +282,7 @@ const functions = {
         // Frederic Chopin has two birth dates.
         // throw no error
         date = pickFirst(date);
-        if (!date)
+        if (date == null)
             return '';
         return date.replace(/T.+$/, '');
     },
