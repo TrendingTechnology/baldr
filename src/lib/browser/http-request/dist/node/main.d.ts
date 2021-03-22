@@ -24,7 +24,7 @@ export declare class HttpRequest {
      *
      * results in the URL `http://localhost/api/media/query`.
      */
-    private readonly urlFillIn;
+    private readonly urlFillIn?;
     /**
      * The base URL of the REST endpoint.
      */
@@ -50,7 +50,7 @@ export declare class HttpRequest {
      *
      *   results in the URL `http://localhost/api/media/query`.
      */
-    constructor(config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string);
+    constructor(config: Configuration, restEndPoint: RestEndPoint, urlFillIn?: string);
     /**
      * @property url - A path relative to REST endpoints base URL. if
      *   `url` starts with `/` the `urlFillin` is not used.

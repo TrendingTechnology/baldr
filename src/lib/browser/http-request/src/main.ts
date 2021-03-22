@@ -30,7 +30,7 @@ export class HttpRequest {
    *
    * results in the URL `http://localhost/api/media/query`.
    */
-  private readonly urlFillIn: string
+  private readonly urlFillIn?: string
 
   /**
    * The base URL of the REST endpoint.
@@ -59,7 +59,7 @@ export class HttpRequest {
    *
    *   results in the URL `http://localhost/api/media/query`.
    */
-  constructor (config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string) {
+  constructor (config: Configuration, restEndPoint: RestEndPoint, urlFillIn?: string) {
     this.urlFillIn = urlFillIn
 
     let isRemote: boolean = false
@@ -96,7 +96,7 @@ export class HttpRequest {
    *   `url` starts with `/` the `urlFillin` is not used.
    */
   private formatUrl (url: string): string {
-    if (this.urlFillIn && url.substr(0, 1) !== '/') {
+    if (this.urlFillIn !== null && typeof this.urlFillIn === 'string' && url.substr(0, 1) !== '/') {
       return `${this.urlFillIn}/${url}`
     }
     return url
@@ -136,7 +136,7 @@ export class HttpRequest {
     if (!('method' in requestConfig)) {
       requestConfig.method = 'get'
     }
-    if (requestConfig.url) {
+    if (requestConfig.url !== null && typeof requestConfig.url === 'string') {
       requestConfig.url = this.formatUrl(requestConfig.url)
     }
     return await this.axiosInstance.request(requestConfig)

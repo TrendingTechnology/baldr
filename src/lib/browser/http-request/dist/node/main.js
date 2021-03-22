@@ -71,7 +71,7 @@ class HttpRequest {
      *   `url` starts with `/` the `urlFillin` is not used.
      */
     formatUrl(url) {
-        if (this.urlFillIn && url.substr(0, 1) !== '/') {
+        if (this.urlFillIn !== null && typeof this.urlFillIn === 'string' && url.substr(0, 1) !== '/') {
             return `${this.urlFillIn}/${url}`;
         }
         return url;
@@ -111,7 +111,7 @@ class HttpRequest {
             if (!('method' in requestConfig)) {
                 requestConfig.method = 'get';
             }
-            if (requestConfig.url) {
+            if (requestConfig.url !== null && typeof requestConfig.url === 'string') {
                 requestConfig.url = this.formatUrl(requestConfig.url);
             }
             return yield this.axiosInstance.request(requestConfig);
