@@ -194,7 +194,7 @@ export declare class IntermediateSong extends ExtendedSong {
      * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
      *
      * @param folder - The folder containing the files to be renamed.
-     * @param filter - A string to filter the list of file names.
+     * @param regExp - A string to filter the list of file names.
      * @param newMultipartFilename - The new base name of the multipart files.
      *
      * @returns An array of the renamed multipart files names.

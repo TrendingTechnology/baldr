@@ -185,8 +185,8 @@ class ExtendedSong {
         this.folderIntermediateFiles = new Folder(this.folder, 'NB');
         this.mscxProjector = this.detectFile('projector.mscx');
         this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx');
-        this.pianoFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), '.eps');
-        this.slidesFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), '.svg');
+        this.pianoFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), /\.eps$/i);
+        this.slidesFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), /\.svg$/i);
     }
     /**
      * Get the song folder.
@@ -324,27 +324,27 @@ class IntermediateSong extends ExtendedSong {
      * Rename an array of multipart media files to follow the naming scheme `_noXXX.extension`.
      *
      * @param folder - The folder containing the files to be renamed.
-     * @param filter - A string to filter the list of file names.
+     * @param regExp - A string to filter the list of file names.
      * @param newMultipartFilename - The new base name of the multipart files.
      *
      * @returns An array of the renamed multipart files names.
      */
-    renameMultipartFiles(folder, filter, newMultipartFilename) {
-        const intermediateFiles = utils_1.listFiles(folder, filter);
+    renameMultipartFiles(folder, regExp, newMultipartFilename) {
+        const intermediateFiles = utils_1.listFiles(folder, regExp);
         let no = 1;
         for (const oldName of intermediateFiles) {
             const newName = core_browser_1.formatMultiPartAssetFileName(newMultipartFilename, no);
             fs.renameSync(path.join(folder, oldName), path.join(folder, newName));
             no++;
         }
-        return utils_1.listFiles(folder, filter);
+        return utils_1.listFiles(folder, regExp);
     }
     /**
      * Generate SVG files in the slides subfolder.
      */
     generateSlides() {
         const subFolder = this.folderIntermediateFiles.get();
-        const oldSVGs = utils_1.listFiles(subFolder, '.svg');
+        const oldSVGs = utils_1.listFiles(subFolder, /\.svg$/i);
         for (const oldSVG of oldSVGs) {
             fs.unlinkSync(path.join(subFolder, oldSVG));
         }
@@ -355,7 +355,7 @@ class IntermediateSong extends ExtendedSong {
             'all'
         ]);
         fs.unlinkSync(src);
-        const result = this.renameMultipartFiles(subFolder, '.svg', 'Projektor.svg');
+        const result = this.renameMultipartFiles(subFolder, /\.svg$/i, 'Projektor.svg');
         media_manager_1.writeYamlFile(path.join(subFolder, 'Projektor.svg.yml'), { title: this.metaData.title });
         log.info('  Generate SVG files: %s', result.toString());
         if (result.length === 0) {
@@ -372,11 +372,11 @@ class IntermediateSong extends ExtendedSong {
      */
     generatePiano() {
         const subFolder = this.folderIntermediateFiles.get();
-        utils_1.deleteFiles(subFolder, '.eps');
+        utils_1.deleteFiles(subFolder, /\.eps$/i);
         const pianoFile = path.join(subFolder, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
-        const result = this.renameMultipartFiles(subFolder, '.eps', 'Piano.eps');
+        const result = this.renameMultipartFiles(subFolder, /\.eps$/i, 'Piano.eps');
         log.info('  Generate EPS files: %s', result.toString());
         if (result.length === 0) {
             throw new Error('The EPS files for the piano score couldn’t be generated.');

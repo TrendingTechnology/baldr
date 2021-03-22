@@ -32,14 +32,14 @@ exports.parseSongIDList = parseSongIDList;
  * The resulting array of file names is sorted.
  *
  * @param folderPath - The path of the directory.
- * @param filter - String to filter, e. g. “.eps”.
+ * @param regExp - A regular expression to filter, e. g. “\.eps$”.
  *
  * @return An array of file names.
  */
-function listFiles(folderPath, filter) {
+function listFiles(folderPath, regExp) {
     if (fs.existsSync(folderPath)) {
         return fs.readdirSync(folderPath).filter((file) => {
-            return file.includes(filter);
+            return file.match(regExp);
         }).sort(undefined);
     }
     return [];
@@ -49,10 +49,10 @@ exports.listFiles = listFiles;
  * Delete all files matching a filter string in a specified folder.
  *
  * @param folderPath - The path of the folder.
- * @param filter - String to filter, e. g. “.eps”.
+ * @param regExp - A regular expression to filter, e. g. “.eps”.
  */
-function deleteFiles(folderPath, filter) {
-    const oldFiles = listFiles(folderPath, filter);
+function deleteFiles(folderPath, regExp) {
+    const oldFiles = listFiles(folderPath, regExp);
     for (const oldFile of oldFiles) {
         fs.unlinkSync(path.join(folderPath, oldFile));
     }
