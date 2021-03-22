@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@bldr/core-node": "*",
+    "@bldr/core-browser": "*",
     "@bldr/songbook-core": "*",
     "@bldr/themes": "*",
     "@bldr/components-collection": "*",

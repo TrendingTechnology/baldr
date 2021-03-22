@@ -9,6 +9,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { formatMultiPartAssetFileName } from '@bldr/core-browser'
 
 import MetaData from './MetaData'
 
@@ -25,14 +26,14 @@ export default {
     songId () {
       return this.songCurrent.songId
     },
-    slideNo () {
-      if (this.slideNo <= 9) {
-        return `0${this.slideNo}`
-      }
-      return this.slideNo
-    },
+    // slideNo () {
+    //   if (this.slideNo <= 9) {
+    //     return `0${this.slideNo}`
+    //   }
+    //   return this.slideNo
+    // },
     imageSrc () {
-      return `./songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
+      return formatMultiPartAssetFileName(`./songs/${this.abc}/${this.songId}/NB/Projektor.svg`, this.slideNo)
     }
   }
 }
