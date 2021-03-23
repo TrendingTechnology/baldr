@@ -76,7 +76,7 @@ export function getPdfPageCount (filePath: string): number {
     { encoding: 'utf-8', cwd: process.cwd() }
   )
   const match = proc.stdout.match(/Pages:\s+(\d+)/)
-  if (match) {
+  if (match != null) {
     return parseInt(match[1])
   }
   return 0
@@ -89,7 +89,7 @@ export function getPdfPageCount (filePath: string): number {
  * @param dest - The destination. Missing parent directories are
  *   automatically created.
  */
-export async function fetchFile (url: string, dest: string) {
+export async function fetchFile (url: string, dest: string): Promise<void> {
   const response = await fetch(new URL(url))
   fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
@@ -104,7 +104,7 @@ export async function fetchFile (url: string, dest: string) {
  *
  * @returns The content of the file in the `utf-8` format.
  */
-export function readFile(filePath: string): string {
+export function readFile (filePath: string): string {
   return fs.readFileSync(filePath, { encoding: 'utf-8' })
 }
 
@@ -114,6 +114,6 @@ export function readFile(filePath: string): string {
  * @param filePath - A path of a text file.
  * @param content - Some text to write to a file.
  */
-export function writeFile(filePath: string, content: string): void {
+export function writeFile (filePath: string, content: string): void {
   fs.writeFileSync(filePath, content)
 }

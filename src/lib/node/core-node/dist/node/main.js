@@ -81,7 +81,7 @@ function getPdfPageCount(filePath) {
         throw new Error(`PDF file doesn’t exist: ${filePath}.`);
     const proc = child_process_1.default.spawnSync('pdfinfo', [filePath], { encoding: 'utf-8', cwd: process.cwd() });
     const match = proc.stdout.match(/Pages:\s+(\d+)/);
-    if (match) {
+    if (match != null) {
         return parseInt(match[1]);
     }
     return 0;
