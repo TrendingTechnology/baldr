@@ -7,7 +7,7 @@
 /* globals defaultThemeSassVars FileReader */
 
 import yaml from 'js-yaml'
-import { toString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
+import { convertToString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
@@ -91,7 +91,7 @@ class RawSlideObject extends RawDataObject {
       rawData = raw
     }
     if (getType(rawData) !== 'object') {
-      throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${toString(rawData)}`)
+      throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${convertToString(rawData)}`)
     }
     super(rawData)
   }
@@ -253,11 +253,11 @@ export class Slide {
     )
 
     if (intersection.length === 0) {
-      throw Error(`No master slide found: ${toString(rawSlideObject.raw)}`)
+      throw Error(`No master slide found: ${convertToString(rawSlideObject.raw)}`)
     }
 
     if (intersection.length > 1) {
-      throw Error(`Each slide must have only one master slide: ${toString(rawSlideObject.raw)}`)
+      throw Error(`Each slide must have only one master slide: ${convertToString(rawSlideObject.raw)}`)
     }
 
     /**
@@ -398,7 +398,7 @@ export class Slide {
     }
 
     if (!rawSlideObject.isEmpty()) {
-      throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
+      throw Error(`Unknown slide properties: ${convertToString(rawSlideObject.raw)}`)
     }
   }
 
