@@ -18,7 +18,8 @@
   },
   "scripts": {
     "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node"
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard src/*.ts"
   },
   "dependencies": {
     "@bldr/type-definitions": "0.1.0"

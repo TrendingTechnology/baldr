@@ -23,7 +23,8 @@
   "scripts": {
     "test": "rm -rf dist && npm run build && node ./dist/node/main.js",
     "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node"
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard src/*.ts"
   },
   "dependencies": {
     "@bldr/config": "*",

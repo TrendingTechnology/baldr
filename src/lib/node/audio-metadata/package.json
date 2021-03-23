@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node"
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard src/*.ts"
   },
   "dependencies": {
     "music-metadata": "7.8.1"

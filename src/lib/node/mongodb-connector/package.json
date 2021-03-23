@@ -14,17 +14,18 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
-    "mongodb": "3.6.3",
+    "mongodb": "3.6.5",
     "@bldr/config": "*"
   },
   "devDependencies": {
-    "@types/node": "14.14.7",
-    "@types/mongodb": "3.5.33",
+    "@types/node": "14.14.35",
+    "@types/mongodb": "3.6.10",
     "@bldr/type-definitions": "*"
   },
   "scripts": {
     "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node"
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard src/*.ts"
   },
   "publishConfig": {
     "access": "public"

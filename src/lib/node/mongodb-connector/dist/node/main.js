@@ -153,7 +153,7 @@ var Database = /** @class */ (function () {
      */
     Database.prototype.initialize = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, result, _e, _f, _g, collectionName, indexes, _h, indexes_1, index, unique;
+            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, result, _e, _f, _g, collectionName, indexes, _h, indexes_1, index, indexDefinition, unique;
             var _j;
             return __generator(this, function (_k) {
                 switch (_k.label) {
@@ -208,7 +208,8 @@ var Database = /** @class */ (function () {
                         };
                         for (_h = 0, indexes_1 = indexes; _h < indexes_1.length; _h++) {
                             index = indexes_1[_h];
-                            unique = index.unique ? 'true' : 'false';
+                            indexDefinition = index;
+                            unique = indexDefinition.unique ? 'true' : 'false';
                             result[collectionName].indexes[index.name] = "unique: " + unique;
                         }
                         _k.label = 11;

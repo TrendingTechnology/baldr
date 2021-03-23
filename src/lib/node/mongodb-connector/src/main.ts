@@ -129,7 +129,8 @@ export class Database {
         indexes: {}
       }
       for (const index of indexes) {
-        const unique = index.unique ? 'true' : 'false'
+        const indexDefinition = index as IndexDefinition
+        const unique = indexDefinition.unique ? 'true' : 'false'
         result[collectionName].indexes[index.name] = `unique: ${unique}`
       }
     }

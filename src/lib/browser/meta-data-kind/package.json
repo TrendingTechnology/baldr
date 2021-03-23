@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "npm run build:browser",
-    "build:browser": "tsc --module es2015 --outDir dist/browser"
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "lint": "ts-standard src/*.ts"
   },
   "license": "MIT",
   "author": {
