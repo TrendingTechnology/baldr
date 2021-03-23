@@ -8,6 +8,9 @@ const jsYamlConfig = {
     lineWidth: 72,
     noCompatMode: true
 };
+export function convertToYamlRaw(data) {
+    return dump(data, jsYamlConfig);
+}
 /**
  * Convert a Javascript object into a text string. The returned string of the
  * function is ready to be written into a text file. The property names are
@@ -22,9 +25,16 @@ export function convertToYaml(data) {
     data = convertPropertiesCamelToSnake(data);
     const yamlMarkup = [
         '---',
-        dump(data, jsYamlConfig)
+        convertToYamlRaw(data)
     ];
     return yamlMarkup.join('\n');
+}
+export function convertFromYamlRaw(yamlString) {
+    const result = load(yamlString);
+    if (typeof result !== 'object') {
+        return { result };
+    }
+    return result;
 }
 /**
  * Load a YAML string and convert into a Javascript object. The string
@@ -38,9 +48,6 @@ export function convertToYaml(data) {
  *   converted in the `camleCase` format.
  */
 export function convertFromYaml(yamlString) {
-    const result = load(yamlString);
-    if (typeof result !== 'object') {
-        return { result };
-    }
+    const result = convertFromYamlRaw(yamlString);
     return convertPropertiesSnakeToCamel(result);
 }

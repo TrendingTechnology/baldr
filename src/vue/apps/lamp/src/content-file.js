@@ -6,8 +6,8 @@
 
 /* globals defaultThemeSassVars FileReader */
 
-import yaml from 'js-yaml'
-import { convertToString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
+import { convertToYamlRaw, convertFromYamlRaw } from '@bldr/yaml'
+import { convertToString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
@@ -486,8 +486,7 @@ export class Slide {
    * @type {String}
    */
   get yamlMarkup () {
-    const markup = yaml.safeDump(this.rawData, jsYamlConfig)
-    return escapeHtml(markup)
+    return escapeHtml(convertToYamlRaw(this.rawData))
   }
 
   /**
@@ -601,7 +600,7 @@ export class Presentation {
         if (rawObject && rawObject.meta && rawObject.meta.id) {
           rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.id)
         }
-        rawYamlObject = yaml.load(rawYamlString)
+        rawYamlObject = convertFromYamlRaw(rawYamlString)
       } catch (error) {
         throw new Error(`${error.name}: ${error.message}`)
       }

@@ -1,3 +1,4 @@
+export declare function convertToYamlRaw(data: any): string;
 /**
  * Convert a Javascript object into a text string. The returned string of the
  * function is ready to be written into a text file. The property names are
@@ -9,6 +10,7 @@
  *   The result string begins with `---`.
  */
 export declare function convertToYaml(data: any): string;
+export declare function convertFromYamlRaw(yamlString: string): string | number | object | null | undefined;
 /**
  * Load a YAML string and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function returns an
