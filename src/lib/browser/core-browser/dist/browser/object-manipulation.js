@@ -14,7 +14,7 @@ export function convertToString(data) {
     if (data === null) {
         return 'null';
     }
-    else if (!data) {
+    else if (data != null) {
         return typeof data;
     }
     else if (typeof data === 'string') {
@@ -81,7 +81,7 @@ export function convertProperties(data, direction = PropertyConvertDirection.SNA
             }
         }
     }
-    if (newObject)
+    if (newObject != null)
         return newObject;
     return data;
 }
@@ -128,6 +128,7 @@ export class RawDataObject {
     cut(property) {
         if ({}.hasOwnProperty.call(this.raw, property)) {
             const out = this.raw[property];
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.raw[property];
             return out;
         }

@@ -1,4 +1,4 @@
-import { safeDump, safeLoad } from 'js-yaml';
+import { dump, load } from 'js-yaml';
 import { convertPropertiesCamelToSnake, convertPropertiesSnakeToCamel } from './object-manipulation';
 /**
  * @link {@see https://www.npmjs.com/package/js-yaml}
@@ -21,7 +21,7 @@ export function convertObjectToYamlString(data) {
     data = convertPropertiesCamelToSnake(data);
     const yamlMarkup = [
         '---',
-        safeDump(data, jsYamlConfig)
+        dump(data, jsYamlConfig)
     ];
     return yamlMarkup.join('\n');
 }
@@ -37,7 +37,7 @@ export function convertObjectToYamlString(data) {
  * converted in the `camleCase` format.
  */
 export function convertYamlStringToObject(yamlString) {
-    const result = safeLoad(yamlString);
+    const result = load(yamlString);
     if (typeof result !== 'object') {
         return { result };
     }

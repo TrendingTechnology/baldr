@@ -72,11 +72,11 @@ export function escapeHtml (htmlString: string): string {
  * @returns The plain text version.
  */
 export function convertHtmlToPlainText (html: string): string {
-  if (!html) return ''
+  if (html == null) return ''
   // To get spaces between heading and paragraphs
   html = html.replace(/></g, '> <')
   const markup = new DOMParser().parseFromString(html, 'text/html')
-  return markup.body.textContent || ''
+  return markup.body.textContent ?? ''
 }
 
 /**
@@ -205,22 +205,19 @@ interface ShortenTextOptions {
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.
- *
- * @param text
- * @param options
  */
-export function shortenText (text: string, options?: ShortenTextOptions) {
+export function shortenText (text: string, options?: ShortenTextOptions): string {
   const defaults = {
     stripTags: false,
     maxLength: 80
   }
-  if (!options) {
+  if (options == null) {
     options = defaults
   } else {
-    options = <ShortenTextOptions> Object.assign(defaults, options)
+    options = Object.assign(defaults, options) as ShortenTextOptions
   }
 
-  if (!text) return ''
+  if (text == null) return ''
   if (options.stripTags) {
     text = convertHtmlToPlainText(text)
   }
@@ -285,6 +282,8 @@ export function formatToLocalDateTime (timeStampMsec: number): string {
     dayString = 'Fr'
   } else if (dayNumber === 6) {
     dayString = 'Sa'
+  } else {
+    dayString = ''
   }
   const dateString = date.toLocaleDateString()
   const timeString = date.toLocaleTimeString()
@@ -301,12 +300,12 @@ export function convertDurationToSeconds (duration: string | number): number {
   if (typeof duration === 'number') {
     return duration
   }
-  if (typeof duration === 'string' && duration.match(/:/)) {
+  if (typeof duration === 'string' && duration.match(/:/) != null) {
     const segments = duration.split(':')
     if (segments.length === 3) {
       return parseInt(segments[0]) * 3600 + parseInt(segments[1]) * 60 + parseInt(segments[2])
     } else if (segments.length === 2) {
-      return  parseInt(segments[0]) * 60 + parseInt(segments[1])
+      return parseInt(segments[0]) * 60 + parseInt(segments[1])
     }
   }
   return Number.parseFloat(duration)

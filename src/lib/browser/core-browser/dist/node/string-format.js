@@ -69,12 +69,13 @@ exports.escapeHtml = escapeHtml;
  * @returns The plain text version.
  */
 function convertHtmlToPlainText(html) {
-    if (!html)
+    var _a;
+    if (html == null)
         return '';
     // To get spaces between heading and paragraphs
     html = html.replace(/></g, '> <');
     const markup = new DOMParser().parseFromString(html, 'text/html');
-    return markup.body.textContent || '';
+    return (_a = markup.body.textContent) !== null && _a !== void 0 ? _a : '';
 }
 exports.convertHtmlToPlainText = convertHtmlToPlainText;
 /**
@@ -199,22 +200,19 @@ exports.formatWikicommonsUrl = formatWikicommonsUrl;
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.
- *
- * @param text
- * @param options
  */
 function shortenText(text, options) {
     const defaults = {
         stripTags: false,
         maxLength: 80
     };
-    if (!options) {
+    if (options == null) {
         options = defaults;
     }
     else {
         options = Object.assign(defaults, options);
     }
-    if (!text)
+    if (text == null)
         return '';
     if (options.stripTags) {
         text = convertHtmlToPlainText(text);
@@ -289,6 +287,9 @@ function formatToLocalDateTime(timeStampMsec) {
     else if (dayNumber === 6) {
         dayString = 'Sa';
     }
+    else {
+        dayString = '';
+    }
     const dateString = date.toLocaleDateString();
     const timeString = date.toLocaleTimeString();
     return `${dayString} ${dateString} ${timeString}`;
@@ -304,7 +305,7 @@ function convertDurationToSeconds(duration) {
     if (typeof duration === 'number') {
         return duration;
     }
-    if (typeof duration === 'string' && duration.match(/:/)) {
+    if (typeof duration === 'string' && duration.match(/:/) != null) {
         const segments = duration.split(':');
         if (segments.length === 3) {
             return parseInt(segments[0]) * 3600 + parseInt(segments[1]) * 60 + parseInt(segments[2]);

@@ -24,7 +24,7 @@ function convertObjectToYamlString(data) {
     data = object_manipulation_1.convertPropertiesCamelToSnake(data);
     const yamlMarkup = [
         '---',
-        js_yaml_1.safeDump(data, exports.jsYamlConfig)
+        js_yaml_1.dump(data, exports.jsYamlConfig)
     ];
     return yamlMarkup.join('\n');
 }
@@ -41,7 +41,7 @@ exports.convertObjectToYamlString = convertObjectToYamlString;
  * converted in the `camleCase` format.
  */
 function convertYamlStringToObject(yamlString) {
-    const result = js_yaml_1.safeLoad(yamlString);
+    const result = js_yaml_1.load(yamlString);
     if (typeof result !== 'object') {
         return { result };
     }

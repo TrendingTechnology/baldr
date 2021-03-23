@@ -9,8 +9,8 @@ import { Configuration } from '@bldr/type-definitions';
  * `audio`, `image`, `video`, `document`.
  */
 export declare class MediaCategoriesManager {
-    private config;
-    private allowedExtensions;
+    private readonly config;
+    private readonly allowedExtensions;
     /**
      * @param config The configuration of the BALDR project. It has to be
      * specifed as a argument and is not imported via the module

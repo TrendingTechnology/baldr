@@ -15,7 +15,7 @@ import { convertSnakeToCamel, convertCamelToSnake } from './string-format'
 export function convertToString (data: any): string {
   if (data === null) {
     return 'null'
-  } else if (!data) {
+  } else if (data != null) {
     return typeof data
   } else if (typeof data === 'string') {
     return data
@@ -37,7 +37,7 @@ export function deepCopy (data: object): object {
 }
 
 interface StringObject {
-  [key: string]: any;
+  [key: string]: any
 }
 
 enum PropertyConvertDirection {
@@ -84,7 +84,7 @@ export function convertProperties (data: any, direction: PropertyConvertDirectio
       }
     }
   }
-  if (newObject) return newObject
+  if (newObject != null) return newObject
   return data
 }
 
@@ -138,6 +138,7 @@ export class RawDataObject {
   cut (property: string): any {
     if ({}.hasOwnProperty.call(this.raw, property)) {
       const out = this.raw[property]
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.raw[property]
       return out
     }

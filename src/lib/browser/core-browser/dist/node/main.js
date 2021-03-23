@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toString = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.getExtension = void 0;
+exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.getExtension = void 0;
 __exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -205,7 +205,7 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     const domParser = new DOMParser();
     let dom = domParser.parseFromString(htmlString, 'text/html');
     // If htmlString is a text without tags
-    if (!dom.body.children.length) {
+    if (dom.body.children.length === 0) {
         dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html');
     }
     let text = '';
@@ -215,10 +215,12 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
         const element = children;
         // If htmlString is a text with inner tags
         if (children.nodeName === '#text') {
-            text += element.textContent;
+            if (element.textContent != null)
+                text += `${element.textContent}`;
         }
         else {
-            text += element.outerHTML;
+            if (element.outerHTML != null)
+                text += `${element.outerHTML}`;
         }
         if (text.length > charactersOnSlide) {
             addHtml(htmlChunks, text);
@@ -230,28 +232,3 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     return htmlChunks;
 }
 exports.splitHtmlIntoChunks = splitHtmlIntoChunks;
-/**
- * Convert various data to a string. Meant for error messages.
- *
- * @param data - various data
- *
- * @return A string version of the data.
- */
-function toString(data) {
-    if (data === null) {
-        return 'null';
-    }
-    else if (!data) {
-        return typeof data;
-    }
-    else if (typeof data === 'string') {
-        return data;
-    }
-    else if (Array.isArray(data)) {
-        return data.toString();
-    }
-    else {
-        return JSON.stringify(data);
-    }
-}
-exports.toString = toString;

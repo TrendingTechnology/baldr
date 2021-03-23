@@ -64,7 +64,7 @@ export class MediaCategoriesManager {
      */
     isAsset(filename) {
         const extension = filename.split('.').pop();
-        if (extension && this.allowedExtensions[extension.toLowerCase()]) {
+        if (extension != null && this.allowedExtensions[extension.toLowerCase()] != null) {
             return true;
         }
         return false;

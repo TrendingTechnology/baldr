@@ -1,4 +1,4 @@
-import { safeDump, safeLoad } from 'js-yaml'
+import { dump, load } from 'js-yaml'
 
 import {
   convertPropertiesCamelToSnake,
@@ -27,7 +27,7 @@ export function convertObjectToYamlString (data: any): string {
   data = convertPropertiesCamelToSnake(data)
   const yamlMarkup = [
     '---',
-    safeDump(data, jsYamlConfig)
+    dump(data, jsYamlConfig)
   ]
   return yamlMarkup.join('\n')
 }
@@ -44,7 +44,7 @@ export function convertObjectToYamlString (data: any): string {
  * converted in the `camleCase` format.
  */
 export function convertYamlStringToObject (yamlString: string): { [key: string]: any } {
-  const result = safeLoad(yamlString)
+  const result = load(yamlString)
   if (typeof result !== 'object') {
     return { result }
   }

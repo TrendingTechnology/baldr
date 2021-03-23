@@ -187,7 +187,7 @@ export function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     const domParser = new DOMParser();
     let dom = domParser.parseFromString(htmlString, 'text/html');
     // If htmlString is a text without tags
-    if (!dom.body.children.length) {
+    if (dom.body.children.length === 0) {
         dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html');
     }
     let text = '';
@@ -197,10 +197,12 @@ export function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
         const element = children;
         // If htmlString is a text with inner tags
         if (children.nodeName === '#text') {
-            text += element.textContent;
+            if (element.textContent != null)
+                text += `${element.textContent}`;
         }
         else {
-            text += element.outerHTML;
+            if (element.outerHTML != null)
+                text += `${element.outerHTML}`;
         }
         if (text.length > charactersOnSlide) {
             addHtml(htmlChunks, text);
@@ -210,28 +212,4 @@ export function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     // Add last not full text
     addHtml(htmlChunks, text);
     return htmlChunks;
-}
-/**
- * Convert various data to a string. Meant for error messages.
- *
- * @param data - various data
- *
- * @return A string version of the data.
- */
-export function toString(data) {
-    if (data === null) {
-        return 'null';
-    }
-    else if (!data) {
-        return typeof data;
-    }
-    else if (typeof data === 'string') {
-        return data;
-    }
-    else if (Array.isArray(data)) {
-        return data.toString();
-    }
-    else {
-        return JSON.stringify(data);
-    }
 }

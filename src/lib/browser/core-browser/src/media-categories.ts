@@ -15,9 +15,9 @@ interface SpreadExtensionCollection {
  * `audio`, `image`, `video`, `document`.
  */
 export class MediaCategoriesManager {
-  private config
+  private readonly config
 
-  private allowedExtensions: SpreadExtensionCollection
+  private readonly allowedExtensions: SpreadExtensionCollection
 
   /**
    * @param config The configuration of the BALDR project. It has to be
@@ -80,7 +80,7 @@ export class MediaCategoriesManager {
    */
   isAsset (filename: string): boolean {
     const extension = filename.split('.').pop()
-    if (extension && this.allowedExtensions[extension.toLowerCase()]) {
+    if (extension != null && this.allowedExtensions[extension.toLowerCase()] != null) {
       return true
     }
     return false

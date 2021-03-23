@@ -114,9 +114,6 @@ interface ShortenTextOptions {
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.
- *
- * @param text
- * @param options
  */
 export declare function shortenText(text: string, options?: ShortenTextOptions): string;
 /**
