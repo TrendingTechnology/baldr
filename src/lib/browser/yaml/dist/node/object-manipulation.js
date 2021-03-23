@@ -52,7 +52,7 @@ function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_C
             }
         }
     }
-    if (newObject)
+    if (newObject != null)
         return newObject;
     return data;
 }

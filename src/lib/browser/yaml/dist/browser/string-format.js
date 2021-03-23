@@ -1,7 +1,7 @@
 /**
  * Format functions to manipulate strings.
  *
- * @module @bldr/yaml/object-manipulation
+ * @module @bldr/yaml/string-format
  */
 /**
  * Convert `camelCase` into `snake_case` strings.

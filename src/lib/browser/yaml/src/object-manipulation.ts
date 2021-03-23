@@ -7,7 +7,7 @@
 import { convertSnakeToCamel, convertCamelToSnake } from './string-format'
 
 interface StringObject {
-  [key: string]: any;
+  [key: string]: any
 }
 
 enum PropertyConvertDirection {
@@ -54,7 +54,7 @@ export function convertProperties (data: any, direction: PropertyConvertDirectio
       }
     }
   }
-  if (newObject) return newObject
+  if (newObject != null) return newObject
   return data
 }
 

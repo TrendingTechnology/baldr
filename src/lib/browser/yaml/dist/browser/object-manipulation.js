@@ -49,7 +49,7 @@ export function convertProperties(data, direction = PropertyConvertDirection.SNA
             }
         }
     }
-    if (newObject)
+    if (newObject != null)
         return newObject;
     return data;
 }

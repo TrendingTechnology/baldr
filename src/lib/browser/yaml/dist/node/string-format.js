@@ -2,7 +2,7 @@
 /**
  * Format functions to manipulate strings.
  *
- * @module @bldr/yaml/object-manipulation
+ * @module @bldr/yaml/string-format
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
