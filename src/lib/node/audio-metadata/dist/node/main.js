@@ -87,20 +87,19 @@ function collectAudioMetaData(inputFile) {
     return __awaiter(this, void 0, void 0, function* () {
         const metaData = yield musicMetadata.parseFile(inputFile);
         if ('common' in metaData) {
-            const output = {};
+            const output = { title: '' };
             const common = metaData.common;
-            for (const property of [
-                ['title', 'title'],
-                ['albumartist', 'artist'],
-                ['artist', 'composer'],
-                ['album', 'album'],
-                ['musicbrainz_recordingid', 'musicbrainz_recording_id']
-            ]) {
-                if (property[0] in common && common[property[0]]) {
-                    output[property[1]] = common[property[0]];
-                }
-            }
-            if (output.album && output.title) {
+            if (common.title != null)
+                output.title = common.title;
+            if (common.albumartist != null)
+                output.artist = common.albumartist;
+            if (common.artist != null)
+                output.composer = common.artist;
+            if (common.album != null)
+                output.album = common.album;
+            if (common.musicbrainz_recordingid != null)
+                output.musicbrainz_recording_id = common.musicbrainz_recordingid;
+            if (output.album != null && output.title != null) {
                 output.title = `${output.album}: ${output.title}`;
                 delete output.album;
             }
