@@ -19,7 +19,7 @@ function bootstrapConfig() {
     if (fs_1.default.existsSync(configFile)) {
         config = require(configFile);
     }
-    if (!config)
+    if (config == null)
         throw new Error(`No configuration file found: ${configFile}`);
     return config;
 }
