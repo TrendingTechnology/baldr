@@ -39,7 +39,7 @@ export class CommandRunner {
    * Print out captured stdout and stderr of the method exec form
    * childProcess.
    */
-  private verbose: boolean
+  private readonly verbose: boolean
 
   /**
    * An instance of the Ora package terminal spinner.
@@ -51,7 +51,7 @@ export class CommandRunner {
   /**
    * An instance of the Gauge progress bar.
    */
-  private gauge: any
+  private readonly gauge: any
 
   /**
    * The current log message. If you use `this.log(message)`, message is
@@ -64,7 +64,7 @@ export class CommandRunner {
    * @property {Boolean} verbose
    */
   constructor (options?: CommandRunnerOption) {
-    this.verbose = (options && options.verbose) ? true : false
+    this.verbose = (options?.verbose != null && options?.verbose)
     this.spinner = ora({ spinner: 'line' })
     this.gauge = new Gauge()
     this.gauge.setTheme('ASCII')
@@ -75,7 +75,7 @@ export class CommandRunner {
   /**
    *
    */
-  checkRoot () {
+  checkRoot (): void {
     const user = os.userInfo()
     if (user.username !== 'root') {
       console.error('You need to be root: sudo /usr/local/bin/baldr …')
@@ -86,21 +86,21 @@ export class CommandRunner {
   /**
    * Start the Ora terminal spinner.
    */
-  startSpin () {
+  startSpin (): void {
     this.spinner.start()
   }
 
   /**
    * Start the Gauge progress bar.
    */
-  startProgress () {
+  startProgress (): void {
     this.gauge.show('default', 0)
   }
 
   /**
    * Update the Gauge progress bar.
    */
-  updateProgress (completed: number, text: string) {
+  updateProgress (completed: number, text: string): void {
     this.gauge.pulse()
     this.gauge.show(text, completed)
   }
@@ -119,15 +119,15 @@ export class CommandRunner {
    * @returns {Object}
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult> {
+  async exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult> {
     if (this.verbose) this.startSpin()
 
     // To get error messages on unkown commands
-    if (!options) options = {} as CommandRunnerExecOption
+    if (options == null) options = {}
 
     if (options.shell === undefined) options.shell = true
     if (options.encoding === undefined) options.encoding = 'utf-8'
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       let command
       let commandString
       if (args.length === 1) {
@@ -142,9 +142,10 @@ export class CommandRunner {
         this.message = `Exec: ${chalk.yellow(commandString)}`
       }
 
-      if (options && options.detached) {
+      if (options?.detached != null && options.detached) {
         command.unref()
-        resolve(<CommandRunnerResult> {})
+        const result: CommandRunnerResult = { stderr: '', stdout: '' }
+        resolve(result)
       }
 
       let stdout: string = ''
@@ -152,13 +153,13 @@ export class CommandRunner {
 
       command.stdout.on('data', (data: Buffer) => {
         this.logStdOutErr(data)
-        stdout = stdout + data
+        stdout = stdout + data.toString()
       })
 
       // somehow songbook build stays open without this event.
       command.stderr.on('data', (data: Buffer) => {
         this.logStdOutErr(data)
-        stderr = stderr + data
+        stderr = stderr + data.toString()
       })
 
       command.on('error', (code) => {
@@ -167,7 +168,8 @@ export class CommandRunner {
 
       command.on('exit', (code) => {
         if (code === 0) {
-          resolve(<CommandRunnerResult> { stdout, stderr })
+          const result: CommandRunnerResult = { stdout, stderr }
+          resolve(result)
         } else {
           reject(new Error(stderr))
         }
@@ -180,7 +182,7 @@ export class CommandRunner {
    *
    * @param data - The binary output from childProcess.
    */
-  logStdOutErr (data: Buffer) {
+  logStdOutErr (data: Buffer): void {
     if (this.verbose) {
       let cleanedText = data.toString().trim()
       cleanedText = cleanedText.replace(/<s> \[webpack\.Progress\]/, '')
@@ -195,14 +197,14 @@ export class CommandRunner {
    *
    * @param text - The text to set on the spinner.
    */
-  private setSpinnerText (text: string) {
+  private setSpinnerText (text: string): void {
     this.spinner.text = text.substring(0, process.stdout.columns - 3)
   }
 
   /**
    * @param message - A message to show after the spinner.
    */
-  log (message: string) {
+  log (message: string): void {
     this.message = message
     this.setSpinnerText(message)
   }
@@ -210,7 +212,7 @@ export class CommandRunner {
   /**
    * Catch an error and exit the progress.
    */
-  catch (error: Error) {
+  catch (error: Error): void {
     this.stopSpin()
     console.log(error)
     process.exit()
@@ -219,14 +221,14 @@ export class CommandRunner {
   /**
    * Stop the gauge progress bar.
    */
-  stopProgress () {
+  stopProgress (): void {
     this.gauge.hide()
   }
 
   /**
    * Stop the command line spinner.
    */
-  stopSpin () {
+  stopSpin (): void {
     this.spinner.stop()
   }
 }

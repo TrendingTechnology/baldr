@@ -23,6 +23,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -46,7 +55,7 @@ class CommandRunner {
      * @property {Boolean} verbose
      */
     constructor(options) {
-        this.verbose = (options && options.verbose) ? true : false;
+        this.verbose = ((options === null || options === void 0 ? void 0 : options.verbose) != null && (options === null || options === void 0 ? void 0 : options.verbose));
         this.spinner = ora_1.default({ spinner: 'line' });
         this.gauge = new gauge_1.default();
         this.gauge.setTheme('ASCII');
@@ -96,54 +105,58 @@ class CommandRunner {
      *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      */
     exec(args, options) {
-        if (this.verbose)
-            this.startSpin();
-        // To get error messages on unkown commands
-        if (!options)
-            options = {};
-        if (options.shell === undefined)
-            options.shell = true;
-        if (options.encoding === undefined)
-            options.encoding = 'utf-8';
-        return new Promise((resolve, reject) => {
-            let command;
-            let commandString;
-            if (args.length === 1) {
-                command = childProcess.spawn(args[0], options);
-                commandString = args[0];
-            }
-            else {
-                command = childProcess.spawn(args[0], args.slice(1), options);
-                commandString = `${args[0]} ${args.slice(1).join(' ')}`;
-            }
-            if (this.verbose) {
-                this.message = `Exec: ${chalk_1.default.yellow(commandString)}`;
-            }
-            if (options && options.detached) {
-                command.unref();
-                resolve({});
-            }
-            let stdout = '';
-            let stderr = '';
-            command.stdout.on('data', (data) => {
-                this.logStdOutErr(data);
-                stdout = stdout + data;
-            });
-            // somehow songbook build stays open without this event.
-            command.stderr.on('data', (data) => {
-                this.logStdOutErr(data);
-                stderr = stderr + data;
-            });
-            command.on('error', (code) => {
-                reject(new Error(stderr));
-            });
-            command.on('exit', (code) => {
-                if (code === 0) {
-                    resolve({ stdout, stderr });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.verbose)
+                this.startSpin();
+            // To get error messages on unkown commands
+            if (options == null)
+                options = {};
+            if (options.shell === undefined)
+                options.shell = true;
+            if (options.encoding === undefined)
+                options.encoding = 'utf-8';
+            return yield new Promise((resolve, reject) => {
+                let command;
+                let commandString;
+                if (args.length === 1) {
+                    command = childProcess.spawn(args[0], options);
+                    commandString = args[0];
                 }
                 else {
-                    reject(new Error(stderr));
+                    command = childProcess.spawn(args[0], args.slice(1), options);
+                    commandString = `${args[0]} ${args.slice(1).join(' ')}`;
                 }
+                if (this.verbose) {
+                    this.message = `Exec: ${chalk_1.default.yellow(commandString)}`;
+                }
+                if ((options === null || options === void 0 ? void 0 : options.detached) != null && options.detached) {
+                    command.unref();
+                    const result = { stderr: '', stdout: '' };
+                    resolve(result);
+                }
+                let stdout = '';
+                let stderr = '';
+                command.stdout.on('data', (data) => {
+                    this.logStdOutErr(data);
+                    stdout = stdout + data.toString();
+                });
+                // somehow songbook build stays open without this event.
+                command.stderr.on('data', (data) => {
+                    this.logStdOutErr(data);
+                    stderr = stderr + data.toString();
+                });
+                command.on('error', (code) => {
+                    reject(new Error(stderr));
+                });
+                command.on('exit', (code) => {
+                    if (code === 0) {
+                        const result = { stdout, stderr };
+                        resolve(result);
+                    }
+                    else {
+                        reject(new Error(stderr));
+                    }
+                });
             });
         });
     }

@@ -25,7 +25,7 @@ export declare class CommandRunner {
      * Print out captured stdout and stderr of the method exec form
      * childProcess.
      */
-    private verbose;
+    private readonly verbose;
     /**
      * An instance of the Ora package terminal spinner.
      *
@@ -35,7 +35,7 @@ export declare class CommandRunner {
     /**
      * An instance of the Gauge progress bar.
      */
-    private gauge;
+    private readonly gauge;
     /**
      * The current log message. If you use `this.log(message)`, message is
      * stored in this attribute. `this.exec(args[])` appends in the verbose mode
