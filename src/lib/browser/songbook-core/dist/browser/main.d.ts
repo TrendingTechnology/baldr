@@ -155,7 +155,7 @@ export interface Song {
  * </code></pre>
  */
 export declare class AlphabeticalSongsTree {
-    [key: string]: Song[];
+    [songId: string]: Song[];
     /**
      * @param songs - An array of song objects.
      */
@@ -182,7 +182,7 @@ export declare class SongMetaDataCombined {
      * @param songMetaData - A song
      * metadata object.
      */
-    constructor(songMetaData: StringIndexedObject);
+    constructor(songMetaData: SongMetaData);
     /**
      * An array of external sites a song is linked to. Each external site has
      * its ...URL property.
@@ -199,7 +199,7 @@ export declare class SongMetaDataCombined {
     /**
      * Format: `composer, artist, genre`
      */
-    get composer(): string;
+    get composer(): string | undefined;
     /**
      * Return the lyricist only if it is not the same as in the fields
      * `artist` and `composer`.
@@ -214,7 +214,7 @@ export declare class SongMetaDataCombined {
     /**
      * Format: `subtitle - alias - country`
      */
-    get subtitle(): string;
+    get subtitle(): string | undefined;
     /**
      * title (year)
      */

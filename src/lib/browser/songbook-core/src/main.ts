@@ -188,7 +188,7 @@ export interface Song {
  * </code></pre>
  */
 export class AlphabeticalSongsTree {
-  [key: string]: Song[]
+  [songId: string]: Song[]
 
   /**
    * @param songs - An array of song objects.
@@ -220,13 +220,13 @@ interface DynamicSelectSong {
  * - lyricist: lyricist
  */
 export class SongMetaDataCombined {
-  private readonly metaData: StringIndexedObject
+  private readonly metaData: SongMetaData
   public allProperties: string[]
   /**
    * @param songMetaData - A song
    * metadata object.
    */
-  constructor (songMetaData: StringIndexedObject) {
+  constructor (songMetaData: SongMetaData) {
     /**
      * The raw metadata object originating from the info.yml file.
      */
@@ -270,7 +270,7 @@ export class SongMetaDataCombined {
   private static collectProperties (properties: string[], object: StringIndexedObject): string[] {
     const parts = []
     for (const property of properties) {
-      if (property in object && object[property]) {
+      if (property in object && object[property] != null) {
         parts.push(object[property])
       }
     }
@@ -280,17 +280,20 @@ export class SongMetaDataCombined {
   /**
    * Format: `composer, artist, genre`
    */
-  get composer (): string {
+  get composer (): string | undefined {
     let properties
     if (this.metaData.composer === this.metaData.artist) {
       properties = ['composer', 'genre']
     } else {
       properties = ['composer', 'artist', 'genre']
     }
-    return SongMetaDataCombined.collectProperties(
+    const collection = SongMetaDataCombined.collectProperties(
       properties,
       this.metaData
-    ).join(', ')
+    )
+    if (collection.length > 0) {
+      return collection.join(', ')
+    }
   }
 
   /**
@@ -301,7 +304,7 @@ export class SongMetaDataCombined {
    */
   get lyricist (): string | undefined {
     if (
-      this.metaData.lyricist &&
+      this.metaData.lyricist != null &&
       this.metaData.lyricist !== this.metaData.artist &&
       this.metaData.lyricist !== this.metaData.composer
     ) {
@@ -313,7 +316,7 @@ export class SongMetaDataCombined {
    * For example: `https://musescore.com/score/1234`
    */
   get musescoreUrl (): string | undefined {
-    if (this.metaData.musescore) {
+    if (this.metaData.musescore != null) {
       return `https://musescore.com/score/${this.metaData.musescore}`
     }
   }
@@ -321,35 +324,31 @@ export class SongMetaDataCombined {
   /**
    * Format: `subtitle - alias - country`
    */
-  get subtitle (): string {
-    return SongMetaDataCombined.collectProperties(
+  get subtitle (): string | undefined {
+    const collection = SongMetaDataCombined.collectProperties(
       ['subtitle', 'alias', 'country'],
       this.metaData
-    ).join(' - ')
+    )
+    if (collection.length > 0) {
+      return collection.join(' - ')
+    }
   }
 
   /**
    * title (year)
    */
   get title (): string {
-    let out: string
-    if (this.metaData.title) {
-      out = this.metaData.title
-    } else {
-      out = ''
+    if (this.metaData.year != null) {
+      return `${this.metaData.title} (${this.metaData.year})`
     }
-
-    if (this.metaData.year) {
-      return `${out} (${this.metaData.year})`
-    }
-    return out
+    return this.metaData.title
   }
 
   /**
    * For example: `https://www.wikidata.org/wiki/Q42`
    */
   get wikidataUrl (): string | undefined {
-    if (this.metaData.wikidata) {
+    if (this.metaData.wikidata != null) {
       return formatWikidataUrl(this.metaData.wikidata)
     }
   }
@@ -358,7 +357,7 @@ export class SongMetaDataCombined {
    * For example: `https://en.wikipedia.org/wiki/A_Article`
    */
   get wikipediaUrl (): string | undefined {
-    if (this.metaData.wikipedia) {
+    if (this.metaData.wikipedia != null) {
       return formatWikipediaUrl(this.metaData.wikipedia)
     }
   }
@@ -367,18 +366,19 @@ export class SongMetaDataCombined {
    * For example: `https://youtu.be/CQYypFMTQcE`
    */
   get youtubeUrl (): string | undefined {
-    if (this.metaData.youtube) {
+    if (this.metaData.youtube != null) {
       return formatYoutubeUrl(this.metaData.youtube)
     }
   }
 
   toJSON (): StringIndexedObject {
-    return {
-      title: this.title,
-      subtitle: this.subtitle,
-      composer: this.composer,
-      lyricist: this.lyricist
+    const output: StringIndexedObject = {
+      title: this.title
     }
+    if (this.subtitle != null) output.subtitle = this.subtitle
+    if (this.composer != null) output.composer = this.composer
+    if (this.lyricist != null) output.lyricist = this.lyricist
+    return output
   }
 }
 

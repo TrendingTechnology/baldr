@@ -336,6 +336,11 @@ class IntermediateSong extends ExtendedSong {
         }
         return utils_1.listFiles(folder, regExp);
     }
+    generateMetaDataForMediaServer() {
+        const metaData = this.metaDataCombined.toJSON();
+        metaData.id = `LD_${this.songId}`;
+        media_manager_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
+    }
     /**
      * Generate SVG files in the slides subfolder.
      */
@@ -353,7 +358,7 @@ class IntermediateSong extends ExtendedSong {
         ]);
         fs.unlinkSync(src);
         const result = this.renameMultipartFiles(subFolder, /\.svg$/i, 'Projektor.svg');
-        media_manager_1.writeYamlFile(path.join(subFolder, 'Projektor.svg.yml'), { title: this.metaData.title });
+        this.generateMetaDataForMediaServer();
         log.info('  Generate SVG files: %s', result.toString());
         if (result.length === 0) {
             throw new Error('The SVG files for the slides couldn’t be generated.');

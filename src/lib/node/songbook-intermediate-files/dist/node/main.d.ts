@@ -237,7 +237,7 @@ export declare class IntermediateLibrary extends Library {
      * Generate all intermediate media files for one song.
      *
      * @param songId - The ID of the song (the name of the parent song folder)
-     * @param {string} mode - Generate all intermediate media files or only slide
+     * @param mode - Generate all intermediate media files or only slide
      *   and piano files. Possible values: “all”, “slides” or “piano”
      */
     updateSongBySongId(songId: string, mode?: GenerationMode): void;

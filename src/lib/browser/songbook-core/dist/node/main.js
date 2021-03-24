@@ -90,7 +90,7 @@ class SongMetaDataCombined {
     static collectProperties(properties, object) {
         const parts = [];
         for (const property of properties) {
-            if (property in object && object[property]) {
+            if (property in object && object[property] != null) {
                 parts.push(object[property]);
             }
         }
@@ -107,7 +107,10 @@ class SongMetaDataCombined {
         else {
             properties = ['composer', 'artist', 'genre'];
         }
-        return SongMetaDataCombined.collectProperties(properties, this.metaData).join(', ');
+        const collection = SongMetaDataCombined.collectProperties(properties, this.metaData);
+        if (collection.length > 0) {
+            return collection.join(', ');
+        }
     }
     /**
      * Return the lyricist only if it is not the same as in the fields
@@ -116,7 +119,7 @@ class SongMetaDataCombined {
      * Format: `lyricist`
      */
     get lyricist() {
-        if (this.metaData.lyricist &&
+        if (this.metaData.lyricist != null &&
             this.metaData.lyricist !== this.metaData.artist &&
             this.metaData.lyricist !== this.metaData.composer) {
             return this.metaData.lyricist;
@@ -126,7 +129,7 @@ class SongMetaDataCombined {
      * For example: `https://musescore.com/score/1234`
      */
     get musescoreUrl() {
-        if (this.metaData.musescore) {
+        if (this.metaData.musescore != null) {
             return `https://musescore.com/score/${this.metaData.musescore}`;
         }
     }
@@ -134,29 +137,25 @@ class SongMetaDataCombined {
      * Format: `subtitle - alias - country`
      */
     get subtitle() {
-        return SongMetaDataCombined.collectProperties(['subtitle', 'alias', 'country'], this.metaData).join(' - ');
+        const collection = SongMetaDataCombined.collectProperties(['subtitle', 'alias', 'country'], this.metaData);
+        if (collection.length > 0) {
+            return collection.join(' - ');
+        }
     }
     /**
      * title (year)
      */
     get title() {
-        let out;
-        if (this.metaData.title) {
-            out = this.metaData.title;
+        if (this.metaData.year != null) {
+            return `${this.metaData.title} (${this.metaData.year})`;
         }
-        else {
-            out = '';
-        }
-        if (this.metaData.year) {
-            return `${out} (${this.metaData.year})`;
-        }
-        return out;
+        return this.metaData.title;
     }
     /**
      * For example: `https://www.wikidata.org/wiki/Q42`
      */
     get wikidataUrl() {
-        if (this.metaData.wikidata) {
+        if (this.metaData.wikidata != null) {
             return core_browser_1.formatWikidataUrl(this.metaData.wikidata);
         }
     }
@@ -164,7 +163,7 @@ class SongMetaDataCombined {
      * For example: `https://en.wikipedia.org/wiki/A_Article`
      */
     get wikipediaUrl() {
-        if (this.metaData.wikipedia) {
+        if (this.metaData.wikipedia != null) {
             return core_browser_1.formatWikipediaUrl(this.metaData.wikipedia);
         }
     }
@@ -172,17 +171,21 @@ class SongMetaDataCombined {
      * For example: `https://youtu.be/CQYypFMTQcE`
      */
     get youtubeUrl() {
-        if (this.metaData.youtube) {
+        if (this.metaData.youtube != null) {
             return core_browser_1.formatYoutubeUrl(this.metaData.youtube);
         }
     }
     toJSON() {
-        return {
-            title: this.title,
-            subtitle: this.subtitle,
-            composer: this.composer,
-            lyricist: this.lyricist
+        const output = {
+            title: this.title
         };
+        if (this.subtitle != null)
+            output.subtitle = this.subtitle;
+        if (this.composer != null)
+            output.composer = this.composer;
+        if (this.lyricist != null)
+            output.lyricist = this.lyricist;
+        return output;
     }
 }
 exports.SongMetaDataCombined = SongMetaDataCombined;

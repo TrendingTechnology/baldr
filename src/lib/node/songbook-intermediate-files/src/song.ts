@@ -427,6 +427,12 @@ export class IntermediateSong extends ExtendedSong {
     return listFiles(folder, regExp)
   }
 
+  private generateMetaDataForMediaServer() {
+    const metaData = this.metaDataCombined.toJSON()
+    metaData.id = `LD_${this.songId}`
+    writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData)
+  }
+
   /**
    * Generate SVG files in the slides subfolder.
    */
@@ -446,7 +452,7 @@ export class IntermediateSong extends ExtendedSong {
 
     const result = this.renameMultipartFiles(subFolder, /\.svg$/i, 'Projektor.svg')
 
-    writeYamlFile(path.join(subFolder, 'Projektor.svg.yml'), { title: this.metaData.title })
+    this.generateMetaDataForMediaServer()
 
     log.info('  Generate SVG files: %s', result.toString())
     if (result.length === 0) {
