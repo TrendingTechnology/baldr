@@ -44,7 +44,17 @@ lerna exec "sort-package-json"
 lerna publish
 ```
 
+## Testing
+
+```
+lerna run test
+```
+
 ## Coding style
+
+```
+lerna run lint
+```
 
 ### `main.js`
 
