@@ -15,7 +15,8 @@
 import path from 'path'
 
 // Project packages.
-import { deepCopy, getExtension, convertPropertiesSnakeToCamel } from '@bldr/core-browser'
+import { deepCopy, getExtension } from '@bldr/core-browser'
+import {  convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import  config from '@bldr/config'
 import { MetaSpec, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 

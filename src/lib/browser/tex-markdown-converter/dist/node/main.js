@@ -6,7 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.objectifyTexItemize = exports.objectifyTexZitat = exports.convertMdToTex = exports.convertTexToMd = exports.removeTexComments = exports.extractMatchAll = exports.regBuilder = void 0;
-const core_browser_1 = require("@bldr/core-browser");
+const yaml_1 = require("@bldr/yaml");
 /**
  * Build and assemble strings to generate regular expressions from.
  */
@@ -383,7 +383,7 @@ exports.objectifyTexZitat = objectifyTexZitat;
 function convertTexZitat(content) {
     const zitate = objectifyTexZitat(content);
     if (zitate.length > 0) {
-        return core_browser_1.convertObjectToYamlString(zitate);
+        return yaml_1.convertToYaml(zitate);
     }
     return content;
 }

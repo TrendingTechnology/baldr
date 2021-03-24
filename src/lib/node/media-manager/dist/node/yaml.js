@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadMetaDataYaml = exports.loadYaml = void 0;
 const fs_1 = __importDefault(require("fs"));
-const core_browser_1 = require("@bldr/core-browser");
 const core_node_1 = require("@bldr/core-node");
+const yaml_1 = require("@bldr/yaml");
 const helper_1 = require("./helper");
 const media_file_classes_1 = require("./media-file-classes");
 const meta_types_1 = __importDefault(require("./meta-types"));
@@ -22,7 +22,7 @@ const meta_types_1 = __importDefault(require("./meta-types"));
  * converted in the `camleCase` format.
  */
 function loadYaml(filePath) {
-    return core_browser_1.convertYamlStringToObject(core_node_1.readFile(filePath));
+    return yaml_1.convertFromYaml(core_node_1.readFile(filePath));
 }
 exports.loadYaml = loadYaml;
 /**
@@ -53,7 +53,7 @@ exports.loadMetaDataYaml = loadMetaDataYaml;
  * @returns The data converted to YAML as a string.
  */
 function writeYamlFile(filePath, data) {
-    const yaml = core_browser_1.convertObjectToYamlString(data);
+    const yaml = yaml_1.convertToYaml(data);
     core_node_1.writeFile(filePath, yaml);
     return yaml;
 }

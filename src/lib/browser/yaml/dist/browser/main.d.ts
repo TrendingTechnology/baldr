@@ -4,3 +4,4 @@
  * @module @bldr/yaml
  */
 export * from './yaml';
+export * from './object-manipulation';

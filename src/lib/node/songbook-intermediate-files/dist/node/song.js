@@ -23,9 +23,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntermediateSong = exports.ExtendedSong = void 0;
 // Node packages.
@@ -33,15 +30,15 @@ const path = __importStar(require("path"));
 const childProcess = __importStar(require("child_process"));
 // Third party packages.
 const fs = __importStar(require("fs-extra"));
-const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
+const core_browser_1 = require("@bldr/core-browser");
+const media_manager_1 = require("@bldr/media-manager");
+const yaml_1 = require("@bldr/yaml");
 const utils_1 = require("./utils");
 const main_1 = require("./main");
 const file_monitor_1 = require("./file-monitor");
-const core_browser_1 = require("@bldr/core-browser");
-const media_manager_1 = require("@bldr/media-manager");
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -134,7 +131,7 @@ class ExtendedSongMetaData {
         if (!fs.existsSync(ymlFile)) {
             throw new Error(log.format('YAML file could not be found: %s', ymlFile));
         }
-        this.rawYaml = js_yaml_1.default.load(fs.readFileSync(ymlFile, 'utf8'));
+        this.rawYaml = yaml_1.convertFromYamlRaw(fs.readFileSync(ymlFile, 'utf8'));
         for (const key in this.rawYaml) {
             if (!this.allowedProperties.includes(key)) {
                 throw new Error(log.format('Unsupported key: %s', key));

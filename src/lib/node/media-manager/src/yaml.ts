@@ -1,11 +1,8 @@
 import fs from 'fs'
 
-import {
-  convertYamlStringToObject,
-  convertObjectToYamlString
-} from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
+import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 
 import { asciify, deasciify } from './helper'
 import { Asset } from './media-file-classes'
@@ -23,7 +20,7 @@ import metaTypes from './meta-types'
  * converted in the `camleCase` format.
  */
 export function loadYaml (filePath: string): { [key: string]: any } {
-  return convertYamlStringToObject(readFile(filePath))
+  return convertFromYaml(readFile(filePath))
 }
 
 /**
@@ -54,7 +51,7 @@ export function loadMetaDataYaml (filePath: string): { [key: string]: any } {
  * @returns The data converted to YAML as a string.
  */
 export function writeYamlFile (filePath: string, data: object): string {
-  const yaml = convertObjectToYamlString(data)
+  const yaml = convertToYaml(data)
   writeFile(filePath, yaml)
   return yaml
 }

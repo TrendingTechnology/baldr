@@ -3,7 +3,7 @@
  *
  * @module @bldr/tex-markdown-converter
  */
-import { convertObjectToYamlString } from '@bldr/core-browser';
+import { convertToYaml } from '@bldr/yaml';
 /**
  * Build and assemble strings to generate regular expressions from.
  */
@@ -375,7 +375,7 @@ export function objectifyTexZitat(content) {
 function convertTexZitat(content) {
     const zitate = objectifyTexZitat(content);
     if (zitate.length > 0) {
-        return convertObjectToYamlString(zitate);
+        return convertToYaml(zitate);
     }
     return content;
 }

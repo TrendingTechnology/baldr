@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizePresentationFile = void 0;
 const core_node_1 = require("@bldr/core-node");
-const core_browser_1 = require("@bldr/core-browser");
+const yaml_1 = require("@bldr/yaml");
 const titles_1 = require("../titles");
-const yaml_1 = require("../yaml");
+const yaml_2 = require("../yaml");
 const comment = `
 #-----------------------------------------------------------------------
 #
@@ -50,7 +50,7 @@ function shortedMediaUris(rawYamlString, presentationId) {
  */
 function normalizePresentationFile(filePath) {
     let textContent = core_node_1.readFile(filePath);
-    const presentation = yaml_1.loadYaml(filePath);
+    const presentation = yaml_2.loadYaml(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
@@ -60,7 +60,7 @@ function normalizePresentationFile(filePath) {
         if (presentation.meta.curriculumUrl)
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    const metaString = core_browser_1.convertObjectToYamlString({ meta });
+    const metaString = yaml_1.convertToYaml({ meta });
     textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.id) {

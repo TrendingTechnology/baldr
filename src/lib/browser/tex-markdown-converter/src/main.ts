@@ -4,7 +4,7 @@
  * @module @bldr/tex-markdown-converter
  */
 
-import { convertObjectToYamlString } from '@bldr/core-browser'
+import { convertToYaml } from '@bldr/yaml'
 
  /**
   * A replacement using a regular expression.
@@ -435,7 +435,7 @@ export function objectifyTexZitat (content: string): TexObjectArray {
 function convertTexZitat(content: string): string {
   const zitate = objectifyTexZitat(content)
   if (zitate.length > 0) {
-    return convertObjectToYamlString(zitate)
+    return convertToYaml(zitate)
   }
   return content
 }

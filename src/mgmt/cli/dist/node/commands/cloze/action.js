@@ -11,7 +11,7 @@ const path_1 = __importDefault(require("path"));
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
-const core_browser_1 = require("@bldr/core-browser");
+const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
 function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
     const cwd = path_1.default.dirname(tmpPdfFile);
@@ -37,7 +37,7 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         cloze_page_no: pageNo,
         cloze_page_count: pageCount
     };
-    core_node_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), core_browser_1.convertObjectToYamlString(infoYaml));
+    core_node_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), yaml_1.convertToYaml(infoYaml));
     // Move to LT (Lückentext) subdir.
     const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
     media_manager_1.moveAsset(svgFilePath, newPath);

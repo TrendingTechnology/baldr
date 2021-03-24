@@ -16,3 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./yaml"), exports);
+// export * from './string-format'
+__exportStar(require("./object-manipulation"), exports);

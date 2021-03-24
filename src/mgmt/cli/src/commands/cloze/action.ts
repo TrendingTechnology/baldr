@@ -8,7 +8,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { moveAsset, operations, locationIndicator, DeepTitle, walk } from '@bldr/media-manager'
-import { convertObjectToYamlString } from '@bldr/core-browser'
+import { convertToYaml } from '@bldr/yaml'
 import { getPdfPageCount, readFile, writeFile } from '@bldr/core-node'
 
 function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number) {
@@ -42,7 +42,7 @@ function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: num
     cloze_page_no: pageNo,
     cloze_page_count: pageCount
   }
-  writeFile(path.join(cwd, `${svgFileName}.yml`), convertObjectToYamlString(infoYaml))
+  writeFile(path.join(cwd, `${svgFileName}.yml`), convertToYaml(infoYaml))
 
   // Move to LT (Lückentext) subdir.
   const newPath = locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')

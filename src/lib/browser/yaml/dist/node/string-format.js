@@ -13,7 +13,6 @@ exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
  *
  * @returns A string formatted in `snake_case`.
  *
- * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 function convertCamelToSnake(text) {
@@ -23,13 +22,13 @@ function convertCamelToSnake(text) {
 }
 exports.convertCamelToSnake = convertCamelToSnake;
 /**
- * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ * Convert a string that is in the `snake_case` or `kebab-case` format into
+ * `camelCase` formatted string.
  *
  * @param text - A snake or kebab cased string
  *
  * @returns A string formatted in `camelCase`.
  *
- * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 function convertSnakeToCamel(text) {

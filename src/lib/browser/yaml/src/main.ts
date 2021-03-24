@@ -5,3 +5,5 @@
  */
 
 export * from './yaml'
+// export * from './string-format'
+export * from './object-manipulation'

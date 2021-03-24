@@ -5,7 +5,7 @@ import path from 'path'
 // Project packages.
 import { objectifyTexItemize, objectifyTexZitat } from '@bldr/tex-markdown-converter'
 import { readFile, writeFile } from '@bldr/core-node'
-import { convertObjectToYamlString} from '@bldr/core-browser'
+import { convertToYaml } from '@bldr/yaml'
 
 import { makeAsset } from '../media-file-classes'
 import { walk } from '../directory-tree-walk'
@@ -79,7 +79,7 @@ export async function generatePresentation (filePath: string): Promise<void> {
     slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }))
   }
 
-  const result = convertObjectToYamlString({
+  const result = convertToYaml({
     slides
   })
   console.log(result)

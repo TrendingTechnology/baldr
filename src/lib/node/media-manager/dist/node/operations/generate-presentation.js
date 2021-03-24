@@ -19,7 +19,7 @@ const path_1 = __importDefault(require("path"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const core_node_1 = require("@bldr/core-node");
-const core_browser_1 = require("@bldr/core-browser");
+const yaml_1 = require("@bldr/yaml");
 const media_file_classes_1 = require("../media-file-classes");
 const directory_tree_walk_1 = require("../directory-tree-walk");
 /**
@@ -87,7 +87,7 @@ function generatePresentation(filePath) {
             const worksheetContent = core_node_1.readFile(worksheetPath);
             slides = slides.concat(slidify('quote', tex_markdown_converter_1.objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }));
         }
-        const result = core_browser_1.convertObjectToYamlString({
+        const result = yaml_1.convertToYaml({
             slides
         });
         console.log(result);

@@ -1,6 +1,6 @@
 import { PresentationTypes } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
-import { convertObjectToYamlString } from '@bldr/core-browser'
+import { convertToYaml } from '@bldr/yaml'
 
 import { DeepTitle } from '../titles'
 import { loadYaml } from '../yaml'
@@ -62,7 +62,7 @@ export function normalizePresentationFile(filePath: string) {
     if (presentation.meta.id) meta.id = presentation.meta.id
     if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  const metaString = convertObjectToYamlString({ meta })
+  const metaString = convertToYaml({ meta })
   textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
 
   // Shorten media URIs with `./`

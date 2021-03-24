@@ -123,10 +123,10 @@ var path_1 = __importDefault(require("path"));
 // Third party packages.
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
-var js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 var config_1 = __importDefault(require("@bldr/config"));
 var core_browser_1 = require("@bldr/core-browser");
+var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
 // Submodules.
@@ -214,7 +214,7 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.readYaml_ = function (filePath) {
         if (fs_1.default.existsSync(filePath)) {
-            return js_yaml_1.default.safeLoad(fs_1.default.readFileSync(filePath, 'utf8'));
+            return yaml_1.convertFromYamlRaw(fs_1.default.readFileSync(filePath, 'utf8'));
         }
         return {};
     };
@@ -245,7 +245,7 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
-            properties = core_browser_1.convertPropertiesSnakeToCamel(properties);
+            properties = yaml_1.convertPropertiesSnakeToCamel(properties);
             for (var property in properties) {
                 this[property] = properties[property];
             }

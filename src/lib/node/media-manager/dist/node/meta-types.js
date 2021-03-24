@@ -19,6 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
+const yaml_1 = require("@bldr/yaml");
 const config_1 = __importDefault(require("@bldr/config"));
 const titles_1 = require("./titles");
 const meta_type_specs_1 = __importDefault(require("./meta-type-specs"));
@@ -297,7 +298,7 @@ function mergeTypeNames(...typeName) {
 function process(data) {
     // The meta type specification is in camel case. The meta data is
     // stored in the YAML format in snake case
-    data = core_browser_1.convertPropertiesSnakeToCamel(data);
+    data = yaml_1.convertPropertiesSnakeToCamel(data);
     if (!data.metaTypes) {
         data.metaTypes = 'general';
     }

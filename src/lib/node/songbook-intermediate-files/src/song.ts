@@ -10,7 +10,6 @@ import * as childProcess from 'child_process'
 
 // Third party packages.
 import * as fs from 'fs-extra'
-import yaml from 'js-yaml'
 
 // Project packages.
 import {
@@ -19,12 +18,14 @@ import {
   SongMetaData
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
+import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { writeYamlFile } from '@bldr/media-manager'
+import { convertFromYamlRaw } from '@bldr/yaml'
 
 import { listFiles, deleteFiles } from './utils'
 import { PianoScore, GenerationMode } from './main'
 import { fileMonitor } from './file-monitor'
-import { formatMultiPartAssetFileName } from '@bldr/core-browser'
-import { writeYamlFile } from '@bldr/media-manager'
+
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -158,7 +159,7 @@ class ExtendedSongMetaData implements SongMetaData {
       throw new Error(log.format('YAML file could not be found: %s', ymlFile))
     }
 
-    this.rawYaml = yaml.load(fs.readFileSync(ymlFile, 'utf8')) as SongMetaData
+    this.rawYaml = convertFromYamlRaw(fs.readFileSync(ymlFile, 'utf8')) as SongMetaData
 
     for (const key in this.rawYaml) {
       if (!this.allowedProperties.includes(key)) {

@@ -22,7 +22,6 @@ exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByPropert
 __exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
-__exportStar(require("./yaml"), exports);
 /**
  * Get the extension from a file path.
  *

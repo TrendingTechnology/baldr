@@ -11,6 +11,13 @@ const jsYamlConfig = {
     lineWidth: 72,
     noCompatMode: true
 };
+/**
+ * A wrapper around `yaml.dump(data)`.
+ *
+ * @param data - Some data to convert to a YAML string.
+ *
+ * @returns A string in the YAML format (without `---` at the beginning).
+ */
 function convertToYamlRaw(data) {
     return js_yaml_1.dump(data, jsYamlConfig);
 }
@@ -34,8 +41,17 @@ function convertToYaml(data) {
     return yamlMarkup.join('\n');
 }
 exports.convertToYaml = convertToYaml;
+/**
+ * A wrapper around `yaml.load(string)`.
+ *
+ * @param yamlString - A string in the YAML format.
+ *
+ * @returns Wraps strings and numbers into an object.
+ */
 function convertFromYamlRaw(yamlString) {
     const result = js_yaml_1.load(yamlString);
+    if (result == null)
+        return;
     if (typeof result !== 'object') {
         return { result };
     }
@@ -48,7 +64,7 @@ exports.convertFromYamlRaw = convertFromYamlRaw;
  * object with string properties to save Visual Studio Code type checks (Not
  * AssetType, PresentationTypes etc).
  *
- * @param yamlString - A string in the YAML format..
+ * @param yamlString - A string in the YAML format.
  *
  * @returns The parsed YAML file as an object. The string properties are
  *   converted in the `camleCase` format.

@@ -3,17 +3,17 @@ import fs from 'fs'
 
 // Third party packages.
 import chalk from 'chalk'
-import yaml from 'js-yaml'
 
 // Project packages.
 import { walk } from '@bldr/media-manager'
+import { convertFromYamlRaw } from '@bldr/yaml'
 
 /**
  * @param filePath - The media file path.
  */
 function validateYamlOneFile (filePath: string): void {
   try {
-    yaml.load(fs.readFileSync(filePath, 'utf8'))
+    convertFromYamlRaw(fs.readFileSync(filePath, 'utf8'))
     console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
   } catch (error) {
     console.log(`${chalk.red('error')}: ${chalk.red(error.name)}: ${error.message}`)

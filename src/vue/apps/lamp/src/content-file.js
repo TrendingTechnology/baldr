@@ -6,8 +6,8 @@
 
 /* globals defaultThemeSassVars FileReader */
 
-import { convertToYamlRaw, convertFromYamlRaw } from '@bldr/yaml'
-import { convertToString, shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
+import { convertToYamlRaw, convertFromYamlRaw, convertPropertiesSnakeToCamel } from '@bldr/yaml'
+import { convertToString, shortenText, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'

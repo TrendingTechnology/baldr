@@ -6,15 +6,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const fs_1 = __importDefault(require("fs"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
-const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const yaml_1 = require("@bldr/yaml");
 /**
  * @param filePath - The media file path.
  */
 function validateYamlOneFile(filePath) {
     try {
-        js_yaml_1.default.load(fs_1.default.readFileSync(filePath, 'utf8'));
+        yaml_1.convertFromYamlRaw(fs_1.default.readFileSync(filePath, 'utf8'));
         console.log(`${chalk_1.default.green('ok')}: ${chalk_1.default.yellow(filePath)}`);
     }
     catch (error) {
