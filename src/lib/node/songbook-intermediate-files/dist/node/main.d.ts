@@ -6,8 +6,6 @@
  *
  * @module @bldr/songbook-intermediate-files
  */
-/// <reference types="node" />
-import * as childProcess from 'child_process';
 import { CoreLibrary, SongCollection, Song } from '@bldr/songbook-core';
 import { IntermediateSong } from './song';
 /**
@@ -202,10 +200,6 @@ export declare class IntermediateLibrary extends Library {
      * @param basePath - The base path of the song library
      */
     constructor(basePath: string);
-    /**
-     * Execute git pull if repository exists.
-     */
-    gitPull(): childProcess.SpawnSyncReturns<Buffer> | undefined;
     private collectSongs;
     /**
      * Delete multiple files.
@@ -224,7 +218,10 @@ export declare class IntermediateLibrary extends Library {
      *   and piano files. Possible values: “all”, “slides” or “piano”
      * @param force - Force the regeneration of intermediate files.
      */
-    generateIntermediateFiles(mode?: GenerationMode, force?: boolean): void;
+    private generateIntermediateFiles;
+    private generateMetaDataForMediaServer;
+    private generateLibraryJson;
+    compilePianoScore(groupAlphabetically: boolean, pageTurnOptimized: boolean): void;
     /**
      * Generate all intermediate media files for one song.
      *

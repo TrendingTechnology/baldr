@@ -1,7 +1,3 @@
-// Node packages.
-import fs from 'fs'
-import path from 'path'
-
 // Third party packages.
 import chalk from 'chalk'
 
@@ -9,7 +5,6 @@ import chalk from 'chalk'
 import { log } from '@bldr/core-node'
 import {
   IntermediateLibrary,
-  PianoScore,
   GenerationMode
 } from '@bldr/songbook-intermediate-files'
 import config from '@bldr/config'
@@ -62,22 +57,11 @@ function action (cmdObj: { [key: string]: any }): void {
   } else {
     library.update(mode, cmdObj.force)
 
-    if (config.songbook.path) {
-      const projectorPath = path.join(config.songbook.path, 'songs.json')
-      fs.writeFileSync(
-        projectorPath,
-        JSON.stringify(library, null, '  ')
-      )
-      log('Create JSON file: %s', chalk.yellow(projectorPath))
-    }
-
     if (mode === 'piano' || mode === 'all') {
-      const pianoScore = new PianoScore(
-        library,
+      library.compilePianoScore(
         cmdObj.groupAlphabetically,
         cmdObj.pageTurnOptimized
       )
-      pianoScore.compile()
     }
   }
 }

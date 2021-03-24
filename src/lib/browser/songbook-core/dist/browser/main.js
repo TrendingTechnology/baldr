@@ -3,6 +3,13 @@
  * @module @bldr/songbook-core
  */
 import { sortObjectsByProperty, formatWikidataUrl, formatWikipediaUrl, formatYoutubeUrl } from '@bldr/core-browser';
+export const songConstants = {
+    intermediateFolder: 'NB',
+    firstSlideName: 'Projektor.svg',
+    firstPianoName: 'Piano.eps',
+    slideRegExp: /\.svg$/i,
+    pianoRegExp: /\.eps$/i
+};
 /**
  * A tree of songs where the song arrays are placed in alphabetical properties.
  * An instanace of this class would look like this example:

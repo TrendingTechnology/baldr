@@ -12,6 +12,14 @@ import {
 
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
+export const songConstants = {
+  intermediateFolder: 'NB',
+  firstSlideName: 'Projektor.svg',
+  firstPianoName: 'Piano.eps',
+  slideRegExp: /\.svg$/i,
+  pianoRegExp: /\.eps$/i
+}
+
 /**
  * Metadata of a song catched from the info.yml file.
  *

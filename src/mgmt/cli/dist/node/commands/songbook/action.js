@@ -2,9 +2,6 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
@@ -55,14 +52,8 @@ function action(cmdObj) {
     }
     else {
         library.update(mode, cmdObj.force);
-        if (config_1.default.songbook.path) {
-            const projectorPath = path_1.default.join(config_1.default.songbook.path, 'songs.json');
-            fs_1.default.writeFileSync(projectorPath, JSON.stringify(library, null, '  '));
-            core_node_1.log('Create JSON file: %s', chalk_1.default.yellow(projectorPath));
-        }
         if (mode === 'piano' || mode === 'all') {
-            const pianoScore = new songbook_intermediate_files_1.PianoScore(library, cmdObj.groupAlphabetically, cmdObj.pageTurnOptimized);
-            pianoScore.compile();
+            library.compilePianoScore(cmdObj.groupAlphabetically, cmdObj.pageTurnOptimized);
         }
     }
 }

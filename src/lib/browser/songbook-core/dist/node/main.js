@@ -4,8 +4,15 @@
  * @module @bldr/songbook-core
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CoreLibrary = exports.SongMetaDataCombined = exports.AlphabeticalSongsTree = void 0;
+exports.CoreLibrary = exports.SongMetaDataCombined = exports.AlphabeticalSongsTree = exports.songConstants = void 0;
 const core_browser_1 = require("@bldr/core-browser");
+exports.songConstants = {
+    intermediateFolder: 'NB',
+    firstSlideName: 'Projektor.svg',
+    firstPianoName: 'Piano.eps',
+    slideRegExp: /\.svg$/i,
+    pianoRegExp: /\.eps$/i
+};
 /**
  * A tree of songs where the song arrays are placed in alphabetical properties.
  * An instanace of this class would look like this example:

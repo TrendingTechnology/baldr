@@ -459,14 +459,6 @@ class IntermediateLibrary extends Library {
         this.songs = this.collectSongs();
         this.songs = this.collectSongs();
     }
-    /**
-     * Execute git pull if repository exists.
-     */
-    gitPull() {
-        if (fs.existsSync(path.join(this.basePath, '.git'))) {
-            return childProcess.spawnSync('git', ['pull'], { cwd: this.basePath });
-        }
-    }
     collectSongs() {
         const songs = {};
         for (const songPath of this.detectSongs()) {
@@ -518,6 +510,21 @@ class IntermediateLibrary extends Library {
             song.generateIntermediateFiles(mode, force);
         }
     }
+    generateMetaDataForMediaServer() {
+        for (const songId in this.songs) {
+            const song = this.songs[songId];
+            song.generateMetaDataForMediaServer();
+        }
+    }
+    generateLibraryJson() {
+        const jsonPath = path.join(this.basePath, 'songs.json');
+        fs.writeFileSync(jsonPath, JSON.stringify(this, null, '  '));
+        log.info('Create JSON file: %s', jsonPath);
+    }
+    compilePianoScore(groupAlphabetically, pageTurnOptimized) {
+        const pianoScore = new PianoScore(this, groupAlphabetically, pageTurnOptimized);
+        pianoScore.compile();
+    }
     /**
      * Generate all intermediate media files for one song.
      *
@@ -560,8 +567,9 @@ class IntermediateLibrary extends Library {
             throw new Error('The parameter “mode” must be one of this strings: ' +
                 '“all”, “slides” or “piano”.');
         }
-        this.gitPull();
         this.generateIntermediateFiles(mode, force);
+        this.generateMetaDataForMediaServer();
+        this.generateLibraryJson();
     }
 }
 exports.IntermediateLibrary = IntermediateLibrary;

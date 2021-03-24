@@ -200,7 +200,7 @@ export declare class IntermediateSong extends ExtendedSong {
      * @returns An array of the renamed multipart files names.
      */
     private renameMultipartFiles;
-    private generateMetaDataForMediaServer;
+    generateMetaDataForMediaServer(): void;
     /**
      * Generate SVG files in the slides subfolder.
      */

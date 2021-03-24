@@ -39,6 +39,7 @@ const yaml_1 = require("@bldr/yaml");
 const utils_1 = require("./utils");
 const main_1 = require("./main");
 const file_monitor_1 = require("./file-monitor");
+const constants = songbook_core_1.songConstants;
 /**
  * A wrapper class for a folder. If the folder does not exist, it will be
  * created during instantiation.
@@ -179,11 +180,11 @@ class ExtendedSong {
         this.songId = path.basename(this.folder);
         this.metaData = new ExtendedSongMetaData(this.folder);
         this.metaDataCombined = new songbook_core_1.SongMetaDataCombined(this.metaData);
-        this.folderIntermediateFiles = new Folder(this.folder, 'NB');
+        this.folderIntermediateFiles = new Folder(this.folder, constants.intermediateFolder);
         this.mscxProjector = this.detectFile('projector.mscx');
         this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx');
-        this.pianoFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), /\.eps$/i);
-        this.slidesFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), /\.svg$/i);
+        this.pianoFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), constants.pianoRegExp);
+        this.slidesFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), constants.slideRegExp);
     }
     /**
      * Get the song folder.
@@ -259,7 +260,7 @@ class IntermediateSong extends ExtendedSong {
      * @return TeX markup for one EPS image file of a piano score.
      */
     formatPianoTeXEpsFile(index) {
-        const subFolder = path.join(this.abc, this.songId, 'NB', this.pianoFiles[index]);
+        const subFolder = path.join(this.abc, this.songId, constants.intermediateFolder, this.pianoFiles[index]);
         return main_1.PianoScore.texCmd('image', subFolder);
     }
     /**
@@ -337,8 +338,7 @@ class IntermediateSong extends ExtendedSong {
         return utils_1.listFiles(folder, regExp);
     }
     generateMetaDataForMediaServer() {
-        const metaData = this.metaDataCombined.toJSON();
-        metaData.id = `LD_${this.songId}`;
+        const metaData = Object.assign({ id: `LD_${this.songId}` }, this.metaDataCombined.toJSON());
         media_manager_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
     }
     /**
@@ -346,7 +346,7 @@ class IntermediateSong extends ExtendedSong {
      */
     generateSlides() {
         const subFolder = this.folderIntermediateFiles.get();
-        const oldSVGs = utils_1.listFiles(subFolder, /\.svg$/i);
+        const oldSVGs = utils_1.listFiles(subFolder, constants.slideRegExp);
         for (const oldSVG of oldSVGs) {
             fs.unlinkSync(path.join(subFolder, oldSVG));
         }
@@ -357,8 +357,7 @@ class IntermediateSong extends ExtendedSong {
             'all'
         ]);
         fs.unlinkSync(src);
-        const result = this.renameMultipartFiles(subFolder, /\.svg$/i, 'Projektor.svg');
-        this.generateMetaDataForMediaServer();
+        const result = this.renameMultipartFiles(subFolder, constants.slideRegExp, constants.firstSlideName);
         log.info('  Generate SVG files: %s', result.toString());
         if (result.length === 0) {
             throw new Error('The SVG files for the slides couldn’t be generated.');
@@ -378,7 +377,7 @@ class IntermediateSong extends ExtendedSong {
         const pianoFile = path.join(subFolder, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
-        const result = this.renameMultipartFiles(subFolder, /\.eps$/i, 'Piano.eps');
+        const result = this.renameMultipartFiles(subFolder, constants.pianoRegExp, constants.firstPianoName);
         log.info('  Generate EPS files: %s', result.toString());
         if (result.length === 0) {
             throw new Error('The EPS files for the piano score couldn’t be generated.');

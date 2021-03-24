@@ -3,6 +3,13 @@
  * @module @bldr/songbook-core
  */
 import type { StringIndexedObject } from '@bldr/type-definitions';
+export declare const songConstants: {
+    intermediateFolder: string;
+    firstSlideName: string;
+    firstPianoName: string;
+    slideRegExp: RegExp;
+    pianoRegExp: RegExp;
+};
 /**
  * Metadata of a song catched from the info.yml file.
  *

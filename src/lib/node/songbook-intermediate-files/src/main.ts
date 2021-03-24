@@ -509,15 +509,6 @@ export class IntermediateLibrary extends Library {
     this.songs = this.collectSongs()
   }
 
-  /**
-   * Execute git pull if repository exists.
-   */
-  gitPull (): childProcess.SpawnSyncReturns<Buffer> | undefined {
-    if (fs.existsSync(path.join(this.basePath, '.git'))) {
-      return childProcess.spawnSync('git', ['pull'], { cwd: this.basePath })
-    }
-  }
-
   private collectSongs (): SongCollection<IntermediateSong> {
     const songs: SongCollection<IntermediateSong> = {}
     for (const songPath of this.detectSongs()) {
@@ -572,11 +563,36 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
+  private generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
     for (const songId in this.songs) {
       const song = this.songs[songId]
       song.generateIntermediateFiles(mode, force)
     }
+  }
+
+  private generateMetaDataForMediaServer (): void {
+    for (const songId in this.songs) {
+      const song = this.songs[songId]
+      song.generateMetaDataForMediaServer()
+    }
+  }
+
+  private generateLibraryJson (): void {
+    const jsonPath = path.join(this.basePath, 'songs.json')
+    fs.writeFileSync(
+      jsonPath,
+      JSON.stringify(this, null, '  ')
+    )
+    log.info('Create JSON file: %s', jsonPath)
+  }
+
+  compilePianoScore(groupAlphabetically: boolean, pageTurnOptimized: boolean): void {
+    const pianoScore = new PianoScore(
+      this,
+      groupAlphabetically,
+      pageTurnOptimized
+    )
+    pianoScore.compile()
   }
 
   /**
@@ -622,7 +638,8 @@ export class IntermediateLibrary extends Library {
       throw new Error('The parameter “mode” must be one of this strings: ' +
         '“all”, “slides” or “piano”.')
     }
-    this.gitPull()
     this.generateIntermediateFiles(mode, force)
+    this.generateMetaDataForMediaServer()
+    this.generateLibraryJson()
   }
 }
