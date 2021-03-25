@@ -19,9 +19,9 @@ export * from './string-format'
  * @returns The extension in lower case characters.
  */
 export function getExtension (filePath: string): string | undefined {
-  if (filePath) {
+  if (filePath != null) {
     const extension = String(filePath).split('.').pop()
-    if (extension) {
+    if (extension != null) {
       return extension.toLowerCase()
     }
   }
@@ -42,7 +42,7 @@ export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z
  *
  * @param milliSeconds
  */
-export function msleep (milliSeconds: number) {
+export function msleep (milliSeconds: number): void {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliSeconds)
 }
 
@@ -92,13 +92,13 @@ interface SelectionSubsetOption {
  */
 export function selectSubset (subsetSelector: string, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[] {
   const subset = []
-  if (!shiftSelector) shiftSelector = 0
+  if (shiftSelector == null) shiftSelector = 0
 
   // Create elements
-  if (!elements && elementsCount) {
+  if (elements == null && elementsCount != null) {
     elements = []
     let firstNo
-    if (firstElementNo) {
+    if (firstElementNo != null) {
       firstNo = firstElementNo
     } else {
       firstNo = 0
@@ -109,8 +109,8 @@ export function selectSubset (subsetSelector: string, { sort, elements, elements
     }
   }
 
-  if (!elements) elements = []
-  if (!subsetSelector) return elements
+  if (elements == null) elements = []
+  if (subsetSelector == null) return elements
 
   // 1, 3, 5 -> 1,3,5
   subsetSelector = subsetSelector.replace(/\s*/g, '')
@@ -122,13 +122,13 @@ export function selectSubset (subsetSelector: string, { sort, elements, elements
   const shiftSelectorAdjust = -1 * shiftSelector
   for (let range of ranges) {
     // -7 -> 1-7
-    if (range.match(/^-/)) {
+    if (range.match(/^-/) != null) {
       const end = parseInt(range.replace('-', ''))
       range = `${1 + shiftSelectorAdjust}-${end}`
     }
 
     // 7- -> 7-23
-    if (range.match(/-$/)) {
+    if (range.match(/-$/) != null) {
       const begin = parseInt(range.replace('-', ''))
       // for cloze steps (shiftSelector: -1): 7- -> 7-23 -> elements.length
       // as 22 elements because 7-23 translates to 6-22.
@@ -164,8 +164,8 @@ export function selectSubset (subsetSelector: string, { sort, elements, elements
 
   if (sort === 'numeric') {
     subset.sort((a, b) => a - b) // For ascending sort
-  } else if (sort) {
-    subset.sort()
+  } else if (typeof sort === 'boolean' && sort) {
+    subset.sort(undefined)
   }
 
   return subset
@@ -189,7 +189,6 @@ export function sortObjectsByProperty (property: string) {
  * @param uri - The URI to validate.
  */
 export function validateUri (uri: string): string {
-  if (typeof uri !== 'string') throw new Error(`”${uri}“ is not a string.`)
   const segments = uri.split(':')
   // To allow URI with out a URI scheme. This defaults to `id`.
   if (segments.length === 1) {
@@ -216,7 +215,7 @@ export function splitHtmlIntoChunks (htmlString: string, charactersOnSlide: numb
    * @param htmlString - A HTML string to be added to the array.
    */
   function addHtml (htmlChunks: string[], htmlString: string): void {
-    if (htmlString && !htmlString.match(/^\s*$/)) {
+    if (htmlString != null && htmlString.match(/^\s*$/) == null) {
       htmlChunks.push(htmlString)
     }
   }

@@ -3,10 +3,10 @@
  *
  * @module @bldr/type-definitions
  */
-export * from './asset';
+export * as AssetType from './asset';
 export * from './cli';
 export * from './config';
-export * from './meta-spec';
+export * as MetaSpec from './meta-spec';
 export * from './titles';
 export * as MasterTypes from './master';
 export * as PresentationTypes from './presentation';

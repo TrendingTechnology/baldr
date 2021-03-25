@@ -5,6 +5,7 @@ import * as color from './color'
 
 export const colorize = color
 
+// eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/
 
 /**
@@ -49,7 +50,7 @@ export function formatWithoutColor (template: FormatString, ...args: any[]): str
 
 export function format (template: FormatString, ...args: any[]): string {
   args = args.map(value => {
-    if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
+    if (typeof value !== 'string' || (typeof value === 'string' && value?.match(ansiRegexp) != null)) {
       return value
     }
     return color.yellow(value)

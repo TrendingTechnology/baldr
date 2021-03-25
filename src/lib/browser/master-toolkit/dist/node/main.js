@@ -34,7 +34,7 @@ function mapStepProps(selectors) {
     };
     const result = {};
     for (const selector of selectors) {
-        if (props[selector]) {
+        if (props[selector] != null) {
             result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector];
         }
     }

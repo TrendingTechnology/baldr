@@ -4,8 +4,8 @@
 import { formatToLocalDateTime } from '@bldr/core-browser'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
-const httpRequestLocal = makeHttpRequestInstance(config, 'local','/api/seating-plan')
-const httpRequestRemote = makeHttpRequestInstance(config, 'remote','/api/seating-plan')
+const httpRequestLocal = makeHttpRequestInstance(config, 'local', '/api/seating-plan')
+const httpRequestRemote = makeHttpRequestInstance(config, 'remote', '/api/seating-plan')
 
 class InitState {
   constructor () {

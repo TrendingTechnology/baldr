@@ -3,10 +3,12 @@
  *
  * @module @bldr/type-definitions
  */
-export * from './asset';
+import * as AssetType_1 from './asset';
+export { AssetType_1 as AssetType };
 export * from './cli';
 export * from './config';
-export * from './meta-spec';
+import * as MetaSpec_1 from './meta-spec';
+export { MetaSpec_1 as MetaSpec };
 export * from './titles';
 import * as MasterTypes_1 from './master';
 export { MasterTypes_1 as MasterTypes };

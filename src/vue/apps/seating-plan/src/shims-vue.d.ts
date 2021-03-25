@@ -114,6 +114,6 @@ declare module 'vue/types/vue' {
 }
 
 declare module '*.vue' {
-  import Vue from 'vue'
+
   export default Vue
 }

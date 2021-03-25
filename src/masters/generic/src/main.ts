@@ -9,8 +9,8 @@ import { convertMarkdownStringToHTML } from '@bldr/markdown-to-html'
 // import steps from '@/steps.js'
 
 // Do not remove this lines. The comments are removed by the build script.
-///-/ const { JSDOM } = require('jsdom')
-///-/ const DOMParser = new JSDOM().window.DOMParser
+/// -/ const { JSDOM } = require('jsdom')
+/// -/ const DOMParser = new JSDOM().window.DOMParser
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -23,12 +23,12 @@ function splitHtmlintoChunks (htmlString: string, charactersOnSlide?: Number): s
    * whitespaces.
    */
   function addText (chunks: string[], text: string): void {
-    if (text && !text.match(/^\s*$/)) {
+    if (text && (text.match(/^\s*$/) == null)) {
       chunks.push(text)
     }
   }
 
-  if (!charactersOnSlide) charactersOnSlide = CHARACTERS_ON_SLIDE
+  if (charactersOnSlide == null) charactersOnSlide = CHARACTERS_ON_SLIDE
   if (htmlString.length < charactersOnSlide) return [htmlString]
 
   const domParser = new DOMParser()
@@ -132,7 +132,7 @@ export default validateMasterSpec({
       // Split by <hr>
       const splittedByHr = []
       for (const html of converted) {
-        if (html.indexOf('<hr>') > -1) {
+        if (html.includes('<hr>')) {
           const chunks = html.split('<hr>')
           for (const chunk of chunks) {
             splittedByHr.push(chunk)
@@ -156,7 +156,7 @@ export default validateMasterSpec({
       }
 
       if (props.stepMode && props.stepMode === 'words') {
-        //props.markup = [steps.wrapWords(markup.join(' '))]
+        // props.markup = [steps.wrapWords(markup.join(' '))]
       } else {
         props.markup = markup
       }
@@ -180,7 +180,7 @@ export default validateMasterSpec({
         output.push(convertHtmlToPlainText(markup))
       }
       return output.join(' | ')
-    },
+    }
     // afterSlideNoChangeOnComponent ({ newSlideNo }) {
     //   // adjustSlideSize(this.$el, this.$refs.contentWrapper)
     //   if (this.stepMode) {

@@ -469,7 +469,7 @@ export interface MasterSpec {
      */
     store?: Store;
 }
-interface MasterIcon {
+interface MasterIcon extends MasterIconSpec {
 }
 /**
  * Each master slide has an instance of this class.

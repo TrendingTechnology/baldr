@@ -8,8 +8,8 @@ const core_browser_1 = require("@bldr/core-browser");
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 // import steps from '@/steps.js'
 // Do not remove this lines. The comments are removed by the build script.
-const { JSDOM } = require('jsdom')
-const DOMParser = new JSDOM().window.DOMParser
+/// -/ const { JSDOM } = require('jsdom')
+/// -/ const DOMParser = new JSDOM().window.DOMParser
 const CHARACTERS_ON_SLIDE = 400;
 /**
  * Split a HTML text into smaller chunks by looping over the children.
@@ -20,11 +20,11 @@ function splitHtmlintoChunks(htmlString, charactersOnSlide) {
      * whitespaces.
      */
     function addText(chunks, text) {
-        if (text && !text.match(/^\s*$/)) {
+        if (text && (text.match(/^\s*$/) == null)) {
             chunks.push(text);
         }
     }
-    if (!charactersOnSlide)
+    if (charactersOnSlide == null)
         charactersOnSlide = CHARACTERS_ON_SLIDE;
     if (htmlString.length < charactersOnSlide)
         return [htmlString];
@@ -115,7 +115,7 @@ exports.default = master_toolkit_1.validateMasterSpec({
             // Split by <hr>
             const splittedByHr = [];
             for (const html of converted) {
-                if (html.indexOf('<hr>') > -1) {
+                if (html.includes('<hr>')) {
                     const chunks = html.split('<hr>');
                     for (const chunk of chunks) {
                         splittedByHr.push(chunk);
@@ -137,7 +137,7 @@ exports.default = master_toolkit_1.validateMasterSpec({
                 markup = [markup.join(' ')];
             }
             if (props.stepMode && props.stepMode === 'words') {
-                //props.markup = [steps.wrapWords(markup.join(' '))]
+                // props.markup = [steps.wrapWords(markup.join(' '))]
             }
             else {
                 props.markup = markup;
@@ -162,6 +162,27 @@ exports.default = master_toolkit_1.validateMasterSpec({
                 output.push(core_browser_1.convertHtmlToPlainText(markup));
             }
             return output.join(' | ');
-        },
+        }
+        // afterSlideNoChangeOnComponent ({ newSlideNo }) {
+        //   // adjustSlideSize(this.$el, this.$refs.contentWrapper)
+        //   if (this.stepMode) {
+        //     this.domSteps = new steps.DomSteps({
+        //       subsetSelector: this.stepSubset,
+        //       mode: this.stepMode,
+        //       rootElement: this.$el,
+        //       hideAllElementsInitally: false
+        //     })
+        //   }
+        // },
+        // afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
+        //   if (!this.domSteps) return
+        //   const options = { stepNo: newStepNo }
+        //   if (slideNoChange) {
+        //     options.full = true
+        //   } else {
+        //     options.oldStepNo = oldStepNo
+        //   }
+        //   this.domSteps.displayByNo(options)
+        // }
     }
 });

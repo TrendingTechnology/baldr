@@ -374,6 +374,7 @@ function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: Met
         const propSpec = propSpecs[propName].wikidata
         if (propSpec != null && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
           typeData[propName] = dataWiki[propName]
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete dataOrig[propName]
         } else {
           typeData[propName] = dataWiki[propName]

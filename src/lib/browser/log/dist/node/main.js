@@ -5,6 +5,7 @@ const fast_printf_1 = require("fast-printf");
 const logging = require("loglevel");
 const color = require("./color");
 exports.colorize = color;
+// eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/;
 function formatWithoutColor(template, ...args) {
     if (typeof template === 'number') {
@@ -15,7 +16,7 @@ function formatWithoutColor(template, ...args) {
 exports.formatWithoutColor = formatWithoutColor;
 function format(template, ...args) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
+        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return color.yellow(value);

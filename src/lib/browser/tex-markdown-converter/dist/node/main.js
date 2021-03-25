@@ -88,7 +88,7 @@ function cleanMatch(match, excludeCaptureGroups) {
  */
 function extractMatchAll(text, regExp, matches, excludeCaptureGroups) {
     const compiledRegExp = new RegExp(regExp, 'g');
-    if (text.match(compiledRegExp)) {
+    if (text.match(compiledRegExp) != null) {
         const rawMatches = text.matchAll(compiledRegExp);
         for (const match of rawMatches) {
             text = text.replace(match[0], '');
@@ -296,7 +296,7 @@ function convert(text, toTex) {
         else if (typeof specRep === 'object') {
             rep = specRep.rep;
         }
-        if (reg && rep) {
+        if ((reg != null) && rep) {
             text = text.replace(reg, rep);
         }
     }
@@ -351,9 +351,9 @@ function objectifyTexZitat(content) {
     for (const match of matches) {
         let text = match[1];
         const regOpt = /^[^]+\]/;
-        let optional = text.match(regOpt);
+        const optional = text.match(regOpt);
         let optionalString = '';
-        if (optional) {
+        if (optional != null) {
             optionalString = optional[0];
             text = text.replace(regOpt, '');
         }
@@ -411,7 +411,7 @@ function objectifyTexItemize(content) {
                 if (oneLine)
                     items.push(oneLine);
             }
-            if (sections.length)
+            if (sections.length > 0)
                 item.sections = sections;
             item.items = items;
             data.push(item);

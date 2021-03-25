@@ -14,13 +14,6 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest docs && vue-cli-service build --target lib --name vue-file-toolbar-menu src/Bar/Bar.vue",
-    "lint": "vue-cli-service lint",
-    "preversion": "npm run lint",
-    "version": "npm run build && git add -A"
-  },
   "main": "src/Bar.vue",
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.9",

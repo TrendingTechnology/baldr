@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module @bldr/master-quote
  */
 const core_browser_1 = require("@bldr/core-browser");
-const type_definitions_1 = require("@bldr/type-definitions");
-exports.default = type_definitions_1.MasterTypes.validateMasterSpec({
+const master_toolkit_1 = require("@bldr/master-toolkit");
+exports.default = master_toolkit_1.validateMasterSpec({
     name: 'quote',
     title: 'Zitat',
     propsDef: {
@@ -36,7 +36,7 @@ exports.default = type_definitions_1.MasterTypes.validateMasterSpec({
         epilog: {
             type: String,
             markup: true,
-            description: 'Längerer Text, der name dem Zitat erscheint.'
+            description: 'Längerer Text, der nach dem Zitat erscheint.'
         }
     },
     icon: {
@@ -66,3 +66,4 @@ exports.default = type_definitions_1.MasterTypes.validateMasterSpec({
         }
     }
 });
+//# sourceMappingURL=main.js.map

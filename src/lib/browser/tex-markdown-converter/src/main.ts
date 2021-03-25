@@ -6,7 +6,7 @@
 
 import { convertToYaml } from '@bldr/yaml'
 
- /**
+/**
   * A replacement using a regular expression.
   */
 export interface RegExpReplacement {
@@ -39,12 +39,11 @@ export interface ReplacementPair {
  * Build and assemble strings to generate regular expressions from.
  */
 class RegExpBuilder {
-
   dotAll: string
   captDotAll: string
   whiteNewline: string
 
-  constructor() {
+  constructor () {
     this.dotAll = '[^]+?'
     this.captDotAll = this.capt(this.dotAll)
     this.whiteNewline = '[\\s\n]*?'
@@ -57,7 +56,7 @@ class RegExpBuilder {
    *
    * @returns A string to build a regular expression from.
    */
-  capt(regExp: string): string {
+  capt (regExp: string): string {
     return `(${regExp})`
   }
 
@@ -70,7 +69,7 @@ class RegExpBuilder {
    *
    * @returns {string} A string to build a regular expression from.
    */
-  cmd(macroName: string, regExp: string = ''): string {
+  cmd (macroName: string, regExp: string = ''): string {
     if (!regExp) regExp = '([^\\}]+?)'
     return `\\\\${macroName}\\{${regExp}\\}`
   }
@@ -83,7 +82,7 @@ class RegExpBuilder {
    *
    * @returns {string} A string to build a regular expression from.
    */
-  env(envName: string, regExp: string = ''): string {
+  env (envName: string, regExp: string = ''): string {
     if (!regExp) regExp = this.captDotAll
     return this.cmd('begin', envName) + regExp + this.cmd('end', envName)
   }
@@ -98,7 +97,7 @@ export const regBuilder = new RegExpBuilder()
  *   to exclude in the result matches for example regexp:
  *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
  */
-function cleanMatch(match: string[], excludeCaptureGroups: string[]): string[] {
+function cleanMatch (match: string[], excludeCaptureGroups: string[]): string[] {
   const exclude = excludeCaptureGroups
   // Convert to Array
   match = [...match]
@@ -124,9 +123,9 @@ function cleanMatch(match: string[], excludeCaptureGroups: string[]): string[] {
  *
  * @returns {string}
  */
-export function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string {
+export function extractMatchAll (text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string {
   const compiledRegExp = new RegExp(regExp, 'g')
-  if (text.match(compiledRegExp)) {
+  if (text.match(compiledRegExp) != null) {
     const rawMatches = text.matchAll(compiledRegExp)
     for (const match of rawMatches) {
       text = text.replace(match[0], '')
@@ -141,7 +140,7 @@ export function extractMatchAll(text: string, regExp: string, matches: string[][
  * @param {string} commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
-function texReg(commandName: string): RegExp {
+function texReg (commandName: string): RegExp {
   return new RegExp(regBuilder.cmd(commandName), 'g')
 }
 
@@ -149,7 +148,7 @@ function texReg(commandName: string): RegExp {
  * @param {string} commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
-function texRep(commandName: string): string {
+function texRep (commandName: string): string {
   return `\\${commandName}{$1}`
 }
 
@@ -158,7 +157,7 @@ function texRep(commandName: string): string {
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
  */
-function mdReg(tagName: string, className: string = ''): RegExp {
+function mdReg (tagName: string, className: string = ''): RegExp {
   let classMarkup = ''
   if (className) {
     classMarkup = ` class="${className}"`
@@ -170,7 +169,7 @@ function mdReg(tagName: string, className: string = ''): RegExp {
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
  */
-function mdRep(tagName: string, className: string = ''): string {
+function mdRep (tagName: string, className: string = ''): string {
   let classMarkup = ''
   if (className) {
     classMarkup = ` class="${className}"`
@@ -183,7 +182,7 @@ function mdRep(tagName: string, className: string = ''): string {
  * @param htmlTagName
  * @param htmlClassName
  */
-function semanticSpec(texCommandName: string, htmlTagName: string, htmlClassName: string): ReplacementPair[] {
+function semanticSpec (texCommandName: string, htmlTagName: string, htmlClassName: string): ReplacementPair[] {
   return [{
     tex: { reg: texReg(texCommandName), rep: texRep(texCommandName) },
     md: { reg: mdReg(htmlTagName, htmlClassName), rep: mdRep(htmlTagName, htmlClassName) }
@@ -228,7 +227,7 @@ const specification: ReplacementPair[] = [
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-export function removeTexComments(text: string): string {
+export function removeTexComments (text: string): string {
   // TeX comment to fix hyphenation
   // Lorem ip-%
   // sum
@@ -242,7 +241,7 @@ export function removeTexComments(text: string): string {
 /**
  * @param {string} text - A input string to convert.
  */
-function removeTexHeaderFooter(text: string): string {
+function removeTexHeaderFooter (text: string): string {
   // Remove TeX header and footer
   text = text.replace(/[^]*\\begin\{document\}/, '')
   text = text.replace(/\\end\{document\}[^]*/, '')
@@ -252,7 +251,7 @@ function removeTexHeaderFooter(text: string): string {
 /**
  * @param text - A input string to convert.
  */
-function convertTexItemize(text: string): string {
+function convertTexItemize (text: string): string {
   return text.replace(
     /\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g,
     function (match, p1, p2) {
@@ -271,7 +270,7 @@ function convertTexItemize(text: string): string {
  *
  * @param text - A input string to convert.
  */
-function cleanUpTex(text: string): string {
+function cleanUpTex (text: string): string {
   // Delete comments
   text = text.replace(/\n%.*?\n/g, '\n')
   text = text.replace(/\n%.*?\n/g, '\n')
@@ -288,7 +287,7 @@ function cleanUpTex(text: string): string {
  *
  * @returns A cleaned up string.
  */
-function cleanUp(text: string): string {
+function cleanUp (text: string): string {
   text = text.replace(/\n\n\n+/g, '\n\n')
   return text
 }
@@ -300,7 +299,7 @@ function cleanUp(text: string): string {
  * @param toTex - True to convert from Markdown to TeX. False to
  *   convert from TeX to Markdown.
  */
-function convert(text: string, toTex: boolean): string {
+function convert (text: string, toTex: boolean): string {
   const specsReq = []
   const specsRep = []
   for (const spec of specification) {
@@ -343,7 +342,7 @@ function convert(text: string, toTex: boolean): string {
     } else if (typeof specRep === 'object') {
       rep = specRep.rep
     }
-    if (reg && rep) {
+    if ((reg != null) && rep) {
       text = text.replace(reg, rep)
     }
   }
@@ -358,7 +357,7 @@ function convert(text: string, toTex: boolean): string {
  *
  * @returns A string in the Markdown format.
  */
-export function convertTexToMd(text: string): string {
+export function convertTexToMd (text: string): string {
   text = removeTexHeaderFooter(text)
   text = convertTexZitat(text)
   text = convertTexItemize(text)
@@ -375,11 +374,11 @@ export function convertTexToMd(text: string): string {
  *
  * @returns A string in the TeX format.
  */
-export function convertMdToTex(text: string): string {
+export function convertMdToTex (text: string): string {
   return convert(text, true)
 }
 
-type TexObject = { [key: string]: any }
+interface TexObject { [key: string]: any }
 type TexObjectArray = TexObject[]
 
 function convertToOneLineMd (content: string): string {
@@ -404,9 +403,9 @@ export function objectifyTexZitat (content: string): TexObjectArray {
   for (const match of matches) {
     let text = match[1]
     const regOpt = /^[^]+\]/
-    let optional = text.match(regOpt)
+    const optional = text.match(regOpt)
     let optionalString: string = ''
-    if (optional) {
+    if (optional != null) {
       optionalString = optional[0]
       text = text.replace(regOpt, '')
     }
@@ -432,7 +431,7 @@ export function objectifyTexZitat (content: string): TexObjectArray {
   return data
 }
 
-function convertTexZitat(content: string): string {
+function convertTexZitat (content: string): string {
   const zitate = objectifyTexZitat(content)
   if (zitate.length > 0) {
     return convertToYaml(zitate)
@@ -467,11 +466,10 @@ export function objectifyTexItemize (content: string): TexObjectArray {
         if (oneLine) items.push(oneLine)
       }
 
-      if (sections.length) item.sections = sections
+      if (sections.length > 0) item.sections = sections
       item.items = items
       data.push(item)
     }
-
   }
   return data
 }

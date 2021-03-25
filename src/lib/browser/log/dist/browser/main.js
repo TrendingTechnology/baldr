@@ -2,6 +2,7 @@ import { printf } from 'fast-printf';
 import * as logging from 'loglevel';
 import * as color from './color';
 export const colorize = color;
+// eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/;
 export function formatWithoutColor(template, ...args) {
     if (typeof template === 'number') {
@@ -11,7 +12,7 @@ export function formatWithoutColor(template, ...args) {
 }
 export function format(template, ...args) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && value.match(ansiRegexp))) {
+        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return color.yellow(value);

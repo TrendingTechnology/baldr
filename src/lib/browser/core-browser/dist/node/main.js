@@ -30,9 +30,9 @@ __exportStar(require("./string-format"), exports);
  * @returns The extension in lower case characters.
  */
 function getExtension(filePath) {
-    if (filePath) {
+    if (filePath != null) {
         const extension = String(filePath).split('.').pop();
-        if (extension) {
+        if (extension != null) {
             return extension.toLowerCase();
         }
     }
@@ -73,13 +73,13 @@ exports.msleep = msleep;
  */
 function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
     const subset = [];
-    if (!shiftSelector)
+    if (shiftSelector == null)
         shiftSelector = 0;
     // Create elements
-    if (!elements && elementsCount) {
+    if (elements == null && elementsCount != null) {
         elements = [];
         let firstNo;
-        if (firstElementNo) {
+        if (firstElementNo != null) {
             firstNo = firstElementNo;
         }
         else {
@@ -90,9 +90,9 @@ function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElem
             elements.push(i);
         }
     }
-    if (!elements)
+    if (elements == null)
         elements = [];
-    if (!subsetSelector)
+    if (subsetSelector == null)
         return elements;
     // 1, 3, 5 -> 1,3,5
     subsetSelector = subsetSelector.replace(/\s*/g, '');
@@ -103,12 +103,12 @@ function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElem
     const shiftSelectorAdjust = -1 * shiftSelector;
     for (let range of ranges) {
         // -7 -> 1-7
-        if (range.match(/^-/)) {
+        if (range.match(/^-/) != null) {
             const end = parseInt(range.replace('-', ''));
             range = `${1 + shiftSelectorAdjust}-${end}`;
         }
         // 7- -> 7-23
-        if (range.match(/-$/)) {
+        if (range.match(/-$/) != null) {
             const begin = parseInt(range.replace('-', ''));
             // for cloze steps (shiftSelector: -1): 7- -> 7-23 -> elements.length
             // as 22 elements because 7-23 translates to 6-22.
@@ -143,8 +143,8 @@ function selectSubset(subsetSelector, { sort, elements, elementsCount, firstElem
     if (sort === 'numeric') {
         subset.sort((a, b) => a - b); // For ascending sort
     }
-    else if (sort) {
-        subset.sort();
+    else if (typeof sort === 'boolean' && sort) {
+        subset.sort(undefined);
     }
     return subset;
 }
@@ -167,8 +167,6 @@ exports.sortObjectsByProperty = sortObjectsByProperty;
  * @param uri - The URI to validate.
  */
 function validateUri(uri) {
-    if (typeof uri !== 'string')
-        throw new Error(`”${uri}“ is not a string.`);
     const segments = uri.split(':');
     // To allow URI with out a URI scheme. This defaults to `id`.
     if (segments.length === 1) {
@@ -195,7 +193,7 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
      * @param htmlString - A HTML string to be added to the array.
      */
     function addHtml(htmlChunks, htmlString) {
-        if (htmlString && !htmlString.match(/^\s*$/)) {
+        if (htmlString != null && htmlString.match(/^\s*$/) == null) {
             htmlChunks.push(htmlString);
         }
     }

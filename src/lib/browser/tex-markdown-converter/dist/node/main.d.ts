@@ -4,8 +4,8 @@
  * @module @bldr/tex-markdown-converter
  */
 /**
- * A replacement using a regular expression.
- */
+  * A replacement using a regular expression.
+  */
 export interface RegExpReplacement {
     /**
      * A regular expression.
@@ -108,9 +108,9 @@ export declare function convertTexToMd(text: string): string;
  * @returns A string in the TeX format.
  */
 export declare function convertMdToTex(text: string): string;
-declare type TexObject = {
+interface TexObject {
     [key: string]: any;
-};
+}
 declare type TexObjectArray = TexObject[];
 /**
  *

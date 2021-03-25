@@ -20,7 +20,7 @@
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard src/*.ts"
+    "lint": "ts-standard --fix src/*.ts"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",

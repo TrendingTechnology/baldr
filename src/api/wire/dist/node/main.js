@@ -34,7 +34,6 @@ function main() {
         });
     });
 }
-// @ts-ignore
 if (require.main === module) {
     main();
 }
