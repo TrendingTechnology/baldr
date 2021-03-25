@@ -2,37 +2,46 @@
   "name": "@bldr/songbook",
   "version": "0.2.4",
   "description": "Vue app of the baldr songbook.",
-  "scripts": {
-    "serve:webapp": "vue-cli-service serve",
-    "build:webapp": "vue-cli-service build"
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
   },
+  "scripts": {
+    "build:webapp": "vue-cli-service build",
+    "build:electron": "vue-cli-service electron:build",
+    "install:deb": "sudo apt remove baldr-songbook; sudo dpkg -i dist_electron/baldr-songbook_${npm_package_version}_amd64.deb",
+    "serve:electron": "vue-cli-service electron:serve",
+    "serve:webapp": "vue-cli-service serve"
+  },
+  "main": "background.js",
   "dependencies": {
-    "@bldr/core-node": "*",
-    "@bldr/core-browser": "*",
-    "@bldr/songbook-core": "*",
-    "@bldr/themes": "*",
     "@bldr/components-collection": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/icons": "*",
     "@bldr/media-client": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
+    "@bldr/songbook-core": "*",
+    "@bldr/themes": "*",
     "core-js": "3.7.0",
     "vue": "2.6.12",
     "vue-router": "3.4.9",
     "vuex": "3.5.1"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "devDependencies": {
     "@bldr/config": "*",
     "@vue/cli-service": "4.5.9",
     "@vue/eslint-config-standard": "5.1.2",
     "copy-webpack-plugin": "6.3.1",
+    "electron": "^11.0.0",
+    "electron-devtools-installer": "^3.1.0",
     "node-sass": "5.0.0",
     "sass-loader": "10.1.0",
     "style-resources-loader": "1.4.1",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-template-compiler": "2.6.12"
   },
@@ -40,5 +49,14 @@
     "> 1%",
     "last 2 versions"
   ],
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  }
 }

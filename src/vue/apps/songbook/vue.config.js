@@ -54,6 +54,21 @@ module.exports = {
       patterns: [
         path.join(themePath, 'default.scss')
       ]
+    },
+    electronBuilder: {
+      builderOptions: {
+        appId: 'rocks.friedrich.baldr',
+        productName: 'baldr-songbook',
+        asar: true,
+        linux: {
+          target: 'deb',
+          category: 'Education',
+          executableName: 'baldr-songbook',
+        },
+        extraMetadata: {
+          name: 'baldr-songbook'
+        }
+      }
     }
   }
 }
