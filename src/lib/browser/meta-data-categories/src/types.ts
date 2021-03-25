@@ -1,7 +1,7 @@
 /**
  * Some basic Typescript interfaces and type defintions.
  *
- * @module @bldr/meta-data-kind
+ * @module @bldr/meta-data-categories
  */
 
 import { DeepTitleInterface, AssetType } from '@bldr/type-definitions'
@@ -14,7 +14,7 @@ export namespace MetaData {
   /**
    * Defintion of the function `format()`.
    */
-  type WikidataFormatFunc = (value: string, arg: Kind) => string
+  type WikidataFormatFunc = (value: string, arg: Category) => string
 
   /**
    * The specification of a wikidata media metadata property.
@@ -60,7 +60,7 @@ export namespace MetaData {
    */
   interface DeriveFuncArg {
     kindData: AssetType.Generic
-    kindSpecification: Kind
+    kindSpecification: Category
     folderTitles: DeepTitleInterface
     filePath: string
   }
@@ -73,7 +73,7 @@ export namespace MetaData {
   /**
    * Defintion of the function `format()`.
    */
-  type FormatFunc = (value: any, dataAndSpec: KindDataAndSpec) => any
+  type FormatFunc = (value: any, dataAndSpec: CategoryDataAndSpec) => any
 
   /**
    * Defintion of the function `validate()`.
@@ -167,7 +167,7 @@ export namespace MetaData {
    */
   interface RelPathFuncArg {
     kindData: AssetType.Generic
-    kindSpecification: Kind
+    kindSpecification: Category
     oldRelPath: string
   }
 
@@ -177,19 +177,19 @@ export namespace MetaData {
   type RelPathFunc = (arg: RelPathFuncArg) => string
 
   /**
-   * Defintion of the function `detectKindByPath()`.
+   * Defintion of the function `detectCategoryByPath()`.
    */
-  type DetectKindByPathFunc = (arg: Kind) => RegExp
+  type DetectCategoryByPathFunc = (arg: Category) => RegExp
 
   /**
    * Defintion of the function `intialize()`.
    */
-  type InitializeFunc = (arg: KindDataAndSpec) => AssetType.Generic
+  type InitializeFunc = (arg: CategoryDataAndSpec) => AssetType.Generic
 
   /**
    * Defintion of the function `finalize()`.
    */
-  type FinalizeFunc = (dataAndSpec: KindDataAndSpec) => AssetType.Generic
+  type FinalizeFunc = (dataAndSpec: CategoryDataAndSpec) => AssetType.Generic
 
   /**
    * Defintion of the argument of the function `normalizeWikidata()`.
@@ -208,7 +208,7 @@ export namespace MetaData {
   /**
    * The specification of one metadata kind.
    */
-  export interface Kind {
+  export interface Category {
     /**
      * A title for the metadata kind.
      */
@@ -239,7 +239,7 @@ export namespace MetaData {
      * A regular expression that is matched against file paths or a
      * function which is called with `kindSpecification` that returns a regexp.
      */
-    detectKindByPath?: RegExp | DetectKindByPathFunc
+    detectCategoryByPath?: RegExp | DetectCategoryByPathFunc
 
     /**
      * A function which is called before all processing steps: `initialize
@@ -267,7 +267,7 @@ export namespace MetaData {
   /**
    * The name of a meta data kind, for example `person`, `group`.
    */
-  export type KindName =
+  export type CategoryName =
     'cloze' |
     'composition' |
     'cover' |
@@ -288,20 +288,20 @@ export namespace MetaData {
    * Multiple meta data type names, separated by commas, for example
    * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
    */
-  export type KindNames = string
+  export type CategoryNames = string
 
   /**
    * The specification of all meta data kinds
    *
    * ```js
-   * const KindSpecCollection = {
+   * const CategorySpecCollection = {
    *   typeName1: kindSpecification1,
    *   typeName2: kindSpecification2
    *   ...
    * }
    * ```
    */
-  export type KindCollection = { [key in KindName]: Kind }
+  export type CategoryCollection = { [key in CategoryName]: Category }
 
   /**
    * Generic type for metadata of assets.
@@ -313,8 +313,8 @@ export namespace MetaData {
   /**
    * Used in many functions as an argument.
    */
-  interface KindDataAndSpec {
+  interface CategoryDataAndSpec {
     kindData: AssetType.Generic
-    kindSpecification: Kind
+    kindSpecification: Category
   }
 }
