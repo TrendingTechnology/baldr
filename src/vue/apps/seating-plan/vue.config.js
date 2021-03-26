@@ -41,6 +41,21 @@ module.exports = {
       patterns: [
         path.join(themePath, 'default.scss')
       ]
+    },
+    electronBuilder: {
+      builderOptions: {
+        appId: 'rocks.friedrich.baldr',
+        productName: 'baldr-seating-plan',
+        asar: true,
+        linux: {
+          target: 'deb',
+          category: 'Education',
+          executableName: 'baldr-seating-plan',
+        },
+        extraMetadata: {
+          name: 'baldr-seating-plan'
+        }
+      }
     }
   }
 }

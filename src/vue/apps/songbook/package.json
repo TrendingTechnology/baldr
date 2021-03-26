@@ -8,8 +8,8 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build:webapp": "vue-cli-service build",
     "build:electron": "vue-cli-service electron:build",
+    "build:webapp": "vue-cli-service build",
     "install:deb": "sudo apt remove baldr-songbook; sudo dpkg -i dist_electron/baldr-songbook_${npm_package_version}_amd64.deb",
     "serve:electron": "vue-cli-service electron:serve",
     "serve:webapp": "vue-cli-service serve"
@@ -36,12 +36,12 @@
     "@vue/cli-service": "4.5.9",
     "@vue/eslint-config-standard": "5.1.2",
     "copy-webpack-plugin": "6.3.1",
-    "electron": "^11.0.0",
-    "electron-devtools-installer": "^3.1.0",
+    "electron-devtools-installer": "3.1.0",
+    "electron": "11.0.0",
     "node-sass": "5.0.0",
     "sass-loader": "10.1.0",
     "style-resources-loader": "1.4.1",
-    "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
+    "vue-cli-plugin-electron-builder": "2.0.0-rc.6",
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-template-compiler": "2.6.12"
   },
