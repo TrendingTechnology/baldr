@@ -69,15 +69,15 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.Generi
   if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
   if (
-    force ||
+    (force != null && force) ??
     !fs.existsSync(yamlFile)
   ) {
-    if (!metaData) metaData = {}
+    if (metaData == null) metaData = {}
     const asset = new Asset(filePath)
-    if (!metaData.id) {
+    if (metaData.id == null) {
       metaData.id = asset.basename
     }
-    if (!metaData.title) {
+    if (metaData.title == null) {
       metaData.title = deasciify(asset.basename)
     }
 

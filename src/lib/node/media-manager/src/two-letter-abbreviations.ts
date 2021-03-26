@@ -24,7 +24,7 @@ const abbreviations: { [key: string]: string } = {
 }
 
 export function isValidTwoLetterAbbreviation (abbreviation: string): boolean {
-  return !!abbreviations[abbreviation]
+  return abbreviations[abbreviation] != null
 }
 
 export function getTwoLetterAbbreviations (): string[] {
@@ -44,17 +44,17 @@ export function checkForTwoLetterDir (filePath: string): boolean {
   // HB
   const twoLetterDir = pathSegments[pathSegments.length - 2]
   // Match asset type abbreviations, like AB, HB, NB
-  if (twoLetterDir && twoLetterDir.length == 2 && twoLetterDir.match(/[A-Z]{2,}/)) {
+  if (twoLetterDir != null && twoLetterDir.length === 2 && (twoLetterDir.match(/[A-Z]{2,}/) != null)) {
     return isValidTwoLetterAbbreviation(twoLetterDir)
   }
   return false
 }
 
-export function checkTypeAbbreviations (typeSpecs: MetaSpec.TypeCollection) {
+export function checkTypeAbbreviations (typeSpecs: MetaSpec.TypeCollection): void {
   for (const typeName in typeSpecs) {
-    const typeSpec = typeSpecs[<MetaSpec.TypeName>typeName]
+    const typeSpec = typeSpecs[typeName as MetaSpec.TypeName]
 
-    if (typeSpec.abbreviation && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
+    if (typeSpec.abbreviation != null && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
       throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`)
     }
   }

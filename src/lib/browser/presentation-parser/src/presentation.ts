@@ -12,7 +12,7 @@ class Meta implements PresentationTypes.PresentationMeta {
   curriculum: string
   curriculumUrl?: string
 
-  constructor(data: PresentationTypes.PresentationMeta) {
+  constructor (data: PresentationTypes.PresentationMeta) {
     const raw = new RawDataObject(data)
     this.id = raw.cut('id')
     this.title = raw.cut('title')
@@ -39,7 +39,7 @@ export class Presentation implements PresentationTypes.Presentation {
    * @property rawYamlString - The raw YAML string of the YAML file
    *   `Praesentation.baldr.yml`
    */
-  constructor(rawYamlString: string) {
+  constructor (rawYamlString: string) {
     const rawPresentationData = convertFromYaml(rawYamlString)
 
     this.meta = new Meta(rawPresentationData.meta)

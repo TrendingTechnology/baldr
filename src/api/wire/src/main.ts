@@ -19,7 +19,7 @@ import config from '@bldr/config'
 /**
  * Launch the web socket server.
  */
-function main () {
+function main (): void {
   const webSocketServer = new WebSocket.Server({ port: config.wire.port })
 
   webSocketServer.on('connection', function connection (webSocket) {

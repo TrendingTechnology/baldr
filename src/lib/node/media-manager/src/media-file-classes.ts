@@ -25,13 +25,14 @@ class MediaFile {
   /**
    * The file extension of the media file.
    */
-  get extension(): string | undefined {
+  get extension (): string | undefined {
     return getExtension(this.absPath)
   }
+
   /**
    * The basename (filename without extension) of the file.
    */
-  get basename(): string {
+  get basename (): string {
     return path.basename(this.absPath, `.${this.extension}`)
   }
 }
@@ -40,14 +41,14 @@ class MediaFile {
  * A media asset.
  */
 export class Asset extends MediaFile {
-  private metaData: AssetType.FileFormat | undefined
+  private readonly metaData: AssetType.FileFormat | undefined
   /**
    * @param filePath - The file path of the media asset.
    */
   constructor (filePath: string) {
     super(filePath)
     const data = readAssetYaml(this.absPath)
-    if (data) {
+    if (data != null) {
       this.metaData = <AssetType.FileFormat> data
     }
   }
@@ -55,8 +56,8 @@ export class Asset extends MediaFile {
   /**
    * The id of the media asset. Read from the metadata file.
    */
-  get id(): string | undefined {
-    if (this.metaData && this.metaData.id) {
+  get id (): string | undefined {
+    if ((this.metaData != null) && this.metaData.id) {
       return this.metaData.id
     }
   }
@@ -87,8 +88,7 @@ export const mediaCategoriesManager = new MediaCategoriesManager(config)
  */
 export function filePathToAssetType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
-  if (asset.extension)
-  return mediaCategoriesManager.extensionToType(asset.extension)
+  if (asset.extension) { return mediaCategoriesManager.extensionToType(asset.extension) }
 }
 
 /**
@@ -98,13 +98,13 @@ export function filePathToAssetType (filePath: string): string | undefined {
  */
 export function isAsset (filePath: string): boolean {
   if (
-    filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
-    filePath.indexOf('_preview.jpg') > -1 || // Preview image
-    filePath.match(/_no\d+\./) // Multipart asset
+    filePath.includes('eps-converted-to.pdf') || // eps converted into pdf by TeX
+    filePath.includes('_preview.jpg') || // Preview image
+    (filePath.match(/_no\d+\./) != null) // Multipart asset
   ) {
     return false
   }
-  if (filePath.match(new RegExp('^.*/TX/.*.pdf$'))) return true
+  if (filePath.match(new RegExp('^.*/TX/.*.pdf$')) != null) return true
   return mediaCategoriesManager.isAsset(filePath)
 }
 
@@ -114,7 +114,7 @@ export function isAsset (filePath: string): boolean {
  * @param filePath - The path of the file to check.
  */
 export function isPresentation (filePath: string): boolean {
-  if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
+  if (filePath.includes('Praesentation.baldr.yml')) {
     return true
   }
   return false

@@ -12,7 +12,7 @@ class SlideMetaData implements PresentationTypes.SlideMeta {
   title?: string
   description?: string
   source?: string
-  private raw: RawDataObject
+  private readonly raw: RawDataObject
   constructor (raw: RawDataObject) {
     this.raw = raw
     this.id = this.cutAndConvert('id')
@@ -21,7 +21,7 @@ class SlideMetaData implements PresentationTypes.SlideMeta {
     this.source = this.cutAndConvert('source')
   }
 
-  private cutAndConvert(property: string): any {
+  private cutAndConvert (property: string): any {
     const value = this.raw.cut(property)
     if (value) {
       return convertMarkdownToHtml(value)
@@ -46,7 +46,7 @@ export class Slide implements PresentationTypes.Slide {
   optionalMediaUris?: Set<string>
   stepCount?: number
   stepNo?: number
-  constructor(rawData: any) {
+  constructor (rawData: any) {
     const raw = new RawDataObject(rawData)
     this.meta = new SlideMetaData(raw)
     this.rawData = rawData

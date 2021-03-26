@@ -192,8 +192,8 @@ export class Master implements MasterTypes.Master {
    *   with.
    */
   private callHook (hookName: string, payload: any, thisArg?: ThisArg): any {
-    if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
-      if (thisArg) {
+    if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+      if (thisArg != null) {
         return this.spec.hooks[hookName].call(thisArg, payload)
       }
       return this.spec.hooks[hookName](payload)
@@ -209,8 +209,8 @@ export class Master implements MasterTypes.Master {
    *   with.
    */
   private async callHookAsync (hookName: string, payload: any, thisArg?: ThisArg): Promise<any> {
-    if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
-      if (thisArg) {
+    if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+      if (thisArg != null) {
         return this.spec.hooks[hookName].call(thisArg, payload)
       }
       return this.spec.hooks[hookName](payload)

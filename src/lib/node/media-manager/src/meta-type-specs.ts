@@ -27,27 +27,27 @@ import { MetaSpec } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
 import { deasciify, idify } from './helper'
-import { getTwoLetterAbbreviations, checkForTwoLetterDir }  from './two-letter-abbreviations'
+import { getTwoLetterAbbreviations, checkForTwoLetterDir } from './two-letter-abbreviations'
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */
 function validateDate (value: string): boolean {
-  return value.match(/\d{4,}-\d{2,}-\d{2,}/) ? true : false
+  return (value.match(/\d{4,}-\d{2,}-\d{2,}/) != null)
 }
 
 /**
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId (value: string): boolean {
-  return value.match(mediaUriRegExp) ? true : false
+  return (value.match(mediaUriRegExp) != null)
 }
 
 /**
  * Validate UUID string (for the Musicbrainz references).
  */
 function validateUuid (value: string): boolean {
-  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) ? true : false
+  return (value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) != null)
 }
 
 /**
@@ -55,7 +55,7 @@ function validateUuid (value: string): boolean {
  */
 function validateYoutubeId (value: string): boolean {
   // https://webapps.stackexchange.com/a/101153
-  return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) ? true : false
+  return (value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) != null)
 }
 
 /**
@@ -73,7 +73,7 @@ function generateIdPrefix (filePath: string): string {
   // HB
   const parentDir = pathSegments[pathSegments.length - 2]
   // Match asset type abbreviations, like AB, HB, NB
-  if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
+  if (parentDir.length !== 2 || (parentDir.match(/[A-Z]{2,}/) == null)) {
     return ''
   }
   const assetTypeAbbreviation = parentDir
@@ -658,7 +658,7 @@ const reference = <MetaSpec.Type> {
       derive: function ({ typeData, folderTitles, filePath }) {
         let suffix = ''
         if (typeData.forTeacher) {
-          suffix = ` (Lehrerband)`
+          suffix = ' (Lehrerband)'
         }
         return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
       },
@@ -739,7 +739,7 @@ const song = <MetaSpec.Type> {
         // Veröffentlichungsdatum
         fromClaim: 'P577',
         format: 'formatDate'
-      },
+      }
     },
     language: {
       title: 'Sprache',
@@ -787,11 +787,11 @@ const worksheet = <MetaSpec.Type> {
   },
   props: {
     title: {
-      title: "Titel",
+      title: 'Titel',
       derive: function ({ folderTitles, filePath }) {
         const match = filePath.match(new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`))
         let baseName: string = 'Arbeitsblatt'
-        if (match) {
+        if (match != null) {
           baseName = match[1]
         }
         return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`
@@ -921,7 +921,7 @@ const general = <MetaSpec.Type> {
       title: 'Metadaten-Typen',
       description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
-        return String(value).match(/^[a-zA-Z,]+$/) ? true : false
+        return (String(value).match(/^[a-zA-Z,]+$/) != null)
       },
       format: function (value) {
         return value.replace(/,?general,?/, '')
@@ -949,7 +949,7 @@ const general = <MetaSpec.Type> {
     wikidata: {
       title: 'Wikidata',
       validate: function (value) {
-        return String(value).match(/^Q\d+$/) ? true: false
+        return (String(value).match(/^Q\d+$/) != null)
       }
     },
     wikipedia: {
@@ -986,7 +986,7 @@ const general = <MetaSpec.Type> {
       state: 'absent'
     }
   },
-  initialize: function({ typeData, typeSpec }) {
+  initialize: function ({ typeData, typeSpec }) {
     if (typeData.filePath && !checkForTwoLetterDir(typeData.filePath)) {
       console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`)
       process.exit()

@@ -9,11 +9,6 @@ import path from 'path'
 import { PresentationTypes, StringIndexedObject } from '@bldr/type-definitions'
 
 /**
- * The configuration object from `/etc/baldr.json`
- */
-import config from '@bldr/config'
-
-/**
  * Hold some meta data about a folder and its title.
  */
 class FolderTitle {
@@ -50,14 +45,14 @@ class FolderTitle {
   level: number
 
   /**
-   * @param {Object} data - Some meta data about the folder.
+   * @param data - Some meta data about the folder.
    */
   constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: StringIndexedObject) {
     this.title = title
     if (subtitle) this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
-    this.hasPraesentation = !!hasPraesentation
+    this.hasPraesentation = (hasPraesentation != null && hasPraesentation)
     this.level = level
   }
 }
@@ -91,7 +86,7 @@ export class DeepTitle {
   /**
    * Get the first folder name and remove it from the array.
    */
-  shiftFolderName () {
+  shiftFolderName (): string | undefined {
     return this.folderNames.shift()
   }
 
@@ -108,7 +103,7 @@ export class DeepTitle {
     if (titles.length > 0) {
       folderTitle.title = titles[0]
     }
-    if (titles.length > 1 && titles[1]) {
+    if (titles.length > 1 && titles[1] != null) {
       folderTitle.subtitle = titles[1]
     }
     if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
@@ -264,7 +259,7 @@ export class DeepTitle {
    * same folder as the constructor `filePath` file.
    */
   get subtitle (): string | undefined {
-    if (this.lastFolderTitleObject.subtitle) {
+    if (this.lastFolderTitleObject.subtitle != null) {
       return this.lastFolderTitleObject.subtitle
     }
   }
@@ -273,7 +268,7 @@ export class DeepTitle {
    * Combine the title and the subtitle (`Title - Subtitle`).
    */
   get titleAndSubtitle (): string {
-    if (this.subtitle) return `${this.title} - ${this.subtitle}`
+    if (this.subtitle != null) return `${this.title} - ${this.subtitle}`
     return this.title
   }
 
@@ -317,7 +312,7 @@ export class DeepTitle {
       grade: this.grade,
       curriculum: this.curriculum
     }
-    if (!result.subtitle) delete result.subtitle
+    if (result.subtitle == null) delete result.subtitle
     return result
   }
 }
@@ -362,7 +357,7 @@ export class TitleTree {
   title?: FolderTitle
   constructor (deepTitle: DeepTitle, folderName?: string) {
     this.subTree = {}
-    if (folderName) {
+    if (folderName != null) {
       this.title = deepTitle.getFolderTitleByFolderName(folderName)
     }
   }
@@ -374,8 +369,8 @@ export class TitleTree {
    */
   add (deepTitle: DeepTitle): void {
     const folderName = deepTitle.shiftFolderName()
-    if (!folderName) return
-    if (!this.subTree[folderName]) {
+    if (folderName == null) return
+    if (this.subTree[folderName] == null) {
       this.subTree[folderName] = new TitleTree(deepTitle, folderName)
     } else {
       this.subTree[folderName].add(deepTitle)

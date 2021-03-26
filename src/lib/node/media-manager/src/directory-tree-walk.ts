@@ -77,7 +77,7 @@ interface WalkOption {
  *
  * @param func - A single function or an object containing functions.
  */
-export async function walk(func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
+export async function walk (func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
   // Some checks to exit early.
   if (!func) {
     throw new Error('Missing property: `func`.')
@@ -107,7 +107,7 @@ export async function walk(func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
 
   // A directory.
   if (fs.statSync(opt.path).isDirectory()) {
-    if (typeof func !== 'function' && func.directory) {
+    if (typeof func !== 'function' && (func.directory != null)) {
       await func.directory(opt.path, opt.payload)
     }
     if (fs.existsSync(opt.path)) {
@@ -131,7 +131,7 @@ export async function walk(func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
       if (typeof opt.regex === 'string') {
         opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i') // eslint-disable-line
       }
-      if (!opt.path.match(opt.regex)) {
+      if (opt.path.match(opt.regex) == null) {
         return
       }
     }
@@ -140,17 +140,17 @@ export async function walk(func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
       await func(opt.path, opt.payload)
       return
     }
-    if (func.everyFile) {
+    if (func.everyFile != null) {
       await func.everyFile(opt.path, opt.payload)
     }
     const isPres = isPresentation(opt.path)
     const isAss = isAsset(opt.path)
-    if ((isPres || isAss) && func.all) {
+    if ((isPres || isAss) && (func.all != null)) {
       await func.all(opt.path, opt.payload)
     }
-    if (isPres && func.presentation) {
+    if (isPres && (func.presentation != null)) {
       await func.presentation(opt.path, opt.payload)
-    } else if (isAss && func.asset) {
+    } else if (isAss && (func.asset != null)) {
       await func.asset(opt.path, opt.payload)
     }
   }

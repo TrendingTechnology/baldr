@@ -7,5 +7,5 @@ import { Presentation } from './presentation'
  *   `Praesentation.baldr.yml`
  */
 export function parse (rawYamlString: string): Presentation {
-  return new Presentation(rawYamlString);
+  return new Presentation(rawYamlString)
 }

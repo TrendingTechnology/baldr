@@ -17,7 +17,7 @@ import path from 'path'
 // Project packages.
 import { deepCopy, getExtension } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
-import  config from '@bldr/config'
+import config from '@bldr/config'
 import { MetaSpec, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
 import { DeepTitle } from './titles'
@@ -38,14 +38,14 @@ function detectTypeByPath (filePath: string): MetaSpec.TypeNames | undefined {
   const typeNames = new Set()
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[<MetaSpec.TypeName> typeName]
-    if (typeSpec.detectTypeByPath) {
+    if (typeSpec.detectTypeByPath != null) {
       let regexp
       if (typeof typeSpec.detectTypeByPath === 'function') {
         regexp = typeSpec.detectTypeByPath(typeSpec)
       } else {
         regexp = typeSpec.detectTypeByPath
       }
-      if (filePath.match(regexp)) typeNames.add(typeName)
+      if (filePath.match(regexp) != null) typeNames.add(typeName)
     }
   }
   typeNames.add('general')
@@ -63,20 +63,20 @@ function detectTypeByPath (filePath: string): MetaSpec.TypeNames | undefined {
  * @returns A absolute path
  */
 function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
-  if (!data.metaTypes) throw new Error(`Your data needs a property named “metaTypes”.`)
+  if (!data.metaTypes) throw new Error('Your data needs a property named “metaTypes”.')
   // TODO: support multiple types
   // person,general -> person
   const typeName = <MetaSpec.TypeName> data.metaTypes.replace(/,.*$/, '')
   const typeSpec = typeSpecs[typeName]
   if (!typeSpec) throw new Error(`Unkown meta type “${typeName}”.`)
 
-  if (!typeSpec.relPath || typeof typeSpec.relPath !== 'function') {
+  if ((typeSpec.relPath == null) || typeof typeSpec.relPath !== 'function') {
     return ''
   }
 
   // The relPath function needs this.extension.
   if (!data.extension) {
-    if (!data.mainImage) throw new Error(`Your data needs a property named “mainImage”.`)
+    if (!data.mainImage) throw new Error('Your data needs a property named “mainImage”.')
     data.extension = getExtension(data.mainImage)
     // b/Bush_George-Walker/main.jpeg
   }
@@ -136,7 +136,7 @@ function applySpecToProps (data: AssetType.Generic, func: Function, typeSpec: Me
  *   specification of one property
  */
 function isPropertyDerived (propSpec: MetaSpec.Prop) {
-  if (propSpec && propSpec.derive && typeof propSpec.derive === 'function') {
+  if (propSpec && (propSpec.derive != null) && typeof propSpec.derive === 'function') {
     return true
   }
   return false
@@ -167,7 +167,7 @@ function sortAndDeriveProps (data: AssetType.Generic, typeSpec: MetaSpec.Type): 
     const propSpec = propSpecs[<AssetType.PropName> propName]
     const origValue = origData[propName]
     let derivedValue
-    if (isPropertyDerived(propSpec) && propSpec.derive) {
+    if (isPropertyDerived(propSpec) && (propSpec.derive != null)) {
       derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles: <DeepTitleInterface> folderTitles, filePath })
     }
 
@@ -208,7 +208,7 @@ function formatProps (data: AssetType.Generic, typeSpec: MetaSpec.Type) {
   function formatOneProp (spec: MetaSpec.Prop, value: any) {
     if (
       isValue(value) &&
-      spec.format &&
+      (spec.format != null) &&
       typeof spec.format === 'function'
     ) {
       return spec.format(value, { typeData: data, typeSpec })
@@ -229,7 +229,7 @@ function validateProps (data: AssetType.Generic, typeSpec: MetaSpec.Type) {
       throw new Error(`Missing property ${prop}`)
     }
     // validate
-    if (spec.validate && typeof spec.validate === 'function' && isValue(value)) {
+    if ((spec.validate != null) && typeof spec.validate === 'function' && isValue(value)) {
       const result = spec.validate(value)
       if (!result) {
         throw new Error(`Validation failed for property “${prop}” and value “${value}”`)
@@ -254,10 +254,10 @@ function removeProps (data: AssetType.Generic, typeSpec: MetaSpec.Type): AssetTy
         !isValue(value) ||
         (propSpec.state && propSpec.state === 'absent') ||
         (
-          propSpec.removeByRegexp &&
+          (propSpec.removeByRegexp != null) &&
           propSpec.removeByRegexp instanceof RegExp &&
           typeof value === 'string' &&
-          value.match(propSpec.removeByRegexp)
+          (value.match(propSpec.removeByRegexp) != null)
         )
       ) {
         delete data[propName]
@@ -282,7 +282,7 @@ function processByType (data: AssetType.Generic, typeName: MetaSpec.TypeName): A
     throw new Error(`The meta type “${typeName}” has no props.`)
   }
 
-  if (typeSpec.initialize && typeof typeSpec.initialize === 'function') {
+  if ((typeSpec.initialize != null) && typeof typeSpec.initialize === 'function') {
     data = typeSpec.initialize({ typeData: data, typeSpec })
   }
 
@@ -293,7 +293,7 @@ function processByType (data: AssetType.Generic, typeName: MetaSpec.TypeName): A
 
   validateProps(data, typeSpec)
 
-  if (typeSpec.finalize && typeof typeSpec.finalize === 'function') {
+  if ((typeSpec.finalize != null) && typeof typeSpec.finalize === 'function') {
     data = typeSpec.finalize({ typeData: data, typeSpec })
   }
   return data

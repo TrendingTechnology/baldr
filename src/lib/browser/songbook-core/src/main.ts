@@ -195,6 +195,7 @@ export interface Song {
  * }
  * </code></pre>
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AlphabeticalSongsTree {
   [songId: string]: Song[]
 
