@@ -14,6 +14,7 @@
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
+    "build:pegjs": "npx pegjs --plugin ./node_modules/ts-pegjs --format commonjs -o src/markdown-to-tex.ts src/markdown-to-tex.pegjs",
     "lint": "ts-standard --fix src/*.ts"
   },
   "license": "MIT",
@@ -26,6 +27,10 @@
   "main": "dist/node/main.js",
   "dependencies": {
     "@bldr/yaml": "*"
+  },
+  "devDependencies": {
+    "pegjs": "0.10.0",
+    "ts-pegjs": "0.3.1"
   },
   "standard.enable": false,
   "standard.options": {
