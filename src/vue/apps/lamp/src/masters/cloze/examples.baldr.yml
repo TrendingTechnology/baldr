@@ -2,50 +2,50 @@
 slides:
 
 - title: All (Zauberlehrling)
-  cloze: 'uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521'
+  cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
 
 - title: 'step_subset: 53- (Zauberlehrling)'
   cloze:
-    src: 'uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521'
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
     step_subset: 53-
 
 - title: 'step_subset: -11 (Zauberlehrling)'
   cloze:
-    src: 'uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521'
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
     step_subset: '-11'
 
 - title: 'step_subset: 16,35,53 (Zauberlehrling)'
   cloze:
-    src: 'uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521'
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
     step_subset: 16,35,53
 
 - title: 'step_subset: 12-15 (Zauberlehrling)'
   cloze:
-    src: 'uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521'
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
     step_subset: 12-15
 
 - title: 'step_subset: 2,3,4 (Bachs vergebliche Reise)'
   cloze:
-    src: uuid:e097a34f-e48e-4c8f-a63e-58885bd24e29
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
     step_subset: 2,3,4
 
 - title: 'Begin end step_subset: 3-5 (Bachs vergebliche Reise)'
   cloze:
-    src: uuid:e097a34f-e48e-4c8f-a63e-58885bd24e29
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
     step_subset: 3-5
 
 - title: 'End: step_subset: -20 (Bachs vergebliche Reise)'
   cloze:
-    src: uuid:e097a34f-e48e-4c8f-a63e-58885bd24e29
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
     step_subset: '-20'
 
 - title: 'Begin: step_subset: 21- (Bachs vergebliche Reise)'
   cloze:
-    src: uuid:e097a34f-e48e-4c8f-a63e-58885bd24e29
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
     step_subset: 21-
 
 - title: Short form (Bachs vergebliche Reise)
-  cloze: uuid:e097a34f-e48e-4c8f-a63e-58885bd24e29
+  cloze: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
 
 - title: Long form (Bebop)
   cloze:

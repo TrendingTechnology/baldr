@@ -42,7 +42,7 @@ slides:
 - title: 'Custom cover'
   audio:
     src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
-    cover: id:Beethoven_Ludwig-van
+    cover: uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d
     title: Custom cover
 
 - title: 'URL: id:'
