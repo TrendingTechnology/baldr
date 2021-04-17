@@ -338,7 +338,7 @@ class Master {
       for (const match of matches) {
         //  12    3            4
         // [((id):(Fuer-Elise))( caption="Für Elise")]
-        if (match[2] === 'id') uris.add(match[1])
+        if (match[2] === 'id' || match[2] === 'uuid') uris.add(match[1])
       }
     }
 

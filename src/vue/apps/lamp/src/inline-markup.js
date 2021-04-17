@@ -61,7 +61,7 @@ export class Item {
     //  1                  7
     // [((id):(Fuer-Elise))( caption="Für Elise")]
     // this.id = 'id:Haydn_Joseph'
-    this[match[2]] = match[1]
+    this.uri = match[1]
 
     if (match[7]) {
       const attrs = match[7]
@@ -96,8 +96,8 @@ export function render (item) {
       text = item.text
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
-  } else if (item.id) {
-    const asset = vue.$store.getters['media/assetByUri'](item.id)
+  } else if (item.uri) {
+    const asset = vue.$store.getters['media/assetByUri'](item.uri)
 
     let controls = ''
     let htmlTag

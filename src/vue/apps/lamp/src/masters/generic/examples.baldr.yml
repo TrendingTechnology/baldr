@@ -6,16 +6,16 @@ slides:
     Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
     tempor incidunt ut labore et dolore magna aliqua.
 
-    [id:Beethoven_Ludwig-van]
+    [uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d]
 
     Ut enim ad minim
     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex
     ea commodi consequat.
 
-    [id:Beethoven_Ludwig-van]
+    [uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d]
 
-    [id:Haydn_Joseph]
-    [id:Mozart_Wolfgang-Amadeus]
+    [uuid:ad7b747f-fe50-49e3-a563-affdfddbdf80]
+    [uuid:5fb62ea0-e2a7-42cd-b288-c0ffc1747a54]
 
 - title: Test step words
   generic:
