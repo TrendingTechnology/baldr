@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.getExtension = void 0;
+exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.MediaUriWithSubsetSelector = exports.mediaUriRegExp = exports.getExtension = void 0;
 __exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -45,6 +45,26 @@ exports.getExtension = getExtension;
  * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 exports.mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
+/**
+ * A media URI with an optional subset selector.
+ */
+class MediaUriWithSubsetSelector {
+    /**
+     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+     */
+    constructor(uri) {
+        this.uri = uri;
+        const segments = uri.split('#');
+        if (segments.length === 2) {
+            this.uriWithoutSubsetSelector = segments[0];
+            this.subsetSelector = segments[1];
+        }
+        else {
+            this.uriWithoutSubsetSelector = uri;
+        }
+    }
+}
+exports.MediaUriWithSubsetSelector = MediaUriWithSubsetSelector;
 /**
  * Sleep some time
  *

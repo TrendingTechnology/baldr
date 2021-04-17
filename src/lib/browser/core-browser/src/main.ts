@@ -36,6 +36,40 @@ export function getExtension (filePath: string): string | undefined {
 export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))')
 
 /**
+ * A media URI with an optional subset selector.
+ */
+export class MediaUriWithSubsetSelector {
+  /**
+   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+   */
+  public uri: string
+
+  /**
+   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `id:Beethoven_Ludwig-van`
+   */
+  public uriWithoutSubsetSelector: string
+
+  /**
+   * `2-3` or `-4`
+   */
+  public subsetSelector?: string
+
+  /**
+   * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+   */
+  constructor (uri: string) {
+    this.uri = uri
+    const segments = uri.split('#')
+    if (segments.length === 2) {
+      this.uriWithoutSubsetSelector = segments[0]
+      this.subsetSelector = segments[1]
+    } else {
+      this.uriWithoutSubsetSelector = uri
+    }
+  }
+}
+
+/**
  * Sleep some time
  *
  * @see {@link https://github.com/erikdubbelboer/node-sleep}

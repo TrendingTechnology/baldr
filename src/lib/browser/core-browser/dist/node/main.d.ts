@@ -25,6 +25,27 @@ export declare function getExtension(filePath: string): string | undefined;
  */
 export declare const mediaUriRegExp: RegExp;
 /**
+ * A media URI with an optional subset selector.
+ */
+export declare class MediaUriWithSubsetSelector {
+    /**
+     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+     */
+    uri: string;
+    /**
+     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `id:Beethoven_Ludwig-van`
+     */
+    uriWithoutSubsetSelector: string;
+    /**
+     * `2-3` or `-4`
+     */
+    subsetSelector?: string;
+    /**
+     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+     */
+    constructor(uri: string);
+}
+/**
  * Sleep some time
  *
  * @see {@link https://github.com/erikdubbelboer/node-sleep}
