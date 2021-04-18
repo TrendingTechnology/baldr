@@ -33,6 +33,10 @@ export function getExtension(filePath) {
 export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
 /**
  * A media URI with an optional fragment (subset selector).
+ *
+ * Possible URIs are for example:
+ * `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 export class MediaUri {
     /**
@@ -41,8 +45,9 @@ export class MediaUri {
     constructor(uri) {
         this.uri = uri;
         const matches = MediaUri.regExp.exec(uri);
-        if (matches == null || matches.groups == null)
+        if (matches == null || matches.groups == null) {
             throw new Error(`The media URI is not valid: ${uri}`);
+        }
         const groups = matches.groups;
         this.scheme = groups.scheme;
         this.authority = groups.authority;

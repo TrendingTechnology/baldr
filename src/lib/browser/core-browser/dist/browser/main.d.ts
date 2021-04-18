@@ -26,14 +26,18 @@ export declare function getExtension(filePath: string): string | undefined;
 export declare const mediaUriRegExp: RegExp;
 /**
  * A media URI with an optional fragment (subset selector).
+ *
+ * Possible URIs are for example:
+ * `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 export declare class MediaUri {
-    private static schemes;
-    private static regExpAuthority;
+    private static readonly schemes;
+    private static readonly regExpAuthority;
     /**
      * `#Sample1` or `#1,2,3` or `#-4`
      */
-    private static regExpFragment;
+    private static readonly regExpFragment;
     static regExp: RegExp;
     /**
      * The full URI (Uniform Resource Identifier), for example

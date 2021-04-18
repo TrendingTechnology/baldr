@@ -21,7 +21,7 @@
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
     "lint": "ts-standard --fix src/*.ts",
-    "test": "npm run build; mocha tests/*"
+    "test": "npm run build && npm run lint && mocha tests/*"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
