@@ -1,6 +1,6 @@
 import vue from '@/main.js'
 
-import { mediaUriRegExp } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/core-browser'
 
 /**
  * Unfortunatley it is not possible to write a Vue js component tag inline
@@ -33,7 +33,7 @@ import { mediaUriRegExp } from '@bldr/core-browser'
  * @module @bldr/lamp/inline-markup
  */
 
-const mediaUri = mediaUriRegExp.source
+const mediaUri = MediaUri.regExp.source
 // const mediaUri = '(([a-z]+):([a-zA-Z0-9-_]+))'
 export const regExp = '\\[' + mediaUri + ' ?([^\\]]*)?' + '\\]'
 

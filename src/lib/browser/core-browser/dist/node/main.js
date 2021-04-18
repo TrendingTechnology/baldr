@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.MediaUri = exports.mediaUriRegExp = exports.getExtension = void 0;
+exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.MediaUri = exports.getExtension = void 0;
 __exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -38,13 +38,6 @@ function getExtension(filePath) {
     }
 }
 exports.getExtension = getExtension;
-/**
- * Regular expression to detect media URIs.
- *
- * Possible URIs are: `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
- * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
- */
-exports.mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
 /**
  * A media URI with an optional fragment (subset selector).
  *

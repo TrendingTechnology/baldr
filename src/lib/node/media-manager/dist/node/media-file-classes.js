@@ -42,7 +42,7 @@ class Asset extends MediaFile {
     constructor(filePath) {
         super(filePath);
         const data = main_1.readAssetYaml(this.absPath);
-        if (data) {
+        if (data != null) {
             this.metaData = data;
         }
     }
@@ -50,7 +50,7 @@ class Asset extends MediaFile {
      * The id of the media asset. Read from the metadata file.
      */
     get id() {
-        if (this.metaData && this.metaData.id) {
+        if ((this.metaData != null) && this.metaData.id) {
             return this.metaData.id;
         }
     }
@@ -79,8 +79,9 @@ exports.mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(confi
  */
 function filePathToAssetType(filePath) {
     const asset = makeAsset(filePath);
-    if (asset.extension)
+    if (asset.extension) {
         return exports.mediaCategoriesManager.extensionToType(asset.extension);
+    }
 }
 exports.filePathToAssetType = filePathToAssetType;
 /**
@@ -89,13 +90,13 @@ exports.filePathToAssetType = filePathToAssetType;
  * @param filePath - The path of the file to check.
  */
 function isAsset(filePath) {
-    if (filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
-        filePath.indexOf('_preview.jpg') > -1 || // Preview image
-        filePath.match(/_no\d+\./) // Multipart asset
+    if (filePath.includes('eps-converted-to.pdf') || // eps converted into pdf by TeX
+        filePath.includes('_preview.jpg') || // Preview image
+        (filePath.match(/_no\d+\./) != null) // Multipart asset
     ) {
         return false;
     }
-    if (filePath.match(new RegExp('^.*/TX/.*.pdf$')))
+    if (filePath.match(new RegExp('^.*/TX/.*.pdf$')) != null)
         return true;
     return exports.mediaCategoriesManager.isAsset(filePath);
 }
@@ -106,7 +107,7 @@ exports.isAsset = isAsset;
  * @param filePath - The path of the file to check.
  */
 function isPresentation(filePath) {
-    if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
+    if (filePath.includes('Praesentation.baldr.yml')) {
         return true;
     }
     return false;

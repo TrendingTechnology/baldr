@@ -59,13 +59,13 @@ class LocationIndicator {
         do {
             let isPrefixed;
             match = currentPath.match(regexp);
-            if (match && match.length > 1) {
+            if ((match != null) && match.length > 1) {
                 // Return only directories not files like
                 // ...HB/Orchester/05_Promenade.mp3
                 if (
                 // 20_Swing -> true
                 // Material -> false
-                match[1].match(/\d\d_.*/g) &&
+                (match[1].match(/\d\d_.*/g) != null) &&
                     fs_1.default.statSync(currentPath).isDirectory()) {
                     isPrefixed = true;
                 }
@@ -116,7 +116,7 @@ class LocationIndicator {
             return true;
         const segments = relPath.split(path_1.default.sep);
         for (const segment of segments) {
-            if (!segment.match(/^\d\d/)) {
+            if (segment.match(/^\d\d/) == null) {
                 return true;
             }
         }

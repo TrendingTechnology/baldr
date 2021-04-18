@@ -22,7 +22,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 // Project packages.
 import { getPdfPageCount } from '@bldr/core-node'
-import { mediaUriRegExp } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/core-browser'
 import { MetaSpec } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
@@ -40,7 +40,7 @@ function validateDate (value: string): boolean {
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId (value: string): boolean {
-  return (value.match(mediaUriRegExp) != null)
+  return (value.match(MediaUri.regExp) != null)
 }
 
 /**

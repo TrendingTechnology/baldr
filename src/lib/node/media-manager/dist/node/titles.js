@@ -15,7 +15,7 @@ const path_1 = __importDefault(require("path"));
  */
 class FolderTitle {
     /**
-     * @param {Object} data - Some meta data about the folder.
+     * @param data - Some meta data about the folder.
      */
     constructor({ title, subtitle, folderName, path, hasPraesentation, level }) {
         this.title = title;
@@ -23,7 +23,7 @@ class FolderTitle {
             this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
-        this.hasPraesentation = !!hasPraesentation;
+        this.hasPraesentation = (hasPraesentation != null && hasPraesentation);
         this.level = level;
     }
 }
@@ -60,7 +60,7 @@ class DeepTitle {
         if (titles.length > 0) {
             folderTitle.title = titles[0];
         }
-        if (titles.length > 1 && titles[1]) {
+        if (titles.length > 1 && titles[1] != null) {
             folderTitle.subtitle = titles[1];
         }
         if (fs_1.default.existsSync(path_1.default.join(path_1.default.dirname(filePath), 'Praesentation.baldr.yml'))) {
@@ -204,7 +204,7 @@ class DeepTitle {
      * same folder as the constructor `filePath` file.
      */
     get subtitle() {
-        if (this.lastFolderTitleObject.subtitle) {
+        if (this.lastFolderTitleObject.subtitle != null) {
             return this.lastFolderTitleObject.subtitle;
         }
     }
@@ -212,7 +212,7 @@ class DeepTitle {
      * Combine the title and the subtitle (`Title - Subtitle`).
      */
     get titleAndSubtitle() {
-        if (this.subtitle)
+        if (this.subtitle != null)
             return `${this.title} - ${this.subtitle}`;
         return this.title;
     }
@@ -253,7 +253,7 @@ class DeepTitle {
             grade: this.grade,
             curriculum: this.curriculum
         };
-        if (!result.subtitle)
+        if (result.subtitle == null)
             delete result.subtitle;
         return result;
     }
@@ -293,7 +293,7 @@ exports.DeepTitle = DeepTitle;
 class TitleTree {
     constructor(deepTitle, folderName) {
         this.subTree = {};
-        if (folderName) {
+        if (folderName != null) {
             this.title = deepTitle.getFolderTitleByFolderName(folderName);
         }
     }
@@ -304,9 +304,9 @@ class TitleTree {
      */
     add(deepTitle) {
         const folderName = deepTitle.shiftFolderName();
-        if (!folderName)
+        if (folderName == null)
             return;
-        if (!this.subTree[folderName]) {
+        if (this.subTree[folderName] == null) {
             this.subTree[folderName] = new TitleTree(deepTitle, folderName);
         }
         else {

@@ -26,7 +26,7 @@ const abbreviations = {
     YT: 'YouTube-Video'
 };
 function isValidTwoLetterAbbreviation(abbreviation) {
-    return !!abbreviations[abbreviation];
+    return abbreviations[abbreviation] != null;
 }
 exports.isValidTwoLetterAbbreviation = isValidTwoLetterAbbreviation;
 function getTwoLetterAbbreviations() {
@@ -46,7 +46,7 @@ function checkForTwoLetterDir(filePath) {
     // HB
     const twoLetterDir = pathSegments[pathSegments.length - 2];
     // Match asset type abbreviations, like AB, HB, NB
-    if (twoLetterDir && twoLetterDir.length == 2 && twoLetterDir.match(/[A-Z]{2,}/)) {
+    if (twoLetterDir != null && twoLetterDir.length === 2 && (twoLetterDir.match(/[A-Z]{2,}/) != null)) {
         return isValidTwoLetterAbbreviation(twoLetterDir);
     }
     return false;
@@ -55,7 +55,7 @@ exports.checkForTwoLetterDir = checkForTwoLetterDir;
 function checkTypeAbbreviations(typeSpecs) {
     for (const typeName in typeSpecs) {
         const typeSpec = typeSpecs[typeName];
-        if (typeSpec.abbreviation && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
+        if (typeSpec.abbreviation != null && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
             throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`);
         }
     }

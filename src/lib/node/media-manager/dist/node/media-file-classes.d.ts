@@ -24,7 +24,7 @@ declare class MediaFile {
  * A media asset.
  */
 export declare class Asset extends MediaFile {
-    private metaData;
+    private readonly metaData;
     /**
      * @param filePath - The file path of the media asset.
      */

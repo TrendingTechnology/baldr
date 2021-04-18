@@ -56,7 +56,7 @@ function walk(func, opt) {
         }
         // A directory.
         if (fs_1.default.statSync(opt.path).isDirectory()) {
-            if (typeof func !== 'function' && func.directory) {
+            if (typeof func !== 'function' && (func.directory != null)) {
                 yield func.directory(opt.path, opt.payload);
             }
             if (fs_1.default.existsSync(opt.path)) {
@@ -82,7 +82,7 @@ function walk(func, opt) {
                 if (typeof opt.regex === 'string') {
                     opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i'); // eslint-disable-line
                 }
-                if (!opt.path.match(opt.regex)) {
+                if (opt.path.match(opt.regex) == null) {
                     return;
                 }
             }
@@ -90,18 +90,18 @@ function walk(func, opt) {
                 yield func(opt.path, opt.payload);
                 return;
             }
-            if (func.everyFile) {
+            if (func.everyFile != null) {
                 yield func.everyFile(opt.path, opt.payload);
             }
             const isPres = media_file_classes_1.isPresentation(opt.path);
             const isAss = media_file_classes_1.isAsset(opt.path);
-            if ((isPres || isAss) && func.all) {
+            if ((isPres || isAss) && (func.all != null)) {
                 yield func.all(opt.path, opt.payload);
             }
-            if (isPres && func.presentation) {
+            if (isPres && (func.presentation != null)) {
                 yield func.presentation(opt.path, opt.payload);
             }
-            else if (isAss && func.asset) {
+            else if (isAss && (func.asset != null)) {
                 yield func.asset(opt.path, opt.payload);
             }
         }

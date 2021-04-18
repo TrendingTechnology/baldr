@@ -33,7 +33,7 @@ declare class FolderTitle {
      */
     level: number;
     /**
-     * @param {Object} data - Some meta data about the folder.
+     * @param data - Some meta data about the folder.
      */
     constructor({ title, subtitle, folderName, path, hasPraesentation, level }: StringIndexedObject);
 }

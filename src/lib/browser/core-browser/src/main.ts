@@ -28,14 +28,6 @@ export function getExtension (filePath: string): string | undefined {
 }
 
 /**
- * Regular expression to detect media URIs.
- *
- * Possible URIs are: `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
- * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
- */
-export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))')
-
-/**
  * A media URI with an optional fragment (subset selector).
  *
  * Possible URIs are for example:

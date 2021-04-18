@@ -32,26 +32,26 @@ const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
  * Validate a date string in the format `yyyy-mm-dd`.
  */
 function validateDate(value) {
-    return value.match(/\d{4,}-\d{2,}-\d{2,}/) ? true : false;
+    return (value.match(/\d{4,}-\d{2,}-\d{2,}/) != null);
 }
 /**
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId(value) {
-    return value.match(core_browser_1.mediaUriRegExp) ? true : false;
+    return (value.match(core_browser_1.MediaUri.regExp) != null);
 }
 /**
  * Validate UUID string (for the Musicbrainz references).
  */
 function validateUuid(value) {
-    return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) ? true : false;
+    return (value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) != null);
 }
 /**
  * Validate a YouTube ID.
  */
 function validateYoutubeId(value) {
     // https://webapps.stackexchange.com/a/101153
-    return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) ? true : false;
+    return (value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) != null);
 }
 /**
  * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
@@ -68,7 +68,7 @@ function generateIdPrefix(filePath) {
     // HB
     const parentDir = pathSegments[pathSegments.length - 2];
     // Match asset type abbreviations, like AB, HB, NB
-    if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
+    if (parentDir.length !== 2 || (parentDir.match(/[A-Z]{2,}/) == null)) {
         return '';
     }
     const assetTypeAbbreviation = parentDir;
@@ -644,7 +644,7 @@ const reference = {
             derive: function ({ typeData, folderTitles, filePath }) {
                 let suffix = '';
                 if (typeData.forTeacher) {
-                    suffix = ` (Lehrerband)`;
+                    suffix = ' (Lehrerband)';
                 }
                 return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
             },
@@ -723,7 +723,7 @@ const song = {
                 // Veröffentlichungsdatum
                 fromClaim: 'P577',
                 format: 'formatDate'
-            },
+            }
         },
         language: {
             title: 'Sprache',
@@ -770,11 +770,11 @@ const worksheet = {
     },
     props: {
         title: {
-            title: "Titel",
+            title: 'Titel',
             derive: function ({ folderTitles, filePath }) {
                 const match = filePath.match(new RegExp(`${path_1.default.sep}([^${path_1.default.sep}]+)\\.pdf`));
                 let baseName = 'Arbeitsblatt';
-                if (match) {
+                if (match != null) {
                     baseName = match[1];
                 }
                 return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`;
@@ -900,7 +900,7 @@ const general = {
             title: 'Metadaten-Typen',
             description: 'Zum Beispiel: “person” oder “composition,recording”',
             validate: function (value) {
-                return String(value).match(/^[a-zA-Z,]+$/) ? true : false;
+                return (String(value).match(/^[a-zA-Z,]+$/) != null);
             },
             format: function (value) {
                 return value.replace(/,?general,?/, '');
@@ -928,7 +928,7 @@ const general = {
         wikidata: {
             title: 'Wikidata',
             validate: function (value) {
-                return String(value).match(/^Q\d+$/) ? true : false;
+                return (String(value).match(/^Q\d+$/) != null);
             }
         },
         wikipedia: {

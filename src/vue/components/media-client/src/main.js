@@ -31,7 +31,7 @@ import {
   MediaCategoriesManager,
   convertDurationToSeconds,
   formatMultiPartAssetFileName,
-  mediaUriRegExp,
+  MediaUri,
   convertHtmlToPlainText,
   selectSubset
 } from '@bldr/core-browser'
@@ -98,7 +98,7 @@ function extractMediaUrisRecursive (object, urisStore) {
    * @returns {Boolean}
    */
   function isMediaUri (uri) {
-    if (uri && typeof uri === 'string' && uri.match(mediaUriRegExp)) {
+    if (uri && typeof uri === 'string' && uri.match(MediaUri.regExp)) {
       return true
     }
     return false
@@ -1114,9 +1114,9 @@ class WrappedSample {
      */
     this.uri = null
     if (typeof spec === 'string') {
-      if (spec.match(mediaUriRegExp)) {
-        this.uri = spec.match(mediaUriRegExp)[0]
-        let title = spec.replace(mediaUriRegExp, '')
+      if (spec.match(MediaUri.regExp)) {
+        this.uri = spec.match(MediaUri.regExp)[0]
+        let title = spec.replace(MediaUri.regExp, '')
         if (title) {
           title = title.trim()
           this.title_ = title
@@ -1917,7 +1917,7 @@ class Resolver {
       if (storedAsset) {
         return storedAsset
       }
-      if (assetSpec.match(mediaUriRegExp)) {
+      if (assetSpec.match(MediaUri.regExp)) {
         const uri = assetSpec.split(':')
         const response = await this.queryMediaServer_(uri[0], uri[1], throwException)
         if (response) asset = this.createAssetFromRestData_(assetSpec, response.data)
