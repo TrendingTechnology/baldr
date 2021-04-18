@@ -7,7 +7,7 @@
 import steps from '@/steps.js'
 import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
-import { MediaUriWithSubsetSelector } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/core-browser'
 
 /**
  * @param {HTMLElement} componentElement - The parent component element.
@@ -83,10 +83,10 @@ export default {
       if (typeof props === 'string') {
         props = { src: props }
       }
-      const uri = new MediaUriWithSubsetSelector(props.src)
-      if (uri.subsetSelector != null) {
-        if (props.stepSubset == null) props.stepSubset = uri.subsetSelector
-        props.src = uri.uriWithoutSubsetSelector
+      const uri = new MediaUri(props.src)
+      if (uri.fragment != null) {
+        if (props.stepSubset == null) props.stepSubset = uri.fragment
+        props.src = uri.uriWithoutFragment
       }
       return props
     },

@@ -25,21 +25,37 @@ export declare function getExtension(filePath: string): string | undefined;
  */
 export declare const mediaUriRegExp: RegExp;
 /**
- * A media URI with an optional subset selector.
+ * A media URI with an optional fragment (subset selector).
  */
-export declare class MediaUriWithSubsetSelector {
+export declare class MediaUri {
+    private static schemes;
+    private static regExpAuthority;
     /**
-     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+     * `#Sample1` or `#1,2,3` or `#-4`
+     */
+    private static regExpFragment;
+    static regExp: RegExp;
+    /**
+     * The full URI (Uniform Resource Identifier), for example
+     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`.
      */
     uri: string;
     /**
+     * `id` or `uuid`
+     */
+    scheme: string;
+    /**
+     * `c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `Beethoven_Ludwig-van`.
+     */
+    authority: string;
+    /**
      * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `id:Beethoven_Ludwig-van`
      */
-    uriWithoutSubsetSelector: string;
+    uriWithoutFragment: string;
     /**
      * `2-3` or `-4`
      */
-    subsetSelector?: string;
+    fragment?: string;
     /**
      * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
      */
