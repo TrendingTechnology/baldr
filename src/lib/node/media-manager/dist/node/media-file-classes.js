@@ -96,7 +96,8 @@ function isAsset(filePath) {
     ) {
         return false;
     }
-    if (filePath.match(new RegExp('^.*/TX/.*.pdf$')) != null)
+    // see .gitignore of media folder
+    if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null)
         return true;
     return exports.mediaCategoriesManager.isAsset(filePath);
 }

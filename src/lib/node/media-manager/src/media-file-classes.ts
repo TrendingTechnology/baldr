@@ -104,7 +104,8 @@ export function isAsset (filePath: string): boolean {
   ) {
     return false
   }
-  if (filePath.match(new RegExp('^.*/TX/.*.pdf$')) != null) return true
+  // see .gitignore of media folder
+  if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) return true
   return mediaCategoriesManager.isAsset(filePath)
 }
 
