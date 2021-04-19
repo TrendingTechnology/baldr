@@ -67,10 +67,17 @@ class LocationIndicator {
     // /Material
     const regexp = new RegExp(path.sep + '([^' + path.sep + ']+)$')
     let match
+    let isPrefixed: boolean = false
     do {
-      let isPrefixed: boolean = false
       match = currentPath.match(regexp)
-      if ((match != null) && match.length > 1) {
+      // [
+      //   '/54_Reggae',
+      //   '54_Reggae',
+      //   index: 55,
+      //   input: '/home/jf/schule-media/08/20_Mensch-Zeit/20_Popularmusik/54_Reggae',
+      //   groups: undefined
+      // ]
+      if (match != null && match.length > 1) {
         // Return only directories not files like
         // ...HB/Orchester/05_Promenade.mp3
         if (
@@ -85,10 +92,7 @@ class LocationIndicator {
           currentPath = currentPath.replace(regexp, '')
         }
       }
-      if (isPrefixed) {
-        match = false
-      }
-    } while (match != null)
+    } while (!isPrefixed)
 
     return currentPath
   }

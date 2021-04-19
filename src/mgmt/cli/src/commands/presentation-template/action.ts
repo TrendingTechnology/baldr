@@ -2,11 +2,9 @@
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import { locationIndicator, operations } from '@bldr/media-manager'
+import * as log from '@bldr/log'
 
 /**
  * @param filePath - A file path.
@@ -25,12 +23,11 @@ async function action (filePath?: string, cmdObj?: { [key: string]: any }) {
   filePath = locationIndicator.getPresParentDir(filePath)
 
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
-  console.log(filePath)
   if (!fs.existsSync(filePath) || (cmdObj && cmdObj.force)) {
-    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+    log.info('Presentation template created at: %s', filePath)
   } else {
     filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml')
-    console.log(`Presentation already exists, create tmp file: ${chalk.red(filePath)}`)
+    log.info('Presentation already exists, create tmp file: %s', log.colorize.red(filePath))
   }
 
   await operations.generatePresentation(filePath)

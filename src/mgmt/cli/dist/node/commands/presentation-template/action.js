@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,10 +34,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const log = __importStar(require("@bldr/log"));
 /**
  * @param filePath - A file path.
  * @param cmdObj - An object containing options as key-value pairs.
@@ -36,14 +54,14 @@ function action(filePath, cmdObj) {
             }
         }
         filePath = media_manager_1.locationIndicator.getPresParentDir(filePath);
+        console.log('lol');
         filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
-        console.log(filePath);
         if (!fs_1.default.existsSync(filePath) || (cmdObj && cmdObj.force)) {
-            console.log(`Presentation template created at: ${chalk_1.default.green(filePath)}`);
+            log.info('Presentation template created at: %s', filePath);
         }
         else {
             filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml');
-            console.log(`Presentation already exists, create tmp file: ${chalk_1.default.red(filePath)}`);
+            log.info('Presentation already exists, create tmp file: %s', log.colorize.red(filePath));
         }
         yield media_manager_1.operations.generatePresentation(filePath);
     });
