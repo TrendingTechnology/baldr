@@ -77,18 +77,18 @@ interface WalkOption {
  *
  * @param func - A single function or an object containing functions.
  */
-export async function walk (func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
+export async function walk (func: WalkFunc | WalkFuncBundle, opt?: WalkOption): Promise<void> {
   // Some checks to exit early.
-  if (!func) {
+  if (func == null) {
     throw new Error('Missing property: `func`.')
   }
-  if (typeof opt !== 'object') opt = <WalkOption> {}
-  if (typeof func === 'object' && opt.regex) {
+  if (typeof opt !== 'object') opt = {}
+  if (typeof func === 'object' && opt.regex != null) {
     throw new Error('Use a single function and a regex or an object containing functions without a regex.')
   }
 
   // commander [filepath...] -> without arguments is an empty array.
-  if (!opt.path || (Array.isArray(opt.path) && opt.path.length === 0)) {
+  if (opt.path == null || (Array.isArray(opt.path) && opt.path.length === 0)) {
     opt.path = process.cwd()
   }
 
@@ -126,7 +126,7 @@ export async function walk (func: WalkFunc | WalkFuncBundle, opt?: WalkOption) {
     // Exclude hidden files and directories like '.git'
     if (path.basename(opt.path).charAt(0) === '.') return
     if (!fs.existsSync(opt.path)) return
-    if (opt.regex) {
+    if (opt.regex != null) {
       // If regex is a string it is treated as an extension.
       if (typeof opt.regex === 'string') {
         opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i') // eslint-disable-line

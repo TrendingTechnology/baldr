@@ -68,7 +68,7 @@ class LocationIndicator {
     const regexp = new RegExp(path.sep + '([^' + path.sep + ']+)$')
     let match
     do {
-      let isPrefixed
+      let isPrefixed: boolean = false
       match = currentPath.match(regexp)
       if ((match != null) && match.length > 1) {
         // Return only directories not files like
@@ -88,7 +88,7 @@ class LocationIndicator {
       if (isPrefixed) {
         match = false
       }
-    } while (match)
+    } while (match != null)
 
     return currentPath
   }
@@ -127,7 +127,7 @@ class LocationIndicator {
   isInDeactivatedDir (currentPath: string): boolean {
     currentPath = path.dirname(currentPath)
     const relPath = this.getRelPath(currentPath)
-    if (!relPath) return true
+    if (relPath == null) return true
     const segments = relPath.split(path.sep)
     for (const segment of segments) {
       if (segment.match(/^\d\d/) == null) {

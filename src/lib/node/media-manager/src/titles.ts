@@ -49,7 +49,7 @@ class FolderTitle {
    */
   constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: StringIndexedObject) {
     this.title = title
-    if (subtitle) this.subtitle = subtitle
+    if (subtitle != null) this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
     this.hasPraesentation = (hasPraesentation != null && hasPraesentation)

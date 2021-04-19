@@ -62,12 +62,12 @@ __exportStar(require("./yaml"), exports);
  */
 function moveAsset(oldPath, newPath, opts = {}) {
     function move(oldPath, newPath, { copy, dryRun }) {
-        if (copy) {
-            if (!dryRun)
+        if (copy != null && copy) {
+            if (!(dryRun != null && dryRun))
                 fs_1.default.copyFileSync(oldPath, newPath);
         }
         else {
-            if (!dryRun) {
+            if (!(dryRun != null && dryRun)) {
                 //  Error: EXDEV: cross-device link not permitted,
                 try {
                     fs_1.default.renameSync(oldPath, newPath);
@@ -88,8 +88,8 @@ function moveAsset(oldPath, newPath, opts = {}) {
             move(oldPath, newPath, opts);
         }
     }
-    if (newPath && oldPath !== newPath) {
-        if (!opts.dryRun)
+    if (newPath != null && oldPath !== newPath) {
+        if (!(opts.dryRun != null && opts.dryRun))
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
         const extension = core_browser_1.getExtension(oldPath);
         if (extension === 'eps') {

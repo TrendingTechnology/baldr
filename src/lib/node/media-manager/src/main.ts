@@ -57,12 +57,12 @@ interface MoveAssetConfiguration {
  * @param newPath - The new path of a media asset.
  * @param opts - Some options
  */
-export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration = <MoveAssetConfiguration> {}) {
-  function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration) {
-    if (copy) {
-      if (!dryRun) fs.copyFileSync(oldPath, newPath)
+export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration = {}): string | undefined {
+  function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration): void {
+    if (copy != null && copy) {
+      if (!(dryRun != null && dryRun)) fs.copyFileSync(oldPath, newPath)
     } else {
-      if (!dryRun) {
+      if (!(dryRun != null && dryRun)) {
         //  Error: EXDEV: cross-device link not permitted,
         try {
           fs.renameSync(oldPath, newPath)
@@ -76,7 +76,7 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
     }
   }
 
-  function moveCorrespondingFile (oldPath: string, newPath: string, search: RegExp, replace: string, opts: MoveAssetConfiguration) {
+  function moveCorrespondingFile (oldPath: string, newPath: string, search: RegExp, replace: string, opts: MoveAssetConfiguration): void {
     oldPath = oldPath.replace(search, replace)
     if (fs.existsSync(oldPath)) {
       newPath = newPath.replace(search, replace)
@@ -84,8 +84,8 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
     }
   }
 
-  if (newPath && oldPath !== newPath) {
-    if (!opts.dryRun) fs.mkdirSync(path.dirname(newPath), { recursive: true })
+  if (newPath != null && oldPath !== newPath) {
+    if (!(opts.dryRun != null && opts.dryRun)) fs.mkdirSync(path.dirname(newPath), { recursive: true })
 
     const extension = getExtension(oldPath)
     if (extension === 'eps') {

@@ -57,7 +57,7 @@ class LocationIndicator {
         const regexp = new RegExp(path_1.default.sep + '([^' + path_1.default.sep + ']+)$');
         let match;
         do {
-            let isPrefixed;
+            let isPrefixed = false;
             match = currentPath.match(regexp);
             if ((match != null) && match.length > 1) {
                 // Return only directories not files like
@@ -76,7 +76,7 @@ class LocationIndicator {
             if (isPrefixed) {
                 match = false;
             }
-        } while (match);
+        } while (match != null);
         return currentPath;
     }
     /**
@@ -112,7 +112,7 @@ class LocationIndicator {
     isInDeactivatedDir(currentPath) {
         currentPath = path_1.default.dirname(currentPath);
         const relPath = this.getRelPath(currentPath);
-        if (!relPath)
+        if (relPath == null)
             return true;
         const segments = relPath.split(path_1.default.sep);
         for (const segment of segments) {

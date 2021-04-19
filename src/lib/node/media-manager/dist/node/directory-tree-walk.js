@@ -31,16 +31,16 @@ const media_file_classes_1 = require("./media-file-classes");
 function walk(func, opt) {
     return __awaiter(this, void 0, void 0, function* () {
         // Some checks to exit early.
-        if (!func) {
+        if (func == null) {
             throw new Error('Missing property: `func`.');
         }
         if (typeof opt !== 'object')
             opt = {};
-        if (typeof func === 'object' && opt.regex) {
+        if (typeof func === 'object' && opt.regex != null) {
             throw new Error('Use a single function and a regex or an object containing functions without a regex.');
         }
         // commander [filepath...] -> without arguments is an empty array.
-        if (!opt.path || (Array.isArray(opt.path) && opt.path.length === 0)) {
+        if (opt.path == null || (Array.isArray(opt.path) && opt.path.length === 0)) {
             opt.path = process.cwd();
         }
         // A list of file paths.
@@ -77,7 +77,7 @@ function walk(func, opt) {
                 return;
             if (!fs_1.default.existsSync(opt.path))
                 return;
-            if (opt.regex) {
+            if (opt.regex != null) {
                 // If regex is a string it is treated as an extension.
                 if (typeof opt.regex === 'string') {
                     opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i'); // eslint-disable-line

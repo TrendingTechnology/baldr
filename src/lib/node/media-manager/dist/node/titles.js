@@ -19,7 +19,7 @@ class FolderTitle {
      */
     constructor({ title, subtitle, folderName, path, hasPraesentation, level }) {
         this.title = title;
-        if (subtitle)
+        if (subtitle != null)
             this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
