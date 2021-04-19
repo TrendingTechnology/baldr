@@ -1,33 +1,32 @@
-import assert from 'assert'
+const assert = require('assert')
 
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+const { convertMarkdownToHtml } = require('../dist/node/main.js')
 
-function assertEqual (actual: any, expected: any) {
+function assertEqual (actual, expected) {
   assert.deepStrictEqual(convertMarkdownToHtml(actual), expected)
 }
 
 describe('Package “@bldr/markdown-to-html”', function () {
-  it('arrows', async function () {
+  it('arrows', function () {
     assertEqual('test -> test', 'test → test')
   })
 
-  it('inline HTML', async function () {
+  it('inline HTML', function () {
     assertEqual('test <strong>strong</strong> test', 'test <strong>strong</strong> test')
   })
 
-  it('Paragraph', async function () {
+  it('Paragraph', function () {
     assertEqual('test\n\ntest', '<p>test</p>\n<p>test</p>\n')
   })
 
-  it('Array', async function () {
+  it('Array', function () {
     assertEqual(['test *emph* test', 'test'], ['test <em>emph</em> test', 'test'])
   })
 
-  it('Object', async function () {
+  it('Object', function () {
     assertEqual(
       { one: '__one__', two: '__two__' },
       { one: '<strong>one</strong>', two: '<strong>two</strong>' }
     )
   })
-
 })

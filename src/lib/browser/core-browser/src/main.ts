@@ -131,9 +131,6 @@ interface SelectionSubsetOption {
    */
   elementsCount?: number
 
-  /**
-   *
-   */
   firstElementNo?: number
 
   /**

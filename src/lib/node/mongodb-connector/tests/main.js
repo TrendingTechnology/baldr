@@ -1,6 +1,7 @@
-import { connectDb } from '@bldr/mongodb-connector'
+const assert = require('assert')
+const { Db } = require('mongodb')
 
-import assert from 'assert'
+const { connectDb } = require('../dist/node/main.js')
 
 describe('Package “@bldr/mongodb-connector”', function () {
   it('function connectDb()', async function () {
