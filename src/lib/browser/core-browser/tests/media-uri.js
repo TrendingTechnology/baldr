@@ -2,7 +2,7 @@ const assert = require('assert')
 
 const { MediaUri } = require('../dist/node/main.js')
 
-describe('Class MediaUri', function () {
+describe('Class “MediaUri”', function () {
   it('new MediaUri(\'id:Beethoven_Ludwig-van#-4\')', function () {
     const uri = new MediaUri('id:Beethoven_Ludwig-van#-4')
     assert.strictEqual(uri.uri, 'id:Beethoven_Ludwig-van#-4')

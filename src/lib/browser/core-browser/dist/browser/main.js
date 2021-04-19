@@ -116,7 +116,7 @@ export function selectSubset(subsetSelector, { sort, elements, elementsCount, fi
     }
     if (elements == null)
         elements = [];
-    if (subsetSelector == null)
+    if (subsetSelector == null || subsetSelector === '')
         return elements;
     // 1, 3, 5 -> 1,3,5
     subsetSelector = subsetSelector.replace(/\s*/g, '');
