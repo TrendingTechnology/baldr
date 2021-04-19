@@ -68,11 +68,11 @@ exports.writeYamlFile = writeYamlFile;
  * @param force - Always create the yaml file. Overwrite the old one.
  */
 function writeMetaDataYaml(filePath, metaData, force) {
-    var _a;
     if (fs_1.default.lstatSync(filePath).isDirectory())
         return;
     const yamlFile = `${helper_1.asciify(filePath)}.yml`;
-    if ((_a = (force != null && force)) !== null && _a !== void 0 ? _a : !fs_1.default.existsSync(yamlFile)) {
+    if ((force != null && force) ||
+        !fs_1.default.existsSync(yamlFile)) {
         if (metaData == null)
             metaData = {};
         const asset = new media_file_classes_1.Asset(filePath);
