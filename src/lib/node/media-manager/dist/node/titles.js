@@ -253,7 +253,7 @@ class DeepTitle {
             grade: this.grade,
             curriculum: this.curriculum
         };
-        if (result.subtitle == null)
+        if (result.subtitle == null || result.subtitle === '')
             delete result.subtitle;
         return result;
     }

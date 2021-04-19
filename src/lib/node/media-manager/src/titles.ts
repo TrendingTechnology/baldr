@@ -312,7 +312,7 @@ export class DeepTitle {
       grade: this.grade,
       curriculum: this.curriculum
     }
-    if (result.subtitle == null) delete result.subtitle
+    if (result.subtitle == null || result.subtitle === '') delete result.subtitle
     return result
   }
 }
