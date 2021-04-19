@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.error = exports.warn = exports.info = exports.debug = exports.trace = exports.format = exports.formatWithoutColor = exports.colorize = void 0;
+exports.setLogLevel = exports.errorLog = exports.error = exports.warnLog = exports.warn = exports.infoLog = exports.info = exports.debugLog = exports.debug = exports.traceLog = exports.trace = exports.format = exports.formatWithoutColor = exports.colorize = void 0;
 const fast_printf_1 = require("fast-printf");
 const logging = require("loglevel");
 const color = require("./color");
@@ -25,26 +25,47 @@ function format(template, ...args) {
 }
 exports.format = format;
 /**
- * Log on level 5.
+ * Log with a format string on level 5.
  */
 function trace(template, ...args) {
     logging.trace(format(template, ...args));
 }
 exports.trace = trace;
 /**
- * Log on level 4.
+ * A wrapper around `logging.trace()`.
+ */
+function traceLog(...msg) {
+    logging.trace(...msg);
+}
+exports.traceLog = traceLog;
+/**
+ * Log with a format string on level 4.
  */
 function debug(template, ...args) {
     logging.debug(format(template, ...args));
 }
 exports.debug = debug;
 /**
- * Log on level 3.
+ * A wrapper around `logging.debug()`.
+ */
+function debugLog(...msg) {
+    logging.debug(...msg);
+}
+exports.debugLog = debugLog;
+/**
+ * Log with a format string on level 3.
  */
 function info(template, ...args) {
     logging.info(format(template, ...args));
 }
 exports.info = info;
+/**
+ * A wrapper around `logging.info()`.
+ */
+function infoLog(...msg) {
+    logging.info(...msg);
+}
+exports.infoLog = infoLog;
 /**
  * Log on level 2.
  */
@@ -53,12 +74,26 @@ function warn(template, ...args) {
 }
 exports.warn = warn;
 /**
+ * A wrapper around `logging.warn()`.
+ */
+function warnLog(...msg) {
+    logging.warn(...msg);
+}
+exports.warnLog = warnLog;
+/**
  * Log on level 1.
  */
 function error(template, ...args) {
     logging.error(format(template, ...args));
 }
 exports.error = error;
+/**
+ * A wrapper around `logging.error()`.
+ */
+function errorLog(...msg) {
+    logging.error(...msg);
+}
+exports.errorLog = errorLog;
 /**
  * Set the log level.
  *

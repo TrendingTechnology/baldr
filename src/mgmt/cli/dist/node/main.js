@@ -20,6 +20,8 @@ const path_1 = __importDefault(require("path"));
 const commander_1 = require("commander");
 // Project packages.
 const core_node_1 = require("@bldr/core-node");
+const log_1 = require("@bldr/log");
+log_1.setLogLevel(3);
 // Globals.
 const commandsPath = path_1.default.join(__dirname, 'commands');
 /**

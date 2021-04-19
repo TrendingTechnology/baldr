@@ -35,25 +35,45 @@ declare type FormatString = string | number;
 export declare function formatWithoutColor(template: FormatString, ...args: any[]): string;
 export declare function format(template: FormatString, ...args: any[]): string;
 /**
- * Log on level 5.
+ * Log with a format string on level 5.
  */
 export declare function trace(template: FormatString, ...args: any[]): void;
 /**
- * Log on level 4.
+ * A wrapper around `logging.trace()`.
+ */
+export declare function traceLog(...msg: any[]): void;
+/**
+ * Log with a format string on level 4.
  */
 export declare function debug(template: FormatString, ...args: any[]): void;
 /**
- * Log on level 3.
+ * A wrapper around `logging.debug()`.
+ */
+export declare function debugLog(...msg: any[]): void;
+/**
+ * Log with a format string on level 3.
  */
 export declare function info(template: FormatString, ...args: any[]): void;
+/**
+ * A wrapper around `logging.info()`.
+ */
+export declare function infoLog(...msg: any[]): void;
 /**
  * Log on level 2.
  */
 export declare function warn(template: FormatString, ...args: any[]): void;
 /**
+ * A wrapper around `logging.warn()`.
+ */
+export declare function warnLog(...msg: any[]): void;
+/**
  * Log on level 1.
  */
 export declare function error(template: FormatString, ...args: any[]): void;
+/**
+ * A wrapper around `logging.error()`.
+ */
+export declare function errorLog(...msg: any[]): void;
 declare type LogLevel = 0 | 1 | 2 | 3 | 4 | 5;
 /**
  * Set the log level.

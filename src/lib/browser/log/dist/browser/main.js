@@ -20,22 +20,40 @@ export function format(template, ...args) {
     return formatWithoutColor(template, ...args);
 }
 /**
- * Log on level 5.
+ * Log with a format string on level 5.
  */
 export function trace(template, ...args) {
     logging.trace(format(template, ...args));
 }
 /**
- * Log on level 4.
+ * A wrapper around `logging.trace()`.
+ */
+export function traceLog(...msg) {
+    logging.trace(...msg);
+}
+/**
+ * Log with a format string on level 4.
  */
 export function debug(template, ...args) {
     logging.debug(format(template, ...args));
 }
 /**
- * Log on level 3.
+ * A wrapper around `logging.debug()`.
+ */
+export function debugLog(...msg) {
+    logging.debug(...msg);
+}
+/**
+ * Log with a format string on level 3.
  */
 export function info(template, ...args) {
     logging.info(format(template, ...args));
+}
+/**
+ * A wrapper around `logging.info()`.
+ */
+export function infoLog(...msg) {
+    logging.info(...msg);
 }
 /**
  * Log on level 2.
@@ -44,10 +62,22 @@ export function warn(template, ...args) {
     logging.warn(format(template, ...args));
 }
 /**
+ * A wrapper around `logging.warn()`.
+ */
+export function warnLog(...msg) {
+    logging.warn(...msg);
+}
+/**
  * Log on level 1.
  */
 export function error(template, ...args) {
     logging.error(format(template, ...args));
+}
+/**
+ * A wrapper around `logging.error()`.
+ */
+export function errorLog(...msg) {
+    logging.error(...msg);
 }
 /**
  * Set the log level.

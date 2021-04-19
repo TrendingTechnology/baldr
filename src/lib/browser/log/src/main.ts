@@ -59,24 +59,45 @@ export function format (template: FormatString, ...args: any[]): string {
 }
 
 /**
- * Log on level 5.
+ * Log with a format string on level 5.
  */
 export function trace (template: FormatString, ...args: any[]): void {
   logging.trace(format(template, ...args))
 }
 
 /**
- * Log on level 4.
+ * A wrapper around `logging.trace()`.
+ */
+export function traceLog (...msg: any[]): void {
+  logging.trace(...msg)
+}
+
+/**
+ * Log with a format string on level 4.
  */
 export function debug (template: FormatString, ...args: any[]): void {
   logging.debug(format(template, ...args))
 }
 
 /**
- * Log on level 3.
+ * A wrapper around `logging.debug()`.
+ */
+export function debugLog (...msg: any[]): void {
+  logging.debug(...msg)
+}
+
+/**
+ * Log with a format string on level 3.
  */
 export function info (template: FormatString, ...args: any[]): void {
   logging.info(format(template, ...args))
+}
+
+/**
+ * A wrapper around `logging.info()`.
+ */
+export function infoLog (...msg: any[]): void {
+  logging.info(...msg)
 }
 
 /**
@@ -87,10 +108,24 @@ export function warn (template: FormatString, ...args: any[]): void {
 }
 
 /**
+ * A wrapper around `logging.warn()`.
+ */
+export function warnLog (...msg: any[]): void {
+  logging.warn(...msg)
+}
+
+/**
  * Log on level 1.
  */
 export function error (template: FormatString, ...args: any[]): void {
   logging.error(format(template, ...args))
+}
+
+/**
+ * A wrapper around `logging.error()`.
+ */
+export function errorLog (...msg: any[]): void {
+  logging.error(...msg)
 }
 
 type LogLevel = 0 | 1 | 2 | 3 | 4 | 5

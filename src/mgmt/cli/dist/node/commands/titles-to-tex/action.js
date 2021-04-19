@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -8,6 +27,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
 const core_node_1 = require("@bldr/core-node");
+const log = __importStar(require("@bldr/log"));
 /**
  * ```tex
  * \setzetitel{
@@ -20,12 +40,12 @@ const core_node_1 = require("@bldr/core-node");
  * }
  * ```
  *
- * @param {String} filePath - The path of a TeX file.
+ * @param filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles(filePath) {
-    console.log(`\nReplace titles in TeX file “${chalk_1.default.yellow(filePath)}”\n`);
+    log.info('\nReplace titles in TeX file “%s”', filePath);
     const titles = new media_manager_1.DeepTitle(filePath);
-    console.log(titles);
+    log.infoLog(titles);
     const setzeTitle = {
         jahrgangsstufe: titles.grade.toString()
     };
@@ -59,9 +79,9 @@ function patchTexFileWithTitles(filePath) {
             texFileString = texFileString.replace(regexp, patchedTitles);
             core_node_1.writeFile(filePath, texFileString);
         }
-        console.log(chalk_1.default.green(patchedTitles));
+        log.info(patchedTitles);
         if (unpatchedTitles === patchedTitles) {
-            console.log('No changes!');
+            log.info('No changes!');
         }
     }
 }

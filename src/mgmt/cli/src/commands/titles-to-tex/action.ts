@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { convertMdToTex } from '@bldr/tex-markdown-converter'
 import { DeepTitle, walk } from '@bldr/media-manager'
 import { readFile, writeFile } from '@bldr/core-node'
-
+import * as log from '@bldr/log'
 /**
  * ```tex
  * \setzetitel{
@@ -18,13 +18,13 @@ import { readFile, writeFile } from '@bldr/core-node'
  * }
  * ```
  *
- * @param {String} filePath - The path of a TeX file.
+ * @param filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles (filePath: string): void {
-  console.log(`\nReplace titles in TeX file “${chalk.yellow(filePath)}”\n`)
+  log.info('\nReplace titles in TeX file “%s”', filePath)
   const titles = new DeepTitle(filePath)
 
-  console.log(titles)
+  log.infoLog(titles)
 
   const setzeTitle: { [key: string]: string } = {
     jahrgangsstufe: titles.grade.toString()
@@ -66,9 +66,9 @@ function patchTexFileWithTitles (filePath: string): void {
       writeFile(filePath, texFileString)
     }
 
-    console.log(chalk.green(patchedTitles))
+    log.info(patchedTitles)
     if (unpatchedTitles === patchedTitles) {
-      console.log('No changes!')
+      log.info('No changes!')
     }
   }
 }

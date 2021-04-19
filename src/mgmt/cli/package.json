@@ -32,6 +32,7 @@
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/icons": "*",
+    "@bldr/log": "*",
     "@bldr/media-manager": "*",
     "@bldr/media-server": "*",
     "@bldr/open-with": "*",

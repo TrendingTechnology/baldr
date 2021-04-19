@@ -11,6 +11,10 @@ import { Command } from 'commander'
 import { checkExecutables } from '@bldr/core-node'
 import { CliCommandSpec } from '@bldr/type-definitions'
 
+import { setLogLevel } from '@bldr/log'
+
+setLogLevel(3)
+
 // Globals.
 const commandsPath = path.join(__dirname, 'commands')
 
