@@ -19,6 +19,7 @@
   "scripts": {
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
+    "build": "echo 'No build task specified!'",
     "install:deb": "sudo apt remove baldr-seating-plan; sudo dpkg -i dist_electron/baldr-seating-plan_${npm_package_version}_amd64.deb",
     "serve:electron": "vue-cli-service electron:serve",
     "serve:webapp": "vue-cli-service serve"

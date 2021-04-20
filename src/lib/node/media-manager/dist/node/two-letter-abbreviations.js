@@ -52,11 +52,11 @@ function checkForTwoLetterDir(filePath) {
     return false;
 }
 exports.checkForTwoLetterDir = checkForTwoLetterDir;
-function checkTypeAbbreviations(typeSpecs) {
-    for (const typeName in typeSpecs) {
-        const typeSpec = typeSpecs[typeName];
-        if (typeSpec.abbreviation != null && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
-            throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`);
+function checkTypeAbbreviations(categoryCollection) {
+    for (const name in categoryCollection) {
+        const category = categoryCollection[name];
+        if (category.abbreviation != null && !isValidTwoLetterAbbreviation(category.abbreviation)) {
+            throw new Error(`Unkown two letter abbreviation ${category.abbreviation}`);
         }
     }
 }

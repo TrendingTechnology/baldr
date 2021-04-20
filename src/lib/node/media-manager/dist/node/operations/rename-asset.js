@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.renameMediaAsset = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const meta_types_1 = __importDefault(require("../meta-types"));
+const media_categories_management_1 = __importDefault(require("../media-categories-management"));
 const helper_1 = require("../helper");
 const main_1 = require("../main");
 /**
@@ -21,7 +21,7 @@ function renameMediaAsset(oldPath) {
     let newPath;
     if (metaData && metaData.metaTypes) {
         metaData.extension = core_browser_1.getExtension(oldPath);
-        newPath = meta_types_1.default.formatFilePath(metaData, oldPath);
+        newPath = media_categories_management_1.default.formatFilePath(metaData, oldPath);
     }
     if (!newPath)
         newPath = helper_1.asciify(oldPath);

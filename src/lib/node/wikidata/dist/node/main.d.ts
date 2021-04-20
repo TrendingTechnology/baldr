@@ -1,7 +1,7 @@
 /**
  * @module @bldr/wikidata
  */
-import { MetaSpec } from '@bldr/type-definitions';
+import { MediaCategory } from '@bldr/type-definitions';
 /**
  * Download a file from wiki commonds.
  *
@@ -14,13 +14,13 @@ declare function fetchCommonsFile(fileName: string, dest: string): Promise<void>
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-declare function mergeData(data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: MetaSpec.TypeCollection): MetaSpec.Data;
+declare function mergeData(data: MediaCategory.Data, dataWiki: MediaCategory.Data, categoryCollection: MediaCategory.Collection): MediaCategory.Data;
 /**
  * Query wikidata.
  *
  * @param itemId - for example `Q123`
  */
-declare function query(itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<{
+declare function query(itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{
     [key: string]: any;
 }>;
 declare const _default: {

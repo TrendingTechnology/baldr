@@ -9,7 +9,8 @@
   },
   "scripts": {
     "serve:webapp": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build:webapp": "vue-cli-service build",
+    "build": "echo 'No build task specified!'"
   },
   "dependencies": {
     "@bldr/components-collection": "*",

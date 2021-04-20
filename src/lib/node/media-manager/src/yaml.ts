@@ -6,7 +6,7 @@ import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 
 import { asciify, deasciify } from './helper'
 import { Asset } from './media-file-classes'
-import metaTypes from './meta-types'
+import categoriesManagement from './media-categories-management'
 
 /**
  * Load a YAML file and convert into a Javascript object. The string
@@ -81,7 +81,7 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.Generi
       metaData.title = deasciify(asset.basename)
     }
 
-    metaData = metaTypes.process(metaData)
+    metaData = categoriesManagement.process(metaData)
     writeYamlFile(yamlFile, metaData)
     return {
       filePath,

@@ -19,7 +19,7 @@ import config from '@bldr/config'
  * @param {String} arg2
  */
 async function action (metaType: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
-  let rawData = await wikidata.query(itemId, metaType, metaTypes.typeSpecs)
+  let rawData = await wikidata.query(itemId, metaType, metaTypes.categories)
   if (arg1) {
     if (metaType === 'person') {
       rawData.firstname = arg1

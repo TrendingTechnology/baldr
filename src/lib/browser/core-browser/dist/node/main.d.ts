@@ -80,9 +80,6 @@ interface SelectionSubsetOption {
      * used as `elements`.
      */
     elementsCount?: number;
-    /**
-     *
-     */
     firstElementNo?: number;
     /**
      * Shift all selector numbers by this number: For example `-1`: `2-5`

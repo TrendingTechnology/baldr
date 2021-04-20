@@ -149,8 +149,8 @@ export class Master {
      *   with.
      */
     callHook(hookName, payload, thisArg) {
-        if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
-            if (thisArg) {
+        if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+            if (thisArg != null) {
                 return this.spec.hooks[hookName].call(thisArg, payload);
             }
             return this.spec.hooks[hookName](payload);
@@ -166,8 +166,8 @@ export class Master {
      */
     callHookAsync(hookName, payload, thisArg) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.spec.hooks && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
-                if (thisArg) {
+            if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+                if (thisArg != null) {
                     return this.spec.hooks[hookName].call(thisArg, payload);
                 }
                 return this.spec.hooks[hookName](payload);

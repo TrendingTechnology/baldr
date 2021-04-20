@@ -1,14 +1,14 @@
 import assert from 'assert'
 
 import { deepCopy, msleep } from '@bldr/core-browser'
-import { AssetType, MetaSpec } from '@bldr/type-definitions'
+import { AssetType, MediaCategory } from '@bldr/type-definitions'
 import wikidata  from '@bldr/wikidata'
 
-import metaTypes from '../meta-types'
+import categoriesManagement from '../media-categories-management'
 import { readAssetYaml, writeYamlFile } from '../main'
 
-async function queryWikidata (metaData: AssetType.Generic, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<AssetType.Generic> {
-  const dataWiki = await wikidata.query(metaData.wikidata, typeNames, typeSpecs)
+async function queryWikidata (metaData: AssetType.Generic, categoryNames: MediaCategory.Names, typeSpecs: MediaCategory.Collection): Promise<AssetType.Generic> {
+  const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, typeSpecs)
   console.log(dataWiki)
   metaData = wikidata.mergeData(metaData, dataWiki, typeSpecs)
   // To avoid blocking
@@ -38,16 +38,16 @@ export async function normalizeMediaAsset (filePath: string, options?: Normalize
     const origData = <AssetType.Generic> deepCopy(metaData)
 
     // Always: general
-    const typeNames = metaTypes.detectTypeByPath(filePath)
-    if (typeNames) {
-      metaData.metaTypes = metaTypes.mergeTypeNames(metaData.metaTypes, typeNames)
+    const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
+    if (categoryNames) {
+      metaData.metaTypes = categoriesManagement.mergeNames(metaData.metaTypes, categoryNames)
     }
     if (options && options.wikidata) {
       if (metaData.wikidata && metaData.metaTypes) {
-        metaData = await queryWikidata(metaData, metaData.metaTypes, metaTypes.typeSpecs)
+        metaData = await queryWikidata(metaData, metaData.metaTypes, categoriesManagement.categories)
       }
     }
-    metaData = metaTypes.process(metaData)
+    metaData = categoriesManagement.process(metaData)
 
     try {
       delete origData.filePath

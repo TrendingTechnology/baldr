@@ -86,31 +86,31 @@ function generateIdPrefix(filePath) {
 const cloze = {
     title: 'Lückentext',
     abbreviation: 'LT',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/LT/.*.svg$');
     },
-    initialize({ typeData }) {
-        if (typeData.filePath && !typeData.clozePageNo) {
-            const match = typeData.filePath.match(/(\d+)\.svg/);
+    initialize({ data }) {
+        if (data.filePath && !data.clozePageNo) {
+            const match = data.filePath.match(/(\d+)\.svg/);
             if (match)
-                typeData.clozePageNo = parseInt(match[1]);
+                data.clozePageNo = parseInt(match[1]);
         }
-        return typeData;
+        return data;
     },
-    relPath({ typeData, typeSpec, oldRelPath }) {
+    relPath({ data, category, oldRelPath }) {
         const oldRelDir = path_1.default.dirname(oldRelPath);
         let pageNo = '';
-        if (typeData.clozePageNo)
-            pageNo = `_${typeData.clozePageNo}`;
+        if (data.clozePageNo)
+            pageNo = `_${data.clozePageNo}`;
         return path_1.default.join(oldRelDir, `Lueckentext${pageNo}.svg`);
     },
     props: {
         id: {
             title: 'Die ID des Lückentexts',
-            derive: function ({ typeData, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles, filePath }) {
                 let counterSuffix = '';
-                if (typeData.clozePageNo) {
-                    counterSuffix = `_${typeData.clozePageNo}`;
+                if (data.clozePageNo) {
+                    counterSuffix = `_${data.clozePageNo}`;
                 }
                 return `${folderTitles.id}_LT${counterSuffix}`;
             },
@@ -118,13 +118,13 @@ const cloze = {
         },
         title: {
             title: 'Titel des Lückentextes',
-            derive: function ({ typeData, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles, filePath }) {
                 let suffix = '';
-                if (typeData.clozePageNo && typeData.clozePageCount) {
-                    suffix = ` (Seite ${typeData.clozePageNo} von ${typeData.clozePageCount})`;
+                if (data.clozePageNo && data.clozePageCount) {
+                    suffix = ` (Seite ${data.clozePageNo} von ${data.clozePageCount})`;
                 }
-                else if (typeData.clozePageNo && !typeData.clozePageCount) {
-                    suffix = ` (Seite ${typeData.clozePageNo})`;
+                else if (data.clozePageNo && !data.clozePageCount) {
+                    suffix = ` (Seite ${data.clozePageNo})`;
                 }
                 return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
             },
@@ -149,7 +149,7 @@ const cloze = {
  */
 const composition = {
     title: 'Komposition',
-    detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
+    detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
     props: {
         title: {
             title: 'Titel der Komponist',
@@ -222,7 +222,7 @@ const composition = {
  */
 const cover = {
     title: 'Vorschau-Bild',
-    detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
+    detectCategoryByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
     props: {
         title: {
             title: 'Titel',
@@ -245,19 +245,19 @@ const group = {
     title: 'Gruppe',
     abbreviation: 'GR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Gruppen'),
-    relPath: function ({ typeData, typeSpec }) {
-        return path_1.default.join(typeData.groupId.substr(0, 1).toLowerCase(), typeData.groupId, `main.${typeData.extension}`);
+    relPath: function ({ data, category }) {
+        return path_1.default.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`);
     },
-    detectTypeByPath: function (typeSpec) {
-        return new RegExp('^' + typeSpec.basePath + '/.*');
+    detectCategoryByPath: function (category) {
+        return new RegExp('^' + category.basePath + '/.*');
     },
     props: {
         groupId: {
             title: 'Gruppen-ID',
-            derive: function ({ typeData }) {
-                return typeData.name;
+            derive: function ({ data }) {
+                return data.name;
             },
-            format: function (value, { typeData, typeSpec }) {
+            format: function (value, { data, category }) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
                 value = helper_1.idify(value);
                 return value;
@@ -266,10 +266,10 @@ const group = {
         },
         id: {
             title: 'ID zur Referenzierung (Präfix „GR_“)',
-            derive: function ({ typeData }) {
-                return typeData.name;
+            derive: function ({ data }) {
+                return data.name;
             },
-            format: function (value, { typeData, typeSpec }) {
+            format: function (value, { data, category }) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
                 value = helper_1.idify(value);
                 return `GR_${value}`;
@@ -278,8 +278,8 @@ const group = {
         },
         title: {
             title: 'Titel der Gruppe',
-            derive: function ({ typeData }) {
-                return `Portrait-Bild der Gruppe „${typeData.name}“`;
+            derive: function ({ data }) {
+                return `Portrait-Bild der Gruppe „${data.name}“`;
             },
             overwriteByDerived: true
         },
@@ -355,32 +355,32 @@ const instrument = {
     title: 'Instrument',
     abbreviation: 'IN',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Instrumente'),
-    relPath: function ({ typeData, typeSpec }) {
-        const id = typeData.id.replace(/^IN_/, '');
-        return path_1.default.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`);
+    relPath: function ({ data, category }) {
+        const id = data.id.replace(/^IN_/, '');
+        return path_1.default.join(id.substr(0, 1).toLowerCase(), id, `main.${data.extension}`);
     },
-    detectTypeByPath: function (typeSpec) {
-        return new RegExp(`^${typeSpec.basePath}.*/main\\.jpg$`);
+    detectCategoryByPath: function (category) {
+        return new RegExp(`^${category.basePath}.*/main\\.jpg$`);
     },
     props: {
         instrumentId: {
             title: 'Instrumenten-ID',
-            derive: function ({ typeData }) {
-                return helper_1.idify(typeData.name);
+            derive: function ({ data }) {
+                return helper_1.idify(data.name);
             }
         },
         id: {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
-            derive: function ({ typeData, typeSpec }) {
+            derive: function ({ data, category }) {
                 // IS: Instrument
-                return `${typeSpec.abbreviation}_${helper_1.idify(typeData.name)}`;
+                return `${category.abbreviation}_${helper_1.idify(data.name)}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel des Instruments',
-            derive: function ({ typeData }) {
-                return `Foto des Instruments „${typeData.name}“`;
+            derive: function ({ data }) {
+                return `Foto des Instruments „${data.name}“`;
             },
             overwriteByDerived: true
         },
@@ -426,13 +426,13 @@ const person = {
     title: 'Person',
     abbreviation: 'PR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Personen'),
-    relPath: function ({ typeData }) {
-        return path_1.default.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.personId, `main.${typeData.extension}`);
+    relPath: function ({ data }) {
+        return path_1.default.join(data.personId.substr(0, 1).toLowerCase(), data.personId, `main.${data.extension}`);
     },
-    detectTypeByPath: function (typeSpec) {
-        return new RegExp('^' + typeSpec.basePath + '/.*(jpg|png)');
+    detectCategoryByPath: function (category) {
+        return new RegExp('^' + category.basePath + '/.*(jpg|png)');
     },
-    normalizeWikidata: function ({ typeData, entity, functions }) {
+    normalizeWikidata: function ({ data, entity, functions }) {
         const label = functions.getLabel(entity);
         const segments = label.split(' ');
         const firstnameFromLabel = segments.shift();
@@ -440,32 +440,32 @@ const person = {
         // Use the label by artist names.
         // for example „Joan Baez“ and not „Joan Chandos“
         if (firstnameFromLabel && lastnameFromLabel &&
-            (typeData.firstname !== firstnameFromLabel || typeData.lastname !== lastnameFromLabel)) {
-            typeData.firstname = firstnameFromLabel;
-            typeData.lastname = lastnameFromLabel;
-            typeData.name = label;
+            (data.firstname !== firstnameFromLabel || data.lastname !== lastnameFromLabel)) {
+            data.firstname = firstnameFromLabel;
+            data.lastname = lastnameFromLabel;
+            data.name = label;
         }
-        return typeData;
+        return data;
     },
     props: {
         personId: {
             title: 'Personen-ID',
-            derive: function ({ typeData }) {
-                return `${helper_1.idify(typeData.lastname)}_${helper_1.idify(typeData.firstname)}`;
+            derive: function ({ data }) {
+                return `${helper_1.idify(data.lastname)}_${helper_1.idify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
         id: {
             title: 'ID der Person',
-            derive: function ({ typeData, typeSpec }) {
-                return `${typeSpec.abbreviation}_${helper_1.idify(typeData.lastname)}_${helper_1.idify(typeData.firstname)}`;
+            derive: function ({ data, category }) {
+                return `${category.abbreviation}_${helper_1.idify(data.lastname)}_${helper_1.idify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel der Person',
-            derive: function ({ typeData }) {
-                return `Portrait-Bild von „${typeData.firstname} ${typeData.lastname}“`;
+            derive: function ({ data }) {
+                return `Portrait-Bild von „${data.firstname} ${data.lastname}“`;
             },
             overwriteByDerived: true
         },
@@ -476,7 +476,7 @@ const person = {
                 // Vornamen der Person
                 fromClaim: 'P735',
                 secondQuery: 'queryLabels',
-                format: function (value, typeSpec) {
+                format: function (value, category) {
                     if (Array.isArray(value)) {
                         return value.join(' ');
                     }
@@ -491,7 +491,7 @@ const person = {
                 // Familienname einer Person
                 fromClaim: 'P734',
                 secondQuery: 'queryLabels',
-                format: function (value, typeSpec) {
+                format: function (value, category) {
                     if (Array.isArray(value)) {
                         return value.join(' ');
                     }
@@ -501,8 +501,8 @@ const person = {
         },
         name: {
             title: 'Name (Vor- und Familienname)',
-            derive: function ({ typeData }) {
-                return `${typeData.firstname} ${typeData.lastname}`;
+            derive: function ({ data }) {
+                return `${data.firstname} ${data.lastname}`;
             },
             overwriteByDerived: false
         },
@@ -559,7 +559,7 @@ const person = {
 const photo = {
     title: 'Foto',
     abbreviation: 'FT',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/FT/.*.jpg$');
     },
     props: {
@@ -585,7 +585,7 @@ const radio = {
  */
 const recording = {
     title: 'Aufnahme',
-    detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
+    detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
     props: {
         artist: {
             title: 'Interpret',
@@ -634,16 +634,16 @@ const recording = {
 const reference = {
     title: 'Quelle',
     description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/QL/.*.pdf$');
     },
     abbreviation: 'QL',
     props: {
         title: {
             title: 'Titel der Quelle',
-            derive: function ({ typeData, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles, filePath }) {
                 let suffix = '';
-                if (typeData.forTeacher) {
+                if (data.forTeacher) {
                     suffix = ' (Lehrerband)';
                 }
                 return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
@@ -695,7 +695,7 @@ const reference = {
 const score = {
     title: 'Partitur',
     abbreviation: 'PT',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/PT/.*.pdf$');
     },
     props: {
@@ -765,7 +765,7 @@ const song = {
 const worksheet = {
     title: 'Arbeitsblatt',
     abbreviation: 'TX',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/TX/.*.pdf$');
     },
     props: {
@@ -797,33 +797,33 @@ const worksheet = {
 const youtube = {
     title: 'YouTube-Video',
     abbreviation: 'YT',
-    detectTypeByPath: function () {
+    detectCategoryByPath: function () {
         return new RegExp('^.*/YT/.*.mp4$');
     },
-    relPath({ typeData, typeSpec, oldRelPath }) {
+    relPath({ data, category, oldRelPath }) {
         const oldRelDir = path_1.default.dirname(oldRelPath);
-        return path_1.default.join(oldRelDir, `${typeData.youtubeId}.mp4`);
+        return path_1.default.join(oldRelDir, `${data.youtubeId}.mp4`);
     },
     props: {
         id: {
             title: 'ID eines YouTube-Videos',
-            derive: function ({ typeData, typeSpec }) {
-                return `${typeSpec.abbreviation}_${typeData.youtubeId}`;
+            derive: function ({ data, category }) {
+                return `${category.abbreviation}_${data.youtubeId}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel eines YouTube-Videos',
-            derive: function ({ typeData }) {
+            derive: function ({ data }) {
                 let title;
-                if (typeData.heading) {
-                    title = typeData.heading;
+                if (data.heading) {
+                    title = data.heading;
                 }
-                else if (typeData.originalHeading) {
-                    title = typeData.originalHeading;
+                else if (data.originalHeading) {
+                    title = data.originalHeading;
                 }
                 else {
-                    title = typeData.youtubeId;
+                    title = data.youtubeId;
                 }
                 return `YouTube-Video „${title}“`;
             },
@@ -859,12 +859,12 @@ const general = {
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
-            format: function (value, { typeData, typeSpec }) {
+            format: function (value, { data, category }) {
                 value = helper_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 value = value.replace(/^[va]-/, '');
-                if (typeData.filePath && typeData.metaTypes.indexOf('youtube') === -1) {
-                    const idPrefix = generateIdPrefix(typeData.filePath);
+                if (data.filePath && data.metaTypes.indexOf('youtube') === -1) {
+                    const idPrefix = generateIdPrefix(data.filePath);
                     if (idPrefix) {
                         if (value.indexOf(idPrefix) === -1) {
                             value = `${idPrefix}_${value}`;
@@ -916,13 +916,13 @@ const general = {
             title: 'Titel',
             required: true,
             overwriteByDerived: false,
-            format: function (value, { typeData, typeSpec }) {
+            format: function (value, { data, category }) {
                 // a Strawinsky Petruschka Abschnitt 0_22
                 value = value.replace(/^[va] /, '');
                 return value;
             },
-            derive: function ({ typeData }) {
-                return helper_1.deasciify(typeData.id);
+            derive: function ({ data }) {
+                return helper_1.deasciify(data.id);
             }
         },
         wikidata: {
@@ -936,7 +936,7 @@ const general = {
             validate: function (value) {
                 return value.match(/^.+:.+$/);
             },
-            format: function (value, { typeData, typeSpec }) {
+            format: function (value, { data, category }) {
                 return decodeURI(value);
             },
             wikidata: {
@@ -965,21 +965,21 @@ const general = {
             state: 'absent'
         }
     },
-    initialize: function ({ typeData, typeSpec }) {
-        if (typeData.filePath && !two_letter_abbreviations_1.checkForTwoLetterDir(typeData.filePath)) {
-            console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`);
+    initialize: function ({ data, category }) {
+        if (data.filePath && !two_letter_abbreviations_1.checkForTwoLetterDir(data.filePath)) {
+            console.log(`File path ${data.filePath} is not in a valid two letter directory.`);
             process.exit();
         }
-        return typeData;
+        return data;
     },
-    finalize: function ({ typeData, typeSpec }) {
-        for (const propName in typeData) {
-            const value = typeData[propName];
+    finalize: function ({ data, category }) {
+        for (const propName in data) {
+            const value = data[propName];
             if (typeof value === 'string') {
-                typeData[propName] = value.trim();
+                data[propName] = value.trim();
             }
         }
-        return typeData;
+        return data;
     }
 };
 exports.default = {

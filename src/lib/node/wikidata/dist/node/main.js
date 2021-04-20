@@ -326,7 +326,7 @@ const functions = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-function mergeData(data, dataWiki, typeSpecs) {
+function mergeData(data, dataWiki, categoryCollection) {
     var _a;
     // Ẃe delete properties from this object -> make a flat copy.
     const dataOrig = Object.assign({}, data);
@@ -335,7 +335,7 @@ function mergeData(data, dataWiki, typeSpecs) {
     }
     const typeData = {};
     for (const typeName of dataOrig.metaTypes.split(',')) {
-        const propSpecs = typeSpecs[typeName].props;
+        const propSpecs = categoryCollection[typeName].props;
         for (const propName in dataWiki) {
             if (((_a = propSpecs === null || propSpecs === void 0 ? void 0 : propSpecs[propName]) === null || _a === void 0 ? void 0 : _a.wikidata) != null) {
                 const propSpec = propSpecs[propName].wikidata;
@@ -360,7 +360,7 @@ function mergeData(data, dataWiki, typeSpecs) {
  *
  * @param itemId - for example `Q123`
  */
-function query(itemId, typeNames, typeSpecs) {
+function query(itemId, typeNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
         if (wikibase.isItemId(itemId) == null) {
             throw new Error(`No item id: ${itemId}`);
@@ -371,10 +371,10 @@ function query(itemId, typeNames, typeSpecs) {
         const data = {};
         data.wikidata = itemId;
         for (const typeName of typeNames.split(',')) {
-            if (typeSpecs[typeName] == null) {
+            if (categoryCollection[typeName] == null) {
                 throw new Error(`Unkown type name: “${typeName}”`);
             }
-            const typeSpec = typeSpecs[typeName];
+            const typeSpec = categoryCollection[typeName];
             for (const propName in typeSpec.props) {
                 if (typeSpec.props[propName].wikidata != null) {
                     const propSpec = typeSpec.props[propName].wikidata;
@@ -416,7 +416,7 @@ function query(itemId, typeNames, typeSpecs) {
                 }
             }
             if (typeof typeSpec.normalizeWikidata === 'function') {
-                typeSpec.normalizeWikidata({ typeData: data, entity, functions });
+                typeSpec.normalizeWikidata({ data, entity, functions });
             }
         }
         return data;

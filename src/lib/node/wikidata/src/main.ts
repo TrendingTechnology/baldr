@@ -12,7 +12,7 @@ import * as wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
 import { fetchFile } from '@bldr/core-node'
-import { MetaSpec } from '@bldr/type-definitions'
+import { MediaCategory } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
@@ -357,7 +357,7 @@ const functions: {[key: string]: Function } = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: MetaSpec.TypeCollection): MetaSpec.Data {
+function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, categoryCollection: MediaCategory.Collection): MediaCategory.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -365,10 +365,10 @@ function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: Met
     return Object.assign({}, dataOrig, dataWiki)
   }
 
-  const typeData: MetaSpec.Data = {}
+  const typeData: MediaCategory.Data = {}
 
   for (const typeName of dataOrig.metaTypes.split(',')) {
-    const propSpecs = typeSpecs[typeName as MetaSpec.TypeName].props
+    const propSpecs = categoryCollection[typeName as MediaCategory.Name].props
     for (const propName in dataWiki) {
       if (propSpecs?.[propName]?.wikidata != null) {
         const propSpec = propSpecs[propName].wikidata
@@ -395,7 +395,7 @@ function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: Met
  *
  * @param itemId - for example `Q123`
  */
-async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<{ [key: string]: any }> {
+async function query (itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{ [key: string]: any }> {
   if (wikibase.isItemId(itemId) == null) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -406,15 +406,15 @@ async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: 
   const data: { [key: string]: any } = {}
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
-    if (typeSpecs[typeName as MetaSpec.TypeName] == null) {
+    if (categoryCollection[typeName as MediaCategory.Name] == null) {
       throw new Error(`Unkown type name: “${typeName}”`)
     }
 
-    const typeSpec = typeSpecs[typeName as MetaSpec.TypeName]
+    const typeSpec = categoryCollection[typeName as MediaCategory.Name]
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata != null) {
-        const propSpec = typeSpec.props[propName].wikidata as MetaSpec.WikidataProp
+        const propSpec = typeSpec.props[propName].wikidata as MediaCategory.WikidataProp
         let value
 
         // source
@@ -455,7 +455,7 @@ async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: 
       }
     }
     if (typeof typeSpec.normalizeWikidata === 'function') {
-      typeSpec.normalizeWikidata({ typeData: data, entity, functions })
+      typeSpec.normalizeWikidata({ data, entity, functions })
     }
   }
 

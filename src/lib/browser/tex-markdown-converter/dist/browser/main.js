@@ -27,26 +27,26 @@ class RegExpBuilder {
      * Assemble a regular expression string to capture a TeX macro / command
      * `\makroName{}`.
      *
-     * @param {string} macroName -
-     * @param {string} regExp - A string to build a regular expression from.
+     * @param macroName
+     * @param regExp - A string to build a regular expression from.
      *
-     * @returns {string} A string to build a regular expression from.
+     * @returns A string to build a regular expression from.
      */
     cmd(macroName, regExp = '') {
-        if (!regExp)
+        if (regExp == null)
             regExp = '([^\\}]+?)';
         return `\\\\${macroName}\\{${regExp}\\}`;
     }
     /**
      * Build a regular expression for a TeX environment.
      *
-     * @param {string} envName - The name of the environment.
-     * @param {string} regExp - A string to build a regular expression from.
+     * @param envName - The name of the environment.
+     * @param regExp - A string to build a regular expression from.
      *
-     * @returns {string} A string to build a regular expression from.
+     * @returns A string to build a regular expression from.
      */
     env(envName, regExp = '') {
-        if (!regExp)
+        if (regExp == null)
             regExp = this.captDotAll;
         return this.cmd('begin', envName) + regExp + this.cmd('end', envName);
     }
@@ -54,8 +54,8 @@ class RegExpBuilder {
 export const regBuilder = new RegExpBuilder();
 /**
  *
- * @param {*} match
- * @param {Array} excludeCaptureGroups - An array of capture group strings
+ * @param match
+ * @param excludeCaptureGroups - An array of capture group strings
  *   to exclude in the result matches for example regexp:
  *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
  */
@@ -67,7 +67,7 @@ function cleanMatch(match, excludeCaptureGroups) {
     match.shift();
     const result = [];
     for (const group of match) {
-        if ((!exclude && group) || (exclude && group && !exclude.includes(group))) {
+        if ((exclude == null && group != null) || (exclude != null && group != null && !exclude.includes(group))) {
             result.push(group);
         }
     }
@@ -116,7 +116,7 @@ function texRep(commandName) {
  */
 function mdReg(tagName, className = '') {
     let classMarkup = '';
-    if (className) {
+    if (className != null) {
         classMarkup = ` class="${className}"`;
     }
     return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)</' + tagName + '>', 'g');
@@ -127,7 +127,7 @@ function mdReg(tagName, className = '') {
  */
 function mdRep(tagName, className = '') {
     let classMarkup = '';
-    if (className) {
+    if (className != null) {
         classMarkup = ` class="${className}"`;
     }
     return `<${tagName}${classMarkup}>$1</${tagName}>`;
@@ -291,7 +291,7 @@ function convert(text, toTex) {
         else if (typeof specRep === 'object') {
             rep = specRep.rep;
         }
-        if ((reg != null) && rep) {
+        if (reg != null && rep != null) {
             text = text.replace(reg, rep);
         }
     }
@@ -356,7 +356,7 @@ export function objectifyTexZitat(content) {
                 text
             }
         };
-        if (optionalString) {
+        if (optionalString != null) {
             // [\person{Bischof Bernardino Cirillo}][1549]
             // [\person{Martin Luther}]
             const segments = optionalString.split('][');
@@ -394,13 +394,13 @@ export function objectifyTexItemize(content) {
     const data = [];
     for (const match of matches) {
         const itemsText = match.pop();
-        if (itemsText) {
+        if (itemsText != null) {
             const sections = match;
             const item = {};
             const items = [];
             for (const itemText of itemsText.split('\\item')) {
                 const oneLine = convertToOneLineMd(itemText);
-                if (oneLine)
+                if (oneLine != null)
                     items.push(oneLine);
             }
             if (sections.length > 0)

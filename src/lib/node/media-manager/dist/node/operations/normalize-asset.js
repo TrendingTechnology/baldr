@@ -16,11 +16,11 @@ exports.normalizeMediaAsset = void 0;
 const assert_1 = __importDefault(require("assert"));
 const core_browser_1 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
-const meta_types_1 = __importDefault(require("../meta-types"));
+const media_categories_management_1 = __importDefault(require("../media-categories-management"));
 const main_1 = require("../main");
-function queryWikidata(metaData, typeNames, typeSpecs) {
+function queryWikidata(metaData, categoryNames, typeSpecs) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dataWiki = yield wikidata_1.default.query(metaData.wikidata, typeNames, typeSpecs);
+        const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, typeSpecs);
         console.log(dataWiki);
         metaData = wikidata_1.default.mergeData(metaData, dataWiki, typeSpecs);
         // To avoid blocking
@@ -46,16 +46,16 @@ function normalizeMediaAsset(filePath, options) {
             metaData.filePath = filePath;
             const origData = core_browser_1.deepCopy(metaData);
             // Always: general
-            const typeNames = meta_types_1.default.detectTypeByPath(filePath);
-            if (typeNames) {
-                metaData.metaTypes = meta_types_1.default.mergeTypeNames(metaData.metaTypes, typeNames);
+            const categoryNames = media_categories_management_1.default.detectCategoryByPath(filePath);
+            if (categoryNames) {
+                metaData.metaTypes = media_categories_management_1.default.mergeNames(metaData.metaTypes, categoryNames);
             }
             if (options && options.wikidata) {
                 if (metaData.wikidata && metaData.metaTypes) {
-                    metaData = yield queryWikidata(metaData, metaData.metaTypes, meta_types_1.default.typeSpecs);
+                    metaData = yield queryWikidata(metaData, metaData.metaTypes, media_categories_management_1.default.categories);
                 }
             }
-            metaData = meta_types_1.default.process(metaData);
+            metaData = media_categories_management_1.default.process(metaData);
             try {
                 delete origData.filePath;
                 assert_1.default.deepStrictEqual(origData, metaData);

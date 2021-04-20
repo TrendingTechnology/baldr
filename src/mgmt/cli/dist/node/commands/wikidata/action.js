@@ -29,7 +29,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  */
 function action(metaType, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        let rawData = yield wikidata_1.default.query(itemId, metaType, media_manager_1.metaTypes.typeSpecs);
+        let rawData = yield wikidata_1.default.query(itemId, metaType, media_manager_1.metaTypes.categories);
         if (arg1) {
             if (metaType === 'person') {
                 rawData.firstname = arg1;

@@ -10,7 +10,7 @@
  *
  * @module @bldr/media-manager/meta-types
  */
-import { MetaSpec, AssetType } from '@bldr/type-definitions';
+import { MediaCategory, AssetType } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the type name.
  *
@@ -18,7 +18,7 @@ import { MetaSpec, AssetType } from '@bldr/type-definitions';
  *
  * @returns The type names for example `person,group,general`
  */
-declare function detectTypeByPath(filePath: string): MetaSpec.TypeNames | undefined;
+declare function detectCategoryByPath(filePath: string): MediaCategory.Names | undefined;
 /**
  * Generate the file path of the first specifed meta type.
  *
@@ -33,7 +33,7 @@ declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): s
 /**
  * Merge type names to avoid duplicate metadata type names:
  */
-declare function mergeTypeNames(...typeName: string[]): string;
+declare function mergeNames(...typeName: string[]): string;
 /**
  * Bundle three operations: Sort and derive, format, validate.
  *
@@ -41,26 +41,26 @@ declare function mergeTypeNames(...typeName: string[]): string;
  */
 declare function process(data: AssetType.Generic): AssetType.Generic;
 declare const _default: {
-    detectTypeByPath: typeof detectTypeByPath;
+    detectCategoryByPath: typeof detectCategoryByPath;
     formatFilePath: typeof formatFilePath;
     process: typeof process;
-    typeSpecs: {
-        cloze: MetaSpec.Type;
-        composition: MetaSpec.Type;
-        cover: MetaSpec.Type;
-        group: MetaSpec.Type;
-        instrument: MetaSpec.Type;
-        person: MetaSpec.Type;
-        photo: MetaSpec.Type;
-        radio: MetaSpec.Type;
-        recording: MetaSpec.Type;
-        reference: MetaSpec.Type;
-        score: MetaSpec.Type;
-        song: MetaSpec.Type;
-        worksheet: MetaSpec.Type;
-        youtube: MetaSpec.Type;
-        general: MetaSpec.Type;
+    categories: {
+        cloze: MediaCategory.Category;
+        composition: MediaCategory.Category;
+        cover: MediaCategory.Category;
+        group: MediaCategory.Category;
+        instrument: MediaCategory.Category;
+        person: MediaCategory.Category;
+        photo: MediaCategory.Category;
+        radio: MediaCategory.Category;
+        recording: MediaCategory.Category;
+        reference: MediaCategory.Category;
+        score: MediaCategory.Category;
+        song: MediaCategory.Category;
+        worksheet: MediaCategory.Category;
+        youtube: MediaCategory.Category;
+        general: MediaCategory.Category;
     };
-    mergeTypeNames: typeof mergeTypeNames;
+    mergeNames: typeof mergeNames;
 };
 export default _default;

@@ -25,6 +25,7 @@ exports.songConstants = {
  * }
  * </code></pre>
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class AlphabeticalSongsTree {
     /**
      * @param songs - An array of song objects.

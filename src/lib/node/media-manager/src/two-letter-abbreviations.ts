@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { MetaSpec } from '@bldr/type-definitions'
+import { MediaCategory } from '@bldr/type-definitions'
 
 const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',
@@ -50,12 +50,12 @@ export function checkForTwoLetterDir (filePath: string): boolean {
   return false
 }
 
-export function checkTypeAbbreviations (typeSpecs: MetaSpec.TypeCollection): void {
-  for (const typeName in typeSpecs) {
-    const typeSpec = typeSpecs[typeName as MetaSpec.TypeName]
+export function checkTypeAbbreviations (categoryCollection: MediaCategory.Collection): void {
+  for (const name in categoryCollection) {
+    const category = categoryCollection[name as MediaCategory.Name]
 
-    if (typeSpec.abbreviation != null && !isValidTwoLetterAbbreviation(typeSpec.abbreviation)) {
-      throw new Error(`Unkown two letter abbreviation ${typeSpec.abbreviation}`)
+    if (category.abbreviation != null && !isValidTwoLetterAbbreviation(category.abbreviation)) {
+      throw new Error(`Unkown two letter abbreviation ${category.abbreviation}`)
     }
   }
 }

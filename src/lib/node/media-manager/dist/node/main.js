@@ -33,8 +33,8 @@ const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
 const rename_asset_1 = require("./operations/rename-asset");
-const meta_types_1 = __importDefault(require("./meta-types"));
-exports.metaTypes = meta_types_1.default;
+const media_categories_management_1 = __importDefault(require("./media-categories-management"));
+exports.metaTypes = media_categories_management_1.default;
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */

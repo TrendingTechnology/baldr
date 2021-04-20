@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/meta-data-categories",
+  "name": "@bldr/media-categories",
   "version": "0.1.0",
-  "description": "The metadata files (filename.ext.yml) can be from different categories (types).",
+  "description": "The media metadata files (filename.ext.yml) can be from different categories (types).",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

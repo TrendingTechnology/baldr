@@ -49,27 +49,27 @@ declare class RegExpBuilder {
      * Assemble a regular expression string to capture a TeX macro / command
      * `\makroName{}`.
      *
-     * @param {string} macroName -
-     * @param {string} regExp - A string to build a regular expression from.
+     * @param macroName
+     * @param regExp - A string to build a regular expression from.
      *
-     * @returns {string} A string to build a regular expression from.
+     * @returns A string to build a regular expression from.
      */
     cmd(macroName: string, regExp?: string): string;
     /**
      * Build a regular expression for a TeX environment.
      *
-     * @param {string} envName - The name of the environment.
-     * @param {string} regExp - A string to build a regular expression from.
+     * @param envName - The name of the environment.
+     * @param regExp - A string to build a regular expression from.
      *
-     * @returns {string} A string to build a regular expression from.
+     * @returns A string to build a regular expression from.
      */
     env(envName: string, regExp?: string): string;
 }
 export declare const regBuilder: RegExpBuilder;
 /**
  *
- * @param {*} match
- * @param {Array} excludeCaptureGroups - An array of capture group strings
+ * @param match
+ * @param excludeCaptureGroups - An array of capture group strings
  *   to exclude in the result matches for example regexp:
  *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
  */

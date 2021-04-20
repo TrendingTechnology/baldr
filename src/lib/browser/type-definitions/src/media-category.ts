@@ -1,10 +1,11 @@
 /**
  * Some basic Typescript interfaces and type defintions.
  *
- * @module @bldr/meta-data-categories
+ * @module @bldr/type-definitions/meta-spec
  */
 
-import { DeepTitleInterface, AssetType } from '@bldr/type-definitions'
+import { DeepTitleInterface } from './titles'
+import * as AssetType from './asset'
 
 /**
  * Defintion of the function `format()`.
@@ -54,8 +55,8 @@ export type PropName = string
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-  kindData: AssetType.Generic
-  kindSpecification: Category
+  data: AssetType.Generic
+  category: Category
   folderTitles: DeepTitleInterface
   filePath: string
 }
@@ -68,7 +69,7 @@ type DeriveFunc = (arg: DeriveFuncArg) => any
 /**
  * Defintion of the function `format()`.
  */
-type FormatFunc = (value: any, dataAndSpec: CategoryDataAndSpec) => any
+type FormatFunc = (value: any, dataAndSpec: DataAndCategory) => any
 
 /**
  * Defintion of the function `validate()`.
@@ -101,7 +102,7 @@ export interface Prop {
 
   /**
    * A function to derive this property from other values. The function
-   * is called with `derive ({ kindData, kindSpecification, folderTitles,
+   * is called with `derive ({ data, category, folderTitles,
    * filePath })`.
    */
   derive?: DeriveFunc
@@ -114,7 +115,7 @@ export interface Prop {
 
   /**
    * Format the value of the property using this function. The function
-   * has this arguments: `format (value, { kindData, kindSpecification })`
+   * has this arguments: `format (value, { data, category })`
    */
   format?: FormatFunc
 
@@ -161,8 +162,8 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-  kindData: AssetType.Generic
-  kindSpecification: Category
+  data: AssetType.Generic
+  category: Category
   oldRelPath: string
 }
 
@@ -174,23 +175,23 @@ type RelPathFunc = (arg: RelPathFuncArg) => string
 /**
  * Defintion of the function `detectCategoryByPath()`.
  */
-type DetectCategoryByPathFunc = (arg: Category) => RegExp
+type DetectTypeByPathFunc = (arg: Category) => RegExp
 
 /**
  * Defintion of the function `intialize()`.
  */
-type InitializeFunc = (arg: CategoryDataAndSpec) => AssetType.Generic
+type InitializeFunc = (arg: DataAndCategory) => AssetType.Generic
 
 /**
  * Defintion of the function `finalize()`.
  */
-type FinalizeFunc = (dataAndSpec: CategoryDataAndSpec) => AssetType.Generic
+type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.Generic
 
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-  kindData: AssetType.Generic
+  data: AssetType.Generic
   entity: { [key: string]: any }
   functions: { [key: string]: Function }
 }
@@ -201,16 +202,17 @@ interface NormalizeWikidataFuncArg {
 type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Generic
 
 /**
- * The specification of one metadata kind.
+ * Apart from different file formats, media files can belong to several media
+ * categories regardless of their file format.
  */
 export interface Category {
   /**
-   * A title for the metadata kind.
+   * A title for the media category.
    */
   title: string
 
   /**
-   * A text to describe a metadata kind.
+   * A text to describe a media category.
    */
   description?: string
 
@@ -232,19 +234,19 @@ export interface Category {
 
   /**
    * A regular expression that is matched against file paths or a
-   * function which is called with `kindSpecification` that returns a regexp.
+   * function which is called with `category` that returns a regexp.
    */
-  detectCategoryByPath?: RegExp | DetectCategoryByPathFunc
+  detectCategoryByPath?: RegExp | DetectTypeByPathFunc
 
   /**
    * A function which is called before all processing steps: `initialize
-   * ({ kindData, kindSpecification })`.
+   * ({ data, category })`.
    */
   initialize?: InitializeFunc
 
   /**
    * A function which is called after all processing steps: arguments:
-   * `finalize ({ kindData, kindSpecification })`
+   * `finalize ({ data, category })`
    */
   finalize?: FinalizeFunc
 
@@ -260,9 +262,9 @@ export interface Category {
 }
 
 /**
- * The name of a meta data kind, for example `person`, `group`.
+ * The name of a meta type, for example `person`, `group`.
  */
-export type CategoryName =
+export type Name =
   'cloze' |
   'composition' |
   'cover' |
@@ -283,32 +285,30 @@ export type CategoryName =
  * Multiple meta data type names, separated by commas, for example
  * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
  */
-export type CategoryNames = string
+export type Names = string
 
 /**
- * The specification of all meta data kinds
+ * A collection of all media categories.
  *
  * ```js
- * const CategorySpecCollection = {
- *   typeName1: kindSpecification1,
- *   typeName2: kindSpecification2
+ * const Collection = {
+ *   name1: category1,
+ *   name2: category2
  *   ...
  * }
  * ```
  */
-export type CategoryCollection = { [key in CategoryName]: Category }
+export type Collection = { [key in Name]: Category }
 
 /**
  * Generic type for metadata of assets.
  */
-export interface Data {
-  [key: string]: any
-}
+export interface Data { [key: string]: any }
 
 /**
  * Used in many functions as an argument.
  */
-interface CategoryDataAndSpec {
-  kindData: AssetType.Generic
-  kindSpecification: Category
+interface DataAndCategory {
+  data: AssetType.Generic
+  category: Category
 }

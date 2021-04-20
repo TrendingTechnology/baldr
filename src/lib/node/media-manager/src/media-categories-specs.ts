@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid'
 // Project packages.
 import { getPdfPageCount } from '@bldr/core-node'
 import { MediaUri } from '@bldr/core-browser'
-import { MetaSpec } from '@bldr/type-definitions'
+import { MediaCategory } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
 import { deasciify, idify } from './helper'
@@ -89,32 +89,32 @@ function generateIdPrefix (filePath: string): string {
 /**
  * The meta data type specification “cloze”.
  */
-const cloze = <MetaSpec.Type> {
+const cloze = <MediaCategory.Category> {
   title: 'Lückentext',
   abbreviation: 'LT',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/LT/.*.svg$')
   },
-  initialize ({ typeData }) {
-    if (typeData.filePath && !typeData.clozePageNo) {
-      const match = typeData.filePath.match(/(\d+)\.svg/)
-      if (match) typeData.clozePageNo = parseInt(match[1])
+  initialize ({ data }) {
+    if (data.filePath && !data.clozePageNo) {
+      const match = data.filePath.match(/(\d+)\.svg/)
+      if (match) data.clozePageNo = parseInt(match[1])
     }
-    return typeData
+    return data
   },
-  relPath ({ typeData, typeSpec, oldRelPath }) {
+  relPath ({ data, category, oldRelPath }) {
     const oldRelDir = path.dirname(oldRelPath)
     let pageNo = ''
-    if (typeData.clozePageNo) pageNo = `_${typeData.clozePageNo}`
+    if (data.clozePageNo) pageNo = `_${data.clozePageNo}`
     return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
   },
   props: {
     id: {
       title: 'Die ID des Lückentexts',
-      derive: function ({ typeData, folderTitles, filePath }) {
+      derive: function ({ data, folderTitles, filePath }) {
         let counterSuffix = ''
-        if (typeData.clozePageNo) {
-          counterSuffix = `_${typeData.clozePageNo}`
+        if (data.clozePageNo) {
+          counterSuffix = `_${data.clozePageNo}`
         }
         return `${folderTitles.id}_LT${counterSuffix}`
       },
@@ -122,12 +122,12 @@ const cloze = <MetaSpec.Type> {
     },
     title: {
       title: 'Titel des Lückentextes',
-      derive: function ({ typeData, folderTitles, filePath }) {
+      derive: function ({ data, folderTitles, filePath }) {
         let suffix = ''
-        if (typeData.clozePageNo && typeData.clozePageCount) {
-          suffix = ` (Seite ${typeData.clozePageNo} von ${typeData.clozePageCount})`
-        } else if (typeData.clozePageNo && !typeData.clozePageCount) {
-          suffix = ` (Seite ${typeData.clozePageNo})`
+        if (data.clozePageNo && data.clozePageCount) {
+          suffix = ` (Seite ${data.clozePageNo} von ${data.clozePageCount})`
+        } else if (data.clozePageNo && !data.clozePageCount) {
+          suffix = ` (Seite ${data.clozePageNo})`
         }
         return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
       },
@@ -151,9 +151,9 @@ const cloze = <MetaSpec.Type> {
 /**
  * The meta data type specification “composition”.
  */
-const composition = <MetaSpec.Type> {
+const composition = <MediaCategory.Category> {
   title: 'Komposition',
-  detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
+  detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
     title: {
       title: 'Titel der Komponist',
@@ -225,9 +225,9 @@ const composition = <MetaSpec.Type> {
 /**
  * The meta data type specification “cover”.
  */
-const cover = <MetaSpec.Type> {
+const cover = <MediaCategory.Category> {
   title: 'Vorschau-Bild',
-  detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
+  detectCategoryByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
   props: {
     title: {
       title: 'Titel',
@@ -247,23 +247,23 @@ const cover = <MetaSpec.Type> {
 /**
  * The meta data type specification “group”.
  */
-const group = <MetaSpec.Type> {
+const group = <MediaCategory.Category> {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
-  relPath: function ({ typeData, typeSpec }) {
-    return path.join(typeData.groupId.substr(0, 1).toLowerCase(), typeData.groupId, `main.${typeData.extension}`)
+  relPath: function ({ data, category }) {
+    return path.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`)
   },
-  detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '/.*')
+  detectCategoryByPath: function (category) {
+    return new RegExp('^' + category.basePath + '/.*')
   },
   props: {
     groupId: {
       title: 'Gruppen-ID',
-      derive: function ({ typeData }) {
-        return typeData.name
+      derive: function ({ data }) {
+        return data.name
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { data, category }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = idify(value)
         return value
@@ -272,10 +272,10 @@ const group = <MetaSpec.Type> {
     },
     id: {
       title: 'ID zur Referenzierung (Präfix „GR_“)',
-      derive: function ({ typeData }) {
-        return typeData.name
+      derive: function ({ data }) {
+        return data.name
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { data, category }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = idify(value)
         return `GR_${value}`
@@ -284,8 +284,8 @@ const group = <MetaSpec.Type> {
     },
     title: {
       title: 'Titel der Gruppe',
-      derive: function ({ typeData }) {
-        return `Portrait-Bild der Gruppe „${typeData.name}“`
+      derive: function ({ data }) {
+        return `Portrait-Bild der Gruppe „${data.name}“`
       },
       overwriteByDerived: true
     },
@@ -358,36 +358,36 @@ const group = <MetaSpec.Type> {
 /**
  * The meta data type specification “instrument”.
  */
-const instrument = <MetaSpec.Type> {
+const instrument = <MediaCategory.Category> {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
-  relPath: function ({ typeData, typeSpec }) {
-    const id = typeData.id.replace(/^IN_/, '')
-    return path.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`)
+  relPath: function ({ data, category }) {
+    const id = data.id.replace(/^IN_/, '')
+    return path.join(id.substr(0, 1).toLowerCase(), id, `main.${data.extension}`)
   },
-  detectTypeByPath: function (typeSpec) {
-    return new RegExp(`^${typeSpec.basePath}.*/main\\.jpg$`)
+  detectCategoryByPath: function (category) {
+    return new RegExp(`^${category.basePath}.*/main\\.jpg$`)
   },
   props: {
     instrumentId: {
       title: 'Instrumenten-ID',
-      derive: function ({ typeData }) {
-        return idify(typeData.name)
+      derive: function ({ data }) {
+        return idify(data.name)
       }
     },
     id: {
       title: 'ID zur Referenzierung (Präfix „IN_“)',
-      derive: function ({ typeData, typeSpec }) {
+      derive: function ({ data, category }) {
         // IS: Instrument
-        return `${typeSpec.abbreviation}_${idify(typeData.name)}`
+        return `${category.abbreviation}_${idify(data.name)}`
       },
       overwriteByDerived: true
     },
     title: {
       title: 'Titel des Instruments',
-      derive: function ({ typeData }) {
-        return `Foto des Instruments „${typeData.name}“`
+      derive: function ({ data }) {
+        return `Foto des Instruments „${data.name}“`
       },
       overwriteByDerived: true
     },
@@ -430,17 +430,17 @@ const instrument = <MetaSpec.Type> {
 /**
  * The meta data type specification “person”.
  */
-const person = <MetaSpec.Type> {
+const person = <MediaCategory.Category> {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
-  relPath: function ({ typeData }) {
-    return path.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.personId, `main.${typeData.extension}`)
+  relPath: function ({ data }) {
+    return path.join(data.personId.substr(0, 1).toLowerCase(), data.personId, `main.${data.extension}`)
   },
-  detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '/.*(jpg|png)')
+  detectCategoryByPath: function (category) {
+    return new RegExp('^' + category.basePath + '/.*(jpg|png)')
   },
-  normalizeWikidata: function ({ typeData, entity, functions }) {
+  normalizeWikidata: function ({ data, entity, functions }) {
     const label = functions.getLabel(entity)
     const segments = label.split(' ')
     const firstnameFromLabel = segments.shift()
@@ -449,33 +449,33 @@ const person = <MetaSpec.Type> {
     // for example „Joan Baez“ and not „Joan Chandos“
     if (
       firstnameFromLabel && lastnameFromLabel &&
-      (typeData.firstname !== firstnameFromLabel || typeData.lastname !== lastnameFromLabel)
+      (data.firstname !== firstnameFromLabel || data.lastname !== lastnameFromLabel)
     ) {
-      typeData.firstname = firstnameFromLabel
-      typeData.lastname = lastnameFromLabel
-      typeData.name = label
+      data.firstname = firstnameFromLabel
+      data.lastname = lastnameFromLabel
+      data.name = label
     }
-    return typeData
+    return data
   },
   props: {
     personId: {
       title: 'Personen-ID',
-      derive: function ({ typeData }) {
-        return `${idify(typeData.lastname)}_${idify(typeData.firstname)}`
+      derive: function ({ data }) {
+        return `${idify(data.lastname)}_${idify(data.firstname)}`
       },
       overwriteByDerived: true
     },
     id: {
       title: 'ID der Person',
-      derive: function ({ typeData, typeSpec }) {
-        return `${typeSpec.abbreviation}_${idify(typeData.lastname)}_${idify(typeData.firstname)}`
+      derive: function ({ data, category }) {
+        return `${category.abbreviation}_${idify(data.lastname)}_${idify(data.firstname)}`
       },
       overwriteByDerived: true
     },
     title: {
       title: 'Titel der Person',
-      derive: function ({ typeData }) {
-        return `Portrait-Bild von „${typeData.firstname} ${typeData.lastname}“`
+      derive: function ({ data }) {
+        return `Portrait-Bild von „${data.firstname} ${data.lastname}“`
       },
       overwriteByDerived: true
     },
@@ -486,7 +486,7 @@ const person = <MetaSpec.Type> {
         // Vornamen der Person
         fromClaim: 'P735',
         secondQuery: 'queryLabels',
-        format: function (value, typeSpec) {
+        format: function (value, category) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -501,7 +501,7 @@ const person = <MetaSpec.Type> {
         // Familienname einer Person
         fromClaim: 'P734',
         secondQuery: 'queryLabels',
-        format: function (value, typeSpec) {
+        format: function (value, category) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -511,8 +511,8 @@ const person = <MetaSpec.Type> {
     },
     name: {
       title: 'Name (Vor- und Familienname)',
-      derive: function ({ typeData }) {
-        return `${typeData.firstname} ${typeData.lastname}`
+      derive: function ({ data }) {
+        return `${data.firstname} ${data.lastname}`
       },
       overwriteByDerived: false
     },
@@ -567,10 +567,10 @@ const person = <MetaSpec.Type> {
 /**
  * The meta data type specification “photo”.
  */
-const photo = <MetaSpec.Type> {
+const photo = <MediaCategory.Category> {
   title: 'Foto',
   abbreviation: 'FT',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/FT/.*.jpg$')
   },
   props: {
@@ -583,7 +583,7 @@ const photo = <MetaSpec.Type> {
 /**
  * The meta data type specification “radio”.
  */
-const radio = <MetaSpec.Type> {
+const radio = <MediaCategory.Category> {
   title: 'Schulfunk',
   abbreviation: 'SF',
   props: {
@@ -596,9 +596,9 @@ const radio = <MetaSpec.Type> {
 /**
  * The meta data type specification “recording”.
  */
-const recording = <MetaSpec.Type> {
+const recording = <MediaCategory.Category> {
   title: 'Aufnahme',
-  detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
+  detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
     artist: {
       title: 'Interpret',
@@ -645,19 +645,19 @@ const recording = <MetaSpec.Type> {
 /**
  * The meta data type specification “reference”.
  */
-const reference = <MetaSpec.Type> {
+const reference = <MediaCategory.Category> {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/QL/.*.pdf$')
   },
   abbreviation: 'QL',
   props: {
     title: {
       title: 'Titel der Quelle',
-      derive: function ({ typeData, folderTitles, filePath }) {
+      derive: function ({ data, folderTitles, filePath }) {
         let suffix = ''
-        if (typeData.forTeacher) {
+        if (data.forTeacher) {
           suffix = ' (Lehrerband)'
         }
         return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
@@ -707,10 +707,10 @@ const reference = <MetaSpec.Type> {
 /**
  * The meta data type specification “score”.
  */
-const score = <MetaSpec.Type> {
+const score = <MediaCategory.Category> {
   title: 'Partitur',
   abbreviation: 'PT',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/PT/.*.pdf$')
   },
   props: {
@@ -730,7 +730,7 @@ const score = <MetaSpec.Type> {
 /**
  * The meta data type specification “song”.
  */
-const song = <MetaSpec.Type> {
+const song = <MediaCategory.Category> {
   title: 'Lied',
   props: {
     publicationDate: {
@@ -779,10 +779,10 @@ const song = <MetaSpec.Type> {
 /**
  * The meta data type specification “worksheet”.
  */
-const worksheet = <MetaSpec.Type> {
+const worksheet = <MediaCategory.Category> {
   title: 'Arbeitsblatt',
   abbreviation: 'TX',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/TX/.*.pdf$')
   },
   props: {
@@ -812,34 +812,34 @@ const worksheet = <MetaSpec.Type> {
 /**
  * The meta data type specification “youtube”.
  */
-const youtube = <MetaSpec.Type> {
+const youtube = <MediaCategory.Category> {
   title: 'YouTube-Video',
   abbreviation: 'YT',
-  detectTypeByPath: function () {
+  detectCategoryByPath: function () {
     return new RegExp('^.*/YT/.*.mp4$')
   },
-  relPath ({ typeData, typeSpec, oldRelPath }) {
+  relPath ({ data, category, oldRelPath }) {
     const oldRelDir = path.dirname(oldRelPath)
-    return path.join(oldRelDir, `${typeData.youtubeId}.mp4`)
+    return path.join(oldRelDir, `${data.youtubeId}.mp4`)
   },
   props: {
     id: {
       title: 'ID eines YouTube-Videos',
-      derive: function ({ typeData, typeSpec }) {
-        return `${typeSpec.abbreviation}_${typeData.youtubeId}`
+      derive: function ({ data, category }) {
+        return `${category.abbreviation}_${data.youtubeId}`
       },
       overwriteByDerived: true
     },
     title: {
       title: 'Titel eines YouTube-Videos',
-      derive: function ({ typeData }) {
+      derive: function ({ data }) {
         let title
-        if (typeData.heading) {
-          title = typeData.heading
-        } else if (typeData.originalHeading) {
-          title = typeData.originalHeading
+        if (data.heading) {
+          title = data.heading
+        } else if (data.originalHeading) {
+          title = data.originalHeading
         } else {
-          title = typeData.youtubeId
+          title = data.youtubeId
         }
         return `YouTube-Video „${title}“`
       },
@@ -868,7 +868,7 @@ const youtube = <MetaSpec.Type> {
  * General meta data type specification. Applied after all other meta data
  * types.
  */
-const general = <MetaSpec.Type> {
+const general = <MediaCategory.Category> {
   title: 'Allgemeiner Metadaten-Type',
   props: {
     id: {
@@ -876,14 +876,14 @@ const general = <MetaSpec.Type> {
       validate: function (value) {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { data, category }) {
         value = idify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         value = value.replace(/^[va]-/, '')
 
-        if (typeData.filePath && typeData.metaTypes.indexOf('youtube') === -1) {
-          const idPrefix = generateIdPrefix(typeData.filePath)
+        if (data.filePath && data.metaTypes.indexOf('youtube') === -1) {
+          const idPrefix = generateIdPrefix(data.filePath)
           if (idPrefix) {
             if (value.indexOf(idPrefix) === -1) {
               value = `${idPrefix}_${value}`
@@ -937,13 +937,13 @@ const general = <MetaSpec.Type> {
       title: 'Titel',
       required: true,
       overwriteByDerived: false,
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { data, category }) {
         // a Strawinsky Petruschka Abschnitt 0_22
         value = value.replace(/^[va] /, '')
         return value
       },
-      derive: function ({ typeData }) {
-        return deasciify(typeData.id)
+      derive: function ({ data }) {
+        return deasciify(data.id)
       }
     },
     wikidata: {
@@ -957,7 +957,7 @@ const general = <MetaSpec.Type> {
       validate: function (value) {
         return value.match(/^.+:.+$/)
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { data, category }) {
         return decodeURI(value)
       },
       wikidata: {
@@ -986,21 +986,21 @@ const general = <MetaSpec.Type> {
       state: 'absent'
     }
   },
-  initialize: function ({ typeData, typeSpec }) {
-    if (typeData.filePath && !checkForTwoLetterDir(typeData.filePath)) {
-      console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`)
+  initialize: function ({ data, category }) {
+    if (data.filePath && !checkForTwoLetterDir(data.filePath)) {
+      console.log(`File path ${data.filePath} is not in a valid two letter directory.`)
       process.exit()
     }
-    return typeData
+    return data
   },
-  finalize: function ({ typeData, typeSpec }) {
-    for (const propName in typeData) {
-      const value = typeData[propName]
+  finalize: function ({ data, category }) {
+    for (const propName in data) {
+      const value = data[propName]
       if (typeof value === 'string') {
-        typeData[propName] = value.trim()
+        data[propName] = value.trim()
       }
     }
-    return typeData
+    return data
   }
 }
 

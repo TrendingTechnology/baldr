@@ -6,7 +6,7 @@
 export * as AssetType from './asset';
 export * from './cli';
 export * from './config';
-export * as MetaSpec from './meta-spec';
+export * as MediaCategory from './media-category';
 export * from './titles';
 export * as MasterTypes from './master';
 export * as PresentationTypes from './presentation';

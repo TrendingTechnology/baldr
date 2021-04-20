@@ -8,7 +8,7 @@ import * as AssetType from './asset';
 /**
  * Defintion of the function `format()`.
  */
-declare type WikidataFormatFunc = (value: string, arg: Type) => string;
+declare type WikidataFormatFunc = (value: string, arg: Category) => string;
 /**
  * The specification of a wikidata media metadata property.
  */
@@ -46,8 +46,8 @@ export declare type PropName = string;
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-    typeData: AssetType.Generic;
-    typeSpec: Type;
+    data: AssetType.Generic;
+    category: Category;
     folderTitles: DeepTitleInterface;
     filePath: string;
 }
@@ -58,7 +58,7 @@ declare type DeriveFunc = (arg: DeriveFuncArg) => any;
 /**
  * Defintion of the function `format()`.
  */
-declare type FormatFunc = (value: any, dataAndSpec: TypeDataAndSpec) => any;
+declare type FormatFunc = (value: any, dataAndSpec: DataAndCategory) => any;
 /**
  * Defintion of the function `validate()`.
  */
@@ -85,7 +85,7 @@ export interface Prop {
     required?: boolean;
     /**
      * A function to derive this property from other values. The function
-     * is called with `derive ({ typeData, typeSpec, folderTitles,
+     * is called with `derive ({ data, category, folderTitles,
      * filePath })`.
      */
     derive?: DeriveFunc;
@@ -96,7 +96,7 @@ export interface Prop {
     overwriteByDerived?: boolean;
     /**
      * Format the value of the property using this function. The function
-     * has this arguments: `format (value, { typeData, typeSpec })`
+     * has this arguments: `format (value, { data, category })`
      */
     format?: FormatFunc;
     /**
@@ -137,8 +137,8 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-    typeData: AssetType.Generic;
-    typeSpec: Type;
+    data: AssetType.Generic;
+    category: Category;
     oldRelPath: string;
 }
 /**
@@ -146,22 +146,22 @@ interface RelPathFuncArg {
  */
 declare type RelPathFunc = (arg: RelPathFuncArg) => string;
 /**
- * Defintion of the function `detectTypeByPath()`.
+ * Defintion of the function `detectCategoryByPath()`.
  */
-declare type DetectTypeByPathFunc = (arg: Type) => RegExp;
+declare type DetectTypeByPathFunc = (arg: Category) => RegExp;
 /**
  * Defintion of the function `intialize()`.
  */
-declare type InitializeFunc = (arg: TypeDataAndSpec) => AssetType.Generic;
+declare type InitializeFunc = (arg: DataAndCategory) => AssetType.Generic;
 /**
  * Defintion of the function `finalize()`.
  */
-declare type FinalizeFunc = (dataAndSpec: TypeDataAndSpec) => AssetType.Generic;
+declare type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.Generic;
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-    typeData: AssetType.Generic;
+    data: AssetType.Generic;
     entity: {
         [key: string]: any;
     };
@@ -174,15 +174,16 @@ interface NormalizeWikidataFuncArg {
  */
 declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Generic;
 /**
-  * The specification of one metadata type.
-  */
-export interface Type {
+ * Apart from different file formats, media files can belong to several media
+ * categories regardless of their file format.
+ */
+export interface Category {
     /**
-     * A title for the metadata type.
+     * A title for the media category.
      */
     title: string;
     /**
-     * A text to describe a metadata type.
+     * A text to describe a media category.
      */
     description?: string;
     /**
@@ -200,17 +201,17 @@ export interface Type {
     relPath?: RelPathFunc;
     /**
      * A regular expression that is matched against file paths or a
-     * function which is called with `typeSpec` that returns a regexp.
+     * function which is called with `category` that returns a regexp.
      */
-    detectTypeByPath?: RegExp | DetectTypeByPathFunc;
+    detectCategoryByPath?: RegExp | DetectTypeByPathFunc;
     /**
      * A function which is called before all processing steps: `initialize
-     * ({ typeData, typeSpec })`.
+     * ({ data, category })`.
      */
     initialize?: InitializeFunc;
     /**
      * A function which is called after all processing steps: arguments:
-     * `finalize ({ typeData, typeSpec })`
+     * `finalize ({ data, category })`
      */
     finalize?: FinalizeFunc;
     /**
@@ -225,25 +226,25 @@ export interface Type {
 /**
  * The name of a meta type, for example `person`, `group`.
  */
-export declare type TypeName = 'cloze' | 'composition' | 'cover' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'worksheet' | 'youtube' | 'general';
+export declare type Name = 'cloze' | 'composition' | 'cover' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'worksheet' | 'youtube' | 'general';
 /**
  * Multiple meta data type names, separated by commas, for example
  * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
  */
-export declare type TypeNames = string;
+export declare type Names = string;
 /**
- * The specification of all meta types
+ * A collection of all media categories.
  *
  * ```js
- * const TypeSpecCollection = {
- *   typeName1: typeSpec1,
- *   typeName2: typeSpec2
+ * const Collection = {
+ *   name1: category1,
+ *   name2: category2
  *   ...
  * }
  * ```
  */
-export declare type TypeCollection = {
-    [key in TypeName]: Type;
+export declare type Collection = {
+    [key in Name]: Category;
 };
 /**
  * Generic type for metadata of assets.
@@ -254,8 +255,8 @@ export interface Data {
 /**
  * Used in many functions as an argument.
  */
-interface TypeDataAndSpec {
-    typeData: AssetType.Generic;
-    typeSpec: Type;
+interface DataAndCategory {
+    data: AssetType.Generic;
+    category: Category;
 }
 export {};
