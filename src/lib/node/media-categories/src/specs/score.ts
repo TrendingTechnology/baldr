@@ -3,7 +3,7 @@ import type { MediaCategory } from '@bldr/type-definitions'
 /**
  * The meta data type specification “score”.
  */
- export const score: MediaCategory.Category = {
+export const score: MediaCategory.Category = {
   title: 'Partitur',
   abbreviation: 'PT',
   detectCategoryByPath: function () {

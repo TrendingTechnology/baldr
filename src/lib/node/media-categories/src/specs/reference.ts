@@ -5,7 +5,7 @@ import { getPdfPageCount } from '@bldr/core-node'
 /**
  * The meta data type specification “reference”.
  */
- export const reference: MediaCategory.Category = {
+export const reference: MediaCategory.Category = {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectCategoryByPath: function () {

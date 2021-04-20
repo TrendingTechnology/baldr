@@ -33,7 +33,7 @@ declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): s
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
-declare function mergeNames(...typeName: string[]): string;
+declare function mergeNames(...name: string[]): string;
 /**
  * Bundle three operations: Sort and derive, format, validate.
  *

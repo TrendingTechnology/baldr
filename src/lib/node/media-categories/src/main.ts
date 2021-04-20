@@ -1,9 +1,9 @@
 import mediaCategoriesManagmentImport from './management'
-export const categoriesManagement = mediaCategoriesManagmentImport
 
 import path from 'path'
 
 import { MediaUri } from '@bldr/core-browser'
+export const categoriesManagement = mediaCategoriesManagmentImport
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.

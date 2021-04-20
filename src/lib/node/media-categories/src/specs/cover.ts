@@ -3,7 +3,7 @@ import type { MediaCategory } from '@bldr/type-definitions'
 /**
  * The meta data type specification “cover”.
  */
- export const cover: MediaCategory.Category = {
+export const cover: MediaCategory.Category = {
   title: 'Vorschau-Bild',
   detectCategoryByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
   props: {

@@ -11,7 +11,7 @@ import config from '@bldr/config'
 /**
  * The meta data type specification “person”.
  */
- export const person: MediaCategory.Category = {
+export const person: MediaCategory.Category = {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),

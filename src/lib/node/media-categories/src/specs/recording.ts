@@ -5,7 +5,7 @@ import { validateMediaId, validateUuid } from '../main'
 /**
  * The meta data type specification “recording”.
  */
- export const recording: MediaCategory.Category = {
+export const recording: MediaCategory.Category = {
   title: 'Aufnahme',
   detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {

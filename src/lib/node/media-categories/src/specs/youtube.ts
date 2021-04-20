@@ -7,13 +7,13 @@ import { validateYoutubeId } from '../main'
 /**
  * The meta data type specification “youtube”.
  */
- export const youtube: MediaCategory.Category = {
+export const youtube: MediaCategory.Category = {
   title: 'YouTube-Video',
   abbreviation: 'YT',
   detectCategoryByPath: function () {
     return new RegExp('^.*/YT/.*.mp4$')
   },
-  relPath ({ data, category, oldRelPath }) {
+  relPath ({ data, oldRelPath }) {
     const oldRelDir = path.dirname(oldRelPath)
     return path.join(oldRelDir, `${data.youtubeId}.mp4`)
   },
@@ -28,10 +28,10 @@ import { validateYoutubeId } from '../main'
     title: {
       title: 'Titel eines YouTube-Videos',
       derive: function ({ data }) {
-        let title
-        if (data.heading) {
+        let title: string
+        if (data.heading != null && data.heading !== '') {
           title = data.heading
-        } else if (data.originalHeading) {
+        } else if (data.originalHeading != null && data.originalHeading !== '') {
           title = data.originalHeading
         } else {
           title = data.youtubeId

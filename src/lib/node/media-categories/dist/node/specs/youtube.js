@@ -15,7 +15,7 @@ exports.youtube = {
     detectCategoryByPath: function () {
         return new RegExp('^.*/YT/.*.mp4$');
     },
-    relPath({ data, category, oldRelPath }) {
+    relPath({ data, oldRelPath }) {
         const oldRelDir = path_1.default.dirname(oldRelPath);
         return path_1.default.join(oldRelDir, `${data.youtubeId}.mp4`);
     },
@@ -31,10 +31,10 @@ exports.youtube = {
             title: 'Titel eines YouTube-Videos',
             derive: function ({ data }) {
                 let title;
-                if (data.heading) {
+                if (data.heading != null && data.heading !== '') {
                     title = data.heading;
                 }
-                else if (data.originalHeading) {
+                else if (data.originalHeading != null && data.originalHeading !== '') {
                     title = data.originalHeading;
                 }
                 else {

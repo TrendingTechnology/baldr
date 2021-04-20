@@ -7,7 +7,7 @@ import config from '@bldr/config'
 /**
  * The meta data type specification “instrument”.
  */
- export const instrument: MediaCategory.Category = {
+export const instrument: MediaCategory.Category = {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),

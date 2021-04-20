@@ -34,9 +34,9 @@ two_letter_abbreviations_1.checkTypeAbbreviations(specs_1.default);
  */
 function detectCategoryByPath(filePath) {
     filePath = path_1.default.resolve(filePath);
-    const typeNames = new Set();
-    for (const typeName in specs_1.default) {
-        const category = specs_1.default[typeName];
+    const names = new Set();
+    for (const name in specs_1.default) {
+        const category = specs_1.default[name];
         if (category.detectCategoryByPath != null) {
             let regexp;
             if (typeof category.detectCategoryByPath === 'function') {
@@ -46,12 +46,12 @@ function detectCategoryByPath(filePath) {
                 regexp = category.detectCategoryByPath;
             }
             if (filePath.match(regexp) != null)
-                typeNames.add(typeName);
+                names.add(name);
         }
     }
-    typeNames.add('general');
-    if (typeNames.size)
-        return [...typeNames].join(',');
+    names.add('general');
+    if (names.size > 0)
+        return [...names].join(',');
 }
 /**
  * Generate the file path of the first specifed meta type.
@@ -64,20 +64,20 @@ function detectCategoryByPath(filePath) {
  * @returns A absolute path
  */
 function formatFilePath(data, oldPath) {
-    if (!data.categories)
+    if (data.categories == null)
         throw new Error('Your data needs a property named “categories”.');
     // TODO: support multiple types
     // person,general -> person
-    const typeName = data.categories.replace(/,.*$/, '');
-    const category = specs_1.default[typeName];
-    if (!category)
-        throw new Error(`Unkown meta type “${typeName}”.`);
+    const categoryName = data.categories.replace(/,.*$/, '');
+    const category = specs_1.default[categoryName];
+    if (category == null)
+        throw new Error(`Unkown meta type “${categoryName}”.`);
     if ((category.relPath == null) || typeof category.relPath !== 'function') {
         return '';
     }
     // The relPath function needs this.extension.
-    if (!data.extension) {
-        if (!data.mainImage)
+    if (data.extension != null) {
+        if (data.mainImage == null)
             throw new Error('Your data needs a property named “mainImage”.');
         data.extension = core_browser_1.getExtension(data.mainImage);
         // b/Bush_George-Walker/main.jpeg
@@ -85,25 +85,25 @@ function formatFilePath(data, oldPath) {
     if (data.extension === 'jpeg')
         data.extension = 'jpg';
     let oldRelPath = '';
-    if (oldPath) {
+    if (oldPath != null) {
         oldRelPath = path_1.default.resolve(oldPath);
         oldRelPath = oldRelPath.replace(config_1.default.mediaServer.basePath, '');
         oldRelPath = oldRelPath.replace(/^\//, '');
     }
     // b/Bush_George-Walker/main.jpeg
     const relPath = category.relPath({ data, category, oldRelPath });
-    if (!relPath)
-        throw new Error(`The relPath() function has to return a string for meta type “${typeName}”`);
+    if (relPath != null)
+        throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`);
     // To avoid confusion with class MediaFile in the module @bldr/media-client
     delete data.extension;
-    const basePath = category.basePath ? category.basePath : config_1.default.mediaServer.basePath;
+    const basePath = category.basePath != null ? category.basePath : config_1.default.mediaServer.basePath;
     return path_1.default.join(basePath, relPath);
 }
 /**
  * @param value
  */
 function isValue(value) {
-    if (value || typeof value === 'boolean') {
+    if (value != null || typeof value === 'boolean') {
         return true;
     }
     return false;
@@ -136,7 +136,7 @@ function applySpecToProps(data, func, category, replaceValues = true) {
  *   specification of one property
  */
 function isPropertyDerived(propSpec) {
-    if (propSpec && (propSpec.derive != null) && typeof propSpec.derive === 'function') {
+    if (typeof propSpec.derive === 'function') {
         return true;
     }
     return false;
@@ -253,13 +253,10 @@ function removeProps(data, category) {
  * @param typeName - The type name
  */
 function processByType(data, typeName) {
-    if (!specs_1.default[typeName]) {
+    if (specs_1.default[typeName] == null) {
         throw new Error(`Unkown meta type name: “${typeName}”`);
     }
     const category = specs_1.default[typeName];
-    if (!category.props) {
-        throw new Error(`The meta type “${typeName}” has no props.`);
-    }
     if ((category.initialize != null) && typeof category.initialize === 'function') {
         data = category.initialize({ data, category });
     }
@@ -276,17 +273,17 @@ function processByType(data, typeName) {
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
-function mergeNames(...typeName) {
-    const types = new Set();
+function mergeNames(...name) {
+    const categories = new Set();
     for (let i = 0; i < arguments.length; i++) {
-        const typeNames = arguments[i];
-        if (typeNames) {
-            for (const typeName of typeNames.split(',')) {
-                types.add(typeName);
+        const categoryNames = arguments[i];
+        if (typeof categoryNames === 'string' && categoryNames !== '') {
+            for (const name of categoryNames.split(',')) {
+                categories.add(name);
             }
         }
     }
-    return [...types].join(',');
+    return [...categories].join(',');
 }
 /**
  * Bundle three operations: Sort and derive, format, validate.
@@ -297,15 +294,15 @@ function process(data) {
     // The meta type specification is in camel case. The meta data is
     // stored in the YAML format in snake case
     data = yaml_1.convertPropertiesSnakeToCamel(data);
-    if (!data.categories) {
+    if (data.categories == null) {
         data.categories = 'general';
     }
     else if (!data.categories.includes('general')) {
         data.categories = `${data.categories},general`;
     }
-    if (data.categories) {
-        for (const typeName of data.categories.split(',')) {
-            data = processByType(data, typeName);
+    if (data.categories != null) {
+        for (const name of data.categories.split(',')) {
+            data = processByType(data, name);
         }
     }
     // Do not convert back. This conversion should be the last step, before

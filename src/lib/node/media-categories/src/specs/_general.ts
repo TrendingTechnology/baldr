@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
  * General meta data type specification. Applied after all other meta data
  * types.
  */
- export const general: MediaCategory.Category = {
+export const general: MediaCategory.Category = {
   title: 'Allgemeiner Metadaten-Type',
   props: {
     id: {

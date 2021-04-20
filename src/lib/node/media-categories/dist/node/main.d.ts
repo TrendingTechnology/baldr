@@ -19,7 +19,7 @@ export declare const categoriesManagement: {
         youtube: import("@bldr/type-definitions/dist/node/media-category").Category;
         general: import("@bldr/type-definitions/dist/node/media-category").Category;
     };
-    mergeNames: (...typeName: string[]) => string;
+    mergeNames: (...name: string[]) => string;
 };
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
