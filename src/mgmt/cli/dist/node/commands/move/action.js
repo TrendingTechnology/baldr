@@ -209,7 +209,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         metaData.source = oldPath;
         // To get ID prefix
         metaData.filePath = newPath;
-        metaData = media_manager_1.metaTypes.process(metaData);
+        metaData = media_manager_1.categoriesManagement.process(metaData);
         media_manager_1.writeYamlFile(`${newPath}.yml`, metaData);
         // Delete MP3.
         fs_1.default.unlinkSync(tmpMp3Path);

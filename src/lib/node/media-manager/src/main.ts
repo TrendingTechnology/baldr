@@ -23,8 +23,8 @@ import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
 import { renameMediaAsset } from './operations/rename-asset'
 
-import metaTypesImp from './media-categories-management'
-export const metaTypes = metaTypesImp
+import mediaCategoriesManagmentImport from './media-categories-management'
+export const categoriesManagement = mediaCategoriesManagmentImport
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */

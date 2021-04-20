@@ -15,7 +15,7 @@ import {
   readAssetYaml,
   operations,
   idify,
-  metaTypes,
+  categoriesManagement,
   asciify,
   locationIndicator
 } from '@bldr/media-manager'
@@ -211,7 +211,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
   metaData.source = oldPath
   // To get ID prefix
   metaData.filePath = newPath
-  metaData = metaTypes.process(metaData)
+  metaData = categoriesManagement.process(metaData)
   writeYamlFile(`${newPath}.yml`, metaData)
 
   // Delete MP3.

@@ -13,7 +13,7 @@ import { initializeMetaYaml } from './operations/initialize-meta-yaml';
 import { normalizeMediaAsset } from './operations/normalize-asset';
 import { normalizePresentationFile } from './operations/normalize-presentation';
 import { renameMediaAsset } from './operations/rename-asset';
-export declare const metaTypes: {
+export declare const categoriesManagement: {
     detectCategoryByPath: (filePath: string) => string | undefined;
     formatFilePath: (data: AssetType.FileFormat, oldPath?: string | undefined) => string;
     process: (data: AssetType.Generic) => AssetType.Generic;

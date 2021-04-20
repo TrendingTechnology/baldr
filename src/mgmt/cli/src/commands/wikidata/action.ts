@@ -7,7 +7,7 @@ import chalk from 'chalk'
 import wikidata from '@bldr/wikidata'
 
 // Project packages.
-import { writeYamlFile, metaTypes } from '@bldr/media-manager'
+import { writeYamlFile, categoriesManagement } from '@bldr/media-manager'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
@@ -19,7 +19,7 @@ import config from '@bldr/config'
  * @param {String} arg2
  */
 async function action (metaType: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
-  let rawData = await wikidata.query(itemId, metaType, metaTypes.categories)
+  let rawData = await wikidata.query(itemId, metaType, categoriesManagement.categories)
   if (arg1) {
     if (metaType === 'person') {
       rawData.firstname = arg1
@@ -27,7 +27,7 @@ async function action (metaType: string, itemId: string, arg1: string, arg2: str
     }
   }
   rawData.metaTypes = metaType
-  const data = <AssetType.FileFormat> metaTypes.process(rawData)
+  const data = <AssetType.FileFormat> categoriesManagement.process(rawData)
   console.log(data)
 
   let downloadWikicommons = true
@@ -36,7 +36,7 @@ async function action (metaType: string, itemId: string, arg1: string, arg2: str
     downloadWikicommons = false
   }
 
-  const dest = metaTypes.formatFilePath(data)
+  const dest = categoriesManagement.formatFilePath(data)
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)

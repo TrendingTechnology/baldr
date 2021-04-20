@@ -29,7 +29,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  */
 function action(metaType, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        let rawData = yield wikidata_1.default.query(itemId, metaType, media_manager_1.metaTypes.categories);
+        let rawData = yield wikidata_1.default.query(itemId, metaType, media_manager_1.categoriesManagement.categories);
         if (arg1) {
             if (metaType === 'person') {
                 rawData.firstname = arg1;
@@ -37,14 +37,14 @@ function action(metaType, itemId, arg1, arg2, cmdObj) {
             }
         }
         rawData.metaTypes = metaType;
-        const data = media_manager_1.metaTypes.process(rawData);
+        const data = media_manager_1.categoriesManagement.process(rawData);
         console.log(data);
         let downloadWikicommons = true;
         if (!rawData.mainImage) {
             data.mainImage = 'blank.jpg';
             downloadWikicommons = false;
         }
-        const dest = media_manager_1.metaTypes.formatFilePath(data);
+        const dest = media_manager_1.categoriesManagement.formatFilePath(data);
         if (downloadWikicommons) {
             if (!cmdObj.dryRun && data.mainImage) {
                 yield wikidata_1.default.fetchCommonsFile(data.mainImage, dest);
