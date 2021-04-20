@@ -801,8 +801,8 @@ function registerMediaRestApi () {
 async function runRestApi (port?: number) {
   const app = express()
 
-  const db = await connectDb()
-  database = new Database(db)
+  const mongoClient = await connectDb()
+  database = new Database(mongoClient.db())
   await database.initialize()
 
   app.use(cors())

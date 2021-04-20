@@ -10,7 +10,7 @@ import type { StringIndexedObject } from '@bldr/type-definitions'
 /**
  * Connect to the MongoDB server.
  */
-export async function connectDb (): Promise<mongodb.Db> {
+export async function connectDb (): Promise<mongodb.MongoClient> {
   const conf = config.databases.mongodb
   const user = encodeURIComponent(conf.user)
   const password = encodeURIComponent(conf.password)
@@ -23,7 +23,8 @@ export async function connectDb (): Promise<mongodb.Db> {
   )
 
   await mongoClient.connect()
-  return mongoClient.db(config.databases.mongodb.dbName)
+  mongoClient.db(config.databases.mongodb.dbName)
+  return mongoClient
 }
 
 interface IndexDefinition {
@@ -88,7 +89,8 @@ export class Database {
   }
 
   async connect (): Promise<void> {
-    this.db = await connectDb()
+    const mongoClient = await connectDb()
+    this.db = mongoClient.db(config.databases.mongodb.dbName)
   }
 
   /**

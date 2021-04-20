@@ -63,7 +63,8 @@ function connectDb() {
                     return [4 /*yield*/, mongoClient.connect()];
                 case 1:
                     _a.sent();
-                    return [2 /*return*/, mongoClient.db(config_1.default.databases.mongodb.dbName)];
+                    mongoClient.db(config_1.default.databases.mongodb.dbName);
+                    return [2 /*return*/, mongoClient];
             }
         });
     });
@@ -112,14 +113,13 @@ var Database = /** @class */ (function () {
     }
     Database.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this;
-                        return [4 /*yield*/, connectDb()];
+            var mongoClient;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, connectDb()];
                     case 1:
-                        _a.db = _b.sent();
+                        mongoClient = _a.sent();
+                        this.db = mongoClient.db(config_1.default.databases.mongodb.dbName);
                         return [2 /*return*/];
                 }
             });

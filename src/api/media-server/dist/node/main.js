@@ -955,15 +955,15 @@ function registerMediaRestApi() {
  */
 function runRestApi(port) {
     return __awaiter(this, void 0, void 0, function () {
-        var app, db, helpMessages;
+        var app, mongoClient, helpMessages;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     app = express_1.default();
                     return [4 /*yield*/, mongodb_connector_1.connectDb()];
                 case 1:
-                    db = _a.sent();
-                    exports.database = new mongodb_connector_1.Database(db);
+                    mongoClient = _a.sent();
+                    exports.database = new mongodb_connector_1.Database(mongoClient.db());
                     return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();

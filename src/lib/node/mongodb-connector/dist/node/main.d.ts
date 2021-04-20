@@ -5,7 +5,7 @@ import mongodb from 'mongodb';
 /**
  * Connect to the MongoDB server.
  */
-export declare function connectDb(): Promise<mongodb.Db>;
+export declare function connectDb(): Promise<mongodb.MongoClient>;
 interface IndexDefinition {
     field: string;
     unique: boolean;
