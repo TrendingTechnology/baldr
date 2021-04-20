@@ -529,4 +529,3 @@ export interface IParseOptions {
 }
 export type ParseFunction = (input: string, options?: IParseOptions) => any;
 export const parse: ParseFunction = peg$parse;
-

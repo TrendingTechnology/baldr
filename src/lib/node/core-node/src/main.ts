@@ -124,7 +124,7 @@ export function writeFile (filePath: string, content: string): void {
  *
  * @see {@link https://stackoverflow.com/a/36221905/10193818}
  */
- export function untildify (filePath: string): string {
+export function untildify (filePath: string): string {
   if (filePath[0] === '~') {
     return path.join(os.homedir(), filePath.slice(1))
   }
