@@ -13,22 +13,21 @@
  *
  * @module @bldr/media-manager/meta-type-specs
  */
-import { MediaCategory } from '@bldr/type-definitions';
 declare const _default: {
-    cloze: MediaCategory.Category;
-    composition: MediaCategory.Category;
-    cover: MediaCategory.Category;
-    group: MediaCategory.Category;
-    instrument: MediaCategory.Category;
-    person: MediaCategory.Category;
-    photo: MediaCategory.Category;
-    radio: MediaCategory.Category;
-    recording: MediaCategory.Category;
-    reference: MediaCategory.Category;
-    score: MediaCategory.Category;
-    song: MediaCategory.Category;
-    worksheet: MediaCategory.Category;
-    youtube: MediaCategory.Category;
-    general: MediaCategory.Category;
+    cloze: import("@bldr/type-definitions/dist/node/media-category").Category;
+    composition: import("@bldr/type-definitions/dist/node/media-category").Category;
+    cover: import("@bldr/type-definitions/dist/node/media-category").Category;
+    group: import("@bldr/type-definitions/dist/node/media-category").Category;
+    instrument: import("@bldr/type-definitions/dist/node/media-category").Category;
+    person: import("@bldr/type-definitions/dist/node/media-category").Category;
+    photo: import("@bldr/type-definitions/dist/node/media-category").Category;
+    radio: import("@bldr/type-definitions/dist/node/media-category").Category;
+    recording: import("@bldr/type-definitions/dist/node/media-category").Category;
+    reference: import("@bldr/type-definitions/dist/node/media-category").Category;
+    score: import("@bldr/type-definitions/dist/node/media-category").Category;
+    song: import("@bldr/type-definitions/dist/node/media-category").Category;
+    worksheet: import("@bldr/type-definitions/dist/node/media-category").Category;
+    youtube: import("@bldr/type-definitions/dist/node/media-category").Category;
+    general: import("@bldr/type-definitions/dist/node/media-category").Category;
 };
 export default _default;
