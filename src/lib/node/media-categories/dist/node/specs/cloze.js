@@ -22,7 +22,7 @@ exports.cloze = {
         }
         return data;
     },
-    relPath({ data, category, oldRelPath }) {
+    relPath({ data, oldRelPath }) {
         const oldRelDir = path_1.default.dirname(oldRelPath);
         let pageNo = '';
         if (data.clozePageNo)
@@ -32,9 +32,9 @@ exports.cloze = {
     props: {
         id: {
             title: 'Die ID des Lückentexts',
-            derive: function ({ data, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles }) {
                 let counterSuffix = '';
-                if (data.clozePageNo) {
+                if (data.clozePageNo != null) {
                     counterSuffix = `_${data.clozePageNo}`;
                 }
                 return `${folderTitles.id}_LT${counterSuffix}`;
@@ -43,13 +43,14 @@ exports.cloze = {
         },
         title: {
             title: 'Titel des Lückentextes',
-            derive: function ({ data, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles }) {
+                const clozeData = data;
                 let suffix = '';
-                if (data.clozePageNo && data.clozePageCount) {
-                    suffix = ` (Seite ${data.clozePageNo} von ${data.clozePageCount})`;
+                if (clozeData.clozePageNo != null && clozeData.clozePageCount != null) {
+                    suffix = ` (Seite ${clozeData.clozePageNo} von ${clozeData.clozePageCount})`;
                 }
-                else if (data.clozePageNo && !data.clozePageCount) {
-                    suffix = ` (Seite ${data.clozePageNo})`;
+                else if (clozeData.clozePageNo != null && !clozeData.clozePageCount == null) {
+                    suffix = ` (Seite ${clozeData.clozePageNo})`;
                 }
                 return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
             },

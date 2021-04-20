@@ -17,7 +17,7 @@ exports.general = {
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
-            format: function (value, { data, category }) {
+            format: function (value, { data }) {
                 let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
@@ -79,7 +79,7 @@ exports.general = {
             title: 'Titel',
             required: true,
             overwriteByDerived: false,
-            format: function (value, { data, category }) {
+            format: function (value, {}) {
                 // a Strawinsky Petruschka Abschnitt 0_22
                 value = value.replace(/^[va] /, '');
                 return value;
@@ -99,7 +99,7 @@ exports.general = {
             validate: function (value) {
                 return value.match(/^.+:.+$/);
             },
-            format: function (value, { data, category }) {
+            format: function (value, {}) {
                 return decodeURI(value);
             },
             wikidata: {

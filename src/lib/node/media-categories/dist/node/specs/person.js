@@ -84,7 +84,7 @@ exports.person = {
                 // Familienname einer Person
                 fromClaim: 'P734',
                 secondQuery: 'queryLabels',
-                format: function (value, category) {
+                format: function (value) {
                     if (Array.isArray(value)) {
                         return value.join(' ');
                     }

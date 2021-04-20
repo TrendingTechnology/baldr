@@ -12,7 +12,7 @@ export const group: MediaCategory.Category = {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
-  relPath: function ({ data, category }) {
+  relPath: function ({ data }) {
     return path.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`)
   },
   detectCategoryByPath: function (category) {
@@ -24,7 +24,7 @@ export const group: MediaCategory.Category = {
       derive: function ({ data }) {
         return data.name
       },
-      format: function (value, { data, category }) {
+      format: function (value, { }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = idify(value)
         return value
@@ -36,7 +36,7 @@ export const group: MediaCategory.Category = {
       derive: function ({ data }) {
         return data.name
       },
-      format: function (value, { data, category }) {
+      format: function (value, { }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = idify(value)
         return `GR_${value}`

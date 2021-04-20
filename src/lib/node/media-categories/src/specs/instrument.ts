@@ -11,7 +11,7 @@ export const instrument: MediaCategory.Category = {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
-  relPath: function ({ data, category }) {
+  relPath: function ({ data }) {
     const id = data.id.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${data.extension}`)
   },

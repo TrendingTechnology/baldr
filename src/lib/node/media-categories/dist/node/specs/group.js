@@ -15,7 +15,7 @@ exports.group = {
     title: 'Gruppe',
     abbreviation: 'GR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Gruppen'),
-    relPath: function ({ data, category }) {
+    relPath: function ({ data }) {
         return path_1.default.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`);
     },
     detectCategoryByPath: function (category) {
@@ -27,7 +27,7 @@ exports.group = {
             derive: function ({ data }) {
                 return data.name;
             },
-            format: function (value, { data, category }) {
+            format: function (value, {}) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
                 value = core_browser_1.idify(value);
                 return value;
@@ -39,7 +39,7 @@ exports.group = {
             derive: function ({ data }) {
                 return data.name;
             },
-            format: function (value, { data, category }) {
+            format: function (value, {}) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
                 value = core_browser_1.idify(value);
                 return `GR_${value}`;
