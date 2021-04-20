@@ -20,7 +20,7 @@ const path_1 = __importDefault(require("path"));
 const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
 const media_file_classes_1 = require("../media-file-classes");
 const yaml_1 = require("../yaml");
-const helper_1 = require("../helper");
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
  * run of the script.
@@ -58,7 +58,7 @@ function convertAsset(filePath, cmdObj = {}) {
             return;
         }
         const outputExtension = media_file_classes_1.mediaCategoriesManager.typeToTargetExtension(assetType);
-        const outputFileName = `${helper_1.idify(asset.basename)}.${outputExtension}`;
+        const outputFileName = `${core_browser_1.idify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
             return;

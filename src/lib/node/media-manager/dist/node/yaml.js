@@ -7,9 +7,9 @@ exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadMetaDataYaml = e
 const fs_1 = __importDefault(require("fs"));
 const core_node_1 = require("@bldr/core-node");
 const yaml_1 = require("@bldr/yaml");
-const helper_1 = require("./helper");
+const core_browser_1 = require("@bldr/core-browser");
 const media_file_classes_1 = require("./media-file-classes");
-const media_categories_management_1 = __importDefault(require("./media-categories-management"));
+const media_categories_1 = require("@bldr/media-categories");
 /**
  * Load a YAML file and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function
@@ -70,7 +70,7 @@ exports.writeYamlFile = writeYamlFile;
 function writeMetaDataYaml(filePath, metaData, force) {
     if (fs_1.default.lstatSync(filePath).isDirectory())
         return;
-    const yamlFile = `${helper_1.asciify(filePath)}.yml`;
+    const yamlFile = `${core_browser_1.asciify(filePath)}.yml`;
     if ((force != null && force) ||
         !fs_1.default.existsSync(yamlFile)) {
         if (metaData == null)
@@ -80,9 +80,9 @@ function writeMetaDataYaml(filePath, metaData, force) {
             metaData.id = asset.basename;
         }
         if (metaData.title == null) {
-            metaData.title = helper_1.deasciify(asset.basename);
+            metaData.title = core_browser_1.deasciify(asset.basename);
         }
-        metaData = media_categories_management_1.default.process(metaData);
+        metaData = media_categories_1.categoriesManagement.process(metaData);
         writeYamlFile(yamlFile, metaData);
         return {
             filePath,

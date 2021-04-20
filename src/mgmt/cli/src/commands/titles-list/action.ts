@@ -2,7 +2,8 @@
 import chalk from 'chalk'
 
 // Project packages.
-import { DeepTitle, walk } from '@bldr/media-manager'
+import { walk } from '@bldr/media-manager'
+import { DeepTitle } from '@bldr/titles'
 
 function read (filePath: string): void {
   console.log(filePath)

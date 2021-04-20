@@ -3,8 +3,8 @@ import path from 'path'
 import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
-import categoriesManagement from '../media-categories-management'
-import { asciify } from '../helper'
+import { categoriesManagement } from '@bldr/media-categories'
+import { asciify } from '@bldr/core-browser'
 import { readAssetYaml, moveAsset } from '../main'
 
 /**

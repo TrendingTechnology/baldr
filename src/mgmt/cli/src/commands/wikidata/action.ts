@@ -7,7 +7,8 @@ import chalk from 'chalk'
 import wikidata from '@bldr/wikidata'
 
 // Project packages.
-import { writeYamlFile, categoriesManagement } from '@bldr/media-manager'
+import { writeYamlFile } from '@bldr/media-manager'
+import { categoriesManagement } from '@bldr/media-categories'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
 

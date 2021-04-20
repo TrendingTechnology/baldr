@@ -16,9 +16,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const titles_1 = require("@bldr/titles");
 function read(filePath) {
     console.log(filePath);
-    const titles = new media_manager_1.DeepTitle(filePath);
+    const titles = new titles_1.DeepTitle(filePath);
     console.log(`  id: ${chalk_1.default.cyan(titles.id)}`);
     console.log(`  title: ${chalk_1.default.yellow(titles.title)}`);
     if (titles.subtitle)

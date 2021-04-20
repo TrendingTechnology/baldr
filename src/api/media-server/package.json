@@ -20,6 +20,7 @@
     "@bldr/media-manager": "*",
     "@bldr/open-with": "*",
     "@bldr/mongodb-connector": "*",
+    "@bldr/titles": "*",
     "@bldr/yaml": "*",
     "cors": "2.8.5",
     "express": "4.17.1",

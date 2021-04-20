@@ -14,12 +14,13 @@ import {
   walk,
   readAssetYaml,
   operations,
-  idify,
-  categoriesManagement,
-  asciify,
   locationIndicator
 } from '@bldr/media-manager'
+
+import { categoriesManagement } from '@bldr/media-categories'
+
 import { readFile, writeFile } from '@bldr/core-node'
+import { idify, asciify } from '@bldr/core-browser'
 
 /**
  * Relocate a media asset inside the main media folder. Move some

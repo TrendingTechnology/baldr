@@ -20,11 +20,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readAssetYaml = exports.moveAsset = exports.operations = exports.categoriesManagement = void 0;
+exports.readAssetYaml = exports.moveAsset = exports.operations = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const titles_1 = require("./titles");
+const titles_1 = require("@bldr/titles");
 const yaml_1 = require("./yaml");
 // Operations
 const convert_asset_1 = require("./operations/convert-asset");
@@ -33,8 +33,6 @@ const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
 const rename_asset_1 = require("./operations/rename-asset");
-const media_categories_management_1 = __importDefault(require("./media-categories-management"));
-exports.categoriesManagement = media_categories_management_1.default;
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
@@ -47,10 +45,8 @@ exports.operations = {
     renameMediaAsset: rename_asset_1.renameMediaAsset
 };
 __exportStar(require("./directory-tree-walk"), exports);
-__exportStar(require("./helper"), exports);
 __exportStar(require("./location-indicator"), exports);
 __exportStar(require("./media-file-classes"), exports);
-__exportStar(require("./titles"), exports);
 __exportStar(require("./yaml"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file

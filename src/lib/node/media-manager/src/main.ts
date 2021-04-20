@@ -12,7 +12,7 @@ import path from 'path'
 import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
-import { DeepTitle, TitleTree } from './titles'
+import { DeepTitle, TitleTree } from '@bldr/titles'
 import { loadYaml } from './yaml'
 
 // Operations
@@ -23,8 +23,6 @@ import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
 import { renameMediaAsset } from './operations/rename-asset'
 
-import mediaCategoriesManagmentImport from './media-categories-management'
-export const categoriesManagement = mediaCategoriesManagmentImport
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
@@ -38,10 +36,8 @@ export const operations = {
 }
 
 export * from './directory-tree-walk'
-export * from './helper'
 export * from './location-indicator'
 export * from './media-file-classes'
-export * from './titles'
 export * from './yaml'
 
 interface MoveAssetConfiguration {

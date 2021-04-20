@@ -20,8 +20,8 @@ import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import config from '@bldr/config'
 import { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
-import { DeepTitle } from './titles'
-import categories from './media-categories-specs'
+import { DeepTitle } from '@bldr/titles'
+import categories from './specs'
 import { checkTypeAbbreviations } from './two-letter-abbreviations'
 
 checkTypeAbbreviations(categories)

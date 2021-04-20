@@ -7,6 +7,7 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const core_node_1 = require("@bldr/core-node");
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * Convert a Audacity text mark file into a YAML file.
  *
@@ -58,7 +59,7 @@ function action(filePath) {
                 title = match[3];
             }
             title = title.trim();
-            const id = media_manager_1.asciify(title.toLowerCase());
+            const id = core_browser_1.asciify(title.toLowerCase());
             if (startTime === endTime) {
                 endTime = undefined;
             }

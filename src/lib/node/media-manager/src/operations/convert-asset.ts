@@ -7,7 +7,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 
 import { makeAsset, mediaCategoriesManager } from '../media-file-classes'
 import { writeMetaDataYaml } from '../yaml'
-import { idify } from '../helper'
+import { idify } from '@bldr/core-browser'
 
 /**
  * A set of output file paths. To avoid duplicate rendering by a second

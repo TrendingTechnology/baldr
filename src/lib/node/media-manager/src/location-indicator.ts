@@ -9,7 +9,7 @@ import fs from 'fs'
 // Project packages.
 import config from '@bldr/config'
 
-import { untildify } from './helper'
+import { untildify } from '@bldr/core-node'
 
 /**
  * Indicate where a file is located in the media folder structure.

@@ -26,11 +26,12 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
+    "@bldr/media-categories": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/titles": "*",
     "@bldr/type-definitions": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*",
-    "transliteration": "2.2.0",
     "uuid": "8.3.1"
   },
   "devDependencies": {

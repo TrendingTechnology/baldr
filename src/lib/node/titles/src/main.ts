@@ -1,5 +1,7 @@
 /**
- * @module @bldr/media-manager/titles
+ * Read the nexted titles.txt files and form a hierarchical data structure.
+ *
+ * @module @bldr/titles
  */
 
 // Node packages.

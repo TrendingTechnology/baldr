@@ -12,7 +12,7 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const config_1 = __importDefault(require("@bldr/config"));
-const helper_1 = require("./helper");
+const core_node_1 = require("@bldr/core-node");
 /**
  * Indicate where a file is located in the media folder structure.
  *
@@ -28,7 +28,7 @@ class LocationIndicator {
         ];
         this.paths = [];
         for (let i = 0; i < basePaths.length; i++) {
-            basePaths[i] = path_1.default.resolve(helper_1.untildify(basePaths[i]));
+            basePaths[i] = path_1.default.resolve(core_node_1.untildify(basePaths[i]));
             if (fs_1.default.existsSync(basePaths[i])) {
                 this.paths.push(basePaths[i]);
             }

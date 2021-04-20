@@ -4,9 +4,9 @@ import { AssetType } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
 import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 
-import { asciify, deasciify } from './helper'
+import { asciify, deasciify } from '@bldr/core-browser'
 import { Asset } from './media-file-classes'
-import categoriesManagement from './media-categories-management'
+import { categoriesManagement } from '@bldr/media-categories'
 
 /**
  * Load a YAML file and convert into a Javascript object. The string

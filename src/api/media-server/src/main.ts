@@ -72,10 +72,12 @@ import express from 'express'
 
 // Project packages.
 import config from '@bldr/config'
-import { MediaCategoriesManager, getExtension, stripTags } from '@bldr/core-browser'
+import { MediaCategoriesManager, getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel, convertFromYamlRaw } from '@bldr/yaml'
 
-import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-manager'
+import { walk } from '@bldr/media-manager'
+import { TitleTree, DeepTitle } from '@bldr/titles'
+
 import type { StringIndexedObject } from '@bldr/type-definitions'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 
@@ -447,7 +449,7 @@ class Presentation extends MediaFile {
  * @param {String} mediaType
  */
 async function insertObjectIntoDb (filePath: string, mediaType: string): Promise<void> {
-  let object: Presentation | Asset | undefined = undefined
+  let object: Presentation | Asset | undefined
   try {
     if (mediaType === 'presentations') {
       object = new Presentation(filePath)
@@ -480,7 +482,7 @@ function gitPull () {
       encoding: 'utf-8'
     }
   )
-  if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
+  if (gitPull.status !== 0) throw new Error('git pull exits with an non-zero status code.')
 }
 
 /**
@@ -507,8 +509,8 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
       // Delete temporary files.
       if (
         filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
-        filePath.indexOf('title_tmp.txt') > -1
+        filePath.includes('Praesentation_tmp.baldr.yml') ||
+        filePath.includes('title_tmp.txt')
       ) {
         fs.unlinkSync(filePath)
       }
@@ -642,7 +644,7 @@ function registerMediaRestApi () {
         return
       }
       // type
-      const type: string  = validateMediaType(query.type ? query.type.toString() : '')
+      const type: string = validateMediaType(query.type ? query.type.toString() : '')
 
       // method
       const methods = ['exactMatch', 'substringSearch']
@@ -834,7 +836,6 @@ const main = function () {
   return runRestApi(port)
 }
 
-// @ts-ignore
 if (require.main === module) {
   main()
 }

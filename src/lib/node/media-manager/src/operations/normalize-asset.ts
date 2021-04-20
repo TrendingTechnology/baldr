@@ -4,7 +4,7 @@ import { deepCopy, msleep } from '@bldr/core-browser'
 import { AssetType, MediaCategory } from '@bldr/type-definitions'
 import wikidata  from '@bldr/wikidata'
 
-import categoriesManagement from '../media-categories-management'
+import { categoriesManagement } from '@bldr/media-categories'
 import { readAssetYaml, writeYamlFile } from '../main'
 
 async function queryWikidata (metaData: AssetType.Generic, categoryNames: MediaCategory.Names, typeSpecs: MediaCategory.Collection): Promise<AssetType.Generic> {

@@ -16,7 +16,7 @@ exports.normalizeMediaAsset = void 0;
 const assert_1 = __importDefault(require("assert"));
 const core_browser_1 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
-const media_categories_management_1 = __importDefault(require("../media-categories-management"));
+const media_categories_1 = require("@bldr/media-categories");
 const main_1 = require("../main");
 function queryWikidata(metaData, categoryNames, typeSpecs) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -46,16 +46,16 @@ function normalizeMediaAsset(filePath, options) {
             metaData.filePath = filePath;
             const origData = core_browser_1.deepCopy(metaData);
             // Always: general
-            const categoryNames = media_categories_management_1.default.detectCategoryByPath(filePath);
+            const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
             if (categoryNames) {
-                metaData.categories = media_categories_management_1.default.mergeNames(metaData.categories, categoryNames);
+                metaData.categories = media_categories_1.categoriesManagement.mergeNames(metaData.categories, categoryNames);
             }
             if (options && options.wikidata) {
                 if (metaData.wikidata && metaData.categories) {
-                    metaData = yield queryWikidata(metaData, metaData.categories, media_categories_management_1.default.categories);
+                    metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categoriesManagement.categories);
                 }
             }
-            metaData = media_categories_management_1.default.process(metaData);
+            metaData = media_categories_1.categoriesManagement.process(metaData);
             try {
                 delete origData.filePath;
                 assert_1.default.deepStrictEqual(origData, metaData);

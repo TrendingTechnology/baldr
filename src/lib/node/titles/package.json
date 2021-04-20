@@ -1,0 +1,31 @@
+{
+  "name": "@bldr/titles",
+  "version": "0.1.0",
+  "description": "Read the nexted titles.txt files and form a hierarchical data structure.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard --fix src/*.ts"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/node/main.js",
+  "dependencies": {
+    "@bldr/type-definitions": "*"
+  },
+  "devDependencies": {
+    "@types/node": "14.14.7"
+  }
+}

@@ -62,4 +62,10 @@ export declare function readFile(filePath: string): string;
  * @param content - Some text to write to a file.
  */
 export declare function writeFile(filePath: string, content: string): void;
+/**
+ * Replace ~ with the home folder path.
+ *
+ * @see {@link https://stackoverflow.com/a/36221905/10193818}
+ */
+export declare function untildify(filePath: string): string;
 export {};

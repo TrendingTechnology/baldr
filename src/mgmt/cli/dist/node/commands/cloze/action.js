@@ -11,6 +11,7 @@ const path_1 = __importDefault(require("path"));
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const titles_1 = require("@bldr/titles");
 const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
 function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
@@ -29,7 +30,7 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
     svgContent = svgContent.replace(/(width|height)=".+?" /g, '');
     core_node_1.writeFile(svgFilePath, svgContent);
     // Write info yaml
-    const titles = new media_manager_1.DeepTitle(tmpPdfFile);
+    const titles = new titles_1.DeepTitle(tmpPdfFile);
     const infoYaml = {
         id: `${titles.id}_LT${counterSuffix}`,
         title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,

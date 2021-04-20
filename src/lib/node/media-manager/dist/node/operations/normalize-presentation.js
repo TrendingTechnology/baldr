@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizePresentationFile = void 0;
 const core_node_1 = require("@bldr/core-node");
 const yaml_1 = require("@bldr/yaml");
-const titles_1 = require("../titles");
+const titles_1 = require("@bldr/titles");
 const yaml_2 = require("../yaml");
 const comment = `
 #-----------------------------------------------------------------------

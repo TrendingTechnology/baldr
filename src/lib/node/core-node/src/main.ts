@@ -8,6 +8,7 @@
 // Node packages.
 import childProcess from 'child_process'
 import fs from 'fs'
+import os from 'os'
 import util from 'util'
 import path from 'path'
 import { URL } from 'url'
@@ -116,4 +117,16 @@ export function readFile (filePath: string): string {
  */
 export function writeFile (filePath: string, content: string): void {
   fs.writeFileSync(filePath, content)
+}
+
+/**
+ * Replace ~ with the home folder path.
+ *
+ * @see {@link https://stackoverflow.com/a/36221905/10193818}
+ */
+ export function untildify (filePath: string): string {
+  if (filePath[0] === '~') {
+    return path.join(os.homedir(), filePath.slice(1))
+  }
+  return filePath
 }

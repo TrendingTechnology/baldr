@@ -26,6 +26,7 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
+const titles_1 = require("@bldr/titles");
 const core_node_1 = require("@bldr/core-node");
 const log = __importStar(require("@bldr/log"));
 /**
@@ -44,7 +45,7 @@ const log = __importStar(require("@bldr/log"));
  */
 function patchTexFileWithTitles(filePath) {
     log.info('\nReplace titles in TeX file “%s”', filePath);
-    const titles = new media_manager_1.DeepTitle(filePath);
+    const titles = new titles_1.DeepTitle(filePath);
     log.infoLog(titles);
     const setzeTitle = {
         jahrgangsstufe: titles.grade.toString()

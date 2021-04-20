@@ -2,7 +2,7 @@ import { PresentationTypes } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
 import { convertToYaml } from '@bldr/yaml'
 
-import { DeepTitle } from '../titles'
+import { DeepTitle } from '@bldr/titles'
 import { loadYaml } from '../yaml'
 
 const comment = `

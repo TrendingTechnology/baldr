@@ -18,10 +18,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeFile = exports.readFile = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
+exports.untildify = exports.writeFile = exports.readFile = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
+const os_1 = __importDefault(require("os"));
 const util_1 = __importDefault(require("util"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
@@ -125,3 +126,15 @@ function writeFile(filePath, content) {
     fs_1.default.writeFileSync(filePath, content);
 }
 exports.writeFile = writeFile;
+/**
+ * Replace ~ with the home folder path.
+ *
+ * @see {@link https://stackoverflow.com/a/36221905/10193818}
+ */
+function untildify(filePath) {
+    if (filePath[0] === '~') {
+        return path_1.default.join(os_1.default.homedir(), filePath.slice(1));
+    }
+    return filePath;
+}
+exports.untildify = untildify;

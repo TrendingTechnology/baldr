@@ -21,7 +21,9 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
 const media_manager_1 = require("@bldr/media-manager");
+const media_categories_1 = require("@bldr/media-categories");
 const core_node_1 = require("@bldr/core-node");
+const core_browser_2 = require("@bldr/core-browser");
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
@@ -183,11 +185,11 @@ function moveMp3(oldPath, newPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Format dest file path.
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'HB');
-        newPath = media_manager_1.asciify(newPath);
+        newPath = core_browser_2.asciify(newPath);
         // a Earth, Wind & Fire - Shining Star.mp3
         let fileName = path_1.default.basename(newPath);
         fileName = fileName.replace(/\.mp3$/i, '');
-        fileName = media_manager_1.idify(fileName);
+        fileName = core_browser_2.idify(fileName);
         fileName = `${fileName}.mp3`;
         // a-Fletcher-Henderson_Aint-she-sweet.mp3
         fileName = fileName.replace(/^a-/, '');
@@ -209,7 +211,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         metaData.source = oldPath;
         // To get ID prefix
         metaData.filePath = newPath;
-        metaData = media_manager_1.categoriesManagement.process(metaData);
+        metaData = media_categories_1.categoriesManagement.process(metaData);
         media_manager_1.writeYamlFile(`${newPath}.yml`, metaData);
         // Delete MP3.
         fs_1.default.unlinkSync(tmpMp3Path);

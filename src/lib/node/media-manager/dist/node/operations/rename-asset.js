@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.renameMediaAsset = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const media_categories_management_1 = __importDefault(require("../media-categories-management"));
-const helper_1 = require("../helper");
+const media_categories_1 = require("@bldr/media-categories");
+const core_browser_2 = require("@bldr/core-browser");
 const main_1 = require("../main");
 /**
  * Rename a media asset and its meta data files.
@@ -21,10 +21,10 @@ function renameMediaAsset(oldPath) {
     let newPath;
     if (metaData && metaData.categories) {
         metaData.extension = core_browser_1.getExtension(oldPath);
-        newPath = media_categories_management_1.default.formatFilePath(metaData, oldPath);
+        newPath = media_categories_1.categoriesManagement.formatFilePath(metaData, oldPath);
     }
     if (!newPath)
-        newPath = helper_1.asciify(oldPath);
+        newPath = core_browser_2.asciify(oldPath);
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes
     const cleanedBasename = basename.replace(/^[va]-/g, '');

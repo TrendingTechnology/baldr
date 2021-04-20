@@ -21,12 +21,11 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 // Project packages.
-import { getPdfPageCount } from '@bldr/core-node'
-import { MediaUri } from '@bldr/core-browser'
+import { getPdfPageCount  } from '@bldr/core-node'
+import { MediaUri, deasciify, idify } from '@bldr/core-browser'
 import { MediaCategory } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
-import { deasciify, idify } from './helper'
 import { getTwoLetterAbbreviations, checkForTwoLetterDir } from './two-letter-abbreviations'
 
 /**

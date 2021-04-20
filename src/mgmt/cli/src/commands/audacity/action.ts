@@ -2,8 +2,9 @@
 import chalk from 'chalk'
 
 // Project packages.
-import { writeYamlFile, asciify } from '@bldr/media-manager'
+import { writeYamlFile } from '@bldr/media-manager'
 import { readFile } from '@bldr/core-node'
+import { asciify } from '@bldr/core-browser'
 
 /**
  * Convert a Audacity text mark file into a YAML file.

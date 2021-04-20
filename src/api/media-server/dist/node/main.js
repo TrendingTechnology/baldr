@@ -128,6 +128,7 @@ var config_1 = __importDefault(require("@bldr/config"));
 var core_browser_1 = require("@bldr/core-browser");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
+var titles_1 = require("@bldr/titles");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
 // Submodules.
 var seating_plan_1 = require("./seating-plan");
@@ -141,7 +142,7 @@ var basePath = config_1.default.mediaServer.basePath;
  */
 var errors = [];
 /* Media objects **************************************************************/
-var titleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
+var titleTree = new titles_1.TitleTree(new titles_1.DeepTitle(config_1.default.mediaServer.basePath));
 var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.
@@ -258,9 +259,9 @@ var MediaFile = /** @class */ (function () {
     MediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
         if (!this.id && this.basename_)
-            this.id = media_manager_1.asciify(this.basename_);
+            this.id = core_browser_1.asciify(this.basename_);
         if (!this.title && this.id)
-            this.title = media_manager_1.deasciify(this.id);
+            this.title = core_browser_1.deasciify(this.id);
         this.cleanTmpProperties();
         return this;
     };
@@ -376,7 +377,7 @@ var Presentation = /** @class */ (function (_super) {
         var data = _this.readYaml_(filePath);
         if (data)
             _this.importProperties(data);
-        var deepTitle = new media_manager_1.DeepTitle(filePath);
+        var deepTitle = new titles_1.DeepTitle(filePath);
         titleTree.add(deepTitle);
         var deepTitleTmp = deepTitle;
         if (!_this.meta)
@@ -461,10 +462,7 @@ function insertObjectIntoDb(filePath, mediaType) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    object = undefined;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
                         object = new Presentation(filePath);
                     }
@@ -478,10 +476,10 @@ function insertObjectIntoDb(filePath, mediaType) {
                         return [2 /*return*/];
                     object = object.prepareForInsert();
                     return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
-                case 2:
+                case 1:
                     _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
+                    return [3 /*break*/, 3];
+                case 2:
                     error_1 = _a.sent();
                     console.log(error_1);
                     relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
@@ -489,8 +487,8 @@ function insertObjectIntoDb(filePath, mediaType) {
                     msg = relPath + ": [" + error_1.name + "] " + error_1.message;
                     console.log(msg);
                     errors.push(msg);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -504,7 +502,7 @@ function gitPull() {
         encoding: 'utf-8'
     });
     if (gitPull.status !== 0)
-        throw new Error("git pull exits with an non-zero status code.");
+        throw new Error('git pull exits with an non-zero status code.');
 }
 /**
  * Update the media server.
@@ -545,8 +543,8 @@ function update(full) {
                             everyFile: function (filePath) {
                                 // Delete temporary files.
                                 if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-                                    filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
-                                    filePath.indexOf('title_tmp.txt') > -1) {
+                                    filePath.includes('Praesentation_tmp.baldr.yml') ||
+                                    filePath.includes('title_tmp.txt')) {
                                     fs_1.default.unlinkSync(filePath);
                                 }
                             },
@@ -998,7 +996,6 @@ var main = function () {
         port = parseInt(process.argv[2]);
     return runRestApi(port);
 };
-// @ts-ignore
 if (require.main === module) {
     main();
 }
