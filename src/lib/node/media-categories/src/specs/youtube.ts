@@ -1,8 +1,16 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategory, AssetType } from '@bldr/type-definitions'
 
 import path from 'path'
 
 import { validateYoutubeId } from '../main'
+
+interface YoutubeFileFormat extends AssetType.FileFormat {
+  youtubeId: string
+}
+
+interface YoutubeCategory extends MediaCategory.Category {
+  abbreviation: string
+}
 
 /**
  * The meta data type specification “youtube”.
@@ -14,14 +22,17 @@ export const youtube: MediaCategory.Category = {
     return new RegExp('^.*/YT/.*.mp4$')
   },
   relPath ({ data, oldRelPath }) {
+    const youtubeData = data as YoutubeFileFormat
     const oldRelDir = path.dirname(oldRelPath)
-    return path.join(oldRelDir, `${data.youtubeId}.mp4`)
+    return path.join(oldRelDir, `${youtubeData.youtubeId}.mp4`)
   },
   props: {
     id: {
       title: 'ID eines YouTube-Videos',
       derive: function ({ data, category }) {
-        return `${category.abbreviation}_${data.youtubeId}`
+        const youtubeCategory = category as YoutubeCategory
+        const youtubeData = data as YoutubeFileFormat
+        return `${youtubeCategory.abbreviation}_${youtubeData.youtubeId}`
       },
       overwriteByDerived: true
     },

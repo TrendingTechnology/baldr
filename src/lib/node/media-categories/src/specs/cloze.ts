@@ -1,6 +1,11 @@
-import type { MediaCategory } from '@bldr/type-definitions'
-
 import path from 'path'
+
+import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+
+interface ClozeFileFormat extends AssetType.FileFormat {
+  clozePageNo: number
+  clozePageCount: number
+}
 
 /**
  * The meta data type specification “cloze”.
@@ -18,7 +23,7 @@ export const cloze: MediaCategory.Category = {
     }
     return data
   },
-  relPath ({ data, category, oldRelPath }) {
+  relPath ({ data, oldRelPath }) {
     const oldRelDir = path.dirname(oldRelPath)
     let pageNo = ''
     if (data.clozePageNo) pageNo = `_${data.clozePageNo}`
@@ -27,9 +32,9 @@ export const cloze: MediaCategory.Category = {
   props: {
     id: {
       title: 'Die ID des Lückentexts',
-      derive: function ({ data, folderTitles, filePath }) {
+      derive: function ({ data, folderTitles }) {
         let counterSuffix = ''
-        if (data.clozePageNo) {
+        if (data.clozePageNo != null) {
           counterSuffix = `_${data.clozePageNo}`
         }
         return `${folderTitles.id}_LT${counterSuffix}`
@@ -38,12 +43,13 @@ export const cloze: MediaCategory.Category = {
     },
     title: {
       title: 'Titel des Lückentextes',
-      derive: function ({ data, folderTitles, filePath }) {
+      derive: function ({ data, folderTitles }) {
+        const clozeData = data as ClozeFileFormat
         let suffix = ''
-        if (data.clozePageNo && data.clozePageCount) {
-          suffix = ` (Seite ${data.clozePageNo} von ${data.clozePageCount})`
-        } else if (data.clozePageNo && !data.clozePageCount) {
-          suffix = ` (Seite ${data.clozePageNo})`
+        if (clozeData.clozePageNo != null && clozeData.clozePageCount != null) {
+          suffix = ` (Seite ${clozeData.clozePageNo} von ${clozeData.clozePageCount})`
+        } else if (clozeData.clozePageNo != null && !clozeData.clozePageCount == null) {
+          suffix = ` (Seite ${clozeData.clozePageNo})`
         }
         return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
       },

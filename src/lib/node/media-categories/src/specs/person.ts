@@ -1,12 +1,22 @@
-import type { MediaCategory } from '@bldr/type-definitions'
-
 import path from 'path'
+
+import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import { idify } from '@bldr/core-browser'
+import config from '@bldr/config'
 
 import { validateDate } from '../main'
 
-import { idify } from '@bldr/core-browser'
+interface PersonFileFormat extends AssetType.FileFormat {
+  firstname: string
+  lastname: string
+  personId: string
+  extension: string
+}
 
-import config from '@bldr/config'
+interface PersonCategory extends MediaCategory.Category {
+  abbreviation: string
+  basePath: string
+}
 
 /**
  * The meta data type specification “person”.
@@ -16,10 +26,12 @@ export const person: MediaCategory.Category = {
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function ({ data }) {
-    return path.join(data.personId.substr(0, 1).toLowerCase(), data.personId, `main.${data.extension}`)
+    const personData = data as PersonFileFormat
+    return path.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`)
   },
   detectCategoryByPath: function (category) {
-    return new RegExp('^' + category.basePath + '/.*(jpg|png)')
+    const personCategory = category as PersonCategory
+    return new RegExp('^' + personCategory.basePath + '/.*(jpg|png)')
   },
   normalizeWikidata: function ({ data, entity, functions }) {
     const label = functions.getLabel(entity)
@@ -29,7 +41,7 @@ export const person: MediaCategory.Category = {
     // Use the label by artist names.
     // for example „Joan Baez“ and not „Joan Chandos“
     if (
-      firstnameFromLabel && lastnameFromLabel &&
+      firstnameFromLabel != null && lastnameFromLabel != null &&
       (data.firstname !== firstnameFromLabel || data.lastname !== lastnameFromLabel)
     ) {
       data.firstname = firstnameFromLabel
@@ -49,14 +61,16 @@ export const person: MediaCategory.Category = {
     id: {
       title: 'ID der Person',
       derive: function ({ data, category }) {
-        return `${category.abbreviation}_${idify(data.lastname)}_${idify(data.firstname)}`
+        const personCategory = category as PersonCategory
+        return `${personCategory.abbreviation}_${idify(data.lastname)}_${idify(data.firstname)}`
       },
       overwriteByDerived: true
     },
     title: {
       title: 'Titel der Person',
       derive: function ({ data }) {
-        return `Portrait-Bild von „${data.firstname} ${data.lastname}“`
+        const personData = data as PersonFileFormat
+        return `Portrait-Bild von „${personData.firstname} ${personData.lastname}“`
       },
       overwriteByDerived: true
     },
@@ -82,7 +96,7 @@ export const person: MediaCategory.Category = {
         // Familienname einer Person
         fromClaim: 'P734',
         secondQuery: 'queryLabels',
-        format: function (value, category) {
+        format: function (value) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -93,7 +107,8 @@ export const person: MediaCategory.Category = {
     name: {
       title: 'Name (Vor- und Familienname)',
       derive: function ({ data }) {
-        return `${data.firstname} ${data.lastname}`
+        const personData = data as PersonFileFormat
+        return `${personData.firstname} ${personData.lastname}`
       },
       overwriteByDerived: false
     },

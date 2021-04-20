@@ -15,9 +15,9 @@ exports.reference = {
     props: {
         title: {
             title: 'Titel der Quelle',
-            derive: function ({ data, folderTitles, filePath }) {
+            derive: function ({ data, folderTitles }) {
                 let suffix = '';
-                if (data.forTeacher) {
+                if (data.forTeacher != null) {
                     suffix = ' (Lehrerband)';
                 }
                 return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;

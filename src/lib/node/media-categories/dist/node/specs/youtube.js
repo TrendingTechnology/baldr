@@ -16,14 +16,17 @@ exports.youtube = {
         return new RegExp('^.*/YT/.*.mp4$');
     },
     relPath({ data, oldRelPath }) {
+        const youtubeData = data;
         const oldRelDir = path_1.default.dirname(oldRelPath);
-        return path_1.default.join(oldRelDir, `${data.youtubeId}.mp4`);
+        return path_1.default.join(oldRelDir, `${youtubeData.youtubeId}.mp4`);
     },
     props: {
         id: {
             title: 'ID eines YouTube-Videos',
             derive: function ({ data, category }) {
-                return `${category.abbreviation}_${data.youtubeId}`;
+                const youtubeCategory = category;
+                const youtubeData = data;
+                return `${youtubeCategory.abbreviation}_${youtubeData.youtubeId}`;
             },
             overwriteByDerived: true
         },

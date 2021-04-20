@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.person = void 0;
 const path_1 = __importDefault(require("path"));
-const main_1 = require("../main");
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
+const main_1 = require("../main");
 /**
  * The meta data type specification “person”.
  */
@@ -16,10 +16,12 @@ exports.person = {
     abbreviation: 'PR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Personen'),
     relPath: function ({ data }) {
-        return path_1.default.join(data.personId.substr(0, 1).toLowerCase(), data.personId, `main.${data.extension}`);
+        const personData = data;
+        return path_1.default.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`);
     },
     detectCategoryByPath: function (category) {
-        return new RegExp('^' + category.basePath + '/.*(jpg|png)');
+        const personCategory = category;
+        return new RegExp('^' + personCategory.basePath + '/.*(jpg|png)');
     },
     normalizeWikidata: function ({ data, entity, functions }) {
         const label = functions.getLabel(entity);
@@ -28,7 +30,7 @@ exports.person = {
         const lastnameFromLabel = segments.pop();
         // Use the label by artist names.
         // for example „Joan Baez“ and not „Joan Chandos“
-        if (firstnameFromLabel && lastnameFromLabel &&
+        if (firstnameFromLabel != null && lastnameFromLabel != null &&
             (data.firstname !== firstnameFromLabel || data.lastname !== lastnameFromLabel)) {
             data.firstname = firstnameFromLabel;
             data.lastname = lastnameFromLabel;
@@ -47,14 +49,16 @@ exports.person = {
         id: {
             title: 'ID der Person',
             derive: function ({ data, category }) {
-                return `${category.abbreviation}_${core_browser_1.idify(data.lastname)}_${core_browser_1.idify(data.firstname)}`;
+                const personCategory = category;
+                return `${personCategory.abbreviation}_${core_browser_1.idify(data.lastname)}_${core_browser_1.idify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel der Person',
             derive: function ({ data }) {
-                return `Portrait-Bild von „${data.firstname} ${data.lastname}“`;
+                const personData = data;
+                return `Portrait-Bild von „${personData.firstname} ${personData.lastname}“`;
             },
             overwriteByDerived: true
         },
@@ -91,7 +95,8 @@ exports.person = {
         name: {
             title: 'Name (Vor- und Familienname)',
             derive: function ({ data }) {
-                return `${data.firstname} ${data.lastname}`;
+                const personData = data;
+                return `${personData.firstname} ${personData.lastname}`;
             },
             overwriteByDerived: false
         },
