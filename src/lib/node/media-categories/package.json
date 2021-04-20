@@ -28,7 +28,8 @@
     "@bldr/type-definitions": "*",
     "@bldr/config": "*",
     "@bldr/yaml": "*",
-    "@bldr/titles": "*"
+    "@bldr/titles": "*",
+    "uuid": "8.3.1"
   },
   "devDependencies": {
     "@types/node": "14.14.7",
