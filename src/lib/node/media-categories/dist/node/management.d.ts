@@ -31,7 +31,7 @@ declare function detectCategoryByPath(filePath: string): MediaCategory.Names | u
  */
 declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): string;
 /**
- * Merge type names to avoid duplicate metadata type names:
+ * Merge category names to avoid duplicate metadata category names:
  */
 declare function mergeNames(...typeName: string[]): string;
 /**

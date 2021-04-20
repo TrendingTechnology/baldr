@@ -1,6 +1,8 @@
 import { operations } from '@bldr/media-manager'
 import { fetchFile } from '@bldr/core-node'
 
+import type { AssetType } from '@bldr/type-definitions'
+
 /**
  * Download a media asset.
  *
@@ -24,7 +26,7 @@ async function action (url: string, id?: string, extension?: string) {
   // Make images smaller.
   const convertedDestFile = await operations.convertAsset(destFile)
   if (convertedDestFile)
-    await operations.initializeMetaYaml(destFile, { source: url })
+    await operations.initializeMetaYaml(destFile, { source: url } as AssetType.Generic)
 }
 
 export = action

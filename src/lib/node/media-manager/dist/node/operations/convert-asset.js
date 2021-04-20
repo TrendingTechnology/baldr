@@ -126,7 +126,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 if (assetType === 'audio') {
                     let metaData;
                     try {
-                        metaData = yield audio_metadata_1.default(filePath);
+                        metaData = (yield audio_metadata_1.default(filePath));
                     }
                     catch (error) {
                         console.log(error);

@@ -122,7 +122,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
       if (assetType === 'audio') {
         let metaData
         try {
-          metaData = await collectAudioMetaData(filePath)
+          metaData = await collectAudioMetaData(filePath) as unknown
         } catch (error) {
           console.log(error)
         }

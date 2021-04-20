@@ -49,4 +49,4 @@ export declare function writeYamlFile(filePath: string, data: object): string;
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export declare function writeMetaDataYaml(filePath: string, metaData?: AssetType.FileFormat, force?: boolean): object | undefined;
+export declare function writeMetaDataYaml(filePath: string, metaData?: AssetType.FileFormat | AssetType.Generic, force?: boolean): object | undefined;

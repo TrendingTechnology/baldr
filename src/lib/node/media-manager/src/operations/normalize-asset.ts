@@ -7,10 +7,10 @@ import wikidata  from '@bldr/wikidata'
 import { categoriesManagement } from '@bldr/media-categories'
 import { readAssetYaml, writeYamlFile } from '../main'
 
-async function queryWikidata (metaData: AssetType.Generic, categoryNames: MediaCategory.Names, typeSpecs: MediaCategory.Collection): Promise<AssetType.Generic> {
+async function queryWikidata (metaData: AssetType.FileFormat, categoryNames: MediaCategory.Names, typeSpecs: MediaCategory.Collection): Promise<AssetType.FileFormat> {
   const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, typeSpecs)
   console.log(dataWiki)
-  metaData = wikidata.mergeData(metaData, dataWiki, typeSpecs)
+  metaData = wikidata.mergeData(metaData, dataWiki, typeSpecs) as AssetType.FileFormat
   // To avoid blocking
   // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
   // status: 429,
@@ -30,17 +30,18 @@ interface NormalizeMediaAssetOption {
 export async function normalizeMediaAsset (filePath: string, options?: NormalizeMediaAssetOption) {
   try {
     const yamlFile = `${filePath}.yml`
-    let metaData = readAssetYaml(filePath)
+    let metaData = readAssetYaml(filePath) as AssetType.FileFormat
     if (!metaData) {
       return
     }
     metaData.filePath = filePath
-    const origData = <AssetType.Generic> deepCopy(metaData)
+    const origData = <AssetType.FileFormat> deepCopy(metaData)
 
     // Always: general
     const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
     if (categoryNames) {
-      metaData.categories = categoriesManagement.mergeNames(metaData.categories, categoryNames)
+      const categories = metaData.categories != null ? metaData.categories : ''
+      metaData.categories = categoriesManagement.mergeNames(categories, categoryNames)
     }
     if (options && options.wikidata) {
       if (metaData.wikidata && metaData.categories) {

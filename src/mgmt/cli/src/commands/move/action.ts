@@ -22,6 +22,8 @@ import { categoriesManagement } from '@bldr/media-categories'
 import { readFile, writeFile } from '@bldr/core-node'
 import { idify, asciify } from '@bldr/core-browser'
 
+import type { AssetType } from '@bldr/type-definitions'
+
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
@@ -201,7 +203,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
   const convertedPath = await operations.convertAsset(tmpMp3Path)
   if (!convertedPath) throw new Error('Error converting asset.')
 
-  let metaData = readAssetYaml(convertedPath)
+  let metaData = readAssetYaml(convertedPath) as AssetType.FileFormat
   if (!metaData) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 

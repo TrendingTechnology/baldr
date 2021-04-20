@@ -9,6 +9,7 @@ import  axios from 'axios'
 import { CommandRunner } from '@bldr/cli-utils'
 import { operations, locationIndicator } from '@bldr/media-manager'
 import config from '@bldr/config'
+import { AssetType } from '@bldr/type-definitions'
 
 async function requestYoutubeApi(youtubeId: string): Promise<object> {
   const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
@@ -31,7 +32,7 @@ async function requestYoutubeApi(youtubeId: string): Promise<object> {
  *
  */
 async function action (youtubeId: string): Promise<void> {
-  const metaData = await requestYoutubeApi(youtubeId)
+  const metaData = await requestYoutubeApi(youtubeId) as AssetType.FileFormat
   console.log(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())

@@ -274,7 +274,7 @@ function processByType(data, typeName) {
     return data;
 }
 /**
- * Merge type names to avoid duplicate metadata type names:
+ * Merge category names to avoid duplicate metadata category names:
  */
 function mergeNames(...typeName) {
     const types = new Set();

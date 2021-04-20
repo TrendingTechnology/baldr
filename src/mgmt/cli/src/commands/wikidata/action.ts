@@ -26,7 +26,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     }
   }
   rawData.categories = category
-  const data = <AssetType.FileFormat> categoriesManagement.process(rawData)
+  const data = <AssetType.FileFormat> categoriesManagement.process(rawData as AssetType.FileFormat)
   console.log(data)
 
   let downloadWikicommons = true

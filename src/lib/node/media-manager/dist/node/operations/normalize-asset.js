@@ -48,7 +48,8 @@ function normalizeMediaAsset(filePath, options) {
             // Always: general
             const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
             if (categoryNames) {
-                metaData.categories = media_categories_1.categoriesManagement.mergeNames(metaData.categories, categoryNames);
+                const categories = metaData.categories != null ? metaData.categories : '';
+                metaData.categories = media_categories_1.categoriesManagement.mergeNames(categories, categoryNames);
             }
             if (options && options.wikidata) {
                 if (metaData.wikidata && metaData.categories) {
