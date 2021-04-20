@@ -8,6 +8,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 import { makeAsset, mediaCategoriesManager } from '../media-file-classes'
 import { writeMetaDataYaml } from '../yaml'
 import { idify } from '@bldr/core-browser'
+import { AssetType } from '@bldr/type-definitions'
 
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
@@ -126,7 +127,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
           console.log(error)
         }
         if (metaData) {
-          writeMetaDataYaml(outputFile, metaData)
+          writeMetaDataYaml(outputFile, metaData as AssetType.FileFormat)
         }
       }
       converted.add(outputFile)

@@ -39,7 +39,7 @@ declare function mergeNames(...typeName: string[]): string;
  *
  * @param data - An object containing some meta data.
  */
-declare function process(data: AssetType.Generic): AssetType.Generic;
+declare function process(data: AssetType.FileFormat): AssetType.FileFormat;
 declare const _default: {
     detectCategoryByPath: typeof detectCategoryByPath;
     formatFilePath: typeof formatFilePath;

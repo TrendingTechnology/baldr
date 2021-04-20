@@ -68,7 +68,7 @@ function generateIdPrefix(filePath) {
     const parentDir = pathSegments[pathSegments.length - 2];
     // Match asset type abbreviations, like AB, HB, NB
     if (parentDir.length !== 2 || (parentDir.match(/[A-Z]{2,}/) == null)) {
-        return '';
+        return;
     }
     const assetTypeAbbreviation = parentDir;
     // 20_Strawinsky-Petruschka
@@ -859,14 +859,14 @@ const general = {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
             format: function (value, { data, category }) {
-                value = core_browser_1.idify(value);
+                let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
-                value = value.replace(/^[va]-/, '');
-                if (data.filePath && data.categories.indexOf('youtube') === -1) {
+                raw = raw.replace(/^[va]-/, '');
+                if (data.filePath != null && !data.categories.includes('youtube')) {
                     const idPrefix = generateIdPrefix(data.filePath);
-                    if (idPrefix) {
-                        if (value.indexOf(idPrefix) === -1) {
-                            value = `${idPrefix}_${value}`;
+                    if (idPrefix != null) {
+                        if (!raw.includes(idPrefix)) {
+                            raw = `${idPrefix}_${raw}`;
                         }
                         // Avoid duplicate idPrefixes by changed prefixes:
                         // instead of:
@@ -875,15 +875,15 @@ const general = {
                         // updated prefix: Piazzolla-Nonino_NB
                         // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
                         const twoLetterRegExp = '(' + two_letter_abbreviations_1.getTwoLetterAbbreviations().join('|') + ')';
-                        if (value.match(new RegExp(`.*_${twoLetterRegExp}_.*`))) {
-                            value = value.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix);
+                        if (raw.match(new RegExp(`.*_${twoLetterRegExp}_.*`)) != null) {
+                            raw = raw.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix);
                         }
                     }
                 }
                 // Disabled for example GR_Beatles_The != Beatles_GR_The
                 // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
                 // value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
-                return value;
+                return raw;
             },
             required: true
         },
@@ -969,14 +969,14 @@ const general = {
             state: 'absent'
         }
     },
-    initialize: function ({ data, category }) {
-        if (data.filePath && !two_letter_abbreviations_1.checkForTwoLetterDir(data.filePath)) {
+    initialize: function ({ data }) {
+        if (data.filePath != null && !two_letter_abbreviations_1.checkForTwoLetterDir(data.filePath)) {
             console.log(`File path ${data.filePath} is not in a valid two letter directory.`);
             process.exit();
         }
         return data;
     },
-    finalize: function ({ data, category }) {
+    finalize: function ({ data }) {
         for (const propName in data) {
             const value = data[propName];
             if (typeof value === 'string') {

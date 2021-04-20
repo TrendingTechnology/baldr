@@ -21,7 +21,7 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 // Project packages.
-import { getPdfPageCount  } from '@bldr/core-node'
+import { getPdfPageCount } from '@bldr/core-node'
 import { MediaUri, deasciify, idify } from '@bldr/core-browser'
 import { MediaCategory } from '@bldr/type-definitions'
 import config from '@bldr/config'
@@ -65,7 +65,7 @@ function validateYoutubeId (value: string): boolean {
  *
  * @returns The ID prefix.
  */
-function generateIdPrefix (filePath: string): string {
+function generateIdPrefix (filePath: string): string | undefined {
   // We need the absolute path
   filePath = path.resolve(filePath)
   const pathSegments = filePath.split(path.sep)
@@ -73,7 +73,7 @@ function generateIdPrefix (filePath: string): string {
   const parentDir = pathSegments[pathSegments.length - 2]
   // Match asset type abbreviations, like AB, HB, NB
   if (parentDir.length !== 2 || (parentDir.match(/[A-Z]{2,}/) == null)) {
-    return ''
+    return
   }
   const assetTypeAbbreviation = parentDir
   // 20_Strawinsky-Petruschka
@@ -88,7 +88,7 @@ function generateIdPrefix (filePath: string): string {
 /**
  * The meta data type specification “cloze”.
  */
-const cloze = <MediaCategory.Category> {
+const cloze: MediaCategory.Category = {
   title: 'Lückentext',
   abbreviation: 'LT',
   detectCategoryByPath: function () {
@@ -150,7 +150,7 @@ const cloze = <MediaCategory.Category> {
 /**
  * The meta data type specification “composition”.
  */
-const composition = <MediaCategory.Category> {
+const composition: MediaCategory.Category = {
   title: 'Komposition',
   detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
@@ -224,7 +224,7 @@ const composition = <MediaCategory.Category> {
 /**
  * The meta data type specification “cover”.
  */
-const cover = <MediaCategory.Category> {
+const cover: MediaCategory.Category = {
   title: 'Vorschau-Bild',
   detectCategoryByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
   props: {
@@ -246,7 +246,7 @@ const cover = <MediaCategory.Category> {
 /**
  * The meta data type specification “group”.
  */
-const group = <MediaCategory.Category> {
+const group: MediaCategory.Category = {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
@@ -357,7 +357,7 @@ const group = <MediaCategory.Category> {
 /**
  * The meta data type specification “instrument”.
  */
-const instrument = <MediaCategory.Category> {
+const instrument: MediaCategory.Category = {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
@@ -429,7 +429,7 @@ const instrument = <MediaCategory.Category> {
 /**
  * The meta data type specification “person”.
  */
-const person = <MediaCategory.Category> {
+const person: MediaCategory.Category = {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
@@ -566,7 +566,7 @@ const person = <MediaCategory.Category> {
 /**
  * The meta data type specification “photo”.
  */
-const photo = <MediaCategory.Category> {
+const photo: MediaCategory.Category = {
   title: 'Foto',
   abbreviation: 'FT',
   detectCategoryByPath: function () {
@@ -582,7 +582,7 @@ const photo = <MediaCategory.Category> {
 /**
  * The meta data type specification “radio”.
  */
-const radio = <MediaCategory.Category> {
+const radio: MediaCategory.Category = {
   title: 'Schulfunk',
   abbreviation: 'SF',
   props: {
@@ -595,7 +595,7 @@ const radio = <MediaCategory.Category> {
 /**
  * The meta data type specification “recording”.
  */
-const recording = <MediaCategory.Category> {
+const recording: MediaCategory.Category = {
   title: 'Aufnahme',
   detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
@@ -644,7 +644,7 @@ const recording = <MediaCategory.Category> {
 /**
  * The meta data type specification “reference”.
  */
-const reference = <MediaCategory.Category> {
+const reference: MediaCategory.Category = {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectCategoryByPath: function () {
@@ -706,7 +706,7 @@ const reference = <MediaCategory.Category> {
 /**
  * The meta data type specification “score”.
  */
-const score = <MediaCategory.Category> {
+const score: MediaCategory.Category = {
   title: 'Partitur',
   abbreviation: 'PT',
   detectCategoryByPath: function () {
@@ -729,7 +729,7 @@ const score = <MediaCategory.Category> {
 /**
  * The meta data type specification “song”.
  */
-const song = <MediaCategory.Category> {
+const song: MediaCategory.Category = {
   title: 'Lied',
   props: {
     publicationDate: {
@@ -778,7 +778,7 @@ const song = <MediaCategory.Category> {
 /**
  * The meta data type specification “worksheet”.
  */
-const worksheet = <MediaCategory.Category> {
+const worksheet: MediaCategory.Category = {
   title: 'Arbeitsblatt',
   abbreviation: 'TX',
   detectCategoryByPath: function () {
@@ -811,7 +811,7 @@ const worksheet = <MediaCategory.Category> {
 /**
  * The meta data type specification “youtube”.
  */
-const youtube = <MediaCategory.Category> {
+const youtube: MediaCategory.Category = {
   title: 'YouTube-Video',
   abbreviation: 'YT',
   detectCategoryByPath: function () {
@@ -867,7 +867,7 @@ const youtube = <MediaCategory.Category> {
  * General meta data type specification. Applied after all other meta data
  * types.
  */
-const general = <MediaCategory.Category> {
+const general: MediaCategory.Category = {
   title: 'Allgemeiner Metadaten-Type',
   props: {
     id: {
@@ -876,16 +876,16 @@ const general = <MediaCategory.Category> {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
       format: function (value, { data, category }) {
-        value = idify(value)
+        let raw = idify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
-        value = value.replace(/^[va]-/, '')
+        raw = raw.replace(/^[va]-/, '')
 
-        if (data.filePath && data.categories.indexOf('youtube') === -1) {
+        if (data.filePath != null && !data.categories!.includes('youtube')) {
           const idPrefix = generateIdPrefix(data.filePath)
-          if (idPrefix) {
-            if (value.indexOf(idPrefix) === -1) {
-              value = `${idPrefix}_${value}`
+          if (idPrefix != null) {
+            if (!raw.includes(idPrefix)) {
+              raw = `${idPrefix}_${raw}`
             }
 
             // Avoid duplicate idPrefixes by changed prefixes:
@@ -895,8 +895,8 @@ const general = <MediaCategory.Category> {
             // updated prefix: Piazzolla-Nonino_NB
             // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
             const twoLetterRegExp = '(' + getTwoLetterAbbreviations().join('|') + ')'
-            if (value.match(new RegExp(`.*_${twoLetterRegExp}_.*`))) {
-              value = value.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix)
+            if (raw.match(new RegExp(`.*_${twoLetterRegExp}_.*`)) != null) {
+              raw = raw.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix)
             }
           }
         }
@@ -904,7 +904,7 @@ const general = <MediaCategory.Category> {
         // Disabled for example GR_Beatles_The != Beatles_GR_The
         // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
         // value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
-        return value
+        return raw
       },
       required: true
     },
@@ -990,14 +990,14 @@ const general = <MediaCategory.Category> {
       state: 'absent'
     }
   },
-  initialize: function ({ data, category }) {
-    if (data.filePath && !checkForTwoLetterDir(data.filePath)) {
+  initialize: function ({ data }) {
+    if (data.filePath != null && !checkForTwoLetterDir(data.filePath)) {
       console.log(`File path ${data.filePath} is not in a valid two letter directory.`)
       process.exit()
     }
     return data
   },
-  finalize: function ({ data, category }) {
+  finalize: function ({ data }) {
     for (const propName in data) {
       const value = data[propName]
       if (typeof value === 'string') {

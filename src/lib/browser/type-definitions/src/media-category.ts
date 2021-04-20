@@ -55,7 +55,7 @@ export type PropName = string
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-  data: AssetType.Generic
+  data: AssetType.FileFormat
   category: Category
   folderTitles: DeepTitleInterface
   filePath: string
@@ -162,7 +162,7 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-  data: AssetType.Generic
+  data: AssetType.FileFormat
   category: Category
   oldRelPath: string
 }
@@ -180,18 +180,18 @@ type DetectTypeByPathFunc = (arg: Category) => RegExp
 /**
  * Defintion of the function `intialize()`.
  */
-type InitializeFunc = (arg: DataAndCategory) => AssetType.Generic
+type InitializeFunc = (arg: DataAndCategory) => AssetType.FileFormat
 
 /**
  * Defintion of the function `finalize()`.
  */
-type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.Generic
+type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.FileFormat
 
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-  data: AssetType.Generic
+  data: AssetType.FileFormat
   entity: { [key: string]: any }
   functions: { [key: string]: Function }
 }
@@ -199,7 +199,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Generic
+type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.FileFormat
 
 /**
  * Apart from different file formats, media files can belong to several media
@@ -309,6 +309,6 @@ export interface Data { [key: string]: any }
  * Used in many functions as an argument.
  */
 interface DataAndCategory {
-  data: AssetType.Generic
+  data: AssetType.FileFormat
   category: Category
 }

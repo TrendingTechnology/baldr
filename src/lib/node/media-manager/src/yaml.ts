@@ -65,14 +65,14 @@ export function writeYamlFile (filePath: string, data: object): string {
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export function writeMetaDataYaml (filePath: string, metaData?: AssetType.Generic, force?: boolean): object | undefined {
+export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFormat, force?: boolean): object | undefined {
   if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
   if (
     (force != null && force) ||
     !fs.existsSync(yamlFile)
   ) {
-    if (metaData == null) metaData = {}
+    if (metaData == null) metaData = {} as AssetType.FileFormat
     const asset = new Asset(filePath)
     if (metaData.id == null) {
       metaData.id = asset.basename

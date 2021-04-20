@@ -152,12 +152,10 @@ function isPropertyDerived(propSpec) {
 function sortAndDeriveProps(data, category) {
     const origData = core_browser_1.deepCopy(data);
     const result = {};
-    let folderTitles;
-    let filePath;
-    if (data.filePath) {
-        filePath = data.filePath;
-        folderTitles = new titles_1.DeepTitle(data.filePath);
-    }
+    if (data.filePath == null)
+        throw new Error('Property file_path missing');
+    const filePath = data.filePath;
+    const folderTitles = new titles_1.DeepTitle(data.filePath);
     // Loop over the propSpecs to get a sorted object
     const propSpecs = category.props;
     for (const propName in propSpecs) {
@@ -302,7 +300,7 @@ function process(data) {
     if (!data.categories) {
         data.categories = 'general';
     }
-    else if (data.categories.indexOf('general') === -1) {
+    else if (!data.categories.includes('general')) {
         data.categories = `${data.categories},general`;
     }
     if (data.categories) {

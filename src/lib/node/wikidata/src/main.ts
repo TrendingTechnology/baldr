@@ -12,7 +12,7 @@ import * as wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
 import { fetchFile } from '@bldr/core-node'
-import { MediaCategory } from '@bldr/type-definitions'
+import { MediaCategory, AssetType } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
@@ -403,7 +403,7 @@ async function query (itemId: string, typeNames: MediaCategory.Names, categoryCo
 
   if (!typeNames.includes('general')) typeNames = `general,${typeNames}`
 
-  const data: { [key: string]: any } = {}
+  const data: AssetType.FileFormat = {} as AssetType.FileFormat
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
     if (categoryCollection[typeName as MediaCategory.Name] == null) {

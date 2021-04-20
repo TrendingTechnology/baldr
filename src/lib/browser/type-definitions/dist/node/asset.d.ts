@@ -4,7 +4,11 @@
  * @module @bldr/type-definitions/asset
  */
 /**
- * A type for the Metadata YAML file format for media assets.
+ * The metadata YAML file format.
+ *
+ * This interface corresponds to the structure of the YAML files
+ * `*.extension.yml`. The most frequently used properties are explicitly
+ * specified.
  */
 export interface FileFormat {
     id: string;

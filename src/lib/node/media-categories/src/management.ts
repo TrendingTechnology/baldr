@@ -116,7 +116,7 @@ function isValue (value: string | boolean | number): boolean {
  * @param category - The specification of one meta type.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetType.Generic, func: Function, category: MediaCategory.Category, replaceValues: boolean = true) {
+function applySpecToProps (data: AssetType.FileFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true) {
   function applyOneTypeSpec (props: MediaCategory.PropCollection, propName: AssetType.PropName, data: AssetType.Generic, func: Function, replaceValues: boolean) {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
@@ -150,16 +150,14 @@ function isPropertyDerived (propSpec: MediaCategory.Prop) {
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function sortAndDeriveProps (data: AssetType.Generic, category: MediaCategory.Category): AssetType.Generic {
-  const origData = <AssetType.Generic> deepCopy(data)
-  const result = <AssetType.Generic>{}
+function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
+  const origData = <AssetType.FileFormat> deepCopy(data)
+  const result = <AssetType.FileFormat>{}
 
-  let folderTitles
-  let filePath
-  if (data.filePath) {
-    filePath = data.filePath
-    folderTitles = new DeepTitle(data.filePath)
-  }
+  if (data.filePath == null) throw new Error('Property file_path missing')
+
+  const filePath: string = data.filePath
+  const folderTitles = new DeepTitle(data.filePath)
 
   // Loop over the propSpecs to get a sorted object
   const propSpecs = category.props
@@ -204,7 +202,7 @@ function sortAndDeriveProps (data: AssetType.Generic, category: MediaCategory.Ca
  * @param data - An object containing some meta data.
  * @param category - The type name
  */
-function formatProps (data: AssetType.Generic, category: MediaCategory.Category) {
+function formatProps (data: AssetType.FileFormat, category: MediaCategory.Category) {
   function formatOneProp (spec: MediaCategory.Prop, value: any) {
     if (
       isValue(value) &&
@@ -222,7 +220,7 @@ function formatProps (data: AssetType.Generic, category: MediaCategory.Category)
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function validateProps (data: AssetType.Generic, category: MediaCategory.Category) {
+function validateProps (data: AssetType.FileFormat, category: MediaCategory.Category) {
   function validateOneProp (spec: MediaCategory.Prop, value: any, prop: MediaCategory.PropName) {
     // required
     if (spec.required && !isValue(value)) {
@@ -245,7 +243,7 @@ function validateProps (data: AssetType.Generic, category: MediaCategory.Categor
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function removeProps (data: AssetType.Generic, category: MediaCategory.Category): AssetType.Generic {
+function removeProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
   for (const propName in category.props) {
     if (data[propName]) {
       const value = data[propName]
@@ -273,7 +271,7 @@ function removeProps (data: AssetType.Generic, category: MediaCategory.Category)
  * @param data - An object containing some meta data.
  * @param typeName - The type name
  */
-function processByType (data: AssetType.Generic, typeName: MediaCategory.Name): AssetType.Generic {
+function processByType (data: AssetType.FileFormat, typeName: MediaCategory.Name): AssetType.FileFormat {
   if (!categories[typeName]) {
     throw new Error(`Unkown meta type name: “${typeName}”`)
   }
@@ -320,13 +318,13 @@ function mergeNames (...typeName: string[]): string {
  *
  * @param data - An object containing some meta data.
  */
-function process (data: AssetType.Generic): AssetType.Generic {
+function process (data: AssetType.FileFormat): AssetType.FileFormat {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = <AssetType.FileFormat> convertPropertiesSnakeToCamel(data)
   if (!data.categories) {
     data.categories = 'general'
-  } else if (data.categories.indexOf('general') === -1) {
+  } else if (!data.categories.includes('general')) {
     data.categories = `${data.categories},general`
   }
   if (data.categories) {
