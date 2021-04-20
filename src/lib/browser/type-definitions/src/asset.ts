@@ -10,7 +10,7 @@
 export interface FileFormat {
   id: string
   uuid: string
-  metaTypes?: string
+  categories?: string
   extension?: string
   mainImage?: string
   filePath?: string
@@ -23,7 +23,7 @@ export interface FileFormat {
 export type PropName =
   'id' |
   'uuid' |
-  'metaTypes' |
+  'categories' |
   'extension' |
   'mainImage' |
   'filePath'

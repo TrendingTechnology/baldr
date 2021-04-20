@@ -330,11 +330,11 @@ function mergeData(data, dataWiki, categoryCollection) {
     var _a;
     // Ẃe delete properties from this object -> make a flat copy.
     const dataOrig = Object.assign({}, data);
-    if (dataOrig.metaTypes == null) {
+    if (dataOrig.categories == null) {
         return Object.assign({}, dataOrig, dataWiki);
     }
     const typeData = {};
-    for (const typeName of dataOrig.metaTypes.split(',')) {
+    for (const typeName of dataOrig.categories.split(',')) {
         const propSpecs = categoryCollection[typeName].props;
         for (const propName in dataWiki) {
             if (((_a = propSpecs === null || propSpecs === void 0 ? void 0 : propSpecs[propName]) === null || _a === void 0 ? void 0 : _a.wikidata) != null) {

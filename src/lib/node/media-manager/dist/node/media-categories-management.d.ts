@@ -22,7 +22,7 @@ declare function detectCategoryByPath(filePath: string): MediaCategory.Names | u
 /**
  * Generate the file path of the first specifed meta type.
  *
- * @param data - The mandatory property is “metaTypes” and “extension”.
+ * @param data - The mandatory property is “categories” and “extension”.
  *   One can omit the property “extension”, but than you have to specify
  *   the property “mainImage”.
  * @param oldPath - The old file path.

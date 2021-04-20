@@ -12,21 +12,19 @@ import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
 
 /**
- * @param {String} metaType - For example `group`, `instrument`, `person`,
+ * @param category - For example `group`, `instrument`, `person`,
  *   `song`
- * @param {String} itemId - For example `Q123`
- * @param {String} arg1
- * @param {String} arg2
+ * @param itemId - For example `Q123`
  */
-async function action (metaType: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
-  let rawData = await wikidata.query(itemId, metaType, categoriesManagement.categories)
+async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
+  let rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
   if (arg1) {
-    if (metaType === 'person') {
+    if (category === 'person') {
       rawData.firstname = arg1
       rawData.lastname = arg2
     }
   }
-  rawData.metaTypes = metaType
+  rawData.categories = category
   const data = <AssetType.FileFormat> categoriesManagement.process(rawData)
   console.log(data)
 

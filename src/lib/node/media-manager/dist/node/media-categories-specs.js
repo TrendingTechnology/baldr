@@ -863,7 +863,7 @@ const general = {
                 value = helper_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 value = value.replace(/^[va]-/, '');
-                if (data.filePath && data.metaTypes.indexOf('youtube') === -1) {
+                if (data.filePath && data.categories.indexOf('youtube') === -1) {
                     const idPrefix = generateIdPrefix(data.filePath);
                     if (idPrefix) {
                         if (value.indexOf(idPrefix) === -1) {
@@ -896,8 +896,8 @@ const general = {
             },
             overwriteByDerived: false
         },
-        metaTypes: {
-            title: 'Metadaten-Typen',
+        categories: {
+            title: 'Metadaten-Kategorien',
             description: 'Zum Beispiel: “person” oder “composition,recording”',
             validate: function (value) {
                 return (String(value).match(/^[a-zA-Z,]+$/) != null);
@@ -910,6 +910,11 @@ const general = {
         metaType: {
             title: 'Metadaten-Type',
             description: 'Heißt jetzt “metaTypes”',
+            state: 'absent'
+        },
+        metaTypes: {
+            title: 'Metadaten-Type',
+            description: 'Heißt jetzt “categories”',
             state: 'absent'
         },
         title: {

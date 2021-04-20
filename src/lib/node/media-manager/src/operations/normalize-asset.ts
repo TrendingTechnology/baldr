@@ -40,11 +40,11 @@ export async function normalizeMediaAsset (filePath: string, options?: Normalize
     // Always: general
     const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
     if (categoryNames) {
-      metaData.metaTypes = categoriesManagement.mergeNames(metaData.metaTypes, categoryNames)
+      metaData.categories = categoriesManagement.mergeNames(metaData.categories, categoryNames)
     }
     if (options && options.wikidata) {
-      if (metaData.wikidata && metaData.metaTypes) {
-        metaData = await queryWikidata(metaData, metaData.metaTypes, categoriesManagement.categories)
+      if (metaData.wikidata && metaData.categories) {
+        metaData = await queryWikidata(metaData, metaData.categories, categoriesManagement.categories)
       }
     }
     metaData = categoriesManagement.process(metaData)

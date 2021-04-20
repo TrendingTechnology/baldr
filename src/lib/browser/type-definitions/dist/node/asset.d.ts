@@ -9,7 +9,7 @@
 export interface FileFormat {
     id: string;
     uuid: string;
-    metaTypes?: string;
+    categories?: string;
     extension?: string;
     mainImage?: string;
     filePath?: string;
@@ -18,7 +18,7 @@ export interface FileFormat {
 /**
  * A type for the possible property names.
  */
-export declare type PropName = 'id' | 'uuid' | 'metaTypes' | 'extension' | 'mainImage' | 'filePath';
+export declare type PropName = 'id' | 'uuid' | 'categories' | 'extension' | 'mainImage' | 'filePath';
 /**
  * Generic type of the Media asset file format.
  */

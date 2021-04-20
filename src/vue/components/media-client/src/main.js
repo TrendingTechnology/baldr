@@ -1425,7 +1425,7 @@ export class ClientMediaAsset {
       'httpUrl',
       'id',
       'mediaElement',
-      'metaTypes',
+      'categories',
       'musicbrainzRecordingId',
       'musicbrainzWorkId',
       'path',

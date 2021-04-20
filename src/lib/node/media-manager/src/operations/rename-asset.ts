@@ -17,7 +17,7 @@ import { readAssetYaml, moveAsset } from '../main'
 export function renameMediaAsset (oldPath: string): string {
   const metaData = readAssetYaml(oldPath)
   let newPath
-  if (metaData && metaData.metaTypes) {
+  if (metaData && metaData.categories) {
     metaData.extension = getExtension(oldPath)
     newPath = categoriesManagement.formatFilePath(<AssetType.FileFormat> metaData, oldPath)
   }

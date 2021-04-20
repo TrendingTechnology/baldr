@@ -21,22 +21,20 @@ const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const media_manager_1 = require("@bldr/media-manager");
 const config_1 = __importDefault(require("@bldr/config"));
 /**
- * @param {String} metaType - For example `group`, `instrument`, `person`,
+ * @param category - For example `group`, `instrument`, `person`,
  *   `song`
- * @param {String} itemId - For example `Q123`
- * @param {String} arg1
- * @param {String} arg2
+ * @param itemId - For example `Q123`
  */
-function action(metaType, itemId, arg1, arg2, cmdObj) {
+function action(category, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        let rawData = yield wikidata_1.default.query(itemId, metaType, media_manager_1.categoriesManagement.categories);
+        let rawData = yield wikidata_1.default.query(itemId, category, media_manager_1.categoriesManagement.categories);
         if (arg1) {
-            if (metaType === 'person') {
+            if (category === 'person') {
                 rawData.firstname = arg1;
                 rawData.lastname = arg2;
             }
         }
-        rawData.metaTypes = metaType;
+        rawData.categories = category;
         const data = media_manager_1.categoriesManagement.process(rawData);
         console.log(data);
         let downloadWikicommons = true;

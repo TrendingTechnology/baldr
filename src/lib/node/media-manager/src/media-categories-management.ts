@@ -55,7 +55,7 @@ function detectCategoryByPath (filePath: string): MediaCategory.Names | undefine
 /**
  * Generate the file path of the first specifed meta type.
  *
- * @param data - The mandatory property is “metaTypes” and “extension”.
+ * @param data - The mandatory property is “categories” and “extension”.
  *   One can omit the property “extension”, but than you have to specify
  *   the property “mainImage”.
  * @param oldPath - The old file path.
@@ -63,10 +63,10 @@ function detectCategoryByPath (filePath: string): MediaCategory.Names | undefine
  * @returns A absolute path
  */
 function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
-  if (!data.metaTypes) throw new Error('Your data needs a property named “metaTypes”.')
+  if (!data.categories) throw new Error('Your data needs a property named “categories”.')
   // TODO: support multiple types
   // person,general -> person
-  const typeName = <MediaCategory.Name> data.metaTypes.replace(/,.*$/, '')
+  const typeName = <MediaCategory.Name> data.categories.replace(/,.*$/, '')
   const category = categories[typeName]
   if (!category) throw new Error(`Unkown meta type “${typeName}”.`)
 
@@ -324,13 +324,13 @@ function process (data: AssetType.Generic): AssetType.Generic {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = <AssetType.FileFormat> convertPropertiesSnakeToCamel(data)
-  if (!data.metaTypes) {
-    data.metaTypes = 'general'
-  } else if (data.metaTypes.indexOf('general') === -1) {
-    data.metaTypes = `${data.metaTypes},general`
+  if (!data.categories) {
+    data.categories = 'general'
+  } else if (data.categories.indexOf('general') === -1) {
+    data.categories = `${data.categories},general`
   }
-  if (data.metaTypes) {
-    for (const typeName of data.metaTypes.split(',')) {
+  if (data.categories) {
+    for (const typeName of data.categories.split(',')) {
       data = processByType(data, <MediaCategory.Name> typeName)
     }
   }

@@ -361,13 +361,13 @@ function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, cate
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
-  if (dataOrig.metaTypes == null) {
+  if (dataOrig.categories == null) {
     return Object.assign({}, dataOrig, dataWiki)
   }
 
   const typeData: MediaCategory.Data = {}
 
-  for (const typeName of dataOrig.metaTypes.split(',')) {
+  for (const typeName of dataOrig.categories.split(',')) {
     const propSpecs = categoryCollection[typeName as MediaCategory.Name].props
     for (const propName in dataWiki) {
       if (propSpecs?.[propName]?.wikidata != null) {

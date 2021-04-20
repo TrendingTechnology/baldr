@@ -19,7 +19,7 @@ const main_1 = require("../main");
 function renameMediaAsset(oldPath) {
     const metaData = main_1.readAssetYaml(oldPath);
     let newPath;
-    if (metaData && metaData.metaTypes) {
+    if (metaData && metaData.categories) {
         metaData.extension = core_browser_1.getExtension(oldPath);
         newPath = media_categories_management_1.default.formatFilePath(metaData, oldPath);
     }
