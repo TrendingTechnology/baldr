@@ -64,7 +64,7 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
 
   if (opts.remote && opts.config) {
     cmd.log('Updating the configuration remotely using ansible.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"`])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"'])
   }
 
   // api

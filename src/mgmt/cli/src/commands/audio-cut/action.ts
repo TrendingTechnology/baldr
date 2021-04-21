@@ -10,9 +10,9 @@ async function action (filePath: string): Promise<void> {
 
   cmd.startSpin()
   cmd.exec(['ffmpeg', '-i', filePath,
-  '-to', '120',
-  '-af', 'afade=t=out:st=110:d=10',
-  '-map_metadata', '-1',
+    '-to', '120',
+    '-af', 'afade=t=out:st=110:d=10',
+    '-map_metadata', '-1',
   `${filePath}_cut.mp3`])
 }
 

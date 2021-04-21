@@ -18,7 +18,7 @@ import config from '@bldr/config'
  * @param itemId - For example `Q123`
  */
 async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
-  let rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
+  const rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
   if (arg1) {
     if (category === 'person') {
       rawData.firstname = arg1
@@ -26,7 +26,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     }
   }
   rawData.categories = category
-  const data = <AssetType.FileFormat> categoriesManagement.process(rawData as AssetType.FileFormat)
+  const data = categoriesManagement.process(rawData as AssetType.FileFormat)
   console.log(data)
 
   let downloadWikicommons = true
@@ -49,7 +49,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     console.log(src)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.copyFileSync(src, dest)
-    console.log(`No Wikicommons file. Use temporary blank file instead.`)
+    console.log('No Wikicommons file. Use temporary blank file instead.')
   }
 
   const yamlFile = `${dest}.yml`

@@ -56,7 +56,7 @@ async function action (appName: string): Promise<void> {
   cmd.startSpin()
   try {
     if (!appName) {
-      for (let appName of appNames) {
+      for (const appName of appNames) {
         await buildApp(cmd, appName)
       }
     } else {

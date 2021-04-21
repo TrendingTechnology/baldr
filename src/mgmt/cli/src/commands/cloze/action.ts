@@ -59,7 +59,7 @@ function generateClozeSvg (filePath: string) {
   console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = readFile(filePath)
-  if (texFileContent.indexOf('cloze') === -1) {
+  if (!texFileContent.includes('cloze')) {
     console.log(`${chalk.red(filePath)} has no cloze texts.`)
     return
   }

@@ -29,7 +29,7 @@ function convertTexToFolderTitles (filePath: string, cmdObj: any): void {
     output.push(title)
   }
 
-  let matchSubtitle = content.match(/ {2}untertitel = \{(.+?)\}[,\n]/s)
+  const matchSubtitle = content.match(/ {2}untertitel = \{(.+?)\}[,\n]/s)
   if (matchSubtitle) {
     subtitle = clean(matchSubtitle[1])
     output.push(subtitle)

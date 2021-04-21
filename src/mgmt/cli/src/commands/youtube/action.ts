@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Third party packages.
-import  axios from 'axios'
+import axios from 'axios'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
@@ -11,7 +11,7 @@ import { operations, locationIndicator } from '@bldr/media-manager'
 import config from '@bldr/config'
 import { AssetType } from '@bldr/type-definitions'
 
-async function requestYoutubeApi(youtubeId: string): Promise<object> {
+async function requestYoutubeApi (youtubeId: string): Promise<object> {
   const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
     params: {
       part: 'snippet',
@@ -24,7 +24,7 @@ async function requestYoutubeApi(youtubeId: string): Promise<object> {
   return {
     youtubeId,
     originalHeading: snippet.title,
-    originalInfo: snippet.description,
+    originalInfo: snippet.description
   }
 }
 
@@ -73,7 +73,7 @@ async function action (youtubeId: string): Promise<void> {
   } else if (fs.existsSync(srcPreviewWebp)) {
     await cmd.exec(
       ['magick',
-      'convert', srcPreviewWebp, destPreview],
+        'convert', srcPreviewWebp, destPreview],
       { cwd: ytDir }
     )
     fs.unlinkSync(srcPreviewWebp)

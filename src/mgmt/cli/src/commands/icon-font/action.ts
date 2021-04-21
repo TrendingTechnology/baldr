@@ -92,10 +92,10 @@ function writeFileToDest (destFileName: string, content: string): void {
 }
 
 interface WebFontConfig {
-  files: string,
-  fontName: string,
-  formats: string[],
-  fontHeight: number,
+  files: string
+  fontName: string
+  formats: string[]
+  fontHeight: number
   descent: number
 }
 

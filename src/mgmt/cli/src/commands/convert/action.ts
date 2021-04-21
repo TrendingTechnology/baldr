@@ -1,5 +1,4 @@
 
-
 // Project packages.
 import { operations, walk } from '@bldr/media-manager'
 

@@ -25,8 +25,7 @@ async function action (url: string, id?: string, extension?: string) {
   await fetchFile(url, destFile)
   // Make images smaller.
   const convertedDestFile = await operations.convertAsset(destFile)
-  if (convertedDestFile)
-    await operations.initializeMetaYaml(destFile, { source: url } as AssetType.Generic)
+  if (convertedDestFile) { await operations.initializeMetaYaml(destFile, { source: url } as AssetType.Generic) }
 }
 
 export = action

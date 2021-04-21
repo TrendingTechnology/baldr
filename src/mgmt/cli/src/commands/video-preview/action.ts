@@ -15,15 +15,13 @@ import { filePathToAssetType, walk } from '@bldr/media-manager'
  * @param second
  */
 function createVideoPreviewImageOneFile (filePath: string, second: number | string) {
-  if (!second)
-    second = 10
+  if (!second) { second = 10 }
   const assetType = filePathToAssetType(filePath)
   if (assetType === 'video') {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)
     console.log(`Preview image: ${chalk.green(outputFileName)} at second ${chalk.green(second)})`)
-    if (typeof second === 'number')
-      second = second.toString()
+    if (typeof second === 'number') { second = second.toString() }
     const process = childProcess.spawnSync('ffmpeg', [
       '-i', filePath,
       '-ss', second, // Position in seconds

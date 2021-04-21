@@ -251,12 +251,12 @@ async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
  * @param cmdObj - See commander docs.
  */
 async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [key: string]: any }): Promise<void> {
-  if (oldPath.indexOf('Tonart.pdf') > -1) {
+  if (oldPath.includes('Tonart.pdf')) {
     await moveReference(oldPath, cmdObj)
     return
   }
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
-  let newPath = locationIndicator.getMirroredPath(oldPath)
+  const newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   if (extension === 'tex') {
