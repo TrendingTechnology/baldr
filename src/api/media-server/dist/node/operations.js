@@ -55,7 +55,7 @@ var main_1 = require("./main");
  */
 function validateMediaType(mediaType) {
     var mediaTypes = ['assets', 'presentations'];
-    if (mediaType == null || mediaType === '')
+    if (mediaType == null)
         return 'assets';
     if (!mediaTypes.includes(mediaType)) {
         throw new Error("Unkown media type \u201C" + mediaType + "\u201D! Allowed media types are: " + mediaTypes.join(', '));

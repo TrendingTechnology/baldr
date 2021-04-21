@@ -584,6 +584,18 @@ var helpMessages = {
         }
     }
 };
+function extractString(query, propertyName, defaultValue) {
+    if (defaultValue === void 0) { defaultValue = null; }
+    if (query == null || typeof query !== 'object' || query[propertyName] == null || typeof query[propertyName] !== 'string') {
+        if (defaultValue != null) {
+            return defaultValue;
+        }
+        else {
+            throw new Error("No value for property " + propertyName + " in the query object.");
+        }
+    }
+    return query[propertyName];
+}
 /**
  * Register the express js rest api in a giant function.
  */
@@ -615,13 +627,19 @@ function registerMediaRestApi() {
                         });
                         return [2 /*return*/];
                     }
-                    type = operations_1.validateMediaType(query.type != null ? query.type.toString() : '');
-                    methods = ['exactMatch', 'substringSearch'];
-                    method = query.method ? query.method.toString() : 'substringSearch';
-                    if (!methods.includes(method)) {
-                        throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods);
+                    type = void 0;
+                    if (query.type != null && typeof query.type === 'string') {
+                        type = operations_1.validateMediaType(query.type);
                     }
-                    field = !query.field ? 'id' : query.field;
+                    else {
+                        type = 'assets';
+                    }
+                    methods = ['exactMatch', 'substringSearch'];
+                    method = extractString(query, 'method', 'substringSearch');
+                    if (!methods.includes(method)) {
+                        throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods.join(', '));
+                    }
+                    field = extractString(query, 'field', 'id');
                     // result
                     if (!('result' in query))
                         query.result = 'fullObjects';
@@ -643,7 +661,10 @@ function registerMediaRestApi() {
                     return [3 /*break*/, 5];
                 case 3:
                     if (!(query.method === 'substringSearch')) return [3 /*break*/, 5];
-                    search = query.search ? query.search.toString() : '';
+                    search = '';
+                    if (query.search != null && typeof query.search === 'string') {
+                        search = query.search;
+                    }
                     regex = new RegExp(escapeRegex(search), 'gi');
                     $match = {};
                     $match[field] = regex;
@@ -657,7 +678,7 @@ function registerMediaRestApi() {
                         $project = {
                             _id: false,
                             id: true,
-                            name: "$" + query.field
+                            name: "$" + field
                         };
                     }
                     find = collection.aggregate([{ $match: $match }, { $project: $project }]);
@@ -736,7 +757,7 @@ function registerMediaRestApi() {
         });
     }); });
     app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, _a, _b, _c, _d, error_6;
+        var query, archive, create, id, type, _a, _b, _c, _d, error_6;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -750,16 +771,18 @@ function registerMediaRestApi() {
                         query.type = 'presentations';
                     archive = ('archive' in query);
                     create = ('create' in query);
+                    id = extractString(query, 'id');
+                    type = operations_1.validateMediaType(extractString(query, 'type'));
                     if (!(query.with === 'editor')) return [3 /*break*/, 2];
                     _b = (_a = res).json;
-                    return [4 /*yield*/, operations_1.openEditor(query.id.toString(), query.type.toString())];
+                    return [4 /*yield*/, operations_1.openEditor(id, type)];
                 case 1:
                     _b.apply(_a, [_e.sent()]);
                     return [3 /*break*/, 4];
                 case 2:
                     if (!(query.with === 'folder')) return [3 /*break*/, 4];
                     _d = (_c = res).json;
-                    return [4 /*yield*/, operations_1.openParentFolder(query.id.toString(), query.type.toString(), archive, create)];
+                    return [4 /*yield*/, operations_1.openParentFolder(id, type, archive, create)];
                 case 3:
                     _d.apply(_c, [_e.sent()]);
                     _e.label = 4;
@@ -870,7 +893,7 @@ function registerMediaRestApi() {
  */
 function runRestApi(port) {
     return __awaiter(this, void 0, void 0, function () {
-        var app, mongoClient, helpMessages;
+        var app, mongoClient, helpMessages, usedPort;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -895,10 +918,13 @@ function runRestApi(port) {
                         });
                     });
                     if (port == null) {
-                        port = config_1.default.api.port;
+                        usedPort = config_1.default.api.port;
                     }
-                    app.listen(port, function () {
-                        console.log("The BALDR REST API is running on port " + port + ".");
+                    else {
+                        usedPort = port;
+                    }
+                    app.listen(usedPort, function () {
+                        console.log("The BALDR REST API is running on port " + usedPort + ".");
                     });
                     return [2 /*return*/, app];
             }
@@ -920,5 +946,5 @@ var main = function () {
     });
 };
 if (require.main === module) {
-    main();
+    main().then().catch(function (reason) { return console.log(reason); });
 }

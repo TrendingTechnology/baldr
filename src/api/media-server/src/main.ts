@@ -578,7 +578,7 @@ const helpMessages: StringIndexedObject = {
 }
 
 function extractString (query: any, propertyName: string, defaultValue: string | null = null): string {
-  if (query == null || typeof query !== 'object' || query[propertyName] != null || typeof query[propertyName] !== 'string') {
+  if (query == null || typeof query !== 'object' || query[propertyName] == null || typeof query[propertyName] !== 'string') {
     if (defaultValue != null) {
       return defaultValue
     } else {

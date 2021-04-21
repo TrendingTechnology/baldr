@@ -16,10 +16,10 @@ const assert_1 = __importDefault(require("assert"));
 const config_1 = __importDefault(require("@bldr/config"));
 const http_request_1 = require("@bldr/http-request");
 const localHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'local', '/api/media');
-const remoteHttpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'remote', '/api/media');
+//const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
 let httpRequest = localHttpRequest;
 function runTests() {
-    it.skip('/api/media/mgmt/update', function () {
+    it('/api/media/mgmt/update', function () {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield httpRequest.request('mgmt/update');
             assert_1.default.strictEqual(result.data.finished, true);
@@ -48,7 +48,7 @@ function runTests() {
             assert_1.default.strictEqual(data.wikidata, 'Q81982');
         });
     });
-    it('/media/query?type=assets&field=id&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', function () {
+    it('/media/query?type=assets&field=uuid&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', function () {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield httpRequest.request({
                 url: 'query',
@@ -137,6 +137,7 @@ function runTests() {
         });
     });
 }
+httpRequest = localHttpRequest;
 describe('local: /api/media', runTests);
-httpRequest = remoteHttpRequest;
-describe('remote: /api/media', runTests);
+// httpRequest = remoteHttpRequest
+// describe('remote: /api/media', runTests)
