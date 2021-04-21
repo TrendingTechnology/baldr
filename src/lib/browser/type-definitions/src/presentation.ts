@@ -145,7 +145,6 @@ export interface Slide {
  * ```
  */
 export interface PresentationMeta {
-
   /**
    * An unique ID. (for example: `Wiener-Klassik`)
    */

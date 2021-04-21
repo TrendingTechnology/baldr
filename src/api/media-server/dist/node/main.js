@@ -149,50 +149,21 @@ var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.
  */
 var MediaFile = /** @class */ (function () {
     function MediaFile(filePath) {
-        /**
-         * Absolute path ot the file.
-         * @type {string}
-         * @access protected
-         */
         this.absPath_ = path_1.default.resolve(filePath);
-        /**
-         * Relative path ot the file.
-         * @type {string}
-         */
         this.path = filePath.replace(basePath, '').replace(/^\//, '');
-        /**
-         * The basename (filename) of the file.
-         * @type {string}
-         */
         this.filename = path_1.default.basename(filePath);
     }
-    /**
-     * @access protected
-     */
     MediaFile.prototype.addFileInfos_ = function () {
         var stats = fs_1.default.statSync(this.absPath_);
-        /**
-         * The file size in bytes.
-         * @type {number}
-         */
         this.size = stats.size;
-        /**
-         * The timestamp indicating the last time this file was modified
-         * expressed in milliseconds since the POSIX Epoch.
-         * @type {Number}
-         */
         this.timeModified = stats.mtimeMs;
-        /**
-         * The extension of the file.
-         * @type {string}
-         */
         this.extension = core_browser_1.getExtension(this.absPath_);
-        /**
-         * The basename (filename without extension) of the file.
-         * @type {string}
-         * @private
-         */
-        this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
+        if (this.extension != null) {
+            this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
+        }
+        else {
+            this.basename_ = path_1.default.basename(this.absPath_);
+        }
         return this;
     };
     /**
@@ -207,11 +178,7 @@ var MediaFile = /** @class */ (function () {
      * Info file in the YAML file format:
      * `/home/baldr/beethoven.jpg.yml`
      *
-     * @param {string} filePath - The path of the YAML file.
-     *
-     * @returns {object}
-     *
-     * @access protected
+     * @param filePath - The path of the YAML file.
      */
     MediaFile.prototype.readYaml_ = function (filePath) {
         if (fs_1.default.existsSync(filePath)) {
@@ -231,7 +198,8 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.cleanTmpProperties = function () {
         for (var property in this) {
-            if (property.match(/_$/)) {
+            if (property.match(/_$/) != null) {
+                // eslint-disable-next-line
                 delete this[property];
             }
         }
@@ -242,7 +210,7 @@ var MediaFile = /** @class */ (function () {
      * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
      * recursive fashion.
      *
-     * @param {object} properties - Add an object to the class properties.
+     * @param properties - Add an object to the class properties.
      */
     MediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
@@ -258,9 +226,9 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
-        if (!this.id && this.basename_)
+        if (this.id == null && this.basename_ != null)
             this.id = core_browser_1.asciify(this.basename_);
-        if (!this.title && this.id)
+        if (this.title == null && this.id != null)
             this.title = core_browser_1.deasciify(this.id);
         this.cleanTmpProperties();
         return this;
@@ -274,32 +242,20 @@ var MediaFile = /** @class */ (function () {
 var Asset = /** @class */ (function (_super) {
     __extends(Asset, _super);
     /**
-     * @param {string} filePath - The file path of the media file.
+     * @param filePath - The file path of the media file.
      */
     function Asset(filePath) {
         var _this = _super.call(this, filePath) || this;
-        /**
-         * The absolute path of the info file in the YAML format. On the absolute
-         * media file path `.yml` is appended.
-         * @type {string}
-         */
         _this.infoFile_ = _this.absPath_ + ".yml";
         var data = _this.readYaml_(_this.infoFile_);
         _this.importProperties(data);
-        /**
-         * Indicates if the asset has a preview image.
-         * @type {Boolean}
-         */
         _this.previewImage = false;
         return _this;
     }
-    /**
-     *
-     */
     Asset.prototype.addFileInfos = function () {
         this.addFileInfos_();
         var previewImage = this.absPath_ + "_preview.jpg";
-        if (this.extension) {
+        if (this.extension != null) {
             this.assetType = mediaCategoriesManager.extensionToType(this.extension);
         }
         if (fs_1.default.existsSync(previewImage)) {
@@ -328,39 +284,23 @@ var Asset = /** @class */ (function (_super) {
             else {
                 throw new Error(_this.absPath_ + " multipart asset counts greater than 100 are not supported.");
             }
-            var basePath = _this.absPath_.replace("." + _this.extension, '');
-            var fileName = "" + basePath + suffix + "." + _this.extension;
-            return fileName;
-        };
-        /**
-         * For old two digit numbering
-         *
-         * @todo remove
-         * @param {Number} count
-         */
-        var nextAssetFileNameOld = function (count) {
-            var suffix;
-            if (count < 10) {
-                suffix = "_no0" + count;
+            var basePath = _this.absPath_;
+            var fileName;
+            if (_this.extension != null) {
+                basePath = _this.absPath_.replace("." + _this.extension, '');
+                fileName = "" + basePath + suffix + "." + _this.extension;
             }
-            else if (count < 100) {
-                suffix = "_no" + count;
+            else {
+                fileName = "" + basePath + suffix;
             }
-            var basePath = _this.absPath_.replace("." + _this.extension, '');
-            var fileName = "" + basePath + suffix + "." + _this.extension;
             return fileName;
         };
         var count = 2;
-        while (fs_1.default.existsSync(nextAssetFileName(count)) || fs_1.default.existsSync(nextAssetFileNameOld(count))) {
+        while (fs_1.default.existsSync(nextAssetFileName(count))) {
             count += 1;
         }
         count -= 1; // The counter is increased before the file system check.
         if (count > 1) {
-            /**
-             * The count of parts of a multipart asset.
-             *
-             * @type {Number}
-             */
             this.multiPartCount = count;
         }
     };
@@ -375,49 +315,22 @@ var Presentation = /** @class */ (function (_super) {
     function Presentation(filePath) {
         var _this = _super.call(this, filePath) || this;
         var data = _this.readYaml_(filePath);
-        if (data)
+        if (data != null)
             _this.importProperties(data);
         var deepTitle = new titles_1.DeepTitle(filePath);
         titleTree.add(deepTitle);
         var deepTitleTmp = deepTitle;
-        if (!_this.meta)
+        if (_this.meta == null)
             _this.meta = {};
         for (var _i = 0, _a = ['id', 'title', 'subtitle', 'curriculum', 'grade']; _i < _a.length; _i++) {
             var property = _a[_i];
-            if (typeof _this.meta[property] === 'undefined')
+            if (typeof _this.meta[property] === 'undefined') {
                 _this.meta[property] = deepTitleTmp[property];
+            }
         }
-        /**
-         * The plain text version of `this.meta.title`.
-         *
-         * @type {String}
-         */
         _this.title = core_browser_1.stripTags(_this.meta.title);
-        /**
-         * The plain text version of `this.meta.title (this.meta.subtitle)`
-         *
-         * @type {String}
-         */
         _this.titleSubtitle = _this.titleSubtitle_();
-        /**
-       * The plain text version of `folderTitles.allTitles
-       * (this.meta.subtitle)`
-       *
-       * For example:
-       *
-       * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-       * Johann Sebastian Bach: Musik als Bekenntnis /
-       * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-       *
-       * @returns {String}
-       * @private
-       */
         _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
-        /**
-         * Value is the same as `meta.id`
-         *
-         * @type {String}
-         */
         _this.id = _this.meta.id;
         return _this;
     }
@@ -425,7 +338,8 @@ var Presentation = /** @class */ (function (_super) {
      * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
      */
     Presentation.prototype.titleSubtitle_ = function () {
-        if (this.meta && this.meta.subtitle) {
+        var _a;
+        if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
             return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
         }
         else {
@@ -443,8 +357,9 @@ var Presentation = /** @class */ (function (_super) {
      * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
      */
     Presentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
+        var _a;
         var all = folderTitles.allTitles;
-        if (this.meta && this.meta.subtitle) {
+        if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
             all = all + " (" + this.meta.subtitle + ")";
         }
         return core_browser_1.stripTags(all);
@@ -452,10 +367,6 @@ var Presentation = /** @class */ (function (_super) {
     return Presentation;
 }(MediaFile));
 /* Insert *********************************************************************/
-/**
- * @param {String} filePath
- * @param {String} mediaType
- */
 function insertObjectIntoDb(filePath, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
         var object, error_1, relPath, msg;
@@ -472,7 +383,7 @@ function insertObjectIntoDb(filePath, mediaType) {
                             return [2 /*return*/];
                         object = new Asset(filePath);
                     }
-                    if (!object)
+                    if (object == null)
                         return [2 /*return*/];
                     object = object.prepareForInsert();
                     return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
@@ -507,7 +418,7 @@ function gitPull() {
 /**
  * Update the media server.
  *
- * @param {Boolean} full - Update with git pull.
+ * @param full - Update with git pull.
  *
  * @returns {Promise.<Object>}
  */
@@ -542,7 +453,7 @@ function update(full) {
                     return [4 /*yield*/, media_manager_1.walk({
                             everyFile: function (filePath) {
                                 // Delete temporary files.
-                                if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+                                if ((filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null) ||
                                     filePath.includes('Praesentation_tmp.baldr.yml') ||
                                     filePath.includes('title_tmp.txt')) {
                                     fs_1.default.unlinkSync(filePath);
@@ -613,8 +524,6 @@ function update(full) {
  * some entry point urls.
  *
  * Update docs on the top of this file in the JSDoc block.
- *
- * @type {Object}
  */
 var helpMessages = {
     navigation: {
@@ -991,10 +900,18 @@ function runRestApi(port) {
     });
 }
 var main = function () {
-    var port;
-    if (process.argv.length === 3)
-        port = parseInt(process.argv[2]);
-    return runRestApi(port);
+    return __awaiter(this, void 0, void 0, function () {
+        var port;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (process.argv.length === 3)
+                        port = parseInt(process.argv[2]);
+                    return [4 /*yield*/, runRestApi(port)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
 };
 if (require.main === module) {
     main();

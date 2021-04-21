@@ -82,13 +82,12 @@ function getAbsPathFromId(id, mediaType) {
                     return [4 /*yield*/, main_1.database.db.collection(mediaType).find({ id: id }).next()];
                 case 1:
                     result = _a.sent();
-                    if (!result)
+                    if (result.path == null && typeof result.path !== 'string') {
                         throw new Error("Can not find media file with the type \u201C" + mediaType + "\u201D and the id \u201C" + id + "\u201D.");
-                    if (mediaType === 'assets') {
-                        relPath = result.path + ".yml";
                     }
-                    else {
-                        relPath = result.path;
+                    relPath = result.path;
+                    if (mediaType === 'assets') {
+                        relPath = relPath + ".yml";
                     }
                     return [2 /*return*/, path_1.default.join(config_1.default.mediaServer.basePath, relPath)];
             }
@@ -111,7 +110,7 @@ function openWithFileManagerWithArchives(currentPath, create) {
     var relPath = media_manager_1.locationIndicator.getRelPath(currentPath);
     for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
         var basePath = _a[_i];
-        if (relPath) {
+        if (relPath != null) {
             var currentPath_1 = path_1.default.join(basePath, relPath);
             result[currentPath_1] = open_with_1.openWithFileManager(currentPath_1, create);
         }
@@ -120,75 +119,6 @@ function openWithFileManagerWithArchives(currentPath, create) {
         }
     }
     return result;
-}
-/**
- * Mirror the folder structure of the media folder into the archive folder or
- * vice versa. Only folders with two prefixed numbers followed by an
- * underscore (for example “10_”) are mirrored.
- *
- * @param {String} currentPath - Must be a relative path within one of the
- *   folder structures.
- *
- * @returns {Object} - Status informations of the action.
- */
-function mirrorFolderStructure(currentPath) {
-    function walkSync(dir, fileList) {
-        var files = fs_1.default.readdirSync(dir);
-        if (!fileList)
-            fileList = [];
-        files.forEach(function (file) {
-            var filePath = path_1.default.join(dir, file);
-            if (fs_1.default.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
-                if (fileList)
-                    fileList.push(filePath);
-                walkSync(filePath, fileList);
-            }
-        });
-        return fileList;
-    }
-    var currentBasePath = media_manager_1.locationIndicator.getBasePath(currentPath);
-    var mirrorBasePath = '';
-    for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
-        var basePath = _a[_i];
-        if (basePath !== currentBasePath) {
-            mirrorBasePath = basePath;
-            break;
-        }
-    }
-    var relPaths = walkSync(currentPath);
-    for (var index = 0; index < relPaths.length; index++) {
-        var relPath = media_manager_1.locationIndicator.getRelPath(relPaths[index]);
-        if (relPath !== undefined)
-            relPaths[index] = relPath;
-    }
-    var created = [];
-    var existing = [];
-    for (var _b = 0, relPaths_1 = relPaths; _b < relPaths_1.length; _b++) {
-        var relPath = relPaths_1[_b];
-        var newPath = path_1.default.join(mirrorBasePath, relPath);
-        if (!fs_1.default.existsSync(newPath)) {
-            try {
-                fs_1.default.mkdirSync(newPath, { recursive: true });
-            }
-            catch (error) {
-                return {
-                    error: error
-                };
-            }
-            created.push(relPath);
-        }
-        else {
-            existing.push(relPath);
-        }
-    }
-    return {
-        ok: {
-            currentBasePath: currentBasePath,
-            mirrorBasePath: mirrorBasePath,
-            created: created,
-            existing: existing
-        }
-    };
 }
 /**
  * Open a media file specified by an ID with an editor specified in

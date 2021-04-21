@@ -1,5 +1,4 @@
 // Node packages.
-import childProcess from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
@@ -18,9 +17,9 @@ import { database } from './main'
  */
 export function validateMediaType (mediaType: string): string {
   const mediaTypes = ['assets', 'presentations']
-  if (!mediaType) return 'assets'
+  if (mediaType == null || mediaType === '') return 'assets'
   if (!mediaTypes.includes(mediaType)) {
-    throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes}`)
+    throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes.join(', ')}`)
   } else {
     return mediaType
   }
