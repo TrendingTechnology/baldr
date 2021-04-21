@@ -1,9 +1,21 @@
-import type { MediaCategory } from '@bldr/type-definitions'
-
 import path from 'path'
+
+import type { MediaCategory, AssetType } from '@bldr/type-definitions'
 import { idify } from '@bldr/core-browser'
 import config from '@bldr/config'
+
 import { validateDate } from '../main'
+
+interface GroupCategory extends MediaCategory.Category {
+  abbreviation: string
+  basePath: string
+}
+
+interface GroupFileFormat extends AssetType.FileFormat {
+  groupId: string
+  name: string
+  extension: string
+}
 
 /**
  * The meta data type specification “group”.
@@ -13,10 +25,12 @@ export const group: MediaCategory.Category = {
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
   relPath: function ({ data }) {
-    return path.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`)
+    const groupData = data as GroupFileFormat
+    return path.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`)
   },
   detectCategoryByPath: function (category) {
-    return new RegExp('^' + category.basePath + '/.*')
+    const groupCategory = category as GroupCategory
+    return new RegExp('^' + groupCategory.basePath + '/.*')
   },
   props: {
     groupId: {
@@ -24,7 +38,7 @@ export const group: MediaCategory.Category = {
       derive: function ({ data }) {
         return data.name
       },
-      format: function (value, { }) {
+      format: function (value) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = idify(value)
         return value
@@ -36,17 +50,17 @@ export const group: MediaCategory.Category = {
       derive: function ({ data }) {
         return data.name
       },
-      format: function (value, { }) {
+      format: function (value) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
-        value = idify(value)
-        return `GR_${value}`
+        return `GR_${idify(value)}`
       },
       overwriteByDerived: true
     },
     title: {
       title: 'Titel der Gruppe',
       derive: function ({ data }) {
-        return `Portrait-Bild der Gruppe „${data.name}“`
+        const groupData = data as GroupFileFormat
+        return `Portrait-Bild der Gruppe „${groupData.name}“`
       },
       overwriteByDerived: true
     },

@@ -25,7 +25,7 @@ export const general: MediaCategory.Category = {
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         raw = raw.replace(/^[va]-/, '')
 
-        if (data.filePath != null && !data.categories!.includes('youtube')) {
+        if (data != null && data.filePath != null && data.categories!.includes('youtube')) {
           const idPrefix = generateIdPrefix(data.filePath)
           if (idPrefix != null) {
             if (!raw.includes(idPrefix)) {
@@ -85,7 +85,7 @@ export const general: MediaCategory.Category = {
       title: 'Titel',
       required: true,
       overwriteByDerived: false,
-      format: function (value, { }) {
+      format: function (value) {
         // a Strawinsky Petruschka Abschnitt 0_22
         value = value.replace(/^[va] /, '')
         return value
@@ -105,7 +105,7 @@ export const general: MediaCategory.Category = {
       validate: function (value) {
         return value.match(/^.+:.+$/)
       },
-      format: function (value, { }) {
+      format: function (value) {
         return decodeURI(value)
       },
       wikidata: {
