@@ -430,8 +430,8 @@ export class IntermediateSong extends ExtendedSong {
     return listFiles(folder, regExp)
   }
 
-  public generateMetaDataForMediaServer() {
-    const metaData = Object.assign({ id: `LD_${this.songId}` },this.metaDataCombined.toJSON())
+  public generateMetaDataForMediaServer (): void {
+    const metaData = Object.assign({ id: `LD_${this.songId}` }, this.metaDataCombined.toJSON())
     writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData)
   }
 

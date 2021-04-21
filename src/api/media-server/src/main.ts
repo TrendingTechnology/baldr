@@ -214,7 +214,7 @@ class MediaFile {
    */
   cleanTmpProperties () {
     for (const property in this) {
-      if (property.match(/_$/)) {
+      if (property.match(/_$/) != null) {
         delete this[property]
       }
     }
@@ -370,7 +370,7 @@ class Presentation extends MediaFile {
     titleTree.add(deepTitle)
     const deepTitleTmp: StringIndexedObject = deepTitle
 
-    if (!this.meta) this.meta = {}
+    if (this.meta == null) this.meta = {}
     for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
       if (typeof this.meta[property] === 'undefined') this.meta[property] = deepTitleTmp[property]
     }
@@ -416,7 +416,7 @@ class Presentation extends MediaFile {
    * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
    */
   private titleSubtitle_ (): string {
-    if (this.meta && this.meta.subtitle) {
+    if ((this.meta != null) && this.meta.subtitle) {
       return `${this.title} (${stripTags(this.meta.subtitle)})`
     } else {
       return this.title
@@ -435,7 +435,7 @@ class Presentation extends MediaFile {
    */
   private allTitlesSubtitle_ (folderTitles: DeepTitle): string {
     let all = folderTitles.allTitles
-    if (this.meta && this.meta.subtitle) {
+    if ((this.meta != null) && this.meta.subtitle) {
       all = `${all} (${this.meta.subtitle})`
     }
     return stripTags(all)
@@ -458,7 +458,7 @@ async function insertObjectIntoDb (filePath: string, mediaType: string): Promise
       if (!fs.existsSync(`${filePath}.yml`)) return
       object = new Asset(filePath)
     }
-    if (!object) return
+    if (object == null) return
     object = object.prepareForInsert()
     await database.db.collection(mediaType).insertOne(object)
   } catch (error) {
@@ -508,7 +508,7 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
     everyFile: (filePath) => {
       // Delete temporary files.
       if (
-        filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+        (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null) ||
         filePath.includes('Praesentation_tmp.baldr.yml') ||
         filePath.includes('title_tmp.txt')
       ) {
@@ -830,10 +830,10 @@ async function runRestApi (port?: number) {
   return app
 }
 
-const main = function () {
+const main = async function () {
   let port
   if (process.argv.length === 3) port = parseInt(process.argv[2])
-  return runRestApi(port)
+  return await runRestApi(port)
 }
 
 if (require.main === module) {

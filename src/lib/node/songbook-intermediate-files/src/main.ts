@@ -210,8 +210,7 @@ export class PianoScore {
    * @returns A TeX safe string with escaped `\&`.
    */
   static sanitize (markup: string | undefined): string {
-    if (markup)
-      return markup.replace('&', '\\&')
+    if (markup != null) { return markup.replace('&', '\\&') }
     return ''
   }
 
@@ -586,7 +585,7 @@ export class IntermediateLibrary extends Library {
     log.info('Create JSON file: %s', jsonPath)
   }
 
-  compilePianoScore(groupAlphabetically: boolean, pageTurnOptimized: boolean): void {
+  compilePianoScore (groupAlphabetically: boolean, pageTurnOptimized: boolean): void {
     const pianoScore = new PianoScore(
       this,
       groupAlphabetically,

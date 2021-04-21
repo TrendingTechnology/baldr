@@ -12,14 +12,14 @@ import { Database } from '@bldr/mongodb-connector'
 export function registerSeatingPlan (database: Database): Express {
   const app = express()
 
-  app.post('/save-state', (req, res) => {
+  app.post('/save-state', async (req, res) => {
     const body = req.body
 
     if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
       res.sendStatus(404)
     }
 
-    database.seatingPlan.insertOne(body)
+    await database.seatingPlan.insertOne(body)
 
     const responseMessage = {
       success: body.timeStampMsec,
@@ -31,7 +31,7 @@ export function registerSeatingPlan (database: Database): Express {
 
   app.get('/get-states', (req, res) => {
     database.seatingPlan.aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
-      if (error) {
+      if (error != null) {
         return res.status(500).send(error)
       }
       const states = []
@@ -44,7 +44,7 @@ export function registerSeatingPlan (database: Database): Express {
 
   app.get('/latest', (req, res) => {
     database.seatingPlan.find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
-      if (error) {
+      if (error != null) {
         return res.status(500).send(error)
       }
       if (result.length > 0) {
@@ -57,7 +57,7 @@ export function registerSeatingPlan (database: Database): Express {
 
   app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
     database.seatingPlan.find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
-      if (error) {
+      if (error != null) {
         return res.status(500).send(error)
       }
       res.status(200).send(result)
@@ -66,7 +66,7 @@ export function registerSeatingPlan (database: Database): Express {
 
   app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
     database.seatingPlan.deleteOne({ timeStampMsec: parseInt(req.params.timeStampMsec) }, {}, (error, result) => {
-      if (error) {
+      if (error != null) {
         return res.status(500).send(error)
       }
       const message = {

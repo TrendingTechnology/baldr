@@ -36,12 +36,11 @@ export function validateMediaType (mediaType: string): string {
 async function getAbsPathFromId (id: string, mediaType: string = 'presentations'): Promise<string> {
   mediaType = validateMediaType(mediaType)
   const result = await database.db.collection(mediaType).find({ id: id }).next()
-  if (!result) throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`)
-  let relPath
+  if (result.path == null && typeof result.path !== 'string') { throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`) }
+
+  let relPath: string = result.path
   if (mediaType === 'assets') {
-    relPath = `${result.path}.yml`
-  } else {
-    relPath = result.path
+    relPath = `${relPath}.yml`
   }
   return path.join(config.mediaServer.basePath, relPath)
 }
@@ -61,7 +60,7 @@ function openWithFileManagerWithArchives (currentPath: string, create: boolean):
   const result: StringIndexedObject = {}
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
-    if (relPath) {
+    if (relPath != null) {
       const currentPath = path.join(basePath, relPath)
       result[currentPath] = openWithFileManager(currentPath, create)
     } else {
@@ -69,73 +68,6 @@ function openWithFileManagerWithArchives (currentPath: string, create: boolean):
     }
   }
   return result
-}
-
-/**
- * Mirror the folder structure of the media folder into the archive folder or
- * vice versa. Only folders with two prefixed numbers followed by an
- * underscore (for example “10_”) are mirrored.
- *
- * @param {String} currentPath - Must be a relative path within one of the
- *   folder structures.
- *
- * @returns {Object} - Status informations of the action.
- */
-function mirrorFolderStructure (currentPath: string): StringIndexedObject {
-  function walkSync (dir: string, fileList?: string[]): string[] {
-    const files = fs.readdirSync(dir)
-    if (!fileList) fileList = []
-    files.forEach(function (file) {
-      const filePath = path.join(dir, file)
-      if (fs.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
-        if (fileList) fileList.push(filePath)
-        walkSync(filePath, fileList)
-      }
-    })
-    return fileList
-  }
-
-  const currentBasePath = locationIndicator.getBasePath(currentPath)
-
-  let mirrorBasePath: string = ''
-  for (const basePath of locationIndicator.get()) {
-    if (basePath !== currentBasePath) {
-      mirrorBasePath = basePath
-      break
-    }
-  }
-
-  const relPaths = walkSync(currentPath)
-  for (let index = 0; index < relPaths.length; index++) {
-    const relPath = locationIndicator.getRelPath(relPaths[index])
-    if (relPath !== undefined) relPaths[index] = relPath
-  }
-
-  const created = []
-  const existing = []
-  for (const relPath of relPaths) {
-    const newPath = path.join(mirrorBasePath, relPath)
-    if (!fs.existsSync(newPath)) {
-      try {
-        fs.mkdirSync(newPath, { recursive: true })
-      } catch (error) {
-        return {
-          error
-        }
-      }
-      created.push(relPath)
-    } else {
-      existing.push(relPath)
-    }
-  }
-  return {
-    ok: {
-      currentBasePath,
-      mirrorBasePath,
-      created,
-      existing
-    }
-  }
 }
 
 /**
