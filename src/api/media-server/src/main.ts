@@ -79,6 +79,7 @@ import { walk } from '@bldr/media-manager'
 import { TitleTree, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
+import type { MediaType } from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 
 // Submodules.
@@ -576,6 +577,17 @@ const helpMessages: StringIndexedObject = {
   }
 }
 
+function extractString (query: any, propertyName: string, defaultValue: string | null = null): string {
+  if (query == null || typeof query !== 'object' || query[propertyName] != null || typeof query[propertyName] !== 'string') {
+    if (defaultValue != null) {
+      return defaultValue
+    } else {
+      throw new Error(`No value for property ${propertyName} in the query object.`)
+    }
+  }
+  return query[propertyName]
+}
+
 /**
  * Register the express js rest api in a giant function.
  */
@@ -606,19 +618,25 @@ function registerMediaRestApi (): express.Express {
         })
         return
       }
+
       // type
-      const type: string = validateMediaType(query.type != null ? query.type.toString() : '')
+      let type: MediaType
+      if (query.type != null && typeof query.type === 'string') {
+        type = validateMediaType(query.type)
+      } else {
+        type = 'assets'
+      }
 
       // method
       const methods = ['exactMatch', 'substringSearch']
-      const method: string = query.method ? query.method.toString() : 'substringSearch'
+      const method = extractString(query, 'method', 'substringSearch')
+
       if (!methods.includes(method)) {
-        throw new Error(`Unkown method “${method}”! Allowed methods: ${methods}`)
+        throw new Error(`Unkown method “${method}”! Allowed methods: ${methods.join(', ')}`)
       }
 
       // field
-      const field: string = !query.field ? 'id' : <string> query.field
-
+      const field = extractString(query, 'field', 'id')
       // result
       if (!('result' in query)) query.result = 'fullObjects'
 
@@ -637,7 +655,10 @@ function registerMediaRestApi (): express.Express {
       // substringSearch
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
-        const search = query.search ? query.search.toString() : ''
+        let search: string = ''
+        if (query.search != null && typeof query.search === 'string') {
+          search = query.search
+        }
         const regex = new RegExp(escapeRegex(search), 'gi')
         const $match: StringIndexedObject = {}
         $match[field] = regex
@@ -650,7 +671,7 @@ function registerMediaRestApi (): express.Express {
           $project = {
             _id: false,
             id: true,
-            name: `$${query.field}`
+            name: `$${field}`
           }
         }
         find = collection.aggregate([{ $match }, { $project }])
@@ -699,10 +720,13 @@ function registerMediaRestApi (): express.Express {
       if (query.type == null) query.type = 'presentations'
       const archive = ('archive' in query)
       const create = ('create' in query)
+
+      const id = extractString(query, 'id')
+      const type = validateMediaType(extractString(query, 'type'))
       if (query.with === 'editor') {
-        res.json(await openEditor(query.id.toString(), query.type.toString()))
+        res.json(await openEditor(id, type))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(query.id.toString(), query.type.toString(), archive, create))
+        res.json(await openParentFolder(id, type, archive, create))
       }
     } catch (error) {
       next(error)
@@ -761,7 +785,7 @@ function registerMediaRestApi (): express.Express {
  *
  * @param port - A TCP port.
  */
-async function runRestApi (port?: number) {
+async function runRestApi (port?: number): Promise<express.Express> {
   const app = express()
 
   const mongoClient = await connectDb()
@@ -784,21 +808,24 @@ async function runRestApi (port?: number) {
     })
   })
 
+  let usedPort: number
   if (port == null) {
-    port = config.api.port
+    usedPort = config.api.port
+  } else {
+    usedPort = port
   }
-  app.listen(port, () => {
-    console.log(`The BALDR REST API is running on port ${port}.`)
+  app.listen(usedPort, () => {
+    console.log(`The BALDR REST API is running on port ${usedPort}.`)
   })
   return app
 }
 
-const main = async function () {
+const main = async function (): Promise<express.Express> {
   let port
   if (process.argv.length === 3) port = parseInt(process.argv[2])
   return await runRestApi(port)
 }
 
 if (require.main === module) {
-  main()
+  main().then().catch((reason) => console.log(reason))
 }

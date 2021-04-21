@@ -10,18 +10,20 @@ import type { StringIndexedObject } from '@bldr/type-definitions'
 
 import { database } from './main'
 
+export type MediaType = 'assets' | 'presentations'
+
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export function validateMediaType (mediaType: string): string {
+export function validateMediaType (mediaType: string): MediaType {
   const mediaTypes = ['assets', 'presentations']
-  if (mediaType == null || mediaType === '') return 'assets'
+  if (mediaType == null) return 'assets'
   if (!mediaTypes.includes(mediaType)) {
     throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes.join(', ')}`)
   } else {
-    return mediaType
+    return mediaType as MediaType
   }
 }
 
@@ -32,7 +34,7 @@ export function validateMediaType (mediaType: string): string {
  * @param id - The id of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-async function getAbsPathFromId (id: string, mediaType: string = 'presentations'): Promise<string> {
+async function getAbsPathFromId (id: string, mediaType: MediaType = 'presentations'): Promise<string> {
   mediaType = validateMediaType(mediaType)
   const result = await database.db.collection(mediaType).find({ id: id }).next()
   if (result.path == null && typeof result.path !== 'string') { throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`) }
@@ -76,7 +78,7 @@ function openWithFileManagerWithArchives (currentPath: string, create: boolean):
  * @param id - The id of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export async function openEditor (id: string, mediaType: string): Promise<StringIndexedObject> {
+export async function openEditor (id: string, mediaType: MediaType): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
@@ -106,7 +108,7 @@ export async function openEditor (id: string, mediaType: string): Promise<String
  * @param create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-export async function openParentFolder (id: string, mediaType: string, archive: boolean, create: boolean): Promise<StringIndexedObject> {
+export async function openParentFolder (id: string, mediaType: MediaType, archive: boolean, create: boolean): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
 
