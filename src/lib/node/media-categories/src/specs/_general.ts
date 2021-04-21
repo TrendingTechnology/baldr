@@ -25,7 +25,8 @@ export const general: MediaCategory.Category = {
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         raw = raw.replace(/^[va]-/, '')
 
-        if (data != null && data.filePath != null && data.categories!.includes('youtube')) {
+        // eslint-disable-next-line
+        if (data.filePath != null && data.categories?.includes('youtube')) {
           const idPrefix = generateIdPrefix(data.filePath)
           if (idPrefix != null) {
             if (!raw.includes(idPrefix)) {

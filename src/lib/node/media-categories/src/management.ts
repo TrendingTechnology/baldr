@@ -152,6 +152,7 @@ function isPropertyDerived (propSpec: MediaCategory.Prop): boolean {
  */
 function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
   const origData = deepCopy(data) as AssetType.FileFormat
+  // eslint-disable-next-line
   const result: AssetType.FileFormat = {} as AssetType.FileFormat
 
   if (data.filePath == null) throw new Error('Property file_path missing')
@@ -173,8 +174,8 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
     if (
       isValue(derivedValue) &&
       (
-        (!propSpec.overwriteByDerived && !isValue(origValue)) ||
-        propSpec.overwriteByDerived
+        ((propSpec.overwriteByDerived == null || propSpec.overwriteByDerived) && !isValue(origValue)) ||
+        (propSpec.overwriteByDerived != null && propSpec.overwriteByDerived)
       )
     ) {
       result[propName] = derivedValue
@@ -185,6 +186,7 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
     }
     // Throw away the value of this property. We prefer the derived
     // version.
+    // eslint-disable-next-line
     delete origData[propName]
   }
 
@@ -223,13 +225,14 @@ function formatProps (data: AssetType.FileFormat, category: MediaCategory.Catego
 function validateProps (data: AssetType.FileFormat, category: MediaCategory.Category): void {
   function validateOneProp (spec: MediaCategory.Prop, value: any, prop: MediaCategory.PropName): void {
     // required
-    if (spec.required && !isValue(value)) {
+    if (spec.required != null && !isValue(value)) {
       throw new Error(`Missing property ${prop}`)
     }
     // validate
     if ((spec.validate != null) && typeof spec.validate === 'function' && isValue(value)) {
       const result = spec.validate(value)
       if (!result) {
+        // eslint-disable-next-line
         throw new Error(`Validation failed for property “${prop}” and value “${value}”`)
       }
     }
@@ -245,11 +248,13 @@ function validateProps (data: AssetType.FileFormat, category: MediaCategory.Cate
  */
 function removeProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
   for (const propName in category.props) {
-    if (data[propName]) {
+    if (data[propName] != null) {
       const value = data[propName]
-      const propSpec = category.props[<AssetType.PropName> propName]
+      const propSpec = category.props[propName as AssetType.PropName]
       if (
+        // eslint-disable-next-line
         !isValue(value) ||
+        // eslint-disable-next-line
         (propSpec.state && propSpec.state === 'absent') ||
         (
           (propSpec.removeByRegexp != null) &&
@@ -258,6 +263,7 @@ function removeProps (data: AssetType.FileFormat, category: MediaCategory.Catego
           (value.match(propSpec.removeByRegexp) != null)
         )
       ) {
+        // eslint-disable-next-line
         delete data[propName]
       }
     }

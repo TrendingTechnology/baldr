@@ -403,6 +403,7 @@ async function query (itemId: string, typeNames: MediaCategory.Names, categoryCo
 
   if (!typeNames.includes('general')) typeNames = `general,${typeNames}`
 
+  // eslint-disable-next-line
   const data: AssetType.FileFormat = {} as AssetType.FileFormat
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
