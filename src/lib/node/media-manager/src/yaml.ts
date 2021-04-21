@@ -72,6 +72,7 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFo
     (force != null && force) ||
     !fs.existsSync(yamlFile)
   ) {
+    // eslint-disable-next-line
     if (metaData == null) metaData = {} as AssetType.FileFormat
     const asset = new Asset(filePath)
     if (metaData.id == null) {

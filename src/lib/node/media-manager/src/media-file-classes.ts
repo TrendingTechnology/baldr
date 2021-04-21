@@ -33,7 +33,8 @@ class MediaFile {
    * The basename (filename without extension) of the file.
    */
   get basename (): string {
-    return path.basename(this.absPath, `.${this.extension}`)
+    if (this.extension != null) { return path.basename(this.absPath, `.${this.extension}`) }
+    return this.absPath
   }
 }
 
@@ -49,7 +50,7 @@ export class Asset extends MediaFile {
     super(filePath)
     const data = readAssetYaml(this.absPath)
     if (data != null) {
-      this.metaData = <AssetType.FileFormat> data
+      this.metaData = data as AssetType.FileFormat
     }
   }
 
@@ -57,7 +58,7 @@ export class Asset extends MediaFile {
    * The id of the media asset. Read from the metadata file.
    */
   get id (): string | undefined {
-    if ((this.metaData != null) && this.metaData.id) {
+    if (this.metaData?.id != null) {
       return this.metaData.id
     }
   }
@@ -66,7 +67,7 @@ export class Asset extends MediaFile {
    * The media category (`image`, `audio`, `video`, `document`)
    */
   get mediaCategory (): string | undefined {
-    if (this.extension) {
+    if (this.extension != null) {
       return mediaCategoriesManager.extensionToType(this.extension)
     }
   }
@@ -88,7 +89,7 @@ export const mediaCategoriesManager = new MediaCategoriesManager(config)
  */
 export function filePathToAssetType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
-  if (asset.extension) { return mediaCategoriesManager.extensionToType(asset.extension) }
+  if (asset.extension != null) { return mediaCategoriesManager.extensionToType(asset.extension) }
 }
 
 /**
