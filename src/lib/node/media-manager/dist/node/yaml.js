@@ -73,6 +73,7 @@ function writeMetaDataYaml(filePath, metaData, force) {
     const yamlFile = `${core_browser_1.asciify(filePath)}.yml`;
     if ((force != null && force) ||
         !fs_1.default.existsSync(yamlFile)) {
+        // eslint-disable-next-line
         if (metaData == null)
             metaData = {};
         const asset = new media_file_classes_1.Asset(filePath);

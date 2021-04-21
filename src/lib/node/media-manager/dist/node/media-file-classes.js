@@ -29,7 +29,10 @@ class MediaFile {
      * The basename (filename without extension) of the file.
      */
     get basename() {
-        return path_1.default.basename(this.absPath, `.${this.extension}`);
+        if (this.extension != null) {
+            return path_1.default.basename(this.absPath, `.${this.extension}`);
+        }
+        return this.absPath;
     }
 }
 /**
@@ -50,7 +53,8 @@ class Asset extends MediaFile {
      * The id of the media asset. Read from the metadata file.
      */
     get id() {
-        if ((this.metaData != null) && this.metaData.id) {
+        var _a;
+        if (((_a = this.metaData) === null || _a === void 0 ? void 0 : _a.id) != null) {
             return this.metaData.id;
         }
     }
@@ -58,7 +62,7 @@ class Asset extends MediaFile {
      * The media category (`image`, `audio`, `video`, `document`)
      */
     get mediaCategory() {
-        if (this.extension) {
+        if (this.extension != null) {
             return exports.mediaCategoriesManager.extensionToType(this.extension);
         }
     }
@@ -79,7 +83,7 @@ exports.mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(confi
  */
 function filePathToAssetType(filePath) {
     const asset = makeAsset(filePath);
-    if (asset.extension) {
+    if (asset.extension != null) {
         return exports.mediaCategoriesManager.extensionToType(asset.extension);
     }
 }

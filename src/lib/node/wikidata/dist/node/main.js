@@ -368,6 +368,7 @@ function query(itemId, typeNames, categoryCollection) {
         entity = (yield getEntities(itemId));
         if (!typeNames.includes('general'))
             typeNames = `general,${typeNames}`;
+        // eslint-disable-next-line
         const data = {};
         data.wikidata = itemId;
         for (const typeName of typeNames.split(',')) {

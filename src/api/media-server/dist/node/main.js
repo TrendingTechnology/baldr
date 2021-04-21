@@ -313,21 +313,27 @@ var Asset = /** @class */ (function (_super) {
 var Presentation = /** @class */ (function (_super) {
     __extends(Presentation, _super);
     function Presentation(filePath) {
+        var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
         var data = _this.readYaml_(filePath);
         if (data != null)
             _this.importProperties(data);
         var deepTitle = new titles_1.DeepTitle(filePath);
         titleTree.add(deepTitle);
-        var deepTitleTmp = deepTitle;
-        if (_this.meta == null)
+        if (_this.meta == null) {
+            // eslint-disable-next-line
             _this.meta = {};
-        for (var _i = 0, _a = ['id', 'title', 'subtitle', 'curriculum', 'grade']; _i < _a.length; _i++) {
-            var property = _a[_i];
-            if (typeof _this.meta[property] === 'undefined') {
-                _this.meta[property] = deepTitleTmp[property];
-            }
         }
+        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.id) == null)
+            _this.meta.id = deepTitle.id;
+        if (((_b = _this.meta) === null || _b === void 0 ? void 0 : _b.title) == null)
+            _this.meta.title = deepTitle.title;
+        if (((_c = _this.meta) === null || _c === void 0 ? void 0 : _c.subtitle) == null)
+            _this.meta.subtitle = deepTitle.subtitle;
+        if (((_d = _this.meta) === null || _d === void 0 ? void 0 : _d.curriculum) == null)
+            _this.meta.curriculum = deepTitle.curriculum;
+        if (((_e = _this.meta) === null || _e === void 0 ? void 0 : _e.grade) == null)
+            _this.meta.grade = deepTitle.grade;
         _this.title = core_browser_1.stripTags(_this.meta.title);
         _this.titleSubtitle = _this.titleSubtitle_();
         _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
@@ -609,7 +615,7 @@ function registerMediaRestApi() {
                         });
                         return [2 /*return*/];
                     }
-                    type = operations_1.validateMediaType(query.type ? query.type.toString() : '');
+                    type = operations_1.validateMediaType(query.type != null ? query.type.toString() : '');
                     methods = ['exactMatch', 'substringSearch'];
                     method = query.method ? query.method.toString() : 'substringSearch';
                     if (!methods.includes(method)) {
@@ -736,11 +742,11 @@ function registerMediaRestApi() {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
                     query = req.query;
-                    if (!query.id)
+                    if (query.id == null)
                         throw new Error('You have to specify an ID (?id=myfile).');
-                    if (!query.with)
+                    if (query.with == null)
                         query.with = 'editor';
-                    if (!query.type)
+                    if (query.type == null)
                         query.type = 'presentations';
                     archive = ('archive' in query);
                     create = ('create' in query);
@@ -888,7 +894,7 @@ function runRestApi(port) {
                             }
                         });
                     });
-                    if (!port) {
+                    if (port == null) {
                         port = config_1.default.api.port;
                     }
                     app.listen(port, function () {

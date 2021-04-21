@@ -186,8 +186,9 @@ class PianoScore {
      * @returns A TeX safe string with escaped `\&`.
      */
     static sanitize(markup) {
-        if (markup)
+        if (markup != null) {
             return markup.replace('&', '\\&');
+        }
         return '';
     }
     /**

@@ -18,10 +18,12 @@ exports.general = {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
             format: function (value, { data }) {
+                var _a;
                 let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
-                if (data.filePath != null && !data.categories.includes('youtube')) {
+                // eslint-disable-next-line
+                if (data.filePath != null && ((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
                     const idPrefix = main_1.generateIdPrefix(data.filePath);
                     if (idPrefix != null) {
                         if (!raw.includes(idPrefix)) {
@@ -79,7 +81,7 @@ exports.general = {
             title: 'Titel',
             required: true,
             overwriteByDerived: false,
-            format: function (value, {}) {
+            format: function (value) {
                 // a Strawinsky Petruschka Abschnitt 0_22
                 value = value.replace(/^[va] /, '');
                 return value;
@@ -99,7 +101,7 @@ exports.general = {
             validate: function (value) {
                 return value.match(/^.+:.+$/);
             },
-            format: function (value, {}) {
+            format: function (value) {
                 return decodeURI(value);
             },
             wikidata: {

@@ -151,6 +151,7 @@ function isPropertyDerived(propSpec) {
  */
 function sortAndDeriveProps(data, category) {
     const origData = core_browser_1.deepCopy(data);
+    // eslint-disable-next-line
     const result = {};
     if (data.filePath == null)
         throw new Error('Property file_path missing');
@@ -167,8 +168,8 @@ function sortAndDeriveProps(data, category) {
         }
         // Use the derived value
         if (isValue(derivedValue) &&
-            ((!propSpec.overwriteByDerived && !isValue(origValue)) ||
-                propSpec.overwriteByDerived)) {
+            (((propSpec.overwriteByDerived == null || propSpec.overwriteByDerived) && !isValue(origValue)) ||
+                (propSpec.overwriteByDerived != null && propSpec.overwriteByDerived))) {
             result[propName] = derivedValue;
             // Use orig value
         }
@@ -177,6 +178,7 @@ function sortAndDeriveProps(data, category) {
         }
         // Throw away the value of this property. We prefer the derived
         // version.
+        // eslint-disable-next-line
         delete origData[propName];
     }
     // Add additional properties not in the propSpecs.
@@ -210,13 +212,14 @@ function formatProps(data, category) {
 function validateProps(data, category) {
     function validateOneProp(spec, value, prop) {
         // required
-        if (spec.required && !isValue(value)) {
+        if (spec.required != null && !isValue(value)) {
             throw new Error(`Missing property ${prop}`);
         }
         // validate
         if ((spec.validate != null) && typeof spec.validate === 'function' && isValue(value)) {
             const result = spec.validate(value);
             if (!result) {
+                // eslint-disable-next-line
                 throw new Error(`Validation failed for property “${prop}” and value “${value}”`);
             }
         }
@@ -231,15 +234,19 @@ function validateProps(data, category) {
  */
 function removeProps(data, category) {
     for (const propName in category.props) {
-        if (data[propName]) {
+        if (data[propName] != null) {
             const value = data[propName];
             const propSpec = category.props[propName];
-            if (!isValue(value) ||
+            if (
+            // eslint-disable-next-line
+            !isValue(value) ||
+                // eslint-disable-next-line
                 (propSpec.state && propSpec.state === 'absent') ||
                 ((propSpec.removeByRegexp != null) &&
                     propSpec.removeByRegexp instanceof RegExp &&
                     typeof value === 'string' &&
                     (value.match(propSpec.removeByRegexp) != null))) {
+                // eslint-disable-next-line
                 delete data[propName];
             }
         }

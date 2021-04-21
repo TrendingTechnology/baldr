@@ -16,10 +16,12 @@ exports.group = {
     abbreviation: 'GR',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Gruppen'),
     relPath: function ({ data }) {
-        return path_1.default.join(data.groupId.substr(0, 1).toLowerCase(), data.groupId, `main.${data.extension}`);
+        const groupData = data;
+        return path_1.default.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`);
     },
     detectCategoryByPath: function (category) {
-        return new RegExp('^' + category.basePath + '/.*');
+        const groupCategory = category;
+        return new RegExp('^' + groupCategory.basePath + '/.*');
     },
     props: {
         groupId: {
@@ -27,7 +29,7 @@ exports.group = {
             derive: function ({ data }) {
                 return data.name;
             },
-            format: function (value, {}) {
+            format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
                 value = core_browser_1.idify(value);
                 return value;
@@ -39,17 +41,17 @@ exports.group = {
             derive: function ({ data }) {
                 return data.name;
             },
-            format: function (value, {}) {
+            format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = core_browser_1.idify(value);
-                return `GR_${value}`;
+                return `GR_${core_browser_1.idify(value)}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel der Gruppe',
             derive: function ({ data }) {
-                return `Portrait-Bild der Gruppe „${data.name}“`;
+                const groupData = data;
+                return `Portrait-Bild der Gruppe „${groupData.name}“`;
             },
             overwriteByDerived: true
         },

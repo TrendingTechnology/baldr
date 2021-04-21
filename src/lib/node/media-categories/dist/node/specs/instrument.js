@@ -15,11 +15,13 @@ exports.instrument = {
     abbreviation: 'IN',
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Instrumente'),
     relPath: function ({ data }) {
+        const instrumentData = data;
         const id = data.id.replace(/^IN_/, '');
-        return path_1.default.join(id.substr(0, 1).toLowerCase(), id, `main.${data.extension}`);
+        return path_1.default.join(id.substr(0, 1).toLowerCase(), id, `main.${instrumentData.extension}`);
     },
     detectCategoryByPath: function (category) {
-        return new RegExp(`^${category.basePath}.*/main\\.jpg$`);
+        const instrumentCategory = category;
+        return new RegExp(`^${instrumentCategory.basePath}.*/main\\.jpg$`);
     },
     props: {
         instrumentId: {
@@ -32,14 +34,17 @@ exports.instrument = {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
             derive: function ({ data, category }) {
                 // IS: Instrument
-                return `${category.abbreviation}_${core_browser_1.idify(data.name)}`;
+                const instrumentCategory = category;
+                const instrumentData = data;
+                return `${instrumentCategory.abbreviation}_${core_browser_1.idify(instrumentData.name)}`;
             },
             overwriteByDerived: true
         },
         title: {
             title: 'Titel des Instruments',
             derive: function ({ data }) {
-                return `Foto des Instruments „${data.name}“`;
+                const instrumentData = data;
+                return `Foto des Instruments „${instrumentData.name}“`;
             },
             overwriteByDerived: true
         },

@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.openParentFolder = exports.openEditor = exports.validateMediaType = void 0;
+// Node packages.
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 // Project packages.
@@ -54,10 +55,10 @@ var main_1 = require("./main");
  */
 function validateMediaType(mediaType) {
     var mediaTypes = ['assets', 'presentations'];
-    if (!mediaType)
+    if (mediaType == null || mediaType === '')
         return 'assets';
     if (!mediaTypes.includes(mediaType)) {
-        throw new Error("Unkown media type \u201C" + mediaType + "\u201D! Allowed media types are: " + mediaTypes);
+        throw new Error("Unkown media type \u201C" + mediaType + "\u201D! Allowed media types are: " + mediaTypes.join(', '));
     }
     else {
         return mediaType;
