@@ -32,11 +32,11 @@ import type { AssetType } from '@bldr/type-definitions'
  * @param {String} extension
  */
 function relocate (oldPath: string, extension: string, cmdObj: { [key: string]: any }) {
-  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
+  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
     return
   }
   let twoLetterFolder = ''
-  if (oldPath.match(/.*Arbeitsblatt_Loesung.*/)) {
+  if (oldPath.match(/.*Arbeitsblatt_Loesung.*/) != null) {
     twoLetterFolder = 'TX'
   } else if (extension === 'jpg') {
     twoLetterFolder = 'BD'
@@ -234,7 +234,7 @@ async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
   if (cmdObj.dryRun) return
   await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
-  if (!metaData) return
+  if (metaData == null) return
   metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
   metaData.author = 'Wieland Schmid'
   metaData.publisher = 'Helbling'

@@ -52,7 +52,7 @@ function generateClozeSvg(filePath) {
     console.log(filePath);
     const cwd = path_1.default.dirname(filePath);
     let texFileContent = core_node_1.readFile(filePath);
-    if (texFileContent.indexOf('cloze') === -1) {
+    if (!texFileContent.includes('cloze')) {
         console.log(`${chalk_1.default.red(filePath)} has no cloze texts.`);
         return;
     }

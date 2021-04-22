@@ -23,7 +23,7 @@ async function action (filePath?: string, cmdObj?: { [key: string]: any }) {
   filePath = locationIndicator.getPresParentDir(filePath)
 
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
-  if (!fs.existsSync(filePath) || (cmdObj && cmdObj.force)) {
+  if (!fs.existsSync(filePath) || ((cmdObj != null) && cmdObj.force)) {
     log.info('Presentation template created at: %s', filePath)
   } else {
     filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml')

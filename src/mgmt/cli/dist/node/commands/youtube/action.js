@@ -33,7 +33,7 @@ function requestYoutubeApi(youtubeId) {
         return {
             youtubeId,
             originalHeading: snippet.title,
-            originalInfo: snippet.description,
+            originalInfo: snippet.description
         };
     });
 }

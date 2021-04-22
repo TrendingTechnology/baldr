@@ -24,12 +24,12 @@ function convertTexToFolderTitles(filePath, cmdObj) {
     const output = [];
     let title = '';
     let subtitle = '';
-    if (matchTitle) {
+    if (matchTitle != null) {
         title = clean(matchTitle[1]);
         output.push(title);
     }
-    let matchSubtitle = content.match(/ {2}untertitel = \{(.+?)\}[,\n]/s);
-    if (matchSubtitle) {
+    const matchSubtitle = content.match(/ {2}untertitel = \{(.+?)\}[,\n]/s);
+    if (matchSubtitle != null) {
         subtitle = clean(matchSubtitle[1]);
         output.push(subtitle);
     }

@@ -28,7 +28,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  */
 function action(category, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        let rawData = yield wikidata_1.default.query(itemId, category, media_categories_1.categoriesManagement.categories);
+        const rawData = yield wikidata_1.default.query(itemId, category, media_categories_1.categoriesManagement.categories);
         if (arg1) {
             if (category === 'person') {
                 rawData.firstname = arg1;
@@ -57,7 +57,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             console.log(src);
             fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
             fs_1.default.copyFileSync(src, dest);
-            console.log(`No Wikicommons file. Use temporary blank file instead.`);
+            console.log('No Wikicommons file. Use temporary blank file instead.');
         }
         const yamlFile = `${dest}.yml`;
         if (!fs_1.default.existsSync(yamlFile)) {

@@ -65,7 +65,7 @@ function action(appName) {
         cmd.startSpin();
         try {
             if (!appName) {
-                for (let appName of appNames) {
+                for (const appName of appNames) {
                     yield buildApp(cmd, appName);
                 }
             }

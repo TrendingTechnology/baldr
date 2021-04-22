@@ -30,7 +30,7 @@ async function action (globPattern: string, prefix: string, cmdObj: { [key: stri
   const firstNewFileName = `${prefix}.${extension}`
   for (const oldFileName of files) {
     // Omit already existent info file by the renaming.
-    if (!oldFileName.match(/yml$/i)) {
+    if (oldFileName.match(/yml$/i) == null) {
       const newFileName = formatMultiPartAssetFileName(`${prefix}.${extension}`, no)
       console.log(`${chalk.yellow(oldFileName)} -> ${chalk.green(newFileName)}`)
       if (!cmdObj.dryRun) fs.renameSync(oldFileName, newFileName)

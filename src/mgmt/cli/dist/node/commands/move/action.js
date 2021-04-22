@@ -32,11 +32,11 @@ const core_browser_2 = require("@bldr/core-browser");
  * @param {String} extension
  */
 function relocate(oldPath, extension, cmdObj) {
-    if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
+    if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
         return;
     }
     let twoLetterFolder = '';
-    if (oldPath.match(/.*Arbeitsblatt_Loesung.*/)) {
+    if (oldPath.match(/.*Arbeitsblatt_Loesung.*/) != null) {
         twoLetterFolder = 'TX';
     }
     else if (extension === 'jpg') {
@@ -233,7 +233,7 @@ function moveReference(oldPath, cmdObj) {
             return;
         yield media_manager_1.operations.initializeMetaYaml(newPath);
         const metaData = media_manager_1.readAssetYaml(newPath);
-        if (!metaData)
+        if (metaData == null)
             return;
         metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.';
         metaData.author = 'Wieland Schmid';
@@ -252,13 +252,13 @@ function moveReference(oldPath, cmdObj) {
  */
 function moveFromArchive(oldPath, extension, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (oldPath.indexOf('Tonart.pdf') > -1) {
+        if (oldPath.includes('Tonart.pdf')) {
             yield moveReference(oldPath, cmdObj);
             return;
         }
         if (media_manager_1.locationIndicator.isInDeactivatedDir(oldPath))
             return;
-        let newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
+        const newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
         if (newPath === undefined)
             return;
         console.log(`${chalk_1.default.yellow(oldPath)} -> ${chalk_1.default.green(newPath)}`);

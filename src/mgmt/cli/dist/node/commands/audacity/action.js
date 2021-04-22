@@ -45,7 +45,7 @@ function action(filePath) {
     let counter = 1;
     for (const line of lines) {
         const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.*)/); // eslint-disable-line
-        if (match) {
+        if (match != null) {
             //  for example: 1.488171
             const startTime = Number(match[1]);
             //  for example: 1.488171

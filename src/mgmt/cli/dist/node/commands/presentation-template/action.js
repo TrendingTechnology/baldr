@@ -55,7 +55,7 @@ function action(filePath, cmdObj) {
         }
         filePath = media_manager_1.locationIndicator.getPresParentDir(filePath);
         filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
-        if (!fs_1.default.existsSync(filePath) || (cmdObj && cmdObj.force)) {
+        if (!fs_1.default.existsSync(filePath) || ((cmdObj != null) && cmdObj.force)) {
             log.info('Presentation template created at: %s', filePath);
         }
         else {

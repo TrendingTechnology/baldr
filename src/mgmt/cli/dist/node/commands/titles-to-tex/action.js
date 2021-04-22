@@ -73,7 +73,7 @@ function patchTexFileWithTitles(filePath) {
     // /s s (dotall) modifier, +? one or more (non-greedy)
     const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
     const match = texFileString.match(regexp);
-    if (match) {
+    if (match != null) {
         const unpatchedTitles = match[0];
         if (unpatchedTitles !== patchedTitles) {
             console.log(chalk_1.default.yellow(unpatchedTitles));

@@ -41,7 +41,7 @@ function action(globPattern, prefix, cmdObj) {
         const firstNewFileName = `${prefix}.${extension}`;
         for (const oldFileName of files) {
             // Omit already existent info file by the renaming.
-            if (!oldFileName.match(/yml$/i)) {
+            if (oldFileName.match(/yml$/i) == null) {
                 const newFileName = core_browser_1.formatMultiPartAssetFileName(`${prefix}.${extension}`, no);
                 console.log(`${chalk_1.default.yellow(oldFileName)} -> ${chalk_1.default.green(newFileName)}`);
                 if (!cmdObj.dryRun)

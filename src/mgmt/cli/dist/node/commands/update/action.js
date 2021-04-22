@@ -69,7 +69,7 @@ function action(what, cmdObj) {
         }
         if (opts.remote && opts.config) {
             cmd.log('Updating the configuration remotely using ansible.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"`]);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, '\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"']);
         }
         // api
         if (opts.local && opts.api) {

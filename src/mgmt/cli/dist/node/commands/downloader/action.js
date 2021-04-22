@@ -30,8 +30,9 @@ function action(url, id, extension) {
         yield core_node_1.fetchFile(url, destFile);
         // Make images smaller.
         const convertedDestFile = yield media_manager_1.operations.convertAsset(destFile);
-        if (convertedDestFile)
+        if (convertedDestFile) {
             yield media_manager_1.operations.initializeMetaYaml(destFile, { source: url });
+        }
     });
 }
 module.exports = action;
