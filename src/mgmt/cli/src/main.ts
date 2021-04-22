@@ -31,6 +31,8 @@ program.on('command:*', function () {
   process.exit(1)
 })
 
+type ActionHandlerFunction = (...args: any[]) => void | Promise<void>
+
 /**
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
@@ -38,11 +40,12 @@ program.on('command:*', function () {
  * @param commandName - The name of the command.
  * @param def
  */
-function actionHandler (commandName: string, def: CliCommandSpec) {
+function actionHandler (commandName: string, def: CliCommandSpec): ActionHandlerFunction {
   return function (...args: any[]): void | Promise<void> {
-    if (def.checkExecutable) {
+    if (def.checkExecutable != null) {
       checkExecutables(def.checkExecutable)
     }
+    // eslint-disable-next-line
     const action = require(path.join(commandsPath, commandName, 'action.js'))
 
     args = [
@@ -62,14 +65,15 @@ type Program = typeof program
 /**
  * Load all (sub)commands.
  *
- * @param {Object} program - An instance of the package “commander”.
+ * @param program - An instance of the package “commander”.
  */
-function loadCommands (program: Program) {
+function loadCommands (program: Program): void {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
-    const def = require(path.join(commandsPath, commandName, 'def.js'))
+    // eslint-disable-next-line
+    const def = require(path.join(commandsPath, commandName, 'def.js')) as CliCommandSpec
     const subProgramm = program.command(def.command)
-    if (def.alias) {
+    if (def.alias != null) {
       if (!aliases.includes(def.alias)) {
         subProgramm.alias(def.alias)
         aliases.push(def.alias)
@@ -78,7 +82,7 @@ function loadCommands (program: Program) {
       }
     }
     subProgramm.description(def.description)
-    if (def.options) {
+    if (def.options != null) {
       for (const option of def.options) {
         subProgramm.option(option[0], option[1])
       }
@@ -87,13 +91,13 @@ function loadCommands (program: Program) {
   }
 }
 
-function actionHelp () {
+function actionHelp (): void {
   console.log('Specify a subcommand.')
   program.outputHelp()
   process.exit(1)
 }
 
-async function main () {
+async function main (): Promise<void> {
   loadCommands(program)
 
   try {
@@ -112,5 +116,5 @@ async function main () {
 }
 
 if (require.main === module) {
-  main()
+  main().then().catch(reason => console.log(reason))
 }

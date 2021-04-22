@@ -44,9 +44,10 @@ program.on('command:*', function () {
  */
 function actionHandler(commandName, def) {
     return function (...args) {
-        if (def.checkExecutable) {
+        if (def.checkExecutable != null) {
             core_node_1.checkExecutables(def.checkExecutable);
         }
+        // eslint-disable-next-line
         const action = require(path_1.default.join(commandsPath, commandName, 'action.js'));
         args = [
             ...arguments,
@@ -63,14 +64,15 @@ function actionHandler(commandName, def) {
 /**
  * Load all (sub)commands.
  *
- * @param {Object} program - An instance of the package “commander”.
+ * @param program - An instance of the package “commander”.
  */
 function loadCommands(program) {
     const subcommandDirs = fs_1.default.readdirSync(commandsPath);
     for (const commandName of subcommandDirs) {
+        // eslint-disable-next-line
         const def = require(path_1.default.join(commandsPath, commandName, 'def.js'));
         const subProgramm = program.command(def.command);
-        if (def.alias) {
+        if (def.alias != null) {
             if (!aliases.includes(def.alias)) {
                 subProgramm.alias(def.alias);
                 aliases.push(def.alias);
@@ -80,7 +82,7 @@ function loadCommands(program) {
             }
         }
         subProgramm.description(def.description);
-        if (def.options) {
+        if (def.options != null) {
             for (const option of def.options) {
                 subProgramm.option(option[0], option[1]);
             }
@@ -112,5 +114,5 @@ function main() {
     });
 }
 if (require.main === module) {
-    main();
+    main().then().catch(reason => console.log(reason));
 }
