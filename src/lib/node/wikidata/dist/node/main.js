@@ -12,6 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.query = exports.mergeData = exports.fetchCommonsFile = void 0;
 // Node packages.
 const fs = require("fs");
 const childProcess = require("child_process");
@@ -136,6 +137,7 @@ function fetchCommonsFile(fileName, dest) {
         return yield fetchResizeFile(url, dest);
     });
 }
+exports.fetchCommonsFile = fetchCommonsFile;
 /**
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
@@ -355,6 +357,7 @@ function mergeData(data, dataWiki, categoryCollection) {
     }
     return typeData;
 }
+exports.mergeData = mergeData;
 /**
  * Query wikidata.
  *
@@ -423,8 +426,4 @@ function query(itemId, typeNames, categoryCollection) {
         return data;
     });
 }
-exports.default = {
-    fetchCommonsFile,
-    mergeData,
-    query
-};
+exports.query = query;

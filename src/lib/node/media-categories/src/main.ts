@@ -5,6 +5,8 @@ import path from 'path'
 import { MediaUri } from '@bldr/core-browser'
 export const categoriesManagement = mediaCategoriesManagmentImport
 
+export const categories = categoriesManagement.categories
+
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */

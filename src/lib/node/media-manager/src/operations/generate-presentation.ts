@@ -12,10 +12,6 @@ import { walk } from '../directory-tree-walk'
 
 type SlideData = { [key: string]: any }
 
-/**
- * @param {String} masterName
- * @param {Array|Object} data
- */
 function slidify (masterName: string, data: SlideData[] | SlideData, topLevelData: SlideData): SlideData[] {
   function slidifySingle (masterName: string, data: SlideData): SlideData {
     const slide: SlideData = {}

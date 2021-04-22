@@ -158,7 +158,7 @@ async function fetchResizeFile (url: string, dest: string): Promise<void> {
  * @param fileName - The file name from wiki commonds.
  * @param dest - A file path where to store the file locally.
  */
-async function fetchCommonsFile (fileName: string, dest: string): Promise<void> {
+export async function fetchCommonsFile (fileName: string, dest: string): Promise<void> {
   // wikicommons:George-W-Bush.jpeg
   fileName = fileName.replace('wikicommons:', '')
   const url = wikibase.getImageUrl(fileName)
@@ -357,7 +357,7 @@ const functions: {[key: string]: Function } = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, categoryCollection: MediaCategory.Collection): MediaCategory.Data {
+export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, categoryCollection: MediaCategory.Collection): MediaCategory.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -395,7 +395,7 @@ function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, cate
  *
  * @param itemId - for example `Q123`
  */
-async function query (itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{ [key: string]: any }> {
+export async function query (itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{ [key: string]: any }> {
   if (wikibase.isItemId(itemId) == null) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -461,10 +461,4 @@ async function query (itemId: string, typeNames: MediaCategory.Names, categoryCo
   }
 
   return data
-}
-
-export default {
-  fetchCommonsFile,
-  mergeData,
-  query
 }

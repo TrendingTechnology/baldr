@@ -23,12 +23,14 @@
     "wikibase-sdk": "7.9.1"
   },
   "devDependencies": {
-    "@types/node": "14.14.35",
-    "@types/node-fetch": "2.5.8"
+    "@bldr/media-categories": "*",
+    "@types/node-fetch": "2.5.8",
+    "@types/node": "14.14.35"
   },
   "scripts": {
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts"
+    "lint": "ts-standard --fix src/*.ts",
+    "test": "npm run build && npm run lint && mocha tests/*"
   }
 }

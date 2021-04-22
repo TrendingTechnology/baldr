@@ -18,11 +18,11 @@ const core_browser_1 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const media_categories_1 = require("@bldr/media-categories");
 const main_1 = require("../main");
-function queryWikidata(metaData, categoryNames, typeSpecs) {
+function queryWikidata(metaData, categoryNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, typeSpecs);
+        const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, categoryCollection);
         console.log(dataWiki);
-        metaData = wikidata_1.default.mergeData(metaData, dataWiki, typeSpecs);
+        metaData = wikidata_1.default.mergeData(metaData, dataWiki, categoryCollection);
         // To avoid blocking
         // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
         // status: 429,

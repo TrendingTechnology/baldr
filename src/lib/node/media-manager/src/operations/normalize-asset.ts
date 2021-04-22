@@ -7,10 +7,10 @@ import wikidata  from '@bldr/wikidata'
 import { categoriesManagement } from '@bldr/media-categories'
 import { readAssetYaml, writeYamlFile } from '../main'
 
-async function queryWikidata (metaData: AssetType.FileFormat, categoryNames: MediaCategory.Names, typeSpecs: MediaCategory.Collection): Promise<AssetType.FileFormat> {
-  const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, typeSpecs)
+async function queryWikidata (metaData: AssetType.FileFormat, categoryNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<AssetType.FileFormat> {
+  const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, categoryCollection)
   console.log(dataWiki)
-  metaData = wikidata.mergeData(metaData, dataWiki, typeSpecs) as AssetType.FileFormat
+  metaData = wikidata.mergeData(metaData, dataWiki, categoryCollection) as AssetType.FileFormat
   // To avoid blocking
   // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
   // status: 429,

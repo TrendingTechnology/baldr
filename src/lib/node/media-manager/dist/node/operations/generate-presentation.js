@@ -22,10 +22,6 @@ const core_node_1 = require("@bldr/core-node");
 const yaml_1 = require("@bldr/yaml");
 const media_file_classes_1 = require("../media-file-classes");
 const directory_tree_walk_1 = require("../directory-tree-walk");
-/**
- * @param {String} masterName
- * @param {Array|Object} data
- */
 function slidify(masterName, data, topLevelData) {
     function slidifySingle(masterName, data) {
         const slide = {};

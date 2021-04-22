@@ -3,11 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateIdPrefix = exports.validateYoutubeId = exports.validateUuid = exports.validateMediaId = exports.validateDate = exports.categoriesManagement = void 0;
+exports.generateIdPrefix = exports.validateYoutubeId = exports.validateUuid = exports.validateMediaId = exports.validateDate = exports.categories = exports.categoriesManagement = void 0;
 const management_1 = __importDefault(require("./management"));
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 exports.categoriesManagement = management_1.default;
+exports.categories = exports.categoriesManagement.categories;
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */
