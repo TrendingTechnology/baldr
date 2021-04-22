@@ -1,15 +1,16 @@
-import assert from 'assert'
+const assert = require('assert')
 
-import config from '@bldr/config'
-import { makeHttpRequestInstance, HttpRequest } from '@bldr/http-request'
+const { makeHttpRequestInstance } = require('@bldr/http-request')
 
+const config = require('@bldr/config')
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 //const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
 
-let httpRequest: HttpRequest = localHttpRequest
+let httpRequest
 
 function runTests () {
   it('/api/media/mgmt/update', async function () {
+    this.timeout(10000)
     const result = await httpRequest.request('mgmt/update')
     assert.strictEqual(result.data.finished, true)
     assert.ok(typeof result.data.begin === 'number')
