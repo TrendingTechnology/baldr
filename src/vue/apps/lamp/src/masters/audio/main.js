@@ -11,8 +11,9 @@ import { GrabFromObjects } from '@/lib.js'
 
 import { validateMasterSpec } from '@bldr/master-toolkit'
 export default validateMasterSpec({
+  name: 'audio',
   title: 'Hörbeispiel',
-  props: {
+  propsDef: {
     src: {
       type: [String, Array],
       required: true,

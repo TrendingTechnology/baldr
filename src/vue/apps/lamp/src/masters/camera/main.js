@@ -96,61 +96,9 @@
  * @module @bldr/lamp/masters/camera
  */
 
-const state = {
-  mediaDevices: [],
-  cameraNotFound: false,
-  videoElement: null
-}
-
-const getters = {
-  allMediaDevices: state => {
-    return state.mediaDevices
-  },
-  forDynamicSelect: (state, getters) => {
-    const resultList = []
-    for (const device of getters.allMediaDevices) {
-      if (device.kind === 'videoinput') {
-        let label
-        if (device.label) {
-          label = device.label
-        } else {
-          label = `${device.kind} (${device.deviceId})`
-        }
-        resultList.push({
-          id: device.deviceId,
-          name: label
-        })
-      }
-    }
-    return resultList
-  },
-  cameraNotFound: state => {
-    return state.cameraNotFound
-  },
-  videoElement: state => {
-    return state.videoElement
-  }
-}
-
-const actions = {
-  async setMediaDevices ({ commit }) {
-    commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
-  }
-}
-
-const mutations = {
-  setMediaDevices (state, mediaDevices) {
-    state.mediaDevices = mediaDevices
-  },
-  setCameraNotFound (state, cameraNotFound) {
-    state.cameraNotFound = cameraNotFound
-  },
-  setVideoElement (state, videoElement) {
-    state.videoElement = videoElement
-  }
-}
-
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+export default validateMasterSpec({
+  name: 'camera',
   title: 'Dokumentenkamera',
   icon: {
     name: 'document-camera',
@@ -162,9 +110,55 @@ export default {
     centerVertically: true
   },
   store: {
-    state,
-    getters,
-    actions,
-    mutations
+    state: {
+      mediaDevices: [],
+      cameraNotFound: false,
+      videoElement: null
+    },
+    getters: {
+      allMediaDevices: state => {
+        return state.mediaDevices
+      },
+      forDynamicSelect: (state, getters) => {
+        const resultList = []
+        for (const device of getters.allMediaDevices) {
+          if (device.kind === 'videoinput') {
+            let label
+            if (device.label) {
+              label = device.label
+            } else {
+              label = `${device.kind} (${device.deviceId})`
+            }
+            resultList.push({
+              id: device.deviceId,
+              name: label
+            })
+          }
+        }
+        return resultList
+      },
+      cameraNotFound: state => {
+        return state.cameraNotFound
+      },
+      videoElement: state => {
+        return state.videoElement
+      }
+    },
+    actions: {
+      async setMediaDevices ({ commit }) {
+        commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
+      }
+    },
+    mutations: {
+      setMediaDevices (state, mediaDevices) {
+        state.mediaDevices = mediaDevices
+      },
+      setCameraNotFound (state, cameraNotFound) {
+        state.cameraNotFound = cameraNotFound
+      },
+      setVideoElement (state, videoElement) {
+        state.videoElement = videoElement
+      }
+    }
   }
-}
+})

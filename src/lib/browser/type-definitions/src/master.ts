@@ -91,7 +91,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  resolveMediaUris?: (props: StringObject) => string | string[]
+  resolveMediaUris?: (props: StringObject) => string | string[] | Set<string>
 
   /**
    * Check if the handed over media URIs can be resolved. Throw no errors, if
@@ -500,7 +500,7 @@ export interface MasterSpec {
   /**
    * The properties of the master slide.
    */
-  propsDef: PropsDefintion
+  propsDef?: PropsDefintion
 
   /**
    * A collection of the master hooks (exported master methods.)
