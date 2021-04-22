@@ -2,8 +2,10 @@
  * @module @bldr/lamp/masters/note
  */
 
+import { validateMasterSpec } from '@bldr/master-toolkit'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+
 import steps from '@/steps.js'
 
 function scroll (element) {
@@ -13,9 +15,10 @@ function scroll (element) {
   window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'note',
   title: 'Hefteintrag',
-  props: {
+  propsDef: {
     markup: {
       type: String,
       markup: true,
@@ -34,7 +37,6 @@ export default {
   },
   styleConfig: {
     centerVertically: false,
-    overflow: false,
     contentTheme: 'handwriting'
   },
   hooks: {
@@ -118,4 +120,4 @@ export default {
       scroll(element)
     }
   }
-}
+})

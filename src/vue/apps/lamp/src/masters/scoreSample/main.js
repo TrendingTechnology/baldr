@@ -2,9 +2,12 @@
  * @module @bldr/lamp/masters/scoreSample
  */
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+export default validateMasterSpec({
+  name: 'score',
   title: 'Notenbeispiel',
-  props: {
+  propsDef: {
     heading: {
       type: String,
       description: 'Eine Überschrift',
@@ -90,4 +93,4 @@ export default {
       this.$media.player.load(slide.props.audio)
     }
   }
-}
+})

@@ -2,15 +2,17 @@
  * @module @bldr/lamp/masters/image
  */
 
-import { GrabFromObjects } from '@/lib.js'
-
 import { splitHtmlIntoChunks } from '@bldr/core-browser'
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+import { GrabFromObjects } from '@/lib.js'
 
 const DESCRIPTION_TEASER_LENGTH = 200
 
-export default {
+export default validateMasterSpec({
+  name: 'image',
   title: 'Bild',
-  props: {
+  propsDef: {
     src: {
       type: String,
       required: true,
@@ -155,4 +157,4 @@ export default {
       }
     }
   }
-}
+})

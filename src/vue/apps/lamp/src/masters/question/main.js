@@ -2,6 +2,7 @@
  * @module @bldr/lamp/masters/question
  */
 
+import { validateMasterSpec } from '@bldr/master-toolkit'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import steps from '@/steps.js'
@@ -239,9 +240,10 @@ function collectText (text, questions) {
   return text
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'question',
   title: 'Frage',
-  props: {
+  propsDef: {
     questions: {
       type: Array,
       description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
@@ -288,4 +290,4 @@ export default {
       return convertHtmlToPlainText(collectText('', props.questions))
     }
   }
-}
+})

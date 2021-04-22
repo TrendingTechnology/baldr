@@ -3,10 +3,12 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { validateMasterSpec } from '@bldr/master-toolkit'
 
-export default {
+export default validateMasterSpec({
+  name: 'section',
   title: 'Abschnitt',
-  props: {
+  propsDef: {
     heading: {
       type: String,
       required: true,
@@ -33,4 +35,4 @@ export default {
       return convertHtmlToPlainText(props.heading)
     }
   }
-}
+})

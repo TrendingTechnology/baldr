@@ -4,9 +4,11 @@
 
 import { WrappedSampleList } from '@bldr/media-client'
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+export default validateMasterSpec({
+  name: 'sampleList',
   title: 'Audio-Ausschnitte',
-  props: {
+  propsDef: {
     samples: {
       type: Array,
       required: true,
@@ -59,4 +61,4 @@ export default {
     //   }
     // }
   }
-}
+})

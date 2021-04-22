@@ -4,6 +4,8 @@
 
 import { convertHtmlToPlainText, splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
 import steps from '@/steps.js'
 
 const CHARACTERS_ON_SLIDE = 400
@@ -26,9 +28,10 @@ const CHARACTERS_ON_SLIDE = 400
 //   rootElement.style.fontSize = `${size - 0.2}em`
 // }
 
-export default {
+export default validateMasterSpec({
+  name: 'generic',
   title: 'Folie',
-  props: {
+  propsDef: {
     markup: {
       type: [String, Array],
       required: true,
@@ -149,4 +152,4 @@ export default {
       this.domSteps.displayByNo(options)
     }
   }
-}
+})

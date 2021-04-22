@@ -2,13 +2,16 @@
  * @module @bldr/lamp/masters/group
  */
 
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
 function convertGroupIdToMediaId (groupId) {
   return `id:GR_${groupId}`
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'group',
   title: 'Gruppe',
-  props: {
+  propsDef: {
     groupId: {
       type: String,
       required: true,
@@ -43,4 +46,4 @@ export default {
       return propsMain.asset.name
     }
   }
-}
+})

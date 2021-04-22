@@ -3,14 +3,16 @@
  */
 
 import { WrappedSampleList } from '@bldr/media-client'
+import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function convertInstrumentIdToMediaId (instrumentId) {
   return `id:IN_${instrumentId}`
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'instrument',
   title: 'Instrument',
-  props: {
+  propsDef: {
     instrumentId: {
       type: String,
       description: 'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
@@ -55,4 +57,4 @@ export default {
       }
     }
   }
-}
+})

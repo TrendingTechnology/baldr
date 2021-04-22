@@ -4,6 +4,8 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -158,9 +160,10 @@ const mutations = {
   }
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'wikipedia',
   title: 'Wikipedia',
-  props: {
+  propsDef: {
     title: {
       type: String,
       required: true,
@@ -234,4 +237,4 @@ export default {
       return `${props.title} (${props.language})`
     }
   }
-}
+})

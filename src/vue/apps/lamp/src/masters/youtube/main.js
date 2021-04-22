@@ -7,14 +7,16 @@
  */
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function youtubeIdToUri (youtubeId) {
   return `id:YT_${youtubeId}`
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'youtube',
   title: 'YouTube',
-  props: {
+  propsDef: {
     id: {
       type: String,
       required: true,
@@ -84,4 +86,4 @@ export default {
       }
     }
   }
-}
+})

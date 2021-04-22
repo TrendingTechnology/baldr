@@ -5,9 +5,12 @@
  * @module @bldr/lamp/masters/document
  */
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+export default validateMasterSpec({
+  name: 'document',
   title: 'Dokument',
-  props: {
+  propsDef: {
     src: {
       type: String,
       description: 'URI eines Dokuments.'
@@ -23,7 +26,6 @@ export default {
   },
   styleConfig: {
     centerVertically: false,
-    overflow: false,
     contentTheme: 'default'
   },
   hooks: {
@@ -70,4 +72,4 @@ export default {
     //   }
     // }
   }
-}
+})

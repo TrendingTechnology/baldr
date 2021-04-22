@@ -2,9 +2,12 @@
  * @module @bldr/lamp/masters/video
  */
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+export default validateMasterSpec({
+  name: 'video',
   title: 'Video',
-  props: {
+  propsDef: {
     src: {
       type: String,
       required: true,
@@ -64,4 +67,4 @@ export default {
       }
     }
   }
-}
+})

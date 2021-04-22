@@ -7,10 +7,12 @@
 import { warnSvgWidthHeight } from '@/lib.js'
 import steps from '@/steps.js'
 import Vue from 'vue'
+import { validateMasterSpec } from '@bldr/master-toolkit'
 
-export default {
+export default validateMasterSpec({
+  name: 'interactiveGraphic',
   title: 'Interaktive Grafik',
-  props: {
+  propsDef: {
     src: {
       type: String,
       required: true,
@@ -126,4 +128,4 @@ export default {
       this.domSteps.displayByNo(options)
     }
   }
-}
+})

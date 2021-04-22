@@ -2,9 +2,12 @@
  * @module @bldr/lamp/masters/song
  */
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+export default validateMasterSpec({
+  name: 'song',
   title: 'Lied',
-  props: {
+  propsDef: {
     songId: {
       type: String,
       description: 'Die ID des Liedes'
@@ -55,4 +58,4 @@ export default {
       }
     }
   }
-}
+})

@@ -4,9 +4,12 @@
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
+export default validateMasterSpec({
+  name: 'task',
   title: 'Arbeitsauftrag',
-  props: {
+  propsDef: {
     markup: {
       type: String,
       required: true,
@@ -36,4 +39,4 @@ export default {
       return convertHtmlToPlainText(props.markup)
     }
   }
-}
+})

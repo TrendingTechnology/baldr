@@ -4,10 +4,12 @@
 
 /* globals DOMParser */
 
+import { MediaUri } from '@bldr/core-browser'
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
 import steps from '@/steps.js'
 import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
-import { MediaUri } from '@bldr/core-browser'
 
 /**
  * @param {HTMLElement} componentElement - The parent component element.
@@ -46,9 +48,10 @@ export function scrollToClozeGroup (componentElement, scrollContainer, clozeGrou
   scrollContainer.scrollTo({ top: scrollToTop, left: 0, behavior: 'smooth' })
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'cloze',
   title: 'Lückentext',
-  props: {
+  propsDef: {
     src: {
       type: String,
       required: true,
@@ -152,4 +155,4 @@ export default {
       scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
     }
   }
-}
+})

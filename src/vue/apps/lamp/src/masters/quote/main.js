@@ -3,9 +3,11 @@
  */
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 
-export default {
+import { validateMasterSpec } from '@bldr/master-toolkit'
+export default validateMasterSpec({
+  name: 'quote',
   title: 'Zitat',
-  props: {
+  propsDef: {
     text: {
       type: String,
       required: true,
@@ -62,4 +64,4 @@ export default {
       return convertHtmlToPlainText(Object.values(props).join(' | '))
     }
   }
-}
+})

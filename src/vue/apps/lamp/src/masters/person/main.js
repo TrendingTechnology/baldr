@@ -2,13 +2,16 @@
  * @module @bldr/lamp/masters/person
  */
 
+import { validateMasterSpec } from '@bldr/master-toolkit'
+
 function convertPersonIdToMediaId (personId) {
   return `id:PR_${personId}`
 }
 
-export default {
+export default validateMasterSpec({
+  name: 'person',
   title: 'Porträt',
-  props: {
+  propsDef: {
     personId: {
       type: String,
       description: 'Personen-ID (z. B. Beethoven_Ludwig-van).'
@@ -42,4 +45,4 @@ export default {
       return propsMain.asset.name
     }
   }
-}
+})
