@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,7 +25,7 @@ const media_manager_1 = require("@bldr/media-manager");
  * @param second
  */
 function createVideoPreviewImageOneFile(filePath, second) {
-    if (!second) {
+    if (second == null) {
         second = 10;
     }
     const assetType = media_manager_1.filePathToAssetType(filePath);
@@ -49,12 +58,14 @@ function createVideoPreviewImageOneFile(filePath, second) {
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePaths, cmdObj) {
-    media_manager_1.walk({
-        asset(relPath) {
-            createVideoPreviewImageOneFile(relPath, cmdObj.seconds);
-        }
-    }, {
-        path: filePaths
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk({
+            asset(relPath) {
+                createVideoPreviewImageOneFile(relPath, cmdObj.seconds);
+            }
+        }, {
+            path: filePaths
+        });
     });
 }
 module.exports = action;

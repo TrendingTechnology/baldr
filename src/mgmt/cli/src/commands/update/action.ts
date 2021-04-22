@@ -8,6 +8,11 @@ import buildVueApp from '../build/action.js'
 
 type whatType = 'api' | 'config' | 'media' | 'vue'
 
+interface CmdObj {
+  onlyRemote: boolean
+  onlyLocal: boolean
+}
+
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
  *
@@ -15,7 +20,7 @@ type whatType = 'api' | 'config' | 'media' | 'vue'
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<void> {
+async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
   cmd.checkRoot()
 
@@ -72,7 +77,7 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
     const result = await cmd.exec(['git', 'status', '--porcelain'], { cwd: config.localRepo })
     // For example:
     //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
-    if (result.stdout) {
+    if (result.stdout === '') {
       console.log(`Git repo is not clean: ${config.localRepo}`)
       console.log(result.stdout)
       process.exit(1)

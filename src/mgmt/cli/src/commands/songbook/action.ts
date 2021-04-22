@@ -9,11 +9,24 @@ import {
 } from '@bldr/songbook-intermediate-files'
 import config from '@bldr/config'
 
+interface CmdObj {
+  basePath: string
+  clean: boolean
+  folder: string
+  force: boolean
+  groupAlphabetically: boolean
+  list: string
+  pageTurnOptimized: boolean
+  piano: boolean
+  slides: boolean
+  songId: string
+}
+
 /**
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (cmdObj: { [key: string]: any }): void {
+function action (cmdObj: CmdObj): void {
   if (cmdObj.folder) {
     cmdObj.force = true
   }

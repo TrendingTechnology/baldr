@@ -10,7 +10,7 @@ function read (filePath: string): void {
   const titles = new DeepTitle(filePath)
   console.log(`  id: ${chalk.cyan(titles.id)}`)
   console.log(`  title: ${chalk.yellow(titles.title)}`)
-  if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
+  if (titles.subtitle == null) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
   console.log(`  grade: ${chalk.blue(titles.grade)}`)
   console.log(`  curriculum: ${chalk.red(titles.curriculum)}\n`)
 }
@@ -21,7 +21,7 @@ function read (filePath: string): void {
  * @param {Array} filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-async function action (filePaths: string[]) {
+async function action (filePaths: string[]): Promise<void> {
   await walk({
     presentation (relPath) {
       read(relPath)

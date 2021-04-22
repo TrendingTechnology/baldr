@@ -17,7 +17,12 @@ function clean (text: string): string {
   return text
 }
 
-function convertTexToFolderTitles (filePath: string, cmdObj: any): void {
+interface CmdObj {
+  force: boolean
+}
+
+function convertTexToFolderTitles (filePath: string, payload: any): void {
+  const cmdObj = payload as CmdObj
   const content = readFile(filePath)
   const matchTitle = content.match(/ {2}titel = \{(.+?)\}[,\n]/s)
   const output = []
@@ -63,8 +68,8 @@ function convertTexToFolderTitles (filePath: string, cmdObj: any): void {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePaths: string[], cmdObj: { [key: string]: any }) {
-  walk(convertTexToFolderTitles, {
+async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
+  await walk(convertTexToFolderTitles, {
     path: filePaths,
     regex: 'tex',
     payload: cmdObj

@@ -16,11 +16,11 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
-const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
 const config_1 = __importDefault(require("@bldr/config"));
+const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
@@ -39,13 +39,13 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         const data = media_categories_1.categoriesManagement.process(rawData);
         console.log(data);
         let downloadWikicommons = true;
-        if (!rawData.mainImage) {
+        if ((rawData === null || rawData === void 0 ? void 0 : rawData.mainImage) == null) {
             data.mainImage = 'blank.jpg';
             downloadWikicommons = false;
         }
         const dest = media_categories_1.categoriesManagement.formatFilePath(data);
         if (downloadWikicommons) {
-            if (!cmdObj.dryRun && data.mainImage) {
+            if (!cmdObj.dryRun && data.mainImage != null) {
                 yield wikidata_1.default.fetchCommonsFile(data.mainImage, dest);
             }
             else {

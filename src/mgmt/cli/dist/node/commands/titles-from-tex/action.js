@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -18,7 +27,8 @@ function clean(text) {
     text = tex_markdown_converter_1.convertTexToMd(text);
     return text;
 }
-function convertTexToFolderTitles(filePath, cmdObj) {
+function convertTexToFolderTitles(filePath, payload) {
+    const cmdObj = payload;
     const content = core_node_1.readFile(filePath);
     const matchTitle = content.match(/ {2}titel = \{(.+?)\}[,\n]/s);
     const output = [];
@@ -62,10 +72,12 @@ function convertTexToFolderTitles(filePath, cmdObj) {
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePaths, cmdObj) {
-    media_manager_1.walk(convertTexToFolderTitles, {
-        path: filePaths,
-        regex: 'tex',
-        payload: cmdObj
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk(convertTexToFolderTitles, {
+            path: filePaths,
+            regex: 'tex',
+            payload: cmdObj
+        });
     });
 }
 module.exports = action;

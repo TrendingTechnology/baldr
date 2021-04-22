@@ -105,7 +105,6 @@ function main() {
         loadCommands(program);
         try {
             yield program.parseAsync(process.argv);
-            console.log(program.opts());
         }
         catch (error) {
             console.log(error);

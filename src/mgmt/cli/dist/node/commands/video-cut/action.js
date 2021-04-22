@@ -16,7 +16,7 @@ function action(videoFilePath, time1, time2, cmdObj) {
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         let startSec = 0;
         let endSec;
-        if (!time2) {
+        if (time2 == null) {
             endSec = core_browser_1.convertDurationToSeconds(time1);
         }
         else {

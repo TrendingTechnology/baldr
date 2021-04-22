@@ -11,8 +11,8 @@ import { readFile, writeFile } from '@bldr/core-node'
  * @param filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (filePaths: string[]): void {
-  walk({
+async function action (filePaths: string[]): Promise<void> {
+  await walk({
     everyFile (filePath) {
       console.log(chalk.green(filePath))
       let content = readFile(filePath)

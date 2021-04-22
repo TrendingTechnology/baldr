@@ -22,7 +22,7 @@ function read(filePath) {
     const titles = new titles_1.DeepTitle(filePath);
     console.log(`  id: ${chalk_1.default.cyan(titles.id)}`);
     console.log(`  title: ${chalk_1.default.yellow(titles.title)}`);
-    if (titles.subtitle)
+    if (titles.subtitle == null)
         console.log(`  subtitle: ${chalk_1.default.green(titles.subtitle)}`);
     console.log(`  grade: ${chalk_1.default.blue(titles.grade)}`);
     console.log(`  curriculum: ${chalk_1.default.red(titles.curriculum)}\n`);

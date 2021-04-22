@@ -12,14 +12,16 @@ import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
 import wikidata from '@bldr/wikidata'
 
-import { ProgramOptions } from '../../main'
+interface CmdObj {
+  dryRun: boolean
+}
 
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
  * @param itemId - For example `Q123`
  */
-async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: ProgramOptions): Promise<void> {
+async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: CmdObj): Promise<void> {
   const rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
   if (arg1 != null) {
     if (category === 'person') {

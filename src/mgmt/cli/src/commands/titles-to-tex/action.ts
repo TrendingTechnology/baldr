@@ -36,7 +36,7 @@ function patchTexFileWithTitles (filePath: string): void {
     setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index]
   }
   setzeTitle.titel = titles.title
-  if (titles.subtitle) {
+  if (titles.subtitle != null) {
     setzeTitle.untertitel = titles.subtitle
   }
 
@@ -81,8 +81,8 @@ function patchTexFileWithTitles (filePath: string): void {
  * @param filePaths - An array of input files. This parameter comes from
  *   the commanders’ variadic parameter `[files...]`.
  */
-function action (filePaths: string[]): void {
-  walk(patchTexFileWithTitles, {
+async function action (filePaths: string[]): Promise<void> {
+  await walk(patchTexFileWithTitles, {
     path: filePaths,
     regex: 'tex'
   })

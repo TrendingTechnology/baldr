@@ -69,14 +69,14 @@ function action(what, cmdObj) {
         }
         if (opts.remote && opts.config) {
             cmd.log('Updating the configuration remotely using ansible.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, '\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"']);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, '"/usr/local/bin/ansible-playbook-localhost.sh b/baldr"']);
         }
         // api
         if (opts.local && opts.api) {
             const result = yield cmd.exec(['git', 'status', '--porcelain'], { cwd: config_1.default.localRepo });
             // For example:
             //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
-            if (result.stdout) {
+            if (result.stdout === '') {
                 console.log(`Git repo is not clean: ${config_1.default.localRepo}`);
                 console.log(result.stdout);
                 process.exit(1);
@@ -92,11 +92,11 @@ function action(what, cmdObj) {
         }
         if (opts.remote && opts.api) {
             cmd.log('Updating the remote BALDR repository.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `\"cd ${config_1.default.localRepo}; git pull\"`]);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `"cd ${config_1.default.localRepo}; git pull"`]);
             cmd.log('Installing missing node packages in the remote BALDR repository.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `\"cd ${config_1.default.localRepo}; npx lerna bootstrap\"`]);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `"cd ${config_1.default.localRepo}; npx lerna bootstrap"`]);
             cmd.log('Restarting the systemd service named “baldr_api.service” remotely.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, '\"systemctl restart baldr_api.service\"']);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, '"systemctl restart baldr_api.service"']);
         }
         // vue
         if (opts.vue) {
@@ -122,7 +122,7 @@ function action(what, cmdObj) {
         }
         if (opts.remote && opts.media) {
             cmd.log('Pull remote changes from the git server into the remote media repository.');
-            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `\"cd ${config_1.default.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull\"`]);
+            yield cmd.exec(['ssh', config_1.default.mediaServer.sshAliasRemote, `"cd ${config_1.default.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull"`]);
             cmd.log('Updating the remote MongoDB database.');
             yield cmd.exec([
                 'curl',
