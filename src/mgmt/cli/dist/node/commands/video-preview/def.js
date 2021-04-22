@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'video-preview [files...]',
     alias: 'v',
     options: [
@@ -9,4 +10,4 @@ module.exports = {
     checkExecutable: [
         'ffmpeg'
     ]
-};
+});

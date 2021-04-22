@@ -1,10 +1,10 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'tex-build [files...]',
   alias: 'tb',
   description: 'Build TeX files.',
   checkExecutable: [
     'lualatex'
   ]
-}
+})

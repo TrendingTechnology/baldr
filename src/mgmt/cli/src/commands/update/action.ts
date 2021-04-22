@@ -64,7 +64,7 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
 
   if (opts.remote && opts.config) {
     cmd.log('Updating the configuration remotely using ansible.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"'])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"/usr/local/bin/ansible-playbook-localhost.sh b/baldr"'])
   }
 
   // api
@@ -92,13 +92,13 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
 
   if (opts.remote && opts.api) {
     cmd.log('Updating the remote BALDR repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.localRepo}; git pull\"`])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; git pull"`])
 
     cmd.log('Installing missing node packages in the remote BALDR repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.localRepo}; npx lerna bootstrap\"`])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; npx lerna bootstrap"`])
 
     cmd.log('Restarting the systemd service named “baldr_api.service” remotely.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '\"systemctl restart baldr_api.service\"'])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"systemctl restart baldr_api.service"'])
   }
 
   // vue
@@ -129,7 +129,7 @@ async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<
 
   if (opts.remote && opts.media) {
     cmd.log('Pull remote changes from the git server into the remote media repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull\"`])
+    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull"`])
 
     cmd.log('Updating the remote MongoDB database.')
     await cmd.exec(

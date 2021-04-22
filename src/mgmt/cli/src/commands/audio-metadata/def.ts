@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'audio-metadata <audio-file>',
   alias: 'am',
   description: 'List the audio metadata.'
-}
+})

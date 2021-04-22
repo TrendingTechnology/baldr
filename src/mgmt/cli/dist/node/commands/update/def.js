@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'update [what]',
     alias: 'u',
     options: [
@@ -16,4 +17,4 @@ module.exports = {
         '/usr/local/bin/ansible-playbook-localhost.sh',
         'ansible-playbook'
     ]
-};
+});

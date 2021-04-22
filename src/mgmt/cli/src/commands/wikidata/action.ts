@@ -4,22 +4,24 @@ import path from 'path'
 
 // Third party packages.
 import chalk from 'chalk'
-import wikidata from '@bldr/wikidata'
 
 // Project packages.
 import { writeYamlFile } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
+import wikidata from '@bldr/wikidata'
+
+import { ProgramOptions } from '../../main'
 
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
  * @param itemId - For example `Q123`
  */
-async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
+async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: ProgramOptions): Promise<void> {
   const rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
-  if (arg1) {
+  if (arg1 != null) {
     if (category === 'person') {
       rawData.firstname = arg1
       rawData.lastname = arg2
@@ -30,14 +32,14 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   console.log(data)
 
   let downloadWikicommons = true
-  if (!rawData.mainImage) {
+  if (rawData?.mainImage == null) {
     data.mainImage = 'blank.jpg'
     downloadWikicommons = false
   }
 
   const dest = categoriesManagement.formatFilePath(data)
   if (downloadWikicommons) {
-    if (!cmdObj.dryRun && data.mainImage) {
+    if (!cmdObj.dryRun && data.mainImage != null) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)
     } else {
       console.log(`Dry run! Destination: ${chalk.green(dest)}`)

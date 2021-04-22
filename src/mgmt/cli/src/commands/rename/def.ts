@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'rename [files...]',
   alias: 'r',
   description: [
@@ -9,4 +9,4 @@ export = <CliCommandSpec> {
     '“Heimat Games - Titelmusik.mp3” -> “Heimat-Games_Titelmusik.mp3”',
     '“Götterdämmerung.mp3” -> “Goetterdaemmerung.mp3”'
   ].join(' ')
-}
+})

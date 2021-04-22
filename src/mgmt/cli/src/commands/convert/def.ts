@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'convert [files...]',
   alias: 'c',
   options: [
@@ -8,4 +8,4 @@ export = <CliCommandSpec> {
   ],
   description: 'Convert media files in the appropriate format. Multiple files, globbing works *.mp3',
   checkExecutable: ['ffmpeg', 'magick']
-}
+})

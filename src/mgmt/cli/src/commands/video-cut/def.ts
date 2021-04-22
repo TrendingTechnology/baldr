@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'video-cut <video-file> <time-1> [time-2]',
   alias: 'vc',
   description:
@@ -17,4 +17,4 @@ export = <CliCommandSpec> {
   checkExecutable: [
     'MP4Box'
   ]
-}
+})

@@ -29,7 +29,7 @@ const config_1 = __importDefault(require("@bldr/config"));
 function action(category, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         const rawData = yield wikidata_1.default.query(itemId, category, media_categories_1.categoriesManagement.categories);
-        if (arg1) {
+        if (arg1 != null) {
             if (category === 'person') {
                 rawData.firstname = arg1;
                 rawData.lastname = arg2;

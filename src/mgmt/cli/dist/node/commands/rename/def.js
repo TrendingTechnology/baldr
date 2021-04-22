@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'rename [files...]',
     alias: 'r',
     description: [
@@ -8,4 +9,4 @@ module.exports = {
         '“Heimat Games - Titelmusik.mp3” -> “Heimat-Games_Titelmusik.mp3”',
         '“Götterdämmerung.mp3” -> “Goetterdaemmerung.mp3”'
     ].join(' ')
-};
+});

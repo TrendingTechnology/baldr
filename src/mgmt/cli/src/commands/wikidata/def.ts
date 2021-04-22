@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
   alias: 'w',
   options: [
@@ -16,4 +16,4 @@ export = <CliCommandSpec> {
     'song (Jamaica Farewell): baldr wikidata song Q6127294',
     'song (Yesterday): baldr wikidata song Q202698'
   ].join(' ')
-}
+})

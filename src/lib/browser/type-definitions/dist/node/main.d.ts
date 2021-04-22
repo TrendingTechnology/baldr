@@ -16,3 +16,7 @@ export interface StringIndexedObject {
 export interface StringIndexedStringObject {
     [key: string]: string;
 }
+export interface GenericError {
+    name: string;
+    message: string;
+}

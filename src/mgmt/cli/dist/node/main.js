@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateDefintion = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -95,11 +96,16 @@ function actionHelp() {
     program.outputHelp();
     process.exit(1);
 }
+function validateDefintion(spec) {
+    return spec;
+}
+exports.validateDefintion = validateDefintion;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         loadCommands(program);
         try {
             yield program.parseAsync(process.argv);
+            console.log(program.opts());
         }
         catch (error) {
             console.log(error);

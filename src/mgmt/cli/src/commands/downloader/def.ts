@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'download <url> [id] [extension]',
   alias: 'dl',
   description: 'Download a media asset to the current working directory.'
-}
+})

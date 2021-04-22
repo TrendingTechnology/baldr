@@ -7,6 +7,7 @@ import chalk from 'chalk'
 // Project packages.
 import { walk } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
+import { GenericError } from '@bldr/type-definitions'
 
 /**
  * @param filePath - The media file path.
@@ -16,7 +17,8 @@ function validateYamlOneFile (filePath: string): void {
     convertFromYamlRaw(fs.readFileSync(filePath, 'utf8'))
     console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
   } catch (error) {
-    console.log(`${chalk.red('error')}: ${chalk.red(error.name)}: ${error.message}`)
+    const e = error as GenericError
+    console.log(`${chalk.red('error')}: ${chalk.red(e.name)}: ${e.message}`)
     throw new Error(error.name)
   }
 }
@@ -26,8 +28,8 @@ function validateYamlOneFile (filePath: string): void {
  *
  * @param filePaths - The media file path.
  */
-function action (filePaths: string[]): void {
-  walk(validateYamlOneFile, {
+async function action (filePaths: string[]): Promise<void> {
+  await walk(validateYamlOneFile, {
     path: filePaths,
     regex: 'yml'
   })

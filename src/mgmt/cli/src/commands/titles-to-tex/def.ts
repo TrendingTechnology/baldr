@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'titles-to-tex [files...]',
   alias: 't',
   description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
-}
+})

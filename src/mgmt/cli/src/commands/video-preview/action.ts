@@ -14,8 +14,8 @@ import { filePathToAssetType, walk } from '@bldr/media-manager'
  * @param filePath
  * @param second
  */
-function createVideoPreviewImageOneFile (filePath: string, second: number | string) {
-  if (!second) { second = 10 }
+function createVideoPreviewImageOneFile (filePath: string, second: number | string): void {
+  if (second == null) { second = 10 }
   const assetType = filePathToAssetType(filePath)
   if (assetType === 'video') {
     const output = `${filePath}_preview.jpg`
@@ -44,8 +44,8 @@ function createVideoPreviewImageOneFile (filePath: string, second: number | stri
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePaths: string[], cmdObj: { [key: string]: any }) {
-  walk({
+async function action (filePaths: string[], cmdObj: { [key: string]: any }): Promise<void> {
+  await walk({
     asset (relPath) {
       createVideoPreviewImageOneFile(relPath, cmdObj.seconds)
     }

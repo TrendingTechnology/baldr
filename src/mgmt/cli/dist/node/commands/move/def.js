@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'move [files...]',
     alias: 'mv',
     options: [
@@ -9,4 +10,4 @@ module.exports = {
         ['-r, --regexp <regexp>', 'Move only files that match the specified regular expression.']
     ],
     description: 'Move / copy files from the archive folder to the main media directory. Place files which already in the main media folder into the right place (the right subfolder for example)'
-};
+});

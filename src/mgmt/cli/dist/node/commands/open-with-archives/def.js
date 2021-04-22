@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'open-with-archives [path]',
     alias: 'owa',
     options: [
@@ -7,4 +8,4 @@ module.exports = {
     ],
     checkExecutable: 'xdg-open',
     description: 'Create a relative path in different base paths. Open this relative paths in the file manager.'
-};
+});

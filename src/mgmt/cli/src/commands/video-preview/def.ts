@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'video-preview [files...]',
   alias: 'v',
   options: [
@@ -10,4 +10,4 @@ export = <CliCommandSpec> {
   checkExecutable: [
     'ffmpeg'
   ]
-}
+})

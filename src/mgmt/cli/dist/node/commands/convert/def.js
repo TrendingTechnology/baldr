@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'convert [files...]',
     alias: 'c',
     options: [
@@ -7,4 +8,4 @@ module.exports = {
     ],
     description: 'Convert media files in the appropriate format. Multiple files, globbing works *.mp3',
     checkExecutable: ['ffmpeg', 'magick']
-};
+});

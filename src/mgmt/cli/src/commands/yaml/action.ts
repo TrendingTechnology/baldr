@@ -7,8 +7,8 @@ import { operations, walk } from '@bldr/media-manager'
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-function action (filePaths: string[]) {
-  walk({
+async function action (filePaths: string[]): Promise<void> {
+  await walk({
     async asset (relPath) {
       await operations.initializeMetaYaml(relPath)
     }

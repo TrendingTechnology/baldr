@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'color',
   alias: 'co',
   description: 'Generate a GIMP color palette for Inkscape or GIMP.'
-}
+})

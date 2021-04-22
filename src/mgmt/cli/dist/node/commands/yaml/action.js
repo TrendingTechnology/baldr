@@ -18,14 +18,16 @@ const media_manager_1 = require("@bldr/media-manager");
  *   commanders’ variadic parameter `[files...]`.
  */
 function action(filePaths) {
-    media_manager_1.walk({
-        asset(relPath) {
-            return __awaiter(this, void 0, void 0, function* () {
-                yield media_manager_1.operations.initializeMetaYaml(relPath);
-            });
-        }
-    }, {
-        path: filePaths
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk({
+            asset(relPath) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    yield media_manager_1.operations.initializeMetaYaml(relPath);
+                });
+            }
+        }, {
+            path: filePaths
+        });
     });
 }
 module.exports = action;

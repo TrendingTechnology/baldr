@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
     alias: 'w',
     options: [
@@ -15,4 +16,4 @@ module.exports = {
         'song (Jamaica Farewell): baldr wikidata song Q6127294',
         'song (Yesterday): baldr wikidata song Q202698'
     ].join(' ')
-};
+});

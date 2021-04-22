@@ -97,6 +97,14 @@ function actionHelp (): void {
   process.exit(1)
 }
 
+export function validateDefintion (spec: CliCommandSpec): CliCommandSpec {
+  return spec
+}
+
+export interface ProgramOptions {
+  dryRun: boolean
+}
+
 async function main (): Promise<void> {
   loadCommands(program)
 

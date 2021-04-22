@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'presentation-normalize [files...]',
   alias: 'pn',
   description: 'Normalize a presentation file (Remove unnecessary single quotes).'
-}
+})

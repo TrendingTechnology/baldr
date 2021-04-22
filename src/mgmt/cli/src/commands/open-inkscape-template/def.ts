@@ -1,8 +1,8 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'open-inkscape-template',
   alias: 'oi',
   checkExecutable: 'inkscape',
   description: 'Open the Inkscape template.'
-}
+})

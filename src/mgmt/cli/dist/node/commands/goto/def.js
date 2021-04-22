@@ -1,5 +1,6 @@
 "use strict";
-module.exports = {
+const main_js_1 = require("../../main.js");
+module.exports = main_js_1.validateDefintion({
     command: 'goto',
     alias: 'g',
     options: [
@@ -7,4 +8,4 @@ module.exports = {
     ],
     description: 'Change the directory in the terminal (a new terminal session is openend). Change from the main media directory structure to the corresponding archive folder and vice versa.',
     checkExecutable: ['zsh']
-};
+});

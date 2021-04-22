@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'open-with-archives [path]',
   alias: 'owa',
   options: [
@@ -8,4 +8,4 @@ export = <CliCommandSpec> {
   ],
   checkExecutable: 'xdg-open',
   description: 'Create a relative path in different base paths. Open this relative paths in the file manager.'
-}
+})

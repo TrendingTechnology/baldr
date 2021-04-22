@@ -1,8 +1,8 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'audio-cut <audio-file>',
   alias: 'ac',
   description: 'Cut a audio file at a given length and fade out',
   checkExecutable: ['ffmpeg']
-}
+})

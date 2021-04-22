@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'yaml-validate [files...]',
   alias: 'yv',
   description: 'Validate the YAML files.'
-}
+})

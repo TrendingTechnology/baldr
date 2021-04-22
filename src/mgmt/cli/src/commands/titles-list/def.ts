@@ -1,7 +1,7 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'titles-list [files...]',
   alias: 'tl',
   description: 'List all hierarchical (deep) folder titles.'
-}
+})

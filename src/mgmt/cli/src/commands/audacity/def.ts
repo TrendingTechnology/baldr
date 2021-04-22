@@ -1,6 +1,6 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'audacity <text-mark-file>',
   alias: 'au',
   description: [
@@ -8,4 +8,4 @@ export = <CliCommandSpec> {
     'Use the keyboard shortcuts ctrl+b or ctrl+m to create text marks in the software Audacity.',
     'Go to the text mark manager (Edit > text marks) to export the marks.'
   ].join(' ')
-}
+})

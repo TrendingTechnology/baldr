@@ -1,8 +1,8 @@
-import { CliCommandSpec } from '@bldr/type-definitions'
+import { validateDefintion } from '../../main.js'
 
-export = <CliCommandSpec> {
+export = validateDefintion({
   command: 'open-media',
   alias: 'o',
   checkExecutable: 'xdg-open',
   description: 'Open the base directory of the media server in the file manager.'
-}
+})

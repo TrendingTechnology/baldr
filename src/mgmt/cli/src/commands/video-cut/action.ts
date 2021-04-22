@@ -8,7 +8,7 @@ async function action (videoFilePath: string, time1: string, time2: string, cmdO
 
   let startSec = 0
   let endSec
-  if (!time2) {
+  if (time2 == null) {
     endSec = convertDurationToSeconds(time1)
   } else {
     startSec = convertDurationToSeconds(time1)

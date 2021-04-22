@@ -16,3 +16,8 @@ export * as PresentationTypes from './presentation'
 export interface StringIndexedObject { [key: string]: any }
 
 export interface StringIndexedStringObject { [key: string]: string }
+
+export interface GenericError {
+  name: string
+  message: string
+}
