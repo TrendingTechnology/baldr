@@ -35,13 +35,16 @@ const documentTemplate = {
   }
 }
 
-/**
- * @param  mdbFile
- */
+interface CsvRow {
+  vorname: string
+  name: string
+  klasse: string
+}
+
 async function action (mdbFile: string): Promise<void> {
   const cmd = new CommandRunner()
   const result = await cmd.exec(['mdb-export', mdbFile, 'Schüler'])
-  if (result && result.stdout) {
+  if (result?.stdout != null) {
     writeFile('tmp.csv', result.stdout)
   }
 
@@ -49,8 +52,9 @@ async function action (mdbFile: string): Promise<void> {
 
   fs.createReadStream('tmp.csv')
     .pipe(csv())
-    .on('data', (data) => {
-      if (grades[data.klasse]) {
+    .on('data', (row) => {
+      const data = row as CsvRow
+      if (grades[data.klasse] != null) {
         grades[data.klasse][`${data.name}, ${data.vorname}`] = {}
       } else {
         grades[data.klasse] = {}

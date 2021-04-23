@@ -7,8 +7,8 @@ import { operations, walk } from '@bldr/media-manager'
  * @param filePaths - An array of input files. This parameter comes from
  *   the commanders’ variadic parameter `[files...]`.
  */
-function action (filePaths: string[]): void {
-  walk({
+async function action (filePaths: string[]): Promise<void> {
+  await walk({
     presentation (filePath) {
       operations.normalizePresentationFile(filePath)
     }

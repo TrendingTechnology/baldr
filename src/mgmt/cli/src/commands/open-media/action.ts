@@ -7,7 +7,7 @@ import config from '@bldr/config'
 /**
  * Open base path.
  */
-function action () {
+function action (): void {
   const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
   process.unref()
 }

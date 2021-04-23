@@ -8,6 +8,10 @@ import chalk from 'chalk'
 import { locationIndicator } from '@bldr/media-manager'
 import { openWithFileManagerWithArchives } from '@bldr/media-server'
 
+interface CmdObj {
+  createDirs: boolean
+}
+
 /**
  * Create a relative path in different base paths. Open this relative paths in
  * the file manager.
@@ -17,8 +21,8 @@ import { openWithFileManagerWithArchives } from '@bldr/media-server'
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePath: string, cmdObj: { [key: string]: any }): void {
-  if (!filePath) {
+function action (filePath: string, cmdObj: CmdObj): void {
+  if (filePath != null) {
     filePath = process.cwd()
   }
   const regex = /^[a-zA-Z0-9-_/]+$/g

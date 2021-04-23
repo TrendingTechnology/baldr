@@ -12,8 +12,8 @@ import { operations, walk } from '@bldr/media-manager'
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePaths: string[], cmdObj: { [key: string]: any, wikidata: any }) {
-  walk({
+async function action (filePaths: string[], cmdObj: { [key: string]: any, wikidata: any }): Promise<void> {
+  await walk({
     async asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
         await operations.normalizeMediaAsset(relPath, cmdObj)

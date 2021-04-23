@@ -6,8 +6,12 @@ import chalk from 'chalk'
 import glob from 'glob'
 
 // Project packages.
-import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, getExtension } from '@bldr/core-browser'
 import { writeMetaDataYaml, operations } from '@bldr/media-manager'
+
+interface CmdObj {
+  dryRun: boolean
+}
 
 /**
  * Rename multipart assets. Example “b mp "*.jpg" Systeme”
@@ -17,16 +21,17 @@ import { writeMetaDataYaml, operations } from '@bldr/media-manager'
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (globPattern: string, prefix: string, cmdObj: { [key: string]: any }): Promise<void> {
+async function action (globPattern: string, prefix: string, cmdObj: CmdObj): Promise<void> {
   const files = glob.sync(globPattern)
   if (files.length < 1) {
     console.log('Glob matches no files.')
     return
   }
-  files.sort()
+  files.sort(undefined)
 
   let no = 1
-  const extension = files[0].split('.').pop()
+  const extension = getExtension(files[0])
+  if (extension == null) throw Error('No extension')
   const firstNewFileName = `${prefix}.${extension}`
   for (const oldFileName of files) {
     // Omit already existent info file by the renaming.

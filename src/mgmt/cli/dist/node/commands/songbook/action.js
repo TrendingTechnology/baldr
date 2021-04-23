@@ -13,7 +13,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(cmdObj) {
-    if (cmdObj.folder) {
+    if (cmdObj.folder != null) {
         cmdObj.force = true;
     }
     let mode;
@@ -26,7 +26,7 @@ function action(cmdObj) {
     else {
         mode = 'all';
     }
-    if (cmdObj.basePath && cmdObj.basePath.length > 0) {
+    if (cmdObj.basePath != null && cmdObj.basePath.length > 0) {
         config_1.default.songbook.path = cmdObj.basePath;
     }
     // To avoid strange behavior when creating the piano score
@@ -39,15 +39,15 @@ function action(cmdObj) {
     core_node_1.log('The base path of the song collection is located at:\n    %s\n', chalk_1.default.cyan(config_1.default.songbook.path));
     const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path);
     core_node_1.log('Found %s songs.', library.countSongs());
-    if (cmdObj.list)
+    if (cmdObj.list != null)
         library.loadSongList(cmdObj.list);
     if (cmdObj.clean) {
         library.cleanIntermediateFiles();
     }
-    else if (cmdObj.folder) {
+    else if (cmdObj.folder != null) {
         library.updateSongByPath(cmdObj.folder, mode);
     }
-    else if (cmdObj.songId) {
+    else if (cmdObj.songId != null) {
         library.updateSongBySongId(cmdObj.songId, mode);
     }
     else {

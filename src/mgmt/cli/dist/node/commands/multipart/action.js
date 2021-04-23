@@ -35,9 +35,11 @@ function action(globPattern, prefix, cmdObj) {
             console.log('Glob matches no files.');
             return;
         }
-        files.sort();
+        files.sort(undefined);
         let no = 1;
-        const extension = files[0].split('.').pop();
+        const extension = core_browser_1.getExtension(files[0]);
+        if (extension == null)
+            throw Error('No extension');
         const firstNewFileName = `${prefix}.${extension}`;
         for (const oldFileName of files) {
             // Omit already existent info file by the renaming.

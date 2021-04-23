@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -38,14 +47,16 @@ function convertTexToMarkdown(input) {
  *   of the array.
  */
 function action(filesOrText) {
-    if (Array.isArray(filesOrText) && filesOrText.length > 0 && !fs_1.default.existsSync(filesOrText[0])) {
-        convertTexToMarkdown(filesOrText[0]);
-    }
-    else {
-        media_manager_1.walk(convertTexToMarkdown, {
-            path: filesOrText,
-            regex: 'tex'
-        });
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        if (Array.isArray(filesOrText) && filesOrText.length > 0 && !fs_1.default.existsSync(filesOrText[0])) {
+            convertTexToMarkdown(filesOrText[0]);
+        }
+        else {
+            yield media_manager_1.walk(convertTexToMarkdown, {
+                path: filesOrText,
+                regex: 'tex'
+            });
+        }
+    });
 }
 module.exports = action;

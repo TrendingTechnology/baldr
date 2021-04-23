@@ -8,7 +8,7 @@ import chalk from 'chalk'
 // Project packages.
 import { walk } from '@bldr/media-manager'
 
-function buildOneFile (filePath: string) {
+function buildOneFile (filePath: string): void {
   const process = childProcess.spawnSync(
     'lualatex', ['--halt-on-error', '--shell-escape', filePath],
     { cwd: path.dirname(filePath) }
@@ -26,8 +26,8 @@ function buildOneFile (filePath: string) {
  * @param filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`
  */
-function action (filePaths: string[]): void {
-  walk(buildOneFile, {
+async function action (filePaths: string[]): Promise<void> {
+  await walk(buildOneFile, {
     path: filePaths,
     regex: 'tex'
   })

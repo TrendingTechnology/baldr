@@ -8,11 +8,11 @@ import config from '@bldr/config'
 /**
  * Open the Inkscape template.
  */
-function action () {
+async function action (): Promise<void> {
   const cmd = new CommandRunner({
     verbose: false
   })
-  cmd.exec([
+  await cmd.exec([
     'inkscape',
     path.join(config.mediaServer.basePath, 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
   ], { detached: true })

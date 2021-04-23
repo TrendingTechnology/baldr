@@ -44,21 +44,19 @@ const documentTemplate = {
         year: '2019/20'
     }
 };
-/**
- * @param  mdbFile
- */
 function action(mdbFile) {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner();
         const result = yield cmd.exec(['mdb-export', mdbFile, 'Schüler']);
-        if (result && result.stdout) {
+        if ((result === null || result === void 0 ? void 0 : result.stdout) != null) {
             core_node_1.writeFile('tmp.csv', result.stdout);
         }
         const grades = {};
         fs_1.default.createReadStream('tmp.csv')
             .pipe(csv_parser_1.default())
-            .on('data', (data) => {
-            if (grades[data.klasse]) {
+            .on('data', (row) => {
+            const data = row;
+            if (grades[data.klasse] != null) {
                 grades[data.klasse][`${data.name}, ${data.vorname}`] = {};
             }
             else {

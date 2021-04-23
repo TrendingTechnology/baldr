@@ -27,7 +27,7 @@ interface CmdObj {
  *  This parameter comes from `commander.Command.opts()`
  */
 function action (cmdObj: CmdObj): void {
-  if (cmdObj.folder) {
+  if (cmdObj.folder != null) {
     cmdObj.force = true
   }
 
@@ -40,7 +40,7 @@ function action (cmdObj: CmdObj): void {
     mode = 'all'
   }
 
-  if (cmdObj.basePath && cmdObj.basePath.length > 0) {
+  if (cmdObj.basePath != null && cmdObj.basePath.length > 0) {
     config.songbook.path = cmdObj.basePath
   }
 
@@ -59,13 +59,13 @@ function action (cmdObj: CmdObj): void {
 
   const library = new IntermediateLibrary(config.songbook.path)
   log('Found %s songs.', library.countSongs())
-  if (cmdObj.list) library.loadSongList(cmdObj.list)
+  if (cmdObj.list != null) library.loadSongList(cmdObj.list)
 
   if (cmdObj.clean) {
     library.cleanIntermediateFiles()
-  } else if (cmdObj.folder) {
+  } else if (cmdObj.folder != null) {
     library.updateSongByPath(cmdObj.folder, mode)
-  } else if (cmdObj.songId) {
+  } else if (cmdObj.songId != null) {
     library.updateSongBySongId(cmdObj.songId, mode)
   } else {
     library.update(mode, cmdObj.force)

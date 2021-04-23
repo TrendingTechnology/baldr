@@ -7,11 +7,6 @@ import chalk from 'chalk'
 // Project packages.
 import { walk } from '@bldr/media-manager'
 
-/**
- * @param {String} filePath - The media file path.
- *
- * @returns {String}
- */
 function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   const newFilePath = filePath.replace(pattern, replacement)
   if (filePath !== newFilePath) {
@@ -20,8 +15,8 @@ function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   }
 }
 
-function action (pattern: string, replacement: string, filePath: string): void {
-  walk(renameByRegex, {
+async function action (pattern: string, replacement: string, filePath: string): Promise<void> {
+  await walk(renameByRegex, {
     regex: new RegExp('.*'),
     path: filePath,
     payload: { pattern, replacement }

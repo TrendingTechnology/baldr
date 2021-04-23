@@ -24,16 +24,18 @@ const media_manager_1 = require("@bldr/media-manager");
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePaths, cmdObj) {
-    media_manager_1.walk({
-        asset(relPath) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (fs_1.default.existsSync(`${relPath}.yml`)) {
-                    yield media_manager_1.operations.normalizeMediaAsset(relPath, cmdObj);
-                }
-            });
-        }
-    }, {
-        path: filePaths
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk({
+            asset(relPath) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    if (fs_1.default.existsSync(`${relPath}.yml`)) {
+                        yield media_manager_1.operations.normalizeMediaAsset(relPath, cmdObj);
+                    }
+                });
+            }
+        }, {
+            path: filePaths
+        });
     });
 }
 module.exports = action;

@@ -20,7 +20,7 @@ const media_server_1 = require("@bldr/media-server");
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePath, cmdObj) {
-    if (!filePath) {
+    if (filePath != null) {
         filePath = process.cwd();
     }
     const regex = /^[a-zA-Z0-9-_/]+$/g;
