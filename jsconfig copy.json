@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "resolveJsonModule": true,
+    "target": "es6",
+    "module": "commonjs"
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

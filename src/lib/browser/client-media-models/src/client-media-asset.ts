@@ -1,5 +1,7 @@
 import type { AssetType } from '@bldr/type-definitions'
 
+import { MimeTypeManager } from './mime-type'
+
 /**
  * Hold various data of a media file as class properties.
  *
@@ -68,7 +70,7 @@ export class ClientMediaAsset {
        * The media type, for example `image`, `audio` or `video`.
        * @type {string}
        */
-      this.mimeType = mediaCategoriesManager.extensionToType(this.extension)
+      this.mimeType = MimeTypeManager.extensionToType(this.extension)
     }
 
   }

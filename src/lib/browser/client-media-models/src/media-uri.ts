@@ -33,10 +33,10 @@
   )
 
   /**
-   * The full URI (Uniform Resource Identifier), for example
+   * The full, raw and unmodifed URI (Uniform Resource Identifier) as specified, for example
    * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`.
    */
-  public uri: string
+  public raw: string
 
   /**
    * for example: `id`, `uuid`, `http`, `https`, `blob`
@@ -63,7 +63,7 @@
    * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
    */
   constructor (uri: string) {
-    this.uri = uri
+    this.raw = uri
     const matches = MediaUri.regExp.exec(uri)
     if (matches == null || matches.groups == null) { throw new Error(`The media URI is not valid: ${uri}`) }
     const groups = matches.groups

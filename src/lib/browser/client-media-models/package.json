@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/client-media-classes",
+  "name": "@bldr/client-media-models",
   "version": "0.1.0",
   "description": "Client media classes like: ClientMediaAsset, Sample.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
