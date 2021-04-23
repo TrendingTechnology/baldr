@@ -17,8 +17,6 @@ const media_uri_1 = require("./media-uri");
  * @property {string} filename - The file name, for example `Haydn_Joseph.jpg`.
  * @property {string} extension - The file extension, for example `jpg`.
  * @property {string} id - An identifier, for example `Haydn_Joseph`.
- * @property {string} type - The media type, for example `image`, `audio` or
- *   `video`.
  * @property {string} previewHttpUrl - Each media file can have a preview image.
  *   On the path is `_preview.jpg` appended.
  * @property {string} shortcut - The keyboard shortcut to play the media.

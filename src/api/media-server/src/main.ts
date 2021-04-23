@@ -72,7 +72,7 @@ import express from 'express'
 
 // Project packages.
 import config from '@bldr/config'
-import { MediaCategoriesManager, getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
+import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel, convertFromYamlRaw } from '@bldr/yaml'
 
 import { walk } from '@bldr/media-manager'
@@ -81,6 +81,7 @@ import { TitleTree, DeepTitle } from '@bldr/titles'
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
 import type { MediaType } from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
+import { mimeTypeManager } from '@bldr/client-media-models'
 
 // Submodules.
 import { registerSeatingPlan } from './seating-plan'
@@ -104,8 +105,6 @@ export let database: Database
 /* Media objects **************************************************************/
 
 const titleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
-
-const mediaCategoriesManager = new MediaCategoriesManager(config)
 
 /**
  * Base class to be extended.
@@ -276,7 +275,7 @@ class Asset extends MediaFile {
     this.addFileInfos_()
     const previewImage = `${this.absPath_}_preview.jpg`
     if (this.extension != null) {
-      this.assetType = mediaCategoriesManager.extensionToType(this.extension)
+      this.assetType = mimeTypeManager.extensionToType(this.extension)
     }
     if (fs.existsSync(previewImage)) {
       this.previewImage = true

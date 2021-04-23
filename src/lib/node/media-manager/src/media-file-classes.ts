@@ -2,8 +2,8 @@
 import path from 'path'
 
 import { AssetType } from '@bldr/type-definitions'
-import { MediaCategoriesManager, getExtension } from '@bldr/core-browser'
-import config from '@bldr/config'
+import { getExtension } from '@bldr/core-browser'
+import { mimeTypeManager } from '@bldr/client-media-models'
 
 import { readAssetYaml } from './main'
 
@@ -68,7 +68,7 @@ export class Asset extends MediaFile {
    */
   get mediaCategory (): string | undefined {
     if (this.extension != null) {
-      return mediaCategoriesManager.extensionToType(this.extension)
+      return mimeTypeManager.extensionToType(this.extension)
     }
   }
 }
@@ -82,14 +82,12 @@ export function makeAsset (filePath: string): Asset {
   return new Asset(filePath)
 }
 
-export const mediaCategoriesManager = new MediaCategoriesManager(config)
-
 /**
  * @param filePath - The file path of the media asset.
  */
 export function filePathToAssetType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
-  if (asset.extension != null) { return mediaCategoriesManager.extensionToType(asset.extension) }
+  if (asset.extension != null) { return mimeTypeManager.extensionToType(asset.extension) }
 }
 
 /**
@@ -107,7 +105,7 @@ export function isAsset (filePath: string): boolean {
   }
   // see .gitignore of media folder
   if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) return true
-  return mediaCategoriesManager.isAsset(filePath)
+  return mimeTypeManager.isAsset(filePath)
 }
 
 /**

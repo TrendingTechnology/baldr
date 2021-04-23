@@ -5,10 +5,11 @@ import path from 'path'
 // Project packages.
 import collectAudioMetaData from '@bldr/audio-metadata'
 
-import { makeAsset, mediaCategoriesManager } from '../media-file-classes'
+import { makeAsset } from '../media-file-classes'
 import { writeMetaDataYaml } from '../yaml'
 import { idify } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
+import { mimeTypeManager } from '@bldr/client-media-models'
 
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
@@ -41,12 +42,12 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
   }
   let assetType: string
   try {
-    assetType = mediaCategoriesManager.extensionToType(asset.extension)
+    assetType = mimeTypeManager.extensionToType(asset.extension)
   } catch (error) {
     console.log(`Unsupported extension ${asset.extension}`)
     return
   }
-  const outputExtension = mediaCategoriesManager.typeToTargetExtension(assetType)
+  const outputExtension = mimeTypeManager.typeToTargetExtension(assetType)
   const outputFileName = `${idify(asset.basename)}.${outputExtension}`
   let outputFile = path.join(path.dirname(filePath), outputFileName)
   if (converted.has(outputFile)) return

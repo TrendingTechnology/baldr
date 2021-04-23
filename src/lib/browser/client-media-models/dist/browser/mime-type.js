@@ -60,8 +60,6 @@ export class MimeTypeManager {
     }
     /**
      * Check if file is an supported asset format.
-     *
-     * @param filename
      */
     isAsset(filename) {
         const extension = filename.split('.').pop();

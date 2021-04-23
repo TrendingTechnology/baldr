@@ -1,4 +1,3 @@
-import { MediaCategoriesManager } from '@bldr/core-browser';
 /**
  * Base class for the asset and presentation class.
  */
@@ -44,7 +43,6 @@ export declare class Asset extends MediaFile {
  * @param filePath - The file path of the media asset.
  */
 export declare function makeAsset(filePath: string): Asset;
-export declare const mediaCategoriesManager: MediaCategoriesManager;
 /**
  * @param filePath - The file path of the media asset.
  */

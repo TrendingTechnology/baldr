@@ -130,6 +130,7 @@ var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
 var titles_1 = require("@bldr/titles");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
+var client_media_models_1 = require("@bldr/client-media-models");
 // Submodules.
 var seating_plan_1 = require("./seating-plan");
 var operations_1 = require("./operations");
@@ -143,7 +144,6 @@ var basePath = config_1.default.mediaServer.basePath;
 var errors = [];
 /* Media objects **************************************************************/
 var titleTree = new titles_1.TitleTree(new titles_1.DeepTitle(config_1.default.mediaServer.basePath));
-var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.
  */
@@ -256,7 +256,7 @@ var Asset = /** @class */ (function (_super) {
         this.addFileInfos_();
         var previewImage = this.absPath_ + "_preview.jpg";
         if (this.extension != null) {
-            this.assetType = mediaCategoriesManager.extensionToType(this.extension);
+            this.assetType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
         }
         if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;

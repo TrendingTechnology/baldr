@@ -7,7 +7,6 @@
  * @module @bldr/core-browser
  */
 
-export * from './media-categories'
 export * from './object-manipulation'
 export * from './string-format'
 

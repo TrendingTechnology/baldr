@@ -29,6 +29,7 @@
     "@bldr/media-categories": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/titles": "*",
+    "@bldr/client-media-models": "*",
     "@bldr/type-definitions": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*"

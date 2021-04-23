@@ -14,6 +14,7 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
+    "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",

@@ -21,6 +21,7 @@ const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
 const media_file_classes_1 = require("../media-file-classes");
 const yaml_1 = require("../yaml");
 const core_browser_1 = require("@bldr/core-browser");
+const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
  * run of the script.
@@ -51,13 +52,13 @@ function convertAsset(filePath, cmdObj = {}) {
         }
         let assetType;
         try {
-            assetType = media_file_classes_1.mediaCategoriesManager.extensionToType(asset.extension);
+            assetType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
         }
         catch (error) {
             console.log(`Unsupported extension ${asset.extension}`);
             return;
         }
-        const outputExtension = media_file_classes_1.mediaCategoriesManager.typeToTargetExtension(assetType);
+        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(assetType);
         const outputFileName = `${core_browser_1.idify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))

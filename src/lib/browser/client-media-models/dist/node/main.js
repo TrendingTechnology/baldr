@@ -11,3 +11,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./client-media-asset"), exports);
+__exportStar(require("./media-uri"), exports);
+__exportStar(require("./mime-type"), exports);

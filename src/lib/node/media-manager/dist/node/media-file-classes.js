@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isPresentation = exports.isAsset = exports.filePathToAssetType = exports.mediaCategoriesManager = exports.makeAsset = exports.Asset = void 0;
+exports.isPresentation = exports.isAsset = exports.filePathToAssetType = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const config_1 = __importDefault(require("@bldr/config"));
+const client_media_models_1 = require("@bldr/client-media-models");
 const main_1 = require("./main");
 /**
  * Base class for the asset and presentation class.
@@ -63,7 +63,7 @@ class Asset extends MediaFile {
      */
     get mediaCategory() {
         if (this.extension != null) {
-            return exports.mediaCategoriesManager.extensionToType(this.extension);
+            return client_media_models_1.mimeTypeManager.extensionToType(this.extension);
         }
     }
 }
@@ -77,14 +77,13 @@ function makeAsset(filePath) {
     return new Asset(filePath);
 }
 exports.makeAsset = makeAsset;
-exports.mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * @param filePath - The file path of the media asset.
  */
 function filePathToAssetType(filePath) {
     const asset = makeAsset(filePath);
     if (asset.extension != null) {
-        return exports.mediaCategoriesManager.extensionToType(asset.extension);
+        return client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
     }
 }
 exports.filePathToAssetType = filePathToAssetType;
@@ -103,7 +102,7 @@ function isAsset(filePath) {
     // see .gitignore of media folder
     if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null)
         return true;
-    return exports.mediaCategoriesManager.isAsset(filePath);
+    return client_media_models_1.mimeTypeManager.isAsset(filePath);
 }
 exports.isAsset = isAsset;
 /**

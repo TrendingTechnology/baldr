@@ -17,6 +17,7 @@
     "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
     "@bldr/dynamic-select": "*",
+    "@bldr/client-media-models": "*",
     "vuex": "3.5.1"
   },
   "publishConfig": {

@@ -41,8 +41,6 @@ export declare class MimeTypeManager {
     typeToTargetExtension(type: string): string;
     /**
      * Check if file is an supported asset format.
-     *
-     * @param filename
      */
     isAsset(filename: string): boolean;
 }
