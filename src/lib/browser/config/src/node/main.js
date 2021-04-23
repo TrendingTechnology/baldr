@@ -25,4 +25,6 @@ function bootstrapConfig () {
  * file multiple times.
  */
 const config = bootstrapConfig()
+// TODO: Remove dirty hack , problems with default imports
+config.default = config
 module.exports = config

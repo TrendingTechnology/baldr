@@ -2,7 +2,8 @@ import mediaCategoriesManagmentImport from './management'
 
 import path from 'path'
 
-import { MediaUri } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/client-media-models'
+
 export const categoriesManagement = mediaCategoriesManagmentImport
 
 export const categories = categoriesManagement.categories

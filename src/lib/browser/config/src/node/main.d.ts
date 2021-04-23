@@ -9,4 +9,4 @@ import { Configuration } from '@bldr/type-definitions';
  * file multiple times.
  */
 declare const config: Configuration;
-export = config;
+export default config;

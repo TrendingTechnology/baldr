@@ -23,12 +23,13 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
+    "@bldr/client-media-models": "*",
+    "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
-    "@bldr/type-definitions": "*",
-    "@bldr/config": "*",
-    "@bldr/yaml": "*",
     "@bldr/titles": "*",
+    "@bldr/type-definitions": "*",
+    "@bldr/yaml": "*",
     "uuid": "8.3.1"
   },
   "devDependencies": {

@@ -7,7 +7,7 @@
     "strict": true,
     "lib": ["ES6", "ES2018", "DOM", "DOM.Iterable"],
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": false
   },
   "include": ["src/*.ts"]
 }

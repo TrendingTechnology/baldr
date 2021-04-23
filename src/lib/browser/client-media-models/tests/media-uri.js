@@ -5,7 +5,7 @@ const { MediaUri } = require('../dist/node/main.js')
 describe('Class “MediaUri”', function () {
   it('new MediaUri(\'id:Beethoven_Ludwig-van#-4\')', function () {
     const uri = new MediaUri('id:Beethoven_Ludwig-van#-4')
-    assert.strictEqual(uri.uri, 'id:Beethoven_Ludwig-van#-4')
+    assert.strictEqual(uri.raw, 'id:Beethoven_Ludwig-van#-4')
     assert.strictEqual(uri.scheme, 'id')
     assert.strictEqual(uri.authority, 'Beethoven_Ludwig-van')
     assert.strictEqual(uri.fragment, '-4')
@@ -14,7 +14,7 @@ describe('Class “MediaUri”', function () {
 
   it('new MediaUri(\'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7\')', function () {
     const uri = new MediaUri('uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
-    assert.strictEqual(uri.uri, 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
+    assert.strictEqual(uri.raw, 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
     assert.strictEqual(uri.scheme, 'uuid')
     assert.strictEqual(uri.authority, 'c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
     assert.strictEqual(uri.fragment, undefined)

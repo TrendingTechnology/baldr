@@ -30,11 +30,10 @@ import { makeHttpRequestInstance } from '@bldr/http-request'
 import {
   convertDurationToSeconds,
   formatMultiPartAssetFileName,
-  MediaUri,
   convertHtmlToPlainText,
   selectSubset
 } from '@bldr/core-browser'
-import { mimeTypeManager } from '@bldr/client-media-models'
+import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
 import DynamicSelect from '@bldr/dynamic-select'
 

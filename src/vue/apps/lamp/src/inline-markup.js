@@ -1,6 +1,6 @@
 import vue from '@/main.js'
 
-import { MediaUri } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/client-media-models'
 
 /**
  * Unfortunatley it is not possible to write a Vue js component tag inline

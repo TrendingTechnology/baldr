@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateIdPrefix = exports.validateYoutubeId = exports.validateUuid = exports.validateMediaId = exports.validateDate = exports.categories = exports.categoriesManagement = void 0;
 const management_1 = __importDefault(require("./management"));
 const path_1 = __importDefault(require("path"));
-const core_browser_1 = require("@bldr/core-browser");
+const client_media_models_1 = require("@bldr/client-media-models");
 exports.categoriesManagement = management_1.default;
 exports.categories = exports.categoriesManagement.categories;
 /**
@@ -20,7 +20,7 @@ exports.validateDate = validateDate;
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId(value) {
-    return (value.match(core_browser_1.MediaUri.regExp) != null);
+    return (value.match(client_media_models_1.MediaUri.regExp) != null);
 }
 exports.validateMediaId = validateMediaId;
 /**

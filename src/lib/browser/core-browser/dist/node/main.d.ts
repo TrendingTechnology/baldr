@@ -17,47 +17,6 @@ export * from './string-format';
  */
 export declare function getExtension(filePath: string): string | undefined;
 /**
- * A media URI with an optional fragment (subset selector).
- *
- * Possible URIs are for example:
- * `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
- * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
- */
-export declare class MediaUri {
-    private static readonly schemes;
-    private static readonly regExpAuthority;
-    /**
-     * `#Sample1` or `#1,2,3` or `#-4`
-     */
-    private static readonly regExpFragment;
-    static regExp: RegExp;
-    /**
-     * The full URI (Uniform Resource Identifier), for example
-     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`.
-     */
-    uri: string;
-    /**
-     * `id` or `uuid`
-     */
-    scheme: string;
-    /**
-     * `c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `Beethoven_Ludwig-van`.
-     */
-    authority: string;
-    /**
-     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `id:Beethoven_Ludwig-van`
-     */
-    uriWithoutFragment: string;
-    /**
-     * `2-3` or `-4`
-     */
-    fragment?: string;
-    /**
-     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
-     */
-    constructor(uri: string);
-}
-/**
  * Sleep some time
  *
  * @see {@link https://github.com/erikdubbelboer/node-sleep}

@@ -4,7 +4,7 @@
 
 /* globals DOMParser */
 
-import { MediaUri } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 import steps from '@/steps.js'

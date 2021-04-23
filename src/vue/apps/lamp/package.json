@@ -31,6 +31,7 @@
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/client-media-models": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",
