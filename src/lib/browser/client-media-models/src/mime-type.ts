@@ -6,7 +6,7 @@
 
 import type { Configuration } from '@bldr/type-definitions'
 
-import * as config from '@bldr/config'
+import config from '@bldr/config'
 
 interface SpreadExtensionCollection {
   [key: string]: string

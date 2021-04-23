@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const config = require('../dist/node/main.js')
+const config = require('../src/node/main.js')
 
 describe('Package “@bldr/config”', function () {
   it('config', function () {

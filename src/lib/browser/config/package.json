@@ -17,19 +17,14 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts",
-    "test": "npm run build && npm run lint && mocha tests/*"
+    "lint": "standard --fix src/**/*.js",
+    "test": "npm run lint && mocha tests/*"
   },
   "dependencies": {
     "@bldr/type-definitions": "0.1.0"
   },
-  "devDependencies": {
-    "@types/node": "14.14.35"
-  },
-  "browser": "dist/browser/main.js",
-  "main": "dist/node/main.js",
+  "browser": "src/browser/main.js",
+  "main": "src/node/main.js",
   "publishConfig": {
     "access": "public"
   }

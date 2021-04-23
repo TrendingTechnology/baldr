@@ -3,7 +3,7 @@
  *
  * @module @bldr/core-browser/asset-types
  */
-import * as config from '@bldr/config';
+import config from '@bldr/config';
 /**
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.

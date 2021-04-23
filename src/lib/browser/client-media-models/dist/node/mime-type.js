@@ -6,7 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mimeTypeManager = exports.MimeTypeManager = void 0;
-const config = require("@bldr/config");
+const config_1 = require("@bldr/config");
 /**
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.
@@ -73,4 +73,4 @@ class MimeTypeManager {
     }
 }
 exports.MimeTypeManager = MimeTypeManager;
-exports.mimeTypeManager = new MimeTypeManager(config);
+exports.mimeTypeManager = new MimeTypeManager(config_1.default);
