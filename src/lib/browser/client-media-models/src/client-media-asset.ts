@@ -1,6 +1,8 @@
 import type { AssetType } from '@bldr/type-definitions'
+import { getExtension } from '@bldr/core-browser'
 
-import { MimeTypeManager } from './mime-type'
+import { mimeTypeManager } from './mime-type'
+import { MediaUri } from './media-uri'
 
 /**
  * Hold various data of a media file as class properties.
@@ -27,7 +29,13 @@ import { MimeTypeManager } from './mime-type'
  *   for mainly audio files. Video files are also supported.
  */
 export class ClientMediaAsset {
+  /**
+   * A raw javascript object read from the YAML files
+   * (`*.extension.yml`)
+   */
   raw: AssetType.FileFormat
+
+  uri: MediaUri
 
   /**
    * The keyboard shortcut to play the media
@@ -45,7 +53,7 @@ export class ClientMediaAsset {
   mimeType: string
 
   /**
-   * @param mediaData - A raw javascript object read from the YAML files
+   * @param raw - A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
   constructor (raw: AssetType.FileFormat) {
@@ -55,17 +63,20 @@ export class ClientMediaAsset {
       throw new Error('Every client media asset needs a uri property.')
     }
 
-    if ('filename' in this && !('extension' in this)) {
-      this.extensionFromString(this.filename)
-    }
-    if ('extension' in this && !('type' in this)) {
-      /**
-       * The media type, for example `image`, `audio` or `video`.
-       * @type {string}
-       */
-      this.mimeType = MimeTypeManager.extensionToType(this.extension)
+    this.uri = new MediaUri(this.raw.uri)
+
+    if (this.raw.extension == null && this.raw.filename != null) {
+      const extension = getExtension(this.raw.filename)
+      if (extension != null) {
+        this.raw.extension = extension
+      }
     }
 
+    if (this.raw.extension == null) {
+      throw Error('The client media assets needs a extension')
+    }
+
+    this.mimeType = mimeTypeManager.extensionToType(this.raw.extension)
   }
 
   /**
@@ -73,117 +84,108 @@ export class ClientMediaAsset {
    *
    * @returns {String}
    */
-  get uriId () {
-    return `id:${this.id}`
-  }
+  // get uriId () {
+  //   return `id:${this.id}`
+  // }
 
   /**
    * The URI using the `uuid` authority.
    *
    * @returns {String}
    */
-  get uriUuid () {
-    return `uuid:${this.uuid}`
-  }
-
-  /**
-   * Extract the extension from a string.
-   *
-   * @param {String} string
-   */
-  extensionFromString (string) {
-    this.extension = string.split('.').pop().toLowerCase()
-  }
+  // get uriUuid () {
+  //   return `uuid:${this.uuid}`
+  // }
 
   /**
    * Store the file name from a HTTP URL.
    *
    * @param {String} url
    */
-  filenameFromHTTPUrl (url) {
-    this.filename = url.split('/').pop()
-  }
+  // filenameFromHTTPUrl (url) {
+  //   this.filename = url.split('/').pop()
+  // }
 
   /**
    * Merge an object into the class object.
    *
    * @param {object} properties - Add an object to the class properties.
    */
-  addProperties (properties) {
-    for (const property in properties) {
-      this[property] = properties[property]
-    }
-  }
+  // addProperties (properties) {
+  //   for (const property in properties) {
+  //     this[property] = properties[property]
+  //   }
+  // }
 
   /**
    * @type {String}
    */
-  get titleSafe () {
-    if ('title' in this) return this.title
-    if ('filename' in this) return this.filename
-    if ('uri' in this) return this.uri
-  }
+  // get titleSafe () {
+  //   if ('title' in this) return this.title
+  //   if ('filename' in this) return this.filename
+  //   if ('uri' in this) return this.uri
+  // }
 
   /**
    * True if the media file is playable, for example an audio or a video file.
    *
    * @type {Boolean}
    */
-  get isPlayable () {
-    return ['audio', 'video'].includes(this.type)
-  }
+  // get isPlayable () {
+  //   return ['audio', 'video'].includes(this.type)
+  // }
 
   /**
    * True if the media file is visible, for example an image or a video file.
    *
    * @type {Boolean}
    */
-  get isVisible () {
-    return ['image', 'video'].includes(this.type)
-  }
+  // get isVisible () {
+  //   return ['image', 'video'].includes(this.type)
+  // }
 
   /**
    * All plain text collected from the properties except some special properties.
    *
    * @type {string}
    */
-  get plainText () {
-    const output = []
-    const excludedProperties = [
-      'assetType',
-      'extension',
-      'filename',
-      'httpUrl',
-      'id',
-      'mediaElement',
-      'categories',
-      'musicbrainzRecordingId',
-      'musicbrainzWorkId',
-      'path',
-      'previewHttpUrl',
-      'previewImage',
-      'samples',
-      'mainImage',
-      'shortcut',
-      'size',
-      'source',
-      'timeModified',
-      'type',
-      'uri',
-      'uriAuthority',
-      'uriRaw',
-      'uriScheme',
-      'uuid',
-      'wikidata',
-      'youtube'
-    ]
-    for (const property in this) {
-      if (this[property] && !excludedProperties.includes(property)) {
-        output.push(this[property])
-      }
-    }
-    return convertHtmlToPlainText(output.join(' | '))
-  }
+  // get plainText () {
+  //   const output = []
+  //   const excludedProperties = [
+  //     'assetType',
+  //     'extension',
+  //     'filename',
+  //     'httpUrl',
+  //     'id',
+  //     'mediaElement',
+  //     'categories',
+  //     'musicbrainzRecordingId',
+  //     'musicbrainzWorkId',
+  //     'path',
+  //     'previewHttpUrl',
+  //     'previewImage',
+  //     'samples',
+  //     'mainImage',
+  //     'shortcut',
+  //     'size',
+  //     'source',
+  //     'timeModified',
+  //     'type',
+  //     'uri',
+  //     'uriAuthority',
+  //     'uriRaw',
+  //     'uriScheme',
+  //     'uuid',
+  //     'wikidata',
+  //     'youtube'
+  //   ]
+  //   for (const property in this) {
+  //     if (this[property] && !excludedProperties.includes(property)) {
+  //       output.push(this[property])
+  //     }
+  //   }
+  //   return convertHtmlToPlainText(output.join(' | '))
+  // }
 
   /**
    * The vue router link of the component `MediaAsset.vue`.
@@ -193,9 +195,9 @@ export class ClientMediaAsset {
    *
    * @type {string}
    */
-  get routerLink () {
-    return `#/media/${this.uriScheme}/${this.uriAuthority}`
-  }
+  // get routerLink () {
+  //   return `#/media/${this.uriScheme}/${this.uriAuthority}`
+  // }
 
   /**
    * Sort properties alphabetically aand move some important ones to the
@@ -203,26 +205,26 @@ export class ClientMediaAsset {
    *
    * @return {Array}
    */
-  get propertiesSorted () {
-    let properties = Object.keys(this)
-    properties = properties.sort()
-    function moveOnFirstPosition (properties, property) {
-      properties = properties.filter(item => item !== property)
-      properties.unshift(property)
-      return properties
-    }
-    for (const property of ['id', 'uri', 'title']) {
-      properties = moveOnFirstPosition(properties, property)
-    }
-    return properties
-  }
+  // get propertiesSorted () {
+  //   let properties = Object.keys(this)
+  //   properties = properties.sort()
+  //   function moveOnFirstPosition (properties, property) {
+  //     properties = properties.filter(item => item !== property)
+  //     properties.unshift(property)
+  //     return properties
+  //   }
+  //   for (const property of ['id', 'uri', 'title']) {
+  //     properties = moveOnFirstPosition(properties, property)
+  //   }
+  //   return properties
+  // }
 
   /**
    * Dummy method. Has to be overwritten by the subclass `MultiPartAsset()`.
    * Returns `this.httpUrl`.
    * @returns {String}
    */
-  getMultiPartHttpUrlByNo () {
-    return this.httpUrl
-  }
+  // getMultiPartHttpUrlByNo () {
+  //   return this.httpUrl
+  // }
 }

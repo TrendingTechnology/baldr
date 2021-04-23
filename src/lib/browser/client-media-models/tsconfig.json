@@ -6,8 +6,8 @@
     "outDir": "./dist",
     "strict": true,
     "lib": ["ES6", "ES2018", "DOM", "DOM.Iterable"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/*.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "include": ["src/*.ts"]
 }

@@ -1,4 +1,6 @@
 /**
+ * TODO: use from client-media-classes
+ *
  * Categories some asset file formats in asset types.
  *
  * @module @bldr/core-browser/asset-types

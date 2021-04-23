@@ -6,6 +6,8 @@
 
 import type { Configuration } from '@bldr/type-definitions'
 
+import * as config from '@bldr/config'
+
 interface SpreadExtensionCollection {
   [key: string]: string
 }
@@ -86,3 +88,5 @@ export class MimeTypeManager {
     return false
   }
 }
+
+export const mimeTypeManager = new MimeTypeManager(config)
