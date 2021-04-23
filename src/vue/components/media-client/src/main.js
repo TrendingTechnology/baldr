@@ -1241,6 +1241,8 @@ export class WrappedSampleList {
 }
 
 /**
+ * TODO: use from client-media-classes
+ *
  * Hold various data of a media file as class properties.
  *
  * If a media file has a property with the name `multiPartCount` set, it is a

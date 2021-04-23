@@ -463,7 +463,7 @@ export interface StyleConfig {
   centerVertically?: boolean
   darkMode?: boolean
   contentTheme?: string
-  //overflow: false, ?
+  // overflow: false, ?
   uiTheme?: string
 }
 

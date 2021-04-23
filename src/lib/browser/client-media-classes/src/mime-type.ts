@@ -1,12 +1,10 @@
 /**
- * TODO: use from client-media-classes
- *
  * Categories some asset file formats in asset types.
  *
  * @module @bldr/core-browser/asset-types
  */
 
-import { Configuration } from '@bldr/type-definitions'
+import type { Configuration } from '@bldr/type-definitions'
 
 interface SpreadExtensionCollection {
   [key: string]: string
@@ -16,7 +14,7 @@ interface SpreadExtensionCollection {
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.
  */
-export class MediaCategoriesManager {
+export class MimeTypeManager {
   private readonly config
 
   private readonly allowedExtensions: SpreadExtensionCollection
