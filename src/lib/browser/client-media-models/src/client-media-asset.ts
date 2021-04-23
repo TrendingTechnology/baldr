@@ -10,13 +10,6 @@ import { MimeTypeManager } from './mime-type'
  * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  *
- * @property {string} uri - Uniform Resource Identifier, for example `id:Haydn`,
- *   or `http://example.com/Haydn_Joseph.jpg`.
- * @property {string} uriScheme - for example: `http`, `https`, `blob`
- * @property {string} uriAuthority - for example:
- *   `//example.com/Haydn_Joseph.jpg`.
- * @property {string} httpUrl - HTTP Uniform Resource Locator, for example
- *   `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} path - The relative path on the HTTP server, for example
  *   `composer/Haydn_Joseph.jpg`.
  * @property {string} filename - The file name, for example `Haydn_Joseph.jpg`.
@@ -58,8 +51,8 @@ export class ClientMediaAsset {
   constructor (raw: AssetType.FileFormat) {
     this.raw = raw
 
-    if (!('uri' in raw)) {
-      throw new Error('Media file needs a uri property.')
+    if (raw.uri == null) {
+      throw new Error('Every client media asset needs a uri property.')
     }
 
     if ('filename' in this && !('extension' in this)) {

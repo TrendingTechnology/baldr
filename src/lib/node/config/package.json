@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
     "lint": "ts-standard --fix src/*.ts"
   },
@@ -27,7 +28,8 @@
   "devDependencies": {
     "@types/node": "14.14.35"
   },
-  "main": "dist/node/main.js",
+  "browser": "dist/browser/main-browser.js",
+  "main": "dist/node/main-node.js",
   "publishConfig": {
     "access": "public"
   }
