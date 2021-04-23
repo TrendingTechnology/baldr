@@ -23,7 +23,7 @@ import { MediaUri } from './media-uri';
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-export class ClientMediaAsset {
+export class ClientMediaAssetNg {
     /**
      * @param raw - A raw javascript object read from the YAML files
      * (`*.extension.yml`)
@@ -44,5 +44,58 @@ export class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = mimeTypeManager.extensionToType(this.raw.extension);
+    }
+    /**
+     * The URI using the `id` authority.
+     *
+     * @returns {String}
+     */
+    // get uriId () {
+    //   return `id:${this.id}`
+    // }
+    /**
+     * The URI using the `uuid` authority.
+     *
+     * @returns {String}
+     */
+    // get uriUuid () {
+    //   return `uuid:${this.uuid}`
+    // }
+    /**
+     * Store the file name from a HTTP URL.
+     *
+     * @param {String} url
+     */
+    // filenameFromHTTPUrl (url) {
+    //   this.filename = url.split('/').pop()
+    // }
+    /**
+     * Merge an object into the class object.
+     *
+     * @param {object} properties - Add an object to the class properties.
+     */
+    // addProperties (properties) {
+    //   for (const property in properties) {
+    //     this[property] = properties[property]
+    //   }
+    // }
+    get titleSafe() {
+        if (this.raw.title != null)
+            return this.raw.title;
+        if (this.raw.filename != null)
+            return this.raw.filename;
+        return this.raw.uri;
+    }
+    /**
+     * True if the media file is playable, for example an audio or a video file.
+     */
+    get isPlayable() {
+        return ['audio', 'video'].includes(this.mimeType);
+    }
+    /**
+     * True if the media file is visible, for example an image or a video file.
+     */
+    get isVisible() {
+        return ['image', 'video'].includes(this.mimeType);
     }
 }

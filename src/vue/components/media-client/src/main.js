@@ -33,7 +33,7 @@ import {
   convertHtmlToPlainText,
   selectSubset
 } from '@bldr/core-browser'
-import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
+import { mimeTypeManager, MediaUri, ClientMediaAssetNg } from '@bldr/client-media-models'
 
 import DynamicSelect from '@bldr/dynamic-select'
 
@@ -1821,11 +1821,13 @@ class Resolver {
    */
   createAssetFromRestData_ (uri, data) {
     let asset
+    data.uri = uri
     if (data.multiPartCount) {
       asset = new MultiPartAsset({ uri })
       store.commit('media/addMultiPartUri', asset.uriRaw)
     } else {
       asset = new ClientMediaAsset({ uri })
+      console.log(new ClientMediaAssetNg(data))
     }
     extractMediaUrisRecursive(data, this.linkedUris)
     asset.addProperties(data)

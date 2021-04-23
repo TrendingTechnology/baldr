@@ -26,7 +26,7 @@ import { MediaUri } from './media-uri'
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-export class ClientMediaAsset {
+export class ClientMediaAssetNg {
   /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
@@ -115,32 +115,25 @@ export class ClientMediaAsset {
   //   }
   // }
 
-  /**
-   * @type {String}
-   */
-  // get titleSafe () {
-  //   if ('title' in this) return this.title
-  //   if ('filename' in this) return this.filename
-  //   if ('uri' in this) return this.uri
-  // }
+  get titleSafe (): string {
+    if (this.raw.title != null) return this.raw.title
+    if (this.raw.filename != null) return this.raw.filename
+    return this.raw.uri
+  }
 
   /**
    * True if the media file is playable, for example an audio or a video file.
-   *
-   * @type {Boolean}
    */
-  // get isPlayable () {
-  //   return ['audio', 'video'].includes(this.type)
-  // }
+  get isPlayable (): boolean {
+    return ['audio', 'video'].includes(this.mimeType)
+  }
 
   /**
    * True if the media file is visible, for example an image or a video file.
-   *
-   * @type {Boolean}
    */
-  // get isVisible () {
-  //   return ['image', 'video'].includes(this.type)
-  // }
+  get isVisible (): boolean {
+    return ['image', 'video'].includes(this.mimeType)
+  }
 
   /**
    * All plain text collected from the properties except some special properties.
@@ -222,7 +215,7 @@ export class ClientMediaAsset {
    * Returns `this.httpUrl`.
    * @returns {String}
    */
-  // getMultiPartHttpUrlByNo () {
+  // getMultiPartHttpUrlByNo (): string {
   //   return this.httpUrl
   // }
 }

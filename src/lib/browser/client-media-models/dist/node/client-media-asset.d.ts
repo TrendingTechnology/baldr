@@ -22,7 +22,7 @@ import { MediaUri } from './media-uri';
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-export declare class ClientMediaAsset {
+export declare class ClientMediaAssetNg {
     /**
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
@@ -46,4 +46,33 @@ export declare class ClientMediaAsset {
      * (`*.extension.yml`)
      */
     constructor(raw: AssetType.FileFormat);
+    /**
+     * The URI using the `id` authority.
+     *
+     * @returns {String}
+     */
+    /**
+     * The URI using the `uuid` authority.
+     *
+     * @returns {String}
+     */
+    /**
+     * Store the file name from a HTTP URL.
+     *
+     * @param {String} url
+     */
+    /**
+     * Merge an object into the class object.
+     *
+     * @param {object} properties - Add an object to the class properties.
+     */
+    get titleSafe(): string;
+    /**
+     * True if the media file is playable, for example an audio or a video file.
+     */
+    get isPlayable(): boolean;
+    /**
+     * True if the media file is visible, for example an image or a video file.
+     */
+    get isVisible(): boolean;
 }

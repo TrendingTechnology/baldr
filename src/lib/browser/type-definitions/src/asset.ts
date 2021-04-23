@@ -22,6 +22,24 @@ export interface FileFormat {
 }
 
 /**
+ * Exported from the media server REST API
+ */
+export interface RestApiRaw {
+  assetType: string
+  extension: string
+  filename: string
+  /**
+   * Relative path
+   */
+  path: string
+  previewImage: boolean
+  size: number
+  timeModified: number
+  uuid: string
+  id: string
+}
+
+/**
  * A type for the possible property names.
  */
 export type PropName =
