@@ -1,7 +1,7 @@
 {
   "name": "@bldr/config",
   "version": "0.1.0",
-  "description": "Load the configuration file /etc/baldr.json.",
+  "description": "Load the configuration file /etc/baldr.json (node) or export the global config variable (browser)",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -18,7 +18,6 @@
   },
   "scripts": {
     "build": "npm run build:node",
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
     "lint": "ts-standard --fix src/*.ts"
   },
@@ -28,8 +27,8 @@
   "devDependencies": {
     "@types/node": "14.14.35"
   },
-  "browser": "dist/browser/main-browser.js",
-  "main": "dist/node/main-node.js",
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   }
