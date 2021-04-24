@@ -23,6 +23,7 @@ import { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definit
 import { DeepTitle } from '@bldr/titles'
 import categories from './specs'
 import { checkTypeAbbreviations } from './two-letter-abbreviations'
+import { errorMonitor } from 'stream'
 
 checkTypeAbbreviations(categories)
 
@@ -183,7 +184,7 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
     if (
       isValue(derivedValue) &&
       (
-        (overwriteByDerived! && !isValue(origValue)) || overwriteByDerived
+        (!overwriteByDerived && !isValue(origValue)) || overwriteByDerived
       )
     ) {
       result[propName] = derivedValue

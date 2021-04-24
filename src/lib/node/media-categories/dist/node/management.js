@@ -173,7 +173,7 @@ function sortAndDeriveProps(data, category) {
         // Use the derived value
         const overwriteByDerived = propSpec.overwriteByDerived != null ? propSpec.overwriteByDerived : false;
         if (isValue(derivedValue) &&
-            ((overwriteByDerived && !isValue(origValue)) || overwriteByDerived)) {
+            ((!overwriteByDerived && !isValue(origValue)) || overwriteByDerived)) {
             result[propName] = derivedValue;
             // Use orig value
         }
