@@ -2,7 +2,6 @@ import path from 'path'
 
 import { getExtension, asciify } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
-
 import { categoriesManagement } from '@bldr/media-categories'
 
 import { readAssetYaml, moveAsset } from '../main'
@@ -24,7 +23,9 @@ export function renameMediaAsset (oldPath: string): string {
     newPath = categoriesManagement.formatFilePath(data, oldPath)
   }
 
-  if (newPath == null) newPath = asciify(oldPath)
+  if (newPath == null) {
+    newPath = asciify(oldPath)
+  }
   const basename = path.basename(newPath)
   // Remove a- and v- prefixes
   const cleanedBasename = basename.replace(/^[va]-/g, '')

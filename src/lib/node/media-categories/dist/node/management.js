@@ -71,7 +71,7 @@ function formatFilePath(data, oldPath) {
     if (category == null)
         throw new Error(`Unkown meta type “${categoryName}”.`);
     if (category.relPath == null || typeof category.relPath !== 'function') {
-        return '';
+        return;
     }
     // The relPath function needs this.extension.
     if (data.extension != null) {

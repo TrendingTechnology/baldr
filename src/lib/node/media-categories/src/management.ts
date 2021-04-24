@@ -60,7 +60,7 @@ function detectCategoryByPath (filePath: string): MediaCategory.Names | undefine
  *
  * @returns A absolute path
  */
-function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string {
+function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string | undefined {
   if (data.categories == null) throw new Error('Your data needs a property named “categories”.')
   // TODO: support multiple types
   // person,general -> person
@@ -69,7 +69,7 @@ function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string
   if (category == null) throw new Error(`Unkown meta type “${categoryName}”.`)
 
   if (category.relPath == null || typeof category.relPath !== 'function') {
-    return ''
+    return
   }
 
   // The relPath function needs this.extension.

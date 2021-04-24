@@ -40,6 +40,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   }
 
   const dest = categoriesManagement.formatFilePath(data as AssetType.Intermediate)
+  if (!dest) return
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage != null) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)

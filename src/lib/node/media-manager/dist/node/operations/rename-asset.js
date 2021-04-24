@@ -24,8 +24,9 @@ function renameMediaAsset(oldPath) {
         const data = metaData;
         newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
     }
-    if (newPath == null)
+    if (newPath == null) {
         newPath = core_browser_1.asciify(oldPath);
+    }
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes
     const cleanedBasename = basename.replace(/^[va]-/g, '');

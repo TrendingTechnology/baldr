@@ -1,6 +1,6 @@
 export declare const categoriesManagement: {
     detectCategoryByPath: (filePath: string) => string | undefined;
-    formatFilePath: (data: import("@bldr/type-definitions/dist/node/asset").Intermediate, oldPath?: string | undefined) => string;
+    formatFilePath: (data: import("@bldr/type-definitions/dist/node/asset").Intermediate, oldPath?: string | undefined) => string | undefined;
     process: (data: import("@bldr/type-definitions/dist/node/asset").Intermediate) => import("@bldr/type-definitions/dist/node/asset").FileFormat;
     categories: {
         cloze: import("@bldr/type-definitions/dist/node/media-category").Category;

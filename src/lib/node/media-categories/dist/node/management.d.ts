@@ -27,7 +27,7 @@ declare function detectCategoryByPath(filePath: string): MediaCategory.Names | u
  *
  * @returns A absolute path
  */
-declare function formatFilePath(data: AssetType.Intermediate, oldPath?: string): string;
+declare function formatFilePath(data: AssetType.Intermediate, oldPath?: string): string | undefined;
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
