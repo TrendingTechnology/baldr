@@ -98,13 +98,18 @@ function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
 }
 
 /**
- * @param value
+ * Check if the given argument is has value and is no empty string.
  */
 function isValue (value: string | boolean | number): boolean {
-  if (value != null || typeof value === 'boolean') {
-    return true
+  if (typeof value !== 'string' || typeof value !== 'boolean' || typeof value !== 'number' ) {
+    return false
   }
-  return false
+
+  if (value === '') {
+    return false
+  }
+
+  return true
 }
 
 /**
@@ -229,7 +234,7 @@ function validateProps (data: AssetType.FileFormat, category: MediaCategory.Cate
       throw new Error(`Missing property ${prop}`)
     }
     // validate
-    if ((spec.validate != null) && typeof spec.validate === 'function' && isValue(value)) {
+    if (spec.validate != null && typeof spec.validate === 'function' && isValue(value)) {
       const result = spec.validate(value)
       if (!result) {
         // eslint-disable-next-line

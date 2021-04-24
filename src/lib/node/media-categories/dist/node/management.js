@@ -100,13 +100,16 @@ function formatFilePath(data, oldPath) {
     return path_1.default.join(basePath, relPath);
 }
 /**
- * @param value
+ * Check if the given argument is has value and is no empty string.
  */
 function isValue(value) {
-    if (value != null || typeof value === 'boolean') {
-        return true;
+    if (typeof value !== 'string' || typeof value !== 'boolean' || typeof value !== 'number') {
+        return false;
     }
-    return false;
+    if (value === '') {
+        return false;
+    }
+    return true;
 }
 /**
  * Apply the meta type specifications to all props.
@@ -153,6 +156,7 @@ function sortAndDeriveProps(data, category) {
     const origData = core_browser_1.deepCopy(data);
     // eslint-disable-next-line
     const result = {};
+    console.log(data);
     if (data.filePath == null)
         throw new Error('Property file_path missing');
     const filePath = data.filePath;
@@ -216,7 +220,7 @@ function validateProps(data, category) {
             throw new Error(`Missing property ${prop}`);
         }
         // validate
-        if ((spec.validate != null) && typeof spec.validate === 'function' && isValue(value)) {
+        if (spec.validate != null && typeof spec.validate === 'function' && isValue(value)) {
             const result = spec.validate(value);
             if (!result) {
                 // eslint-disable-next-line
