@@ -16,7 +16,7 @@ function slidify (masterName: string, data: SlideData[] | SlideData, topLevelDat
   function slidifySingle (masterName: string, data: SlideData): SlideData {
     const slide: SlideData = {}
     slide[masterName] = data
-    if (topLevelData) Object.assign(slide, topLevelData)
+    if (topLevelData != null) Object.assign(slide, topLevelData)
     return slide
   }
 
@@ -44,7 +44,7 @@ export async function generatePresentation (filePath: string): Promise<void> {
   await walk({
     asset (relPath) {
       const asset = makeAsset(relPath)
-      if (!asset.id) {
+      if (asset.id == null) {
         return
       }
       let masterName: string = 'generic'
@@ -52,14 +52,13 @@ export async function generatePresentation (filePath: string): Promise<void> {
         masterName = 'cloze'
       } else if (asset.id.includes('NB')) {
         masterName = 'score_sample'
-      } else if (asset.mediaCategory) {
+      } else if (asset.mediaCategory != null) {
         masterName = asset.mediaCategory
       }
-      slides.push(
-        <SlideData> {
-          [masterName]: `id:${asset.id}`
-        }
-      )
+      const slideData: SlideData = {
+        [masterName]: `id:${asset.id}`
+      }
+      slides.push(slideData)
     }
   }, { path: basePath })
 

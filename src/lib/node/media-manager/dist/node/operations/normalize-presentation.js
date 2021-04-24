@@ -49,21 +49,20 @@ function shortedMediaUris(rawYamlString, presentationId) {
  * @param filePath - A path of a text file.
  */
 function normalizePresentationFile(filePath) {
+    var _a, _b;
     let textContent = core_node_1.readFile(filePath);
     const presentation = yaml_2.loadYaml(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
-    if (presentation.meta) {
-        if (presentation.meta.id)
-            meta.id = presentation.meta.id;
-        if (presentation.meta.curriculumUrl)
-            meta.curriculumUrl = presentation.meta.curriculumUrl;
-    }
+    if (((_a = presentation.meta) === null || _a === void 0 ? void 0 : _a.id) != null)
+        meta.id = presentation.meta.id;
+    if (((_b = presentation.meta) === null || _b === void 0 ? void 0 : _b.curriculumUrl) != null)
+        meta.curriculumUrl = presentation.meta.curriculumUrl;
     const metaString = yaml_1.convertToYaml({ meta });
     textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:');
     // Shorten media URIs with `./`
-    if (meta.id) {
+    if (meta.id != null) {
         textContent = shortedMediaUris(textContent, meta.id);
     }
     // Remove single quotes.

@@ -17,14 +17,14 @@ import { readAssetYaml, moveAsset } from '../main'
 export function renameMediaAsset (oldPath: string): string {
   const metaData = readAssetYaml(oldPath)
   let newPath
-  if (metaData && metaData.categories) {
+  if (metaData?.categories != null) {
     metaData.extension = getExtension(oldPath)
     metaData.filePath = oldPath
     const data = metaData as AssetType.Intermediate
     newPath = categoriesManagement.formatFilePath(data, oldPath)
   }
 
-  if (!newPath) newPath = asciify(oldPath)
+  if (newPath == null) newPath = asciify(oldPath)
   const basename = path.basename(newPath)
   // Remove a- and v- prefixes
   const cleanedBasename = basename.replace(/^[va]-/g, '')

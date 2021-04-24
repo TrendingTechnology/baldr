@@ -47,7 +47,7 @@ const converted = new Set();
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const asset = media_file_classes_1.makeAsset(filePath);
-        if (!asset.extension) {
+        if (asset.extension == null) {
             return;
         }
         let assetType;
@@ -88,7 +88,7 @@ function convertAsset(filePath, cmdObj = {}) {
         }
         else if (assetType === 'image') {
             let size = '2000x2000>';
-            if (cmdObj.previewImage) {
+            if (cmdObj.previewImage != null) {
                 outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg');
                 size = '1000x1000>';
             }
@@ -110,7 +110,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 outputFile
             ]);
         }
-        if (process) {
+        if (process != null) {
             if (process.status !== 0 && assetType === 'audio') {
                 // A second attempt for mono audio: HEv2 only makes sense with stereo.
                 // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
@@ -132,7 +132,7 @@ function convertAsset(filePath, cmdObj = {}) {
                     catch (error) {
                         console.log(error);
                     }
-                    if (metaData) {
+                    if (metaData != null) {
                         yaml_1.writeMetaDataYaml(outputFile, metaData);
                     }
                 }

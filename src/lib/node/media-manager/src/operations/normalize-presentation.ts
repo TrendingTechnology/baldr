@@ -51,22 +51,22 @@ function shortedMediaUris (rawYamlString: string, presentationId: string): strin
  *
  * @param filePath - A path of a text file.
  */
-export function normalizePresentationFile (filePath: string) {
+export function normalizePresentationFile (filePath: string): void {
   let textContent = readFile(filePath)
-  const presentation = <PresentationTypes.FileFormat> loadYaml(filePath)
+  const presentation = loadYaml(filePath) as PresentationTypes.FileFormat
 
   // Generate meta.
   const title = new DeepTitle(filePath)
   const meta = title.generatePresetationMeta()
-  if (presentation.meta) {
-    if (presentation.meta.id) meta.id = presentation.meta.id
-    if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
-  }
+
+  if (presentation.meta?.id != null) meta.id = presentation.meta.id
+  if (presentation.meta?.curriculumUrl != null) meta.curriculumUrl = presentation.meta.curriculumUrl
+
   const metaString = convertToYaml({ meta })
   textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
 
   // Shorten media URIs with `./`
-  if (meta.id) {
+  if (meta.id != null) {
     textContent = shortedMediaUris(textContent, meta.id)
   }
 

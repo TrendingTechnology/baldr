@@ -37,7 +37,7 @@ const converted: Set<string> = new Set()
 export async function convertAsset (filePath: string, cmdObj: { [key: string]: any } = {}): Promise<string| undefined> {
   const asset = makeAsset(filePath)
 
-  if (!asset.extension) {
+  if (asset.extension == null) {
     return
   }
   let assetType: string
@@ -82,7 +82,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
   // image
   } else if (assetType === 'image') {
     let size = '2000x2000>'
-    if (cmdObj.previewImage) {
+    if (cmdObj.previewImage != null) {
       outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg')
       size = '1000x1000>'
     }
@@ -105,7 +105,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     ])
   }
 
-  if (process) {
+  if (process != null) {
     if (process.status !== 0 && assetType === 'audio') {
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
@@ -127,7 +127,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
         } catch (error) {
           console.log(error)
         }
-        if (metaData) {
+        if (metaData != null) {
           writeMetaDataYaml(outputFile, metaData as AssetType.FileFormat)
         }
       }

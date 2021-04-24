@@ -18,13 +18,13 @@ const main_1 = require("../main");
 function renameMediaAsset(oldPath) {
     const metaData = main_1.readAssetYaml(oldPath);
     let newPath;
-    if (metaData && metaData.categories) {
+    if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
         metaData.extension = core_browser_1.getExtension(oldPath);
         metaData.filePath = oldPath;
         const data = metaData;
         newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
     }
-    if (!newPath)
+    if (newPath == null)
         newPath = core_browser_1.asciify(oldPath);
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes

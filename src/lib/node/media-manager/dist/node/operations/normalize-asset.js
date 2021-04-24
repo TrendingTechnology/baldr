@@ -44,18 +44,18 @@ function normalizeMediaAsset(filePath, options) {
                 raw.filePath = filePath;
             }
             let metaData = raw;
-            if (!metaData) {
+            if (metaData == null) {
                 return;
             }
             const origData = core_browser_1.deepCopy(metaData);
             // Always: general
             const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
-            if (categoryNames) {
+            if (categoryNames != null) {
                 const categories = metaData.categories != null ? metaData.categories : '';
                 metaData.categories = media_categories_1.categoriesManagement.mergeNames(categories, categoryNames);
             }
-            if (options && options.wikidata) {
-                if (metaData.wikidata && metaData.categories) {
+            if ((options === null || options === void 0 ? void 0 : options.wikidata) != null) {
+                if (metaData.wikidata != null && metaData.categories != null) {
                     metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categoriesManagement.categories);
                 }
             }

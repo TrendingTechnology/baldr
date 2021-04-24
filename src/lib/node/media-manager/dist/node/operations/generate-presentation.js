@@ -26,7 +26,7 @@ function slidify(masterName, data, topLevelData) {
     function slidifySingle(masterName, data) {
         const slide = {};
         slide[masterName] = data;
-        if (topLevelData)
+        if (topLevelData != null)
             Object.assign(slide, topLevelData);
         return slide;
     }
@@ -55,7 +55,7 @@ function generatePresentation(filePath) {
         yield directory_tree_walk_1.walk({
             asset(relPath) {
                 const asset = media_file_classes_1.makeAsset(relPath);
-                if (!asset.id) {
+                if (asset.id == null) {
                     return;
                 }
                 let masterName = 'generic';
@@ -65,12 +65,13 @@ function generatePresentation(filePath) {
                 else if (asset.id.includes('NB')) {
                     masterName = 'score_sample';
                 }
-                else if (asset.mediaCategory) {
+                else if (asset.mediaCategory != null) {
                     masterName = asset.mediaCategory;
                 }
-                slides.push({
+                const slideData = {
                     [masterName]: `id:${asset.id}`
-                });
+                };
+                slides.push(slideData);
             }
         }, { path: basePath });
         const notePath = path_1.default.join(basePath, 'Hefteintrag.tex');

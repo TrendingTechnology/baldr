@@ -1,5 +1,5 @@
 interface NormalizeMediaAssetOption {
-    wikidata: boolean;
+    wikidata?: boolean;
 }
 /**
  * @param filePath - The media asset file path.

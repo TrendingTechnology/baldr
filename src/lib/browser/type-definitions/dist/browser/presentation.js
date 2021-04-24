@@ -1,5 +1,5 @@
 /**
- * Some basic Typescript interfaces and type defintions.
+ * The format of the `Praesentation.baldr.yml` file format.
  *
  * @module @bldr/type-definitions/presentation
  */

@@ -21,31 +21,31 @@ async function queryWikidata (metaData: AssetType.Intermediate, categoryNames: M
 }
 
 interface NormalizeMediaAssetOption {
-  wikidata: boolean
+  wikidata?: boolean
 }
 
 /**
  * @param filePath - The media asset file path.
  */
-export async function normalizeMediaAsset (filePath: string, options?: NormalizeMediaAssetOption) {
+export async function normalizeMediaAsset (filePath: string, options?: NormalizeMediaAssetOption): Promise<void> {
   try {
     const yamlFile = `${filePath}.yml`
     const raw = readAssetYaml(filePath)
     if (raw != null) { raw.filePath = filePath }
     let metaData = raw as AssetType.Intermediate
-    if (!metaData) {
+    if (metaData == null) {
       return
     }
     const origData = deepCopy(metaData) as AssetType.Intermediate
 
     // Always: general
     const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
-    if (categoryNames) {
+    if (categoryNames != null) {
       const categories = metaData.categories != null ? metaData.categories : ''
       metaData.categories = categoriesManagement.mergeNames(categories, categoryNames)
     }
-    if (options && options.wikidata) {
-      if (metaData.wikidata && metaData.categories) {
+    if (options?.wikidata != null) {
+      if (metaData.wikidata != null && metaData.categories != null) {
         metaData = await queryWikidata(metaData, metaData.categories, categoriesManagement.categories)
       }
     }

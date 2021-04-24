@@ -1,5 +1,5 @@
 /**
- * Some basic Typescript interfaces and type defintions.
+ * The format of the `Praesentation.baldr.yml` file format.
  *
  * @module @bldr/type-definitions/presentation
  */
@@ -181,7 +181,7 @@ export interface PresentationMeta {
  * The type of the YAML file format of a presentation `Praesentation.baldr.yml`
  */
 export interface FileFormat {
-  meta: PresentationMeta
+  meta?: PresentationMeta
   slides: object
 }
 
