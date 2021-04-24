@@ -103,7 +103,7 @@ function formatFilePath(data, oldPath) {
  * Check if the given argument is has value and is no empty string.
  */
 function isValue(value) {
-    if (typeof value !== 'string' || typeof value !== 'boolean' || typeof value !== 'number') {
+    if (!['string', 'boolean', 'number'].includes(typeof value)) {
         return false;
     }
     if (value === '') {
@@ -156,9 +156,9 @@ function sortAndDeriveProps(data, category) {
     const origData = core_browser_1.deepCopy(data);
     // eslint-disable-next-line
     const result = {};
-    console.log(data);
-    if (data.filePath == null)
-        throw new Error('Property file_path missing');
+    if (data.filePath == null) {
+        throw new Error('The property “file_path” is missing!');
+    }
     const filePath = data.filePath;
     const folderTitles = new titles_1.DeepTitle(data.filePath);
     // Loop over the propSpecs to get a sorted object
@@ -171,9 +171,9 @@ function sortAndDeriveProps(data, category) {
             derivedValue = propSpec.derive({ data, category, folderTitles: folderTitles, filePath });
         }
         // Use the derived value
+        const overwriteByDerived = propSpec.overwriteByDerived != null ? propSpec.overwriteByDerived : false;
         if (isValue(derivedValue) &&
-            (((propSpec.overwriteByDerived == null || propSpec.overwriteByDerived) && !isValue(origValue)) ||
-                (propSpec.overwriteByDerived != null && propSpec.overwriteByDerived))) {
+            ((overwriteByDerived && !isValue(origValue)) || overwriteByDerived)) {
             result[propName] = derivedValue;
             // Use orig value
         }

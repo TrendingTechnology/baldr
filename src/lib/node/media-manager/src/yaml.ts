@@ -82,6 +82,7 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFo
       metaData.title = deasciify(asset.basename)
     }
 
+    metaData.filePath = filePath
     metaData = categoriesManagement.process(metaData as AssetType.FileFormat)
     writeYamlFile(yamlFile, metaData)
     return {

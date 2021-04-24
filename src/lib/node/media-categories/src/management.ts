@@ -101,7 +101,7 @@ function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
  * Check if the given argument is has value and is no empty string.
  */
 function isValue (value: string | boolean | number): boolean {
-  if (typeof value !== 'string' || typeof value !== 'boolean' || typeof value !== 'number' ) {
+  if (!['string', 'boolean', 'number'].includes(typeof value)) {
     return false
   }
 
@@ -160,7 +160,9 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
   // eslint-disable-next-line
   const result: AssetType.FileFormat = {} as AssetType.FileFormat
 
-  if (data.filePath == null) throw new Error('Property file_path missing')
+  if (data.filePath == null) {
+    throw new Error('The property “file_path” is missing!')
+  }
 
   const filePath: string = data.filePath
   const folderTitles = new DeepTitle(data.filePath)
@@ -170,21 +172,21 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
   for (const propName in propSpecs) {
     const propSpec = propSpecs[propName as AssetType.PropName]
     const origValue = origData[propName]
+
     let derivedValue
     if (isPropertyDerived(propSpec) && (propSpec.derive != null)) {
       derivedValue = propSpec.derive({ data, category, folderTitles: folderTitles as DeepTitleInterface, filePath })
     }
 
     // Use the derived value
+    const overwriteByDerived: boolean = propSpec.overwriteByDerived != null ? propSpec.overwriteByDerived : false
     if (
       isValue(derivedValue) &&
       (
-        ((propSpec.overwriteByDerived == null || propSpec.overwriteByDerived) && !isValue(origValue)) ||
-        (propSpec.overwriteByDerived != null && propSpec.overwriteByDerived)
+        (overwriteByDerived! && !isValue(origValue)) || overwriteByDerived
       )
     ) {
       result[propName] = derivedValue
-
     // Use orig value
     } else if (isValue(origValue)) {
       result[propName] = origValue
@@ -202,6 +204,7 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
       result[propName] = value
     }
   }
+
   return result
 }
 
@@ -291,7 +294,6 @@ function processByType (data: AssetType.FileFormat, typeName: MediaCategory.Name
   if ((category.initialize != null) && typeof category.initialize === 'function') {
     data = category.initialize({ data, category })
   }
-
   data = sortAndDeriveProps(data, category)
   data = formatProps(data, category)
   // We need filePath in format. Must be after formatProps

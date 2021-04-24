@@ -83,6 +83,7 @@ function writeMetaDataYaml(filePath, metaData, force) {
         if (metaData.title == null) {
             metaData.title = core_browser_1.deasciify(asset.basename);
         }
+        metaData.filePath = filePath;
         metaData = media_categories_1.categoriesManagement.process(metaData);
         writeYamlFile(yamlFile, metaData);
         return {
