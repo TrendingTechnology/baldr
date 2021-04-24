@@ -74,7 +74,7 @@ function formatFilePath(data, oldPath) {
         return;
     }
     // The relPath function needs this.extension.
-    if (data.extension != null) {
+    if (data.extension == null) {
         if (data.mainImage == null) {
             throw new Error('Your data needs a property named “mainImage”.');
         }
@@ -95,8 +95,9 @@ function formatFilePath(data, oldPath) {
     }
     // b/Bush_George-Walker/main.jpeg
     const relPath = category.relPath({ data, category, oldRelPath });
-    if (relPath != null)
+    if (relPath == null) {
         throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`);
+    }
     const basePath = category.basePath != null ? category.basePath : config_1.default.mediaServer.basePath;
     return path_1.default.join(basePath, relPath);
 }

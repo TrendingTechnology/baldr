@@ -73,7 +73,7 @@ function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string
   }
 
   // The relPath function needs this.extension.
-  if (data.extension != null) {
+  if (data.extension == null) {
     if (data.mainImage == null) {
       throw new Error('Your data needs a property named “mainImage”.')
     }
@@ -94,7 +94,9 @@ function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string
 
   // b/Bush_George-Walker/main.jpeg
   const relPath = category.relPath({ data, category, oldRelPath })
-  if (relPath != null) throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`)
+  if (relPath == null) {
+    throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`)
+  }
   const basePath = category.basePath != null ? category.basePath : config.mediaServer.basePath
   return path.join(basePath, relPath)
 }

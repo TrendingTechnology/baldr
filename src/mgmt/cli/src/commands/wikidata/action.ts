@@ -10,7 +10,7 @@ import { writeYamlFile } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
-import wikidata from '@bldr/wikidata'
+import { query, fetchCommonsFile } from '@bldr/wikidata'
 
 interface CmdObj {
   dryRun: boolean
@@ -22,13 +22,16 @@ interface CmdObj {
  * @param itemId - For example `Q123`
  */
 async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: CmdObj): Promise<void> {
-  const rawData = await wikidata.query(itemId, category, categoriesManagement.categories)
+  const rawData = await query(itemId, category, categoriesManagement.categories)
   if (arg1 != null) {
     if (category === 'person') {
       rawData.firstname = arg1
       rawData.lastname = arg2
     }
   }
+  // TODO remove
+  rawData.filePath = 'BD/dummy.jpg'
+
   rawData.categories = category
   const data = categoriesManagement.process(rawData as AssetType.Intermediate)
   console.log(data)
@@ -43,7 +46,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   if (!dest) return
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage != null) {
-      await wikidata.fetchCommonsFile(data.mainImage, dest)
+      await fetchCommonsFile(data.mainImage, dest)
     } else {
       console.log(`Dry run! Destination: ${chalk.green(dest)}`)
     }

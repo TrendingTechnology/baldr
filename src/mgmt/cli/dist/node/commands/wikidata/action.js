@@ -20,7 +20,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
 const config_1 = __importDefault(require("@bldr/config"));
-const wikidata_1 = __importDefault(require("@bldr/wikidata"));
+const wikidata_1 = require("@bldr/wikidata");
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
@@ -28,13 +28,15 @@ const wikidata_1 = __importDefault(require("@bldr/wikidata"));
  */
 function action(category, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        const rawData = yield wikidata_1.default.query(itemId, category, media_categories_1.categoriesManagement.categories);
+        const rawData = yield wikidata_1.query(itemId, category, media_categories_1.categoriesManagement.categories);
         if (arg1 != null) {
             if (category === 'person') {
                 rawData.firstname = arg1;
                 rawData.lastname = arg2;
             }
         }
+        // TODO remove
+        rawData.filePath = 'BD/dummy.jpg';
         rawData.categories = category;
         const data = media_categories_1.categoriesManagement.process(rawData);
         console.log(data);
@@ -48,7 +50,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             return;
         if (downloadWikicommons) {
             if (!cmdObj.dryRun && data.mainImage != null) {
-                yield wikidata_1.default.fetchCommonsFile(data.mainImage, dest);
+                yield wikidata_1.fetchCommonsFile(data.mainImage, dest);
             }
             else {
                 console.log(`Dry run! Destination: ${chalk_1.default.green(dest)}`);
