@@ -19,11 +19,13 @@ exports.general = {
             },
             format: function (value, { data }) {
                 var _a;
+                console.log(value);
+                console.log(data);
                 let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
                 // eslint-disable-next-line
-                if (data.filePath != null && ((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
+                if (data.filePath != null && !((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
                     const idPrefix = main_1.generateIdPrefix(data.filePath);
                     if (idPrefix != null) {
                         if (!raw.includes(idPrefix)) {

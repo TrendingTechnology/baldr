@@ -26,7 +26,7 @@ export const general: MediaCategory.Category = {
         raw = raw.replace(/^[va]-/, '')
 
         // eslint-disable-next-line
-        if (data.filePath != null && data.categories?.includes('youtube')) {
+        if (data.filePath != null && !data.categories?.includes('youtube')) {
           const idPrefix = generateIdPrefix(data.filePath)
           if (idPrefix != null) {
             if (!raw.includes(idPrefix)) {
