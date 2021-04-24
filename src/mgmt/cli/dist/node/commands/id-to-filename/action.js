@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -23,7 +32,7 @@ function renameFromIdOneFile(filePath) {
         console.log(error);
         return;
     }
-    if (result.id) {
+    if (result.id != null) {
         let id = result.id;
         const oldPath = filePath;
         // .mp4
@@ -50,14 +59,16 @@ function renameFromIdOneFile(filePath) {
  *   variadic parameter `[files...]`.
  */
 function action(files) {
-    media_manager_1.walk({
-        asset(relPath) {
-            if (fs_1.default.existsSync(`${relPath}.yml`)) {
-                renameFromIdOneFile(relPath);
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk({
+            asset(relPath) {
+                if (fs_1.default.existsSync(`${relPath}.yml`)) {
+                    renameFromIdOneFile(relPath);
+                }
             }
-        }
-    }, {
-        path: files
+        }, {
+            path: files
+        });
     });
 }
 module.exports = action;

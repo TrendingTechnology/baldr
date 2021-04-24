@@ -38,7 +38,7 @@ function getIconPath(...args) {
 function downloadIcon(url, name, newName) {
     return __awaiter(this, void 0, void 0, function* () {
         let destName;
-        if (newName) {
+        if (newName != null) {
             destName = newName;
         }
         else {
@@ -46,24 +46,21 @@ function downloadIcon(url, name, newName) {
         }
         const destination = path_1.default.join(tmpDir, `${destName}.svg`);
         yield cmd.exec(['wget', '-O', destination, url]);
-        // console.log(`Download destination: ${chalk.green(destination)}`)
     });
 }
 function downloadIcons(iconMapping, urlTemplate) {
     return __awaiter(this, void 0, void 0, function* () {
         cmd.startProgress();
-        // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
         const iconsCount = Object.keys(iconMapping).length;
         let count = 0;
         for (const oldName in iconMapping) {
             const url = urlTemplate.replace('{icon}', oldName);
-            // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
             let newName = oldName;
             const iconDef = iconMapping[oldName];
-            if (typeof iconDef === 'string' && iconDef) {
+            if (iconDef != null && typeof iconDef === 'string') {
                 newName = iconDef;
             }
-            else if (typeof iconDef === 'object' && iconDef.newName) {
+            else if (typeof iconDef === 'object' && iconDef.newName != null) {
                 newName = iconDef.newName;
             }
             yield downloadIcon(url, oldName, newName);
@@ -128,10 +125,10 @@ function convertIntoFontFiles(config) {
 function buildFont(options) {
     return __awaiter(this, void 0, void 0, function* () {
         for (const task of options) {
-            if (task.urlTemplate) {
+            if (task.urlTemplate != null) {
                 yield downloadIcons(task.iconMapping, task.urlTemplate);
             }
-            else if (task.folder) {
+            else if (task.folder != null) {
                 copyIcons(task.folder, tmpDir);
             }
         }
@@ -145,22 +142,24 @@ function buildFont(options) {
     });
 }
 function action() {
-    tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
-    console.log(`The SVG files of the icons are download to: ${chalk_1.default.yellow(tmpDir)}`);
-    buildFont([
-        config_1.default.iconFont,
-        {
-            folder: getIconPath('icons'),
-            // iconMapping not used
-            iconMapping: {
-                baldr: '',
-                musescore: '',
-                wikidata: '',
-                'document-camera': '',
-                // Google icon „overscan“, not downloadable via github?
-                fullscreen: ''
+    return __awaiter(this, void 0, void 0, function* () {
+        tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+        console.log(`The SVG files of the icons are download to: ${chalk_1.default.yellow(tmpDir)}`);
+        yield buildFont([
+            config_1.default.iconFont,
+            {
+                folder: getIconPath('icons'),
+                // iconMapping not used
+                iconMapping: {
+                    baldr: '',
+                    musescore: '',
+                    wikidata: '',
+                    'document-camera': '',
+                    // Google icon „overscan“, not downloadable via github?
+                    fullscreen: ''
+                }
             }
-        }
-    ]);
+        ]);
+    });
 }
 module.exports = action;

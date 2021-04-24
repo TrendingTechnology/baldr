@@ -33,29 +33,26 @@ function getIconPath (...args: string[]): string {
 
 async function downloadIcon (url: string, name: string, newName: string): Promise<void> {
   let destName: string
-  if (newName) {
+  if (newName != null) {
     destName = newName
   } else {
     destName = name
   }
   const destination = path.join(tmpDir, `${destName}.svg`)
   await cmd.exec(['wget', '-O', destination, url])
-  // console.log(`Download destination: ${chalk.green(destination)}`)
 }
 
 async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): Promise<void> {
   cmd.startProgress()
-  // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
   for (const oldName in iconMapping) {
     const url = urlTemplate.replace('{icon}', oldName)
-    // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
     let newName: string = oldName
     const iconDef: string | IconDefintion = iconMapping[oldName]
-    if (typeof iconDef === 'string' && iconDef) {
+    if (iconDef != null && typeof iconDef === 'string') {
       newName = iconDef
-    } else if (typeof iconDef === 'object' && iconDef.newName) {
+    } else if (typeof iconDef === 'object' && iconDef.newName != null) {
       newName = iconDef.newName
     }
 
@@ -111,9 +108,9 @@ function convertIntoFontFiles (config: WebFontConfig): void {
       css.push(header)
 
       for (const glyphData of result.glyphsData) {
-        const name = glyphData.metadata.name
+        const name: string = glyphData.metadata.name
         names.push(name)
-        const unicodeGlyph = glyphData.metadata.unicode[0]
+        const unicodeGlyph: string = glyphData.metadata.unicode[0]
         const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
         const cssGlyph = `.baldr-icon_${name}::before {
   content: "${cssUnicodeEscape}";
@@ -136,9 +133,9 @@ function convertIntoFontFiles (config: WebFontConfig): void {
 
 async function buildFont (options: IconFontConfiguration[]): Promise<void> {
   for (const task of options) {
-    if (task.urlTemplate) {
+    if (task.urlTemplate != null) {
       await downloadIcons(task.iconMapping, task.urlTemplate)
-    } else if (task.folder) {
+    } else if (task.folder != null) {
       copyIcons(task.folder, tmpDir)
     }
   }
@@ -151,12 +148,12 @@ async function buildFont (options: IconFontConfiguration[]): Promise<void> {
   })
 }
 
-function action (): void {
+async function action (): Promise<void> {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
   console.log(`The SVG files of the icons are download to: ${chalk.yellow(tmpDir)}`)
 
-  buildFont([
+  await buildFont([
     config.iconFont,
     {
       folder: getIconPath('icons'),

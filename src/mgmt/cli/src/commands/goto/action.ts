@@ -10,6 +10,10 @@ import { locationIndicator } from '@bldr/media-manager'
 import { openWithFileManager } from '@bldr/open-with'
 import config from '@bldr/config'
 
+interface CmdObj {
+  fileManager: boolean
+}
+
 function openShell (filePath: string): void {
   childProcess.spawn('zsh', ['-i'], {
     cwd: filePath,
@@ -17,14 +21,16 @@ function openShell (filePath: string): void {
   })
 }
 
-function action (cmdObj: { [key: string]: any }): void {
+function action (cmdObj: CmdObj): void {
   // In the archive folder are no two letter folders like 'YT'.
   // We try to detect the parent folder where the presentation lies in.
   const presDir = locationIndicator.getPresParentDir(process.cwd())
   let mirroredPath = locationIndicator.getMirroredPath(presDir)
   // If no mirrored path could be detected we show the base path of the
   // media server.
-  if (!mirroredPath) mirroredPath = config.mediaServer.basePath
+  if (mirroredPath == null) {
+    mirroredPath = config.mediaServer.basePath
+  }
 
   if (!fs.existsSync(mirroredPath)) {
     console.log(`The path “${chalk.red(mirroredPath)}” doesn’t exist.`)

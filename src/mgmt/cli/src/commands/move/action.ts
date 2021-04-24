@@ -208,7 +208,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promi
   const convertedPath = await operations.convertAsset(tmpMp3Path)
   if (convertedPath == null) throw new Error('Error converting asset.')
 
-  let metaData = readAssetYaml(convertedPath) as AssetType.Intermediate
+  const metaData = readAssetYaml(convertedPath) as AssetType.Intermediate
   if (metaData == null) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 

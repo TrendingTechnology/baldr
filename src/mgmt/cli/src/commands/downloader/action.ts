@@ -10,12 +10,12 @@ import type { AssetType } from '@bldr/type-definitions'
  * @param id - The ID of the destination file.
  * @param extension - The extension of the destination file.
  */
-async function action (url: string, id?: string, extension?: string) {
-  if (!extension) {
+async function action (url: string, id?: string, extension?: string): Promise<void> {
+  if (extension == null) {
     extension = url.substring(url.lastIndexOf('.') + 1)
   }
 
-  if (!id) {
+  if (id == null) {
     id = url.substring(url.lastIndexOf('/') + 1)
     id = id.replace(/\.\w+$/, '')
   }
@@ -25,7 +25,10 @@ async function action (url: string, id?: string, extension?: string) {
   await fetchFile(url, destFile)
   // Make images smaller.
   const convertedDestFile = await operations.convertAsset(destFile)
-  if (convertedDestFile) { await operations.initializeMetaYaml(destFile, { source: url } as AssetType.Generic) }
+  if (convertedDestFile != null) {
+    const metaData: AssetType.Generic = { source: url }
+    await operations.initializeMetaYaml(destFile, metaData)
+  }
 }
 
 export = action

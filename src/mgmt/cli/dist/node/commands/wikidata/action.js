@@ -46,7 +46,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             downloadWikicommons = false;
         }
         const dest = media_categories_1.categoriesManagement.formatFilePath(data);
-        if (!dest)
+        if (dest == null)
             return;
         if (downloadWikicommons) {
             if (!cmdObj.dryRun && data.mainImage != null) {

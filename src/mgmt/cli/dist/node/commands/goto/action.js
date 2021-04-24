@@ -24,8 +24,9 @@ function action(cmdObj) {
     let mirroredPath = media_manager_1.locationIndicator.getMirroredPath(presDir);
     // If no mirrored path could be detected we show the base path of the
     // media server.
-    if (!mirroredPath)
+    if (mirroredPath == null) {
         mirroredPath = config_1.default.mediaServer.basePath;
+    }
     if (!fs_1.default.existsSync(mirroredPath)) {
         console.log(`The path “${chalk_1.default.red(mirroredPath)}” doesn’t exist.`);
         process.exit(1);

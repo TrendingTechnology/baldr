@@ -26,9 +26,9 @@ function downloadCover(filePath) {
         const yamlFile = `${filePath}.yml`;
         const metaData = media_manager_1.loadYaml(yamlFile);
         console.log(metaData);
-        if (metaData.coverSource) {
+        if (metaData.coverSource == null) {
             const previewFile = `${filePath}_preview.jpg`;
-            core_node_1.fetchFile(metaData.coverSource, previewFile);
+            yield core_node_1.fetchFile(metaData.coverSource, previewFile);
         }
         else {
             console.log(chalk_1.default.red('No property “cover_source” found.'));
@@ -40,16 +40,18 @@ function downloadCover(filePath) {
  *   variadic parameter `[files...]`.
  */
 function action(files) {
-    media_manager_1.walk({
-        asset(relPath) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (fs_1.default.existsSync(`${relPath}.yml`)) {
-                    yield downloadCover(relPath);
-                }
-            });
-        }
-    }, {
-        path: files
+    return __awaiter(this, void 0, void 0, function* () {
+        yield media_manager_1.walk({
+            asset(relPath) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    if (fs_1.default.existsSync(`${relPath}.yml`)) {
+                        yield downloadCover(relPath);
+                    }
+                });
+            }
+        }, {
+            path: files
+        });
     });
 }
 module.exports = action;

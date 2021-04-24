@@ -201,7 +201,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         const convertedPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
         if (convertedPath == null)
             throw new Error('Error converting asset.');
-        let metaData = media_manager_1.readAssetYaml(convertedPath);
+        const metaData = media_manager_1.readAssetYaml(convertedPath);
         if (metaData == null)
             throw new Error('Error reading asset yaml');
         metaData.metaType = 'composition';

@@ -20,8 +20,8 @@ function renameFromIdOneFile (filePath: string): void {
     return
   }
 
-  if (result.id) {
-    let id = result.id
+  if (result.id != null) {
+    let id: string = result.id
     const oldPath = filePath
 
     // .mp4
@@ -47,8 +47,8 @@ function renameFromIdOneFile (filePath: string): void {
  * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files: string[]): void {
-  walk({
+async function action (files: string[]): Promise<void> {
+  await walk({
     asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
         renameFromIdOneFile(relPath)

@@ -48,7 +48,7 @@ interface ColorSpec {
   valpha: number
 }
 
-function createGimpPaletteLine (color: ColorSpec, name: string) {
+function createGimpPaletteLine (color: ColorSpec, name: string): string {
   const segments = []
   for (const rgb of color.color) {
     if (rgb > 99) {
@@ -74,13 +74,13 @@ function createGimpPaletteLine (color: ColorSpec, name: string) {
  * 237 201  88  yellow-light
  * ```
  */
-function createGimpPalette () {
+function createGimpPalette (): void {
   const lines = []
   lines.push('GIMP Palette')
   lines.push('Name: baldr')
   for (const colorName in colors) {
     const color = new Color(colors[colorName])
-    lines.push(createGimpPaletteLine(<any> color.rgb(), colorName))
+    lines.push(createGimpPaletteLine(color.rgb() as any, colorName))
   }
   console.log(lines.join('\n'))
 }

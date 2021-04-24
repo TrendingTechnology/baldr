@@ -16,9 +16,9 @@ async function downloadCover (filePath: string): Promise<void> {
   const metaData = loadYaml(yamlFile)
   console.log(metaData)
 
-  if (metaData.coverSource) {
+  if (metaData.coverSource == null) {
     const previewFile = `${filePath}_preview.jpg`
-    fetchFile(metaData.coverSource, previewFile)
+    await fetchFile(metaData.coverSource, previewFile)
   } else {
     console.log(chalk.red('No property “cover_source” found.'))
   }
@@ -28,8 +28,8 @@ async function downloadCover (filePath: string): Promise<void> {
  * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files: string | string[]): void {
-  walk({
+async function action (files: string | string[]): Promise<void> {
+  await walk({
     async asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
         await downloadCover(relPath)

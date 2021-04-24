@@ -8,8 +8,8 @@ import { operations, walk } from '@bldr/media-manager'
  * @param filePaths - An array of input files to convert.
  * @param cmdObj - The command object from the commander.
  */
-function action (filePaths: string[], cmdObj: { [key: string]: any }) {
-  walk({
+async function action (filePaths: string[], cmdObj: { [key: string]: any }): Promise<void> {
+  await walk({
     all: operations.convertAsset
   }, {
     path: filePaths,

@@ -19,10 +19,10 @@ const core_node_1 = require("@bldr/core-node");
  */
 function action(url, id, extension) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!extension) {
+        if (extension == null) {
             extension = url.substring(url.lastIndexOf('.') + 1);
         }
-        if (!id) {
+        if (id == null) {
             id = url.substring(url.lastIndexOf('/') + 1);
             id = id.replace(/\.\w+$/, '');
         }
@@ -30,8 +30,9 @@ function action(url, id, extension) {
         yield core_node_1.fetchFile(url, destFile);
         // Make images smaller.
         const convertedDestFile = yield media_manager_1.operations.convertAsset(destFile);
-        if (convertedDestFile) {
-            yield media_manager_1.operations.initializeMetaYaml(destFile, { source: url });
+        if (convertedDestFile != null) {
+            const metaData = { source: url };
+            yield media_manager_1.operations.initializeMetaYaml(destFile, metaData);
         }
     });
 }
