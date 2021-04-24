@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.general = void 0;
+const uuid_1 = require("uuid");
 const core_browser_1 = require("@bldr/core-browser");
 const two_letter_abbreviations_1 = require("../two-letter-abbreviations");
 const main_1 = require("../main");
-const uuid_1 = require("uuid");
 /**
  * General meta data type specification. Applied after all other meta data
  * types.
@@ -19,8 +19,6 @@ exports.general = {
             },
             format: function (value, { data }) {
                 var _a;
-                console.log(value);
-                console.log(data);
                 let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');

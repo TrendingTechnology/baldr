@@ -14,8 +14,6 @@ import { MediaCategory, AssetType } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the type name.
  *
- * @param filePath
- *
  * @returns The type names for example `person,group,general`
  */
 declare function detectCategoryByPath(filePath: string): MediaCategory.Names | undefined;
@@ -29,7 +27,7 @@ declare function detectCategoryByPath(filePath: string): MediaCategory.Names | u
  *
  * @returns A absolute path
  */
-declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): string;
+declare function formatFilePath(data: AssetType.Intermediate, oldPath?: string): string;
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
@@ -39,7 +37,7 @@ declare function mergeNames(...name: string[]): string;
  *
  * @param data - An object containing some meta data.
  */
-declare function process(data: AssetType.FileFormat): AssetType.FileFormat;
+declare function process(data: AssetType.Intermediate): AssetType.FileFormat;
 declare const _default: {
     detectCategoryByPath: typeof detectCategoryByPath;
     formatFilePath: typeof formatFilePath;

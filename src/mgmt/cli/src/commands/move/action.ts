@@ -208,7 +208,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promi
   const convertedPath = await operations.convertAsset(tmpMp3Path)
   if (convertedPath == null) throw new Error('Error converting asset.')
 
-  let metaData = readAssetYaml(convertedPath) as AssetType.FileFormat
+  let metaData = readAssetYaml(convertedPath) as AssetType.Intermediate
   if (metaData == null) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 
@@ -219,8 +219,8 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promi
   metaData.source = oldPath
   // To get ID prefix
   metaData.filePath = newPath
-  metaData = categoriesManagement.process(metaData)
-  writeYamlFile(`${newPath}.yml`, metaData)
+  const result = categoriesManagement.process(metaData)
+  writeYamlFile(`${newPath}.yml`, result)
 
   // Delete MP3.
   fs.unlinkSync(tmpMp3Path)

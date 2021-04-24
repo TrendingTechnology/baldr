@@ -9,7 +9,7 @@ interface InstrumentCategory extends MediaCategory.Category {
   basePath: string
 }
 
-interface InstrumentFileFormat extends AssetType.FileFormat {
+interface InstrumentIntermediate extends AssetType.Intermediate {
   name: string
   extension: string
 }
@@ -22,7 +22,7 @@ export const instrument: MediaCategory.Category = {
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
   relPath: function ({ data }) {
-    const instrumentData = data as InstrumentFileFormat
+    const instrumentData = data as InstrumentIntermediate
     const id = data.id.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${instrumentData.extension}`)
   },
@@ -42,7 +42,7 @@ export const instrument: MediaCategory.Category = {
       derive: function ({ data, category }) {
         // IS: Instrument
         const instrumentCategory = category as InstrumentCategory
-        const instrumentData = data as InstrumentFileFormat
+        const instrumentData = data as InstrumentIntermediate
         return `${instrumentCategory.abbreviation}_${idify(instrumentData.name)}`
       },
       overwriteByDerived: true
@@ -50,7 +50,7 @@ export const instrument: MediaCategory.Category = {
     title: {
       title: 'Titel des Instruments',
       derive: function ({ data }) {
-        const instrumentData = data as InstrumentFileFormat
+        const instrumentData = data as InstrumentIntermediate
         return `Foto des Instruments „${instrumentData.name}“`
       },
       overwriteByDerived: true

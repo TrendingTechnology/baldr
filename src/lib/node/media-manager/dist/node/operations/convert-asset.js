@@ -63,7 +63,7 @@ function convertAsset(filePath, cmdObj = {}) {
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
             return;
-        let process = undefined;
+        let process;
         // audio
         // https://trac.ffmpeg.org/wiki/Encode/AAC
         // ffmpeg aac encoder

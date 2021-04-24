@@ -2,7 +2,7 @@ import path from 'path'
 
 import type { MediaCategory, AssetType } from '@bldr/type-definitions'
 
-interface ClozeFileFormat extends AssetType.FileFormat {
+interface ClozeIntermediate extends AssetType.Intermediate {
   clozePageNo: number
   clozePageCount: number
 }
@@ -17,7 +17,7 @@ export const cloze: MediaCategory.Category = {
     return new RegExp('^.*/LT/.*.svg$')
   },
   initialize ({ data }) {
-    const clozeData = data as ClozeFileFormat
+    const clozeData = data as ClozeIntermediate
     if (clozeData.filePath != null && clozeData.clozePageNo == null) {
       const match = clozeData.filePath.match(/(\d+)\.svg/)
       if (match != null) clozeData.clozePageNo = parseInt(match[1])
@@ -25,7 +25,7 @@ export const cloze: MediaCategory.Category = {
     return data
   },
   relPath ({ data, oldRelPath }) {
-    const clozeData = data as ClozeFileFormat
+    const clozeData = data as ClozeIntermediate
     const oldRelDir = path.dirname(oldRelPath)
     let pageNo = ''
     if (clozeData.clozePageNo != null) pageNo = `_${clozeData.clozePageNo}`
@@ -35,7 +35,7 @@ export const cloze: MediaCategory.Category = {
     id: {
       title: 'Die ID des Lückentexts',
       derive: function ({ data, folderTitles }) {
-        const clozeData = data as ClozeFileFormat
+        const clozeData = data as ClozeIntermediate
         let counterSuffix = ''
         if (data.clozePageNo != null) {
           counterSuffix = `_${clozeData.clozePageNo}`
@@ -47,7 +47,7 @@ export const cloze: MediaCategory.Category = {
     title: {
       title: 'Titel des Lückentextes',
       derive: function ({ data, folderTitles }) {
-        const clozeData = data as ClozeFileFormat
+        const clozeData = data as ClozeIntermediate
         let suffix = ''
         if (clozeData.clozePageNo != null && clozeData.clozePageCount != null) {
           suffix = ` (Seite ${clozeData.clozePageNo} von ${clozeData.clozePageCount})`

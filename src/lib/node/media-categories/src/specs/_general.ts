@@ -1,11 +1,10 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import { v4 as uuidv4 } from 'uuid'
 
+import type { MediaCategory } from '@bldr/type-definitions'
 import { deasciify, idify } from '@bldr/core-browser'
 import { getTwoLetterAbbreviations, checkForTwoLetterDir } from '../two-letter-abbreviations'
 
 import { generateIdPrefix, validateYoutubeId } from '../main'
-
-import { v4 as uuidv4 } from 'uuid'
 
 /**
  * General meta data type specification. Applied after all other meta data

@@ -28,8 +28,6 @@ two_letter_abbreviations_1.checkTypeAbbreviations(specs_1.default);
 /**
  * Check a file path against a regular expression to get the type name.
  *
- * @param filePath
- *
  * @returns The type names for example `person,group,general`
  */
 function detectCategoryByPath(filePath) {
@@ -72,14 +70,19 @@ function formatFilePath(data, oldPath) {
     const category = specs_1.default[categoryName];
     if (category == null)
         throw new Error(`Unkown meta type “${categoryName}”.`);
-    if ((category.relPath == null) || typeof category.relPath !== 'function') {
+    if (category.relPath == null || typeof category.relPath !== 'function') {
         return '';
     }
     // The relPath function needs this.extension.
     if (data.extension != null) {
-        if (data.mainImage == null)
+        if (data.mainImage == null) {
             throw new Error('Your data needs a property named “mainImage”.');
-        data.extension = core_browser_1.getExtension(data.mainImage);
+        }
+        const extension = core_browser_1.getExtension(data.mainImage);
+        if (extension == null) {
+            throw new Error('Extension couldn’t be detected.');
+        }
+        data.extension = extension;
         // b/Bush_George-Walker/main.jpeg
     }
     if (data.extension === 'jpeg')
@@ -94,8 +97,6 @@ function formatFilePath(data, oldPath) {
     const relPath = category.relPath({ data, category, oldRelPath });
     if (relPath != null)
         throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`);
-    // To avoid confusion with class MediaFile in the module @bldr/media-client
-    delete data.extension;
     const basePath = category.basePath != null ? category.basePath : config_1.default.mediaServer.basePath;
     return path_1.default.join(basePath, relPath);
 }
@@ -157,7 +158,7 @@ function sortAndDeriveProps(data, category) {
     // eslint-disable-next-line
     const result = {};
     if (data.filePath == null) {
-        throw new Error('The property “file_path” is missing!');
+        throw new Error('The property “filePath” is missing!');
     }
     const filePath = data.filePath;
     const folderTitles = new titles_1.DeepTitle(data.filePath);
@@ -316,10 +317,11 @@ function process(data) {
             data = processByType(data, name);
         }
     }
+    const result = data;
     // Do not convert back. This conversion should be the last step, before
     // object is converted to YAML.
     // convertProperties(data, 'camel-to-snake')
-    return data;
+    return result;
 }
 exports.default = {
     detectCategoryByPath,

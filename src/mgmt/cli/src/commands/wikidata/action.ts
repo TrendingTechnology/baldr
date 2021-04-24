@@ -30,7 +30,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     }
   }
   rawData.categories = category
-  const data = categoriesManagement.process(rawData as AssetType.FileFormat)
+  const data = categoriesManagement.process(rawData as AssetType.Intermediate)
   console.log(data)
 
   let downloadWikicommons = true
@@ -39,7 +39,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     downloadWikicommons = false
   }
 
-  const dest = categoriesManagement.formatFilePath(data)
+  const dest = categoriesManagement.formatFilePath(data as AssetType.Intermediate)
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage != null) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)

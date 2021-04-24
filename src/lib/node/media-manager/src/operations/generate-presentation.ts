@@ -10,7 +10,7 @@ import { convertToYaml } from '@bldr/yaml'
 import { makeAsset } from '../media-file-classes'
 import { walk } from '../directory-tree-walk'
 
-type SlideData = { [key: string]: any }
+interface SlideData { [key: string]: any }
 
 function slidify (masterName: string, data: SlideData[] | SlideData, topLevelData: SlideData): SlideData[] {
   function slidifySingle (masterName: string, data: SlideData): SlideData {
@@ -48,9 +48,9 @@ export async function generatePresentation (filePath: string): Promise<void> {
         return
       }
       let masterName: string = 'generic'
-      if (asset.id.indexOf('_LT') > -1) {
+      if (asset.id.includes('_LT')) {
         masterName = 'cloze'
-      } else if (asset.id.indexOf('NB') > -1) {
+      } else if (asset.id.includes('NB')) {
         masterName = 'score_sample'
       } else if (asset.mediaCategory) {
         masterName = asset.mediaCategory

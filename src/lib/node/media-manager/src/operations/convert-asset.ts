@@ -34,7 +34,7 @@ const converted: Set<string> = new Set()
  *
  * @returns The output file path.
  */
-export async function convertAsset (filePath: string, cmdObj: { [key:string]: any } = {}): Promise<string| undefined> {
+export async function convertAsset (filePath: string, cmdObj: { [key: string]: any } = {}): Promise<string| undefined> {
   const asset = makeAsset(filePath)
 
   if (!asset.extension) {
@@ -52,7 +52,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key:string]: an
   let outputFile = path.join(path.dirname(filePath), outputFileName)
   if (converted.has(outputFile)) return
 
-  let process: childProcess.SpawnSyncReturns<string> | undefined = undefined
+  let process: childProcess.SpawnSyncReturns<string> | undefined
 
   // audio
   // https://trac.ffmpeg.org/wiki/Encode/AAC

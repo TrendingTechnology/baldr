@@ -46,7 +46,7 @@ export declare type PropName = string;
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-    data: AssetType.FileFormat;
+    data: AssetType.Intermediate;
     category: Category;
     folderTitles: DeepTitleInterface;
     filePath: string;
@@ -137,7 +137,7 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-    data: AssetType.FileFormat;
+    data: AssetType.Intermediate;
     category: Category;
     oldRelPath: string;
 }
@@ -152,16 +152,16 @@ declare type DetectTypeByPathFunc = (arg: Category) => RegExp;
 /**
  * Defintion of the function `intialize()`.
  */
-declare type InitializeFunc = (arg: DataAndCategory) => AssetType.FileFormat;
+declare type InitializeFunc = (arg: DataAndCategory) => AssetType.Intermediate;
 /**
  * Defintion of the function `finalize()`.
  */
-declare type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.FileFormat;
+declare type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.Intermediate;
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-    data: AssetType.FileFormat;
+    data: AssetType.Intermediate;
     entity: {
         [key: string]: any;
     };
@@ -172,7 +172,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.FileFormat;
+declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Intermediate;
 /**
  * Apart from different file formats, media files can belong to several media
  * categories regardless of their file format.
@@ -256,7 +256,7 @@ export interface Data {
  * Used in many functions as an argument.
  */
 interface DataAndCategory {
-    data: AssetType.FileFormat;
+    data: AssetType.Intermediate;
     category: Category;
 }
 export {};

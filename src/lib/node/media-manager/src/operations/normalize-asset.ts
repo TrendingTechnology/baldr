@@ -1,16 +1,16 @@
 import assert from 'assert'
 
 import { deepCopy, msleep } from '@bldr/core-browser'
-import { AssetType, MediaCategory } from '@bldr/type-definitions'
-import wikidata  from '@bldr/wikidata'
+import { AssetType, MediaCategory, StringIndexedObject } from '@bldr/type-definitions'
+import wikidata from '@bldr/wikidata'
 
 import { categoriesManagement } from '@bldr/media-categories'
 import { readAssetYaml, writeYamlFile } from '../main'
 
-async function queryWikidata (metaData: AssetType.FileFormat, categoryNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<AssetType.FileFormat> {
+async function queryWikidata (metaData: AssetType.Intermediate, categoryNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<AssetType.Intermediate> {
   const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, categoryCollection)
   console.log(dataWiki)
-  metaData = wikidata.mergeData(metaData, dataWiki, categoryCollection) as AssetType.FileFormat
+  metaData = wikidata.mergeData(metaData, dataWiki, categoryCollection) as AssetType.Intermediate
   // To avoid blocking
   // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
   // status: 429,
@@ -30,12 +30,13 @@ interface NormalizeMediaAssetOption {
 export async function normalizeMediaAsset (filePath: string, options?: NormalizeMediaAssetOption) {
   try {
     const yamlFile = `${filePath}.yml`
-    let metaData = readAssetYaml(filePath) as AssetType.FileFormat
+    const raw = readAssetYaml(filePath)
+    if (raw != null) { raw.filePath = filePath }
+    let metaData = raw as AssetType.Intermediate
     if (!metaData) {
       return
     }
-    metaData.filePath = filePath
-    const origData = <AssetType.FileFormat> deepCopy(metaData)
+    const origData = deepCopy(metaData) as AssetType.Intermediate
 
     // Always: general
     const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
@@ -48,13 +49,14 @@ export async function normalizeMediaAsset (filePath: string, options?: Normalize
         metaData = await queryWikidata(metaData, metaData.categories, categoriesManagement.categories)
       }
     }
-    metaData = categoriesManagement.process(metaData)
+    const result = categoriesManagement.process(metaData)
 
     try {
-      delete origData.filePath
-      assert.deepStrictEqual(origData, metaData)
+      const comparable = origData as StringIndexedObject
+      delete comparable.filePath
+      assert.deepStrictEqual(comparable, result)
     } catch (error) {
-      writeYamlFile(yamlFile, metaData)
+      writeYamlFile(yamlFile, result)
     }
   } catch (error) {
     console.log(filePath)

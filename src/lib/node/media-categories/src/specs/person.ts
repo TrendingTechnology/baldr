@@ -6,7 +6,7 @@ import config from '@bldr/config'
 
 import { validateDate } from '../main'
 
-interface PersonFileFormat extends AssetType.FileFormat {
+interface PersonIntermediate extends AssetType.Intermediate {
   firstname: string
   lastname: string
   personId: string
@@ -26,7 +26,7 @@ export const person: MediaCategory.Category = {
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function ({ data }) {
-    const personData = data as PersonFileFormat
+    const personData = data as PersonIntermediate
     return path.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`)
   },
   detectCategoryByPath: function (category) {
@@ -69,7 +69,7 @@ export const person: MediaCategory.Category = {
     title: {
       title: 'Titel der Person',
       derive: function ({ data }) {
-        const personData = data as PersonFileFormat
+        const personData = data as PersonIntermediate
         return `Portrait-Bild von „${personData.firstname} ${personData.lastname}“`
       },
       overwriteByDerived: true
@@ -107,7 +107,7 @@ export const person: MediaCategory.Category = {
     name: {
       title: 'Name (Vor- und Familienname)',
       derive: function ({ data }) {
-        const personData = data as PersonFileFormat
+        const personData = data as PersonIntermediate
         return `${personData.firstname} ${personData.lastname}`
       },
       overwriteByDerived: false

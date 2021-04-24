@@ -23,14 +23,11 @@ import { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definit
 import { DeepTitle } from '@bldr/titles'
 import categories from './specs'
 import { checkTypeAbbreviations } from './two-letter-abbreviations'
-import { errorMonitor } from 'stream'
 
 checkTypeAbbreviations(categories)
 
 /**
  * Check a file path against a regular expression to get the type name.
- *
- * @param filePath
  *
  * @returns The type names for example `person,group,general`
  */
@@ -63,7 +60,7 @@ function detectCategoryByPath (filePath: string): MediaCategory.Names | undefine
  *
  * @returns A absolute path
  */
-function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
+function formatFilePath (data: AssetType.Intermediate, oldPath?: string): string {
   if (data.categories == null) throw new Error('Your data needs a property named “categories”.')
   // TODO: support multiple types
   // person,general -> person
@@ -71,14 +68,20 @@ function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
   const category = categories[categoryName]
   if (category == null) throw new Error(`Unkown meta type “${categoryName}”.`)
 
-  if ((category.relPath == null) || typeof category.relPath !== 'function') {
+  if (category.relPath == null || typeof category.relPath !== 'function') {
     return ''
   }
 
   // The relPath function needs this.extension.
   if (data.extension != null) {
-    if (data.mainImage == null) throw new Error('Your data needs a property named “mainImage”.')
-    data.extension = getExtension(data.mainImage)
+    if (data.mainImage == null) {
+      throw new Error('Your data needs a property named “mainImage”.')
+    }
+    const extension = getExtension(data.mainImage)
+    if (extension == null) {
+      throw new Error('Extension couldn’t be detected.')
+    }
+    data.extension = extension
     // b/Bush_George-Walker/main.jpeg
   }
   if (data.extension === 'jpeg') data.extension = 'jpg'
@@ -92,8 +95,6 @@ function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
   // b/Bush_George-Walker/main.jpeg
   const relPath = category.relPath({ data, category, oldRelPath })
   if (relPath != null) throw new Error(`The relPath() function has to return a string for meta type “${categoryName}”`)
-  // To avoid confusion with class MediaFile in the module @bldr/media-client
-  delete data.extension
   const basePath = category.basePath != null ? category.basePath : config.mediaServer.basePath
   return path.join(basePath, relPath)
 }
@@ -122,7 +123,7 @@ function isValue (value: string | boolean | number): boolean {
  * @param category - The specification of one meta type.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetType.FileFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.FileFormat {
+function applySpecToProps (data: AssetType.Intermediate | AssetType.Intermediate, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.Intermediate | AssetType.Intermediate {
   function applyOneTypeSpec (props: MediaCategory.PropCollection, propName: AssetType.PropName, data: AssetType.Generic, func: Function, replaceValues: boolean): void {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
@@ -156,13 +157,13 @@ function isPropertyDerived (propSpec: MediaCategory.Prop): boolean {
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
-  const origData = deepCopy(data) as AssetType.FileFormat
+function sortAndDeriveProps (data: AssetType.Intermediate, category: MediaCategory.Category): AssetType.Intermediate {
+  const origData = deepCopy(data) as AssetType.Intermediate
   // eslint-disable-next-line
-  const result: AssetType.FileFormat = {} as AssetType.FileFormat
+  const result: AssetType.Intermediate = {} as AssetType.Intermediate
 
   if (data.filePath == null) {
-    throw new Error('The property “file_path” is missing!')
+    throw new Error('The property “filePath” is missing!')
   }
 
   const filePath: string = data.filePath
@@ -213,7 +214,7 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
  * @param data - An object containing some meta data.
  * @param category - The type name
  */
-function formatProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
+function formatProps (data: AssetType.Intermediate, category: MediaCategory.Category): AssetType.Intermediate {
   function formatOneProp (spec: MediaCategory.Prop, value: any): any {
     if (
       isValue(value) &&
@@ -231,7 +232,7 @@ function formatProps (data: AssetType.FileFormat, category: MediaCategory.Catego
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function validateProps (data: AssetType.FileFormat, category: MediaCategory.Category): void {
+function validateProps (data: AssetType.Intermediate, category: MediaCategory.Category): void {
   function validateOneProp (spec: MediaCategory.Prop, value: any, prop: MediaCategory.PropName): void {
     // required
     if (spec.required != null && !isValue(value)) {
@@ -255,7 +256,7 @@ function validateProps (data: AssetType.FileFormat, category: MediaCategory.Cate
  * @param data - An object containing some meta data.
  * @param category - The specification of one meta type.
  */
-function removeProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
+function removeProps (data: AssetType.Intermediate, category: MediaCategory.Category): AssetType.Intermediate {
   for (const propName in category.props) {
     if (data[propName] != null) {
       const value = data[propName]
@@ -286,7 +287,7 @@ function removeProps (data: AssetType.FileFormat, category: MediaCategory.Catego
  * @param data - An object containing some meta data.
  * @param typeName - The type name
  */
-function processByType (data: AssetType.FileFormat, typeName: MediaCategory.Name): AssetType.FileFormat {
+function processByType (data: AssetType.Intermediate, typeName: MediaCategory.Name): AssetType.Intermediate {
   if (categories[typeName] == null) {
     throw new Error(`Unkown meta type name: “${typeName}”`)
   }
@@ -329,10 +330,10 @@ function mergeNames (...name: string[]): string {
  *
  * @param data - An object containing some meta data.
  */
-function process (data: AssetType.FileFormat): AssetType.FileFormat {
+function process (data: AssetType.Intermediate): AssetType.FileFormat {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = convertPropertiesSnakeToCamel(data) as AssetType.FileFormat
+  data = convertPropertiesSnakeToCamel(data) as AssetType.Intermediate
   if (data.categories == null) {
     data.categories = 'general'
   } else if (!data.categories.includes('general')) {
@@ -343,10 +344,11 @@ function process (data: AssetType.FileFormat): AssetType.FileFormat {
       data = processByType(data, name as MediaCategory.Name)
     }
   }
+  const result = data as AssetType.FileFormat
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.
   // convertProperties(data, 'camel-to-snake')
-  return data
+  return result
 }
 
 export default {

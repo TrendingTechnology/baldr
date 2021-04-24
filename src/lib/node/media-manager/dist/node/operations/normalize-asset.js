@@ -39,11 +39,14 @@ function normalizeMediaAsset(filePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const yamlFile = `${filePath}.yml`;
-            let metaData = main_1.readAssetYaml(filePath);
+            const raw = main_1.readAssetYaml(filePath);
+            if (raw != null) {
+                raw.filePath = filePath;
+            }
+            let metaData = raw;
             if (!metaData) {
                 return;
             }
-            metaData.filePath = filePath;
             const origData = core_browser_1.deepCopy(metaData);
             // Always: general
             const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
@@ -56,13 +59,14 @@ function normalizeMediaAsset(filePath, options) {
                     metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categoriesManagement.categories);
                 }
             }
-            metaData = media_categories_1.categoriesManagement.process(metaData);
+            const result = media_categories_1.categoriesManagement.process(metaData);
             try {
-                delete origData.filePath;
-                assert_1.default.deepStrictEqual(origData, metaData);
+                const comparable = origData;
+                delete comparable.filePath;
+                assert_1.default.deepStrictEqual(comparable, result);
             }
             catch (error) {
-                main_1.writeYamlFile(yamlFile, metaData);
+                main_1.writeYamlFile(yamlFile, result);
             }
         }
         catch (error) {

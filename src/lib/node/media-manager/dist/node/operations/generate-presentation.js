@@ -59,10 +59,10 @@ function generatePresentation(filePath) {
                     return;
                 }
                 let masterName = 'generic';
-                if (asset.id.indexOf('_LT') > -1) {
+                if (asset.id.includes('_LT')) {
                     masterName = 'cloze';
                 }
-                else if (asset.id.indexOf('NB') > -1) {
+                else if (asset.id.includes('NB')) {
                     masterName = 'score_sample';
                 }
                 else if (asset.mediaCategory) {

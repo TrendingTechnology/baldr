@@ -23,7 +23,7 @@ const comment = `
  * @returns A raw YAML string without single quotes around the media
  *   URIs.
  */
-function removeSingleQuotes(rawYamlString: string): string {
+function removeSingleQuotes (rawYamlString: string): string {
   return rawYamlString.replace(/ 'id:([^']*)'/g, ' id:$1')
 }
 
@@ -40,7 +40,7 @@ function removeSingleQuotes(rawYamlString: string): string {
  * @returns A raw YAML string without single quotes around the media
  *   URIs.
  */
-function shortedMediaUris(rawYamlString: string, presentationId: string): string {
+function shortedMediaUris (rawYamlString: string, presentationId: string): string {
   return rawYamlString.replace(new RegExp(`id:${presentationId}_`, 'g'), 'id:./')
 }
 
@@ -51,7 +51,7 @@ function shortedMediaUris(rawYamlString: string, presentationId: string): string
  *
  * @param filePath - A path of a text file.
  */
-export function normalizePresentationFile(filePath: string) {
+export function normalizePresentationFile (filePath: string) {
   let textContent = readFile(filePath)
   const presentation = <PresentationTypes.FileFormat> loadYaml(filePath)
 
