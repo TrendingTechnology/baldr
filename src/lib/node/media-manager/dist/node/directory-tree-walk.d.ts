@@ -6,7 +6,7 @@
 /**
  * A function which is called during the directory structure walk.
  */
-declare type WalkFunc = (path: string, payload?: object) => any;
+declare type WalkFunc = (path: string, payload?: object | any) => any;
 /**
  * A collection of walk functions.
  */

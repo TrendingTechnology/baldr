@@ -23,7 +23,6 @@ const core_browser_1 = require("@bldr/core-browser");
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
 const core_node_1 = require("@bldr/core-node");
-const core_browser_2 = require("@bldr/core-browser");
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
@@ -83,7 +82,7 @@ const resolvedTexImages = {};
  * @returns for example: BD/John-Coltrane.jpg
  */
 function moveTexImage(oldPathTex, baseName, cmdObj) {
-    if (resolvedTexImages[baseName])
+    if (resolvedTexImages[baseName] != null)
         return resolvedTexImages[baseName];
     // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
     const imageFolder = path_1.default.join(path_1.default.dirname(oldPathTex), 'Material');
@@ -98,7 +97,7 @@ function moveTexImage(oldPathTex, baseName, cmdObj) {
         }
     }
     // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material/John-Coltrane.jpg
-    if (oldPath) {
+    if (oldPath != null) {
         // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz
         const presParentDir = media_manager_1.locationIndicator.getPresParentDir(oldPath);
         // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
@@ -155,8 +154,10 @@ function moveTex(oldPath, newPath, cmdObj) {
         const newRelPath = moveTexImage(oldPath, oldRelPath, cmdObj);
         // TeX files are now in the TX subfolder
         // \grafik[0.8\linewidth]{../BD/Freight-Train-Blues.eps}
-        const newMarkup = oldMarkup.replace(oldRelPath, `../${newRelPath}`);
-        replacements.push([oldMarkup, newMarkup]);
+        if (newRelPath != null) {
+            const newMarkup = oldMarkup.replace(oldRelPath, `../${newRelPath}`);
+            replacements.push([oldMarkup, newMarkup]);
+        }
     }
     // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
     newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'TX');
@@ -172,7 +173,7 @@ function moveTex(oldPath, newPath, cmdObj) {
 }
 function getMbrainzRecordingId(filePath) {
     const process = child_process_1.default.spawnSync('/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' });
-    if (process.stdout) {
+    if (process.stdout != null) {
         // There are mulitple recording ids:
         // 0585ec4a-487d-4944-bf59-dd9ecc325c66\n
         // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
@@ -185,11 +186,11 @@ function moveMp3(oldPath, newPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Format dest file path.
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'HB');
-        newPath = core_browser_2.asciify(newPath);
+        newPath = core_browser_1.asciify(newPath);
         // a Earth, Wind & Fire - Shining Star.mp3
         let fileName = path_1.default.basename(newPath);
         fileName = fileName.replace(/\.mp3$/i, '');
-        fileName = core_browser_2.idify(fileName);
+        fileName = core_browser_1.idify(fileName);
         fileName = `${fileName}.mp3`;
         // a-Fletcher-Henderson_Aint-she-sweet.mp3
         fileName = fileName.replace(/^a-/, '');
@@ -198,15 +199,15 @@ function moveMp3(oldPath, newPath, cmdObj) {
         media_manager_1.moveAsset(oldPath, tmpMp3Path, { copy: true });
         // Convert into m4a.
         const convertedPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
-        if (!convertedPath)
+        if (convertedPath == null)
             throw new Error('Error converting asset.');
         let metaData = media_manager_1.readAssetYaml(convertedPath);
-        if (!metaData)
+        if (metaData == null)
             throw new Error('Error reading asset yaml');
         metaData.metaType = 'composition';
         // Try to get the MusicBrainz recording ID.
         const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path);
-        if (musicbrainzRecordingId)
+        if (musicbrainzRecordingId != null)
             metaData.musicbrainzRecordingId = musicbrainzRecordingId;
         metaData.source = oldPath;
         // To get ID prefix
@@ -229,7 +230,7 @@ function moveReference(oldPath, cmdObj) {
             return;
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'QL');
         media_manager_1.moveAsset(oldPath, newPath, cmdObj);
-        if (cmdObj.dryRun)
+        if (cmdObj.dryRun != null && cmdObj.dryRun)
             return;
         yield media_manager_1.operations.initializeMetaYaml(newPath);
         const metaData = media_manager_1.readAssetYaml(newPath);
@@ -266,7 +267,7 @@ function moveFromArchive(oldPath, extension, cmdObj) {
             moveTex(oldPath, newPath, cmdObj);
         }
         else if (extension === 'mp3') {
-            moveMp3(oldPath, newPath, cmdObj);
+            yield moveMp3(oldPath, newPath, cmdObj);
         }
         else {
             media_manager_1.moveAsset(oldPath, newPath, cmdObj);
@@ -283,7 +284,7 @@ function move(oldPath, cmdObj) {
         // Had to be an absolute path (to check if its an inactive/archived folder)
         oldPath = path_1.default.resolve(oldPath);
         const extension = core_browser_1.getExtension(oldPath);
-        if (!extension)
+        if (extension == null)
             return;
         if (!media_manager_1.locationIndicator.isInArchive(oldPath)) {
             relocate(oldPath, extension, cmdObj);
@@ -302,24 +303,28 @@ function move(oldPath, cmdObj) {
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePaths, cmdObj) {
-    const opts = {
-        path: filePaths,
-        payload: cmdObj
-    };
-    if (cmdObj.extension) {
-        opts.regex = cmdObj.extension;
-        media_manager_1.walk(move, opts);
-    }
-    else if (cmdObj.regexp) {
-        opts.regex = new RegExp(cmdObj.regexp);
-        media_manager_1.walk(move, opts);
-    }
-    else {
-        media_manager_1.walk({
-            everyFile(relPath) {
-                move(relPath, {});
-            }
-        }, opts);
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        const opts = {
+            path: filePaths,
+            payload: cmdObj
+        };
+        if (cmdObj.extension != null) {
+            opts.regex = cmdObj.extension;
+            yield media_manager_1.walk(move, opts);
+        }
+        else if (cmdObj.regexp != null) {
+            opts.regex = new RegExp(cmdObj.regexp);
+            yield media_manager_1.walk(move, opts);
+        }
+        else {
+            yield media_manager_1.walk({
+                everyFile(relPath) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        yield move(relPath, {});
+                    });
+                }
+            }, opts);
+        }
+    });
 }
 module.exports = action;

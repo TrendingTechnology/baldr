@@ -12,7 +12,7 @@ import { isPresentation, isAsset } from './media-file-classes'
 /**
  * A function which is called during the directory structure walk.
  */
-type WalkFunc = (path: string, payload?: object) => any
+type WalkFunc = (path: string, payload?: object | any) => any
 
 /**
  * A collection of walk functions.

@@ -10,16 +10,18 @@ async function action (filePath: string): Promise<void> {
   })
 
   const extension = getExtension(filePath)
-  const dest = filePath.replace('.' + extension, '_no-metadata.' + extension)
+  if (extension != null) {
+    const dest = filePath.replace('.' + extension, '_no-metadata.' + extension)
 
-  cmd.startSpin()
-  cmd.exec([
-    'ffmpeg', '-i', filePath,
-    '-map_metadata', '-1',
-    '-c:v', 'copy', '-c:a', 'copy',
-    dest
-  ])
-  cmd.stopSpin()
+    cmd.startSpin()
+    await cmd.exec([
+      'ffmpeg', '-i', filePath,
+      '-map_metadata', '-1',
+      '-c:v', 'copy', '-c:a', 'copy',
+      dest
+    ])
+    cmd.stopSpin()
+  }
 }
 
 export = action

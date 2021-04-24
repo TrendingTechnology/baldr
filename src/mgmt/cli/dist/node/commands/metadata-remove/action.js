@@ -18,15 +18,17 @@ function action(filePath) {
             verbose: true
         });
         const extension = core_browser_1.getExtension(filePath);
-        const dest = filePath.replace('.' + extension, '_no-metadata.' + extension);
-        cmd.startSpin();
-        cmd.exec([
-            'ffmpeg', '-i', filePath,
-            '-map_metadata', '-1',
-            '-c:v', 'copy', '-c:a', 'copy',
-            dest
-        ]);
-        cmd.stopSpin();
+        if (extension != null) {
+            const dest = filePath.replace('.' + extension, '_no-metadata.' + extension);
+            cmd.startSpin();
+            yield cmd.exec([
+                'ffmpeg', '-i', filePath,
+                '-map_metadata', '-1',
+                '-c:v', 'copy', '-c:a', 'copy',
+                dest
+            ]);
+            cmd.stopSpin();
+        }
     });
 }
 module.exports = action;

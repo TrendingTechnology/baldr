@@ -7,7 +7,7 @@ import childProcess from 'child_process'
 import chalk from 'chalk'
 
 // Project packages.
-import { getExtension } from '@bldr/core-browser'
+import { getExtension, idify, asciify } from '@bldr/core-browser'
 import {
   moveAsset,
   writeYamlFile,
@@ -16,13 +16,16 @@ import {
   operations,
   locationIndicator
 } from '@bldr/media-manager'
-
 import { categoriesManagement } from '@bldr/media-categories'
-
 import { readFile, writeFile } from '@bldr/core-node'
-import { idify, asciify } from '@bldr/core-browser'
-
 import type { AssetType } from '@bldr/type-definitions'
+
+interface CmdObj {
+  regexp?: string
+  extension?: string
+  copy?: boolean
+  dryRun?: boolean
+}
 
 /**
  * Relocate a media asset inside the main media folder. Move some
@@ -31,7 +34,7 @@ import type { AssetType } from '@bldr/type-definitions'
  * @param {String} oldPath
  * @param {String} extension
  */
-function relocate (oldPath: string, extension: string, cmdObj: { [key: string]: any }) {
+function relocate (oldPath: string, extension: string, cmdObj: CmdObj): void {
   if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
     return
   }
@@ -79,8 +82,8 @@ const resolvedTexImages: { [key: string]: string } = {}
  *
  * @returns for example: BD/John-Coltrane.jpg
  */
-function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: string]: any }): string | undefined {
-  if (resolvedTexImages[baseName]) return resolvedTexImages[baseName]
+function moveTexImage (oldPathTex: string, baseName: string, cmdObj: CmdObj): string | undefined {
+  if (resolvedTexImages[baseName] != null) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
   const imageFolder = path.join(path.dirname(oldPathTex), 'Material')
   let ext
@@ -95,7 +98,7 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: str
   }
 
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material/John-Coltrane.jpg
-  if (oldPath) {
+  if (oldPath != null) {
     // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz
     const presParentDir = locationIndicator.getPresParentDir(oldPath)
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
@@ -124,7 +127,7 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: str
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function moveTex (oldPath: string, newPath: string, cmdObj: any) {
+function moveTex (oldPath: string, newPath: string, cmdObj: CmdObj): void {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
@@ -151,8 +154,10 @@ function moveTex (oldPath: string, newPath: string, cmdObj: any) {
     const newRelPath = moveTexImage(oldPath, oldRelPath, cmdObj)
     // TeX files are now in the TX subfolder
     // \grafik[0.8\linewidth]{../BD/Freight-Train-Blues.eps}
-    const newMarkup = oldMarkup.replace(oldRelPath, `../${newRelPath}`)
-    replacements.push([oldMarkup, newMarkup])
+    if (newRelPath != null) {
+      const newMarkup = oldMarkup.replace(oldRelPath, `../${newRelPath}`)
+      replacements.push([oldMarkup, newMarkup])
+    }
   }
 
   // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
@@ -173,7 +178,7 @@ function getMbrainzRecordingId (filePath: string): string | undefined {
     '/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' }
   )
 
-  if (process.stdout) {
+  if (process.stdout != null) {
     // There are mulitple recording ids:
     // 0585ec4a-487d-4944-bf59-dd9ecc325c66\n
     // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
@@ -183,7 +188,7 @@ function getMbrainzRecordingId (filePath: string): string | undefined {
   }
 }
 
-async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string]: any }) {
+async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promise<void> {
   // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
   newPath = asciify(newPath)
@@ -201,15 +206,15 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
 
   // Convert into m4a.
   const convertedPath = await operations.convertAsset(tmpMp3Path)
-  if (!convertedPath) throw new Error('Error converting asset.')
+  if (convertedPath == null) throw new Error('Error converting asset.')
 
   let metaData = readAssetYaml(convertedPath) as AssetType.FileFormat
-  if (!metaData) throw new Error('Error reading asset yaml')
+  if (metaData == null) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 
   // Try to get the MusicBrainz recording ID.
   const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
-  if (musicbrainzRecordingId) metaData.musicbrainzRecordingId = musicbrainzRecordingId
+  if (musicbrainzRecordingId != null) metaData.musicbrainzRecordingId = musicbrainzRecordingId
 
   metaData.source = oldPath
   // To get ID prefix
@@ -226,12 +231,12 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param cmdObj - See commander docs.
  */
-async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
+async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
   let newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
   moveAsset(oldPath, newPath, cmdObj)
-  if (cmdObj.dryRun) return
+  if (cmdObj.dryRun != null && cmdObj.dryRun) return
   await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
   if (metaData == null) return
@@ -250,7 +255,7 @@ async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
  * @param extension - The extension of the file.
  * @param cmdObj - See commander docs.
  */
-async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [key: string]: any }): Promise<void> {
+async function moveFromArchive (oldPath: string, extension: string, cmdObj: CmdObj): Promise<void> {
   if (oldPath.includes('Tonart.pdf')) {
     await moveReference(oldPath, cmdObj)
     return
@@ -262,7 +267,7 @@ async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [k
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
   } else if (extension === 'mp3') {
-    moveMp3(oldPath, newPath, cmdObj)
+    await moveMp3(oldPath, newPath, cmdObj)
   } else {
     moveAsset(oldPath, newPath, cmdObj)
   }
@@ -273,11 +278,11 @@ async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [k
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param cmdObj - See commander docs.
  */
-async function move (oldPath: string, cmdObj: any): Promise<void> {
+async function move (oldPath: string, cmdObj: CmdObj): Promise<void> {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
   const extension = getExtension(oldPath)
-  if (!extension) return
+  if (extension == null) return
   if (!locationIndicator.isInArchive(oldPath)) {
     relocate(oldPath, extension, cmdObj)
   } else {
@@ -293,21 +298,21 @@ async function move (oldPath: string, cmdObj: any): Promise<void> {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePaths: string[], cmdObj: { [key: string]: any }) {
+async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
   const opts: { [key: string]: any } = {
     path: filePaths,
     payload: cmdObj
   }
-  if (cmdObj.extension) {
+  if (cmdObj.extension != null) {
     opts.regex = cmdObj.extension
-    walk(move, opts)
-  } else if (cmdObj.regexp) {
+    await walk(move, opts)
+  } else if (cmdObj.regexp != null) {
     opts.regex = new RegExp(cmdObj.regexp)
-    walk(move, opts)
+    await walk(move, opts)
   } else {
-    walk({
-      everyFile (relPath) {
-        move(relPath, {})
+    await walk({
+      async everyFile (relPath) {
+        await move(relPath, {})
       }
     }, opts)
   }
