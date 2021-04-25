@@ -92,7 +92,7 @@ class DeepTitle {
      */
     findTitleTxt(filePath) {
         let parentDir;
-        if (fs_1.default.lstatSync(filePath).isDirectory()) {
+        if (fs_1.default.existsSync(filePath) && fs_1.default.lstatSync(filePath).isDirectory()) {
             parentDir = filePath;
         }
         else {

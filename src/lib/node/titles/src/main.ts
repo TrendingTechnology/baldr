@@ -137,7 +137,7 @@ export class DeepTitle {
    */
   private findTitleTxt (filePath: string): string[] {
     let parentDir: string
-    if (fs.lstatSync(filePath).isDirectory()) {
+    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
       parentDir = filePath
     } else {
       parentDir = path.dirname(filePath)
