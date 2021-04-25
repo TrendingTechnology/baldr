@@ -100,6 +100,7 @@ class DeepTitle {
         }
         const segments = parentDir.split(path_1.default.sep);
         const titlePaths = [];
+        let found = false;
         for (let index = segments.length; index >= 0; index--) {
             const pathSegments = segments.slice(0, index);
             // /media/05/20_Mensch-Zeit/10_Mozart/20_Biographie-Salzburg-Wien/title.txt
@@ -108,11 +109,15 @@ class DeepTitle {
             // /media/05/title.txt
             const titleTxt = this.generateTitleTxtPath(pathSegments);
             if (fs_1.default.existsSync(titleTxt)) {
+                found = true;
                 // Do not push “title.txt” in the parent working directory (without initial /).
                 // Push only absolute paths
                 if (titleTxt.indexOf(path_1.default.sep) === 0) {
                     titlePaths.push(titleTxt);
                 }
+            }
+            else if (found) {
+                break;
             }
         }
         return titlePaths.reverse();
