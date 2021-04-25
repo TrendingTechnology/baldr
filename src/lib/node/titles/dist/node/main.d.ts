@@ -79,16 +79,15 @@ export declare class DeepTitle {
      */
     private generateTitleTxtPath;
     /**
-     * Find the deepest title.txt or the title.txt file with the shortest path of
-     * a given path.
+     * Find all title.txt files (from the deepest to the shallowest title.txt)
      *
      * @param filePath A file path from which to descend into the folder
      *   structure.
      *
-     * @returns The deepest title.txt or the title.txt file with the shortest
-     *   path. `/var/data/baldr/media/05/title.txt`
+     * @returns An array with absolute file path. First the deepest title.txt
+     *   file. Last the shallowest title.txt file.
      */
-    private findDeepestTitleTxt;
+    private findTitleTxt;
     /**
      * Read all `title.txt` files. Descend to all parent folders which contain
      * a `title.txt` file.
