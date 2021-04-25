@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findMediaUris = exports.makeMediaUris = exports.MediaUri = void 0;
+exports.MediaUriCache = exports.findMediaUris = exports.makeMediaUris = exports.MediaUri = void 0;
 /**
  * Uniform Resource Identifier for media files, for example `id:Haydn`, or
  * `http://example.com/Haydn_Joseph.jpg`. An optional fragment (`#1-7`) (subset
@@ -109,3 +109,27 @@ function findMediaUris(data, uris) {
     }
 }
 exports.findMediaUris = findMediaUris;
+/**
+ * Media assets have two URIs: uuid:... and id:...
+ */
+class MediaUriCache {
+    constructor() {
+        this.ids = {};
+        this.uuids = {};
+    }
+    addPair(id, uuid) {
+        this.ids[id] = uuid;
+        this.uuids[uuid] = id;
+    }
+    getIdFromUuid(uuid) {
+        if (this.uuids[uuid] != null) {
+            return this.uuids[uuid];
+        }
+    }
+    getUuidFromId(id) {
+        if (this.ids[id] != null) {
+            return this.ids[id];
+        }
+    }
+}
+exports.MediaUriCache = MediaUriCache;

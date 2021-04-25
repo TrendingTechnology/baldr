@@ -59,3 +59,14 @@ export declare class MediaUri {
  */
 export declare function makeMediaUris(uris: string | string[] | Set<string>): MediaUri[];
 export declare function findMediaUris(data: any, uris: Set<string>): void;
+/**
+ * Media assets have two URIs: uuid:... and id:...
+ */
+export declare class MediaUriCache {
+    private ids;
+    private uuids;
+    constructor();
+    addPair(id: string, uuid: string): void;
+    getIdFromUuid(uuid: string): string | undefined;
+    getUuidFromId(id: string): string | undefined;
+}

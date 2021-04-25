@@ -268,7 +268,7 @@ export function removeDuplicatesFromArray (input: string[]): string[] {
  *
  * @returns A new set.
  */
- export function makeSet (values: string | string[] | Set<string>): Set<string> {
+export function makeSet (values: string | string[] | Set<string>): Set<string> {
   if (typeof values === 'string') {
     return new Set([values])
   } else if (Array.isArray(values)) {

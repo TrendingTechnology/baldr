@@ -75,22 +75,18 @@ export class ClientMediaAsset {
   }
 
   /**
-   * The URI using the `id` authority.
-   *
-   * @returns {String}
+   * The URI using the `id` scheme.
    */
-  // get uriId () {
-  //   return `id:${this.id}`
-  // }
+  get id (): string {
+    return this.meta.id
+  }
 
   /**
-   * The URI using the `uuid` authority.
-   *
-   * @returns {String}
+   * The URI using the `uuid` scheme.
    */
-  // get uriUuid () {
-  //   return `uuid:${this.uuid}`
-  // }
+  get uuid (): string {
+    return this.meta.uuid
+  }
 
   /**
    * Store the file name from a HTTP URL.

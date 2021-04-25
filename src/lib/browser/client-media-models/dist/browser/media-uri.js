@@ -103,3 +103,26 @@ export function findMediaUris(data, uris) {
         }
     }
 }
+/**
+ * Media assets have two URIs: uuid:... and id:...
+ */
+export class MediaUriCache {
+    constructor() {
+        this.ids = {};
+        this.uuids = {};
+    }
+    addPair(id, uuid) {
+        this.ids[id] = uuid;
+        this.uuids[uuid] = id;
+    }
+    getIdFromUuid(uuid) {
+        if (this.uuids[uuid] != null) {
+            return this.uuids[uuid];
+        }
+    }
+    getUuidFromId(id) {
+        if (this.ids[id] != null) {
+            return this.ids[id];
+        }
+    }
+}

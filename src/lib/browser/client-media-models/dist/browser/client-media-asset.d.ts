@@ -47,15 +47,13 @@ export declare class ClientMediaAsset {
      */
     constructor(uri: string, httpUrl: string, meta: AssetType.RestApiRaw);
     /**
-     * The URI using the `id` authority.
-     *
-     * @returns {String}
+     * The URI using the `id` scheme.
      */
+    get id(): string;
     /**
-     * The URI using the `uuid` authority.
-     *
-     * @returns {String}
+     * The URI using the `uuid` scheme.
      */
+    get uuid(): string;
     /**
      * Store the file name from a HTTP URL.
      *

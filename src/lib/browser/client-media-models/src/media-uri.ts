@@ -135,3 +135,33 @@ export function findMediaUris (data: any, uris: Set<string>): void {
     }
   }
 }
+
+/**
+ * Media assets have two URIs: uuid:... and id:...
+ */
+export class MediaUriCache {
+  private ids: { [id: string]: string }
+  private uuids: { [uiid: string]: string }
+
+  constructor () {
+    this.ids = {}
+    this.uuids = {}
+  }
+
+  addPair (id: string, uuid: string): void {
+    this.ids[id] = uuid
+    this.uuids[uuid] = id
+  }
+
+  getIdFromUuid (uuid: string): string | undefined {
+    if (this.uuids[uuid] != null) {
+      return this.uuids[uuid]
+    }
+  }
+
+  getUuidFromId (id: string): string | undefined {
+    if (this.ids[id] != null) {
+      return this.ids[id]
+    }
+  }
+}

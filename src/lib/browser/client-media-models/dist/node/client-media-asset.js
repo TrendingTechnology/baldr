@@ -46,21 +46,17 @@ class ClientMediaAsset {
         this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.meta.extension);
     }
     /**
-     * The URI using the `id` authority.
-     *
-     * @returns {String}
+     * The URI using the `id` scheme.
      */
-    // get uriId () {
-    //   return `id:${this.id}`
-    // }
+    get id() {
+        return this.meta.id;
+    }
     /**
-     * The URI using the `uuid` authority.
-     *
-     * @returns {String}
+     * The URI using the `uuid` scheme.
      */
-    // get uriUuid () {
-    //   return `uuid:${this.uuid}`
-    // }
+    get uuid() {
+        return this.meta.uuid;
+    }
     /**
      * Store the file name from a HTTP URL.
      *
