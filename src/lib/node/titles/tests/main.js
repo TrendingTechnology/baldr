@@ -22,5 +22,6 @@ describe('Package “@bldr/titles”', function () {
   it('11/30_Politik/10_Lieder/10_Arbeiterlied-Weber/', function () {
     const deep = new DeepTitle('/home/jf/schule-media/11/30_Politik/10_Lieder/10_Arbeiterlied-Weber/')
     assert.strictEqual(deep.id, 'Arbeiterlied-Weber')
+    assert.strictEqual(deep.grade, 11)
   })
 })

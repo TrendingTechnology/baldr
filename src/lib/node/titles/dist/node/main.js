@@ -108,7 +108,11 @@ class DeepTitle {
             // /media/05/title.txt
             const titleTxt = this.generateTitleTxtPath(pathSegments);
             if (fs_1.default.existsSync(titleTxt)) {
-                titlePaths.push(titleTxt);
+                // Do not push “title.txt” in the parent working directory (without initial /).
+                // Push only absolute paths
+                if (titleTxt.indexOf(path_1.default.sep) === 0) {
+                    titlePaths.push(titleTxt);
+                }
             }
         }
         return titlePaths.reverse();
@@ -123,6 +127,7 @@ class DeepTitle {
         // We need absolute paths. The cli gives us relative paths.
         filePath = path_1.default.resolve(filePath);
         const titleTxtPaths = this.findTitleTxt(filePath);
+        console.log(titleTxtPaths);
         let level = 1;
         for (const titleTxtPath of titleTxtPaths) {
             const folderTitle = this.readTitleTxt(titleTxtPath);
