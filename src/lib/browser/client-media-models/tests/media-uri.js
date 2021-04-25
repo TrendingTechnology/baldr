@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const { MediaUri } = require('../dist/node/main.js')
+const { MediaUri, findMediaUris } = require('../dist/node/main.js')
 
 describe('Class “MediaUri”', function () {
   it('new MediaUri(\'id:Beethoven_Ludwig-van#-4\')', function () {
@@ -23,6 +23,27 @@ describe('Class “MediaUri”', function () {
 
   it('new MediaUri(\'xxx:xxx\')', function () {
     assert.throws(() => new MediaUri('xxx:xxx'))
+  })
+
+})
+
+describe('Function “findMediaUris()”', function () {
+  it('In an array', function () {
+    uris = new Set()
+    findMediaUris(['id:test'], uris)
+    assert.strictEqual(uris.size, 1)
+  })
+
+  it('In an object', function () {
+    uris = new Set()
+    findMediaUris({ id: 'id:test', child: { id: 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
+    assert.strictEqual(uris.size, 2)
+  })
+
+  it('invalid', function () {
+    uris = new Set()
+    findMediaUris({ id: 'idtest', child: { id: 'uuid c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
+    assert.strictEqual(uris.size, 0)
   })
 
 })

@@ -41,6 +41,14 @@ export declare class MediaUri {
      * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
      */
     constructor(uri: string);
+    /**
+     * Check if the given media URI is a valid media URI.
+     *
+     * @param uri A media URI.
+     *
+     * @returns True if the given URI is a valid media URI.
+     */
+    static check(uri: string): boolean;
 }
 /**
  * Make Media URI objects for a single URI or an array of URIs.
@@ -49,4 +57,5 @@ export declare class MediaUri {
  *
  * @returns An array of media URIs objects.
  */
-export declare function makeMediaUris(uris: string | string[]): MediaUri[];
+export declare function makeMediaUris(uris: string | string[] | Set<string>): MediaUri[];
+export declare function findMediaUris(data: any, uris: Set<string>): void;

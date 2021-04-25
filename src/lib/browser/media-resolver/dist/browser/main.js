@@ -8,28 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { makeHttpRequestInstance } from '@bldr/http-request';
-import { ClientMediaAsset, makeMediaUris } from '@bldr/client-media-models';
-import { removeDuplicatesFromArray } from '@bldr/core-browser';
+import { ClientMediaAsset, MediaUri, findMediaUris } from '@bldr/client-media-models';
+import { makeSet } from '@bldr/core-browser';
 import config from '@bldr/config';
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
-/**
- * A `assetSpec` can be:
- *
- * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` which has to be resolved.
- * 2. A already resolved HTTP URL, for example
- *    `https://example.com/Josef_Haydn.jg`
- * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
- *
- * @typedef assetSpec
- * @type {(String|File)}
- */
-/**
- * An array of `assetSpec` or a single `assetSpec`
- *
- * @typedef assetSpecs
- * @type {(assetSpec[]|assetSpec)}
- */
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Resolve a local file. The local files have to dropped
@@ -38,8 +20,7 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/me
  */
 export class Resolver {
     constructor() {
-        this.cache_ = {};
-        this.linkedUris = [];
+        this.cache = {};
     }
     /**
      * @param field - For example `id` or `uuid`
@@ -49,13 +30,14 @@ export class Resolver {
      *
      * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
      */
-    queryMediaServer(mediaUri) {
+    queryMediaServer(uri) {
         return __awaiter(this, void 0, void 0, function* () {
+            const mediaUri = new MediaUri(uri);
             const field = mediaUri.scheme;
             const search = mediaUri.authority;
             const cacheKey = mediaUri.uriWithoutFragment;
-            if (this.cache_[cacheKey] != null) {
-                return this.cache_[cacheKey];
+            if (this.cache[cacheKey] != null) {
+                return this.cache[cacheKey];
             }
             const response = yield httpRequest.request({
                 url: 'query',
@@ -71,7 +53,7 @@ export class Resolver {
                 throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`);
             }
             const rawRestApiAsset = response.data;
-            this.cache_[cacheKey] = rawRestApiAsset;
+            this.cache[cacheKey] = rawRestApiAsset;
             return rawRestApiAsset;
         });
     }
@@ -197,49 +179,37 @@ export class Resolver {
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
      */
-    resolveSingle(mediaUri) {
+    resolveSingle(uri) {
         return __awaiter(this, void 0, void 0, function* () {
-            const raw = yield this.queryMediaServer(mediaUri);
+            const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
-            return new ClientMediaAsset(mediaUri.raw, httpUrl, raw);
+            return new ClientMediaAsset(uri, httpUrl, raw);
         });
     }
     /**
-     * Resolve one or more remote media files by URIs, HTTP URLs or
-     * local media files by their file objects.
+     * Resolve one or more remote media files by URIs.
      *
-     * Linked media URIs are resolve in a second step (not recursive). Linked
-     * media assets are not allowed to have linked media URIs.
+     * Linked media URIs are resolved recursively.
      *
      * @param uris - A single media URI or an array of media URIs.
      */
     resolve(uris) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (typeof uris === 'string') {
-                uris = [uris];
-            }
-            uris = removeDuplicatesFromArray(uris);
-            const mediaUris = makeMediaUris(uris);
+            const mediaUris = makeSet(uris);
+            const assets = [];
             // Resolve the main media URIs
-            const promises = [];
-            for (const mediaUri of mediaUris) {
-                promises.push(this.resolveSingle(mediaUri));
+            while (mediaUris.size > 0) {
+                const promises = [];
+                for (const mediaUri of mediaUris) {
+                    promises.push(this.resolveSingle(mediaUri));
+                }
+                for (const asset of yield Promise.all(promises)) {
+                    findMediaUris(asset.meta, mediaUris);
+                    assets.push(asset);
+                    mediaUris.delete(asset.uri.raw);
+                }
             }
-            const mainAssets = yield Promise.all(promises);
-            // let linkedAssets: string[] = []
-            // // @todo make this recursive: For example master person -> main image
-            // // famous pieces -> audio -> cover
-            // // Resolve the linked media URIs.
-            // if (this.linkedUris.length) {
-            //   promises = []
-            //   for (const mediaUri of this.linkedUris) {
-            //     promises.push(this.resolveSingle_(mediaUri))
-            //   }
-            //   linkedAssets = await Promise.all(promises)
-            // }
-            // const assets = mainAssets.concat(linkedAssets)
-            // if (assets) return assets
-            return mainAssets;
+            return assets;
         });
     }
 }

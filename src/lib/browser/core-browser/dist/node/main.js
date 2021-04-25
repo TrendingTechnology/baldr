@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**
@@ -154,6 +154,8 @@ function sortObjectsByProperty(property) {
 }
 exports.sortObjectsByProperty = sortObjectsByProperty;
 /**
+ * TODO: Remove use class MediaUri()
+ *
  * Check if the input is a valid URI. Prefix with `id:` if necessary.
  *
  * @param uri - The URI to validate.
@@ -222,6 +224,8 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
 }
 exports.splitHtmlIntoChunks = splitHtmlIntoChunks;
 /**
+ * TODO: Remove -> use Set()
+ *
  * Remove duplicates from an array. A new array is created and returned.
  *
  * @param input - An array with possible duplicate entries.
@@ -238,3 +242,20 @@ function removeDuplicatesFromArray(input) {
     return output;
 }
 exports.removeDuplicatesFromArray = removeDuplicatesFromArray;
+/**
+ * Make a set of strings.
+ *
+ * @param values - Some strings to add to the set
+ *
+ * @returns A new set.
+ */
+function makeSet(values) {
+    if (typeof values === 'string') {
+        return new Set([values]);
+    }
+    else if (Array.isArray(values)) {
+        return new Set(values);
+    }
+    return values;
+}
+exports.makeSet = makeSet;

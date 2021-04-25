@@ -28,6 +28,20 @@ export class MediaUri {
             this.uriWithoutFragment = uri;
         }
     }
+    /**
+     * Check if the given media URI is a valid media URI.
+     *
+     * @param uri A media URI.
+     *
+     * @returns True if the given URI is a valid media URI.
+     */
+    static check(uri) {
+        const matches = MediaUri.regExp.exec(uri);
+        if (matches != null) {
+            return true;
+        }
+        return false;
+    }
 }
 MediaUri.schemes = ['id', 'uuid'];
 MediaUri.regExpAuthority = 'a-zA-Z0-9-_';
@@ -54,12 +68,38 @@ MediaUri.regExp = new RegExp('(?<uri>' +
  * @returns An array of media URIs objects.
  */
 export function makeMediaUris(uris) {
+    let urisNormalized;
     if (typeof uris === 'string') {
-        uris = [uris];
+        urisNormalized = new Set([uris]);
+    }
+    else if (Array.isArray(uris)) {
+        urisNormalized = new Set(uris);
+    }
+    else {
+        urisNormalized = uris;
     }
     const mediaUris = [];
-    for (const uri of uris) {
+    for (const uri of urisNormalized) {
         mediaUris.push(new MediaUri(uri));
     }
     return mediaUris;
+}
+export function findMediaUris(data, uris) {
+    // Array
+    if (Array.isArray(data)) {
+        for (let i = 0; i < data.length; i++) {
+            findMediaUris(data[i], uris);
+        }
+        // Object
+    }
+    else if (typeof data === 'object') {
+        for (const prop in data) {
+            findMediaUris(data[prop], uris);
+        }
+    }
+    else if (typeof data === 'string') {
+        if (MediaUri.check(data)) {
+            uris.add(data);
+        }
+    }
 }

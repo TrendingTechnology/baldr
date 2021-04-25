@@ -137,6 +137,8 @@ export function sortObjectsByProperty(property) {
     };
 }
 /**
+ * TODO: Remove use class MediaUri()
+ *
  * Check if the input is a valid URI. Prefix with `id:` if necessary.
  *
  * @param uri - The URI to validate.
@@ -203,6 +205,8 @@ export function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     return htmlChunks;
 }
 /**
+ * TODO: Remove -> use Set()
+ *
  * Remove duplicates from an array. A new array is created and returned.
  *
  * @param input - An array with possible duplicate entries.
@@ -217,4 +221,20 @@ export function removeDuplicatesFromArray(input) {
         }
     }
     return output;
+}
+/**
+ * Make a set of strings.
+ *
+ * @param values - Some strings to add to the set
+ *
+ * @returns A new set.
+ */
+export function makeSet(values) {
+    if (typeof values === 'string') {
+        return new Set([values]);
+    }
+    else if (Array.isArray(values)) {
+        return new Set(values);
+    }
+    return values;
 }

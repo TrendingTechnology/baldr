@@ -1,24 +1,6 @@
 import { ClientMediaAsset } from '@bldr/client-media-models';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 /**
- * A `assetSpec` can be:
- *
- * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` which has to be resolved.
- * 2. A already resolved HTTP URL, for example
- *    `https://example.com/Josef_Haydn.jg`
- * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
- *
- * @typedef assetSpec
- * @type {(String|File)}
- */
-/**
- * An array of `assetSpec` or a single `assetSpec`
- *
- * @typedef assetSpecs
- * @type {(assetSpec[]|assetSpec)}
- */
-/**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Resolve a local file. The local files have to dropped
  * in the application. Create media elements for each media file. Create samples
@@ -29,13 +11,7 @@ export declare class Resolver {
      * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.
      */
-    private cache_;
-    /**
-     * Store for linked URIs (URIs inside media assets). They are collected
-     * and resolved in a second step after the resolution of the main
-     * media assets.
-     */
-    private readonly linkedUris;
+    private cache;
     constructor();
     /**
      * @param field - For example `id` or `uuid`
@@ -80,13 +56,11 @@ export declare class Resolver {
      */
     private resolveSingle;
     /**
-     * Resolve one or more remote media files by URIs, HTTP URLs or
-     * local media files by their file objects.
+     * Resolve one or more remote media files by URIs.
      *
-     * Linked media URIs are resolve in a second step (not recursive). Linked
-     * media assets are not allowed to have linked media URIs.
+     * Linked media URIs are resolved recursively.
      *
      * @param uris - A single media URI or an array of media URIs.
      */
-    resolve(uris: string | string[]): Promise<ClientMediaAsset[]>;
+    resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
 }

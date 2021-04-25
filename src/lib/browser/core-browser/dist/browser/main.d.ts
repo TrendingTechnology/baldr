@@ -73,6 +73,8 @@ export declare function sortObjectsByProperty(property: string): (a: {
     [key: string]: any;
 }) => any;
 /**
+ * TODO: Remove use class MediaUri()
+ *
  * Check if the input is a valid URI. Prefix with `id:` if necessary.
  *
  * @param uri - The URI to validate.
@@ -89,6 +91,8 @@ export declare function validateUri(uri: string): string;
  */
 export declare function splitHtmlIntoChunks(htmlString: string, charactersOnSlide: number): string[];
 /**
+ * TODO: Remove -> use Set()
+ *
  * Remove duplicates from an array. A new array is created and returned.
  *
  * @param input - An array with possible duplicate entries.
@@ -96,3 +100,11 @@ export declare function splitHtmlIntoChunks(htmlString: string, charactersOnSlid
  * @returns A new array with no duplicates.
  */
 export declare function removeDuplicatesFromArray(input: string[]): string[];
+/**
+ * Make a set of strings.
+ *
+ * @param values - Some strings to add to the set
+ *
+ * @returns A new set.
+ */
+export declare function makeSet(values: string | string[] | Set<string>): Set<string>;

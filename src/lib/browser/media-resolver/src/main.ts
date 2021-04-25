@@ -1,29 +1,9 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAsset, MediaUri, makeMediaUris } from '@bldr/client-media-models'
-import { removeDuplicatesFromArray } from '@bldr/core-browser'
+import { ClientMediaAsset, MediaUri, makeMediaUris, findMediaUris } from '@bldr/client-media-models'
+import { removeDuplicatesFromArray, makeSet } from '@bldr/core-browser'
 import config from '@bldr/config'
 import { AssetType } from '@bldr/type-definitions'
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
-
-/**
- * A `assetSpec` can be:
- *
- * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` which has to be resolved.
- * 2. A already resolved HTTP URL, for example
- *    `https://example.com/Josef_Haydn.jg`
- * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
- *
- * @typedef assetSpec
- * @type {(String|File)}
- */
-
-/**
- * An array of `assetSpec` or a single `assetSpec`
- *
- * @typedef assetSpecs
- * @type {(assetSpec[]|assetSpec)}
- */
 
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -36,18 +16,10 @@ export class Resolver {
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
    */
-  private cache_: { [uri: string]: AssetType.RestApiRaw }
+  private cache: { [uri: string]: AssetType.RestApiRaw }
 
-  /**
-   * Store for linked URIs (URIs inside media assets). They are collected
-   * and resolved in a second step after the resolution of the main
-   * media assets.
-   */
-  private readonly linkedUris: string[]
   constructor () {
-    this.cache_ = {}
-
-    this.linkedUris = []
+    this.cache = {}
   }
 
   /**
@@ -58,12 +30,13 @@ export class Resolver {
    *
    * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
    */
-  private async queryMediaServer (mediaUri: MediaUri): Promise<AssetType.RestApiRaw> {
+  private async queryMediaServer (uri: string): Promise<AssetType.RestApiRaw> {
+    const mediaUri = new MediaUri(uri)
     const field = mediaUri.scheme
     const search = mediaUri.authority
     const cacheKey = mediaUri.uriWithoutFragment
-    if (this.cache_[cacheKey] != null) {
-      return this.cache_[cacheKey]
+    if (this.cache[cacheKey] != null) {
+      return this.cache[cacheKey]
     }
     const response = await httpRequest.request({
       url: 'query',
@@ -79,7 +52,7 @@ export class Resolver {
       throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
     }
     const rawRestApiAsset: AssetType.RestApiRaw = response.data
-    this.cache_[cacheKey] = rawRestApiAsset
+    this.cache[cacheKey] = rawRestApiAsset
     return rawRestApiAsset
   }
 
@@ -213,48 +186,34 @@ export class Resolver {
    * Resolve (get the HTTP URL and some meta informations) of a remote media
    * file by its URI.
    */
-  private async resolveSingle (mediaUri: MediaUri): Promise<ClientMediaAsset> {
-    const raw = await this.queryMediaServer(mediaUri)
+  private async resolveSingle (uri: string): Promise<ClientMediaAsset> {
+    const raw = await this.queryMediaServer(uri)
     const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-    return new ClientMediaAsset(mediaUri.raw, httpUrl, raw)
+    return new ClientMediaAsset(uri, httpUrl, raw)
   }
 
   /**
-   * Resolve one or more remote media files by URIs, HTTP URLs or
-   * local media files by their file objects.
+   * Resolve one or more remote media files by URIs.
    *
-   * Linked media URIs are resolve in a second step (not recursive). Linked
-   * media assets are not allowed to have linked media URIs.
+   * Linked media URIs are resolved recursively.
    *
    * @param uris - A single media URI or an array of media URIs.
    */
-  async resolve (uris: string | string[]): Promise<ClientMediaAsset[]> {
-    if (typeof uris === 'string') {
-      uris = [uris]
-    }
-    uris = removeDuplicatesFromArray(uris)
-
-    const mediaUris = makeMediaUris(uris)
-
+  async resolve (uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]> {
+    const mediaUris = makeSet(uris)
+    const assets: ClientMediaAsset[] = []
     // Resolve the main media URIs
-    const promises = []
-    for (const mediaUri of mediaUris) {
-      promises.push(this.resolveSingle(mediaUri))
+    while (mediaUris.size > 0) {
+      const promises = []
+      for (const mediaUri of mediaUris) {
+        promises.push(this.resolveSingle(mediaUri))
+      }
+      for (const asset of await Promise.all<ClientMediaAsset>(promises)) {
+        findMediaUris(asset.meta, mediaUris)
+        assets.push(asset)
+        mediaUris.delete(asset.uri.raw)
+      }
     }
-    const mainAssets: ClientMediaAsset[] = await Promise.all<ClientMediaAsset>(promises)
-    // let linkedAssets: string[] = []
-    // // @todo make this recursive: For example master person -> main image
-    // // famous pieces -> audio -> cover
-    // // Resolve the linked media URIs.
-    // if (this.linkedUris.length) {
-    //   promises = []
-    //   for (const mediaUri of this.linkedUris) {
-    //     promises.push(this.resolveSingle_(mediaUri))
-    //   }
-    //   linkedAssets = await Promise.all(promises)
-    // }
-    // const assets = mainAssets.concat(linkedAssets)
-    // if (assets) return assets
-    return mainAssets
+    return assets
   }
 }
