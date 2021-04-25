@@ -20,6 +20,7 @@ async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<v
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
 
+  // eslint-disable-next-line
   const packageJson = require(path.join(appPath, 'package.json'))
 
   cmd.log(`${appName}: Install npm dependencies.`)
@@ -32,8 +33,9 @@ async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<v
   cmd.log(`${appName}: remove old .deb package.`)
   await cmd.exec(['apt', '-y', 'remove', `baldr-${appName}`])
 
+  const version: string = packageJson.version
   cmd.log(`${appName}: install the .deb package.`)
-  await cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`)])
+  await cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${version}_amd64.deb`)])
 
   cmd.stopSpin()
 }
@@ -49,7 +51,7 @@ async function action (appName: string): Promise<void> {
   cmd.checkRoot()
   cmd.startSpin()
   try {
-    if (!appName) {
+    if (appName == null) {
       for (const appName of appNames) {
         await buildElectronApp(cmd, appName)
       }

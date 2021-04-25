@@ -12,7 +12,7 @@ import { DeepTitle } from '@bldr/titles'
 import { convertToYaml } from '@bldr/yaml'
 import { getPdfPageCount, readFile, writeFile } from '@bldr/core-node'
 
-function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number) {
+async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number): Promise<void> {
   const cwd = path.dirname(tmpPdfFile)
   let counterSuffix = ''
   if (pageCount > 1) {
@@ -48,13 +48,10 @@ function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: num
   // Move to LT (Lückentext) subdir.
   const newPath = locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
   moveAsset(svgFilePath, newPath)
-  operations.normalizeMediaAsset(newPath, { wikidata: false })
+  await operations.normalizeMediaAsset(newPath, { wikidata: false })
 }
 
-/**
- * @param {String} filePath
- */
-function generateClozeSvg (filePath: string) {
+async function generateClozeSvg (filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
   console.log(filePath)
   const cwd = path.dirname(filePath)
@@ -78,7 +75,7 @@ function generateClozeSvg (filePath: string) {
       // p2: angabe,querformat
       let args: string[] = []
       let isSolutionSet = false
-      if (p2) {
+      if (p2 != null) {
         args = p2.split(',')
         for (let index = 0; index < args.length; index++) {
           if (args[index] === 'angabe') {
@@ -112,7 +109,7 @@ function generateClozeSvg (filePath: string) {
   const pageCount = getPdfPageCount(tmpPdfFile)
 
   for (let index = 1; index <= pageCount; index++) {
-    generateOneClozeSvg(tmpPdfFile, pageCount, index)
+    await generateOneClozeSvg(tmpPdfFile, pageCount, index)
   }
   fs.unlinkSync(tmpTexFile)
   fs.unlinkSync(tmpPdfFile)
@@ -121,11 +118,11 @@ function generateClozeSvg (filePath: string) {
 /**
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
-function action (filePath: string) {
-  walk(
+async function action (filePath: string): Promise<void> {
+  await walk(
     generateClozeSvg,
-    { regex: new RegExp('.*\.tex$'), path: filePath }
-  ) // eslint-disable-line
+    { regex: new RegExp('.*\.tex$'), path: filePath } // eslint-disable-line
+  )
 }
 
 module.exports = action

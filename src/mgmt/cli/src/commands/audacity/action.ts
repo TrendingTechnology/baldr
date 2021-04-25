@@ -30,10 +30,10 @@ import { asciify } from '@bldr/core-browser'
  *   start_time: 13.846082
  * ```
  *
- * @param {String} filePath - The file path of the Audacity’s text mark
+ * @param filePath - The file path of the Audacity’s text mark
  *   file.
  */
-function action (filePath: string) {
+function action (filePath: string): void {
   const text = readFile(filePath)
   console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`)
   console.log(text)
@@ -50,7 +50,7 @@ function action (filePath: string) {
       //  for example: 1.488171
       let endTime: number | undefined = Number(match[2])
       let title
-      if (!match[3]) {
+      if (match[3] == null) {
         title = String(counter)
       } else {
         // for example: Sample 1
@@ -67,16 +67,17 @@ function action (filePath: string) {
         title,
         startTime: startTime
       }
-      if (endTime) sample.endTime = endTime
+      if (endTime == null) sample.endTime = endTime
       samples.push(sample)
     }
     counter += 1
   }
-  for (const index in samples) {
-    const sample = samples[index]
-    if (!sample.endTime && parseInt(index) < samples.length - 1) {
-      sample.endTime = samples[parseInt(index) + 1].startTime
+  let index = 0
+  for (const sample of samples) {
+    if (sample.endTime == null && index < samples.length - 1) {
+      sample.endTime = samples[index + 1].startTime
     }
+    index++
   }
   const dest = `${filePath}.yml`
   console.log(`The content of the destination file “${chalk.green(dest)}”:\n`)

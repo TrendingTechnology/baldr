@@ -55,7 +55,7 @@ async function action (appName: string): Promise<void> {
   const cmd = new CommandRunner()
   cmd.startSpin()
   try {
-    if (!appName) {
+    if (appName == null) {
       for (const appName of appNames) {
         await buildApp(cmd, appName)
       }

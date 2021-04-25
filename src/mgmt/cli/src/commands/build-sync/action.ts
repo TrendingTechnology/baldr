@@ -2,10 +2,7 @@
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
 
-/**
- *
- */
-async function action () {
+async function action (): Promise<void> {
   const cmd = new CommandRunner()
   cmd.checkRoot()
   cmd.startSpin()
