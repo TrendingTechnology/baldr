@@ -127,7 +127,6 @@ class DeepTitle {
         // We need absolute paths. The cli gives us relative paths.
         filePath = path_1.default.resolve(filePath);
         const titleTxtPaths = this.findTitleTxt(filePath);
-        console.log(titleTxtPaths);
         let level = 1;
         for (const titleTxtPath of titleTxtPaths) {
             const folderTitle = this.readTitleTxt(titleTxtPath);
