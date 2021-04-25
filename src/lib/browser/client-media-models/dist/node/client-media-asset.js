@@ -28,25 +28,22 @@ const media_uri_1 = require("./media-uri");
  */
 class ClientMediaAssetNg {
     /**
-     * @param raw - A raw javascript object read from the YAML files
-     * (`*.extension.yml`)
+     * @param meta - A raw javascript object read from the Rest API
      */
-    constructor(raw) {
-        this.raw = raw;
-        if (raw.uri == null) {
-            throw new Error('Every client media asset needs a uri property.');
-        }
-        this.uri = new media_uri_1.MediaUri(this.raw.uri);
-        if (this.raw.extension == null && this.raw.filename != null) {
-            const extension = core_browser_1.getExtension(this.raw.filename);
+    constructor(uri, httpUrl, meta) {
+        this.uri = new media_uri_1.MediaUri(uri);
+        this.httpUrl = httpUrl;
+        this.meta = meta;
+        if (this.meta.extension == null && this.meta.filename != null) {
+            const extension = core_browser_1.getExtension(this.meta.filename);
             if (extension != null) {
-                this.raw.extension = extension;
+                this.meta.extension = extension;
             }
         }
-        if (this.raw.extension == null) {
+        if (this.meta.extension == null) {
             throw Error('The client media assets needs a extension');
         }
-        this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.raw.extension);
+        this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.meta.extension);
     }
     /**
      * The URI using the `id` authority.
@@ -83,11 +80,11 @@ class ClientMediaAssetNg {
     //   }
     // }
     get titleSafe() {
-        if (this.raw.title != null)
-            return this.raw.title;
-        if (this.raw.filename != null)
-            return this.raw.filename;
-        return this.raw.uri;
+        if (this.meta.title != null)
+            return this.meta.title;
+        if (this.meta.filename != null)
+            return this.meta.filename;
+        return this.uri.raw;
     }
     /**
      * True if the media file is playable, for example an audio or a video file.

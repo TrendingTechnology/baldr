@@ -28,7 +28,7 @@ export declare class HttpRequest {
     /**
      * The base URL of the REST endpoint.
      */
-    private readonly baseUrl;
+    readonly baseUrl: string;
     /**
      * An Axios instance.
      *

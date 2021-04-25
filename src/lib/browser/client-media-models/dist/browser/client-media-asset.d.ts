@@ -27,7 +27,7 @@ export declare class ClientMediaAssetNg {
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
      */
-    raw: AssetType.FileFormat;
+    meta: AssetType.RestApiRaw;
     uri: MediaUri;
     /**
      * The keyboard shortcut to play the media
@@ -41,11 +41,11 @@ export declare class ClientMediaAssetNg {
      * The media type, for example `image`, `audio` or `video`.
      */
     mimeType: string;
+    httpUrl: string;
     /**
-     * @param raw - A raw javascript object read from the YAML files
-     * (`*.extension.yml`)
+     * @param meta - A raw javascript object read from the Rest API
      */
-    constructor(raw: AssetType.FileFormat);
+    constructor(uri: string, httpUrl: string, meta: AssetType.RestApiRaw);
     /**
      * The URI using the `id` authority.
      *

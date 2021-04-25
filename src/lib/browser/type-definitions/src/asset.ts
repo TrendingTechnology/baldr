@@ -64,6 +64,7 @@ export interface RestApiRaw {
   timeModified: number
   uuid: string
   id: string
+  [property: string]: any
 }
 
 /**
