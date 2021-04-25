@@ -105,7 +105,7 @@ export class DeepTitle {
     if (titles.length > 0) {
       folderTitle.title = titles[0]
     }
-    if (titles.length > 1 && titles[1] != null) {
+    if (titles.length > 1 && titles[1] != null && titles[1] !== '') {
       folderTitle.subtitle = titles[1]
     }
     if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
@@ -176,7 +176,7 @@ export class DeepTitle {
     // To build the path property of the FolderTitle class.
     const folderNames = []
     let level: number = 1
-    for (let index = minDepth - 1; index < depth; index++) {
+    for (let index = minDepth; index < depth; index++) {
       const folderName = segments[index - 1]
       folderNames.push(folderName)
       // [ '', 'var', 'data', 'baldr', 'media', '05' ]
