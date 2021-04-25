@@ -1,91 +1,92 @@
-import * as color from './color';
-export declare const colorize: typeof color;
+import { ClientMediaAsset } from '@bldr/client-media-models';
+export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 /**
- * A string in printf format.
+ * A `assetSpec` can be:
  *
- * - `%c` character
- * - `%C` converts to uppercase character (if not already)
- * - `%d` decimal integer (base 10)
- * - `%0Xd` zero-fill for X digits
- * - `%Xd` right justify for X digits
- * - `%-Xd` left justify for X digits
- * - `%+d` adds plus sign(+) to positive integers, minus sign for negative integers(-)
- * - `%e` scientific notation
- * - `%E` scientific notation with a capital 'E'
- * - `%f` floating-point number
- * - `%.Yf` prints Y positions after decimal
- * - `%Xf` takes up X spaces
- * - `%0X.Yf` zero-fills
- * - `%-X.Yf` left justifies
- * - `%i` integer (base 10)
- * - `%b` converts to boolean
- * - `%B` converts to uppercase boolean
- * - `%o` octal number (base 8)
- * - `%s` a string of characters
- * - `%Xs` formats string for a minimum of X spaces
- * - `%-Xs` left justify
- * - `%S` converts to a string of uppercase characters (if not already)
- * - `%u` unsigned decimal integer
- * - `%x` number in hexadecimal (base 16)
- * - `%%` prints a percent sign
- * - `\%` prints a percent sign
- * - `%2$s %1$s` positional arguments
- */
-declare type FormatString = string | number;
-export declare function formatWithoutColor(template: FormatString, ...args: any[]): string;
-export declare function format(template: FormatString, ...args: any[]): string;
-/**
- * Log with a format string on level 5.
- */
-export declare function trace(template: FormatString, ...args: any[]): void;
-/**
- * A wrapper around `logging.trace()`.
- */
-export declare function traceLog(...msg: any[]): void;
-/**
- * Log with a format string on level 4.
- */
-export declare function debug(template: FormatString, ...args: any[]): void;
-/**
- * A wrapper around `logging.debug()`.
- */
-export declare function debugLog(...msg: any[]): void;
-/**
- * Log with a format string on level 3.
- */
-export declare function info(template: FormatString, ...args: any[]): void;
-/**
- * A wrapper around `logging.info()`.
- */
-export declare function infoLog(...msg: any[]): void;
-/**
- * Log on level 2.
- */
-export declare function warn(template: FormatString, ...args: any[]): void;
-/**
- * A wrapper around `logging.warn()`.
- */
-export declare function warnLog(...msg: any[]): void;
-/**
- * Log on level 1.
- */
-export declare function error(template: FormatString, ...args: any[]): void;
-/**
- * A wrapper around `logging.error()`.
- */
-export declare function errorLog(...msg: any[]): void;
-declare type LogLevel = 0 | 1 | 2 | 3 | 4 | 5;
-/**
- * Set the log level.
+ * 1. A remote URI (Uniform Resource Identifier) as a string, for example
+ *    `id:Joseph_haydn` which has to be resolved.
+ * 2. A already resolved HTTP URL, for example
+ *    `https://example.com/Josef_Haydn.jg`
+ * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
  *
- * - 0: silent
- * - 1: error
- * - 2: warn
- * - 3: info
- * - 4: debug
- * - 5: trace
- *
- * @param level - A number from 0 (silent) up to 5 (trace)
+ * @typedef assetSpec
+ * @type {(String|File)}
  */
-export declare function setLogLevel(level: LogLevel): void;
-export {};
+/**
+ * An array of `assetSpec` or a single `assetSpec`
+ *
+ * @typedef assetSpecs
+ * @type {(assetSpec[]|assetSpec)}
+ */
+/**
+ * Resolve (get the HTTP URL and some meta informations) of a remote media
+ * file by its URI. Resolve a local file. The local files have to dropped
+ * in the application. Create media elements for each media file. Create samples
+ * for playable media files.
+ */
+export declare class Resolver {
+    /**
+     * Assets with linked assets have to be cached. For example: many
+     * audio assets can have the same cover ID.
+     */
+    private cache_;
+    /**
+     * Store for linked URIs (URIs inside media assets). They are collected
+     * and resolved in a second step after the resolution of the main
+     * media assets.
+     */
+    private readonly linkedUris;
+    constructor();
+    /**
+     * @param field - For example `id` or `uuid`
+     * @param search - For example `Fuer-Elise_HB`
+     * @param throwException - Throw an exception if the media URI
+     *  cannot be resolved (default: `true`).
+     *
+     * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
+     */
+    private queryMediaServer;
+    /**
+     * Create samples for each playable media file. By default each media file
+     * has one sample called “complete”.
+     *
+     * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
+     *   `asset` object, a client side representation of a media asset.
+     *
+     * @returns {module:@bldr/media-client~Sample[]}
+     */
+    /**
+     * @private
+     *
+     * @param {String} uri - For example `uuid:... id:...`
+     * @param {Object} data - Object from the REST API.
+     *
+     * @returns {module:@bldr/media-client.ClientMediaAsset}
+     */
+    /**
+     * @private
+     *
+     * @param {Object} file - A file object, see
+     *  {@link https://developer.mozilla.org/de/docs/Web/API/File}
+     *
+     * @returns {module:@bldr/media-client.ClientMediaAsset}
+     */
+    /**
+     * @param {module:@bldr/media-client.ClientMediaAsset} asset
+     */
+    /**
+     * Resolve (get the HTTP URL and some meta informations) of a remote media
+     * file by its URI.
+     */
+    private resolveSingle;
+    /**
+     * Resolve one or more remote media files by URIs, HTTP URLs or
+     * local media files by their file objects.
+     *
+     * Linked media URIs are resolve in a second step (not recursive). Linked
+     * media assets are not allowed to have linked media URIs.
+     *
+     * @param uris - A single media URI or an array of media URIs.
+     */
+    resolve(uris: string | string[]): Promise<ClientMediaAsset[]>;
+}

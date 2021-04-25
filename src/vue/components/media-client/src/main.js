@@ -31,9 +31,10 @@ import {
   convertDurationToSeconds,
   formatMultiPartAssetFileName,
   convertHtmlToPlainText,
-  selectSubset
+  selectSubset,
+  removeDuplicatesFromArray
 } from '@bldr/core-browser'
-import { mimeTypeManager, MediaUri, ClientMediaAssetNg } from '@bldr/client-media-models'
+import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
 import DynamicSelect from '@bldr/dynamic-select'
 
@@ -129,23 +130,6 @@ function extractMediaUrisRecursive (object, urisStore) {
   } else {
     collectMediaUri(object, urisStore)
   }
-}
-
-/**
- * Remove duplicates from an array. A new array is created an returns
- *
- * @param {Array} input - An array with possible duplicate entries.
- *
- * @returns {Array} - The new array with no duplicates.
- */
-function removeDuplicatesFromArray (input) {
-  const output = []
-  for (const value of input) {
-    if (!output.includes(value)) {
-      output.push(value)
-    }
-  }
-  return output
 }
 
 /**
@@ -1827,7 +1811,6 @@ class Resolver {
       store.commit('media/addMultiPartUri', asset.uriRaw)
     } else {
       asset = new ClientMediaAsset({ uri })
-      console.log(new ClientMediaAssetNg(data))
     }
     extractMediaUrisRecursive(data, this.linkedUris)
     asset.addProperties(data)

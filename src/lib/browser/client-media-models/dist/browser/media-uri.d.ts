@@ -42,3 +42,11 @@ export declare class MediaUri {
      */
     constructor(uri: string);
 }
+/**
+ * Make Media URI objects for a single URI or an array of URIs.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ *
+ * @returns An array of media URIs objects.
+ */
+export declare function makeMediaUris(uris: string | string[]): MediaUri[];

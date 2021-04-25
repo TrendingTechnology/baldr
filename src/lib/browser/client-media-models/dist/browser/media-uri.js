@@ -46,3 +46,20 @@ MediaUri.regExp = new RegExp('(?<uri>' +
     ')?' +
     ')' +
     ')');
+/**
+ * Make Media URI objects for a single URI or an array of URIs.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ *
+ * @returns An array of media URIs objects.
+ */
+export function makeMediaUris(uris) {
+    if (typeof uris === 'string') {
+        uris = [uris];
+    }
+    const mediaUris = [];
+    for (const uri of uris) {
+        mediaUris.push(new MediaUri(uri));
+    }
+    return mediaUris;
+}

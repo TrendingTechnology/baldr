@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**
@@ -221,3 +221,20 @@ function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
     return htmlChunks;
 }
 exports.splitHtmlIntoChunks = splitHtmlIntoChunks;
+/**
+ * Remove duplicates from an array. A new array is created and returned.
+ *
+ * @param input - An array with possible duplicate entries.
+ *
+ * @returns A new array with no duplicates.
+ */
+function removeDuplicatesFromArray(input) {
+    const output = [];
+    for (const value of input) {
+        if (!output.includes(value)) {
+            output.push(value);
+        }
+    }
+    return output;
+}
+exports.removeDuplicatesFromArray = removeDuplicatesFromArray;

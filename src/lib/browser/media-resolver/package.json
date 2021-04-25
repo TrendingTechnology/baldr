@@ -20,7 +20,8 @@
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts"
+    "lint": "ts-standard --fix src/*.ts",
+    "test": "npm run build && mocha tests/*"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
@@ -29,8 +30,10 @@
   },
   "dependencies": {
     "@bldr/client-media-models": "*",
+    "@bldr/config": "*",
+    "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
-    "@bldr/config": "*"
+    "@bldr/type-definitions": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

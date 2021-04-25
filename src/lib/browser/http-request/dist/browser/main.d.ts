@@ -26,7 +26,8 @@ export declare class HttpRequest {
      */
     private readonly urlFillIn?;
     /**
-     * The base URL of the REST endpoint.
+     * The base URL of the REST endpoint, for example `http://localhost` or
+     * `https://baldr.example.com`.
      */
     readonly baseUrl: string;
     /**

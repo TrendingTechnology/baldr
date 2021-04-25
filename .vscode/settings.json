@@ -7,7 +7,6 @@
     "**/.nyc_output": true,
     "**/*.log": true,
     "**/coverage": true,
-    "**/dist": true,
     "**/jspm_packages/": true,
     "**/lib-cov": true,
     "**/logs": true,

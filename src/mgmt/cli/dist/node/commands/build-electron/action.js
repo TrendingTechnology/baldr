@@ -30,6 +30,7 @@ function buildElectronApp(cmd, appName) {
         if (!fs_1.default.existsSync(appPath)) {
             throw new Error(`App path doesn’t exist for app “${appName}”.`);
         }
+        // eslint-disable-next-line
         const packageJson = require(path_1.default.join(appPath, 'package.json'));
         cmd.log(`${appName}: Install npm dependencies.`);
         yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config_1.default.localRepo });
@@ -38,8 +39,9 @@ function buildElectronApp(cmd, appName) {
         // await cmd.exec(['npm', 'run', 'install:deb'], { cwd: appPath })
         cmd.log(`${appName}: remove old .deb package.`);
         yield cmd.exec(['apt', '-y', 'remove', `baldr-${appName}`]);
+        const version = packageJson.version;
         cmd.log(`${appName}: install the .deb package.`);
-        yield cmd.exec(['dpkg', '-i', path_1.default.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`)]);
+        yield cmd.exec(['dpkg', '-i', path_1.default.join(appPath, 'dist_electron', `baldr-${appName}_${version}_amd64.deb`)]);
         cmd.stopSpin();
     });
 }
@@ -55,7 +57,7 @@ function action(appName) {
         cmd.checkRoot();
         cmd.startSpin();
         try {
-            if (!appName) {
+            if (appName == null) {
                 for (const appName of appNames) {
                     yield buildElectronApp(cmd, appName);
                 }

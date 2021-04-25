@@ -239,3 +239,20 @@ export function splitHtmlIntoChunks (htmlString: string, charactersOnSlide: numb
   addHtml(htmlChunks, text)
   return htmlChunks
 }
+
+/**
+ * Remove duplicates from an array. A new array is created and returned.
+ *
+ * @param input - An array with possible duplicate entries.
+ *
+ * @returns A new array with no duplicates.
+ */
+export function removeDuplicatesFromArray (input: string[]): string[] {
+  const output: string[] = []
+  for (const value of input) {
+    if (!output.includes(value)) {
+      output.push(value)
+    }
+  }
+  return output
+}

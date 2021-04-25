@@ -24,14 +24,17 @@
   "scripts": {
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts"
+    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#// <-##' ./dist/node/main.js",
+    "lint": "ts-standard --fix src/*.ts",
+    "test": "npm run build && npm run lint && mocha tests/*"
   },
   "dependencies": {
     "axios": "0.21.1"
   },
   "devDependencies": {
-    "@bldr/type-definitions": "*"
+    "@bldr/type-definitions": "*",
+    "@bldr/config": "*",
+    "jsdom":"16.5.3"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

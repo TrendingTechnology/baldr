@@ -64,7 +64,7 @@ function action(appName) {
         const cmd = new cli_utils_1.CommandRunner();
         cmd.startSpin();
         try {
-            if (!appName) {
+            if (appName == null) {
                 for (const appName of appNames) {
                     yield buildApp(cmd, appName);
                 }

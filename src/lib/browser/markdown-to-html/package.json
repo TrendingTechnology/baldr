@@ -19,7 +19,7 @@
   "scripts": {
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#// /-/ ##' ./dist/node/main.js",
+    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#// <- ##' ./dist/node/main.js",
     "lint": "ts-standard --fix src/*.ts",
     "test": "npm run build && npm run lint && mocha tests/*"
   },

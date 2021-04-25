@@ -14,9 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
-/**
- *
- */
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner();

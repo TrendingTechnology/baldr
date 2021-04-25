@@ -130,6 +130,12 @@ interface MediaServerConfiguration {
     editor: string;
     fileManager: string;
     assetTypes: AssetTypes;
+    /**
+     * A URL segment that is inserted between the hostname and the relative path
+     * of the media assets. For example `http://localhost/media/05/Mozart.jpg`.
+     * `media` is the `urlFillIn`.
+     */
+    urlFillIn: string;
 }
 interface SongbookConfiguration {
     path: string;

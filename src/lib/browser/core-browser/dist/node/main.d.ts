@@ -88,3 +88,11 @@ export declare function validateUri(uri: string): string;
  * @returns An array of HTML chunks.
  */
 export declare function splitHtmlIntoChunks(htmlString: string, charactersOnSlide: number): string[];
+/**
+ * Remove duplicates from an array. A new array is created and returned.
+ *
+ * @param input - An array with possible duplicate entries.
+ *
+ * @returns A new array with no duplicates.
+ */
+export declare function removeDuplicatesFromArray(input: string[]): string[];

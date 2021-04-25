@@ -1,7 +1,9 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAssetNg } from '@bldr/client-media-models'
+import { ClientMediaAsset, MediaUri, makeMediaUris } from '@bldr/client-media-models'
+import { removeDuplicatesFromArray } from '@bldr/core-browser'
 import config from '@bldr/config'
-export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/media')
+import { AssetType } from '@bldr/type-definitions'
+export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 
 /**
  * A `assetSpec` can be:
@@ -29,21 +31,20 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
  * in the application. Create media elements for each media file. Create samples
  * for playable media files.
  */
- class Resolver {
+export class Resolver {
   /**
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
    */
-  private cache_: { [uri: string]: any }
+  private cache_: { [uri: string]: AssetType.RestApiRaw }
 
   /**
    * Store for linked URIs (URIs inside media assets). They are collected
    * and resolved in a second step after the resolution of the main
    * media assets.
    */
-  private linkedUris: string[]
+  private readonly linkedUris: string[]
   constructor () {
-
     this.cache_ = {}
 
     this.linkedUris = []
@@ -57,11 +58,13 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
    *
    * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
    */
-  private async queryMediaServer_ (field: string, search: string, throwException = true) {
-    // Do search for samples.
-    search = search.replace(/#.*$/g, '')
-    const cacheKey = `${field}:${search}`
-    if (this.cache_[cacheKey]) return this.cache_[cacheKey]
+  private async queryMediaServer (mediaUri: MediaUri): Promise<AssetType.RestApiRaw> {
+    const field = mediaUri.scheme
+    const search = mediaUri.authority
+    const cacheKey = mediaUri.uriWithoutFragment
+    if (this.cache_[cacheKey] != null) {
+      return this.cache_[cacheKey]
+    }
     const response = await httpRequest.request({
       url: 'query',
       method: 'get',
@@ -72,32 +75,12 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
         search: search
       }
     })
-    if (response && response.status === 200 && response.data && response.data.path) {
-      this.cache_[cacheKey] = response
-      return response
+    if (response == null || response.status !== 200 || response.data == null) {
+      throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
     }
-    if (throwException) throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
-  }
-
-  /**
-   * @private
-   * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
-   *   `asset` object, a client side representation of a media asset.
-   * @property {String} httpUrl
-   * @property {String} path
-   * @param {Boolean} throwException - Throw an exception if the media URI
-   *  cannot be resolved (default: `true`).
-   *
-   * @returns {String} - A HTTP URL.
-   */
-  resolveHttpUrl_ (asset: ClientMediaAssetNg, throwException: boolean) {
-    if (asset.httpUrl) return asset.httpUrl
-    if (asset.meta.path) {
-      return `${httpRequest.baseUrl}/media/${asset.meta.path}`
-    }
-    if (throwException) {
-      throw new Error(`Can not resolve HTTP URL. The asset object needs the property “path” or “httpUrl”.`)
-    }
+    const rawRestApiAsset: AssetType.RestApiRaw = response.data
+    this.cache_[cacheKey] = rawRestApiAsset
+    return rawRestApiAsset
   }
 
   /**
@@ -167,24 +150,24 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
    *
    * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
-  createAssetFromRestData_ (uri, data) {
-    let asset
-    data.uri = uri
-    if (data.multiPartCount) {
-      // asset = new MultiPartAsset({ uri })
-      // store.commit('media/addMultiPartUri', asset.uriRaw)
-    } else {
-      asset = new ClientMediaAsset({ uri })
-      console.log(new ClientMediaAssetNg(data))
-    }
-    extractMediaUrisRecursive(data, this.linkedUris)
-    asset.addProperties(data)
-    asset.httpUrl = this.resolveHttpUrl_(asset)
-    if (asset.previewImage) {
-      asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
-    }
-    return asset
-  }
+  // createAssetFromRestData_ (uri, data): ClientMediaAsset {
+  //   let asset
+  //   data.uri = uri
+  //   if (data.multiPartCount) {
+  //     // asset = new MultiPartAsset({ uri })
+  //     // store.commit('media/addMultiPartUri', asset.uriRaw)
+  //   } else {
+  //     asset = new ClientMediaAsset({ uri })
+  //     console.log(new ClientMediaAsset(data))
+  //   }
+  //   extractMediaUrisRecursive(data, this.linkedUris)
+  //   asset.addProperties(data)
+  //   asset.httpUrl = this.resolveHttpUrl_(asset)
+  //   if (asset.previewImage) {
+  //     asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
+  //   }
+  //   return asset
+  // }
 
   /**
    * @private
@@ -194,22 +177,22 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
    *
    * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
-  createAssetFromFileObject_ (file) {
-    if (mimeTypeManager.isAsset(file.name)) {
-      // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-      const httpUrl = URL.createObjectURL(file)
-      // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-      const uuid = httpUrl.substr(httpUrl.length - 36)
-      // We use the uuid instead of the file name. The file name can contain
-      // whitespaces and special characters. A uuid is  more reliable.
-      const uri = `localfile:${uuid}`
-      return new ClientMediaAsset({
-        uri: uri,
-        httpUrl: httpUrl,
-        filename: file.name
-      })
-    }
-  }
+  // createAssetFromFileObject_ (file) {
+  //   if (mimeTypeManager.isAsset(file.name)) {
+  //     // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+  //     const httpUrl = URL.createObjectURL(file)
+  //     // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+  //     const uuid = httpUrl.substr(httpUrl.length - 36)
+  //     // We use the uuid instead of the file name. The file name can contain
+  //     // whitespaces and special characters. A uuid is  more reliable.
+  //     const uri = `localfile:${uuid}`
+  //     return new ClientMediaAsset({
+  //       uri: uri,
+  //       httpUrl: httpUrl,
+  //       filename: file.name
+  //     })
+  //   }
+  // }
 
   /**
    * @param {module:@bldr/media-client.ClientMediaAsset} asset
@@ -227,53 +210,13 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
   // }
 
   /**
-   * # Remote
-   *
    * Resolve (get the HTTP URL and some meta informations) of a remote media
    * file by its URI.
-   *
-   * Order of async resolution calls / tasks:
-   *
-   * 1. asset
-   * 2. httpUrl
-   * 3. mediaElement
-   *
-   * # Local
-   *
-   * Resolve a local file. The local files have to dropped in in the
-   * application.
-   *
-   * Order of async resolution calls / tasks:
-   *
-   * 1. mediaElement
-   *
-   * @private
-   * @param {module:@bldr/media-client~assetSpec} assetSpec - URI
-   *   or File object
-   * @param {Boolean} throwException - Throw an exception if the media URI
-   *  cannot be resolved (default: `true`).
-   *
-   * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
-  async resolveSingle_ (assetSpec, throwException) {
-    let asset
-    // Remote uri to resolve
-    if (typeof assetSpec === 'string') {
-      if (assetSpec.match(MediaUri.regExp)) {
-        const uri = assetSpec.split(':')
-        const response = await this.queryMediaServer_(uri[0], uri[1], throwException)
-        if (response) asset = this.createAssetFromRestData_(assetSpec, response.data)
-      } else if (throwException) {
-        throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,id,uuid`)
-      }
-    // Local: File object from drag and drop or open dialog
-    } else if (assetSpec instanceof File) {
-      asset = this.createAssetFromFileObject_(assetSpec)
-    }
-    if (asset) {
-      this.addMediaElementToAsset(asset)
-      return asset
-    }
+  private async resolveSingle (mediaUri: MediaUri): Promise<ClientMediaAsset> {
+    const raw = await this.queryMediaServer(mediaUri)
+    const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
+    return new ClientMediaAsset(mediaUri.raw, httpUrl, raw)
   }
 
   /**
@@ -283,37 +226,35 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/med
    * Linked media URIs are resolve in a second step (not recursive). Linked
    * media assets are not allowed to have linked media URIs.
    *
-   * @param {module:@bldr/media-client~assetSpecs} assetSpecs
-   * @param {Boolean} throwException - Throw an exception if the media URI
-   *  cannot be resolved (default: `true`).
-   *
-   * @returns {module:@bldr/media-client.ClientMediaAsset[]}
+   * @param uris - A single media URI or an array of media URIs.
    */
-  async resolve (assetSpecs, throwException = true) {
-    if (typeof assetSpecs === 'string' || assetSpecs instanceof File) {
-      assetSpecs = [assetSpecs]
+  async resolve (uris: string | string[]): Promise<ClientMediaAsset[]> {
+    if (typeof uris === 'string') {
+      uris = [uris]
     }
+    uris = removeDuplicatesFromArray(uris)
 
-    const uniqueSpecs = removeDuplicatesFromArray(assetSpecs)
+    const mediaUris = makeMediaUris(uris)
 
     // Resolve the main media URIs
-    let promises = []
-    for (const assetSpec of uniqueSpecs) {
-      promises.push(this.resolveSingle_(assetSpec, throwException))
+    const promises = []
+    for (const mediaUri of mediaUris) {
+      promises.push(this.resolveSingle(mediaUri))
     }
-    const mainAssets = await Promise.all(promises)
-    let linkedAssets = []
-    // @todo make this recursive: For example master person -> main image
-    // famous pieces -> audio -> cover
-    // Resolve the linked media URIs.
-    if (this.linkedUris.length) {
-      promises = []
-      for (const mediaUri of this.linkedUris) {
-        promises.push(this.resolveSingle_(mediaUri, throwException))
-      }
-      linkedAssets = await Promise.all(promises)
-    }
-    const assets = mainAssets.concat(linkedAssets)
-    if (assets) return assets
+    const mainAssets: ClientMediaAsset[] = await Promise.all<ClientMediaAsset>(promises)
+    // let linkedAssets: string[] = []
+    // // @todo make this recursive: For example master person -> main image
+    // // famous pieces -> audio -> cover
+    // // Resolve the linked media URIs.
+    // if (this.linkedUris.length) {
+    //   promises = []
+    //   for (const mediaUri of this.linkedUris) {
+    //     promises.push(this.resolveSingle_(mediaUri))
+    //   }
+    //   linkedAssets = await Promise.all(promises)
+    // }
+    // const assets = mainAssets.concat(linkedAssets)
+    // if (assets) return assets
+    return mainAssets
   }
 }

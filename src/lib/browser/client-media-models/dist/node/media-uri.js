@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MediaUri = void 0;
+exports.makeMediaUris = exports.MediaUri = void 0;
 /**
  * Uniform Resource Identifier for media files, for example `id:Haydn`, or
  * `http://example.com/Haydn_Joseph.jpg`. An optional fragment (`#1-7`) (subset
@@ -50,3 +50,21 @@ MediaUri.regExp = new RegExp('(?<uri>' +
     ')?' +
     ')' +
     ')');
+/**
+ * Make Media URI objects for a single URI or an array of URIs.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ *
+ * @returns An array of media URIs objects.
+ */
+function makeMediaUris(uris) {
+    if (typeof uris === 'string') {
+        uris = [uris];
+    }
+    const mediaUris = [];
+    for (const uri of uris) {
+        mediaUris.push(new MediaUri(uri));
+    }
+    return mediaUris;
+}
+exports.makeMediaUris = makeMediaUris;

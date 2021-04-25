@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClientMediaAssetNg = void 0;
+exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const mime_type_1 = require("./mime-type");
 const media_uri_1 = require("./media-uri");
@@ -26,7 +26,7 @@ const media_uri_1 = require("./media-uri");
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-class ClientMediaAssetNg {
+class ClientMediaAsset {
     /**
      * @param meta - A raw javascript object read from the Rest API
      */
@@ -99,4 +99,4 @@ class ClientMediaAssetNg {
         return ['image', 'video'].includes(this.mimeType);
     }
 }
-exports.ClientMediaAssetNg = ClientMediaAssetNg;
+exports.ClientMediaAsset = ClientMediaAsset;

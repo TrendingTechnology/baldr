@@ -26,7 +26,7 @@ import { MediaUri } from './media-uri'
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-export class ClientMediaAssetNg {
+export class ClientMediaAsset {
   /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)

@@ -65,7 +65,9 @@ export class MediaUri {
   constructor (uri: string) {
     this.raw = uri
     const matches = MediaUri.regExp.exec(uri)
-    if (matches == null || matches.groups == null) { throw new Error(`The media URI is not valid: ${uri}`) }
+    if (matches == null || matches.groups == null) {
+      throw new Error(`The media URI is not valid: ${uri}`)
+    }
     const groups = matches.groups
     this.scheme = groups.scheme
     this.authority = groups.authority
@@ -76,4 +78,22 @@ export class MediaUri {
       this.uriWithoutFragment = uri
     }
   }
+}
+
+/**
+ * Make Media URI objects for a single URI or an array of URIs.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ *
+ * @returns An array of media URIs objects.
+ */
+export function makeMediaUris (uris: string | string[]): MediaUri[] {
+  if (typeof uris === 'string') {
+    uris = [uris]
+  }
+  const mediaUris: MediaUri[] = []
+  for (const uri of uris) {
+    mediaUris.push(new MediaUri(uri))
+  }
+  return mediaUris
 }

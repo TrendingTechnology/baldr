@@ -16,6 +16,11 @@ import { Configuration } from '@bldr/type-definitions'
 
 type RestEndPoint = 'local' | 'remote' | 'automatic'
 
+// Do not remove this lines. The comments are removed by the build script.
+// <- const { JSDOM } = require('jsdom')
+// <- const { window } = new JSDOM('', { url: 'http://localhost' })
+// <- const location = window.location
+
 /**
  * A wrapper around Axios.
  */
@@ -33,7 +38,8 @@ export class HttpRequest {
   private readonly urlFillIn?: string
 
   /**
-   * The base URL of the REST endpoint.
+   * The base URL of the REST endpoint, for example `http://localhost` or
+   * `https://baldr.example.com`.
    */
   public readonly baseUrl: string
 
@@ -66,7 +72,7 @@ export class HttpRequest {
 
     // Electron (build version): location.hostname: '.'
     // Electron (build version): location.protocol: 'app'
-    if (restEndPoint === 'remote' || (restEndPoint === 'automatic' && (location.hostname !== 'localhost' && location.hostname !== '.'))) {
+    if (restEndPoint === 'remote' || (restEndPoint === 'automatic' && (location != null && location.hostname !== 'localhost' && location.hostname !== '.'))) {
       isRemote = true
     }
 
