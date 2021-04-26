@@ -1,12 +1,10 @@
-import mediaCategoriesManagmentImport from './management'
 
 import path from 'path'
 
 import { MediaUri } from '@bldr/client-media-models'
 
-export const categoriesManagement = mediaCategoriesManagmentImport
-
-export const categories = categoriesManagement.categories
+export * as categoriesManagement from './management'
+export * from './specs'
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.

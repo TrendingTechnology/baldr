@@ -130,9 +130,9 @@ exports.general = {
             state: 'absent'
         }
     },
-    initialize: function ({ data }) {
-        if (data.filePath != null && !two_letter_abbreviations_1.checkForTwoLetterDir(data.filePath)) {
-            console.log(`File path ${data.filePath} is not in a valid two letter directory.`);
+    initialize: function ({ data, filePath }) {
+        if (filePath != null && !two_letter_abbreviations_1.checkForTwoLetterDir(filePath)) {
+            console.log(`File path ${filePath} is not in a valid two letter directory.`);
             process.exit();
         }
         return data;

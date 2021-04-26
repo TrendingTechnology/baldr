@@ -16,6 +16,8 @@ exports.reference = {
         title: {
             title: 'Titel der Quelle',
             derive: function ({ data, folderTitles }) {
+                if (folderTitles == null)
+                    return 'Quelle';
                 let suffix = '';
                 if (data.forTeacher != null) {
                     suffix = ' (Lehrerband)';
@@ -57,6 +59,8 @@ exports.reference = {
             title: 'Seitenanzahl des PDFs',
             description: 'Die Seitenanzahl dieses PDFs',
             derive({ filePath }) {
+                if (filePath == null)
+                    return;
                 return core_node_1.getPdfPageCount(filePath);
             },
             overwriteByDerived: true

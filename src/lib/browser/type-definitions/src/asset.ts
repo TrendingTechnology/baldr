@@ -32,23 +32,6 @@ export interface FileFormat {
 }
 
 /**
- * Intermediate data format for client media assets. The media categories
- * manager needs the `filePath` property.
- */
-export interface Intermediate extends FileFormat {
-  /**
-   * Required by the function `categoriesManager.sortAndDeriveProps()`.
-   */
-  filePath: string
-
-  /**
-   * Required by the function `categoriesManager.formatFilePath()`.
-   */
-  extension: string
-  [property: string]: any
-}
-
-/**
  * Exported from the media server REST API
  */
 export interface RestApiRaw {

@@ -17,6 +17,9 @@ export const worksheet: MediaCategory.Category = {
     title: {
       title: 'Titel',
       derive: function ({ folderTitles, filePath }) {
+        if (folderTitles == null || filePath == null) {
+          return 'Arbeitsblatt'
+        }
         const match = filePath.match(new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`))
         let baseName: string = 'Arbeitsblatt'
         if (match != null) {
@@ -30,7 +33,9 @@ export const worksheet: MediaCategory.Category = {
       title: 'Seitenanzahl des PDFs',
       description: 'Die Seitenanzahl dieses PDFs',
       derive ({ filePath }) {
-        return getPdfPageCount(filePath)
+        if (filePath != null) {
+          return getPdfPageCount(filePath)
+        }
       },
       overwriteByDerived: true
     }

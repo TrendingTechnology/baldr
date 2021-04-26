@@ -40,7 +40,8 @@ exports.cloze = {
                 if (data.clozePageNo != null) {
                     counterSuffix = `_${clozeData.clozePageNo}`;
                 }
-                return `${folderTitles.id}_LT${counterSuffix}`;
+                const id = folderTitles != null ? folderTitles.id : 'lueckentext';
+                return `${id}_LT${counterSuffix}`;
             },
             overwriteByDerived: true
         },
@@ -55,7 +56,12 @@ exports.cloze = {
                 else if (clozeData.clozePageNo != null && clozeData.clozePageCount == null) {
                     suffix = ` (Seite ${clozeData.clozePageNo})`;
                 }
-                return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
+                if (folderTitles != null) {
+                    return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`;
+                }
+                else {
+                    return `Lückentext${suffix}`;
+                }
             },
             overwriteByDerived: true
         },

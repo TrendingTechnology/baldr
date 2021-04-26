@@ -19,6 +19,9 @@ exports.worksheet = {
         title: {
             title: 'Titel',
             derive: function ({ folderTitles, filePath }) {
+                if (folderTitles == null || filePath == null) {
+                    return 'Arbeitsblatt';
+                }
                 const match = filePath.match(new RegExp(`${path_1.default.sep}([^${path_1.default.sep}]+)\\.pdf`));
                 let baseName = 'Arbeitsblatt';
                 if (match != null) {
@@ -32,7 +35,9 @@ exports.worksheet = {
             title: 'Seitenanzahl des PDFs',
             description: 'Die Seitenanzahl dieses PDFs',
             derive({ filePath }) {
-                return core_node_1.getPdfPageCount(filePath);
+                if (filePath != null) {
+                    return core_node_1.getPdfPageCount(filePath);
+                }
             },
             overwriteByDerived: true
         }

@@ -14,6 +14,8 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 
+import { MediaCategory } from '@bldr/type-definitions'
+
 import { cloze } from './specs/cloze'
 import { composition } from './specs/composition'
 import { cover } from './specs/cover'
@@ -30,7 +32,7 @@ import { worksheet } from './specs/worksheet'
 import { youtube } from './specs/youtube'
 import { general } from './specs/_general'
 
-export default {
+export const categories: MediaCategory.Collection = {
   cloze,
   composition,
   cover,

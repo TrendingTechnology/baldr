@@ -11,7 +11,7 @@ interface GroupCategory extends MediaCategory.Category {
   basePath: string
 }
 
-interface GroupIntermediate extends AssetType.Intermediate {
+interface GroupFileFormat extends AssetType.FileFormat {
   groupId: string
   name: string
   extension: string
@@ -25,7 +25,7 @@ export const group: MediaCategory.Category = {
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
   relPath: function ({ data }) {
-    const groupData = data as GroupIntermediate
+    const groupData = data as GroupFileFormat
     return path.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`)
   },
   detectCategoryByPath: function (category) {
@@ -59,7 +59,7 @@ export const group: MediaCategory.Category = {
     title: {
       title: 'Titel der Gruppe',
       derive: function ({ data }) {
-        const groupData = data as GroupIntermediate
+        const groupData = data as GroupFileFormat
         return `Portrait-Bild der Gruppe „${groupData.name}“`
       },
       overwriteByDerived: true

@@ -15,6 +15,7 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.categories = void 0;
 const cloze_1 = require("./specs/cloze");
 const composition_1 = require("./specs/composition");
 const cover_1 = require("./specs/cover");
@@ -30,7 +31,7 @@ const song_1 = require("./specs/song");
 const worksheet_1 = require("./specs/worksheet");
 const youtube_1 = require("./specs/youtube");
 const _general_1 = require("./specs/_general");
-exports.default = {
+exports.categories = {
     cloze: cloze_1.cloze,
     composition: composition_1.composition,
     cover: cover_1.cover,

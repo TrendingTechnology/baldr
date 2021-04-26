@@ -16,6 +16,7 @@ export const reference: MediaCategory.Category = {
     title: {
       title: 'Titel der Quelle',
       derive: function ({ data, folderTitles }) {
+        if (folderTitles == null) return 'Quelle'
         let suffix = ''
         if (data.forTeacher != null) {
           suffix = ' (Lehrerband)'
@@ -57,6 +58,7 @@ export const reference: MediaCategory.Category = {
       title: 'Seitenanzahl des PDFs',
       description: 'Die Seitenanzahl dieses PDFs',
       derive ({ filePath }) {
+        if (filePath == null) return
         return getPdfPageCount(filePath)
       },
       overwriteByDerived: true

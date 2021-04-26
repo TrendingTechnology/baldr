@@ -46,10 +46,10 @@ export declare type PropName = string;
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-    data: AssetType.Intermediate;
+    data: AssetType.FileFormat;
     category: Category;
-    folderTitles: DeepTitleInterface;
-    filePath: string;
+    folderTitles?: DeepTitleInterface;
+    filePath?: string;
 }
 /**
  * Defintion of the function `derive()`.
@@ -58,7 +58,7 @@ declare type DeriveFunc = (arg: DeriveFuncArg) => any;
 /**
  * Defintion of the function `format()`.
  */
-declare type FormatFunc = (value: any, dataAndSpec: DataAndCategory) => any;
+declare type FormatFunc = (value: any, args: DataCategoryFilePath) => any;
 /**
  * Defintion of the function `validate()`.
  */
@@ -137,31 +137,31 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-    data: AssetType.Intermediate;
+    data: AssetType.FileFormat;
     category: Category;
     oldRelPath: string;
 }
 /**
  * Defintion of the function `relPath()`.
  */
-declare type RelPathFunc = (arg: RelPathFuncArg) => string;
+declare type RelPathFunc = (relPathFuncArg: RelPathFuncArg) => string;
 /**
  * Defintion of the function `detectCategoryByPath()`.
  */
-declare type DetectTypeByPathFunc = (arg: Category) => RegExp;
+declare type DetectTypeByPathFunc = (category: Category) => RegExp;
 /**
  * Defintion of the function `intialize()`.
  */
-declare type InitializeFunc = (arg: DataAndCategory) => AssetType.Intermediate;
+declare type InitializeFunc = (args: DataCategoryFilePath) => AssetType.FileFormat;
 /**
  * Defintion of the function `finalize()`.
  */
-declare type FinalizeFunc = (dataAndSpec: DataAndCategory) => AssetType.Intermediate;
+declare type FinalizeFunc = (args: DataCategoryFilePath) => AssetType.FileFormat;
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-    data: AssetType.Intermediate;
+    data: AssetType.FileFormat;
     entity: {
         [key: string]: any;
     };
@@ -172,7 +172,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Intermediate;
+declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.FileFormat;
 /**
  * Apart from different file formats, media files can belong to several media
  * categories regardless of their file format.
@@ -243,9 +243,23 @@ export declare type Names = string;
  * }
  * ```
  */
-export declare type Collection = {
-    [key in Name]: Category;
-};
+export interface Collection {
+    cloze: Category;
+    composition: Category;
+    cover: Category;
+    group: Category;
+    instrument: Category;
+    person: Category;
+    photo: Category;
+    radio: Category;
+    recording: Category;
+    reference: Category;
+    score: Category;
+    song: Category;
+    worksheet: Category;
+    youtube: Category;
+    general: Category;
+}
 /**
  * Generic type for metadata of assets.
  */
@@ -255,8 +269,12 @@ export interface Data {
 /**
  * Used in many functions as an argument.
  */
-interface DataAndCategory {
-    data: AssetType.Intermediate;
+interface DataCategoryFilePath {
+    data: AssetType.FileFormat;
     category: Category;
+    /**
+     * The path of media asset itself, not the metadata `*.extension.yml` file.
+     */
+    filePath?: string;
 }
 export {};

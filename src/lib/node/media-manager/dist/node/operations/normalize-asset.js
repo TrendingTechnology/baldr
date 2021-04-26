@@ -56,10 +56,10 @@ function normalizeMediaAsset(filePath, options) {
             }
             if ((options === null || options === void 0 ? void 0 : options.wikidata) != null) {
                 if (metaData.wikidata != null && metaData.categories != null) {
-                    metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categoriesManagement.categories);
+                    metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categories);
                 }
             }
-            const result = media_categories_1.categoriesManagement.process(metaData);
+            const result = media_categories_1.categoriesManagement.process(metaData, filePath);
             try {
                 const comparable = origData;
                 delete comparable.filePath;

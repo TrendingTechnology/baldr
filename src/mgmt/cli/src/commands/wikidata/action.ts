@@ -7,7 +7,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { writeYamlFile } from '@bldr/media-manager'
-import { categoriesManagement } from '@bldr/media-categories'
+import { categoriesManagement, categories } from '@bldr/media-categories'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
@@ -22,18 +22,16 @@ interface CmdObj {
  * @param itemId - For example `Q123`
  */
 async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: CmdObj): Promise<void> {
-  const rawData = await query(itemId, category, categoriesManagement.categories)
+  const rawData = await query(itemId, category, categories)
   if (arg1 != null) {
     if (category === 'person') {
       rawData.firstname = arg1
       rawData.lastname = arg2
     }
   }
-  // TODO remove
-  rawData.filePath = 'BD/dummy.jpg'
 
   rawData.categories = category
-  const data = categoriesManagement.process(rawData as AssetType.Intermediate)
+  const data = categoriesManagement.process(rawData as AssetType.FileFormat)
   console.log(data)
 
   let downloadWikicommons = true
@@ -42,7 +40,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     downloadWikicommons = false
   }
 
-  const dest = categoriesManagement.formatFilePath(data as AssetType.Intermediate)
+  const dest = categoriesManagement.formatFilePath(data as AssetType.FileFormat)
   if (dest == null) return
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage != null) {

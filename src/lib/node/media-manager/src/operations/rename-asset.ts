@@ -19,7 +19,7 @@ export function renameMediaAsset (oldPath: string): string {
   if (metaData?.categories != null) {
     metaData.extension = getExtension(oldPath)
     metaData.filePath = oldPath
-    const data = metaData as AssetType.Intermediate
+    const data = metaData as AssetType.FileFormat
     newPath = categoriesManagement.formatFilePath(data, oldPath)
   }
 

@@ -134,9 +134,9 @@ export const general: MediaCategory.Category = {
       state: 'absent'
     }
   },
-  initialize: function ({ data }) {
-    if (data.filePath != null && !checkForTwoLetterDir(data.filePath)) {
-      console.log(`File path ${data.filePath} is not in a valid two letter directory.`)
+  initialize: function ({ data, filePath }) {
+    if (filePath != null && !checkForTwoLetterDir(filePath)) {
+      console.log(`File path ${filePath} is not in a valid two letter directory.`)
       process.exit()
     }
     return data

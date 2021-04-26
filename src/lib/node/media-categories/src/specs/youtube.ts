@@ -4,7 +4,7 @@ import path from 'path'
 
 import { validateYoutubeId } from '../main'
 
-interface YoutubeIntermediate extends AssetType.Intermediate {
+interface YoutubeFileFormat extends AssetType.FileFormat {
   youtubeId: string
 }
 
@@ -22,7 +22,7 @@ export const youtube: MediaCategory.Category = {
     return new RegExp('^.*/YT/.*.mp4$')
   },
   relPath ({ data, oldRelPath }) {
-    const youtubeData = data as YoutubeIntermediate
+    const youtubeData = data as YoutubeFileFormat
     const oldRelDir = path.dirname(oldRelPath)
     return path.join(oldRelDir, `${youtubeData.youtubeId}.mp4`)
   },
@@ -31,7 +31,7 @@ export const youtube: MediaCategory.Category = {
       title: 'ID eines YouTube-Videos',
       derive: function ({ data, category }) {
         const youtubeCategory = category as YoutubeCategory
-        const youtubeData = data as YoutubeIntermediate
+        const youtubeData = data as YoutubeFileFormat
         return `${youtubeCategory.abbreviation}_${youtubeData.youtubeId}`
       },
       overwriteByDerived: true
