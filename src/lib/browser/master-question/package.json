@@ -28,5 +28,8 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@bldr/markdown-to-html": "*"
+  },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -37,7 +37,7 @@ describe('Package “@bldr/master-question”', function () {
   }
 
   it('aliases', function () {
-    const questions = Question.init(aliases)
+    const questions = Question.parse(aliases)
     assert.strictEqual(questions[0].heading, 'h')
     assert.strictEqual(questions[0].subQuestions[0].question, 'q')
     assert.strictEqual(questions[0].subQuestions[0].answer, 'a')
@@ -85,10 +85,22 @@ describe('Package “@bldr/master-question”', function () {
     answer: 'Markup support: *italic* **bold**'
   }
 
+  it('markupShort', function () {
+    const questions = Question.parse(markupShort)
+    assert.strictEqual(questions[0].question, 'Markup support: <em>italic</em> <strong>bold</strong>')
+    assert.strictEqual(questions[0].answer, 'Markup support: <em>italic</em> <strong>bold</strong>')
+  })
+
   const markupMultiLine = {
-    question: 'Markup support: *multiline*',
-    answer: '* one\n* two\n* three\n'
+    question: '1. one\n2. two\n3. three\n',
+    answer: '1. one\n2. two\n3. three\n'
   }
+
+  it('markupMultiLine', function () {
+    const questions = Question.parse(markupMultiLine)
+    assert.strictEqual(questions[0].question, 'one\ntwo\nthree')
+    assert.strictEqual(questions[0].answer, '<ol>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ol>\n')
+  })
 
   const heading = {
     heading: 'Questions about the text',
@@ -115,7 +127,7 @@ describe('Package “@bldr/master-question”', function () {
   ]
 
   it('questionsAsString', function () {
-    const questions = Question.init(questionsAsString)
+    const questions = Question.parse(questionsAsString)
     assert.strictEqual(questions[0].question, 'Question one?')
     assert.strictEqual(questions[1].question, 'Question two?')
     assert.strictEqual(questions[2].question, 'Question three?')
@@ -124,7 +136,7 @@ describe('Package “@bldr/master-question”', function () {
   const oneQuestionAsString = 'One big question?'
 
   it('oneQuestionAsString', function () {
-    const questions = Question.init(oneQuestionAsString)
+    const questions = Question.parse(oneQuestionAsString)
     assert.strictEqual(questions[0].question, 'One big question?')
   })
 })

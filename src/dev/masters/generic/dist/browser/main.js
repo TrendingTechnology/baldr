@@ -3,7 +3,7 @@
  */
 import { validateMasterSpec, mapStepProps } from '@bldr/master-toolkit';
 import { convertHtmlToPlainText } from '@bldr/core-browser';
-import { convertMarkdownStringToHTML } from '@bldr/markdown-to-html';
+import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html';
 // import steps from '@/steps.js'
 // Do not remove this lines. The comments are removed by the build script.
 /// -/ const { JSDOM } = require('jsdom')
@@ -108,7 +108,7 @@ export default validateMasterSpec({
             // Convert into HTML
             const converted = [];
             for (const markup of props.markup) {
-                converted.push(convertMarkdownStringToHTML(markup));
+                converted.push(convertMarkdownStringToHtml(markup));
             }
             // Split by <hr>
             const splittedByHr = [];

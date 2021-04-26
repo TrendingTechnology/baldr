@@ -3,7 +3,7 @@
  *
  * @param text - A string in the Markdown format.
  */
-export declare function convertMarkdownStringToHTML(text: string): string;
+export declare function convertMarkdownStringToHtml(text: string): string;
 declare type Any = string | string[] | {
     [key: string]: Any;
 };

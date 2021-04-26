@@ -1,16 +1,17 @@
+import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html'
 
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
- * heading. `1. act` is convert my `marked` into those lists. This is a
+ * heading. `1. act` is convert by `marked` into those lists. This is a
  * quick and dirty hack. Disable some renderer
  * https://marked.js.org/#/USING_PRO.md may be better.
  */
-//  function convertMarkdownToHtmlNoLists (text) {
-//   text = convertMarkdownToHtml(text)
-//   // <ol start="2">
-//   text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '')
-//   return text.trim()
-// }
+function convertMarkdownToHtmlNoLists (text: string): string {
+  text = convertMarkdownStringToHtml(text)
+  // <ol start="2">
+  text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '')
+  return text.trim()
+}
 
 interface Counter {
   sequence: QuestionSequence
@@ -33,7 +34,7 @@ interface RawSpec extends Spec {
   questions?: RawSpec[]
 }
 
-export function normalizeSpec (spec: string | RawSpec): Spec {
+function normalizeSpec (spec: string | RawSpec): Spec {
   const output: Spec = {}
   if (typeof spec === 'string') {
     output.question = spec
@@ -53,7 +54,7 @@ export function normalizeSpec (spec: string | RawSpec): Spec {
   return output
 }
 
-export function normalizeMultipleSpecs (specs: RawSpec | RawSpec[]): Spec[] {
+function normalizeMultipleSpecs (specs: RawSpec | RawSpec[]): Spec[] {
   if (Array.isArray(specs)) {
     const output = []
     for (const spec of specs) {
@@ -85,36 +86,17 @@ export class Question {
   private readonly counter: Counter
   constructor (spec: Spec, counter: Counter, level: number) {
     this.counter = counter
-
-    // const spec = normalizeSpec(rawSpec)
-
-    // for (const prop of ['heading', 'question', 'answer']) {
-    //   if (spec[prop]) {
-    //     if (typeof spec[prop] === 'string') {
-    //       // list are allowed
-    //       if (spec[prop] === 'answer') {
-    //         this[prop] = convertMarkdownToHtml(spec[prop])
-    //         // no lists are allowed
-    //       } else {
-    //         this[prop] = convertMarkdownToHtmlNoLists(spec[prop])
-    //       }
-    //     } else {
-    //       throw new Error(`Unsupported type for questions ${prop} ${spec[prop]}`)
-    //     }
-    //   }
-    // }
-
     if (spec.heading != null) {
-      this.heading = spec.heading
+      this.heading = convertMarkdownToHtmlNoLists(spec.heading)
     }
     if (spec.question != null) {
-      this.question = spec.question
+      this.question = convertMarkdownToHtmlNoLists(spec.question)
       counter.question++
       counter.sequence.push(`q${counter.question}`)
       this.questionNo = counter.question
     }
     if (spec.answer != null) {
-      this.answer = spec.answer
+      this.answer = convertMarkdownStringToHtml(spec.answer)
       counter.answer++
       counter.sequence.push(`a${counter.answer}`)
       this.answerNo = counter.answer
@@ -169,7 +151,7 @@ export class Question {
     }
   }
 
-  static init (rawSpecs: RawSpec | RawSpec[]): Question[] {
+  static parse (rawSpecs: RawSpec | RawSpec[]): Question[] {
     const counter = Question.initCounter()
     return Question.parseRecursively(rawSpecs, [], counter, 0)
   }

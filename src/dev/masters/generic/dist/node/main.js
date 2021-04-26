@@ -110,7 +110,7 @@ exports.default = master_toolkit_1.validateMasterSpec({
             // Convert into HTML
             const converted = [];
             for (const markup of props.markup) {
-                converted.push(markdown_to_html_1.convertMarkdownStringToHTML(markup));
+                converted.push(markdown_to_html_1.convertMarkdownStringToHtml(markup));
             }
             // Split by <hr>
             const splittedByHr = [];

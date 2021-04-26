@@ -45,7 +45,7 @@ function convertMarkdownAutoInline (text: string): string {
  *
  * @param text - A string in the Markdown format.
  */
-export function convertMarkdownStringToHTML (text: string): string {
+export function convertMarkdownStringToHtml (text: string): string {
   return convertMarkdownAutoInline(convertCustomMarkup(text))
 }
 
@@ -62,14 +62,14 @@ type Any = string | string[] | { [key: string]: Any }
 export function convertMarkdownToHtml (input: Any): Any {
   // string
   if (typeof input === 'string') {
-    return convertMarkdownStringToHTML(input)
+    return convertMarkdownStringToHtml(input)
 
   // array
   } else if (Array.isArray(input)) {
     for (let index = 0; index < input.length; index++) {
       const value = input[index]
       if (typeof value === 'string') {
-        input[index] = convertMarkdownStringToHTML(value)
+        input[index] = convertMarkdownStringToHtml(value)
       } else {
         convertMarkdownToHtml(value)
       }
@@ -80,7 +80,7 @@ export function convertMarkdownToHtml (input: Any): Any {
     for (const key in input) {
       const value = input[key]
       if (typeof value === 'string') {
-        input[key] = convertMarkdownStringToHTML(value)
+        input[key] = convertMarkdownStringToHtml(value)
       } else {
         convertMarkdownToHtml(value)
       }

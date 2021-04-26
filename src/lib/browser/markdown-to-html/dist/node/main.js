@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertMarkdownToHtml = exports.convertMarkdownStringToHTML = void 0;
+exports.convertMarkdownToHtml = exports.convertMarkdownStringToHtml = void 0;
 const marked = require("marked");
 // Do not remove this lines. The comments are removed by the build script.
 const { JSDOM } = require('jsdom')
@@ -45,10 +45,10 @@ function convertMarkdownAutoInline(text) {
  *
  * @param text - A string in the Markdown format.
  */
-function convertMarkdownStringToHTML(text) {
+function convertMarkdownStringToHtml(text) {
     return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
-exports.convertMarkdownStringToHTML = convertMarkdownStringToHTML;
+exports.convertMarkdownStringToHtml = convertMarkdownStringToHtml;
 /**
  * Convert Markdown texts into HTML texts.
  *
@@ -60,14 +60,14 @@ exports.convertMarkdownStringToHTML = convertMarkdownStringToHTML;
 function convertMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdownStringToHTML(input);
+        return convertMarkdownStringToHtml(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdownStringToHTML(value);
+                input[index] = convertMarkdownStringToHtml(value);
             }
             else {
                 convertMarkdownToHtml(value);
@@ -79,7 +79,7 @@ function convertMarkdownToHtml(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdownStringToHTML(value);
+                input[key] = convertMarkdownStringToHtml(value);
             }
             else {
                 convertMarkdownToHtml(value);
