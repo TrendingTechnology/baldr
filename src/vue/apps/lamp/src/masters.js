@@ -452,16 +452,8 @@ class Master {
     return this.callHook_('plainTextFromProps', props)
   }
 
-  /**
-   * @param {object} payload
-   * @property {module:@bldr/lamp~props} payload.props
-   * @property {module:@bldr/lamp~props} payload.propsMain
-   * @property {module:@bldr/lamp~props} payload.propPreview
-   *
-   * @returns {String}
-   */
-  titleFromProps (payload) {
-    return this.callHook_('titleFromProps', payload)
+  generateTexMarkup (payload) {
+    return this.callHook_('generateTexMarkup', payload)
   }
 
   /**

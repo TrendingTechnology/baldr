@@ -277,6 +277,11 @@ export default validateMasterSpec({
       const firstQuestion = props.questions[0]
       return firstQuestion.stepCount
     },
+    generateTexMarkup ({ propsMain }) {
+      const questions = propsMain.questions
+      console.log(questions)
+      return 'TeeeX'
+    },
     afterSlideNoChangeOnComponent () {
       this.domSteps = new steps.DomSteps({
         elements: this.$el.querySelectorAll('.answer'),

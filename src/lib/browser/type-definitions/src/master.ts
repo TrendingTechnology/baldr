@@ -231,6 +231,11 @@ interface MasterHooks {
   titleFromProps?: (payload: PropsBundle) => string
 
   /**
+   * Generate a TeX markup from the current slide.
+   */
+  generateTexMarkup?: (payload: PropsBundle) => string
+
+  /**
    * Extract a plain text from the props (properties) of a slide. Getter on
    * the slide object.
    *

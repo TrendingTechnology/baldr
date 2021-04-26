@@ -21,6 +21,10 @@
     />
 
     <pre v-if="slide.yamlMarkup"><code v-html="slide.yamlMarkup"/></pre>
+    <div v-if="slide.texMarkup">
+      <h2>TeX</h2>
+      <pre><code v-html="slide.texMarkup"/></pre>
+    </div>
   </div>
 </template>
 

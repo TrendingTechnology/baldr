@@ -308,6 +308,8 @@ export class Slide {
     const mediaUris = this.master.resolveMediaUris(this.props)
     if (mediaUris) this.mediaUris = mediaUris
 
+    this.texMarkup = null
+
     /**
      * Media URIs that do not have to exist.
      *
@@ -783,6 +785,11 @@ export class Presentation {
         },
         vm
       )
+      slide.texMarkup = slide.master.generateTexMarkup({
+        props: slide.props,
+        propsMain: slide.propsMain,
+        propsPreview: slide.propsPreview
+      }, vm)
       const steps = slide.master.calculateStepCount({
         props: slide.props,
         propsMain: slide.propsMain,
