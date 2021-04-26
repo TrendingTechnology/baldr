@@ -110,24 +110,24 @@ const actions = {
     // This is possible by the routes.
     // dispatch('setSlideNoCurrent', 1)
   },
-  async openPresentationById ({ dispatch }, id) {
+  async openPresentationById ({ dispatch }, { vm, presId }) {
     // Get the path
-    let response = await vue.$media.httpRequest.request({
+    let response = await vm.$media.httpRequest.request({
       url: 'query',
       method: 'get',
       params: {
         type: 'presentations',
         method: 'exactMatch',
         field: 'id',
-        search: id
+        search: presId
       }
     })
     if (!response.data) {
-      throw new Error(`Unkown presentation with the id “${id}”`)
+      throw new Error(`Unkown presentation with the id “${presId}”`)
     }
     const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.
-    response = await vue.$media.httpRequest.request({
+    response = await vm.$media.httpRequest.request({
       url: `/media/${mongoDbObject.path}`,
       headers: { 'Cache-Control': 'no-cache' }
     })

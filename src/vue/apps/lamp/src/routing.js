@@ -188,7 +188,7 @@ async function loadPresentationById (vm, presId) {
     }
   }
 
-  await vm.$store.dispatch('lamp/openPresentationById', presId)
+  await vm.$store.dispatch('lamp/openPresentationById', { vm, presId })
 }
 
 /**
