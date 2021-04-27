@@ -1,4 +1,5 @@
 import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html';
+import * as tex from '@bldr/tex-templates';
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
  * heading. `1. act` is convert by `marked` into those lists. This is a
@@ -123,4 +124,30 @@ export class Question {
         const counter = Question.initCounter();
         return Question.parseRecursively(rawSpec, [], counter, 0);
     }
+}
+function formatTexQuestion(question) {
+    const markup = ['\\item'];
+    if (question.heading != null) {
+        markup.push(tex.cmd('textbf', question.heading));
+    }
+    if (question.question != null) {
+        markup.push(question.question);
+    }
+    if (question.answer != null) {
+        markup.push(tex.cmd('textit', question.answer));
+    }
+    if (question.subQuestions != null) {
+        markup.push(formatTexMultipleQuestions(question.subQuestions));
+    }
+    return markup.join('\n\n') + '\n';
+}
+function formatTexMultipleQuestions(questions) {
+    const markup = [];
+    for (const question of questions) {
+        markup.push(formatTexQuestion(question));
+    }
+    return tex.environment('enumerate', markup.join('\n'));
+}
+export function generateTexMarkup(questions) {
+    return formatTexMultipleQuestions(questions);
 }

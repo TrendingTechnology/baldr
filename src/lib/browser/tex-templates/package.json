@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/master-question",
+  "name": "@bldr/tex-templates",
   "version": "0.1.0",
-  "description": "Classes and models for the master slide “question”.",
+  "description": "Template functions to generate TeX markup.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -20,17 +20,12 @@
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts",
-    "test": "npm run build && npm run lint && mocha tests/*"
+    "lint": "ts-standard --fix src/*.ts"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@bldr/markdown-to-html": "*",
-    "@bldr/tex-templates": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

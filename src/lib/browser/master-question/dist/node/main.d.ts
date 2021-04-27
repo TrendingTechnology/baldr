@@ -44,4 +44,5 @@ export declare class Question {
     private static initCounter;
     static parse(rawSpec: RawSpec): Question[];
 }
+export declare function generateTexMarkup(questions: Question[]): string;
 export {};

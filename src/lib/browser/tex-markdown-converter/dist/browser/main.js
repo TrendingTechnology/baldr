@@ -96,14 +96,14 @@ export function extractMatchAll(text, regExp, matches, excludeCaptureGroups) {
     return text;
 }
 /**
- * @param {string} commandName - A simple LaTeX macro / command name
+ * @param commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
 function texReg(commandName) {
     return new RegExp(regBuilder.cmd(commandName), 'g');
 }
 /**
- * @param {string} commandName - A simple LaTeX macro / command name
+ * @param commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
 function texRep(commandName) {

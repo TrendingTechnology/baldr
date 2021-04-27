@@ -137,7 +137,7 @@ export function extractMatchAll (text: string, regExp: string, matches: string[]
 }
 
 /**
- * @param {string} commandName - A simple LaTeX macro / command name
+ * @param commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
 function texReg (commandName: string): RegExp {
@@ -145,7 +145,7 @@ function texReg (commandName: string): RegExp {
 }
 
 /**
- * @param {string} commandName - A simple LaTeX macro / command name
+ * @param commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
 function texRep (commandName: string): string {

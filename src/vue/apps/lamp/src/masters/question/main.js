@@ -4,7 +4,7 @@
 
 import { validateMasterSpec } from '@bldr/master-toolkit'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
-import { Question } from '@bldr/master-question'
+import { Question, generateTexMarkup } from '@bldr/master-question'
 import steps from '@/steps.js'
 
 /**
@@ -99,8 +99,7 @@ export default validateMasterSpec({
     },
     generateTexMarkup ({ propsMain }) {
       const questions = propsMain.questions
-      console.log(questions)
-      return 'TeeeX'
+      return generateTexMarkup(questions)
     },
     afterSlideNoChangeOnComponent () {
       this.domSteps = new steps.DomSteps({

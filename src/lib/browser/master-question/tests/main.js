@@ -1,6 +1,93 @@
 const assert = require('assert')
 
-const { Question } = require('../dist/node/main.js')
+const { Question, generateTexMarkup } = require('../dist/node/main.js')
+
+const threeQuestions = [
+  {
+    question: 'Question one?',
+    answer: 'Answer one'
+  },
+  {
+    question: 'Question two?',
+    answer: 'Answer two'
+  },
+  {
+    question: 'Question three?',
+    answer: 'Answer three'
+  }
+]
+
+const threeQuestionsTex = `\\begin{enumerate}
+\\item
+
+Question one?
+
+\\textit{Answer one}
+
+\\item
+
+Question two?
+
+\\textit{Answer two}
+
+\\item
+
+Question three?
+
+\\textit{Answer three}
+\\end{enumerate}`
+
+const recursiveStructure = {
+  heading: 'Heading',
+  subQuestions: [
+    {
+      question: 'Questions Level 1',
+      answer: 'Answer Level 1',
+      subQuestions: [
+        {
+          question: 'Questions Level 2',
+          answer: 'Answer Level 2',
+          subQuestions: [
+            {
+              question: 'Questions Level 3',
+              answer: 'Answer Level 3'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+const recursiveStructureTex = `\\begin{enumerate}
+\\item
+
+\\textbf{Heading}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 1
+
+\\textit{Answer Level 1}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 2
+
+\\textit{Answer Level 2}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 3
+
+\\textit{Answer Level 3}
+\\end{enumerate}
+\\end{enumerate}
+\\end{enumerate}
+\\end{enumerate}`
 
 describe('Package “@bldr/master-question”', function () {
 
@@ -33,45 +120,12 @@ describe('Package “@bldr/master-question”', function () {
   })
 
   it('threeQuestions', function () {
-    const questions = Question.parse([
-      {
-        question: 'Question one?',
-        answer: 'Answer one'
-      },
-      {
-        question: 'Question two?',
-        answer: 'Answer two'
-      },
-      {
-        question: 'Question three?',
-        answer: 'Answer three'
-      }
-    ])
+    const questions = Question.parse(threeQuestions)
     assert.strictEqual(questions.length, 3)
   })
 
   it('recursiveStructure', function () {
-    const questions = Question.parse({
-      heading: 'Heading',
-      subQuestions: [
-        {
-          question: 'Questions Level 1',
-          answer: 'Answer Level 1',
-          subQuestions: [
-            {
-              question: 'Questions Level 2',
-              answer: 'Answer Level 2',
-              subQuestions: [
-                {
-                  question: 'Questions Level 3',
-                  answer: 'Answer Level 3'
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    })
+    const questions = Question.parse(recursiveStructure)
     assert.strictEqual(
       questions[0].subQuestions[0].subQuestions[0].subQuestions[0].question,
       'Questions Level 3'
@@ -123,5 +177,19 @@ describe('Package “@bldr/master-question”', function () {
   it('oneQuestionAsString', function () {
     const questions = Question.parse('One big question?')
     assert.strictEqual(questions[0].question, 'One big question?')
+  })
+
+  describe('Function “generateTexMarkup”', function () {
+    it('threeQuestions', function () {
+      const questions = Question.parse(threeQuestions)
+      assert.strictEqual(generateTexMarkup(questions), threeQuestionsTex)
+
+    })
+
+    it('recursiveStructure', function () {
+      const questions = Question.parse(recursiveStructure)
+      assert.strictEqual(generateTexMarkup(questions), recursiveStructureTex)
+    })
+
   })
 })
