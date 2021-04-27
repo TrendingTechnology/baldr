@@ -9,13 +9,14 @@ interface Spec {
     heading?: string;
     subQuestions?: Spec[];
 }
-interface RawSpec extends Spec {
+interface RawSpecObject extends Spec {
     q?: string;
     a?: string;
     h?: string;
-    s?: RawSpec[];
-    questions?: RawSpec[];
+    s?: RawSpecObject[];
+    questions?: RawSpecObject[];
 }
+declare type RawSpec = string | string[] | RawSpecObject | RawSpecObject[];
 /**
  * `['q1', 'a1', 'q2', 'q3']`
  */
@@ -41,6 +42,6 @@ export declare class Question {
     get questionText(): string;
     private static parseRecursively;
     private static initCounter;
-    static parse(rawSpecs: RawSpec | RawSpec[]): Question[];
+    static parse(rawSpec: RawSpec): Question[];
 }
 export {};

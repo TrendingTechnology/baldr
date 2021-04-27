@@ -26,15 +26,17 @@ interface Spec {
   subQuestions?: Spec[]
 }
 
-interface RawSpec extends Spec {
+interface RawSpecObject extends Spec {
   q?: string
   a?: string
   h?: string
-  s?: RawSpec[]
-  questions?: RawSpec[]
+  s?: RawSpecObject[]
+  questions?: RawSpecObject[]
 }
 
-function normalizeSpec (spec: string | RawSpec): Spec {
+type RawSpec = string | string[] | RawSpecObject | RawSpecObject[]
+
+function normalizeSpec (spec: string | RawSpecObject): Spec {
   const output: Spec = {}
   if (typeof spec === 'string') {
     output.question = spec
@@ -54,16 +56,16 @@ function normalizeSpec (spec: string | RawSpec): Spec {
   return output
 }
 
-function normalizeMultipleSpecs (specs: RawSpec | RawSpec[]): Spec[] {
-  if (Array.isArray(specs)) {
+function normalizeMultipleSpecs (rawSpec: RawSpec): Spec[] {
+  if (Array.isArray(rawSpec)) {
     const output = []
-    for (const spec of specs) {
+    for (const spec of rawSpec) {
       output.push(normalizeSpec(spec))
     }
     return output
   }
   return [
-    normalizeSpec(specs)
+    normalizeSpec(rawSpec)
   ]
 }
 
@@ -131,8 +133,8 @@ export class Question {
     return output
   }
 
-  private static parseRecursively (rawSpecs: RawSpec | RawSpec[], processed: Question[], counter: Counter, level: number): Question[] {
-    const specs = normalizeMultipleSpecs(rawSpecs)
+  private static parseRecursively (rawSpec: RawSpec, processed: Question[], counter: Counter, level: number): Question[] {
+    const specs = normalizeMultipleSpecs(rawSpec)
     if (Array.isArray(specs)) {
       for (const spec of specs) {
         processed.push(new Question(spec, counter, level))
@@ -151,8 +153,8 @@ export class Question {
     }
   }
 
-  static parse (rawSpecs: RawSpec | RawSpec[]): Question[] {
+  static parse (rawSpec: RawSpec): Question[] {
     const counter = Question.initCounter()
-    return Question.parseRecursively(rawSpecs, [], counter, 0)
+    return Question.parseRecursively(rawSpec, [], counter, 0)
   }
 }

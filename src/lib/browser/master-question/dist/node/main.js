@@ -42,16 +42,16 @@ function normalizeSpec(spec) {
     }
     return output;
 }
-function normalizeMultipleSpecs(specs) {
-    if (Array.isArray(specs)) {
+function normalizeMultipleSpecs(rawSpec) {
+    if (Array.isArray(rawSpec)) {
         const output = [];
-        for (const spec of specs) {
+        for (const spec of rawSpec) {
             output.push(normalizeSpec(spec));
         }
         return output;
     }
     return [
-        normalizeSpec(specs)
+        normalizeSpec(rawSpec)
     ];
 }
 /**
@@ -104,8 +104,8 @@ class Question {
             output = output + this.question;
         return output;
     }
-    static parseRecursively(rawSpecs, processed, counter, level) {
-        const specs = normalizeMultipleSpecs(rawSpecs);
+    static parseRecursively(rawSpec, processed, counter, level) {
+        const specs = normalizeMultipleSpecs(rawSpec);
         if (Array.isArray(specs)) {
             for (const spec of specs) {
                 processed.push(new Question(spec, counter, level));
@@ -122,9 +122,9 @@ class Question {
             answer: 0
         };
     }
-    static parse(rawSpecs) {
+    static parse(rawSpec) {
         const counter = Question.initCounter();
-        return Question.parseRecursively(rawSpecs, [], counter, 0);
+        return Question.parseRecursively(rawSpec, [], counter, 0);
     }
 }
 exports.Question = Question;
