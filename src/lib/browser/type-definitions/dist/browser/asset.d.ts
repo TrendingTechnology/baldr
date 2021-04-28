@@ -33,7 +33,7 @@ export interface FileFormat {
  * Exported from the media server REST API
  */
 export interface RestApiRaw {
-    assetType: string;
+    mimeType: string;
     extension: string;
     filename: string;
     /**

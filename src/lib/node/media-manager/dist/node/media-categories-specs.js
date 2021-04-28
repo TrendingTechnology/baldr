@@ -71,13 +71,13 @@ function generateIdPrefix(filePath) {
     if (parentDir.length !== 2 || (parentDir.match(/[A-Z]{2,}/) == null)) {
         return '';
     }
-    const assetTypeAbbreviation = parentDir;
+    const mimeTypeAbbreviation = parentDir;
     // 20_Strawinsky-Petruschka
     const subParentDir = pathSegments[pathSegments.length - 3];
     // Strawinsky-Petruschka
     const presentationId = subParentDir.replace(/^[0-9]{2,}_/, '');
     // Strawinsky-Petruschka_HB
-    const idPrefix = `${presentationId}_${assetTypeAbbreviation}`;
+    const idPrefix = `${presentationId}_${mimeTypeAbbreviation}`;
     return idPrefix;
 }
 /**

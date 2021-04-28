@@ -253,7 +253,7 @@ class Asset extends MediaFile {
    * Indicates if the asset has a preview image.
    */
   previewImage: boolean
-  assetType?: string
+  mimeType?: string
 
   /**
    * The count of parts of a multipart asset.
@@ -275,7 +275,7 @@ class Asset extends MediaFile {
     this.addFileInfos_()
     const previewImage = `${this.absPath_}_preview.jpg`
     if (this.extension != null) {
-      this.assetType = mimeTypeManager.extensionToType(this.extension)
+      this.mimeType = mimeTypeManager.extensionToType(this.extension)
     }
     if (fs.existsSync(previewImage)) {
       this.previewImage = true

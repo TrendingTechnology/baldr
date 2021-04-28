@@ -28,8 +28,8 @@ function createVideoPreviewImageOneFile(filePath, second) {
     if (second == null) {
         second = 10;
     }
-    const assetType = media_manager_1.filePathToAssetType(filePath);
-    if (assetType === 'video') {
+    const mimeType = media_manager_1.filePathToAssetType(filePath);
+    if (mimeType === 'video') {
         const output = `${filePath}_preview.jpg`;
         const outputFileName = path_1.default.basename(output);
         console.log(`Preview image: ${chalk_1.default.green(outputFileName)} at second ${chalk_1.default.green(second)})`);

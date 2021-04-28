@@ -50,15 +50,15 @@ function convertAsset(filePath, cmdObj = {}) {
         if (asset.extension == null) {
             return;
         }
-        let assetType;
+        let mimeType;
         try {
-            assetType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
+            mimeType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
         }
         catch (error) {
             console.log(`Unsupported extension ${asset.extension}`);
             return;
         }
-        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(assetType);
+        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
         const outputFileName = `${core_browser_1.idify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
@@ -72,7 +72,7 @@ function convertAsset(filePath, cmdObj = {}) {
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
         // aac_he_v2
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
-        if (assetType === 'audio') {
+        if (mimeType === 'audio') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i', filePath,
                 // '-c:a', 'aac', '-b:a', '128k',
@@ -86,7 +86,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // image
         }
-        else if (assetType === 'image') {
+        else if (mimeType === 'image') {
             let size = '2000x2000>';
             if (cmdObj.previewImage != null) {
                 outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg');
@@ -101,7 +101,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // videos
         }
-        else if (assetType === 'video') {
+        else if (mimeType === 'video') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i', filePath,
                 '-vcodec', 'libx264',
@@ -111,7 +111,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
         }
         if (process != null) {
-            if (process.status !== 0 && assetType === 'audio') {
+            if (process.status !== 0 && mimeType === 'audio') {
                 // A second attempt for mono audio: HEv2 only makes sense with stereo.
                 // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
                 process = child_process_1.default.spawnSync('ffmpeg', [
@@ -124,7 +124,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 ]);
             }
             if (process.status === 0) {
-                if (assetType === 'audio') {
+                if (mimeType === 'audio') {
                     let metaData;
                     try {
                         metaData = (yield audio_metadata_1.default(filePath));

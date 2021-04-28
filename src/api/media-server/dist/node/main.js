@@ -256,7 +256,7 @@ var Asset = /** @class */ (function (_super) {
         this.addFileInfos_();
         var previewImage = this.absPath_ + "_preview.jpg";
         if (this.extension != null) {
-            this.assetType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
+            this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
         }
         if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;

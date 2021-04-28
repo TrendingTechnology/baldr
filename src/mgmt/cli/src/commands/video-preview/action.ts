@@ -16,8 +16,8 @@ import { filePathToAssetType, walk } from '@bldr/media-manager'
  */
 function createVideoPreviewImageOneFile (filePath: string, second: number | string): void {
   if (second == null) { second = 10 }
-  const assetType = filePathToAssetType(filePath)
-  if (assetType === 'video') {
+  const mimeType = filePathToAssetType(filePath)
+  if (mimeType === 'video') {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)
     console.log(`Preview image: ${chalk.green(outputFileName)} at second ${chalk.green(second)})`)

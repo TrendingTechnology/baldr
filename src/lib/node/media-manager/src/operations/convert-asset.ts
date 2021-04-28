@@ -40,14 +40,14 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
   if (asset.extension == null) {
     return
   }
-  let assetType: string
+  let mimeType: string
   try {
-    assetType = mimeTypeManager.extensionToType(asset.extension)
+    mimeType = mimeTypeManager.extensionToType(asset.extension)
   } catch (error) {
     console.log(`Unsupported extension ${asset.extension}`)
     return
   }
-  const outputExtension = mimeTypeManager.typeToTargetExtension(assetType)
+  const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
   const outputFileName = `${idify(asset.basename)}.${outputExtension}`
   let outputFile = path.join(path.dirname(filePath), outputFileName)
   if (converted.has(outputFile)) return
@@ -66,7 +66,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
   // aac_he_v2
   // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
 
-  if (assetType === 'audio') {
+  if (mimeType === 'audio') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i', filePath,
       // '-c:a', 'aac', '-b:a', '128k',
@@ -80,7 +80,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     ])
 
   // image
-  } else if (assetType === 'image') {
+  } else if (mimeType === 'image') {
     let size = '2000x2000>'
     if (cmdObj.previewImage != null) {
       outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg')
@@ -95,7 +95,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     ])
 
   // videos
-  } else if (assetType === 'video') {
+  } else if (mimeType === 'video') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i', filePath,
       '-vcodec', 'libx264',
@@ -106,7 +106,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
   }
 
   if (process != null) {
-    if (process.status !== 0 && assetType === 'audio') {
+    if (process.status !== 0 && mimeType === 'audio') {
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
       process = childProcess.spawnSync('ffmpeg', [
@@ -120,7 +120,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     }
 
     if (process.status === 0) {
-      if (assetType === 'audio') {
+      if (mimeType === 'audio') {
         let metaData
         try {
           metaData = await collectAudioMetaData(filePath) as unknown

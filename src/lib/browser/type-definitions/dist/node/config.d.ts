@@ -129,7 +129,7 @@ interface MediaServerConfiguration {
     sshAliasRemote: string;
     editor: string;
     fileManager: string;
-    assetTypes: AssetTypes;
+    mimeTypes: AssetTypes;
     /**
      * A URL segment that is inserted between the hostname and the relative path
      * of the media assets. For example `http://localhost/media/05/Mozart.jpg`.

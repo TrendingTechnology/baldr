@@ -27,7 +27,7 @@ export class MimeTypeManager {
    * `@bldr/config` to able to use this class in Vue projects.
    */
   constructor (config: Configuration) {
-    this.config = config.mediaServer.assetTypes
+    this.config = config.mediaServer.mimeTypes
     this.allowedExtensions = this.spreadExtensions()
   }
 

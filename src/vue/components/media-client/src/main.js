@@ -805,7 +805,7 @@ class Sample {
    */
   set volume (value) {
     this.mediaElement.volume = value.toFixed(2)
-    if (this.asset.assetType === 'video') {
+    if (this.asset.mimeType === 'video') {
       this.mediaElement.style.opacity = value.toFixed(2)
     }
   }
@@ -958,7 +958,7 @@ class Sample {
     await this.fadeOut(fadeOutSec)
     this.mediaElement.currentTime = this.startTimeSec
     this.timeOut_.clear()
-    if (this.asset.assetType === 'video') {
+    if (this.asset.mimeType === 'video') {
       this.mediaElement.load()
       this.mediaElement.style.opacity = 1
     }
@@ -973,7 +973,7 @@ class Sample {
   async pause () {
     await this.fadeOut()
     this.timeOut_.clear()
-    if (this.asset.assetType === 'video') {
+    if (this.asset.mimeType === 'video') {
       this.mediaElement.style.opacity = 0
     }
     this.mediaElementCurrentTimeSec_ = this.mediaElement.currentTime
@@ -1399,7 +1399,7 @@ export class ClientMediaAsset {
   get plainText () {
     const output = []
     const excludedProperties = [
-      'assetType',
+      'mimeType',
       'extension',
       'filename',
       'httpUrl',
@@ -2227,8 +2227,8 @@ class Media {
       }
     }
     addShortcutsCustom(samples)
-    for (const assetType of ['audio', 'video']) {
-      addShortcutsByType(samples, assetType)
+    for (const mimeType of ['audio', 'video']) {
+      addShortcutsByType(samples, mimeType)
     }
   }
 }

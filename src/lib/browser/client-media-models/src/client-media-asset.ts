@@ -136,7 +136,7 @@ export class ClientMediaAsset {
   // get plainText () {
   //   const output = []
   //   const excludedProperties = [
-  //     'assetType',
+  //     'mimeType',
   //     'extension',
   //     'filename',
   //     'httpUrl',

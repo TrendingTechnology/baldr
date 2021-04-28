@@ -148,7 +148,7 @@ interface MediaServerConfiguration {
   sshAliasRemote: string
   editor: string
   fileManager: string
-  assetTypes: AssetTypes
+  mimeTypes: AssetTypes
 
   /**
    * A URL segment that is inserted between the hostname and the relative path

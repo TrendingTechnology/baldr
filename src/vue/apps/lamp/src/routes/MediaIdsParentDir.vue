@@ -22,7 +22,7 @@
       <tbody>
         <tr v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
           <td class="id">{{ mediaAsset.id }}</td>
-          <td>{{ mediaAsset.assetType }}</td>
+          <td>{{ mediaAsset.mimeType }}</td>
           <td>{{ mediaAsset.extension }}</td>
           <td>{{ mediaAsset.title }}</td>
         </tr>
