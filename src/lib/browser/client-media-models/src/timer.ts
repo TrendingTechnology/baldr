@@ -16,8 +16,8 @@ class Timer {
  * to early.
  */
 class TimeOut extends Timer {
-  set (func: Function, delay: string) {
-    this.ids.push(setTimeout(func, parseInt(delay)))
+  set (func: Function, delay: number) {
+    this.ids.push(setTimeout(func, delay))
   }
 
   clear () {
@@ -41,8 +41,8 @@ class Interval extends Timer {
    *   second), the timer should delay in between executions of the specified
    *   function or code.
    */
-  set (func: Function, delay: string) {
-    this.ids.push(setInterval(func, parseInt(delay)))
+  set (func: Function, delay: number) {
+    this.ids.push(setInterval(func, delay))
   }
 
   /**
