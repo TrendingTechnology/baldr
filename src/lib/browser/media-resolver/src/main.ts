@@ -1,6 +1,6 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAsset, MediaUri, makeMediaUris, findMediaUris } from '@bldr/client-media-models'
-import { removeDuplicatesFromArray, makeSet } from '@bldr/core-browser'
+import { ClientMediaAsset, MediaUri, findMediaUris } from '@bldr/client-media-models'
+import { makeSet } from '@bldr/core-browser'
 import config from '@bldr/config'
 import { AssetType } from '@bldr/type-definitions'
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
