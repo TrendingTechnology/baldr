@@ -23,15 +23,6 @@ export declare class Resolver {
      */
     private queryMediaServer;
     /**
-     * Create samples for each playable media file. By default each media file
-     * has one sample called “complete”.
-     *
-     * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
-     *   `asset` object, a client side representation of a media asset.
-     *
-     * @returns {module:@bldr/media-client~Sample[]}
-     */
-    /**
      * @private
      *
      * @param {String} uri - For example `uuid:... id:...`

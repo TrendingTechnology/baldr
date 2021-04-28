@@ -1,8 +1,7 @@
-// import { CustomEventsManager } from './custom-events-manager'
-// import { TimeOut } from './timer'
-
 import { ClientMediaAsset } from './client-media-asset'
 import { convertDurationToSeconds } from '@bldr/core-browser'
+import type { AssetType } from '@bldr/type-definitions'
+
 /**
  * The state of the current playback.
  *
@@ -15,17 +14,6 @@ import { convertDurationToSeconds } from '@bldr/core-browser'
 type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped'
 
 type JumpDirection = 'forward' | 'backward'
-
-interface SampleSpec {
-  title: string
-  id: string
-  startTime?: number
-  fadeIn?: number
-  duration?: number
-  fadeOut?: number
-  endTime?: number
-  shortcut?: string
-}
 
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -50,7 +38,7 @@ interface SampleSpec {
  *  | <-      durationSec      ->|
  * ```
  */
-class Sample {
+export class Sample {
   /**
    * We fade in very short and smoothly to avoid audio artefacts.
    */
@@ -154,29 +142,13 @@ class Sample {
 
   playbackState: PlaybackState
 
-  /**
-   * @param {ClientMediaAsset} asset
-   * @param {object} specs
-   * @property {String} specs.title
-   * @property {String|Number} specs.id
-   * @property {String|Number} specs.startTime - The start time in seconds.
-   * @property {String|Number} specs.fadeIn - The fade in time in seconds. The
-   *   duration is not affected by this time specification.
-   * @property {String|Number} specs.duration - The duration in seconds of
-   *   the sample.
-   * @property {String|Number} specs.fadeOut - The fade out time in seconds. The
-   *   duration is not affected by this time specification.
-   * @property {String|Number} specs.endTime - The end time in seconds.
-   * @property {String} specs.shortcut - A custom shortcut
-   */
-  constructor (asset: ClientMediaAsset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: SampleSpec) {
+  constructor (
+    asset: ClientMediaAsset,
+    { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat
+  ) {
     this.asset = asset
-    this.title = title
-
-    if (!id) {
-      throw new Error('A sample needs an id.')
-    }
-    this.id = id
+    this.title = title == null ? 'komplett' : title
+    this.id = id == null ? 'complete' : id
     this.uri = `${this.asset.uri}#${id}`
     if (startTime != null) {
       this.startTimeSec = this.toSec(startTime)
@@ -364,13 +336,9 @@ class Sample {
    * Fade in. Set the volume to 0 and reach after a time intervale, specified
    * with `duration` the `targetVolume.`
    *
-   * @param {Number} targetVolume - End volume value of the fade in process. A
+   * @param targetVolume - End volume value of the fade in process. A
    *   number from 0 - 1.
-   * @param {Number} duration - in seconds
-   *
-   * @async
-   *
-   * @returns {Promise}
+   * @param duration - in seconds
    */
   async fadeIn (targetVolume: number = 1, duration?: number): Promise<void> {
     let durationSafe: number

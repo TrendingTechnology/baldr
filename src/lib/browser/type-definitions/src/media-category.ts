@@ -324,7 +324,7 @@ export interface Data { [key: string]: any }
 /**
  * Used in many functions as an argument.
  */
- interface DataCategoryFilePath {
+interface DataCategoryFilePath {
   data: AssetType.FileFormat
   category: Category
 

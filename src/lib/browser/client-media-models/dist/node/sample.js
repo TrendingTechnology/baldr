@@ -1,6 +1,4 @@
 "use strict";
-// import { CustomEventsManager } from './custom-events-manager'
-// import { TimeOut } from './timer'
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sample = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -36,21 +35,6 @@ const core_browser_1 = require("@bldr/core-browser");
  * ```
  */
 class Sample {
-    /**
-     * @param {ClientMediaAsset} asset
-     * @param {object} specs
-     * @property {String} specs.title
-     * @property {String|Number} specs.id
-     * @property {String|Number} specs.startTime - The start time in seconds.
-     * @property {String|Number} specs.fadeIn - The fade in time in seconds. The
-     *   duration is not affected by this time specification.
-     * @property {String|Number} specs.duration - The duration in seconds of
-     *   the sample.
-     * @property {String|Number} specs.fadeOut - The fade out time in seconds. The
-     *   duration is not affected by this time specification.
-     * @property {String|Number} specs.endTime - The end time in seconds.
-     * @property {String} specs.shortcut - A custom shortcut
-     */
     constructor(asset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
         /**
          * We fade in very short and smoothly to avoid audio artefacts.
@@ -84,11 +68,8 @@ class Sample {
         this.timeOut = new TimeOut();
         this.customEventsManager = new CustomEventsManager();
         this.asset = asset;
-        this.title = title;
-        if (!id) {
-            throw new Error('A sample needs an id.');
-        }
-        this.id = id;
+        this.title = title == null ? 'komplett' : title;
+        this.id = id == null ? 'complete' : id;
         this.uri = `${this.asset.uri}#${id}`;
         if (startTime != null) {
             this.startTimeSec = this.toSec(startTime);
@@ -266,50 +247,48 @@ class Sample {
      * Fade in. Set the volume to 0 and reach after a time intervale, specified
      * with `duration` the `targetVolume.`
      *
-     * @param {Number} targetVolume - End volume value of the fade in process. A
+     * @param targetVolume - End volume value of the fade in process. A
      *   number from 0 - 1.
-     * @param {Number} duration - in seconds
-     *
-     * @async
-     *
-     * @returns {Promise}
+     * @param duration - in seconds
      */
     fadeIn(targetVolume = 1, duration) {
-        let durationSafe;
-        if (duration == null) {
-            durationSafe = this.defaultFadeInSec;
-        }
-        else {
-            durationSafe = duration;
-        }
-        return new Promise((resolve, reject) => {
-            if (this.mediaElement == null)
-                return;
-            // Fade in can triggered when a fade out process is started and
-            // not yet finished.
-            this.interval.clear();
-            this.customEventsManager.trigger('fadeinbegin');
-            this.playbackState = 'fadein';
-            let actualVolume = 0;
-            this.mediaElement.volume = 0;
-            this.mediaElement.play();
-            // Normally 0.01 by volume = 1
-            const steps = targetVolume / 100;
-            // Interval: every X ms reduce volume by step
-            // in milliseconds: duration * 1000 / 100
-            const stepInterval = durationSafe * 10;
-            this.interval.set(() => {
-                actualVolume += steps;
-                if (actualVolume <= targetVolume) {
-                    this.volume = actualVolume;
-                }
-                else {
-                    this.interval.clear();
-                    this.customEventsManager.trigger('fadeinend');
-                    this.playbackState = 'playing';
-                    resolve();
-                }
-            }, stepInterval);
+        return __awaiter(this, void 0, void 0, function* () {
+            let durationSafe;
+            if (duration == null) {
+                durationSafe = this.defaultFadeInSec;
+            }
+            else {
+                durationSafe = duration;
+            }
+            return yield new Promise((resolve, reject) => {
+                if (this.mediaElement == null)
+                    return;
+                // Fade in can triggered when a fade out process is started and
+                // not yet finished.
+                this.interval.clear();
+                this.customEventsManager.trigger('fadeinbegin');
+                this.playbackState = 'fadein';
+                let actualVolume = 0;
+                this.mediaElement.volume = 0;
+                this.mediaElement.play();
+                // Normally 0.01 by volume = 1
+                const steps = targetVolume / 100;
+                // Interval: every X ms reduce volume by step
+                // in milliseconds: duration * 1000 / 100
+                const stepInterval = durationSafe * 10;
+                this.interval.set(() => {
+                    actualVolume += steps;
+                    if (actualVolume <= targetVolume) {
+                        this.volume = actualVolume;
+                    }
+                    else {
+                        this.interval.clear();
+                        this.customEventsManager.trigger('fadeinend');
+                        this.playbackState = 'playing';
+                        resolve();
+                    }
+                }, stepInterval);
+            });
         });
     }
     /**
@@ -365,46 +344,48 @@ class Sample {
      * @param duration - in seconds
      */
     fadeOut(duration) {
-        let durationSafe;
-        if (duration == null) {
-            durationSafe = this.defaultFadeOutSec;
-        }
-        else {
-            durationSafe = duration;
-        }
-        return new Promise((resolve, reject) => {
-            if (this.mediaElement == null)
-                return;
-            if (this.mediaElement.paused)
-                resolve(undefined);
-            // Fade out can triggered when a fade out process is started and
-            // not yet finished.
-            this.interval.clear();
-            this.customEventsManager.trigger('fadeoutbegin');
-            this.playbackState = 'fadeout';
-            // Number from 0 - 1
-            let actualVolume = this.mediaElement.volume;
-            // Normally 0.01 by volume = 1
-            const steps = actualVolume / 100;
-            // Interval: every X ms reduce volume by step
-            // in milliseconds: duration * 1000 / 100
-            const stepInterval = durationSafe * 10;
-            this.interval.set(() => {
-                actualVolume -= steps;
-                if (actualVolume >= 0) {
-                    this.volume = actualVolume;
-                }
-                else {
-                    // The video opacity must be set to zero.
-                    this.volume = 0;
-                    if (this.mediaElement != null)
-                        this.mediaElement.pause();
-                    this.interval.clear();
-                    this.customEventsManager.trigger('fadeoutend');
-                    this.playbackState = 'stopped';
-                    resolve();
-                }
-            }, stepInterval);
+        return __awaiter(this, void 0, void 0, function* () {
+            let durationSafe;
+            if (duration == null) {
+                durationSafe = this.defaultFadeOutSec;
+            }
+            else {
+                durationSafe = duration;
+            }
+            return yield new Promise((resolve, reject) => {
+                if (this.mediaElement == null)
+                    return;
+                if (this.mediaElement.paused)
+                    resolve(undefined);
+                // Fade out can triggered when a fade out process is started and
+                // not yet finished.
+                this.interval.clear();
+                this.customEventsManager.trigger('fadeoutbegin');
+                this.playbackState = 'fadeout';
+                // Number from 0 - 1
+                let actualVolume = this.mediaElement.volume;
+                // Normally 0.01 by volume = 1
+                const steps = actualVolume / 100;
+                // Interval: every X ms reduce volume by step
+                // in milliseconds: duration * 1000 / 100
+                const stepInterval = durationSafe * 10;
+                this.interval.set(() => {
+                    actualVolume -= steps;
+                    if (actualVolume >= 0) {
+                        this.volume = actualVolume;
+                    }
+                    else {
+                        // The video opacity must be set to zero.
+                        this.volume = 0;
+                        if (this.mediaElement != null)
+                            this.mediaElement.pause();
+                        this.interval.clear();
+                        this.customEventsManager.trigger('fadeoutend');
+                        this.playbackState = 'stopped';
+                        resolve();
+                    }
+                }, stepInterval);
+            });
         });
     }
     /**
@@ -506,3 +487,4 @@ class Sample {
         this.jump(interval, 'backward');
     }
 }
+exports.Sample = Sample;
