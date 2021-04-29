@@ -8,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { convertDurationToSeconds } from '@bldr/core-browser';
+import { createHtmlElement } from './html-elements';
+import { Interval, TimeOut } from './timer';
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -65,9 +67,10 @@ export class Sample {
         this.timeOut = new TimeOut();
         this.customEventsManager = new CustomEventsManager();
         this.asset = asset;
+        this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl);
         this.title = title == null ? 'komplett' : title;
         this.id = id == null ? 'complete' : id;
-        this.uri = `${this.asset.uri}#${id}`;
+        this.uri = `${this.asset.uri.uriWithoutFragment}#${this.id}`;
         if (startTime != null) {
             this.startTimeSec = this.toSec(startTime);
         }
@@ -102,7 +105,7 @@ export class Sample {
      * The URI using the `uuid` authority.
      */
     get uriUuid() {
-        return `${this.asset.uri}#${this.id}`;
+        return `${this.asset.uuid}#${this.id}`;
     }
     /**
      * If the sample is the complete media file get the title of the media file.
@@ -160,16 +163,13 @@ export class Sample {
      * The current time of the sample. It starts from zero.
      */
     get currentTimeSec() {
-        if (this.mediaElement != null) {
-            return this.mediaElement.currentTime - this.startTimeSec;
-        }
-        return 0;
+        return this.htmlElement.currentTime - this.startTimeSec;
     }
     /**
      * Time in seconds to fade in.
      */
     get fadeInSec() {
-        if (!this.fadeInSec_) {
+        if (this.fadeInSec_ == null) {
             return this.defaultFadeInSec;
         }
         else {
@@ -180,7 +180,7 @@ export class Sample {
      * Time in seconds to fade out.
      */
     get fadeOutSec() {
-        if (!this.fadeOutSec_) {
+        if (this.fadeOutSec_ == null) {
             return this.defaultFadeOutSec;
         }
         else {
@@ -198,9 +198,9 @@ export class Sample {
      * sample, it is the same as `sample.durationSec_`.
      */
     get durationSec() {
-        if (this.durationSec_ == null && this.mediaElement != null) {
+        if (this.durationSec_ == null) {
             // Samples without duration play until the end fo the media file.
-            return this.mediaElement.duration - this.startTimeSec;
+            return this.htmlElement.duration - this.startTimeSec;
         }
         else if (this.durationSec_ != null) {
             return this.durationSec_;
@@ -228,16 +228,17 @@ export class Sample {
         // 6 / 60 = 0.1
         return this.currentTimeSec / this.durationSec_;
     }
+    get volume() {
+        return this.htmlElement.volume;
+    }
     /**
      * Set the volume and simultaneously the opacity of a video element, to be
      * able to fade out or fade in a video and a audio file.
      */
     set volume(value) {
-        if (this.mediaElement == null)
-            return;
-        this.mediaElement.volume = parseFloat(value.toFixed(2));
+        this.htmlElement.volume = parseFloat(value.toFixed(2));
         if (this.asset.mimeType === 'video') {
-            this.mediaElement.style.opacity = value.toFixed(2);
+            this.htmlElement.style.opacity = value.toFixed(2);
         }
     }
     /**
@@ -258,7 +259,7 @@ export class Sample {
                 durationSafe = duration;
             }
             return yield new Promise((resolve, reject) => {
-                if (this.mediaElement == null)
+                if (this.htmlElement == null)
                     return;
                 // Fade in can triggered when a fade out process is started and
                 // not yet finished.
@@ -266,8 +267,8 @@ export class Sample {
                 this.customEventsManager.trigger('fadeinbegin');
                 this.playbackState = 'fadein';
                 let actualVolume = 0;
-                this.mediaElement.volume = 0;
-                this.mediaElement.play();
+                this.htmlElement.volume = 0;
+                this.htmlElement.play().then(() => { }, () => { });
                 // Normally 0.01 by volume = 1
                 const steps = targetVolume / 100;
                 // Interval: every X ms reduce volume by step
@@ -307,25 +308,25 @@ export class Sample {
      *   the sample
      */
     play(targetVolume, startTimeSec, fadeInSec) {
-        if (this.mediaElement == null)
+        if (this.htmlElement == null)
             return;
         if (fadeInSec == null)
             fadeInSec = this.fadeInSec;
         // The start() triggers play with this.startTimeSec. “complete” samples
         // have on this.startTimeSec 0.
         if (startTimeSec != null || startTimeSec === 0) {
-            this.mediaElement.currentTime = startTimeSec;
+            this.htmlElement.currentTime = startTimeSec;
         }
-        else if (this.mediaElementCurrentTimeSec) {
-            this.mediaElement.currentTime = this.mediaElementCurrentTimeSec;
+        else if (this.mediaElementCurrentTimeSec != null) {
+            this.htmlElement.currentTime = this.mediaElementCurrentTimeSec;
         }
         else {
-            this.mediaElement.currentTime = this.startTimeSec;
+            this.htmlElement.currentTime = this.startTimeSec;
         }
         // To prevent AbortError in Firefox, artefacts when switching through the
         // audio files.
         this.timeOut.set(() => {
-            this.fadeIn(targetVolume, this.fadeInSec);
+            this.fadeIn(targetVolume, this.fadeInSec).then(() => { }, () => { });
             this.scheduleFadeOut();
         }, this.defaultPlayDelayMsec);
     }
@@ -335,7 +336,9 @@ export class Sample {
      * fade out.
      */
     scheduleFadeOut() {
-        this.timeOut.set(() => { this.fadeOut(this.fadeOutSec); }, this.fadeOutStartTimeMsec_);
+        this.timeOut.set(() => {
+            this.fadeOut(this.fadeOutSec).then(() => { }, () => { });
+        }, this.fadeOutStartTimeMsec_);
     }
     /**
      * @param duration - in seconds
@@ -350,9 +353,9 @@ export class Sample {
                 durationSafe = duration;
             }
             return yield new Promise((resolve, reject) => {
-                if (this.mediaElement == null)
+                if (this.htmlElement == null)
                     return;
-                if (this.mediaElement.paused)
+                if (this.htmlElement.paused)
                     resolve(undefined);
                 // Fade out can triggered when a fade out process is started and
                 // not yet finished.
@@ -360,7 +363,7 @@ export class Sample {
                 this.customEventsManager.trigger('fadeoutbegin');
                 this.playbackState = 'fadeout';
                 // Number from 0 - 1
-                let actualVolume = this.mediaElement.volume;
+                let actualVolume = this.htmlElement.volume;
                 // Normally 0.01 by volume = 1
                 const steps = actualVolume / 100;
                 // Interval: every X ms reduce volume by step
@@ -374,8 +377,8 @@ export class Sample {
                     else {
                         // The video opacity must be set to zero.
                         this.volume = 0;
-                        if (this.mediaElement != null)
-                            this.mediaElement.pause();
+                        if (this.htmlElement != null)
+                            this.htmlElement.pause();
                         this.interval.clear();
                         this.customEventsManager.trigger('fadeoutend');
                         this.playbackState = 'stopped';
@@ -395,14 +398,14 @@ export class Sample {
      */
     stop(fadeOutSec) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.mediaElement == null || this.mediaElement.paused)
+            if (this.htmlElement == null || this.htmlElement.paused)
                 return;
             yield this.fadeOut(fadeOutSec);
-            this.mediaElement.currentTime = this.startTimeSec;
+            this.htmlElement.currentTime = this.startTimeSec;
             this.timeOut.clear();
             if (this.asset.mimeType === 'video') {
-                this.mediaElement.load();
-                this.mediaElement.style.opacity = '1';
+                this.htmlElement.load();
+                this.htmlElement.style.opacity = '1';
             }
         });
     }
@@ -414,15 +417,15 @@ export class Sample {
      */
     pause() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.mediaElement == null)
+            if (this.htmlElement == null)
                 return;
             yield this.fadeOut();
             this.timeOut.clear();
             if (this.asset.mimeType === 'video') {
-                this.mediaElement.style.opacity = '0';
+                this.htmlElement.style.opacity = '0';
             }
-            this.mediaElementCurrentTimeSec = this.mediaElement.currentTime;
-            this.mediaElementCurrentVolume = this.mediaElement.volume;
+            this.mediaElementCurrentTimeSec = this.htmlElement.currentTime;
+            this.mediaElementCurrentVolume = this.htmlElement.volume;
         });
     }
     /**
@@ -430,19 +433,19 @@ export class Sample {
      * start this sample.
      */
     toggle(targetVolume = 1) {
-        var _a;
-        if ((_a = this.mediaElement) === null || _a === void 0 ? void 0 : _a.paused) {
+        var _a, _b;
+        if (((_a = this.htmlElement) === null || _a === void 0 ? void 0 : _a.paused) != null && ((_b = this.htmlElement) === null || _b === void 0 ? void 0 : _b.paused)) {
             this.play(targetVolume);
         }
         else {
-            this.pause();
+            this.pause().then(() => { }, () => { });
         }
     }
     /**
      * Jump to a new time position.
      */
     jump(interval = 10, direction = 'forward') {
-        if (this.mediaElement == null)
+        if (this.htmlElement == null)
             return;
         let newPlayPosition;
         const cur = this.currentTimeSec;
@@ -464,7 +467,7 @@ export class Sample {
             }
         }
         this.timeOut.clear();
-        this.mediaElement.currentTime = this.startTimeSec + newPlayPosition;
+        this.htmlElement.currentTime = this.startTimeSec + newPlayPosition;
         this.scheduleFadeOut();
     }
     /**

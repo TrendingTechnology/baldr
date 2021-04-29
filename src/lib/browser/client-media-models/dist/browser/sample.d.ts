@@ -1,5 +1,5 @@
-import { ClientMediaAsset } from './client-media-asset';
 import type { AssetType } from '@bldr/type-definitions';
+import { ClientMediaAsset } from './client-media-asset';
 /**
  * The state of the current playback.
  *
@@ -55,7 +55,7 @@ export declare class Sample {
      * The corresponding HTML media element, a object of the
      * corresponding `<audio/>` or `<video/>` element.
      */
-    mediaElement?: HTMLMediaElement;
+    htmlElement: HTMLMediaElement;
     /**
      * The title of the sample. For example `komplett`, `Hook-Line`.
      */
@@ -173,6 +173,7 @@ export declare class Sample {
      * the sample reaches the end.
      */
     get progress(): number;
+    get volume(): number;
     /**
      * Set the volume and simultaneously the opacity of a video element, to be
      * able to fade out or fade in a video and a audio file.

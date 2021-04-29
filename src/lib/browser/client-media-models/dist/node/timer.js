@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Interval = exports.TimeOut = void 0;
 class Timer {
     constructor() {
         this.ids = [];
@@ -19,6 +21,7 @@ class TimeOut extends Timer {
         }
     }
 }
+exports.TimeOut = TimeOut;
 /**
  * Wrapper class around the function `setInterval` to store the `id`s returned
  * by the function to be able to clear the function.
@@ -46,3 +49,4 @@ class Interval extends Timer {
         }
     }
 }
+exports.Interval = Interval;

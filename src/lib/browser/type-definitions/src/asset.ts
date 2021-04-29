@@ -135,6 +135,9 @@ export interface FileFormat {
    */
   cover?: string
 
+  composer?: string
+  artist?: string
+
   [property: string]: any
 }
 

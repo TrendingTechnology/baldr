@@ -117,6 +117,8 @@ export interface FileFormat {
      * Video files are also supported.
      */
     cover?: string;
+    composer?: string;
+    artist?: string;
     [property: string]: any;
 }
 /**

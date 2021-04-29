@@ -1,4 +1,3 @@
-"use strict";
 class Timer {
     constructor() {
         this.ids = [];
@@ -9,7 +8,7 @@ class Timer {
  * duration - stopped to early - cases that the next playback gets stopped
  * to early.
  */
-class TimeOut extends Timer {
+export class TimeOut extends Timer {
     set(func, delay) {
         this.ids.push(setTimeout(func, delay));
     }
@@ -23,7 +22,7 @@ class TimeOut extends Timer {
  * Wrapper class around the function `setInterval` to store the `id`s returned
  * by the function to be able to clear the function.
  */
-class Interval extends Timer {
+export class Interval extends Timer {
     /**
      * Repeatedly call a function.
      *

@@ -1,1 +1,1 @@
-export declare function createMediaElement(mimeType: string, httpUrl: string, previewHttpUrl?: string): HTMLElement;
+export declare function createHtmlElement(mimeType: string, httpUrl: string, previewHttpUrl?: string): HTMLElement;

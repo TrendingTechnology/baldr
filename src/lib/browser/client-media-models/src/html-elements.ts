@@ -5,26 +5,22 @@
 // <- const Audio = dom.window.Audio
 // <- const document = dom.window.document
 
-export function createMediaElement (mimeType: string, httpUrl: string, previewHttpUrl?: string): HTMLElement {
-  switch (mimeType) {
-    case 'audio':
-      return new Audio(httpUrl)
-
-    case 'video':
-      const video = document.createElement('video')
-      video.src = httpUrl
-      video.controls = true
-      if (previewHttpUrl != null) {
-        video.poster = previewHttpUrl
-      }
-      return video
-
-    case 'image':
-      const image = new Image()
-      image.src = httpUrl
-      return image
-
-    default:
-      throw new Error(`Not supported asset type “${mimeType}”.`)
+export function createHtmlElement (mimeType: string, httpUrl: string, previewHttpUrl?: string): HTMLElement {
+  if (mimeType === 'audio') {
+    return new Audio(httpUrl)
+  } else if (mimeType === 'video') {
+    const video = document.createElement('video')
+    video.src = httpUrl
+    video.controls = true
+    if (previewHttpUrl != null) {
+      video.poster = previewHttpUrl
+    }
+    return video
+  } else if (mimeType === 'image') {
+    const image = new Image()
+    image.src = httpUrl
+    return image
+  } else {
+    throw new Error(`Not supported asset type “${mimeType}”.`)
   }
 }
