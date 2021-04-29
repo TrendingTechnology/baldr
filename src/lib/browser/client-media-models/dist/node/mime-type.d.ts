@@ -20,8 +20,6 @@ export declare class MimeTypeManager {
     private spreadExtensions;
     /**
      * Get the media type from the extension.
-     *
-     * @param extension
      */
     extensionToType(extension: string): string;
     /**

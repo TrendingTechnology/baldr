@@ -1,9 +1,11 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAsset, MediaUri, findMediaUris } from '@bldr/client-media-models'
+import { ClientMediaAsset, MediaUri, findMediaUris, AssetCache } from '@bldr/client-media-models'
 import { makeSet } from '@bldr/core-browser'
 import config from '@bldr/config'
-import { AssetType } from '@bldr/type-definitions'
+import type { AssetType } from '@bldr/type-definitions'
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
+
+export const assetCache = new AssetCache()
 
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -128,9 +130,13 @@ export class Resolver {
    * file by its URI.
    */
   private async resolveSingle (uri: string): Promise<ClientMediaAsset> {
+    const cachedAsset = assetCache.get(uri)
+    if (cachedAsset != null) return cachedAsset
     const raw = await this.queryMediaServer(uri)
     const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-    return new ClientMediaAsset(uri, httpUrl, raw)
+    const asset = new ClientMediaAsset(uri, httpUrl, raw)
+    assetCache.add(asset)
+    return asset
   }
 
   /**

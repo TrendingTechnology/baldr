@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CustomEventsManager = void 0;
 /**
  * A simple wrapper class for a custom event system. Used in the classes
  * `Sample()` and `Player()`.
@@ -40,3 +42,4 @@ class CustomEventsManager {
         this.callbacks[name].push(callback);
     }
 }
+exports.CustomEventsManager = CustomEventsManager;

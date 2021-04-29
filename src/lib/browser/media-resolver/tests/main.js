@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const { Resolver } = require('../dist/node/main.js')
+const { Resolver, assetCache } = require('../dist/node/main.js')
 
 const resolver = new Resolver()
 describe('Package “@bldr/media-resolver”', function () {
@@ -12,6 +12,8 @@ describe('Package “@bldr/media-resolver”', function () {
     // Linked over cover: uuid:
     // 09/20_Kontext/20_Romantik/10_Programmmusik/35_Ausstellung/10_Ausstellung-Ueberblick/HB/Ausstellung_Cover.jpg
     assert.strictEqual(assets[1].uri.raw, 'uuid:e14ad479-3c2a-497a-a5f3-c30ea7dcb8b9')
+    const cachedAssets = assetCache.getAll()
+    assert.strictEqual(cachedAssets.length, 2)
   })
 
 })

@@ -148,15 +148,26 @@ export class MediaUriCache {
     this.uuids = {}
   }
 
-  addPair (id: string, uuid: string): void {
-    this.ids[id] = uuid
-    this.uuids[uuid] = id
+  addPair (id: string, uuid: string): boolean {
+    if (this.ids[id] == null && this.uuids[uuid] == null) {
+      this.ids[id] = uuid
+      this.uuids[uuid] = id
+      return true
+    }
+    return false
   }
 
   getIdFromUuid (uuid: string): string | undefined {
     if (this.uuids[uuid] != null) {
       return this.uuids[uuid]
     }
+  }
+
+  getId (uuidOrId: string): string | undefined {
+    if (uuidOrId.indexOf('uuid:') === 0) {
+      return this.getIdFromUuid(uuidOrId)
+    }
+    return uuidOrId
   }
 
   getUuidFromId (id: string): string | undefined {

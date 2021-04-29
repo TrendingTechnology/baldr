@@ -2,7 +2,7 @@
  * A simple wrapper class for a custom event system. Used in the classes
  * `Sample()` and `Player()`.
  */
-declare class CustomEventsManager {
+export declare class CustomEventsManager {
     /**
      * An object of callback functions
      */

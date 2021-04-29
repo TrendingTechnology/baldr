@@ -1,9 +1,8 @@
-"use strict";
 /**
  * A simple wrapper class for a custom event system. Used in the classes
  * `Sample()` and `Player()`.
  */
-class CustomEventsManager {
+export class CustomEventsManager {
     constructor() {
         this.callbacks = {};
     }

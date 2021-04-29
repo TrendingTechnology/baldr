@@ -67,3 +67,11 @@ export declare class ClientMediaAsset {
      */
     get isVisible(): boolean;
 }
+export declare class AssetCache {
+    private cache;
+    private readonly mediaUriCache;
+    constructor();
+    add(asset: ClientMediaAsset): boolean;
+    get(uuidOrId: string): ClientMediaAsset | undefined;
+    getAll(): ClientMediaAsset[];
+}

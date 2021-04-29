@@ -16,7 +16,7 @@
     "build:node": "tsc --module commonjs --outDir dist/node && npm run patch:jsdom",
     "patch:jsdom": "sed -i 's#// <- ##' ./dist/node/html-elements.js",
     "lint": "ts-standard --fix src/*.ts",
-    "test": "npm run build && mocha tests/*"
+    "test": "npm run build && npm run lint && mocha tests/*"
   },
   "license": "MIT",
   "author": {

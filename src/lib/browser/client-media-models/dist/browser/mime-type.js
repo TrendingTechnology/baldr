@@ -29,8 +29,6 @@ export class MimeTypeManager {
     }
     /**
      * Get the media type from the extension.
-     *
-     * @param extension
      */
     extensionToType(extension) {
         extension = extension.toLowerCase();

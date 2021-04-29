@@ -1,6 +1,6 @@
 import { getExtension } from '@bldr/core-browser';
 import { mimeTypeManager } from './mime-type';
-import { MediaUri } from './media-uri';
+import { MediaUri, MediaUriCache } from './media-uri';
 import { Sample } from './sample';
 /**
  * Hold various data of a media file as class properties.
@@ -49,11 +49,11 @@ export class ClientMediaAsset {
     createSamples() {
         if (this.isPlayable) {
             // First sample of each playable media file is the “complete” track.
-            const completeSampleSpec = {
-                title: 'komplett',
-                id: 'complete',
-                startTime: 0
-            };
+            // const completeSampleSpec = {
+            //   title: 'komplett',
+            //   id: 'complete',
+            //   startTime: 0
+            // }
             // for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
             //   if (asset[prop]) {
             //     completeSampleSpec[prop] = asset[prop]
@@ -125,5 +125,27 @@ export class ClientMediaAsset {
      */
     get isVisible() {
         return ['image', 'video'].includes(this.mimeType);
+    }
+}
+export class AssetCache {
+    constructor() {
+        this.cache = {};
+        this.mediaUriCache = new MediaUriCache();
+    }
+    add(asset) {
+        if (this.mediaUriCache.addPair(asset.id, asset.uuid)) {
+            this.cache[asset.id] = asset;
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrId) {
+        const id = this.mediaUriCache.getId(uuidOrId);
+        if (id != null && this.cache[id] != null) {
+            return this.cache[id];
+        }
+    }
+    getAll() {
+        return Object.values(this.cache);
     }
 }

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { convertDurationToSeconds } from '@bldr/core-browser';
 import { createHtmlElement } from './html-elements';
 import { Interval, TimeOut } from './timer';
+import { CustomEventsManager } from './custom-events-manager';
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -259,8 +260,6 @@ export class Sample {
                 durationSafe = duration;
             }
             return yield new Promise((resolve, reject) => {
-                if (this.htmlElement == null)
-                    return;
                 // Fade in can triggered when a fade out process is started and
                 // not yet finished.
                 this.interval.clear();
@@ -308,8 +307,6 @@ export class Sample {
      *   the sample
      */
     play(targetVolume, startTimeSec, fadeInSec) {
-        if (this.htmlElement == null)
-            return;
         if (fadeInSec == null)
             fadeInSec = this.fadeInSec;
         // The start() triggers play with this.startTimeSec. “complete” samples
@@ -353,8 +350,6 @@ export class Sample {
                 durationSafe = duration;
             }
             return yield new Promise((resolve, reject) => {
-                if (this.htmlElement == null)
-                    return;
                 if (this.htmlElement.paused)
                     resolve(undefined);
                 // Fade out can triggered when a fade out process is started and
@@ -398,7 +393,7 @@ export class Sample {
      */
     stop(fadeOutSec) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.htmlElement == null || this.htmlElement.paused)
+            if (this.htmlElement.paused)
                 return;
             yield this.fadeOut(fadeOutSec);
             this.htmlElement.currentTime = this.startTimeSec;
@@ -417,8 +412,6 @@ export class Sample {
      */
     pause() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.htmlElement == null)
-                return;
             yield this.fadeOut();
             this.timeOut.clear();
             if (this.asset.mimeType === 'video') {
@@ -433,8 +426,7 @@ export class Sample {
      * start this sample.
      */
     toggle(targetVolume = 1) {
-        var _a, _b;
-        if (((_a = this.htmlElement) === null || _a === void 0 ? void 0 : _a.paused) != null && ((_b = this.htmlElement) === null || _b === void 0 ? void 0 : _b.paused)) {
+        if (this.htmlElement.paused) {
             this.play(targetVolume);
         }
         else {
@@ -445,8 +437,6 @@ export class Sample {
      * Jump to a new time position.
      */
     jump(interval = 10, direction = 'forward') {
-        if (this.htmlElement == null)
-            return;
         let newPlayPosition;
         const cur = this.currentTimeSec;
         if (direction === 'backward') {
@@ -485,5 +475,45 @@ export class Sample {
      */
     backward(interval = 10) {
         this.jump(interval, 'backward');
+    }
+}
+class SampleCollection {
+    constructor() {
+        this.cache = {};
+    }
+    add(asset, yamlFormat) {
+        const sample = new Sample(asset, yamlFormat);
+        if (this.cache[sample.id] != null) {
+            throw new Error(`Duplicate sample with the id ${sample.id}`);
+        }
+        this.cache[sample.id] = sample;
+    }
+    buildSampleYamlFromAssetYaml(assetFormat) {
+        const sampleFormat = {};
+        if (assetFormat.startTime != null)
+            sampleFormat.startTime = assetFormat.startTime;
+        if (assetFormat.duration != null)
+            sampleFormat.duration = assetFormat.duration;
+        if (assetFormat.endTime != null)
+            sampleFormat.endTime = assetFormat.endTime;
+        if (assetFormat.fadeIn != null)
+            sampleFormat.startTime = assetFormat.fadeIn;
+        if (assetFormat.fadeOut != null)
+            sampleFormat.startTime = assetFormat.fadeOut;
+        if (assetFormat.shortcut != null)
+            sampleFormat.shortcut = assetFormat.shortcut;
+        if (Object.keys(sampleFormat).length > 0) {
+            return sampleFormat;
+        }
+    }
+    addFromAsset(asset) {
+        if (asset.meta.samples != null) {
+            for (const sampleSpec of asset.meta.samples) {
+                this.add(asset, sampleSpec);
+            }
+        }
+        const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.meta);
+        if (sampleFormat != null)
+            this.add(asset, sampleFormat);
     }
 }

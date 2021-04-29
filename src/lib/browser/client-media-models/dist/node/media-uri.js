@@ -118,13 +118,23 @@ class MediaUriCache {
         this.uuids = {};
     }
     addPair(id, uuid) {
-        this.ids[id] = uuid;
-        this.uuids[uuid] = id;
+        if (this.ids[id] == null && this.uuids[uuid] == null) {
+            this.ids[id] = uuid;
+            this.uuids[uuid] = id;
+            return true;
+        }
+        return false;
     }
     getIdFromUuid(uuid) {
         if (this.uuids[uuid] != null) {
             return this.uuids[uuid];
         }
+    }
+    getId(uuidOrId) {
+        if (uuidOrId.indexOf('uuid:') === 0) {
+            return this.getIdFromUuid(uuidOrId);
+        }
+        return uuidOrId;
     }
     getUuidFromId(id) {
         if (this.ids[id] != null) {

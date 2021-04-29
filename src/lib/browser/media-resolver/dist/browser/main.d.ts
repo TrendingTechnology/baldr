@@ -1,5 +1,6 @@
-import { ClientMediaAsset } from '@bldr/client-media-models';
+import { ClientMediaAsset, AssetCache } from '@bldr/client-media-models';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
+export declare const assetCache: AssetCache;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Resolve a local file. The local files have to dropped

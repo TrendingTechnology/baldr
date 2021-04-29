@@ -8,10 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { makeHttpRequestInstance } from '@bldr/http-request';
-import { ClientMediaAsset, MediaUri, findMediaUris } from '@bldr/client-media-models';
+import { ClientMediaAsset, MediaUri, findMediaUris, AssetCache } from '@bldr/client-media-models';
 import { makeSet } from '@bldr/core-browser';
 import config from '@bldr/config';
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
+export const assetCache = new AssetCache();
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Resolve a local file. The local files have to dropped
@@ -127,9 +128,14 @@ export class Resolver {
      */
     resolveSingle(uri) {
         return __awaiter(this, void 0, void 0, function* () {
+            const cachedAsset = assetCache.get(uri);
+            if (cachedAsset != null)
+                return cachedAsset;
             const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
-            return new ClientMediaAsset(uri, httpUrl, raw);
+            const asset = new ClientMediaAsset(uri, httpUrl, raw);
+            assetCache.add(asset);
+            return asset;
         });
     }
     /**

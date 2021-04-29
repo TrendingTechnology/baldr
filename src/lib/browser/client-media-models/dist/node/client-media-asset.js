@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClientMediaAsset = void 0;
+exports.AssetCache = exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const mime_type_1 = require("./mime-type");
 const media_uri_1 = require("./media-uri");
@@ -52,11 +52,11 @@ class ClientMediaAsset {
     createSamples() {
         if (this.isPlayable) {
             // First sample of each playable media file is the “complete” track.
-            const completeSampleSpec = {
-                title: 'komplett',
-                id: 'complete',
-                startTime: 0
-            };
+            // const completeSampleSpec = {
+            //   title: 'komplett',
+            //   id: 'complete',
+            //   startTime: 0
+            // }
             // for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
             //   if (asset[prop]) {
             //     completeSampleSpec[prop] = asset[prop]
@@ -131,3 +131,26 @@ class ClientMediaAsset {
     }
 }
 exports.ClientMediaAsset = ClientMediaAsset;
+class AssetCache {
+    constructor() {
+        this.cache = {};
+        this.mediaUriCache = new media_uri_1.MediaUriCache();
+    }
+    add(asset) {
+        if (this.mediaUriCache.addPair(asset.id, asset.uuid)) {
+            this.cache[asset.id] = asset;
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrId) {
+        const id = this.mediaUriCache.getId(uuidOrId);
+        if (id != null && this.cache[id] != null) {
+            return this.cache[id];
+        }
+    }
+    getAll() {
+        return Object.values(this.cache);
+    }
+}
+exports.AssetCache = AssetCache;

@@ -2,7 +2,7 @@ import type { AssetType } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 
 import { mimeTypeManager } from './mime-type'
-import { MediaUri } from './media-uri'
+import { MediaUri, MediaUriCache } from './media-uri'
 import { Sample } from './sample'
 
 /**
@@ -86,11 +86,11 @@ export class ClientMediaAsset {
   private createSamples (): Sample[] | undefined {
     if (this.isPlayable) {
       // First sample of each playable media file is the “complete” track.
-      const completeSampleSpec = {
-        title: 'komplett',
-        id: 'complete',
-        startTime: 0
-      }
+      // const completeSampleSpec = {
+      //   title: 'komplett',
+      //   id: 'complete',
+      //   startTime: 0
+      // }
       // for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
       //   if (asset[prop]) {
       //     completeSampleSpec[prop] = asset[prop]
@@ -254,4 +254,34 @@ export class ClientMediaAsset {
   // getMultiPartHttpUrlByNo (): string {
   //   return this.httpUrl
   // }
+}
+
+export class AssetCache {
+  private cache: { [id: string]: ClientMediaAsset }
+
+  private readonly mediaUriCache: MediaUriCache
+
+  constructor () {
+    this.cache = {}
+    this.mediaUriCache = new MediaUriCache()
+  }
+
+  add (asset: ClientMediaAsset): boolean {
+    if (this.mediaUriCache.addPair(asset.id, asset.uuid)) {
+      this.cache[asset.id] = asset
+      return true
+    }
+    return false
+  }
+
+  get (uuidOrId: string): ClientMediaAsset | undefined {
+    const id = this.mediaUriCache.getId(uuidOrId)
+    if (id != null && this.cache[id] != null) {
+      return this.cache[id]
+    }
+  }
+
+  getAll (): ClientMediaAsset[] {
+    return Object.values(this.cache)
+  }
 }

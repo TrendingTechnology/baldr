@@ -43,8 +43,6 @@ export class MimeTypeManager {
 
   /**
    * Get the media type from the extension.
-   *
-   * @param extension
    */
   extensionToType (extension: string): string {
     extension = extension.toLowerCase()

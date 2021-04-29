@@ -4,6 +4,7 @@ import type { AssetType } from '@bldr/type-definitions'
 import { ClientMediaAsset } from './client-media-asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
+import { CustomEventsManager } from './custom-events-manager'
 
 /**
  * The state of the current playback.
@@ -354,7 +355,6 @@ export class Sample {
       durationSafe = duration
     }
     return await new Promise((resolve, reject) => {
-      if (this.htmlElement == null) return
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
       this.interval.clear()
@@ -402,7 +402,6 @@ export class Sample {
    *   the sample
    */
   play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
-    if (this.htmlElement == null) return
     if (fadeInSec == null) fadeInSec = this.fadeInSec
     // The start() triggers play with this.startTimeSec. “complete” samples
     // have on this.startTimeSec 0.
@@ -453,7 +452,6 @@ export class Sample {
       durationSafe = duration
     }
     return await new Promise((resolve, reject) => {
-      if (this.htmlElement == null) return
       if (this.htmlElement.paused) resolve(undefined)
       // Fade out can triggered when a fade out process is started and
       // not yet finished.
@@ -493,7 +491,7 @@ export class Sample {
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
   async stop (fadeOutSec?: number): Promise<void> {
-    if (this.htmlElement == null || this.htmlElement.paused) return
+    if (this.htmlElement.paused) return
     await this.fadeOut(fadeOutSec)
     this.htmlElement.currentTime = this.startTimeSec
     this.timeOut.clear()
@@ -510,7 +508,6 @@ export class Sample {
    * updated.
    */
   async pause (): Promise<void> {
-    if (this.htmlElement == null) return
     await this.fadeOut()
     this.timeOut.clear()
     if (this.asset.mimeType === 'video') {
@@ -525,7 +522,7 @@ export class Sample {
    * start this sample.
    */
   toggle (targetVolume: number = 1): void {
-    if (this.htmlElement?.paused != null && this.htmlElement?.paused) {
+    if (this.htmlElement.paused) {
       this.play(targetVolume)
     } else {
       this.pause().then(
@@ -539,7 +536,6 @@ export class Sample {
    * Jump to a new time position.
    */
   private jump (interval: number = 10, direction = 'forward'): void {
-    if (this.htmlElement == null) return
     let newPlayPosition
     const cur = this.currentTimeSec
     if (direction === 'backward') {
@@ -577,5 +573,45 @@ export class Sample {
    */
   backward (interval: number = 10): void {
     this.jump(interval, 'backward')
+  }
+}
+
+class SampleCollection {
+  private cache: { [id: string]: Sample }
+
+  constructor() {
+    this.cache = {}
+  }
+
+  private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
+    const sample = new Sample(asset, yamlFormat)
+    if (this.cache[sample.id] != null) {
+      throw new Error(`Duplicate sample with the id ${sample.id}`)
+    }
+    this.cache[sample.id] = sample
+  }
+
+  private buildSampleYamlFromAssetYaml (assetFormat: AssetType.FileFormat): AssetType.SampleYamlFormat | undefined {
+    const sampleFormat: AssetType.SampleYamlFormat = {}
+    if (assetFormat.startTime != null) sampleFormat.startTime = assetFormat.startTime
+    if (assetFormat.duration != null) sampleFormat.duration = assetFormat.duration
+    if (assetFormat.endTime != null) sampleFormat.endTime = assetFormat.endTime
+    if (assetFormat.fadeIn != null) sampleFormat.startTime = assetFormat.fadeIn
+    if (assetFormat.fadeOut != null) sampleFormat.startTime = assetFormat.fadeOut
+    if (assetFormat.shortcut != null) sampleFormat.shortcut = assetFormat.shortcut
+    if (Object.keys(sampleFormat).length > 0) {
+      return sampleFormat
+    }
+  }
+
+  addFromAsset (asset: ClientMediaAsset) {
+    if (asset.meta.samples != null) {
+      for (const sampleSpec of asset.meta.samples) {
+        this.add(asset, sampleSpec)
+      }
+    }
+
+    const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.meta)
+    if (sampleFormat != null) this.add(asset, sampleFormat)
   }
 }
