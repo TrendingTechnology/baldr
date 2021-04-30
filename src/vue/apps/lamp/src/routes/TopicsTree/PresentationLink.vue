@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     async openPresentation (presRef) {
-      console.log(presRef)
       this.$router.push({ name: 'slides-preview', params: { presRef: presRef } })
     }
   },

@@ -665,7 +665,7 @@ export class Presentation {
     if (rawObject && rawObject.meta) {
       const meta = rawObject.meta
       if (!this.meta) this.meta = {}
-      for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+      for (const key of ['ref', 'title', 'subtitle', 'curriculum', 'grade']) {
         if (!this.meta[key] && meta[key]) {
           this.meta[key] = meta[key]
         }
