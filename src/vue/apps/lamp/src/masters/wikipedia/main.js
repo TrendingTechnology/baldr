@@ -222,7 +222,7 @@ export default validateMasterSpec({
       return {
         title: props.title,
         language: props.language,
-        ref: formatId(props.language, props.title),
+        id: formatId(props.language, props.title),
         oldid: props.oldid,
         httpUrl: formatUrl(props)
       }
@@ -230,7 +230,7 @@ export default validateMasterSpec({
     collectPropsPreview ({ propsMain }) {
       return {
         title: propsMain.title,
-        ref: propsMain.id
+        id: propsMain.id
       }
     },
     plainTextFromProps (props) {

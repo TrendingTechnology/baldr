@@ -201,7 +201,7 @@ async function loadPresentationByRoute (vm, route) {
   try {
     if (route.params.presId) {
       const presentation = vm.$store.getters['lamp/presentation']
-      if (!presentation || (presentation && presentation.id !== route.params.presId)) {
+      if (!presentation || (presentation && presentation.ref !== route.params.presId)) {
         await loadPresentationById(vm, route.params.presId)
       }
       if (route.params.slideNo) {

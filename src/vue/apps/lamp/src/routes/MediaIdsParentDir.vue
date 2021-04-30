@@ -20,8 +20,8 @@
       </thead>
 
       <tbody>
-        <tr v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
-          <td class="id">{{ mediaAsset.id }}</td>
+        <tr v-for="mediaAsset in mediaAssets" :key="mediaAsset.ref">
+          <td class="id">{{ mediaAsset.ref }}</td>
           <td>{{ mediaAsset.mimeType }}</td>
           <td>{{ mediaAsset.extension }}</td>
           <td>{{ mediaAsset.title }}</td>
@@ -32,8 +32,8 @@
     <h2>Nur die IDs</h2>
 
     <code>
-      <div v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
-        {{ mediaAsset.id }}
+      <div v-for="mediaAsset in mediaAssets" :key="mediaAsset.ref">
+        {{ mediaAsset.ref }}
       </div>
     </code>
 

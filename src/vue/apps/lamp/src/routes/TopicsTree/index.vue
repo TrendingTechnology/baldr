@@ -30,7 +30,7 @@ async function enterRoute (vm, to) {
   vm.setSubFolderTitleTreeByIds(to.params.ids)
   const presentation = vm.$store.getters['lamp/presentation']
   if (presentation) {
-    const elementLink = document.getElementById(`PID_${presentation.id}`)
+    const elementLink = document.getElementById(`PID_${presentation.ref}`)
     if (elementLink) elementLink.scrollIntoView({ block: 'center' })
   }
 }

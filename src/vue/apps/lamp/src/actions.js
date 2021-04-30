@@ -104,7 +104,7 @@ function goToNextSlide (direction) {
   const slides = store.getters['lamp/slides']
   const slidesCount = store.getters['lamp/slidesCount']
 
-  const params = { presId: presentation.id }
+  const params = { presId: presentation.ref }
 
   // next
   if (direction === 1 && slide.no === slidesCount) {
@@ -148,7 +148,7 @@ function goToNextStep (direction) {
   if (!slide.stepCount || slide.stepCount < 2) return
 
   const params = {
-    presId: presentation.id,
+    presId: presentation.ref,
     slideNo: slide.no
   }
 
@@ -182,7 +182,7 @@ function goToNextSlideOrStep (direction) {
   const presentation = store.getters['lamp/presentation']
   if (!presentation) return
   const params = store.getters['lamp/nav/nextRouterParams'](direction)
-  params.presId = presentation.id
+  params.presId = presentation.ref
 
   const name = getNavRouteNameFromRoute(params, router.currentRoute)
 

@@ -110,7 +110,7 @@ export class MetaData {
     /**
      * The ID of a slide (Used for links)
      */
-    this.id = this.grabProperty_('id')
+    this.ref = this.grabProperty_('ref')
 
     /**
      * The title of a slide.
@@ -516,7 +516,7 @@ export class Slide {
     const routeNames = routerViews[view]
     const presentation = store.getters['lamp/presentation']
     let name
-    const params = { presId: presentation.id }
+    const params = { presId: presentation.ref }
     if (this.stepCount && this.stepCount > 1) {
       name = routeNames.stepNo
       if (this.stepNo) {
@@ -746,7 +746,7 @@ export class Presentation {
    * @returns {string} A raw YAML string with fully expanded media URIs.
    */
   expandMediaUris (rawYamlString, presentationId) {
-    return rawYamlString.replace(/id:.\//g, `ref:${presentationId}_`)
+    return rawYamlString.replace(/ref:.\//g, `ref:${presentationId}_`)
   }
 
   /**

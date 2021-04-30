@@ -102,7 +102,7 @@ const getters = {
 const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation({ rawYamlString, rawObject: mongoDbObject })
-    dispatch('recent/add', { presId: presentation.id, title: presentation.title })
+    dispatch('recent/add', { presId: presentation.ref, title: presentation.title })
     await presentation.resolveMedia()
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)

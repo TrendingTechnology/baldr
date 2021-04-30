@@ -46,7 +46,7 @@ export default {
     classObject: function () {
       const result = {}
       result[`level-${this.level}`] = true
-      if (this.hasPraesentation && this.presentation && this.id === this.presentation.id) {
+      if (this.hasPraesentation && this.presentation && this.id === this.presentation.ref) {
         result.active = true
       }
       return result
