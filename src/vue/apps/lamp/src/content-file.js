@@ -587,7 +587,7 @@ export class Presentation {
    * ```js
    * this.path
    * this.parentDir
-   * this.meta.id
+   * this.meta.ref
    * this.meta.title
    * this.meta.subtitle
    * this.meta.grade
@@ -599,8 +599,8 @@ export class Presentation {
     let rawYamlObject
     if (rawYamlString) {
       try {
-        if (rawObject && rawObject.meta && rawObject.meta.id) {
-          rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.id)
+        if (rawObject && rawObject.meta && rawObject.meta.ref) {
+          rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.ref)
         }
         rawYamlObject = convertFromYamlRaw(rawYamlString)
       } catch (error) {
@@ -628,7 +628,7 @@ export class Presentation {
      * ```yaml
      * meta:
      *   title: A title
-     *   id: An unique id
+     *   ref: An unique id
      *   grade: The grade the presentation belongs to.
      *   curriculum: Relation to the curriculum.
      * ```
@@ -734,8 +734,8 @@ export class Presentation {
   /**
    * Media URIs can be shorted with the string `./`. The abbreviationn `./` is
    * replaced with the presentation ID and a underscore, for example the media
-   * URI `id:Leitmotivtechnik_VD_Verdeutlichung_Duell-Mundharmonika-Frank` can
-   * be shortend with `id:./VD_Verdeutlichung_Duell-Mundharmonika-Frank`. The
+   * URI `ref:Leitmotivtechnik_VD_Verdeutlichung_Duell-Mundharmonika-Frank` can
+   * be shortend with `ref:./VD_Verdeutlichung_Duell-Mundharmonika-Frank`. The
    * abbreviationn `./` is inspired by th UNIX dot notation for the current
    * directory.
    *
@@ -746,7 +746,7 @@ export class Presentation {
    * @returns {string} A raw YAML string with fully expanded media URIs.
    */
   expandMediaUris (rawYamlString, presentationId) {
-    return rawYamlString.replace(/id:.\//g, `id:${presentationId}_`)
+    return rawYamlString.replace(/id:.\//g, `ref:${presentationId}_`)
   }
 
   /**
@@ -852,13 +852,13 @@ export class Presentation {
    *
    * ```yml
    * meta:
-   *   id: My-Presentation
+   *   ref: My-Presentation
    * ```
    *
    * @returns {String}
    */
   get id () {
-    if (this.meta && this.meta.id) return this.meta.id
+    if (this.meta && this.meta.ref) return this.meta.ref
   }
 
   /**

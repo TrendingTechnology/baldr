@@ -18,7 +18,7 @@ import path from 'path'
 import { deepCopy, getExtension } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import config from '@bldr/config'
-import { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
+import type { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
 import { DeepTitle } from '@bldr/titles'
 import { categories } from './specs'

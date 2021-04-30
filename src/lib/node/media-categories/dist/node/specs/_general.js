@@ -12,7 +12,7 @@ const main_1 = require("../main");
 exports.general = {
     title: 'Allgemeiner Metadaten-Type',
     props: {
-        id: {
+        ref: {
             title: 'ID',
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);

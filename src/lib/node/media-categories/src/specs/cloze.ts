@@ -32,7 +32,7 @@ export const cloze: MediaCategory.Category = {
     return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
   },
   props: {
-    id: {
+    ref: {
       title: 'Die ID des Lückentexts',
       derive: function ({ data, folderTitles }) {
         const clozeData = data as ClozeFileFormat
@@ -40,7 +40,7 @@ export const cloze: MediaCategory.Category = {
         if (data.clozePageNo != null) {
           counterSuffix = `_${clozeData.clozePageNo}`
         }
-        const id = folderTitles != null ? folderTitles.id : 'lueckentext'
+        const id = folderTitles != null ? folderTitles.ref : 'lueckentext'
         return `${id}_LT${counterSuffix}`
       },
       overwriteByDerived: true

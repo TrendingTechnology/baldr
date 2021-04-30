@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_metaData
+  ref: EP_common_metaData
   title: Slide meta data
   subtitle: A subtitle
   grade: 7
@@ -8,7 +8,7 @@ meta:
   curriculum_url: https://de.wikipedia.org
 
 slides:
-- id: slide_first
+- ref: slide_first
   generic: This slide has an ID.
 
 - title: This slide has a *title*.
@@ -20,7 +20,7 @@ slides:
 - source: http://example.com
   generic: This slide has a source.
 
-- id: all
+- ref: all
   title: This slide has a title.
   description: This slide has a description.
   source: This slide has a source.

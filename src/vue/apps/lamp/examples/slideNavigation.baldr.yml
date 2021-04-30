@@ -1,10 +1,10 @@
 ---
 meta:
-  id: EP_common_slideNavigation
+  ref: EP_common_slideNavigation
   title: Slide navigation
 
 slides:
-- id: overview
+- ref: overview
   generic: |
     Slide overview
 
@@ -12,7 +12,7 @@ slides:
     2. [slide:two text="Slide 2"]
     3. [slide:three text="Slide 3"]
 
-- id: one
+- ref: one
   generic: |
     This is slide one.
 
@@ -20,7 +20,7 @@ slides:
 
     Go back to the overview [slide:overview]
 
-- id: two
+- ref: two
   generic: |
     This is slide two.
 
@@ -28,7 +28,7 @@ slides:
 
     Go back to the overview [slide:overview]
 
-- id: three
+- ref: three
   generic: |
     This is slide three.
 

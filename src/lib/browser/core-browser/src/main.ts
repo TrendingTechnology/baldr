@@ -174,7 +174,7 @@ export function sortObjectsByProperty (property: string) {
 /**
  * TODO: Remove use class MediaUri()
  *
- * Check if the input is a valid URI. Prefix with `id:` if necessary.
+ * Check if the input is a valid URI. Prefix with `ref:` if necessary.
  *
  * @param uri - The URI to validate.
  */
@@ -182,7 +182,7 @@ export function validateUri (uri: string): string {
   const segments = uri.split(':')
   // To allow URI with out a URI scheme. This defaults to `id`.
   if (segments.length === 1) {
-    uri = `id:${uri}`
+    uri = `ref:${uri}`
   }
   return uri
 }

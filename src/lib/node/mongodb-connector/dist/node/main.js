@@ -80,14 +80,14 @@ var Database = /** @class */ (function () {
             assets: {
                 indexes: [
                     { field: 'path', unique: true },
-                    { field: 'id', unique: true },
+                    { field: 'ref', unique: true },
                     { field: 'uuid', unique: true }
                 ],
                 drop: true
             },
             presentations: {
                 indexes: [
-                    { field: 'id', unique: true }
+                    { field: 'ref', unique: true }
                 ],
                 drop: true
             },
@@ -99,7 +99,7 @@ var Database = /** @class */ (function () {
             },
             folderTitleTree: {
                 indexes: [
-                    { field: 'id', unique: true }
+                    { field: 'ref', unique: true }
                 ],
                 drop: true
             },

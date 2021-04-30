@@ -37,7 +37,7 @@ async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageN
   // Write info yaml
   const titles = new DeepTitle(tmpPdfFile)
   const infoYaml = {
-    id: `${titles.id}_LT${counterSuffix}`,
+    ref: `${titles.ref}_LT${counterSuffix}`,
     title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
     meta_types: 'cloze',
     cloze_page_no: pageNo,

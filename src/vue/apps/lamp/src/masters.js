@@ -195,7 +195,7 @@ class Master {
     const prefix =
       '---\n' +
       'meta:\n' +
-      `  id: EP_master_${this.name}\n` +
+      `  ref: EP_master_${this.name}\n` +
       `  title: Beispiel-Präsentation für die Master-Folie „${this.name}“\n` +
       '\n'
     return rawYaml.replace('---\n', prefix)
@@ -394,7 +394,7 @@ class Master {
    * Retrieve the media URIs which have to be resolved.
    *
    * Call the master funtion `resolveMediaUris` and collect the media URIs.
-   * (like [id:beethoven, id:mozart]). Extract media URIs from
+   * (like [id:beethoven, ref:mozart]). Extract media URIs from
    * the text props.
    *
    * @param {module:@bldr/lamp~props} props

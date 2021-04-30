@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_slidesWithPlayButtons
+  ref: EP_common_slidesWithPlayButtons
 
 slides:
 - audio:

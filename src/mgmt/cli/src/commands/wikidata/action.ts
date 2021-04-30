@@ -40,7 +40,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     downloadWikicommons = false
   }
 
-  const dest = categoriesManagement.formatFilePath(data as AssetType.FileFormat)
+  const dest = categoriesManagement.formatFilePath(data)
   if (dest == null) return
   if (downloadWikicommons) {
     if (!cmdObj.dryRun && data.mainImage != null) {

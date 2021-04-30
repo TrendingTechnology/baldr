@@ -20,7 +20,7 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 export default {
   name: 'PresentationLink',
   props: {
-    id: {
+    ref: {
       type: String
     },
     title: {

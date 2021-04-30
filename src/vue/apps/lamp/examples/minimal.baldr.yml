@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_minimal
+  ref: EP_common_minimal
 
 slides:
   - quote:

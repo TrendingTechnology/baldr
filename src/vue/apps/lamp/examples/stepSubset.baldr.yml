@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_stepSubset
+  ref: EP_common_stepSubset
 
 slides:
 - title: 2 3 4 5 6

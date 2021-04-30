@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_allMasters
+  ref: EP_common_allMasters
 
 slides:
 
@@ -67,12 +67,12 @@ slides:
 
 - group: Rolling-Stones_The
 
-- image: 'id:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
+- image: 'ref:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
 
 - instrument: Kontrabass
 
 - interactive_graphic:
-    src: id:Requiem_NB_Confutatis_1-Takt
+    src: ref:Requiem_NB_Confutatis_1-Takt
     step_subset: 3-
 
 - note: |
@@ -118,8 +118,8 @@ slides:
       des westafrikanischen Staates Ghana.
 
 - score_sample:
-    score: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
-    audio: 'id:Schuetz-Freue_HB_Freue-dich'
+    score: 'ref:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
+    audio: 'ref:Schuetz-Freue_HB_Freue-dich'
 
 - section: >-
     <em class="person">John Cage</em>: <em class="piece">Imaginary Landscape No. 4</em>
@@ -128,7 +128,7 @@ slides:
 
 - task: <em>“Do this!”</em> __subito__!
 
-- video: id:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
+- video: ref:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
 
 - wikipedia: Sequenz_(Musik)
 

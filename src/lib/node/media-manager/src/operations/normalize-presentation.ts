@@ -15,7 +15,7 @@ const comment = `
  * Remove unnecessary single quotes.
  *
  * js-yaml add single quotes arround the media URIs, for example
- * `'id:fuer-elise'`.
+ * `'ref:fuer-elise'`.
  *
  * @param rawYamlString - A raw YAML string (not converted into a
  *   Javascript object).
@@ -24,7 +24,7 @@ const comment = `
  *   URIs.
  */
 function removeSingleQuotes (rawYamlString: string): string {
-  return rawYamlString.replace(/ 'id:([^']*)'/g, ' id:$1')
+  return rawYamlString.replace(/ 'ref:([^']*)'/g, ' ref:$1')
 }
 
 /**
@@ -41,7 +41,7 @@ function removeSingleQuotes (rawYamlString: string): string {
  *   URIs.
  */
 function shortedMediaUris (rawYamlString: string, presentationId: string): string {
-  return rawYamlString.replace(new RegExp(`id:${presentationId}_`, 'g'), 'id:./')
+  return rawYamlString.replace(new RegExp(`ref:${presentationId}_`, 'g'), 'ref:./')
 }
 
 /**
@@ -59,15 +59,15 @@ export function normalizePresentationFile (filePath: string): void {
   const title = new DeepTitle(filePath)
   const meta = title.generatePresetationMeta()
 
-  if (presentation.meta?.id != null) meta.id = presentation.meta.id
+  if (presentation.meta?.ref != null) meta.ref = presentation.meta.ref
   if (presentation.meta?.curriculumUrl != null) meta.curriculumUrl = presentation.meta.curriculumUrl
 
   const metaString = convertToYaml({ meta })
   textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
 
   // Shorten media URIs with `./`
-  if (meta.id != null) {
-    textContent = shortedMediaUris(textContent, meta.id)
+  if (meta.ref != null) {
+    textContent = shortedMediaUris(textContent, meta.ref)
   }
 
   // Remove single quotes.

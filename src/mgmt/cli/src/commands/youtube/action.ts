@@ -15,7 +15,7 @@ async function requestYoutubeApi (youtubeId: string): Promise<object> {
   const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
     params: {
       part: 'snippet',
-      id: youtubeId,
+      ref: youtubeId,
       key: config.youtube.apiKey
     }
   })

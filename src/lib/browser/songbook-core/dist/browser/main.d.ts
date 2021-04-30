@@ -169,7 +169,7 @@ export declare class AlphabeticalSongsTree {
     constructor(songs: Song[]);
 }
 interface DynamicSelectSong {
-    id: string;
+    ref: string;
     name: string;
 }
 /**

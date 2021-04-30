@@ -2,17 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaUriCache = exports.findMediaUris = exports.makeMediaUris = exports.MediaUri = void 0;
 /**
- * Uniform Resource Identifier for media files, for example `id:Haydn`, or
+ * Uniform Resource Identifier for media files, for example `ref:Haydn`, or
  * `http://example.com/Haydn_Joseph.jpg`. An optional fragment (`#1-7`) (subset
  * selector) maybe included.
  *
  * Possible URIs are for example:
- * `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
  * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 class MediaUri {
     /**
-     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
+     * `ref:Beethoven_Ludwig-van#-4`
      */
     constructor(uri) {
         this.raw = uri;
@@ -47,7 +48,7 @@ class MediaUri {
     }
 }
 exports.MediaUri = MediaUri;
-MediaUri.schemes = ['id', 'uuid'];
+MediaUri.schemes = ['ref', 'uuid'];
 MediaUri.regExpAuthority = 'a-zA-Z0-9-_';
 /**
  * `#Sample1` or `#1,2,3` or `#-4`
@@ -110,35 +111,35 @@ function findMediaUris(data, uris) {
 }
 exports.findMediaUris = findMediaUris;
 /**
- * Media assets have two URIs: uuid:... and id:...
+ * Media assets have two URIs: uuid:... and ref:...
  */
 class MediaUriCache {
     constructor() {
-        this.ids = {};
+        this.refs = {};
         this.uuids = {};
     }
-    addPair(id, uuid) {
-        if (this.ids[id] == null && this.uuids[uuid] == null) {
-            this.ids[id] = uuid;
-            this.uuids[uuid] = id;
+    addPair(ref, uuid) {
+        if (this.refs[ref] == null && this.uuids[uuid] == null) {
+            this.refs[ref] = uuid;
+            this.uuids[uuid] = ref;
             return true;
         }
         return false;
     }
-    getIdFromUuid(uuid) {
+    getRefFromUuid(uuid) {
         if (this.uuids[uuid] != null) {
             return this.uuids[uuid];
         }
     }
-    getId(uuidOrId) {
-        if (uuidOrId.indexOf('uuid:') === 0) {
-            return this.getIdFromUuid(uuidOrId);
+    getId(uuidOrRef) {
+        if (uuidOrRef.indexOf('uuid:') === 0) {
+            return this.getRefFromUuid(uuidOrRef);
         }
-        return uuidOrId;
+        return uuidOrRef;
     }
-    getUuidFromId(id) {
-        if (this.ids[id] != null) {
-            return this.ids[id];
+    getUuidFromRef(id) {
+        if (this.refs[id] != null) {
+            return this.refs[id];
         }
     }
 }

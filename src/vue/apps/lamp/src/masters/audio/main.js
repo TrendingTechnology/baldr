@@ -17,7 +17,7 @@ export default validateMasterSpec({
     src: {
       type: [String, Array],
       required: true,
-      description: 'Eine Medien-Datei-URI, z. B. `id:Fuer-Elise` oder eine Sample-URI (`id:Fuer-Elise#complete`).',
+      description: 'Eine Medien-Datei-URI, z. B. `ref:Fuer-Elise` oder eine Sample-URI (`ref:Fuer-Elise#complete`).',
       assetUri: true
     },
     title: {

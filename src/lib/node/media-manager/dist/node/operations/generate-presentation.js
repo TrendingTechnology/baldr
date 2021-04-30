@@ -55,21 +55,21 @@ function generatePresentation(filePath) {
         yield directory_tree_walk_1.walk({
             asset(relPath) {
                 const asset = media_file_classes_1.makeAsset(relPath);
-                if (asset.id == null) {
+                if (asset.ref == null) {
                     return;
                 }
                 let masterName = 'generic';
-                if (asset.id.includes('_LT')) {
+                if (asset.ref.includes('_LT')) {
                     masterName = 'cloze';
                 }
-                else if (asset.id.includes('NB')) {
+                else if (asset.ref.includes('NB')) {
                     masterName = 'score_sample';
                 }
                 else if (asset.mediaCategory != null) {
                     masterName = asset.mediaCategory;
                 }
                 const slideData = {
-                    [masterName]: `id:${asset.id}`
+                    [masterName]: `ref:${asset.ref}`
                 };
                 slides.push(slideData);
             }

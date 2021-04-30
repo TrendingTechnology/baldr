@@ -30,7 +30,7 @@ exports.instrument = {
                 return core_browser_1.idify(data.name);
             }
         },
-        id: {
+        ref: {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
             derive: function ({ data, category }) {
                 // IS: Instrument

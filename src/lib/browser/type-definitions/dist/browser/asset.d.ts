@@ -15,7 +15,7 @@ export interface SampleYamlFormat {
     /**
      * without spaces, only ASCII, for example `theme_1`
      */
-    id?: string;
+    ref?: string;
     /**
      * The start time in seconds or as a duration string like `1:23:45` = 1 hour
      * 23 minutes and 45 seconds, for example `61.123435`.
@@ -55,7 +55,7 @@ export interface SampleYamlFormat {
  *
  * ```yml
  * ---
- * id: Schuetz-Freue_HB_Freue-dich
+ * ref: Schuetz-Freue_HB_Freue-dich
  * uuid: 02dcf8df-8f34-4b0d-b121-32b0f54cfd74
  * categories: 'composition,recording'
  * title: 'Freue dich des Weibes deiner Jugend, SWV 453 (verm. um 1620)'
@@ -67,9 +67,9 @@ export interface SampleYamlFormat {
  */
 export interface FileFormat {
     /**
-     * An identifier, for example `Haydn_Joseph`.
+     * A reference string, for example `Haydn_Joseph`.
      */
-    id: string;
+    ref: string;
     uuid: string;
     title: string;
     categories?: string;
@@ -148,7 +148,7 @@ export interface RestApiRaw extends FileFormat {
 /**
  * A type for the possible property names.
  */
-export declare type PropName = 'id' | 'uuid' | 'categories' | 'extension' | 'mainImage' | 'filePath';
+export declare type PropName = 'ref' | 'uuid' | 'categories' | 'extension' | 'mainImage' | 'filePath';
 /**
  * Generic type of the Media asset file format.
  */

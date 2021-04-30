@@ -20,7 +20,7 @@ const titles_1 = require("@bldr/titles");
 function read(filePath) {
     console.log(filePath);
     const titles = new titles_1.DeepTitle(filePath);
-    console.log(`  id: ${chalk_1.default.cyan(titles.id)}`);
+    console.log(`  ref: ${chalk_1.default.cyan(titles.ref)}`);
     console.log(`  title: ${chalk_1.default.yellow(titles.title)}`);
     if (titles.subtitle == null)
         console.log(`  subtitle: ${chalk_1.default.green(titles.subtitle)}`);

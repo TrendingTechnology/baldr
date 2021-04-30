@@ -105,7 +105,7 @@ const cloze = {
         return path_1.default.join(oldRelDir, `Lueckentext${pageNo}.svg`);
     },
     props: {
-        id: {
+        ref: {
             title: 'Die ID des Lückentexts',
             derive: function ({ data, folderTitles, filePath }) {
                 let counterSuffix = '';
@@ -264,7 +264,7 @@ const group = {
             },
             overwriteByDerived: true
         },
-        id: {
+        ref: {
             title: 'ID zur Referenzierung (Präfix „GR_“)',
             derive: function ({ data }) {
                 return data.name;
@@ -369,7 +369,7 @@ const instrument = {
                 return helper_1.idify(data.name);
             }
         },
-        id: {
+        ref: {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
             derive: function ({ data, category }) {
                 // IS: Instrument
@@ -455,7 +455,7 @@ const person = {
             },
             overwriteByDerived: true
         },
-        id: {
+        ref: {
             title: 'ID der Person',
             derive: function ({ data, category }) {
                 return `${category.abbreviation}_${helper_1.idify(data.lastname)}_${helper_1.idify(data.firstname)}`;
@@ -805,7 +805,7 @@ const youtube = {
         return path_1.default.join(oldRelDir, `${data.youtubeId}.mp4`);
     },
     props: {
-        id: {
+        ref: {
             title: 'ID eines YouTube-Videos',
             derive: function ({ data, category }) {
                 return `${category.abbreviation}_${data.youtubeId}`;
@@ -854,7 +854,7 @@ const youtube = {
 const general = {
     title: 'Allgemeiner Metadaten-Type',
     props: {
-        id: {
+        ref: {
             title: 'ID',
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);

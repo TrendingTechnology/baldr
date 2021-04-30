@@ -4,6 +4,6 @@
  * @module @bldr/type-definitions/titles
  */
 export interface DeepTitleInterface {
-    id: string;
+    ref: string;
     titleAndSubtitle: string;
 }

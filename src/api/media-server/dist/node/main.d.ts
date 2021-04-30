@@ -28,7 +28,7 @@
  *   - `init`: Initialize the MongoDB database
  *   - `open`: Open a media file specified by an ID. This query parameters are
  *     available:
- *       - `id`: The ID of the media file (required).
+ *       - `ref`: The ID of the media file (required).
  *       - `type`: `presentations`, `assets`. The default value is
  *         `presentations.`
  *       - `with`: `editor` specified in `config.mediaServer.editor`
@@ -49,7 +49,7 @@
  *            to a top level database field to get a result.
  *          - `substringSearch`: The query parameter `search` is only a
  *            substring of the string to search in.
- *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `field`: `ref` (default), `title`, etc ... (where).
  *      - `search`: Some text to search for (search for).
  *      - `result`: `fullObjects` (default), `dynamicSelect`
  * - `stats`:

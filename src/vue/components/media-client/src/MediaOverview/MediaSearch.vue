@@ -40,7 +40,7 @@ export default {
       this.currentSearchField = searchField
     },
     onInput () {
-      const uri = `id:${this.asset.id}`
+      const uri = `ref:${this.asset.ref}`
       this.$media.resolve(uri)
     },
     search (text) {

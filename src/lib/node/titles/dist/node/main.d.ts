@@ -128,7 +128,7 @@ export declare class DeepTitle {
      * The parent directory name with the numeric prefix: For example
      * `Bachs-vergebliche-Reise`.
      */
-    get id(): string;
+    get ref(): string;
     /**
      * The title. It is the first line in the text file `title.txt` in the
      * same folder as the constructor `filePath` file.

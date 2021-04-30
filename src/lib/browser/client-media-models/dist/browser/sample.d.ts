@@ -61,13 +61,13 @@ export declare class Sample {
      */
     title: string;
     /**
-     * The ID of the sample. The ID is used to build the URI of the sample, for
-     * example `uri#id`: `id:Beethoven#complete`
+     * The reference of the sample. The reference is used to build the URI of the sample, for
+     * example `uri#reference`: `ref:Beethoven#complete`
      */
-    id: string;
+    ref: string;
     /**
-     * The URI of the sample in the format `uri#id`: for example
-     * `id:Beethoven#complete`
+     * The URI of the sample in the format `uri#ref`: for example
+     * `ref:Beethoven#complete`
      */
     uri: string;
     /**
@@ -116,11 +116,11 @@ export declare class Sample {
     private readonly timeOut;
     private readonly customEventsManager;
     playbackState: PlaybackState;
-    constructor(asset: ClientMediaAsset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat);
+    constructor(asset: ClientMediaAsset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat);
     /**
      * The URI using the `id` authority.
      */
-    get uriId(): string;
+    get uriRef(): string;
     /**
      * The URI using the `uuid` authority.
      */
@@ -255,7 +255,7 @@ export declare class Sample {
 export declare class SampleCollection {
     private cache;
     constructor(asset: ClientMediaAsset);
-    get(id: string): Sample | undefined;
+    get(ref: string): Sample | undefined;
     private add;
     private buildSampleYamlFromAssetYaml;
     private addFromAsset;

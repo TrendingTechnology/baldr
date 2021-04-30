@@ -58,7 +58,7 @@ export const person: MediaCategory.Category = {
       },
       overwriteByDerived: true
     },
-    id: {
+    ref: {
       title: 'ID der Person',
       derive: function ({ data, category }) {
         const personCategory = category as PersonCategory

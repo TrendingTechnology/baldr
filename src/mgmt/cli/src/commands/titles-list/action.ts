@@ -8,7 +8,7 @@ import { DeepTitle } from '@bldr/titles'
 function read (filePath: string): void {
   console.log(filePath)
   const titles = new DeepTitle(filePath)
-  console.log(`  id: ${chalk.cyan(titles.id)}`)
+  console.log(`  ref: ${chalk.cyan(titles.ref)}`)
   console.log(`  title: ${chalk.yellow(titles.title)}`)
   if (titles.subtitle == null) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
   console.log(`  grade: ${chalk.blue(titles.grade)}`)

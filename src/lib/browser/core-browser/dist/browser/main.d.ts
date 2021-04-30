@@ -75,7 +75,7 @@ export declare function sortObjectsByProperty(property: string): (a: {
 /**
  * TODO: Remove use class MediaUri()
  *
- * Check if the input is a valid URI. Prefix with `id:` if necessary.
+ * Check if the input is a valid URI. Prefix with `ref:` if necessary.
  *
  * @param uri - The URI to validate.
  */

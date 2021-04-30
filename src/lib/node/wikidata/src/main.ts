@@ -59,7 +59,7 @@ interface SitelinkData {
 /**
  * ```js
  * let entity = {
-  *   id: 'Q202698',
+  *   ref: 'Q202698',
   *   type: 'item',
   *   modified: '2020-03-20T20:27:33Z',
   *   labels: { de: 'Yesterday', en: 'Yesterday' },
@@ -397,7 +397,7 @@ export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Dat
  */
 export async function query (itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{ [key: string]: any }> {
   if (wikibase.isItemId(itemId) == null) {
-    throw new Error(`No item id: ${itemId}`)
+    throw new Error(`No item ref: ${itemId}`)
   }
   entity = await getEntities(itemId) as Entity
 

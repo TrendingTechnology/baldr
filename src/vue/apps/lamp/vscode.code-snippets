@@ -39,11 +39,11 @@
     "prefix": "audio",
     "body": [
       "- title: Kurzform",
-      "  audio: id:Fuer-Elise#complete",
+      "  audio: ref:Fuer-Elise#complete",
       "",
       "- title: Langform",
       "  audio:",
-      "    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, assetUri, types=String,Array)",
+      "    src: Eine Medien-Datei-URI, z. B. ref:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, assetUri, types=String,Array)",
       "    title: Der Titel des Audio-Ausschnitts. (markup, type=String)",
       "    composer: Der/Die KomponistIn des Audio-Ausschnitts. (markup, type=String)",
       "    artist: Der/Die InterpretIn des Audio-Ausschnitts. (markup, type=String)",
@@ -69,7 +69,7 @@
     "prefix": "cloze",
     "body": [
       "- title: Kurzform",
-      "  cloze: id:AB",
+      "  cloze: ref:AB",
       "",
       "- title: Langform",
       "  cloze:",
@@ -134,7 +134,7 @@
     "prefix": "image",
     "body": [
       "- title: Kurzform",
-      "  image: id:Luigi-Russolo_Arte-dei-rumori",
+      "  image: ref:Luigi-Russolo_Arte-dei-rumori",
       "",
       "- title: Langform",
       "  image:",
@@ -149,7 +149,7 @@
     "prefix": "person",
     "body": [
       "- title: Kurzform",
-      "  person: id:Beethoven",
+      "  person: ref:Beethoven",
       "",
       "- title: Langform",
       "  person:",
@@ -201,7 +201,7 @@
     "prefix": "scoresample",
     "body": [
       "- title: Kurzform",
-      "  score_sample: id:Bild-Datei",
+      "  score_sample: ref:Bild-Datei",
       "",
       "- title: Langform",
       "  score_sample:",
@@ -233,7 +233,7 @@
     "prefix": "svg",
     "body": [
       "- title: Kurzform",
-      "  svg: id:Grafik",
+      "  svg: ref:Grafik",
       "",
       "- title: Langform",
       "  svg:",
@@ -261,7 +261,7 @@
     "prefix": "video",
     "body": [
       "- title: Kurzform",
-      "  video: id:Luigi-Russolo_Arte-dei-rumori",
+      "  video: ref:Luigi-Russolo_Arte-dei-rumori",
       "",
       "- title: Langform",
       "  video:",
@@ -292,7 +292,7 @@
       "",
       "- title: Langform",
       "  youtube:",
-      "    id: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)"
+      "    ref: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)"
     ],
     "description": "Baldr master: youtube",
     "scope": "yaml"

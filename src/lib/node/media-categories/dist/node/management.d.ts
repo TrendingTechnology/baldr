@@ -10,7 +10,7 @@
  *
  * @module @bldr/media-manager/meta-types
  */
-import { MediaCategory, AssetType } from '@bldr/type-definitions';
+import type { MediaCategory, AssetType } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the category name.
  *

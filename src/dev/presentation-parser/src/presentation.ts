@@ -5,7 +5,7 @@ import { RawDataObject } from '@bldr/core-browser'
 import { Slide } from './slide'
 
 class Meta implements PresentationTypes.PresentationMeta {
-  id: string
+  ref: string
   title: string
   subtitle?: string
   grade: number

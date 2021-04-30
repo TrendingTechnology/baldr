@@ -1,6 +1,6 @@
 ---
 meta:
-  id: EP_common_genericWithoutMaster
+  ref: EP_common_genericWithoutMaster
   title: Generic without master
 
 slides:

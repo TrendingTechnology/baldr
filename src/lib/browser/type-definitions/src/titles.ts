@@ -5,6 +5,6 @@
  */
 
 export interface DeepTitleInterface {
-  id: string
+  ref: string
   titleAndSubtitle: string
 }

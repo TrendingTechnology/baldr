@@ -118,7 +118,7 @@ const actions = {
       params: {
         type: 'presentations',
         method: 'exactMatch',
-        field: 'id',
+        field: 'ref',
         search: presId
       }
     })
@@ -140,8 +140,8 @@ const actions = {
    */
   async reloadPresentation ({ dispatch, getters }) {
     const presentation = getters.presentation
-    if (presentation && presentation.meta && presentation.meta.id) {
-      await dispatch('openPresentationById', presentation.meta.id)
+    if (presentation && presentation.meta && presentation.meta.ref) {
+      await dispatch('openPresentationById', presentation.meta.ref)
       dispatch('setSlideNoCurrent', getters.slide.no)
     }
   },

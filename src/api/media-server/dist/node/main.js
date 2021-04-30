@@ -29,7 +29,7 @@
  *   - `init`: Initialize the MongoDB database
  *   - `open`: Open a media file specified by an ID. This query parameters are
  *     available:
- *       - `id`: The ID of the media file (required).
+ *       - `ref`: The ID of the media file (required).
  *       - `type`: `presentations`, `assets`. The default value is
  *         `presentations.`
  *       - `with`: `editor` specified in `config.mediaServer.editor`
@@ -50,7 +50,7 @@
  *            to a top level database field to get a result.
  *          - `substringSearch`: The query parameter `search` is only a
  *            substring of the string to search in.
- *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `field`: `ref` (default), `title`, etc ... (where).
  *      - `search`: Some text to search for (search for).
  *      - `result`: `fullObjects` (default), `dynamicSelect`
  * - `stats`:
@@ -324,8 +324,8 @@ var Presentation = /** @class */ (function (_super) {
             // eslint-disable-next-line
             _this.meta = {};
         }
-        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.id) == null)
-            _this.meta.id = deepTitle.id;
+        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.ref) == null)
+            _this.meta.ref = deepTitle.ref;
         if (((_b = _this.meta) === null || _b === void 0 ? void 0 : _b.title) == null)
             _this.meta.title = deepTitle.title;
         if (((_c = _this.meta) === null || _c === void 0 ? void 0 : _c.subtitle) == null)
@@ -337,7 +337,7 @@ var Presentation = /** @class */ (function (_super) {
         _this.title = core_browser_1.stripTags(_this.meta.title);
         _this.titleSubtitle = _this.titleSubtitle_();
         _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
-        _this.id = _this.meta.id;
+        _this.ref = _this.meta.ref;
         return _this;
     }
     /**
@@ -498,12 +498,12 @@ function update(full) {
                 case 5:
                     _a.sent();
                     // .replaceOne and upsert: Problems with merged objects?
-                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' })];
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })];
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
                     return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
-                            id: 'root',
+                            ref: 'root',
                             tree: titleTree.get()
                         })];
                 case 7:
@@ -551,7 +551,7 @@ var helpMessages = {
                     '/media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
                 ],
                 '#parameters': {
-                    id: 'The ID of the media file (required).',
+                    ref: 'The ID of the media file (required).',
                     type: '`presentations`, `assets`. The default value is `presentations.`',
                     with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
                     archive: 'True if present, false by default. Open the file or the folder in the corresponding archive folder structure.',
@@ -564,16 +564,16 @@ var helpMessages = {
         query: {
             '#description': 'Get results by using query parameters',
             '#examples': [
-                '/media/query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
+                '/media/query?type=assets&field=ref&method=exactMatch&search=Egmont-Ouverture',
                 '/media/query?type=assets&field=uuid&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53',
-                '/media/query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte',
+                '/media/query?type=presentations&field=ref&method=exactMatch&search=Beethoven_Marmotte',
                 '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
                 '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
             ],
             '#parameters': {
                 type: '`assets` (default), `presentations` (what)',
                 method: '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
-                field: '`id` (default), `title`, etc ... (where).',
+                field: '`ref` (default), `title`, etc ... (where).',
                 search: 'Some text to search for (search for).',
                 result: '`fullObjects` (default), `dynamicSelect`'
             }
@@ -639,7 +639,7 @@ function registerMediaRestApi() {
                     if (!methods.includes(method)) {
                         throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods.join(', '));
                     }
-                    field = extractString(query, 'field', 'id');
+                    field = extractString(query, 'field', 'ref');
                     // result
                     if (!('result' in query))
                         query.result = 'fullObjects';
@@ -677,7 +677,7 @@ function registerMediaRestApi() {
                     else if (query.result === 'dynamicSelect') {
                         $project = {
                             _id: false,
-                            id: true,
+                            ref: true,
                             name: "$" + field
                         };
                     }
@@ -704,7 +704,7 @@ function registerMediaRestApi() {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next()];
+                    return [4 /*yield*/, db.collection('folderTitleTree').find({ ref: 'root' }, { projection: { _id: 0 } }).next()];
                 case 1:
                     result = _a.sent();
                     res.json(result.tree);
@@ -757,32 +757,32 @@ function registerMediaRestApi() {
         });
     }); });
     app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, id, type, _a, _b, _c, _d, error_6;
+        var query, archive, create, ref, type, _a, _b, _c, _d, error_6;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
                     query = req.query;
-                    if (query.id == null)
-                        throw new Error('You have to specify an ID (?id=myfile).');
+                    if (query.ref == null)
+                        throw new Error('You have to specify an ID (?ref=myfile).');
                     if (query.with == null)
                         query.with = 'editor';
                     if (query.type == null)
                         query.type = 'presentations';
                     archive = ('archive' in query);
                     create = ('create' in query);
-                    id = extractString(query, 'id');
+                    ref = extractString(query, 'ref');
                     type = operations_1.validateMediaType(extractString(query, 'type'));
                     if (!(query.with === 'editor')) return [3 /*break*/, 2];
                     _b = (_a = res).json;
-                    return [4 /*yield*/, operations_1.openEditor(id, type)];
+                    return [4 /*yield*/, operations_1.openEditor(ref, type)];
                 case 1:
                     _b.apply(_a, [_e.sent()]);
                     return [3 /*break*/, 4];
                 case 2:
                     if (!(query.with === 'folder')) return [3 /*break*/, 4];
                     _d = (_c = res).json;
-                    return [4 /*yield*/, operations_1.openParentFolder(id, type, archive, create)];
+                    return [4 /*yield*/, operations_1.openParentFolder(ref, type, archive, create)];
                 case 3:
                     _d.apply(_c, [_e.sent()]);
                     _e.label = 4;

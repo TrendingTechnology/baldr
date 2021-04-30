@@ -184,7 +184,7 @@ class DeepTitle {
      * The parent directory name with the numeric prefix: For example
      * `Bachs-vergebliche-Reise`.
      */
-    get id() {
+    get ref() {
         return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '');
     }
     /**
@@ -242,7 +242,7 @@ class DeepTitle {
      */
     generatePresetationMeta() {
         const result = {
-            id: this.id,
+            ref: this.ref,
             subtitle: this.subtitle,
             title: this.title,
             grade: this.grade,

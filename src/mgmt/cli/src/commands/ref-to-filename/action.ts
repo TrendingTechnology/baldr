@@ -20,8 +20,8 @@ function renameFromIdOneFile (filePath: string): void {
     return
   }
 
-  if (result.id != null) {
-    let id: string = result.id
+  if (result.ref != null) {
+    let ref: string = result.ref
     const oldPath = filePath
 
     // .mp4
@@ -29,10 +29,10 @@ function renameFromIdOneFile (filePath: string): void {
     const oldBaseName = path.basename(oldPath, extension)
     let newPath = null
     // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
-    id = id.replace(/.*_[A-Z]{2,}_/, '')
-    console.log(id)
-    if (id !== oldBaseName) {
-      newPath = path.join(path.dirname(oldPath), `${id}${extension}`)
+    ref = ref.replace(/.*_[A-Z]{2,}_/, '')
+    console.log(ref)
+    if (ref !== oldBaseName) {
+      newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     } else {
       return
     }

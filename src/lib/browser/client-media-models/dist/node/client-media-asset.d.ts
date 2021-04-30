@@ -6,7 +6,7 @@ import { SampleCollection } from './sample';
  *
  * If a media file has a property with the name `multiPartCount` set, it is a
  * multi part asset. A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export declare class ClientMediaAsset {
@@ -35,9 +35,9 @@ export declare class ClientMediaAsset {
      */
     constructor(uri: string, httpUrl: string, meta: AssetType.RestApiRaw);
     /**
-     * The URI using the `id` scheme.
+     * The URI using the `ref` scheme.
      */
-    get id(): string;
+    get ref(): string;
     /**
      * The URI using the `uuid` scheme.
      */
@@ -67,6 +67,6 @@ export declare class AssetCache {
     private readonly mediaUriCache;
     constructor();
     add(asset: ClientMediaAsset): boolean;
-    get(uuidOrId: string): ClientMediaAsset | undefined;
+    get(uuidOrRef: string): ClientMediaAsset | undefined;
     getAll(): ClientMediaAsset[];
 }

@@ -5,7 +5,7 @@
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function convertGroupIdToMediaId (groupId) {
-  return `id:GR_${groupId}`
+  return `ref:GR_${groupId}`
 }
 
 export default validateMasterSpec({

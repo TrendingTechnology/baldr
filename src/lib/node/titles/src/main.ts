@@ -234,7 +234,7 @@ export class DeepTitle {
    * The parent directory name with the numeric prefix: For example
    * `Bachs-vergebliche-Reise`.
    */
-  get id (): string {
+  get ref (): string {
     return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '')
   }
 
@@ -298,7 +298,7 @@ export class DeepTitle {
    */
   generatePresetationMeta (): PresentationTypes.PresentationMeta {
     const result: PresentationTypes.PresentationMeta = {
-      id: this.id,
+      ref: this.ref,
       subtitle: this.subtitle,
       title: this.title,
       grade: this.grade,

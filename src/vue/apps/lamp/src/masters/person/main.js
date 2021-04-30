@@ -5,7 +5,7 @@
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function convertPersonIdToMediaId (personId) {
-  return `id:PR_${personId}`
+  return `ref:PR_${personId}`
 }
 
 export default validateMasterSpec({

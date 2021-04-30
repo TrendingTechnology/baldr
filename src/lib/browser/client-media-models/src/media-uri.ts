@@ -1,15 +1,15 @@
 
 /**
- * Uniform Resource Identifier for media files, for example `id:Haydn`, or
+ * Uniform Resource Identifier for media files, for example `ref:Haydn`, or
  * `http://example.com/Haydn_Joseph.jpg`. An optional fragment (`#1-7`) (subset
  * selector) maybe included.
  *
  * Possible URIs are for example:
- * `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
  * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 export class MediaUri {
-  private static readonly schemes: string[] = ['id', 'uuid']
+  private static readonly schemes: string[] = ['ref', 'uuid']
 
   private static readonly regExpAuthority: string = 'a-zA-Z0-9-_'
 
@@ -33,13 +33,14 @@ export class MediaUri {
   )
 
   /**
-   * The full, raw and unmodifed URI (Uniform Resource Identifier) as specified, for example
-   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`.
+   * The full, raw and unmodifed URI (Uniform Resource Identifier) as specified,
+   * for example `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
+   * `ref:Beethoven_Ludwig-van#-4`.
    */
   public raw: string
 
   /**
-   * for example: `id`, `uuid`, `http`, `https`, `blob`
+   * for example: `ref`, `uuid`, `http`, `https`, `blob`
    */
   public scheme: string
 
@@ -50,7 +51,7 @@ export class MediaUri {
   public authority: string
 
   /**
-   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `id:Beethoven_Ludwig-van`
+   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7` or `ref:Beethoven_Ludwig-van`
    */
   public uriWithoutFragment: string
 
@@ -60,7 +61,8 @@ export class MediaUri {
   public fragment?: string
 
   /**
-   * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or `id:Beethoven_Ludwig-van#-4`
+   * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
+   * `ref:Beethoven_Ludwig-van#-4`
    */
   constructor (uri: string) {
     this.raw = uri
@@ -137,42 +139,42 @@ export function findMediaUris (data: any, uris: Set<string>): void {
 }
 
 /**
- * Media assets have two URIs: uuid:... and id:...
+ * Media assets have two URIs: uuid:... and ref:...
  */
 export class MediaUriCache {
-  private ids: { [id: string]: string }
+  private refs: { [ref: string]: string }
   private uuids: { [uiid: string]: string }
 
   constructor () {
-    this.ids = {}
+    this.refs = {}
     this.uuids = {}
   }
 
-  addPair (id: string, uuid: string): boolean {
-    if (this.ids[id] == null && this.uuids[uuid] == null) {
-      this.ids[id] = uuid
-      this.uuids[uuid] = id
+  addPair (ref: string, uuid: string): boolean {
+    if (this.refs[ref] == null && this.uuids[uuid] == null) {
+      this.refs[ref] = uuid
+      this.uuids[uuid] = ref
       return true
     }
     return false
   }
 
-  getIdFromUuid (uuid: string): string | undefined {
+  getRefFromUuid (uuid: string): string | undefined {
     if (this.uuids[uuid] != null) {
       return this.uuids[uuid]
     }
   }
 
-  getId (uuidOrId: string): string | undefined {
-    if (uuidOrId.indexOf('uuid:') === 0) {
-      return this.getIdFromUuid(uuidOrId)
+  getId (uuidOrRef: string): string | undefined {
+    if (uuidOrRef.indexOf('uuid:') === 0) {
+      return this.getRefFromUuid(uuidOrRef)
     }
-    return uuidOrId
+    return uuidOrRef
   }
 
-  getUuidFromId (id: string): string | undefined {
-    if (this.ids[id] != null) {
-      return this.ids[id]
+  getUuidFromRef (id: string): string | undefined {
+    if (this.refs[id] != null) {
+      return this.refs[id]
     }
   }
 }

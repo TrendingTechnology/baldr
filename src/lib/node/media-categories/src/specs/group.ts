@@ -45,7 +45,7 @@ export const group: MediaCategory.Category = {
       },
       overwriteByDerived: true
     },
-    id: {
+    ref: {
       title: 'ID zur Referenzierung (Präfix „GR_“)',
       derive: function ({ data }) {
         return data.name

@@ -46,7 +46,7 @@ exports.person = {
             },
             overwriteByDerived: true
         },
-        id: {
+        ref: {
             title: 'ID der Person',
             derive: function ({ data, category }) {
                 const personCategory = category;

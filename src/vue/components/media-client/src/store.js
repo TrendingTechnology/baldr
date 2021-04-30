@@ -141,7 +141,7 @@ const actions = {
       commit('removeSample', sampleUri)
       commit('removeSampleFromPlayList', sampleUri)
     }
-    commit('removeAsset', asset.uriId)
+    commit('removeAsset', asset.uriRef)
   },
   removeAssetsAll ({ dispatch, getters }) {
     for (const assetUri in getters.assets) {
@@ -206,22 +206,22 @@ const mutations = {
     state.multiPartUris.add(multiPartUri)
   },
   addMultiPartSelection (state, selection) {
-    Vue.set(state.multiPartSelections, selection.uriId, selection)
-    Vue.set(state.uuidToId, selection.uriUuid, selection.uriId)
+    Vue.set(state.multiPartSelections, selection.uriRef, selection)
+    Vue.set(state.uuidToId, selection.uriUuid, selection.uriRef)
   },
   clearMultiPartUris (state) {
     state.multiPartUris.clear()
   },
   addAsset (state, asset) {
-    Vue.set(state.assets, asset.uriId, asset)
-    Vue.set(state.uuidToId, asset.uriUuid, asset.uriId)
+    Vue.set(state.assets, asset.uriRef, asset)
+    Vue.set(state.uuidToId, asset.uriUuid, asset.uriRef)
   },
   addSample (state, sample) {
-    Vue.set(state.samples, sample.uriId, sample)
-    Vue.set(state.uuidToId, sample.uriUuid, sample.uriId)
+    Vue.set(state.samples, sample.uriRef, sample)
+    Vue.set(state.uuidToId, sample.uriUuid, sample.uriRef)
   },
   addSampleToPlayList (state, sample) {
-    state.playList.push(sample.uriId)
+    state.playList.push(sample.uriRef)
   },
   removeAsset (state, uri) {
     Vue.delete(state.assets, uri)

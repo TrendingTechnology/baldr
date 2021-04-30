@@ -75,7 +75,7 @@ interface MasterHooks {
    * Retrieve the media URIs which have to be resolved.
    *
    * Call the master funtion `resolveMediaUris` and collect the media URIs.
-   * (like [id:beethoven, id:mozart]). Extract media URIs from
+   * (like [id:beethoven, ref:mozart]). Extract media URIs from
    * the text props.
    *
    * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
@@ -83,7 +83,7 @@ interface MasterHooks {
    * ```js
    * export const default = {
    *   hooks: {
-   *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
+   *     // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
    *     resolveMediaUris (props) {
    *       return props.src
    *     }
@@ -103,7 +103,7 @@ interface MasterHooks {
    * ```js
    * export const default = {
    *   hooks: {
-   *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
+   *     // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
    *     resolveOptionalMediaUris (props) {
    *       return props.src
    *     }
@@ -125,7 +125,7 @@ interface MasterHooks {
    *   hooks {
    *     async afterLoading ({ props, master }) {
    *       const body = await getHtmlBody(props.title, props.language)
-   *       master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
+   *       master.$commit('addBody', { ref: formatId(props.language, props.title), body: body })
    *     }
    *   }
    * }
@@ -375,7 +375,7 @@ interface MasterHooks {
  * ```js
  *  const props = {
  *    src: {
- *      default: 'id:Fuer-Elise'
+ *      default: 'ref:Fuer-Elise'
  *      description: 'Den URI zu einer Video-Datei.',
  *      inlineMarkup: false
  *      markup: false
@@ -580,7 +580,7 @@ export interface Master {
    * Retrieve the media URIs which have to be resolved.
    *
    * Call the master funtion `resolveMediaUris` and collect the media URIs.
-   * (like [id:beethoven, id:mozart]). Extract media URIs from
+   * (like [id:beethoven, ref:mozart]). Extract media URIs from
    * the text props.
    */
   resolveMediaUris: (props: StringObject) => Set<string> | undefined

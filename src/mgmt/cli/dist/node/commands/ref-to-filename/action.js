@@ -32,18 +32,18 @@ function renameFromIdOneFile(filePath) {
         console.log(error);
         return;
     }
-    if (result.id != null) {
-        let ref = result.id;
+    if (result.ref != null) {
+        let ref = result.ref;
         const oldPath = filePath;
         // .mp4
         const extension = path_1.default.extname(oldPath);
         const oldBaseName = path_1.default.basename(oldPath, extension);
         let newPath = null;
         // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
-        id = id.replace(/.*_[A-Z]{2,}_/, '');
-        console.log(id);
-        if (id !== oldBaseName) {
-            newPath = path_1.default.join(path_1.default.dirname(oldPath), `${id}${extension}`);
+        ref = ref.replace(/.*_[A-Z]{2,}_/, '');
+        console.log(ref);
+        if (ref !== oldBaseName) {
+            newPath = path_1.default.join(path_1.default.dirname(oldPath), `${ref}${extension}`);
         }
         else {
             return;

@@ -8,7 +8,7 @@
  * A `assetSpec` can be:
  *
  * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` which has to be resolved.
+ *    `ref:Joseph_haydn` which has to be resolved.
  * 2. A already resolved HTTP URL, for example
  *    `https://example.com/Josef_Haydn.jg`
  * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
@@ -76,8 +76,8 @@ export let shortcuts
  * ```yml
  * ---
  * title: Für Elise
- * id: HB_Fuer-Elise
- * cover: id:BD_Feuer-Elise
+ * ref: HB_Fuer-Elise
+ * cover: ref:BD_Feuer-Elise
  * ```
  *
  * @param {Object} object - For example from the YAML files.
@@ -88,7 +88,7 @@ export let shortcuts
 function extractMediaUrisRecursive (object, urisStore) {
   /**
    *
-   * @param {String} uri - A string to test if it is a media URI (`id:Sample1_HB`)
+   * @param {String} uri - A string to test if it is a media URI (`ref:Sample1_HB`)
    *
    * @returns {Boolean}
    */
@@ -450,7 +450,7 @@ class Sample {
    * @param {ClientMediaAsset} asset
    * @param {object} specs
    * @property {String} specs.title
-   * @property {String|Number} specs.id
+   * @property {String|Number} specs.ref
    * @property {String|Number} specs.startTime - The start time in seconds.
    * @property {String|Number} specs.fadeIn - The fade in time in seconds. The
    *   duration is not affected by this time specification.
@@ -461,7 +461,7 @@ class Sample {
    * @property {String|Number} specs.endTime - The end time in seconds.
    * @property {String} specs.shortcut - A custom shortcut
    */
-  constructor (asset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+  constructor (asset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
     /**
      * We fade in very short and smoothly to avoid audio artefacts.
      *
@@ -505,23 +505,23 @@ class Sample {
      */
     this.title = title
 
-    if (!id) throw new Error('A sample needs an id.')
+    if (!ref) throw new Error('A sample needs an reference.')
 
     /**
      * The ID of the sample. The ID is used to build the URI of the sample, for
-     * example `uri#id`: `id:Beethoven#complete`
+     * example `uri#ref`: `ref:Beethoven#complete`
      *
      * @type {String}
      */
-    this.id = id
+    this.ref = ref
 
     /**
-     * The URI of the sample in the format `uri#id`: for example
-     * `id:Beethoven#complete`
+     * The URI of the sample in the format `uri#ref`: for example
+     * `ref:Beethoven#complete`
      *
      * @type {String}
      */
-    this.uri = `${this.asset.uri}#${id}`
+    this.uri = `${this.asset.uri}#${ref}`
 
     /**
      * The start time in seconds. The sample is played from this start time
@@ -638,12 +638,12 @@ class Sample {
   }
 
   /**
-   * The URI using the `id` authority.
+   * The URI using the `ref` authority.
    *
    * @returns {String}
    */
-  get uriId () {
-    return `${this.asset.uriId}#${this.id}`
+  get uriRef () {
+    return `${this.asset.uriRef}#${this.ref}`
   }
 
   /**
@@ -652,7 +652,7 @@ class Sample {
    * @returns {String}
    */
   get uriUuid () {
-    return `${this.asset.uriUuid}#${this.id}`
+    return `${this.asset.uriUuid}#${this.ref}`
   }
 
   /**
@@ -662,7 +662,7 @@ class Sample {
    * @type {String}
    */
   get titleSafe () {
-    if (this.id === 'complete') {
+    if (this.ref === 'complete') {
       return this.asset.titleSafe
     } else {
       return `${this.title} (${this.asset.titleSafe})`
@@ -1053,11 +1053,11 @@ class WrappedSample {
    * @param {Object|String} spec - Different input specifications are
    *   possible:
    *
-   *   1. The sample URI as a string (for example: `id:Fuer-Elise_HB`).
+   *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
    *   2. The sample URI inside the title text. (for example
-   *      `id:Fuer-Elise_HB Für Elise` or `Für Elise id:Fuer-Elise_HB`)
+   *      `ref:Fuer-Elise_HB Für Elise` or `Für Elise ref:Fuer-Elise_HB`)
    *   3. An object with the mandatory property `uri` (for example:
-   *      `{ uri: 'id:Fuer-Elise_HB'}`).
+   *      `{ uri: 'ref:Fuer-Elise_HB'}`).
    *   4. An instance of the class `Sample`.
    */
   constructor (spec) {
@@ -1079,7 +1079,7 @@ class WrappedSample {
      * True if the title is set manually.
      *
      * This specification sets the property to `true`.
-     * `{ title: 'My Title', uri: 'id:Fuer-Elise' }`
+     * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
      *
      * @type {Boolean}
      */
@@ -1166,9 +1166,9 @@ export class WrappedSampleList {
    * @param {Object|String|Array} spec - Different input specifications are
    *   possible:
    *
-   *   1. The sample URI as a string (for example: `id:Fuer-Elise_HB`).
+   *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
    *   2. An object with the mandatory property `uri` (for example:
-   *      `{ uri: 'id:Fuer-Elise_HB'}`).
+   *      `{ uri: 'ref:Fuer-Elise_HB'}`).
    *   3. An instance of the class `Sample`.
    *   4. An array
    */
@@ -1194,7 +1194,7 @@ export class WrappedSampleList {
      * True if the title of the first sample is set manually.
      *
      * This specification sets the property to `true`.
-     * `{ title: 'My Title', uri: 'id:Fuer-Elise' }`
+     * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
      *
      * @type {Boolean}
      */
@@ -1225,10 +1225,10 @@ export class WrappedSampleList {
  *
  * If a media file has a property with the name `multiPartCount` set, it is a
  * multi part asset. A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  *
- * @property {string} uri - Uniform Resource Identifier, for example `id:Haydn`,
+ * @property {string} uri - Uniform Resource Identifier, for example `ref:Haydn`,
  *   or `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} uriScheme - for example: `http`, `https`, `blob`
  * @property {string} uriAuthority - for example:
@@ -1272,7 +1272,7 @@ export class ClientMediaAsset {
     this.uriRaw = this.uri
 
     /**
-     * Uniform Resource Identifier, for example  `id:Haydn`, or
+     * Uniform Resource Identifier, for example  `ref:Haydn`, or
      * `http://example.com/Haydn_Joseph.jpg`. The sample addition (`#complete`)
      * is removed.
      *
@@ -1282,7 +1282,7 @@ export class ClientMediaAsset {
     const segments = this.uri.split(':')
 
     /**
-     * for example: `id`, `uuid`, `http`, `https`, `blob`
+     * for example: `ref`, `uuid`, `http`, `https`, `blob`
      * @type {string}
      */
     this.uriScheme = segments[0]
@@ -1318,12 +1318,12 @@ export class ClientMediaAsset {
   }
 
   /**
-   * The URI using the `id` authority.
+   * The URI using the `ref` authority.
    *
    * @returns {String}
    */
-  get uriId () {
-    return `id:${this.id}`
+  get uriRef () {
+    return `ref:${this.ref}`
   }
 
   /**
@@ -1403,7 +1403,7 @@ export class ClientMediaAsset {
       'extension',
       'filename',
       'httpUrl',
-      'id',
+      'ref',
       'mediaElement',
       'categories',
       'musicbrainzRecordingId',
@@ -1460,7 +1460,7 @@ export class ClientMediaAsset {
       properties.unshift(property)
       return properties
     }
-    for (const property of ['id', 'uri', 'title']) {
+    for (const property of ['ref', 'uri', 'title']) {
       properties = moveOnFirstPosition(properties, property)
     }
     return properties
@@ -1514,14 +1514,14 @@ class MultiPartAsset extends ClientMediaAsset {
  * A multi part asset can be restricted in different ways. This class holds the
  * data of the restriction (for example all parts, only a single part, a
  * subset of parts). A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 class MultiPartSelection {
   /**
    * @param {module:@bldr/vue-app-media~MultiPartAsset} multiPartAsset
    * @param {String} selectionSpec - Can be a uri, everthing after `#`, for
-   * example `id:Song-2#2-5` -> `2-5`
+   * example `ref:Song-2#2-5` -> `2-5`
    */
   constructor (multiPartAsset, selectionSpec) {
     if (selectionSpec.indexOf('#') === -1 || !selectionSpec) {
@@ -1542,7 +1542,7 @@ class MultiPartSelection {
 
     /**
      * The URI of the media asset suffixed with the selection specification.
-     * `id:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
+     * `ref:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
      * means all parts.
      *
      * @type {String}
@@ -1564,15 +1564,15 @@ class MultiPartSelection {
   }
 
   /**
-   * The URI using the `id` authority.
+   * The URI using the `ref` authority.
    *
    * @returns {String}
    */
-  get uriId () {
+  get uriRef () {
     if (!this.selectionSpec) {
-      return this.asset.uriId
+      return this.asset.uriRef
     } else {
-      return `${this.asset.uriId}#${this.selectionSpec}`
+      return `${this.asset.uriRef}#${this.selectionSpec}`
     }
   }
 
@@ -1688,7 +1688,7 @@ class Resolver {
 
   /**
    * @private
-   * @param {string} field - For example `id` or `uuid`
+   * @param {string} field - For example `ref` or `uuid`
    * @param {string|json} search - For example `Fuer-Elise_HB`
    * @param {Boolean} throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
@@ -1750,7 +1750,7 @@ class Resolver {
       // First sample of each playable media file is the “complete” track.
       const completeSampleSpec = {
         title: 'komplett',
-        id: 'complete',
+        ref: 'complete',
         startTime: 0
       }
       for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
@@ -1761,12 +1761,12 @@ class Resolver {
       }
 
       // Store all sample specs in a object to check if there is already a
-      // sample with the id “complete”.
+      // sample with the ref “complete”.
       let sampleSpecs = null
       if (asset.samples) {
         sampleSpecs = {}
         for (const sampleSpec of asset.samples) {
-          sampleSpecs[sampleSpec.id] = sampleSpec
+          sampleSpecs[sampleSpec.ref] = sampleSpec
         }
       }
 
@@ -1798,7 +1798,7 @@ class Resolver {
   /**
    * @private
    *
-   * @param {String} uri - For example `uuid:... id:...`
+   * @param {String} uri - For example `uuid:... ref:...`
    * @param {Object} data - Object from the REST API.
    *
    * @returns {module:@bldr/media-client.ClientMediaAsset}
@@ -1903,7 +1903,7 @@ class Resolver {
         const response = await this.queryMediaServer_(uri[0], uri[1], throwException)
         if (response) asset = this.createAssetFromRestData_(assetSpec, response.data)
       } else if (throwException) {
-        throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,id,uuid`)
+        throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,ref,uuid`)
       }
     // Local: File object from drag and drop or open dialog
     } else if (assetSpec instanceof File) {
@@ -2075,7 +2075,7 @@ class Media {
     })
 
     for (const data of response.data) {
-      const asset = this.resolver.createAssetFromRestData_(`id:${data.id}`, data)
+      const asset = this.resolver.createAssetFromRestData_(`ref:${data.ref}`, data)
       this.resolver.addMediaElementToAsset(asset)
       store.dispatch('media/addAsset', asset)
     }

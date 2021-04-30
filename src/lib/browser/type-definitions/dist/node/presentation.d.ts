@@ -10,9 +10,9 @@ import { Master, StringObject } from './master';
  */
 export declare class SlideMeta {
     /**
-     * The ID of a slide (Used for links). Markdown is supported in this property.
+     * An unique reference string of a slide (Used for links). Markdown is supported in this property.
      */
-    id?: string;
+    ref?: string;
     /**
      * The title of a slide. Markdown is supported in this property.
      */
@@ -113,7 +113,8 @@ export interface Slide {
  *
  * ```yaml
  * meta:
- *   id: An unique id
+ *   ref: An unique reference string
+ *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
  *   title: A title
  *   sub_title: A subtitle
  *   grade: The grade the presentation belongs to.
@@ -123,9 +124,13 @@ export interface Slide {
  */
 export interface PresentationMeta {
     /**
-     * An unique ID. (for example: `Wiener-Klassik`)
+     * A reference string to identify the presentation (for example: `Wiener-Klassik`)
      */
-    id: string;
+    ref: string;
+    /**
+     * A Universally Unique Identifier to identify the presentation.
+     */
+    uuid?: string;
     /**
      * The title of the presentation. (for example: `Das orchestrale Klangbild bei Beethoven`)
      */

@@ -64,7 +64,7 @@ class Resolver {
     /**
      * @private
      *
-     * @param {String} uri - For example `uuid:... id:...`
+     * @param {String} uri - For example `uuid:... ref:...`
      * @param {Object} data - Object from the REST API.
      *
      * @returns {module:@bldr/media-client.ClientMediaAsset}

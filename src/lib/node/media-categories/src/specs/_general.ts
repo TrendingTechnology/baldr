@@ -13,7 +13,7 @@ import { generateIdPrefix, validateYoutubeId } from '../main'
 export const general: MediaCategory.Category = {
   title: 'Allgemeiner Metadaten-Type',
   props: {
-    id: {
+    ref: {
       title: 'ID',
       validate: function (value) {
         return value.match(/^[a-zA-Z0-9-_]+$/)

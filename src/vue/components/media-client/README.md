@@ -15,7 +15,7 @@ Vue.use(media, router, store)
 On every Vue instance:
 
 ```js
-this.$media.resolve('id:Haydn')
+this.$media.resolve('ref:Haydn')
 
-const asset = this.$store.getters['media/assetByUri']('id:Haydn')
+const asset = this.$store.getters['media/assetByUri']('ref:Haydn')
 ```

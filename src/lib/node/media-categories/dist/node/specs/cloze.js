@@ -32,7 +32,7 @@ exports.cloze = {
         return path_1.default.join(oldRelDir, `Lueckentext${pageNo}.svg`);
     },
     props: {
-        id: {
+        ref: {
             title: 'Die ID des Lückentexts',
             derive: function ({ data, folderTitles }) {
                 const clozeData = data;
@@ -40,7 +40,7 @@ exports.cloze = {
                 if (data.clozePageNo != null) {
                     counterSuffix = `_${clozeData.clozePageNo}`;
                 }
-                const id = folderTitles != null ? folderTitles.id : 'lueckentext';
+                const id = folderTitles != null ? folderTitles.ref : 'lueckentext';
                 return `${id}_LT${counterSuffix}`;
             },
             overwriteByDerived: true

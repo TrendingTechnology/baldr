@@ -1,7 +1,7 @@
 // Node packages.
 import path from 'path'
 
-import { AssetType } from '@bldr/type-definitions'
+import type { AssetType } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
@@ -55,11 +55,11 @@ export class Asset extends MediaFile {
   }
 
   /**
-   * The id of the media asset. Read from the metadata file.
+   * The reference of the media asset. Read from the metadata file.
    */
-  get id (): string | undefined {
-    if (this.metaData?.id != null) {
-      return this.metaData.id
+  get ref (): string | undefined {
+    if (this.metaData?.ref != null) {
+      return this.metaData.ref
     }
   }
 

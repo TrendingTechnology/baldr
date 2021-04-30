@@ -1,24 +1,24 @@
 ---
 meta:
-  id: EP_common_audioOverlay
+  ref: EP_common_audioOverlay
 
 slides:
 - title: 'Without titles'
   score_sample:
     heading: Hook-Line
-    score: id:Final-Countdown_NB_The-Final-Countdown
+    score: ref:Final-Countdown_NB_The-Final-Countdown
   audio_overlay:
-    - id:Final-Countdown_HB_The-Final-Countdown#blaeser-intro
-    - id:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro
+    - ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro
+    - ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro
 
 - title: 'With titles'
   score_sample:
     heading: Hook-Line
-    score: id:Final-Countdown_NB_The-Final-Countdown
+    score: ref:Final-Countdown_NB_The-Final-Countdown
   audio_overlay:
-    - uri: id:Final-Countdown_HB_The-Final-Countdown#blaeser-intro
+    - uri: ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro
       title: Original
-    - uri: id:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro
+    - uri: ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro
       title: Bollywood
 
 - title: 'Object: only uri, long form, show titles'
@@ -46,6 +46,6 @@ slides:
 - title: URI and title in one string
   task: URI and title in one string
   audio_overlay:
-  - id:Beatles-Strawberry_HB_Demoversion
-  - id:Beatles-Strawberry_HB_Studioversion-von-1966 ersten Studioversion vom 24. November 1966
-  - id:Beatles-Strawberry_HB_Plattenfassung fertige Produktion
+  - ref:Beatles-Strawberry_HB_Demoversion
+  - ref:Beatles-Strawberry_HB_Studioversion-von-1966 ersten Studioversion vom 24. November 1966
+  - ref:Beatles-Strawberry_HB_Plattenfassung fertige Produktion

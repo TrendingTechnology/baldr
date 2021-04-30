@@ -44,19 +44,19 @@ export async function generatePresentation (filePath: string): Promise<void> {
   await walk({
     asset (relPath) {
       const asset = makeAsset(relPath)
-      if (asset.id == null) {
+      if (asset.ref == null) {
         return
       }
       let masterName: string = 'generic'
-      if (asset.id.includes('_LT')) {
+      if (asset.ref.includes('_LT')) {
         masterName = 'cloze'
-      } else if (asset.id.includes('NB')) {
+      } else if (asset.ref.includes('NB')) {
         masterName = 'score_sample'
       } else if (asset.mediaCategory != null) {
         masterName = asset.mediaCategory
       }
       const slideData: SlideData = {
-        [masterName]: `id:${asset.id}`
+        [masterName]: `ref:${asset.ref}`
       }
       slides.push(slideData)
     }

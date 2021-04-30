@@ -28,7 +28,7 @@ describe('Package “@bldr/presentation-parser”', function () {
 
   it('Property „presentation.meta“', async function () {
     const presentation = parseExample('metaData')
-    assert.strictEqual(presentation.meta.id, 'EP_common_metaData')
+    assert.strictEqual(presentation.meta.ref, 'EP_common_metaData')
     assert.strictEqual(presentation.meta.title, 'Slide meta data')
     assert.strictEqual(presentation.meta.subtitle, 'A subtitle')
     assert.strictEqual(presentation.meta.grade, 7)
@@ -39,7 +39,7 @@ describe('Package “@bldr/presentation-parser”', function () {
   it('Property „slide.meta“', async function () {
     const presentation = parseExample('metaData')
     const slides = presentation.slides
-    assert.strictEqual(slides[0].meta.id, 'slide_first')
+    assert.strictEqual(slides[0].meta.ref, 'slide_first')
     assert.strictEqual(slides[0].meta.title, undefined)
     assert.strictEqual(slides[0].meta.source, undefined)
     assert.strictEqual(slides[0].meta.description, undefined)
@@ -50,7 +50,7 @@ describe('Package “@bldr/presentation-parser”', function () {
 
     assert.strictEqual(slides[3].meta.source, '<a href="http://example.com">http://example.com</a>')
 
-    assert.strictEqual(slides[4].meta.id, 'all')
+    assert.strictEqual(slides[4].meta.ref, 'all')
     assert.strictEqual(slides[4].meta.title, 'This slide has a title.')
     assert.strictEqual(slides[4].meta.source, 'This slide has a source.')
     assert.strictEqual(slides[4].meta.description, 'This slide has a description.')

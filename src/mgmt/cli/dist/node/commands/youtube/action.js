@@ -25,7 +25,7 @@ function requestYoutubeApi(youtubeId) {
         const result = yield axios_1.default.get('https://www.googleapis.com/youtube/v3/videos', {
             params: {
                 part: 'snippet',
-                id: youtubeId,
+                ref: youtubeId,
                 key: config_1.default.youtube.apiKey
             }
         });

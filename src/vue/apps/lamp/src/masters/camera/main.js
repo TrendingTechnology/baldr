@@ -130,7 +130,7 @@ export default validateMasterSpec({
               label = `${device.kind} (${device.deviceId})`
             }
             resultList.push({
-              id: device.deviceId,
+              ref: device.deviceId,
               name: label
             })
           }

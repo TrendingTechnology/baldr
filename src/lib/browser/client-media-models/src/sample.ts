@@ -76,14 +76,14 @@ export class Sample {
   title: string
 
   /**
-   * The ID of the sample. The ID is used to build the URI of the sample, for
-   * example `uri#id`: `id:Beethoven#complete`
+   * The reference of the sample. The reference is used to build the URI of the sample, for
+   * example `uri#reference`: `ref:Beethoven#complete`
    */
-  id: string
+  ref: string
 
   /**
-   * The URI of the sample in the format `uri#id`: for example
-   * `id:Beethoven#complete`
+   * The URI of the sample in the format `uri#ref`: for example
+   * `ref:Beethoven#complete`
    */
   uri: string
 
@@ -148,15 +148,15 @@ export class Sample {
 
   constructor (
     asset: ClientMediaAsset,
-    { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat
+    { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat
   ) {
     this.asset = asset
 
     this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl) as HTMLMediaElement
 
     this.title = title == null ? 'komplett' : title
-    this.id = id == null ? 'complete' : id
-    this.uri = `${this.asset.uri.uriWithoutFragment}#${this.id}`
+    this.ref = ref == null ? 'complete' : ref
+    this.uri = `${this.asset.uri.uriWithoutFragment}#${this.ref}`
     if (startTime != null) {
       this.startTimeSec = this.toSec(startTime)
     }
@@ -189,15 +189,15 @@ export class Sample {
   /**
    * The URI using the `id` authority.
    */
-  get uriId (): string {
-    return `${this.asset.id}#${this.id}`
+  get uriRef (): string {
+    return `${this.asset.ref}#${this.ref}`
   }
 
   /**
    * The URI using the `uuid` authority.
    */
   get uriUuid (): string {
-    return `${this.asset.uuid}#${this.id}`
+    return `${this.asset.uuid}#${this.ref}`
   }
 
   /**
@@ -205,7 +205,7 @@ export class Sample {
    * For example `Glocken (Das große Tor von Kiew)`
    */
   get titleSafe (): string {
-    if (this.id === 'complete') {
+    if (this.ref === 'complete') {
       return this.asset.titleSafe
     } else {
       return `${this.title} (${this.asset.titleSafe})`
@@ -577,25 +577,25 @@ export class Sample {
 }
 
 export class SampleCollection {
-  private cache: { [id: string]: Sample }
+  private cache: { [ref: string]: Sample }
 
   constructor (asset: ClientMediaAsset) {
     this.cache = {}
     this.addFromAsset(asset)
   }
 
-  get (id: string): Sample | undefined {
-    if (this.cache[id] != null) {
-      return this.cache[id]
+  get (ref: string): Sample | undefined {
+    if (this.cache[ref] != null) {
+      return this.cache[ref]
     }
   }
 
   private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
-    if (this.cache[sample.id] != null) {
-      throw new Error(`Duplicate sample with the id ${sample.id}`)
+    if (this.cache[sample.ref] != null) {
+      throw new Error(`Duplicate sample with the id ${sample.ref}`)
     }
-    this.cache[sample.id] = sample
+    this.cache[sample.ref] = sample
   }
 
   private buildSampleYamlFromAssetYaml (assetFormat: AssetType.FileFormat): AssetType.SampleYamlFormat | undefined {

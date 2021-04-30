@@ -13,7 +13,7 @@ import { getHtmlBody } from './main.js'
 
 export default {
   props: {
-    id: {
+    ref: {
       type: String,
       required: true
     },
@@ -52,7 +52,7 @@ export default {
     const body = master.$get('bodyById', this.id)
     if (!body) {
       const body = await getHtmlBody(this.title, this.language)
-      master.$commit('addBody', { id: this.id, body })
+      master.$commit('addBody', { ref: this.id, body })
     }
   }
 }

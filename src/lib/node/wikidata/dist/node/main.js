@@ -28,7 +28,7 @@ const wikibase = wikibaseSdk({
 /**
  * ```js
  * let entity = {
-  *   id: 'Q202698',
+  *   ref: 'Q202698',
   *   type: 'item',
   *   modified: '2020-03-20T20:27:33Z',
   *   labels: { de: 'Yesterday', en: 'Yesterday' },
@@ -366,7 +366,7 @@ exports.mergeData = mergeData;
 function query(itemId, typeNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
         if (wikibase.isItemId(itemId) == null) {
-            throw new Error(`No item id: ${itemId}`);
+            throw new Error(`No item ref: ${itemId}`);
         }
         entity = (yield getEntities(itemId));
         if (!typeNames.includes('general'))

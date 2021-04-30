@@ -6,7 +6,7 @@ import { WrappedSampleList } from '@bldr/media-client'
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function convertInstrumentIdToMediaId (instrumentId) {
-  return `id:IN_${instrumentId}`
+  return `ref:IN_${instrumentId}`
 }
 
 export default validateMasterSpec({

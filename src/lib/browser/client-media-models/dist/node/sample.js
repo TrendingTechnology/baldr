@@ -38,7 +38,7 @@ const custom_events_manager_1 = require("./custom-events-manager");
  * ```
  */
 class Sample {
-    constructor(asset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+    constructor(asset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
         /**
          * We fade in very short and smoothly to avoid audio artefacts.
          */
@@ -73,8 +73,8 @@ class Sample {
         this.asset = asset;
         this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
         this.title = title == null ? 'komplett' : title;
-        this.id = id == null ? 'complete' : id;
-        this.uri = `${this.asset.uri.uriWithoutFragment}#${this.id}`;
+        this.ref = ref == null ? 'complete' : ref;
+        this.uri = `${this.asset.uri.uriWithoutFragment}#${this.ref}`;
         if (startTime != null) {
             this.startTimeSec = this.toSec(startTime);
         }
@@ -102,21 +102,21 @@ class Sample {
     /**
      * The URI using the `id` authority.
      */
-    get uriId() {
-        return `${this.asset.id}#${this.id}`;
+    get uriRef() {
+        return `${this.asset.ref}#${this.ref}`;
     }
     /**
      * The URI using the `uuid` authority.
      */
     get uriUuid() {
-        return `${this.asset.uuid}#${this.id}`;
+        return `${this.asset.uuid}#${this.ref}`;
     }
     /**
      * If the sample is the complete media file get the title of the media file.
      * For example `Glocken (Das große Tor von Kiew)`
      */
     get titleSafe() {
-        if (this.id === 'complete') {
+        if (this.ref === 'complete') {
             return this.asset.titleSafe;
         }
         else {
@@ -486,17 +486,17 @@ class SampleCollection {
         this.cache = {};
         this.addFromAsset(asset);
     }
-    get(id) {
-        if (this.cache[id] != null) {
-            return this.cache[id];
+    get(ref) {
+        if (this.cache[ref] != null) {
+            return this.cache[ref];
         }
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
-        if (this.cache[sample.id] != null) {
-            throw new Error(`Duplicate sample with the id ${sample.id}`);
+        if (this.cache[sample.ref] != null) {
+            throw new Error(`Duplicate sample with the id ${sample.ref}`);
         }
-        this.cache[sample.id] = sample;
+        this.cache[sample.ref] = sample;
     }
     buildSampleYamlFromAssetYaml(assetFormat) {
         const sampleFormat = {};

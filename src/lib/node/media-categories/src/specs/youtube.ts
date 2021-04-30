@@ -27,7 +27,7 @@ export const youtube: MediaCategory.Category = {
     return path.join(oldRelDir, `${youtubeData.youtubeId}.mp4`)
   },
   props: {
-    id: {
+    ref: {
       title: 'ID eines YouTube-Videos',
       derive: function ({ data, category }) {
         const youtubeCategory = category as YoutubeCategory

@@ -53,7 +53,7 @@ function callOpenRestApi (openWith, archive = false, create = false) {
     params: {
       with: openWith,
       type: 'presentations',
-      id: presentation.meta.id,
+      ref: presentation.meta.ref,
       archive,
       create
     }
@@ -245,7 +245,7 @@ export default {
         params: {
           with: 'editor',
           type: 'assets',
-          id: uri
+          ref: uri
         }
       })
     } else {

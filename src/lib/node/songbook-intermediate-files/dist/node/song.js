@@ -338,7 +338,7 @@ class IntermediateSong extends ExtendedSong {
         return utils_1.listFiles(folder, regExp);
     }
     generateMetaDataForMediaServer() {
-        const metaData = Object.assign({ id: `LD_${this.songId}` }, this.metaDataCombined.toJSON());
+        const metaData = Object.assign({ ref: `LD_${this.songId}` }, this.metaDataCombined.toJSON());
         media_manager_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
     }
     /**

@@ -29,9 +29,9 @@ export declare class Asset extends MediaFile {
      */
     constructor(filePath: string);
     /**
-     * The id of the media asset. Read from the metadata file.
+     * The reference of the media asset. Read from the metadata file.
      */
-    get id(): string | undefined;
+    get ref(): string | undefined;
     /**
      * The media category (`image`, `audio`, `video`, `document`)
      */

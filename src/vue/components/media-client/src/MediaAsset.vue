@@ -75,7 +75,7 @@ export default {
         params: {
           with: 'editor',
           type: 'assets',
-          id: this.asset.id
+          ref: this.asset.ref
         }
       })
     },

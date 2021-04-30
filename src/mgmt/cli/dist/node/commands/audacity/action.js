@@ -19,15 +19,15 @@ const core_browser_1 = require("@bldr/core-browser");
  *
  * ```yaml
  * ---
- * - id: sample 1
+ * - ref: sample 1
  *   title: Sample 1
  *   start_time: 1.488171
  *   end_time: 11.635583
- * - id: sample 2 (begin + end)
+ * - ref: sample 2 (begin + end)
  *   title: Sample 2 (begin + end)
  *   start_time: 11.635583
  *   end_time: 12.940996
- * - id: '3'
+ * - ref: '3'
  *   title: '3'
  *   start_time: 13.846082
  * ```

@@ -247,7 +247,7 @@ class DeepTitle {
      */
     generatePresetationMeta() {
         const result = {
-            id: this.id,
+            ref: this.id,
             subtitle: this.subtitle,
             title: this.title,
             grade: this.grade,

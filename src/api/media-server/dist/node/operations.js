@@ -69,10 +69,10 @@ exports.validateMediaType = validateMediaType;
  * Resolve a ID from a given media type (`assets`, `presentations`) to a
  * absolute path.
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-function getAbsPathFromId(id, mediaType) {
+function getAbsPathFromId(ref, mediaType) {
     if (mediaType === void 0) { mediaType = 'presentations'; }
     return __awaiter(this, void 0, void 0, function () {
         var result, relPath;
@@ -80,11 +80,11 @@ function getAbsPathFromId(id, mediaType) {
             switch (_a.label) {
                 case 0:
                     mediaType = validateMediaType(mediaType);
-                    return [4 /*yield*/, main_1.database.db.collection(mediaType).find({ id: id }).next()];
+                    return [4 /*yield*/, main_1.database.db.collection(mediaType).find({ ref: ref }).next()];
                 case 1:
                     result = _a.sent();
                     if (result.path == null && typeof result.path !== 'string') {
-                        throw new Error("Can not find media file with the type \u201C" + mediaType + "\u201D and the id \u201C" + id + "\u201D.");
+                        throw new Error("Can not find media file with the type \u201C" + mediaType + "\u201D and the reference \u201C" + ref + "\u201D.");
                     }
                     relPath = result.path;
                     if (mediaType === 'assets') {
@@ -102,8 +102,8 @@ function getAbsPathFromId(id, mediaType) {
  * 2. In a archive directory structure.
  * 3. In a second archive directory structure ... and so on.
  *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
+ * @param currentPath
+ * @param create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
 function openWithFileManagerWithArchives(currentPath, create) {
@@ -125,15 +125,15 @@ function openWithFileManagerWithArchives(currentPath, create) {
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-function openEditor(id, mediaType) {
+function openEditor(ref, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
         var absPath, parentFolder, editor;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, getAbsPathFromId(id, mediaType)];
+                case 0: return [4 /*yield*/, getAbsPathFromId(ref, mediaType)];
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
@@ -145,7 +145,7 @@ function openEditor(id, mediaType) {
                     }
                     open_with_1.openWith(config_1.default.mediaServer.editor, parentFolder);
                     return [2 /*return*/, {
-                            id: id,
+                            ref: ref,
                             mediaType: mediaType,
                             absPath: absPath,
                             parentFolder: parentFolder,
@@ -160,19 +160,19 @@ exports.openEditor = openEditor;
  * Open the parent folder of a presentation, a media asset in a file explorer
  * GUI application.
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  * @param archive - Addtionaly open the corresponding archive
  *   folder.
  * @param create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-function openParentFolder(id, mediaType, archive, create) {
+function openParentFolder(ref, mediaType, archive, create) {
     return __awaiter(this, void 0, void 0, function () {
         var absPath, parentFolder, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, getAbsPathFromId(id, mediaType)];
+                case 0: return [4 /*yield*/, getAbsPathFromId(ref, mediaType)];
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
@@ -183,7 +183,7 @@ function openParentFolder(id, mediaType, archive, create) {
                         result = open_with_1.openWithFileManager(parentFolder, create);
                     }
                     return [2 /*return*/, {
-                            id: id,
+                            ref: ref,
                             parentFolder: parentFolder,
                             mediaType: mediaType,
                             archive: archive,

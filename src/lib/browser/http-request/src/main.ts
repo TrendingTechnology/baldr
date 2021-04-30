@@ -129,7 +129,7 @@ export class HttpRequest {
    * url: 'query',
    * params: {
    *   type: 'assets',
-   *   field: 'id',
+   *   field: 'ref',
    *   method: 'exactMatch',
    *   search: 'IN_Cembalo'
    * }

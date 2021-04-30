@@ -31,13 +31,13 @@ export function validateMediaType (mediaType: string): MediaType {
  * Resolve a ID from a given media type (`assets`, `presentations`) to a
  * absolute path.
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-async function getAbsPathFromId (id: string, mediaType: MediaType = 'presentations'): Promise<string> {
+async function getAbsPathFromId (ref: string, mediaType: MediaType = 'presentations'): Promise<string> {
   mediaType = validateMediaType(mediaType)
-  const result = await database.db.collection(mediaType).find({ id: id }).next()
-  if (result.path == null && typeof result.path !== 'string') { throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`) }
+  const result = await database.db.collection(mediaType).find({ ref: ref }).next()
+  if (result.path == null && typeof result.path !== 'string') { throw new Error(`Can not find media file with the type “${mediaType}” and the reference “${ref}”.`) }
 
   let relPath: string = result.path
   if (mediaType === 'assets') {
@@ -53,8 +53,8 @@ async function getAbsPathFromId (id: string, mediaType: MediaType = 'presentatio
  * 2. In a archive directory structure.
  * 3. In a second archive directory structure ... and so on.
  *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
+ * @param currentPath
+ * @param create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
 function openWithFileManagerWithArchives (currentPath: string, create: boolean): StringIndexedObject {
@@ -75,11 +75,11 @@ function openWithFileManagerWithArchives (currentPath: string, create: boolean):
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export async function openEditor (id: string, mediaType: MediaType): Promise<StringIndexedObject> {
-  const absPath = await getAbsPathFromId(id, mediaType)
+export async function openEditor (ref: string, mediaType: MediaType): Promise<StringIndexedObject> {
+  const absPath = await getAbsPathFromId(ref, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
@@ -89,7 +89,7 @@ export async function openEditor (id: string, mediaType: MediaType): Promise<Str
   }
   openWith(config.mediaServer.editor, parentFolder)
   return {
-    id,
+    ref,
     mediaType,
     absPath,
     parentFolder,
@@ -101,15 +101,15 @@ export async function openEditor (id: string, mediaType: MediaType): Promise<Str
  * Open the parent folder of a presentation, a media asset in a file explorer
  * GUI application.
  *
- * @param id - The id of the media type.
+ * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  * @param archive - Addtionaly open the corresponding archive
  *   folder.
  * @param create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-export async function openParentFolder (id: string, mediaType: MediaType, archive: boolean, create: boolean): Promise<StringIndexedObject> {
-  const absPath = await getAbsPathFromId(id, mediaType)
+export async function openParentFolder (ref: string, mediaType: MediaType, archive: boolean, create: boolean): Promise<StringIndexedObject> {
+  const absPath = await getAbsPathFromId(ref, mediaType)
   const parentFolder = path.dirname(absPath)
 
   let result: StringIndexedObject
@@ -119,7 +119,7 @@ export async function openParentFolder (id: string, mediaType: MediaType, archiv
     result = openWithFileManager(parentFolder, create)
   }
   return {
-    id,
+    ref,
     parentFolder,
     mediaType,
     archive,

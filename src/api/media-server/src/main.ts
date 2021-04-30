@@ -29,7 +29,7 @@
  *   - `init`: Initialize the MongoDB database
  *   - `open`: Open a media file specified by an ID. This query parameters are
  *     available:
- *       - `id`: The ID of the media file (required).
+ *       - `ref`: The ID of the media file (required).
  *       - `type`: `presentations`, `assets`. The default value is
  *         `presentations.`
  *       - `with`: `editor` specified in `config.mediaServer.editor`
@@ -50,7 +50,7 @@
  *            to a top level database field to get a result.
  *          - `substringSearch`: The query parameter `search` is only a
  *            substring of the string to search in.
- *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `field`: `ref` (default), `title`, etc ... (where).
  *      - `search`: Some text to search for (search for).
  *      - `result`: `fullObjects` (default), `dynamicSelect`
  * - `stats`:
@@ -352,9 +352,9 @@ class Presentation extends MediaFile {
   allTitlesSubtitle: string
 
   /**
-   * Value is the same as `meta.id`
+   * Value is the same as `meta.ref`
    */
-  id: string
+  ref: string
 
   constructor (filePath: string) {
     super(filePath)
@@ -369,7 +369,7 @@ class Presentation extends MediaFile {
       this.meta = {} as PresentationTypes.PresentationMeta
     }
 
-    if (this.meta?.id == null) this.meta.id = deepTitle.id
+    if (this.meta?.ref == null) this.meta.ref = deepTitle.ref
     if (this.meta?.title == null) this.meta.title = deepTitle.title
     if (this.meta?.subtitle == null) this.meta.subtitle = deepTitle.subtitle
     if (this.meta?.curriculum == null) this.meta.curriculum = deepTitle.curriculum
@@ -377,7 +377,7 @@ class Presentation extends MediaFile {
     this.title = stripTags(this.meta.title)
     this.titleSubtitle = this.titleSubtitle_()
     this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle)
-    this.id = this.meta.id
+    this.ref = this.meta.ref
   }
 
   /**
@@ -497,9 +497,9 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
   })
 
   // .replaceOne and upsert: Problems with merged objects?
-  await database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
+  await database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })
   await database.db.collection('folderTitleTree').insertOne({
-    id: 'root', // To avoid duplicate trees.
+    ref: 'root', // To avoid duplicate trees.
     tree: titleTree.get()
   })
   const end = new Date().getTime()
@@ -542,7 +542,7 @@ const helpMessages: StringIndexedObject = {
           '/media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
         ],
         '#parameters': {
-          id: 'The ID of the media file (required).',
+          ref: 'The ID of the media file (required).',
           type: '`presentations`, `assets`. The default value is `presentations.`',
           with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
           archive: 'True if present, false by default. Open the file or the folder in the corresponding archive folder structure.',
@@ -555,16 +555,16 @@ const helpMessages: StringIndexedObject = {
     query: {
       '#description': 'Get results by using query parameters',
       '#examples': [
-        '/media/query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
+        '/media/query?type=assets&field=ref&method=exactMatch&search=Egmont-Ouverture',
         '/media/query?type=assets&field=uuid&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53',
-        '/media/query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte',
+        '/media/query?type=presentations&field=ref&method=exactMatch&search=Beethoven_Marmotte',
         '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
         '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
       ],
       '#parameters': {
         type: '`assets` (default), `presentations` (what)',
         method: '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
-        field: '`id` (default), `title`, etc ... (where).',
+        field: '`ref` (default), `title`, etc ... (where).',
         search: 'Some text to search for (search for).',
         result: '`fullObjects` (default), `dynamicSelect`'
       }
@@ -635,7 +635,7 @@ function registerMediaRestApi (): express.Express {
       }
 
       // field
-      const field = extractString(query, 'field', 'id')
+      const field = extractString(query, 'field', 'ref')
       // result
       if (!('result' in query)) query.result = 'fullObjects'
 
@@ -669,7 +669,7 @@ function registerMediaRestApi (): express.Express {
         } else if (query.result === 'dynamicSelect') {
           $project = {
             _id: false,
-            id: true,
+            ref: true,
             name: `$${field}`
           }
         }
@@ -686,7 +686,7 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
-      const result = await db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next()
+      const result = await db.collection('folderTitleTree').find({ ref: 'root' }, { projection: { _id: 0 } }).next()
       res.json(result.tree)
     } catch (error) {
       next(error)
@@ -714,18 +714,18 @@ function registerMediaRestApi (): express.Express {
   app.get('/mgmt/open', async (req, res, next) => {
     try {
       const query = req.query
-      if (query.id == null) throw new Error('You have to specify an ID (?id=myfile).')
+      if (query.ref == null) throw new Error('You have to specify an ID (?ref=myfile).')
       if (query.with == null) query.with = 'editor'
       if (query.type == null) query.type = 'presentations'
       const archive = ('archive' in query)
       const create = ('create' in query)
 
-      const id = extractString(query, 'id')
+      const ref = extractString(query, 'ref')
       const type = validateMediaType(extractString(query, 'type'))
       if (query.with === 'editor') {
-        res.json(await openEditor(id, type))
+        res.json(await openEditor(ref, type))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(id, type, archive, create))
+        res.json(await openParentFolder(ref, type, archive, create))
       }
     } catch (error) {
       next(error)

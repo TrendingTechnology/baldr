@@ -60,7 +60,7 @@ export class Item {
     }
     //  1                  7
     // [((id):(Fuer-Elise))( caption="Für Elise")]
-    // this.id = 'id:Haydn_Joseph'
+    // this.id = 'ref:Haydn_Joseph'
     this.uri = match[1]
 
     if (match[7]) {

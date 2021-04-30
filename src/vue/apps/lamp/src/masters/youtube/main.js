@@ -10,7 +10,7 @@ import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 function youtubeIdToUri (youtubeId) {
-  return `id:YT_${youtubeId}`
+  return `ref:YT_${youtubeId}`
 }
 
 export default validateMasterSpec({

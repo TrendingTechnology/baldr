@@ -21,18 +21,18 @@ function runTests () {
     assert.strictEqual(result.data.errors.length, 0)
   })
 
-  it('/media/query?type=assets&field=id&method=exactMatch&search=IN_Cembalo', async function () {
+  it('/media/query?type=assets&field=ref&method=exactMatch&search=IN_Cembalo', async function () {
     const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'assets',
-        field: 'id',
+        field: 'ref',
         method: 'exactMatch',
         search: 'IN_Cembalo'
       }
     })
     const data = result.data
-    assert.strictEqual(data.id, 'IN_Cembalo')
+    assert.strictEqual(data.ref, 'IN_Cembalo')
     assert.strictEqual(data.uuid, '0f741f26-f861-4c17-a4a4-c12dcd8375d9')
     assert.strictEqual(data.wikidata, 'Q81982')
   })
@@ -52,33 +52,33 @@ function runTests () {
     assert.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
   })
 
-  it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', async function () {
+  it('/media/query?type=presentations&field=ref&method=exactMatch&search=Marmotte', async function () {
     const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'presentations',
-        field: 'id',
+        field: 'ref',
         method: 'exactMatch',
         search: 'Marmotte'
       }
     })
     const data = result.data
-    assert.strictEqual(data.meta.id, 'Marmotte')
+    assert.strictEqual(data.meta.ref, 'Marmotte')
     assert.ok(typeof data.path === 'string')
     assert.ok(typeof data.filename === 'string')
   })
 
-  it('/media/query?type=presentations&field=id&method=exactMatch&search=Marmotte', async function () {
+  it('/media/query?type=presentations&field=ref&method=exactMatch&search=Marmotte', async function () {
     const result = await httpRequest.request({
       url: 'query',
       params: {
         type: 'presentations',
-        field: 'id',
+        field: 'ref',
         method: 'exactMatch',
         search: 'Marmotte'
       }
     })
-    assert.strictEqual(result.data.meta.id, 'Marmotte')
+    assert.strictEqual(result.data.meta.ref, 'Marmotte')
     assert.ok(typeof result.data.path === 'string')
     assert.ok(typeof result.data.filename === 'string')
   })
@@ -109,7 +109,7 @@ function runTests () {
       }
     })
     assert.ok(!result.data[0].uuid)
-    assert.ok(result.data[0].id)
+    assert.ok(result.data[0].ref)
     assert.ok(result.data[0].name)
   })
 

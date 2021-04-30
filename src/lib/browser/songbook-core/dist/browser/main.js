@@ -208,7 +208,7 @@ export class CoreLibrary {
         const result = [];
         for (const songId of this.songIds) {
             const song = this.getSongById(songId);
-            result.push({ id: song.songId, name: song.metaData.title });
+            result.push({ ref: song.songId, name: song.metaData.title });
         }
         return result;
     }

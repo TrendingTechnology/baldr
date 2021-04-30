@@ -50,12 +50,12 @@ class Asset extends MediaFile {
         }
     }
     /**
-     * The id of the media asset. Read from the metadata file.
+     * The reference of the media asset. Read from the metadata file.
      */
-    get id() {
+    get ref() {
         var _a;
-        if (((_a = this.metaData) === null || _a === void 0 ? void 0 : _a.id) != null) {
-            return this.metaData.id;
+        if (((_a = this.metaData) === null || _a === void 0 ? void 0 : _a.ref) != null) {
+            return this.metaData.ref;
         }
     }
     /**
