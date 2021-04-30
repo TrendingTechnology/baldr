@@ -102,7 +102,7 @@ const getters = {
 const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation({ rawYamlString, rawObject: mongoDbObject })
-    dispatch('recent/add', { presId: presentation.ref, title: presentation.title })
+    dispatch('recent/add', { presRef: presentation.ref, title: presentation.title })
     await presentation.resolveMedia()
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
@@ -110,7 +110,7 @@ const actions = {
     // This is possible by the routes.
     // dispatch('setSlideNoCurrent', 1)
   },
-  async openPresentationById ({ dispatch }, { vm, presId }) {
+  async openPresentationById ({ dispatch }, { vm, presRef }) {
     // Get the path
     let response = await vm.$media.httpRequest.request({
       url: 'query',
@@ -119,11 +119,11 @@ const actions = {
         type: 'presentations',
         method: 'exactMatch',
         field: 'ref',
-        search: presId
+        search: presRef
       }
     })
     if (!response.data) {
-      throw new Error(`Unkown presentation with the id “${presId}”`)
+      throw new Error(`Unkown presentation with the id “${presRef}”`)
     }
     const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.

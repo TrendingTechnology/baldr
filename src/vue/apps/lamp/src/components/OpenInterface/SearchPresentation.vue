@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     async onInput () {
-      router.push({ name: 'slides-preview', params: { presId: this.presentation.ref } })
+      router.push({ name: 'slides-preview', params: { presRef: this.presentation.ref } })
     },
     search (title) {
       if (!title) return

@@ -410,9 +410,9 @@ export class Slide {
    *
    * @type {String}
    */
-  get id () {
-    if (this.metaData.id) {
-      return this.metaData.id
+  get ref () {
+    if (this.metaData.ref) {
+      return this.metaData.ref
     }
     // else if (this.no) {
     //   return this.no
@@ -516,7 +516,7 @@ export class Slide {
     const routeNames = routerViews[view]
     const presentation = store.getters['lamp/presentation']
     let name
-    const params = { presId: presentation.ref }
+    const params = { presRef: presentation.ref }
     if (this.stepCount && this.stepCount > 1) {
       name = routeNames.stepNo
       if (this.stepNo) {
@@ -527,8 +527,8 @@ export class Slide {
     } else {
       name = routeNames.slideNo
     }
-    if (this.id) {
-      params.slideNo = this.id
+    if (this.ref) {
+      params.slideNo = this.ref
     } else {
       params.slideNo = this.no
     }
@@ -857,7 +857,7 @@ export class Presentation {
    *
    * @returns {String}
    */
-  get id () {
+  get ref () {
     if (this.meta && this.meta.ref) return this.meta.ref
   }
 

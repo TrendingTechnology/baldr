@@ -159,17 +159,17 @@ export function getViewFromRoute () {
 
 /**
  * @param {module:@bldr/lamp/routing~vm} vm
- * @param {String} presId - Presentation ID.
+ * @param {String} presRef - Presentation ID.
  */
-async function loadPresentationById (vm, presId) {
+async function loadPresentationById (vm, presRef) {
   vm.$media.player.stop()
   vm.$store.dispatch('media/clear')
   vm.$store.commit('lamp/setPresentation', null)
 
   // EP: Example
-  if (presId.match(/^EP_.*$/)) {
+  if (presRef.match(/^EP_.*$/)) {
     // master example
-    const masterMatch = presId.match(/^EP_master_(.*)$/)
+    const masterMatch = presRef.match(/^EP_master_(.*)$/)
     if (masterMatch) {
       const masterName = masterMatch[1]
       const master = vm.$masters.get(masterName)
@@ -178,7 +178,7 @@ async function loadPresentationById (vm, presId) {
     }
 
     // common example
-    const commonMatch = presId.match(/^EP_common_(.*)$/)
+    const commonMatch = presRef.match(/^EP_common_(.*)$/)
     if (commonMatch) {
       const commonName = commonMatch[1]
       await vm.$store.dispatch('lamp/openPresentation', {
@@ -188,7 +188,7 @@ async function loadPresentationById (vm, presId) {
     }
   }
 
-  await vm.$store.dispatch('lamp/openPresentationById', { vm, presId })
+  await vm.$store.dispatch('lamp/openPresentationById', { vm, presRef })
 }
 
 /**
@@ -199,10 +199,10 @@ async function loadPresentationById (vm, presId) {
  */
 async function loadPresentationByRoute (vm, route) {
   try {
-    if (route.params.presId) {
+    if (route.params.presRef) {
       const presentation = vm.$store.getters['lamp/presentation']
-      if (!presentation || (presentation && presentation.ref !== route.params.presId)) {
-        await loadPresentationById(vm, route.params.presId)
+      if (!presentation || (presentation && presentation.ref !== route.params.presRef)) {
+        await loadPresentationById(vm, route.params.presRef)
       }
       if (route.params.slideNo) {
         if (route.params.stepNo) route.params.stepNo = parseInt(route.params.stepNo)

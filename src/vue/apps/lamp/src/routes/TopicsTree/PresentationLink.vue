@@ -3,9 +3,9 @@
     <span
       v-if="hasPraesentation"
       class="title link"
-      :id="`PID_${id}`"
-      @click="openPresentation(id)"
-      :title="`ID: ${id}`"
+      :id="`PREF_${presRef}`"
+      @click="openPresentation(presRef)"
+      :title="`ID: ${presRef}`"
       v-html="title"
     />
     <span class="title" v-else v-html="title"/>
@@ -20,7 +20,8 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 export default {
   name: 'PresentationLink',
   props: {
-    ref: {
+    // ref is a reserved attribute
+    presRef: {
       type: String
     },
     title: {
@@ -37,8 +38,9 @@ export default {
     }
   },
   methods: {
-    async openPresentation (presId) {
-      this.$router.push({ name: 'slides-preview', params: { presId: presId } })
+    async openPresentation (presRef) {
+      console.log(presRef)
+      this.$router.push({ name: 'slides-preview', params: { presRef: presRef } })
     }
   },
   computed: {
@@ -46,7 +48,7 @@ export default {
     classObject: function () {
       const result = {}
       result[`level-${this.level}`] = true
-      if (this.hasPraesentation && this.presentation && this.id === this.presentation.ref) {
+      if (this.hasPraesentation && this.presentation && this.presRef === this.presentation.ref) {
         result.active = true
       }
       return result

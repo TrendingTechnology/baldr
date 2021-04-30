@@ -19,7 +19,7 @@
     <section v-if="master.example">
       <h2>
         Example
-        <router-link :to="{ name: 'slides-preview', params: { presId: `EP_master_${masterName}` } }">
+        <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_master_${masterName}` } }">
           <material-icon name="presentation"/>
         </router-link>
       </h2>

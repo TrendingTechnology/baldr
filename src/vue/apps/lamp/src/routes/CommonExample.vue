@@ -4,7 +4,7 @@
 
     <section>
       <h2>Example
-        <router-link :to="{ name: 'slides-preview', params: { presId: `EP_common_${exampleName}` } }">
+        <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_common_${exampleName}` } }">
           <material-icon name="presentation"/>
         </router-link>
       </h2>

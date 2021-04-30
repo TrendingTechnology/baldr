@@ -2,7 +2,7 @@
   <div class="vc_presentation_item">
     <presentation-link
       :hasPraesentation="hasPraesentation"
-      :id="id"
+      :presRef="presRef"
       :subtitle="subtitle"
       :title="title"
       :level="level"
@@ -57,7 +57,7 @@ export default {
       }
       return 0
     },
-    id () {
+    presRef () {
       if (this.folderTitle) {
         return this.folderTitle.folderName.substr(3)
       }

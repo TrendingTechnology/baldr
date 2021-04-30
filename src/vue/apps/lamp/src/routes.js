@@ -53,7 +53,7 @@ const routes = [
     }
   },
   {
-    path: '/presentation/:presId',
+    path: '/presentation/:presRef',
     component: SlidesPreview,
     name: 'slides-preview-short',
     meta: {
@@ -61,7 +61,7 @@ const routes = [
     }
   },
   {
-    path: '/presentation/:presId/preview',
+    path: '/presentation/:presRef/preview',
     component: SlidesPreview,
     name: 'slides-preview',
     meta: {
@@ -70,7 +70,7 @@ const routes = [
     }
   },
   {
-    path: '/presentation/:presId/slide/:slideNo',
+    path: '/presentation/:presRef/slide/:slideNo',
     name: 'slide',
     component: SlideView,
     meta: {
@@ -86,7 +86,7 @@ const routes = [
     ]
   },
   {
-    path: '/speaker-view/:presId/slide/:slideNo',
+    path: '/speaker-view/:presRef/slide/:slideNo',
     name: 'speaker-view',
     component: SpeakerView,
     meta: {

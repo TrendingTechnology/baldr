@@ -4,7 +4,7 @@
 
 /**
  * @typedef {Object} presInfo
- * @property {String} presId
+ * @property {String} presRef
  * @property {String} title
  */
 
@@ -23,7 +23,7 @@ const actions = {
       commit('write', JSON.parse(recent))
     }
   },
-  add ({ commit, getters }, { presId, title }) {
+  add ({ commit, getters }, { presRef, title }) {
     let recent
     if (getters.recent) {
       recent = [...getters.recent]
@@ -32,12 +32,12 @@ const actions = {
     }
     let latestPres
     if (recent.length) latestPres = recent[0]
-    if (!latestPres || (presId !== latestPres.presId)) {
+    if (!latestPres || (presRef !== latestPres.presRef)) {
       const presInfo = {
-        presId
+        presRef
       }
       if (!title) {
-        presInfo.title = presId
+        presInfo.title = presRef
       } else {
         presInfo.title = title
       }

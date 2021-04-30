@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     sendMessage () {
-      this.$socket.sendObj({ presId: 'Futurismus' })
+      this.$socket.sendObj({ presRef: 'Futurismus' })
     }
   },
   ...routerGuards

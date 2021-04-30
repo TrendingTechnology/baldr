@@ -7,7 +7,7 @@
           <router-link
             :to="{
               name: 'slides-preview',
-              params: { presId: presInfo.presId }
+              params: { presRef: presInfo.presRef }
             }"
             v-html="presInfo.title"
           />

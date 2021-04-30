@@ -30,7 +30,7 @@ async function enterRoute (vm, to) {
   vm.setSubFolderTitleTreeByIds(to.params.ids)
   const presentation = vm.$store.getters['lamp/presentation']
   if (presentation) {
-    const elementLink = document.getElementById(`PID_${presentation.ref}`)
+    const elementLink = document.getElementById(`PREF_${presentation.ref}`)
     if (elementLink) elementLink.scrollIntoView({ block: 'center' })
   }
 }
@@ -50,16 +50,16 @@ export default {
     }
   },
   methods: {
-    setSubFolderTitleTreeByIds (ids) {
-      if (!ids) return
-      if (ids === 'Musik') {
+    setSubFolderTitleTreeByIds (refs) {
+      if (!refs) return
+      if (refs === 'Musik') {
         this.subFolderTitleTree = null
         return this.folderTitleTree
       }
-      ids = ids.split('/')
+      refs = refs.split('/')
       let tree = this.folderTitleTree
-      for (const id of ids) {
-        if (tree && tree.subTree) tree = tree.subTree[id]
+      for (const ref of refs) {
+        if (tree && tree.subTree) tree = tree.subTree[ref]
       }
       this.subFolderTitleTree = tree
     }

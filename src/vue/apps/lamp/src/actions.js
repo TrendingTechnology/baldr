@@ -65,7 +65,7 @@ function callOpenRestApi (openWith, archive = false, create = false) {
  * in a specific presentation.
  *
  * @typedef {Object} routerParams
- * @property {String} presId - The ID of the presentation, for example
+ * @property {String} presRef - The ID of the presentation, for example
  *   `Tradition_Futurismus`
  * @property {Number} slideNo - The slide number starting from 1.
  * @property {Number} stepNo  - The step number starting from 1.
@@ -104,7 +104,7 @@ function goToNextSlide (direction) {
   const slides = store.getters['lamp/slides']
   const slidesCount = store.getters['lamp/slidesCount']
 
-  const params = { presId: presentation.ref }
+  const params = { presRef: presentation.ref }
 
   // next
   if (direction === 1 && slide.no === slidesCount) {
@@ -148,7 +148,7 @@ function goToNextStep (direction) {
   if (!slide.stepCount || slide.stepCount < 2) return
 
   const params = {
-    presId: presentation.ref,
+    presRef: presentation.ref,
     slideNo: slide.no
   }
 
@@ -182,7 +182,7 @@ function goToNextSlideOrStep (direction) {
   const presentation = store.getters['lamp/presentation']
   if (!presentation) return
   const params = store.getters['lamp/nav/nextRouterParams'](direction)
-  params.presId = presentation.ref
+  params.presRef = presentation.ref
 
   const name = getNavRouteNameFromRoute(params, router.currentRoute)
 
