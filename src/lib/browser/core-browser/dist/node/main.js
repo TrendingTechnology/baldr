@@ -18,7 +18,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**
@@ -259,3 +260,13 @@ function makeSet(values) {
     return values;
 }
 exports.makeSet = makeSet;
+/**
+ * Generate a UUID (Universally Unique Identifier) in version 4. A version 4
+ * UUID is randomly generated. This is a small wrapper around `uuid.v4()`
+ *
+ * @returns An UUID version 4
+ */
+function genUuid() {
+    return uuid_1.v4();
+}
+exports.genUuid = genUuid;

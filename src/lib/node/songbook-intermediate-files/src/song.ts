@@ -19,8 +19,8 @@ import {
   songConstants
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
-import { formatMultiPartAssetFileName } from '@bldr/core-browser'
-import { writeYamlFile } from '@bldr/media-manager'
+import { formatMultiPartAssetFileName, genUuid } from '@bldr/core-browser'
+import { writeYamlFile, loadYaml } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
 
 import { listFiles, deleteFiles } from './utils'
@@ -431,7 +431,17 @@ export class IntermediateSong extends ExtendedSong {
   }
 
   public generateMetaDataForMediaServer (): void {
-    const metaData = Object.assign({ ref: `LD_${this.songId}` }, this.metaDataCombined.toJSON())
+    const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml')
+    const oldMetaData = loadYaml(yamlFilePath)
+    let uuid: string
+    if (oldMetaData != null && oldMetaData.uuid != null) {
+      uuid = oldMetaData.uuid
+    } else {
+      uuid = genUuid()
+    }
+    const newMetaData = this.metaDataCombined.toJSON()
+    newMetaData.uuid = uuid
+    const metaData = Object.assign({ ref: `LD_${this.songId}` }, newMetaData)
     writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData)
   }
 

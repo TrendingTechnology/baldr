@@ -7,6 +7,8 @@
  * @module @bldr/core-browser
  */
 
+import { v4 as uuidv4 } from 'uuid'
+
 export * from './object-manipulation'
 export * from './string-format'
 
@@ -275,4 +277,14 @@ export function makeSet (values: string | string[] | Set<string>): Set<string> {
     return new Set(values)
   }
   return values
+}
+
+/**
+ * Generate a UUID (Universally Unique Identifier) in version 4. A version 4
+ * UUID is randomly generated. This is a small wrapper around `uuid.v4()`
+ *
+ * @returns An UUID version 4
+ */
+export function genUuid (): string {
+  return uuidv4()
 }

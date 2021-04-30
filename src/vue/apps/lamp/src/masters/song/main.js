@@ -34,7 +34,7 @@ export default validateMasterSpec({
         propsNormalized = props
       }
       if (!propsNormalized.imageUri) {
-        propsNormalized.imageUri = `ref:Lied_${propsNormalized.songId}_NB`
+        propsNormalized.imageUri = `ref:LD_${propsNormalized.songId}`
       }
       return propsNormalized
     },

@@ -30,7 +30,11 @@
   },
   "dependencies": {
     "@bldr/type-definitions": "*",
-    "transliteration": "2.2.0"
+    "transliteration": "2.2.0",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "8.3.0"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
