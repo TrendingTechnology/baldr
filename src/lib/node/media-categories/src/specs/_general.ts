@@ -1,7 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import type { MediaCategory } from '@bldr/type-definitions'
-import { deasciify, idify } from '@bldr/core-browser'
+import { deasciify, idify, genUuid } from '@bldr/core-browser'
 import { getTwoLetterAbbreviations, checkForTwoLetterDir } from '../two-letter-abbreviations'
 
 import { generateIdPrefix, validateYoutubeId } from '../main'
@@ -18,15 +16,15 @@ export const general: MediaCategory.Category = {
       validate: function (value) {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
-      format: function (value, { data }) {
+      format: function (value, { data, filePath }) {
         let raw = idify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         raw = raw.replace(/^[va]-/, '')
 
         // eslint-disable-next-line
-        if (data.filePath != null && !data.categories?.includes('youtube')) {
-          const idPrefix = generateIdPrefix(data.filePath)
+        if (filePath != null && !data.categories?.includes('youtube')) {
+          const idPrefix = generateIdPrefix(filePath)
           if (idPrefix != null) {
             if (!raw.includes(idPrefix)) {
               raw = `${idPrefix}_${raw}`
@@ -56,7 +54,7 @@ export const general: MediaCategory.Category = {
       title: 'UUID',
       description: 'UUID version 4.',
       derive () {
-        return uuidv4()
+        return genUuid()
       },
       overwriteByDerived: false
     },

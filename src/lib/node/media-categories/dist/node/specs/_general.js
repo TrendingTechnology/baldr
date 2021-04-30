@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.general = void 0;
-const uuid_1 = require("uuid");
 const core_browser_1 = require("@bldr/core-browser");
 const two_letter_abbreviations_1 = require("../two-letter-abbreviations");
 const main_1 = require("../main");
@@ -17,14 +16,14 @@ exports.general = {
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
-            format: function (value, { data }) {
+            format: function (value, { data, filePath }) {
                 var _a;
                 let raw = core_browser_1.idify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
                 // eslint-disable-next-line
-                if (data.filePath != null && !((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
-                    const idPrefix = main_1.generateIdPrefix(data.filePath);
+                if (filePath != null && !((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
+                    const idPrefix = main_1.generateIdPrefix(filePath);
                     if (idPrefix != null) {
                         if (!raw.includes(idPrefix)) {
                             raw = `${idPrefix}_${raw}`;
@@ -52,7 +51,7 @@ exports.general = {
             title: 'UUID',
             description: 'UUID version 4.',
             derive() {
-                return uuid_1.v4();
+                return core_browser_1.genUuid();
             },
             overwriteByDerived: false
         },
