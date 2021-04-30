@@ -3,7 +3,7 @@ import { getExtension } from '@bldr/core-browser'
 
 import { mimeTypeManager } from './mime-type'
 import { MediaUri, MediaUriCache } from './media-uri'
-import { Sample } from './sample'
+import { SampleCollection } from './sample'
 
 /**
  * Hold various data of a media file as class properties.
@@ -39,7 +39,7 @@ export class ClientMediaAsset {
 
   httpUrl: string
 
-  samples?: Sample[]
+  samples?: SampleCollection
 
   /**
    * @param meta - A raw javascript object read from the Rest API
@@ -62,7 +62,7 @@ export class ClientMediaAsset {
 
     this.mimeType = mimeTypeManager.extensionToType(this.meta.extension)
 
-    this.samples = this.createSamples()
+    this.samples = new SampleCollection(this)
   }
 
   /**
@@ -77,58 +77,6 @@ export class ClientMediaAsset {
    */
   get uuid (): string {
     return this.meta.uuid
-  }
-
-  /**
-   * Create samples for each playable media file. By default each media file
-   * has one sample called “complete”.
-   */
-  private createSamples (): Sample[] | undefined {
-    if (this.isPlayable) {
-      // First sample of each playable media file is the “complete” track.
-      // const completeSampleSpec = {
-      //   title: 'komplett',
-      //   id: 'complete',
-      //   startTime: 0
-      // }
-      // for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
-      //   if (asset[prop]) {
-      //     completeSampleSpec[prop] = asset[prop]
-      //     delete asset[prop]
-      //   }
-      // }
-
-      // Store all sample specs in a object to check if there is already a
-      // sample with the id “complete”.
-      // let sampleSpecs = null
-      // if (asset.samples) {
-      //   sampleSpecs = {}
-      //   for (const sampleSpec of asset.samples) {
-      //     sampleSpecs[sampleSpec.id] = sampleSpec
-      //   }
-      // }
-
-      // Create the sample “complete”.
-      // let sample
-      // const samples = {}
-      // if (!sampleSpecs || (sampleSpecs && !('complete' in sampleSpecs))) {
-      //   sample = new Sample(this, completeSampleSpec)
-      //   samples[sample.uri] = sample
-      // }
-
-      const samples: Sample[] = []
-      // Add further samples specifed in the yaml section.
-      if (this.meta.samples != null) {
-        for (const sampleSpec of this.meta.samples) {
-          samples.push(new Sample(this, sampleSpec))
-        }
-      }
-
-      // for (const sampleUri in samples) {
-      //   samples[sampleUri].mediaElement = createMediaElement(asset)
-      // }
-      return samples
-    }
   }
 
   /**

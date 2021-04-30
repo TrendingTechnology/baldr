@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sample = void 0;
+exports.SampleCollection = exports.Sample = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const html_elements_1 = require("./html-elements");
 const timer_1 = require("./timer");
@@ -482,8 +482,14 @@ class Sample {
 }
 exports.Sample = Sample;
 class SampleCollection {
-    constructor() {
+    constructor(asset) {
         this.cache = {};
+        this.addFromAsset(asset);
+    }
+    get(id) {
+        if (this.cache[id] != null) {
+            return this.cache[id];
+        }
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
@@ -521,3 +527,4 @@ class SampleCollection {
             this.add(asset, sampleFormat);
     }
 }
+exports.SampleCollection = SampleCollection;

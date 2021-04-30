@@ -1,6 +1,6 @@
 import type { AssetType } from '@bldr/type-definitions';
 import { MediaUri } from './media-uri';
-import { Sample } from './sample';
+import { SampleCollection } from './sample';
 /**
  * Hold various data of a media file as class properties.
  *
@@ -29,7 +29,7 @@ export declare class ClientMediaAsset {
      */
     mimeType: string;
     httpUrl: string;
-    samples?: Sample[];
+    samples?: SampleCollection;
     /**
      * @param meta - A raw javascript object read from the Rest API
      */
@@ -42,11 +42,6 @@ export declare class ClientMediaAsset {
      * The URI using the `uuid` scheme.
      */
     get uuid(): string;
-    /**
-     * Create samples for each playable media file. By default each media file
-     * has one sample called “complete”.
-     */
-    private createSamples;
     /**
      * Store the file name from a HTTP URL.
      *

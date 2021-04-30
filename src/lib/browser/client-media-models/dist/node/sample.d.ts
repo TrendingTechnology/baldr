@@ -252,4 +252,12 @@ export declare class Sample {
      */
     backward(interval?: number): void;
 }
+export declare class SampleCollection {
+    private cache;
+    constructor(asset: ClientMediaAsset);
+    get(id: string): Sample | undefined;
+    private add;
+    private buildSampleYamlFromAssetYaml;
+    private addFromAsset;
+}
 export {};

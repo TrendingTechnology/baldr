@@ -535,7 +535,7 @@ export class Sample {
   /**
    * Jump to a new time position.
    */
-  private jump (interval: number = 10, direction = 'forward'): void {
+  private jump (interval: number = 10, direction: JumpDirection = 'forward'): void {
     let newPlayPosition
     const cur = this.currentTimeSec
     if (direction === 'backward') {
@@ -576,11 +576,18 @@ export class Sample {
   }
 }
 
-class SampleCollection {
+export class SampleCollection {
   private cache: { [id: string]: Sample }
 
-  constructor() {
+  constructor (asset: ClientMediaAsset) {
     this.cache = {}
+    this.addFromAsset(asset)
+  }
+
+  get (id: string): Sample | undefined {
+    if (this.cache[id] != null) {
+      return this.cache[id]
+    }
   }
 
   private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
@@ -604,13 +611,12 @@ class SampleCollection {
     }
   }
 
-  addFromAsset (asset: ClientMediaAsset) {
+  private addFromAsset (asset: ClientMediaAsset): void {
     if (asset.meta.samples != null) {
       for (const sampleSpec of asset.meta.samples) {
         this.add(asset, sampleSpec)
       }
     }
-
     const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.meta)
     if (sampleFormat != null) this.add(asset, sampleFormat)
   }

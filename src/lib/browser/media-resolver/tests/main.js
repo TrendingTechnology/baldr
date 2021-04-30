@@ -16,4 +16,22 @@ describe('Package “@bldr/media-resolver”', function () {
     assert.strictEqual(cachedAssets.length, 2)
   })
 
+  describe('Samples', function () {
+    it('samples from samples property', async function () {
+      // id:Grosses-Tor_HB_Orchester_Samples
+      const assets = await resolver.resolve('uuid:702ba259-349a-459f-bc58-cf1b0da37263')
+      const samples = assets[0].samples
+      const sample = samples.get('menschen')
+      assert.strictEqual(sample.id, 'menschen')
+    })
+
+    it('default complete sample', async function () {
+      // id:Fuge-Opfer_HB_Ricercar-a-3
+      const assets = await resolver.resolve('uuid:30a285e1-1fc1-418f-af6d-89cd37c0438d')
+      const samples = assets[0].samples
+      const sample = samples.get('complete')
+      assert.strictEqual(sample.id, 'complete')
+      assert.strictEqual(sample.startTimeSec, 1)
+    })
+  })
 })

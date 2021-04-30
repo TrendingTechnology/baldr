@@ -477,9 +477,15 @@ export class Sample {
         this.jump(interval, 'backward');
     }
 }
-class SampleCollection {
-    constructor() {
+export class SampleCollection {
+    constructor(asset) {
         this.cache = {};
+        this.addFromAsset(asset);
+    }
+    get(id) {
+        if (this.cache[id] != null) {
+            return this.cache[id];
+        }
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
