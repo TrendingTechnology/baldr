@@ -1,8 +1,9 @@
-import { PresentationTypes } from '@bldr/type-definitions'
+import type { PresentationTypes } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
+import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
-
 import { DeepTitle } from '@bldr/titles'
+
 import { loadYaml } from '../yaml'
 
 const comment = `
@@ -59,8 +60,15 @@ export function normalizePresentationFile (filePath: string): void {
   const title = new DeepTitle(filePath)
   const meta = title.generatePresetationMeta()
 
-  if (presentation.meta?.ref != null) meta.ref = presentation.meta.ref
-  if (presentation.meta?.curriculumUrl != null) meta.curriculumUrl = presentation.meta.curriculumUrl
+  if (presentation.meta?.ref != null) {
+    meta.ref = presentation.meta.ref
+  }
+  if (presentation.meta?.curriculumUrl != null) {
+    meta.curriculumUrl = presentation.meta.curriculumUrl
+  }
+  if (presentation.meta?.uuid != null) {
+    meta.uuid = genUuid()
+  }
 
   const metaString = convertToYaml({ meta })
   textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
