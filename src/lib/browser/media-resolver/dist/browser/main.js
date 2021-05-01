@@ -15,8 +15,7 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/me
 export const assetCache = new AssetCache();
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
- * file by its URI. Resolve a local file. The local files have to dropped
- * in the application. Create media elements for each media file. Create samples
+ * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
 export class Resolver {
@@ -24,12 +23,12 @@ export class Resolver {
         this.cache = {};
     }
     /**
+     * Query the media server to get meta informations and the location of the file.
+     *
      * @param field - For example `id` or `uuid`
      * @param search - For example `Fuer-Elise_HB`
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
-     *
-     * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
      */
     queryMediaServer(uri) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -83,44 +82,6 @@ export class Resolver {
     //     asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
     //   }
     //   return asset
-    // }
-    /**
-     * @private
-     *
-     * @param {Object} file - A file object, see
-     *  {@link https://developer.mozilla.org/de/docs/Web/API/File}
-     *
-     * @returns {module:@bldr/media-client.ClientMediaAsset}
-     */
-    // createAssetFromFileObject_ (file) {
-    //   if (mimeTypeManager.isAsset(file.name)) {
-    //     // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-    //     const httpUrl = URL.createObjectURL(file)
-    //     // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-    //     const uuid = httpUrl.substr(httpUrl.length - 36)
-    //     // We use the uuid instead of the file name. The file name can contain
-    //     // whitespaces and special characters. A uuid is  more reliable.
-    //     const uri = `localfile:${uuid}`
-    //     return new ClientMediaAsset({
-    //       uri: uri,
-    //       httpUrl: httpUrl,
-    //       filename: file.name
-    //     })
-    //   }
-    // }
-    /**
-     * @param {module:@bldr/media-client.ClientMediaAsset} asset
-     */
-    // addMediaElementToAsset (asset) {
-    //   asset.type = mimeTypeManager.extensionToType(asset.extension)
-    //   // After type
-    //   if (asset.type !== 'document') {
-    //     asset.mediaElement = createMediaElement(asset)
-    //   }
-    //   const samples = this.createSamples_(asset)
-    //   if (samples) {
-    //     asset.samples = samples
-    //   }
     // }
     /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media

@@ -23,7 +23,7 @@ export declare class ClientMediaAsset {
     /**
      * The HTMLMediaElement of the media file.
      */
-    mediaElement?: object;
+    htmlElement?: object;
     /**
      * The media type, for example `image`, `audio` or `video`.
      */
@@ -46,11 +46,6 @@ export declare class ClientMediaAsset {
      * Store the file name from a HTTP URL.
      *
      * @param {String} url
-     */
-    /**
-     * Merge an object into the class object.
-     *
-     * @param {object} properties - Add an object to the class properties.
      */
     get titleSafe(): string;
     /**

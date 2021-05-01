@@ -3,8 +3,7 @@ export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 export declare const assetCache: AssetCache;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
- * file by its URI. Resolve a local file. The local files have to dropped
- * in the application. Create media elements for each media file. Create samples
+ * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
 export declare class Resolver {
@@ -15,12 +14,12 @@ export declare class Resolver {
     private cache;
     constructor();
     /**
+     * Query the media server to get meta informations and the location of the file.
+     *
      * @param field - For example `id` or `uuid`
      * @param search - For example `Fuer-Elise_HB`
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
-     *
-     * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
      */
     private queryMediaServer;
     /**
@@ -30,17 +29,6 @@ export declare class Resolver {
      * @param {Object} data - Object from the REST API.
      *
      * @returns {module:@bldr/media-client.ClientMediaAsset}
-     */
-    /**
-     * @private
-     *
-     * @param {Object} file - A file object, see
-     *  {@link https://developer.mozilla.org/de/docs/Web/API/File}
-     *
-     * @returns {module:@bldr/media-client.ClientMediaAsset}
-     */
-    /**
-     * @param {module:@bldr/media-client.ClientMediaAsset} asset
      */
     /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media

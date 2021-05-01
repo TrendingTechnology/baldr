@@ -5,6 +5,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const mime_type_1 = require("./mime-type");
 const media_uri_1 = require("./media-uri");
 const sample_1 = require("./sample");
+const html_elements_1 = require("./html-elements");
 /**
  * Hold various data of a media file as class properties.
  *
@@ -32,6 +33,9 @@ class ClientMediaAsset {
         }
         this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.meta.extension);
         this.samples = new sample_1.SampleCollection(this);
+        if (this.mimeType !== 'document') {
+            this.htmlElement = html_elements_1.createHtmlElement(this.mimeType, this.httpUrl);
+        }
     }
     /**
      * The URI using the `ref` scheme.
@@ -52,16 +56,6 @@ class ClientMediaAsset {
      */
     // filenameFromHTTPUrl (url) {
     //   this.filename = url.split('/').pop()
-    // }
-    /**
-     * Merge an object into the class object.
-     *
-     * @param {object} properties - Add an object to the class properties.
-     */
-    // addProperties (properties) {
-    //   for (const property in properties) {
-    //     this[property] = properties[property]
-    //   }
     // }
     get titleSafe() {
         if (this.meta.title != null)

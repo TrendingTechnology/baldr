@@ -4,6 +4,7 @@ import { getExtension } from '@bldr/core-browser'
 import { mimeTypeManager } from './mime-type'
 import { MediaUri, MediaUriCache } from './media-uri'
 import { SampleCollection } from './sample'
+import { createHtmlElement } from './html-elements'
 
 /**
  * Hold various data of a media file as class properties.
@@ -30,7 +31,7 @@ export class ClientMediaAsset {
   /**
    * The HTMLMediaElement of the media file.
    */
-  mediaElement?: object
+  htmlElement?: object
 
   /**
    * The media type, for example `image`, `audio` or `video`.
@@ -63,6 +64,10 @@ export class ClientMediaAsset {
     this.mimeType = mimeTypeManager.extensionToType(this.meta.extension)
 
     this.samples = new SampleCollection(this)
+
+    if (this.mimeType !== 'document') {
+      this.htmlElement = createHtmlElement(this.mimeType, this.httpUrl)
+    }
   }
 
   /**
@@ -86,17 +91,6 @@ export class ClientMediaAsset {
    */
   // filenameFromHTTPUrl (url) {
   //   this.filename = url.split('/').pop()
-  // }
-
-  /**
-   * Merge an object into the class object.
-   *
-   * @param {object} properties - Add an object to the class properties.
-   */
-  // addProperties (properties) {
-  //   for (const property in properties) {
-  //     this[property] = properties[property]
-  //   }
   // }
 
   get titleSafe (): string {
