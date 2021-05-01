@@ -2,7 +2,7 @@ import type { AssetType } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 
 import { mimeTypeManager } from './mime-type'
-import { MediaUri, MediaUriCache } from './media-uri'
+import { MediaUri } from './media-uri'
 import { SampleCollection } from './sample'
 import { createHtmlElement } from './html-elements'
 
@@ -197,42 +197,3 @@ export class ClientMediaAsset {
   //   return this.httpUrl
   // }
 }
-
-export class AssetCache {
-  private cache: { [ref: string]: ClientMediaAsset }
-
-  private readonly mediaUriCache: MediaUriCache
-
-  constructor () {
-    this.cache = {}
-    this.mediaUriCache = new MediaUriCache()
-  }
-
-  add (asset: ClientMediaAsset): boolean {
-    if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
-      this.cache[asset.ref] = asset
-      return true
-    }
-    return false
-  }
-
-  get (uuidOrRef: string): ClientMediaAsset | undefined {
-    const id = this.mediaUriCache.getRef(uuidOrRef)
-    if (id != null && this.cache[id] != null) {
-      return this.cache[id]
-    }
-  }
-
-  getAll (): ClientMediaAsset[] {
-    return Object.values(this.cache)
-  }
-
-  reset (): void {
-    for (const ref in this.cache) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.cache[ref]
-    }
-  }
-}
-
-export const assetCache = new AssetCache()

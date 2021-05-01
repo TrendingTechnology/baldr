@@ -1,10 +1,10 @@
 import { convertDurationToSeconds } from '@bldr/core-browser'
 import type { AssetType } from '@bldr/type-definitions'
 
-import { ClientMediaAsset } from './client-media-asset'
+import { ClientMediaAsset } from './asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
-import { CustomEventsManager } from './custom-events-manager'
+import { CustomEventsManager } from './events'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).

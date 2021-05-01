@@ -1,4 +1,3 @@
-
 /**
  * Uniform Resource Identifier for media files, for example `ref:Haydn`, or
  * `http://example.com/Haydn_Joseph.jpg`. An optional fragment (`#1-7`) (subset
@@ -134,58 +133,6 @@ export function findMediaUris (data: any, uris: Set<string>): void {
   } else if (typeof data === 'string') {
     if (MediaUri.check(data)) {
       uris.add(data)
-    }
-  }
-}
-
-/**
- * Media assets have two URIs: uuid:... and ref:...
- */
-export class MediaUriCache {
-  private refs: { [ref: string]: string }
-  private uuids: { [uiid: string]: string }
-
-  constructor () {
-    this.refs = {}
-    this.uuids = {}
-  }
-
-  addPair (ref: string, uuid: string): boolean {
-    if (this.refs[ref] == null && this.uuids[uuid] == null) {
-      this.refs[ref] = uuid
-      this.uuids[uuid] = ref
-      return true
-    }
-    return false
-  }
-
-  private getRefFromUuid (uuid: string): string | undefined {
-    if (this.uuids[uuid] != null) {
-      return this.uuids[uuid]
-    }
-  }
-
-  getRef (uuidOrRef: string): string | undefined {
-    if (uuidOrRef.indexOf('uuid:') === 0) {
-      return this.getRefFromUuid(uuidOrRef)
-    }
-    return uuidOrRef
-  }
-
-  getUuidFromRef (id: string): string | undefined {
-    if (this.refs[id] != null) {
-      return this.refs[id]
-    }
-  }
-
-  reset (): void {
-    for (const ref in this.refs) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.refs[ref]
-    }
-    for (const uuid in this.uuids) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.uuids[uuid]
     }
   }
 }

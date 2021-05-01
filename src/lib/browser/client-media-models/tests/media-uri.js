@@ -24,7 +24,6 @@ describe('Class “MediaUri”', function () {
   it('new MediaUri(\'xxx:xxx\')', function () {
     assert.throws(() => new MediaUri('xxx:xxx'))
   })
-
 })
 
 describe('Function “findMediaUris()”', function () {
@@ -45,5 +44,4 @@ describe('Function “findMediaUris()”', function () {
     findMediaUris({ ref: 'reftest', child: { ref: 'uuid c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
     assert.strictEqual(uris.size, 0)
   })
-
 })

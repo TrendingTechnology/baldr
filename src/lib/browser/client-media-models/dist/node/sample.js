@@ -13,7 +13,7 @@ exports.SampleCollection = exports.Sample = exports.shortcutManager = exports.Sh
 const core_browser_1 = require("@bldr/core-browser");
 const html_elements_1 = require("./html-elements");
 const timer_1 = require("./timer");
-const custom_events_manager_1 = require("./custom-events-manager");
+const events_1 = require("./events");
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  *
@@ -121,7 +121,7 @@ class Sample {
         this.mediaElementCurrentTimeSec = 0;
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
-        this.customEventsManager = new custom_events_manager_1.CustomEventsManager();
+        this.customEventsManager = new events_1.CustomEventsManager();
         this.asset = asset;
         this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
         this.title = title == null ? 'komplett' : title;
@@ -149,7 +149,7 @@ class Sample {
         exports.shortcutManager.addShortcut(this);
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
-        this.customEventsManager = new custom_events_manager_1.CustomEventsManager();
+        this.customEventsManager = new events_1.CustomEventsManager();
         this.playbackState = 'stopped';
     }
     /**

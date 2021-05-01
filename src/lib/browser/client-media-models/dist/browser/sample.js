@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { convertDurationToSeconds } from '@bldr/core-browser';
 import { createHtmlElement } from './html-elements';
 import { Interval, TimeOut } from './timer';
-import { CustomEventsManager } from './custom-events-manager';
+import { CustomEventsManager } from './events';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  *
