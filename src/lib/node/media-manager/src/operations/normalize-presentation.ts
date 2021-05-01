@@ -66,11 +66,23 @@ export function normalizePresentationFile (filePath: string): void {
   if (presentation.meta?.curriculumUrl != null) {
     meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  if (presentation.meta?.uuid != null) {
+  if (presentation.meta?.uuid == null) {
     meta.uuid = genUuid()
+  } else {
+    meta.uuid = presentation.meta.uuid
   }
 
-  const metaString = convertToYaml({ meta })
+  const metaSorted: PresentationTypes.PresentationMeta = {} as PresentationTypes.PresentationMeta
+
+  metaSorted.ref = meta.ref
+  if (meta.uuid != null) metaSorted.uuid = meta.uuid
+  metaSorted.title = meta.title
+  metaSorted.subtitle = meta.subtitle
+  metaSorted.grade = meta.grade
+  metaSorted.curriculum = meta.curriculum
+  if (meta.curriculumUrl != null) metaSorted.curriculumUrl = meta.curriculumUrl
+
+  const metaString = convertToYaml({ meta: metaSorted })
   textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
 
   // Shorten media URIs with `./`

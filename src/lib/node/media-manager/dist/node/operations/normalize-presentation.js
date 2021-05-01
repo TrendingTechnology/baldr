@@ -62,10 +62,23 @@ function normalizePresentationFile(filePath) {
     if (((_b = presentation.meta) === null || _b === void 0 ? void 0 : _b.curriculumUrl) != null) {
         meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    if (((_c = presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) != null) {
+    if (((_c = presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) == null) {
         meta.uuid = core_browser_1.genUuid();
     }
-    const metaString = yaml_1.convertToYaml({ meta });
+    else {
+        meta.uuid = presentation.meta.uuid;
+    }
+    const metaSorted = {};
+    metaSorted.ref = meta.ref;
+    if (meta.uuid != null)
+        metaSorted.uuid = meta.uuid;
+    metaSorted.title = meta.title;
+    metaSorted.subtitle = meta.subtitle;
+    metaSorted.grade = meta.grade;
+    metaSorted.curriculum = meta.curriculum;
+    if (meta.curriculumUrl != null)
+        metaSorted.curriculumUrl = meta.curriculumUrl;
+    const metaString = yaml_1.convertToYaml({ meta: metaSorted });
     textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.ref != null) {
