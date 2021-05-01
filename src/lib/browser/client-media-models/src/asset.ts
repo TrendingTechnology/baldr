@@ -1,5 +1,5 @@
 import type { AssetType } from '@bldr/type-definitions'
-import { getExtension } from '@bldr/core-browser'
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/core-browser'
 
 import { mimeTypeManager } from './mime-type'
 import { MediaUri } from './media-uri'
@@ -189,11 +189,24 @@ export class ClientMediaAsset {
   // }
 
   /**
-   * Dummy method. Has to be overwritten by the subclass `MultiPartAsset()`.
-   * Returns `this.httpUrl`.
-   * @returns {String}
+   * The actual multi part asset count. If the multi part asset is restricted
+   * the method returns 1, else the count of all the parts.
    */
-  // getMultiPartHttpUrlByNo (): string {
-  //   return this.httpUrl
-  // }
+  get multiPartCount (): number {
+    if (this.meta.multiPartCount == null) return 1
+    return this.meta.multiPartCount
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param The part number starts with 1.
+   */
+  getMultiPartHttpUrlByNo (no: number): string {
+    if (this.multiPartCount === 1) return this.httpUrl
+    if (no > this.multiPartCount) {
+      throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`)
+    }
+    return formatMultiPartAssetFileName(this.httpUrl, no)
+  }
 }

@@ -72,6 +72,7 @@ export function normalizePresentationFile (filePath: string): void {
     meta.uuid = presentation.meta.uuid
   }
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const metaSorted: PresentationTypes.PresentationMeta = {} as PresentationTypes.PresentationMeta
 
   metaSorted.ref = meta.ref

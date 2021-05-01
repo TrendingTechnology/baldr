@@ -76,5 +76,99 @@ class ClientMediaAsset {
     get isVisible() {
         return ['image', 'video'].includes(this.mimeType);
     }
+    /**
+     * All plain text collected from the properties except some special properties.
+     *
+     * @type {string}
+     */
+    // get plainText () {
+    //   const output = []
+    //   const excludedProperties = [
+    //     'mimeType',
+    //     'extension',
+    //     'filename',
+    //     'httpUrl',
+    //     'id',
+    //     'mediaElement',
+    //     'categories',
+    //     'musicbrainzRecordingId',
+    //     'musicbrainzWorkId',
+    //     'path',
+    //     'previewHttpUrl',
+    //     'previewImage',
+    //     'samples',
+    //     'mainImage',
+    //     'shortcut',
+    //     'size',
+    //     'source',
+    //     'timeModified',
+    //     'type',
+    //     'uri',
+    //     'uriAuthority',
+    //     'uriRaw',
+    //     'uriScheme',
+    //     'uuid',
+    //     'wikidata',
+    //     'youtube'
+    //   ]
+    //   for (const property in this) {
+    //     if (this[property] && !excludedProperties.includes(property)) {
+    //       output.push(this[property])
+    //     }
+    //   }
+    //   return convertHtmlToPlainText(output.join(' | '))
+    // }
+    /**
+     * The vue router link of the component `MediaAsset.vue`.
+     *
+     * Examples:
+     * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
+     *
+     * @type {string}
+     */
+    // get routerLink () {
+    //   return `#/media/${this.uriScheme}/${this.uriAuthority}`
+    // }
+    /**
+     * Sort properties alphabetically aand move some important ones to the
+     * begining of the array.
+     *
+     * @return {Array}
+     */
+    // get propertiesSorted () {
+    //   let properties = Object.keys(this)
+    //   properties = properties.sort()
+    //   function moveOnFirstPosition (properties, property) {
+    //     properties = properties.filter(item => item !== property)
+    //     properties.unshift(property)
+    //     return properties
+    //   }
+    //   for (const property of ['id', 'uri', 'title']) {
+    //     properties = moveOnFirstPosition(properties, property)
+    //   }
+    //   return properties
+    // }
+    /**
+     * The actual multi part asset count. If the multi part asset is restricted
+     * the method returns 1, else the count of all the parts.
+     */
+    get multiPartCount() {
+        if (this.meta.multiPartCount == null)
+            return 1;
+        return this.meta.multiPartCount;
+    }
+    /**
+     * Retrieve the HTTP URL of the multi part asset by the part number.
+     *
+     * @param The part number starts with 1.
+     */
+    getMultiPartHttpUrlByNo(no) {
+        if (this.multiPartCount === 1)
+            return this.httpUrl;
+        if (no > this.multiPartCount) {
+            throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`);
+        }
+        return core_browser_1.formatMultiPartAssetFileName(this.httpUrl, no);
+    }
 }
 exports.ClientMediaAsset = ClientMediaAsset;

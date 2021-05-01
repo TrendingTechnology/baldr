@@ -434,7 +434,7 @@ export class IntermediateSong extends ExtendedSong {
     const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml')
     const oldMetaData = loadYaml(yamlFilePath)
     let uuid: string
-    if (oldMetaData != null && oldMetaData.uuid != null) {
+    if (oldMetaData?.uuid != null) {
       uuid = oldMetaData.uuid
     } else {
       uuid = genUuid()

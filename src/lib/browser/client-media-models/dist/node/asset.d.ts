@@ -56,4 +56,34 @@ export declare class ClientMediaAsset {
      * True if the media file is visible, for example an image or a video file.
      */
     get isVisible(): boolean;
+    /**
+     * All plain text collected from the properties except some special properties.
+     *
+     * @type {string}
+     */
+    /**
+     * The vue router link of the component `MediaAsset.vue`.
+     *
+     * Examples:
+     * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
+     *
+     * @type {string}
+     */
+    /**
+     * Sort properties alphabetically aand move some important ones to the
+     * begining of the array.
+     *
+     * @return {Array}
+     */
+    /**
+     * The actual multi part asset count. If the multi part asset is restricted
+     * the method returns 1, else the count of all the parts.
+     */
+    get multiPartCount(): number;
+    /**
+     * Retrieve the HTTP URL of the multi part asset by the part number.
+     *
+     * @param The part number starts with 1.
+     */
+    getMultiPartHttpUrlByNo(no: number): string;
 }
