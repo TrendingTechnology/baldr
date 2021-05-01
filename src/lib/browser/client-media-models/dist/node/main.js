@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mimeTypeManager = exports.resetMediaCache = exports.findMediaUris = exports.MediaUri = exports.assetCache = exports.ClientMediaAsset = void 0;
+exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.resetMediaCache = exports.assetCache = exports.ClientMediaAsset = void 0;
 var asset_1 = require("./asset");
 Object.defineProperty(exports, "ClientMediaAsset", { enumerable: true, get: function () { return asset_1.ClientMediaAsset; } });
 var cache_1 = require("./cache");
 Object.defineProperty(exports, "assetCache", { enumerable: true, get: function () { return cache_1.assetCache; } });
+Object.defineProperty(exports, "resetMediaCache", { enumerable: true, get: function () { return cache_1.resetMediaCache; } });
 var media_uri_1 = require("./media-uri");
 Object.defineProperty(exports, "MediaUri", { enumerable: true, get: function () { return media_uri_1.MediaUri; } });
 Object.defineProperty(exports, "findMediaUris", { enumerable: true, get: function () { return media_uri_1.findMediaUris; } });
-var cache_2 = require("./cache");
-Object.defineProperty(exports, "resetMediaCache", { enumerable: true, get: function () { return cache_2.resetMediaCache; } });
 var mime_type_1 = require("./mime-type");
 Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return mime_type_1.mimeTypeManager; } });

@@ -633,10 +633,21 @@ export class SampleCollection {
     this.addFromAsset(asset)
   }
 
+  /**
+   * Retrieve a single sample.
+   *
+   * @param ref The sample reference, for example `complete`.
+   *
+   * @returns A sample.
+   */
   get (ref: string): Sample | undefined {
     if (this.cache[ref] != null) {
       return this.cache[ref]
     }
+  }
+
+  getAllAsArray(): Sample[] {
+    return Object.values(this.cache)
   }
 
   private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {

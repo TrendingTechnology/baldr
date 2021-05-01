@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const { assetCache } = require('@bldr/client-media-models')
+const { assetCache, resetMediaCache } = require('@bldr/client-media-models')
 
 const { Resolver } = require('../dist/node/main.js')
 
@@ -57,5 +57,23 @@ describe('Package “@bldr/media-resolver”', function () {
       const asset = await resolveSingleByUuid('02dcf8df-8f34-4b0d-b121-32b0f54cfd74')
       assert.strictEqual(asset.htmlElement.constructor.name, 'HTMLAudioElement')
     })
+  })
+
+  it('Samples shortcuts', async function () {
+    resetMediaCache()
+     //ref: Stars-on-45_HB_Stars-on-45
+    const asset = await resolveSingleByUuid('6a3c5972-b039-4faa-ad3f-3152b2413b65')
+    const samples = asset.samples.getAllAsArray()
+    assert.strictEqual(samples[0].shortcut, 'a 1')
+    assert.strictEqual(samples[1].shortcut, 'a 2')
+    assert.strictEqual(samples[2].shortcut, 'a 3')
+    assert.strictEqual(samples[3].shortcut, 'a 4')
+    assert.strictEqual(samples[4].shortcut, 'a 5')
+    assert.strictEqual(samples[5].shortcut, 'a 6')
+    assert.strictEqual(samples[6].shortcut, 'a 7')
+    assert.strictEqual(samples[7].shortcut, 'a 8')
+    assert.strictEqual(samples[8].shortcut, 'a 9')
+    assert.strictEqual(samples[9].shortcut, 'a 0')
+    assert.strictEqual(samples[10].shortcut, undefined)
   })
 })

@@ -534,10 +534,20 @@ export class SampleCollection {
         this.cache = {};
         this.addFromAsset(asset);
     }
+    /**
+     * Retrieve a single sample.
+     *
+     * @param ref The sample reference, for example `complete`.
+     *
+     * @returns A sample.
+     */
     get(ref) {
         if (this.cache[ref] != null) {
             return this.cache[ref];
         }
+    }
+    getAllAsArray() {
+        return Object.values(this.cache);
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);

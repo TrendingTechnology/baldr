@@ -248,7 +248,15 @@ export declare class Sample {
 export declare class SampleCollection {
     private cache;
     constructor(asset: ClientMediaAsset);
+    /**
+     * Retrieve a single sample.
+     *
+     * @param ref The sample reference, for example `complete`.
+     *
+     * @returns A sample.
+     */
     get(ref: string): Sample | undefined;
+    getAllAsArray(): Sample[];
     private add;
     private buildSampleYamlFromAssetYaml;
     private addFromAsset;
