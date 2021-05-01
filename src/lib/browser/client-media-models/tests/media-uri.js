@@ -1,26 +1,47 @@
 const assert = require('assert')
 
-const { ClientMediaAsset } = require('../dist/node/asset.js')
+const { MediaUri, findMediaUris } = require('../dist/node/main.js')
 
-describe('Class “ClientMediaAsset”', function () {
-  it('multipart', function () {
-    const asset = new ClientMediaAsset('ref:test', 'http://example.com/test.jpg', {
-      ref: 'test',
-      uuid: '75269599-0025-47e1-9698-a8744cdebee5',
-      mimeType: 'image',
-      title: 'Test',
-      extension: 'jpg',
-      filename: 'test.jpg',
-      path: 'dir/test.jpg',
-      previewImage: undefined,
-      size: 1,
-      timeModified: 12345,
-      multiPartCount: 13
-    })
-
-    assert.strictEqual(asset.getMultiPartHttpUrlByNo(1), 'http://example.com/test.jpg')
-    assert.strictEqual(asset.getMultiPartHttpUrlByNo(13), 'http://example.com/test_no013.jpg')
-    assert.throws(() => asset.getMultiPartHttpUrlByNo(14))
+describe('Class “MediaUri”', function () {
+  it('new MediaUri(\'ref:Beethoven_Ludwig-van#-4\')', function () {
+    const uri = new MediaUri('ref:Beethoven_Ludwig-van#-4')
+    assert.strictEqual(uri.raw, 'ref:Beethoven_Ludwig-van#-4')
+    assert.strictEqual(uri.scheme, 'ref')
+    assert.strictEqual(uri.authority, 'Beethoven_Ludwig-van')
+    assert.strictEqual(uri.fragment, '-4')
+    assert.strictEqual(uri.uriWithoutFragment, 'ref:Beethoven_Ludwig-van')
   })
 
+  it('new MediaUri(\'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7\')', function () {
+    const uri = new MediaUri('uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
+    assert.strictEqual(uri.raw, 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
+    assert.strictEqual(uri.scheme, 'uuid')
+    assert.strictEqual(uri.authority, 'c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
+    assert.strictEqual(uri.fragment, undefined)
+    assert.strictEqual(uri.uriWithoutFragment, 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7')
+  })
+
+  it('new MediaUri(\'xxx:xxx\')', function () {
+    assert.throws(() => new MediaUri('xxx:xxx'))
+  })
+})
+
+describe('Function “findMediaUris()”', function () {
+  it('In an array', function () {
+    uris = new Set()
+    findMediaUris(['ref:test'], uris)
+    assert.strictEqual(uris.size, 1)
+  })
+
+  it('In an object', function () {
+    uris = new Set()
+    findMediaUris({ ref: 'ref:test', child: { ref: 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
+    assert.strictEqual(uris.size, 2)
+  })
+
+  it('invalid', function () {
+    uris = new Set()
+    findMediaUris({ ref: 'reftest', child: { ref: 'uuid c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
+    assert.strictEqual(uris.size, 0)
+  })
 })
