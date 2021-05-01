@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AssetCache = exports.ClientMediaAsset = void 0;
+exports.assetCache = exports.AssetCache = exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const mime_type_1 = require("./mime-type");
 const media_uri_1 = require("./media-uri");
@@ -107,3 +107,4 @@ class AssetCache {
     }
 }
 exports.AssetCache = AssetCache;
+exports.assetCache = new AssetCache();

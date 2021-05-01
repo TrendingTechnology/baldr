@@ -1,6 +1,7 @@
 const assert = require('assert')
 
-const { ClientMediaAsset, mimeTypeManager } = require('../dist/node/main.js')
+const { ClientMediaAsset } = require('../dist/node/main.js')
+const { mimeTypeManager } = require('../dist/node/mime-type.js')
 
 describe('Package “@bldr/client-media-models”', function () {
   it('Class ClientMediaAsset()', function () {

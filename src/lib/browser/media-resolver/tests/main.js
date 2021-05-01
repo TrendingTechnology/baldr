@@ -1,6 +1,8 @@
 const assert = require('assert')
 
-const { Resolver, assetCache } = require('../dist/node/main.js')
+const { assetCache } = require('@bldr/client-media-models')
+
+const { Resolver } = require('../dist/node/main.js')
 
 async function resolveByUuid(uuid) {
   return await resolver.resolve('uuid:' +  uuid)

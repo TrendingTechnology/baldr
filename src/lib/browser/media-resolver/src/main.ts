@@ -1,11 +1,9 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAsset, MediaUri, findMediaUris, AssetCache } from '@bldr/client-media-models'
+import { ClientMediaAsset, MediaUri, findMediaUris, assetCache } from '@bldr/client-media-models'
 import { makeSet } from '@bldr/core-browser'
 import config from '@bldr/config'
 import type { AssetType } from '@bldr/type-definitions'
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
-
-export const assetCache = new AssetCache()
 
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

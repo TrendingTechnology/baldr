@@ -1,5 +1,14 @@
 import type { AssetType } from '@bldr/type-definitions';
 import { ClientMediaAsset } from './client-media-asset';
+export declare class ShortcutManager {
+    private readonly audio;
+    private readonly image;
+    private readonly video;
+    constructor();
+    addShortcut(sample: Sample): void;
+    reset(): void;
+}
+export declare const shortcutManager: ShortcutManager;
 /**
  * The state of the current playback.
  */

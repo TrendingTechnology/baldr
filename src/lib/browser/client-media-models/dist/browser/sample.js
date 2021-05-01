@@ -11,7 +11,57 @@ import { convertDurationToSeconds } from '@bldr/core-browser';
 import { createHtmlElement } from './html-elements';
 import { Interval, TimeOut } from './timer';
 import { CustomEventsManager } from './custom-events-manager';
-import { shortcutManager } from './cache';
+/**
+ * This class manages the counter for one MIME type (`audio`, `image` and `video`).
+ *
+ */
+class MimeTypeShortcutCounter {
+    constructor(triggerKey) {
+        this.triggerKey = triggerKey;
+        this.count = 0;
+    }
+    /**
+     * Get the next available shortcut: `a 1`, `a 2`
+     */
+    get() {
+        if (this.count < 10) {
+            this.count++;
+            if (this.count === 10) {
+                return `${this.triggerKey} 0`;
+            }
+            return `${this.triggerKey} ${this.count}`;
+        }
+    }
+    reset() {
+        this.count = 0;
+    }
+}
+export class ShortcutManager {
+    constructor() {
+        this.audio = new MimeTypeShortcutCounter('a');
+        this.image = new MimeTypeShortcutCounter('i');
+        this.video = new MimeTypeShortcutCounter('v');
+    }
+    addShortcut(sample) {
+        if (sample.shortcut != null)
+            return;
+        if (sample.asset.mimeType === 'audio') {
+            sample.shortcut = this.audio.get();
+        }
+        else if (sample.asset.mimeType === 'image') {
+            sample.shortcut = this.image.get();
+        }
+        else if (sample.asset.mimeType === 'video') {
+            sample.shortcut = this.video.get();
+        }
+    }
+    reset() {
+        this.audio.reset();
+        this.image.reset();
+        this.video.reset();
+    }
+}
+export const shortcutManager = new ShortcutManager();
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the

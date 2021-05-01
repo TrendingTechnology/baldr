@@ -102,3 +102,4 @@ export class AssetCache {
         }
     }
 }
+export const assetCache = new AssetCache();

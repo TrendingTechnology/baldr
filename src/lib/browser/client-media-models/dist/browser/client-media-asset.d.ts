@@ -66,3 +66,4 @@ export declare class AssetCache {
     getAll(): ClientMediaAsset[];
     reset(): void;
 }
+export declare const assetCache: AssetCache;

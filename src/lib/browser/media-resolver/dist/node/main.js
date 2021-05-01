@@ -9,13 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Resolver = exports.assetCache = exports.httpRequest = void 0;
+exports.Resolver = exports.httpRequest = void 0;
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = require("@bldr/config");
 exports.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
-exports.assetCache = new client_media_models_1.AssetCache();
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -92,13 +91,13 @@ class Resolver {
      */
     resolveSingle(uri) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cachedAsset = exports.assetCache.get(uri);
+            const cachedAsset = client_media_models_1.assetCache.get(uri);
             if (cachedAsset != null)
                 return cachedAsset;
             const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${exports.httpRequest.baseUrl}/${config_1.default.mediaServer.urlFillIn}/${raw.path}`;
             const asset = new client_media_models_1.ClientMediaAsset(uri, httpUrl, raw);
-            exports.assetCache.add(asset);
+            client_media_models_1.assetCache.add(asset);
             return asset;
         });
     }

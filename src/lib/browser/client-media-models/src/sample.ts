@@ -5,7 +5,72 @@ import { ClientMediaAsset } from './client-media-asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
 import { CustomEventsManager } from './custom-events-manager'
-import { shortcutManager } from './cache'
+
+/**
+ * This class manages the counter for one MIME type (`audio`, `image` and `video`).
+ *
+ */
+class MimeTypeShortcutCounter {
+  /**
+   * `a` for audio files and `v` for video files.
+   */
+  triggerKey: string
+
+  count: number
+
+  constructor (triggerKey: string) {
+    this.triggerKey = triggerKey
+    this.count = 0
+  }
+
+  /**
+   * Get the next available shortcut: `a 1`, `a 2`
+   */
+  get (): string | undefined {
+    if (this.count < 10) {
+      this.count++
+      if (this.count === 10) {
+        return `${this.triggerKey} 0`
+      }
+      return `${this.triggerKey} ${this.count}`
+    }
+  }
+
+  reset (): void {
+    this.count = 0
+  }
+}
+
+export class ShortcutManager {
+  private readonly audio: MimeTypeShortcutCounter
+  private readonly image: MimeTypeShortcutCounter
+  private readonly video: MimeTypeShortcutCounter
+
+  constructor () {
+    this.audio = new MimeTypeShortcutCounter('a')
+    this.image = new MimeTypeShortcutCounter('i')
+    this.video = new MimeTypeShortcutCounter('v')
+  }
+
+  addShortcut (sample: Sample): void {
+    if (sample.shortcut != null) return
+    if (sample.asset.mimeType === 'audio') {
+      sample.shortcut = this.audio.get()
+    } else if (sample.asset.mimeType === 'image') {
+      sample.shortcut = this.image.get()
+    } else if (sample.asset.mimeType === 'video') {
+      sample.shortcut = this.video.get()
+    }
+  }
+
+  reset (): void {
+    this.audio.reset()
+    this.image.reset()
+    this.video.reset()
+  }
+}
+
+export const shortcutManager = new ShortcutManager()
 
 /**
  * The state of the current playback.
