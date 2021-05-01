@@ -199,7 +199,7 @@ export class ClientMediaAsset {
 }
 
 export class AssetCache {
-  private cache: { [id: string]: ClientMediaAsset }
+  private cache: { [ref: string]: ClientMediaAsset }
 
   private readonly mediaUriCache: MediaUriCache
 
@@ -217,7 +217,7 @@ export class AssetCache {
   }
 
   get (uuidOrRef: string): ClientMediaAsset | undefined {
-    const id = this.mediaUriCache.getId(uuidOrRef)
+    const id = this.mediaUriCache.getRef(uuidOrRef)
     if (id != null && this.cache[id] != null) {
       return this.cache[id]
     }
@@ -225,5 +225,12 @@ export class AssetCache {
 
   getAll (): ClientMediaAsset[] {
     return Object.values(this.cache)
+  }
+
+  reset (): void {
+    for (const ref in this.cache) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.cache[ref]
+    }
   }
 }

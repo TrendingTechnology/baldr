@@ -125,7 +125,7 @@ export class MediaUriCache {
             return this.uuids[uuid];
         }
     }
-    getId(uuidOrRef) {
+    getRef(uuidOrRef) {
         if (uuidOrRef.indexOf('uuid:') === 0) {
             return this.getRefFromUuid(uuidOrRef);
         }
@@ -134,6 +134,16 @@ export class MediaUriCache {
     getUuidFromRef(id) {
         if (this.refs[id] != null) {
             return this.refs[id];
+        }
+    }
+    reset() {
+        for (const ref in this.refs) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.refs[ref];
+        }
+        for (const uuid in this.uuids) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.uuids[uuid];
         }
     }
 }

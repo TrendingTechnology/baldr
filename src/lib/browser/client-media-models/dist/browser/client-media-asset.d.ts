@@ -64,4 +64,5 @@ export declare class AssetCache {
     add(asset: ClientMediaAsset): boolean;
     get(uuidOrRef: string): ClientMediaAsset | undefined;
     getAll(): ClientMediaAsset[];
+    reset(): void;
 }

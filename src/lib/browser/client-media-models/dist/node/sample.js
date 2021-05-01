@@ -14,6 +14,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const html_elements_1 = require("./html-elements");
 const timer_1 = require("./timer");
 const custom_events_manager_1 = require("./custom-events-manager");
+const cache_1 = require("./cache");
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -93,7 +94,8 @@ class Sample {
         if (fadeOut != null) {
             this.fadeOutSec_ = this.toSec(fadeOut);
         }
-        this.shortcutCustom = shortcut;
+        this.shortcut = shortcut;
+        cache_1.shortcutManager.addShortcut(this);
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
         this.customEventsManager = new custom_events_manager_1.CustomEventsManager();

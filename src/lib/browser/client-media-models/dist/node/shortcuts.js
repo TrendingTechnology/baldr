@@ -1,5 +1,6 @@
-import { Sample } from './sample'
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ShortcutManager = void 0;
 // /**
 //  * Add shortcuts for media files. At the momenten only for images. Video
 //  * and audio are samples and handled separately.
@@ -29,7 +30,6 @@ import { Sample } from './sample'
 //     }
 //   }
 // }
-
 // /**
 //  * Add shortcut for each sample. Audio samples are triggered by “a number” and
 //  * video files are trigger by “v number”.
@@ -46,7 +46,6 @@ import { Sample } from './sample'
 //       return 'v'
 //     }
 //   }
-
 //   const addShortcutsByType = (samples, type) => {
 //     let counter = store.getters['media/shortcutCounterByType'](type)
 //     // a 10 does not work.
@@ -77,7 +76,6 @@ import { Sample } from './sample'
 //       }
 //     }
 //   }
-
 //   const addShortcutsCustom = (samples) => {
 //     for (const sampleUri in samples) {
 //       const sample = samples[sampleUri]
@@ -99,67 +97,54 @@ import { Sample } from './sample'
 //   for (const mimeType of ['audio', 'video']) {
 //     addShortcutsByType(samples, mimeType)
 //   }
-
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  *
  */
 class MimeTypeShortcutCounter {
-  /**
-   * `a` for audio files and `v` for video files.
-   */
-  triggerKey: string
-
-  count: number
-
-  constructor (triggerKey: string) {
-    this.triggerKey = triggerKey
-    this.count = 0
-  }
-
-  /**
-   * Get the next available shortcut: `a 1`, `a 2`
-   */
-  get (): string | undefined {
-    if (this.count < 10) {
-      this.count++
-      if (this.count === 10) {
-        return `${this.triggerKey} 0`
-      }
-      return `${this.triggerKey} ${this.count}`
+    constructor(triggerKey) {
+        this.triggerKey = triggerKey;
+        this.count = 0;
     }
-  }
-
-  reset (): void {
-    this.count = 0
-  }
-}
-
-export class ShortcutManager {
-  private readonly audio: MimeTypeShortcutCounter
-  private readonly image: MimeTypeShortcutCounter
-  private readonly video: MimeTypeShortcutCounter
-
-  constructor () {
-    this.audio = new MimeTypeShortcutCounter('a')
-    this.image = new MimeTypeShortcutCounter('i')
-    this.video = new MimeTypeShortcutCounter('v')
-  }
-
-  addShortcut (sample: Sample): void {
-    if (sample.shortcut != null) return
-    if (sample.asset.mimeType === 'audio') {
-      sample.shortcut = this.audio.get()
-    } else if (sample.asset.mimeType === 'image') {
-      sample.shortcut = this.image.get()
-    } else if (sample.asset.mimeType === 'video') {
-      sample.shortcut = this.video.get()
+    /**
+     * Get the next available shortcut: `a 1`, `a 2`
+     */
+    get() {
+        if (this.count < 10) {
+            this.count++;
+            if (this.count === 10) {
+                return `${this.triggerKey} 0`;
+            }
+            return `${this.triggerKey} ${this.count}`;
+        }
     }
-  }
-
-  reset (): void {
-    this.audio.reset()
-    this.image.reset()
-    this.video.reset()
-  }
+    reset() {
+        this.count = 0;
+    }
 }
+class ShortcutManager {
+    constructor() {
+        this.audio = new MimeTypeShortcutCounter('a');
+        this.image = new MimeTypeShortcutCounter('i');
+        this.video = new MimeTypeShortcutCounter('v');
+    }
+    addShortcut(sample) {
+        if (sample.shortcut != null)
+            return;
+        if (sample.asset.mimeType === 'audio') {
+            sample.shortcut = this.audio.get();
+        }
+        else if (sample.asset.mimeType === 'image') {
+            sample.shortcut = this.image.get();
+        }
+        else if (sample.asset.mimeType === 'video') {
+            sample.shortcut = this.video.get();
+        }
+    }
+    reset() {
+        this.audio.reset();
+        this.image.reset();
+        this.video.reset();
+    }
+}
+exports.ShortcutManager = ShortcutManager;

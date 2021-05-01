@@ -87,12 +87,18 @@ export class AssetCache {
         return false;
     }
     get(uuidOrRef) {
-        const id = this.mediaUriCache.getId(uuidOrRef);
+        const id = this.mediaUriCache.getRef(uuidOrRef);
         if (id != null && this.cache[id] != null) {
             return this.cache[id];
         }
     }
     getAll() {
         return Object.values(this.cache);
+    }
+    reset() {
+        for (const ref in this.cache) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.cache[ref];
+        }
     }
 }

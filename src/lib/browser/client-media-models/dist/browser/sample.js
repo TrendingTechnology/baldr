@@ -11,6 +11,7 @@ import { convertDurationToSeconds } from '@bldr/core-browser';
 import { createHtmlElement } from './html-elements';
 import { Interval, TimeOut } from './timer';
 import { CustomEventsManager } from './custom-events-manager';
+import { shortcutManager } from './cache';
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -90,7 +91,8 @@ export class Sample {
         if (fadeOut != null) {
             this.fadeOutSec_ = this.toSec(fadeOut);
         }
-        this.shortcutCustom = shortcut;
+        this.shortcut = shortcut;
+        shortcutManager.addShortcut(this);
         this.interval = new Interval();
         this.timeOut = new TimeOut();
         this.customEventsManager = new CustomEventsManager();

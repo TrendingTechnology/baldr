@@ -5,15 +5,10 @@ import { ClientMediaAsset } from './client-media-asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
 import { CustomEventsManager } from './custom-events-manager'
+import { shortcutManager } from './cache'
 
 /**
  * The state of the current playback.
- *
- * - started
- * - fadein
- * - playing
- * - fadeout
- * - stopped
  */
 type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped'
 
@@ -122,21 +117,9 @@ export class Sample {
   private mediaElementCurrentTimeSec: number = 0
 
   /**
-   * The actual shortcut. If `shortcutCustom` is set, it is the same as this
-   * value.
+   * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
    */
-  shortcut?: number
-
-  /**
-   * The shortcut number. 1 means: To play the sample type in “a 1” if it
-   * is a audio file or “v 1” if it is a video file.
-   */
-  shortcutNo?: number
-
-  /**
-   * A custom shortcut, for example “k 1”
-   */
-  shortcutCustom?: string
+  shortcut?: string
 
   private readonly interval = new Interval()
 
@@ -179,7 +162,8 @@ export class Sample {
       this.fadeOutSec_ = this.toSec(fadeOut)
     }
 
-    this.shortcutCustom = shortcut
+    this.shortcut = shortcut
+    shortcutManager.addShortcut(this)
     this.interval = new Interval()
     this.timeOut = new TimeOut()
     this.customEventsManager = new CustomEventsManager()

@@ -2,12 +2,6 @@ import type { AssetType } from '@bldr/type-definitions';
 import { ClientMediaAsset } from './client-media-asset';
 /**
  * The state of the current playback.
- *
- * - started
- * - fadein
- * - playing
- * - fadeout
- * - stopped
  */
 declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped';
 /**
@@ -99,19 +93,9 @@ export declare class Sample {
      */
     private mediaElementCurrentTimeSec;
     /**
-     * The actual shortcut. If `shortcutCustom` is set, it is the same as this
-     * value.
+     * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
      */
-    shortcut?: number;
-    /**
-     * The shortcut number. 1 means: To play the sample type in “a 1” if it
-     * is a audio file or “v 1” if it is a video file.
-     */
-    shortcutNo?: number;
-    /**
-     * A custom shortcut, for example “k 1”
-     */
-    shortcutCustom?: string;
+    shortcut?: string;
     private readonly interval;
     private readonly timeOut;
     private readonly customEventsManager;

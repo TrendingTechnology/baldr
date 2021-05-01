@@ -69,7 +69,8 @@ export declare class MediaUriCache {
     private uuids;
     constructor();
     addPair(ref: string, uuid: string): boolean;
-    getRefFromUuid(uuid: string): string | undefined;
-    getId(uuidOrRef: string): string | undefined;
+    private getRefFromUuid;
+    getRef(uuidOrRef: string): string | undefined;
     getUuidFromRef(id: string): string | undefined;
+    reset(): void;
 }
