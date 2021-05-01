@@ -38,18 +38,6 @@ declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'sto
  */
 export declare class Sample {
     /**
-     * We fade in very short and smoothly to avoid audio artefacts.
-     */
-    defaultFadeInSec: number;
-    /**
-     * We never stop. Instead we fade out very short and smoothly.
-     */
-    defaultFadeOutSec: number;
-    /**
-     * Number of milliseconds to wait before the media file is played.
-     */
-    defaultPlayDelayMsec: number;
-    /**
      * The parent media file object.
      *
      */

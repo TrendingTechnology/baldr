@@ -13,7 +13,6 @@ import { Interval, TimeOut } from './timer';
 import { CustomEventsManager } from './events';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
- *
  */
 class MimeTypeShortcutCounter {
     constructor(triggerKey) {
@@ -63,6 +62,18 @@ export class ShortcutManager {
 }
 export const shortcutManager = new ShortcutManager();
 /**
+ * We fade in very short and smoothly to avoid audio artefacts.
+ */
+const defaultFadeInSec = 0.3;
+/**
+* We never stop. Instead we fade out very short and smoothly.
+*/
+const defaultFadeOutSec = 1;
+/**
+* Number of milliseconds to wait before the media file is played.
+*/
+const defaultPlayDelayMsec = 10;
+/**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
@@ -87,18 +98,6 @@ export const shortcutManager = new ShortcutManager();
  */
 export class Sample {
     constructor(asset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
-        /**
-         * We fade in very short and smoothly to avoid audio artefacts.
-         */
-        this.defaultFadeInSec = 0.3;
-        /**
-         * We never stop. Instead we fade out very short and smoothly.
-         */
-        this.defaultFadeOutSec = 1;
-        /**
-         * Number of milliseconds to wait before the media file is played.
-         */
-        this.defaultPlayDelayMsec = 10;
         /**
          * The start time in seconds. The sample is played from this start time
          * using the `mediaElement` of the `asset`. It is the “zero” second
@@ -223,7 +222,7 @@ export class Sample {
      */
     get fadeInSec() {
         if (this.fadeInSec_ == null) {
-            return this.defaultFadeInSec;
+            return defaultFadeInSec;
         }
         else {
             return this.fadeInSec_;
@@ -234,7 +233,7 @@ export class Sample {
      */
     get fadeOutSec() {
         if (this.fadeOutSec_ == null) {
-            return this.defaultFadeOutSec;
+            return defaultFadeOutSec;
         }
         else {
             return this.fadeOutSec_;
@@ -306,7 +305,7 @@ export class Sample {
         return __awaiter(this, void 0, void 0, function* () {
             let durationSafe;
             if (duration == null) {
-                durationSafe = this.defaultFadeInSec;
+                durationSafe = defaultFadeInSec;
             }
             else {
                 durationSafe = duration;
@@ -377,7 +376,7 @@ export class Sample {
         this.timeOut.set(() => {
             this.fadeIn(targetVolume, this.fadeInSec).then(() => { }, () => { });
             this.scheduleFadeOut();
-        }, this.defaultPlayDelayMsec);
+        }, defaultPlayDelayMsec);
     }
     /**
      * Schedule when the fade out process has to start.
@@ -396,7 +395,7 @@ export class Sample {
         return __awaiter(this, void 0, void 0, function* () {
             let durationSafe;
             if (duration == null) {
-                durationSafe = this.defaultFadeOutSec;
+                durationSafe = defaultFadeOutSec;
             }
             else {
                 durationSafe = duration;

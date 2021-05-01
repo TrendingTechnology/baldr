@@ -8,7 +8,6 @@ import { CustomEventsManager } from './events'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
- *
  */
 class MimeTypeShortcutCounter {
   /**
@@ -80,6 +79,21 @@ type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped'
 type JumpDirection = 'forward' | 'backward'
 
 /**
+ * We fade in very short and smoothly to avoid audio artefacts.
+ */
+const defaultFadeInSec: number = 0.3
+
+/**
+* We never stop. Instead we fade out very short and smoothly.
+*/
+const defaultFadeOutSec: number = 1
+
+/**
+* Number of milliseconds to wait before the media file is played.
+*/
+const defaultPlayDelayMsec: number = 10
+
+/**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
@@ -103,21 +117,6 @@ type JumpDirection = 'forward' | 'backward'
  * ```
  */
 export class Sample {
-  /**
-   * We fade in very short and smoothly to avoid audio artefacts.
-   */
-  defaultFadeInSec: number = 0.3
-
-  /**
-   * We never stop. Instead we fade out very short and smoothly.
-   */
-  defaultFadeOutSec: number = 1
-
-  /**
-   * Number of milliseconds to wait before the media file is played.
-   */
-  defaultPlayDelayMsec: number = 10
-
   /**
    * The parent media file object.
    *
@@ -313,7 +312,7 @@ export class Sample {
    */
   get fadeInSec (): number {
     if (this.fadeInSec_ == null) {
-      return this.defaultFadeInSec
+      return defaultFadeInSec
     } else {
       return this.fadeInSec_
     }
@@ -324,7 +323,7 @@ export class Sample {
    */
   get fadeOutSec (): number {
     if (this.fadeOutSec_ == null) {
-      return this.defaultFadeOutSec
+      return defaultFadeOutSec
     } else {
       return this.fadeOutSec_
     }
@@ -399,7 +398,7 @@ export class Sample {
   async fadeIn (targetVolume: number = 1, duration?: number): Promise<void> {
     let durationSafe: number
     if (duration == null) {
-      durationSafe = this.defaultFadeInSec
+      durationSafe = defaultFadeInSec
     } else {
       durationSafe = duration
     }
@@ -470,7 +469,7 @@ export class Sample {
         () => {}
       )
       this.scheduleFadeOut()
-    }, this.defaultPlayDelayMsec)
+    }, defaultPlayDelayMsec)
   }
 
   /**
@@ -496,7 +495,7 @@ export class Sample {
   async fadeOut (duration?: number): Promise<void> {
     let durationSafe: number
     if (duration == null) {
-      durationSafe = this.defaultFadeOutSec
+      durationSafe = defaultFadeOutSec
     } else {
       durationSafe = duration
     }
@@ -646,7 +645,7 @@ export class SampleCollection {
     }
   }
 
-  getAllAsArray(): Sample[] {
+  getAllAsArray (): Sample[] {
     return Object.values(this.cache)
   }
 
