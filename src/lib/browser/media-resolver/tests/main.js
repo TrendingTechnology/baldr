@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const { assetCache, resetMediaCache } = require('@bldr/client-media-models')
+const { assetCache, sampleCache, resetMediaCache } = require('@bldr/client-media-models')
 
 const { Resolver } = require('../dist/node/main.js')
 
@@ -86,5 +86,12 @@ describe('Package “@bldr/media-resolver”', function () {
     assert.strictEqual(samples[8].shortcut, 'a 9')
     assert.strictEqual(samples[9].shortcut, 'a 0')
     assert.strictEqual(samples[10].shortcut, undefined)
+  })
+
+  it('sampleCache', async function () {
+    resetMediaCache()
+    // ref: Bolero_HB_Bolero
+    await resolveSingleByUuid('538204e4-6171-42d3-924c-b3f80a954a1a')
+    assert.strictEqual(sampleCache.size, 9)
   })
 })

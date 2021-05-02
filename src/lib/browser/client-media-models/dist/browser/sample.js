@@ -546,7 +546,7 @@ export class SampleCollection {
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
-        sampleCache.add(sample);
+        sampleCache.add(sample.ref, sample);
         if (this.cache[sample.ref] != null) {
             throw new Error(`Duplicate sample with the id ${sample.ref}`);
         }

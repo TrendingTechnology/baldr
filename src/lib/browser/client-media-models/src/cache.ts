@@ -1,6 +1,45 @@
 import { Sample, shortcutManager } from './sample'
 import { ClientMediaAsset } from './asset'
 
+class Cache <T>{
+  private cache: { [ref: string]: T }
+  constructor () {
+    this.cache = {}
+  }
+
+  add (ref: string, mediaObject: T): boolean {
+    if (this.cache[ref] == null) {
+      this.cache[ref] = mediaObject
+      return true
+    }
+    return false
+  }
+
+  get (ref: string): T | undefined {
+    if (this.cache[ref] != null) {
+      return this.cache[ref]
+    }
+  }
+
+  /**
+   * The size of the cache. Indicates how many media objects are in the cache.
+   */
+  get size (): number {
+    return Object.keys(this.cache).length
+  }
+
+  getAll (): T[] {
+    return Object.values(this.cache)
+  }
+
+  reset (): void {
+    for (const ref in this.cache) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.cache[ref]
+    }
+  }
+}
+
 /**
  * Media assets have two URIs: uuid:... and ref:...
  */
@@ -47,32 +86,7 @@ export class MediaUriCache {
   }
 }
 
-export class SampleCache {
-  private cache: { [ref: string]: Sample }
-
-  constructor () {
-    this.cache = {}
-  }
-
-  add (sample: Sample): boolean {
-    if (this.cache[sample.uriRef] == null) {
-      this.cache[sample.uriRef] = sample
-      return true
-    }
-    return false
-  }
-
-  getAll (): Sample[] {
-    return Object.values(this.cache)
-  }
-
-  reset (): void {
-    for (const uriRef in this.cache) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.cache[uriRef]
-    }
-  }
-}
+class SampleCache extends Cache<Sample>{}
 
 export const sampleCache = new SampleCache()
 

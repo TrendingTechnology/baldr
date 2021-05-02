@@ -1,5 +1,17 @@
 import { Sample } from './sample';
 import { ClientMediaAsset } from './asset';
+declare class Cache<T> {
+    private cache;
+    constructor();
+    add(ref: string, mediaObject: T): boolean;
+    get(ref: string): T | undefined;
+    /**
+     * The size of the cache. Indicates how many media objects are in the cache.
+     */
+    get size(): number;
+    getAll(): T[];
+    reset(): void;
+}
 /**
  * Media assets have two URIs: uuid:... and ref:...
  */
@@ -12,12 +24,7 @@ export declare class MediaUriCache {
     getRef(uuidOrRef: string): string | undefined;
     reset(): void;
 }
-export declare class SampleCache {
-    private cache;
-    constructor();
-    add(sample: Sample): boolean;
-    getAll(): Sample[];
-    reset(): void;
+declare class SampleCache extends Cache<Sample> {
 }
 export declare const sampleCache: SampleCache;
 export declare class AssetCache {
@@ -31,3 +38,4 @@ export declare class AssetCache {
 }
 export declare const assetCache: AssetCache;
 export declare function resetMediaCache(): void;
+export {};

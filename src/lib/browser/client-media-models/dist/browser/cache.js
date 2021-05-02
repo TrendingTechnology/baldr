@@ -1,4 +1,36 @@
 import { shortcutManager } from './sample';
+class Cache {
+    constructor() {
+        this.cache = {};
+    }
+    add(ref, mediaObject) {
+        if (this.cache[ref] == null) {
+            this.cache[ref] = mediaObject;
+            return true;
+        }
+        return false;
+    }
+    get(ref) {
+        if (this.cache[ref] != null) {
+            return this.cache[ref];
+        }
+    }
+    /**
+     * The size of the cache. Indicates how many media objects are in the cache.
+     */
+    get size() {
+        return Object.keys(this.cache).length;
+    }
+    getAll() {
+        return Object.values(this.cache);
+    }
+    reset() {
+        for (const ref in this.cache) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.cache[ref];
+        }
+    }
+}
 /**
  * Media assets have two URIs: uuid:... and ref:...
  */
@@ -37,26 +69,7 @@ export class MediaUriCache {
         }
     }
 }
-export class SampleCache {
-    constructor() {
-        this.cache = {};
-    }
-    add(sample) {
-        if (this.cache[sample.uriRef] == null) {
-            this.cache[sample.uriRef] = sample;
-            return true;
-        }
-        return false;
-    }
-    getAll() {
-        return Object.values(this.cache);
-    }
-    reset() {
-        for (const uriRef in this.cache) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.cache[uriRef];
-        }
-    }
+class SampleCache extends Cache {
 }
 export const sampleCache = new SampleCache();
 export class AssetCache {
@@ -90,6 +103,7 @@ export class AssetCache {
 }
 export const assetCache = new AssetCache();
 export function resetMediaCache() {
+    sampleCache.reset();
     assetCache.reset();
     shortcutManager.reset();
 }
