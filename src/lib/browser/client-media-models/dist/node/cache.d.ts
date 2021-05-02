@@ -27,15 +27,13 @@ export declare class MediaUriCache {
     getRef(uuidOrRef: string): string | undefined;
     reset(): void;
 }
+export declare const mediaUriCache: MediaUriCache;
 declare class SampleCache extends Cache<Sample> {
 }
 export declare const sampleCache: SampleCache;
 export declare class AssetCache extends Cache<ClientMediaAsset> {
-    private readonly mediaUriCache;
-    constructor();
     add(ref: string, asset: ClientMediaAsset): boolean;
     get(uuidOrRef: string): ClientMediaAsset | undefined;
-    reset(): void;
 }
 export declare const assetCache: AssetCache;
 export declare function resetMediaCache(): void;

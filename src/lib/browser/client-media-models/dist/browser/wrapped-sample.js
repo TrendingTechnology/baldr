@@ -1,7 +1,7 @@
 import { MediaUri } from './media-uri';
 /**
- * Wrap a sample with some meta data (mostly a custom title). Allow different
- * input specifications.
+ * Wrap a sample with some custom meta data (mostly a custom title). Allow
+ * different input specifications.
  *
  * @see {@link module:@bldr/media-client.WrappedSampleList}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}

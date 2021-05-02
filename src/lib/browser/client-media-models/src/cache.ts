@@ -92,20 +92,15 @@ export class MediaUriCache {
   }
 }
 
+export const mediaUriCache = new MediaUriCache()
+
 class SampleCache extends Cache<Sample> {}
 
 export const sampleCache = new SampleCache()
 
 export class AssetCache extends Cache<ClientMediaAsset> {
-  private readonly mediaUriCache: MediaUriCache
-
-  constructor () {
-    super()
-    this.mediaUriCache = new MediaUriCache()
-  }
-
   add (ref: string, asset: ClientMediaAsset): boolean {
-    if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+    if (mediaUriCache.addPair(asset.ref, asset.uuid)) {
       super.add(ref, asset)
       return true
     }
@@ -113,15 +108,12 @@ export class AssetCache extends Cache<ClientMediaAsset> {
   }
 
   get (uuidOrRef: string): ClientMediaAsset | undefined {
-    const id = this.mediaUriCache.getRef(uuidOrRef)
+    const id = mediaUriCache.getRef(uuidOrRef)
+    console.log(this.cache)
     if (id != null && this.cache[id] != null) {
+      console.log('from cache' + id)
       return super.get(id)
     }
-  }
-
-  reset (): void {
-    super.reset()
-    this.mediaUriCache.reset()
   }
 }
 
@@ -130,5 +122,6 @@ export const assetCache = new AssetCache()
 export function resetMediaCache (): void {
   sampleCache.reset()
   assetCache.reset()
+  mediaUriCache.reset()
   shortcutManager.reset()
 }

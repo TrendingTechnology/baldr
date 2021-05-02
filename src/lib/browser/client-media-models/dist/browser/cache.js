@@ -74,35 +74,31 @@ export class MediaUriCache {
         }
     }
 }
+export const mediaUriCache = new MediaUriCache();
 class SampleCache extends Cache {
 }
 export const sampleCache = new SampleCache();
 export class AssetCache extends Cache {
-    constructor() {
-        super();
-        this.mediaUriCache = new MediaUriCache();
-    }
     add(ref, asset) {
-        if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+        if (mediaUriCache.addPair(asset.ref, asset.uuid)) {
             super.add(ref, asset);
             return true;
         }
         return false;
     }
     get(uuidOrRef) {
-        const id = this.mediaUriCache.getRef(uuidOrRef);
+        const id = mediaUriCache.getRef(uuidOrRef);
+        console.log(this.cache);
         if (id != null && this.cache[id] != null) {
+            console.log('from cache' + id);
             return super.get(id);
         }
-    }
-    reset() {
-        super.reset();
-        this.mediaUriCache.reset();
     }
 }
 export const assetCache = new AssetCache();
 export function resetMediaCache() {
     sampleCache.reset();
     assetCache.reset();
+    mediaUriCache.reset();
     shortcutManager.reset();
 }

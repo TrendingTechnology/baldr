@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.MediaUriCache = exports.Cache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.mediaUriCache = exports.MediaUriCache = exports.Cache = void 0;
 const sample_1 = require("./sample");
 class Cache {
     constructor() {
@@ -79,30 +79,25 @@ class MediaUriCache {
     }
 }
 exports.MediaUriCache = MediaUriCache;
+exports.mediaUriCache = new MediaUriCache();
 class SampleCache extends Cache {
 }
 exports.sampleCache = new SampleCache();
 class AssetCache extends Cache {
-    constructor() {
-        super();
-        this.mediaUriCache = new MediaUriCache();
-    }
     add(ref, asset) {
-        if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+        if (exports.mediaUriCache.addPair(asset.ref, asset.uuid)) {
             super.add(ref, asset);
             return true;
         }
         return false;
     }
     get(uuidOrRef) {
-        const id = this.mediaUriCache.getRef(uuidOrRef);
+        const id = exports.mediaUriCache.getRef(uuidOrRef);
+        console.log(this.cache);
         if (id != null && this.cache[id] != null) {
+            console.log('from cache' + id);
             return super.get(id);
         }
-    }
-    reset() {
-        super.reset();
-        this.mediaUriCache.reset();
     }
 }
 exports.AssetCache = AssetCache;
@@ -110,6 +105,7 @@ exports.assetCache = new AssetCache();
 function resetMediaCache() {
     exports.sampleCache.reset();
     exports.assetCache.reset();
+    exports.mediaUriCache.reset();
     sample_1.shortcutManager.reset();
 }
 exports.resetMediaCache = resetMediaCache;
