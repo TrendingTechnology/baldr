@@ -29,7 +29,7 @@ declare function detectCategoryByPath(filePath: string): MediaCategory.Names | u
  *
  * @returns A absolute path
  */
-declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): string;
+declare function formatFilePath(data: AssetType.YamlFormat, oldPath?: string): string;
 /**
  * Merge type names to avoid duplicate metadata type names:
  */

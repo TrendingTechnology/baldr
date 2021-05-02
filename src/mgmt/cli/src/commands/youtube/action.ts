@@ -32,7 +32,7 @@ async function requestYoutubeApi (youtubeId: string): Promise<object> {
  *
  */
 async function action (youtubeId: string): Promise<void> {
-  const metaData = await requestYoutubeApi(youtubeId) as AssetType.FileFormat
+  const metaData = await requestYoutubeApi(youtubeId) as AssetType.YamlFormat
   console.log(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())

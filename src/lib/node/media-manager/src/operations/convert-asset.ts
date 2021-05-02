@@ -128,7 +128,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
           console.log(error)
         }
         if (metaData != null) {
-          writeMetaDataYaml(outputFile, metaData as AssetType.FileFormat)
+          writeMetaDataYaml(outputFile, metaData as AssetType.YamlFormat)
         }
       }
       converted.add(outputFile)

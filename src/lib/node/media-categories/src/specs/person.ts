@@ -6,7 +6,7 @@ import config from '@bldr/config'
 
 import { validateDate } from '../main'
 
-interface PersonFileFormat extends AssetType.FileFormat {
+interface PersonFileFormat extends AssetType.YamlFormat {
   firstname: string
   lastname: string
   personId: string

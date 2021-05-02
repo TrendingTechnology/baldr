@@ -654,7 +654,7 @@ export class SampleCollection {
     this.cache[sample.ref] = sample
   }
 
-  private buildSampleYamlFromAssetYaml (assetFormat: AssetType.FileFormat): AssetType.SampleYamlFormat | undefined {
+  private buildSampleYamlFromAssetYaml (assetFormat: AssetType.YamlFormat): AssetType.SampleYamlFormat | undefined {
     const sampleFormat: AssetType.SampleYamlFormat = {}
     if (assetFormat.startTime != null) sampleFormat.startTime = assetFormat.startTime
     if (assetFormat.duration != null) sampleFormat.duration = assetFormat.duration

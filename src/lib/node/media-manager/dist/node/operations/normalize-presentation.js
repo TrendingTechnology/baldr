@@ -68,6 +68,7 @@ function normalizePresentationFile(filePath) {
     else {
         meta.uuid = presentation.meta.uuid;
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const metaSorted = {};
     metaSorted.ref = meta.ref;
     if (meta.uuid != null)

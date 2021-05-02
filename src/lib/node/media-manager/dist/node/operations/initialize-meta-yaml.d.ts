@@ -5,4 +5,4 @@ import { AssetType } from '@bldr/type-definitions';
  * @param filePath
  * @param metaData
  */
-export declare function initializeMetaYaml(filePath: string, metaData?: AssetType.FileFormat | AssetType.Generic): Promise<void>;
+export declare function initializeMetaYaml(filePath: string, metaData?: AssetType.YamlFormat | AssetType.Generic): Promise<void>;

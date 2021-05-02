@@ -42,7 +42,7 @@ class MediaFile {
  * A media asset.
  */
 export class Asset extends MediaFile {
-  private readonly metaData: AssetType.FileFormat | undefined
+  private readonly metaData: AssetType.YamlFormat | undefined
   /**
    * @param filePath - The file path of the media asset.
    */
@@ -50,7 +50,7 @@ export class Asset extends MediaFile {
     super(filePath)
     const data = readAssetYaml(this.absPath)
     if (data != null) {
-      this.metaData = data as AssetType.FileFormat
+      this.metaData = data as AssetType.YamlFormat
     }
   }
 

@@ -11,7 +11,7 @@ interface GroupCategory extends MediaCategory.Category {
   basePath: string
 }
 
-interface GroupFileFormat extends AssetType.FileFormat {
+interface GroupFileFormat extends AssetType.YamlFormat {
   groupId: string
   name: string
   extension: string

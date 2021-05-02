@@ -65,7 +65,7 @@ export interface SampleYamlFormat {
  * musicbrainz_work_id: 0f6faed6-4892-4b43-855f-e3fe8f49bffa
  * ```
  */
-export interface FileFormat {
+export interface YamlFormat {
     /**
      * A reference string, for example `Haydn_Joseph`.
      */
@@ -124,7 +124,7 @@ export interface FileFormat {
 /**
  * Exported from the media server REST API
  */
-export interface RestApiRaw extends FileFormat {
+export interface RestApiRaw extends YamlFormat {
     mimeType: string;
     extension: string;
     /**

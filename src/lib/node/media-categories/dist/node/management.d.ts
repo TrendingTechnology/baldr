@@ -27,7 +27,7 @@ export declare function detectCategoryByPath(filePath: string): MediaCategory.Na
  *
  * @returns A absolute path
  */
-export declare function formatFilePath(data: AssetType.FileFormat, oldPath?: string): string | undefined;
+export declare function formatFilePath(data: AssetType.YamlFormat, oldPath?: string): string | undefined;
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
@@ -39,4 +39,4 @@ export declare function mergeNames(...name: string[]): string;
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export declare function process(data: AssetType.FileFormat, filePath?: string): AssetType.FileFormat;
+export declare function process(data: AssetType.YamlFormat, filePath?: string): AssetType.YamlFormat;

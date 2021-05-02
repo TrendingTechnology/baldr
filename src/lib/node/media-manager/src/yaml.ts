@@ -65,7 +65,7 @@ export function writeYamlFile (filePath: string, data: object): string {
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFormat | AssetType.Generic, force?: boolean): object | undefined {
+export function writeMetaDataYaml (filePath: string, metaData?: AssetType.YamlFormat | AssetType.Generic, force?: boolean): object | undefined {
   if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
   if (
@@ -73,7 +73,7 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFo
     !fs.existsSync(yamlFile)
   ) {
     // eslint-disable-next-line
-    if (metaData == null) metaData = {} as AssetType.FileFormat
+    if (metaData == null) metaData = {} as AssetType.YamlFormat
     const asset = new Asset(filePath)
     if (metaData.id == null) {
       metaData.id = asset.basename
@@ -83,7 +83,7 @@ export function writeMetaDataYaml (filePath: string, metaData?: AssetType.FileFo
     }
 
     metaData.filePath = filePath
-    metaData = categoriesManagement.process(metaData as AssetType.FileFormat)
+    metaData = categoriesManagement.process(metaData as AssetType.YamlFormat)
     writeYamlFile(yamlFile, metaData)
     return {
       filePath,

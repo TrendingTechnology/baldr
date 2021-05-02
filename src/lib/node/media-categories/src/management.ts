@@ -60,7 +60,7 @@ export function detectCategoryByPath (filePath: string): MediaCategory.Names | u
  *
  * @returns A absolute path
  */
-export function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string | undefined {
+export function formatFilePath (data: AssetType.YamlFormat, oldPath?: string): string | undefined {
   if (data.categories == null) throw new Error('Your data needs a property named “categories”.')
   // TODO: support multiple types
   // person,general -> person
@@ -125,7 +125,7 @@ function isValue (value: string | boolean | number): boolean {
  * @param category - The specification of one media category.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetType.FileFormat | AssetType.FileFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.FileFormat | AssetType.FileFormat {
+function applySpecToProps (data: AssetType.YamlFormat | AssetType.YamlFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.YamlFormat | AssetType.YamlFormat {
   function applyOneTypeSpec (props: MediaCategory.PropCollection, propName: AssetType.PropName, data: AssetType.Generic, func: Function, replaceValues: boolean): void {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
@@ -161,10 +161,10 @@ function isPropertyDerived (propSpec: MediaCategory.Prop): boolean {
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory.Category, filePath?: string): AssetType.FileFormat {
-  const origData = deepCopy(data) as AssetType.FileFormat
+function sortAndDeriveProps (data: AssetType.YamlFormat, category: MediaCategory.Category, filePath?: string): AssetType.YamlFormat {
+  const origData = deepCopy(data) as AssetType.YamlFormat
   // eslint-disable-next-line
-  const result: AssetType.FileFormat = {} as AssetType.FileFormat
+  const result: AssetType.YamlFormat = {} as AssetType.YamlFormat
 
   let folderTitles: DeepTitleInterface | undefined
   if (filePath != null) {
@@ -216,7 +216,7 @@ function sortAndDeriveProps (data: AssetType.FileFormat, category: MediaCategory
  * @param data - An object containing some meta data.
  * @param category - The category name.
  */
-function formatProps (data: AssetType.FileFormat, category: MediaCategory.Category, filePath?: string): AssetType.FileFormat {
+function formatProps (data: AssetType.YamlFormat, category: MediaCategory.Category, filePath?: string): AssetType.YamlFormat {
   function formatOneProp (spec: MediaCategory.Prop, value: any): any {
     if (
       isValue(value) &&
@@ -234,7 +234,7 @@ function formatProps (data: AssetType.FileFormat, category: MediaCategory.Catego
  * @param data - An object containing some meta data.
  * @param category - The specification of one media category.
  */
-function validateProps (data: AssetType.FileFormat, category: MediaCategory.Category): void {
+function validateProps (data: AssetType.YamlFormat, category: MediaCategory.Category): void {
   function validateOneProp (spec: MediaCategory.Prop, value: any, prop: MediaCategory.PropName): void {
     // required
     if (spec.required != null && !isValue(value)) {
@@ -258,7 +258,7 @@ function validateProps (data: AssetType.FileFormat, category: MediaCategory.Cate
  * @param data - An object containing some meta data.
  * @param category - The specification of one media category.
  */
-function removeProps (data: AssetType.FileFormat, category: MediaCategory.Category): AssetType.FileFormat {
+function removeProps (data: AssetType.YamlFormat, category: MediaCategory.Category): AssetType.YamlFormat {
   for (const propName in category.props) {
     if (data[propName] != null) {
       const value = data[propName]
@@ -291,7 +291,7 @@ function removeProps (data: AssetType.FileFormat, category: MediaCategory.Catego
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function processByType (data: AssetType.FileFormat, name: MediaCategory.Name, filePath?: string): AssetType.FileFormat {
+function processByType (data: AssetType.YamlFormat, name: MediaCategory.Name, filePath?: string): AssetType.YamlFormat {
   if (categories[name] == null) {
     throw new Error(`Unkown meta category name: “${name}”`)
   }
@@ -336,10 +336,10 @@ export function mergeNames (...name: string[]): string {
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export function process (data: AssetType.FileFormat, filePath?: string): AssetType.FileFormat {
+export function process (data: AssetType.YamlFormat, filePath?: string): AssetType.YamlFormat {
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = convertPropertiesSnakeToCamel(data) as AssetType.FileFormat
+  data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
   if (data.categories == null) {
     data.categories = 'general'
   } else if (!data.categories.includes('general')) {

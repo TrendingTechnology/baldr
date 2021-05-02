@@ -341,7 +341,7 @@ class IntermediateSong extends ExtendedSong {
         const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml');
         const oldMetaData = media_manager_1.loadYaml(yamlFilePath);
         let uuid;
-        if (oldMetaData != null && oldMetaData.uuid != null) {
+        if ((oldMetaData === null || oldMetaData === void 0 ? void 0 : oldMetaData.uuid) != null) {
             uuid = oldMetaData.uuid;
         }
         else {

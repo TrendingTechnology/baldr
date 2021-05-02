@@ -9,7 +9,7 @@ interface InstrumentCategory extends MediaCategory.Category {
   basePath: string
 }
 
-interface InstrumentFileFormat extends AssetType.FileFormat {
+interface InstrumentFileFormat extends AssetType.YamlFormat {
   name: string
   extension: string
 }

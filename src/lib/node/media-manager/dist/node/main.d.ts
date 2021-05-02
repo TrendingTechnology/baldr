@@ -47,7 +47,7 @@ export declare function moveAsset(oldPath: string, newPath: string, opts?: MoveA
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
-export declare function readAssetYaml(filePath: string): AssetType.FileFormat | AssetType.Generic | undefined;
+export declare function readAssetYaml(filePath: string): AssetType.YamlFormat | AssetType.Generic | undefined;
 declare const _default: {
     DeepTitle: typeof DeepTitle;
     TitleTree: typeof TitleTree;

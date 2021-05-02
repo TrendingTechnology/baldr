@@ -31,7 +31,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   }
 
   rawData.categories = category
-  const data = categoriesManagement.process(rawData as AssetType.FileFormat)
+  const data = categoriesManagement.process(rawData as AssetType.YamlFormat)
   console.log(data)
 
   let downloadWikicommons = true

@@ -10,7 +10,7 @@ import { writeMetaDataYaml } from '../yaml'
  * @param filePath
  * @param metaData
  */
-export async function initializeMetaYaml (filePath: string, metaData?: AssetType.FileFormat | AssetType.Generic): Promise<void> {
+export async function initializeMetaYaml (filePath: string, metaData?: AssetType.YamlFormat | AssetType.Generic): Promise<void> {
   const newPath = renameMediaAsset(filePath)
   writeMetaDataYaml(newPath, metaData)
   await normalizeMediaAsset(newPath, { wikidata: false })

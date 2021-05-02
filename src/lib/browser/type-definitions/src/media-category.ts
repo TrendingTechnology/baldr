@@ -55,7 +55,7 @@ export type PropName = string
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-  data: AssetType.FileFormat
+  data: AssetType.YamlFormat
   category: Category
   folderTitles?: DeepTitleInterface
   filePath?: string
@@ -162,7 +162,7 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-  data: AssetType.FileFormat
+  data: AssetType.YamlFormat
   category: Category
   oldRelPath: string
 }
@@ -180,18 +180,18 @@ type DetectTypeByPathFunc = (category: Category) => RegExp
 /**
  * Defintion of the function `intialize()`.
  */
-type InitializeFunc = (args: DataCategoryFilePath) => AssetType.FileFormat
+type InitializeFunc = (args: DataCategoryFilePath) => AssetType.YamlFormat
 
 /**
  * Defintion of the function `finalize()`.
  */
-type FinalizeFunc = (args: DataCategoryFilePath) => AssetType.FileFormat
+type FinalizeFunc = (args: DataCategoryFilePath) => AssetType.YamlFormat
 
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-  data: AssetType.FileFormat
+  data: AssetType.YamlFormat
   entity: { [key: string]: any }
   functions: { [key: string]: Function }
 }
@@ -199,7 +199,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.FileFormat
+type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.YamlFormat
 
 /**
  * Apart from different file formats, media files can belong to several media
@@ -325,7 +325,7 @@ export interface Data { [key: string]: any }
  * Used in many functions as an argument.
  */
 interface DataCategoryFilePath {
-  data: AssetType.FileFormat
+  data: AssetType.YamlFormat
   category: Category
 
   /**

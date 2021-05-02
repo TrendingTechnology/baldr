@@ -4,7 +4,7 @@ import path from 'path'
 
 import { validateYoutubeId } from '../main'
 
-interface YoutubeFileFormat extends AssetType.FileFormat {
+interface YoutubeFileFormat extends AssetType.YamlFormat {
   youtubeId: string
 }
 
