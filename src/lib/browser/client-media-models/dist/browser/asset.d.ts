@@ -31,9 +31,9 @@ export declare class ClientMediaAsset {
     httpUrl: string;
     samples?: SampleCollection;
     /**
-     * @param meta - A raw javascript object read from the Rest API
+     * @param yaml - A raw javascript object read from the Rest API
      */
-    constructor(uri: string, httpUrl: string, meta: AssetType.RestApiRaw);
+    constructor(uri: string, httpUrl: string, yaml: AssetType.RestApiRaw);
     /**
      * The URI using the `ref` scheme.
      */

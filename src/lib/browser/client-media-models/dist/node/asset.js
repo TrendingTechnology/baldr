@@ -6,6 +6,7 @@ const mime_type_1 = require("./mime-type");
 const media_uri_1 = require("./media-uri");
 const sample_1 = require("./sample");
 const html_elements_1 = require("./html-elements");
+const cache_1 = require("./cache");
 /**
  * Hold various data of a media file as class properties.
  *
@@ -16,12 +17,12 @@ const html_elements_1 = require("./html-elements");
  */
 class ClientMediaAsset {
     /**
-     * @param meta - A raw javascript object read from the Rest API
+     * @param yaml - A raw javascript object read from the Rest API
      */
-    constructor(uri, httpUrl, meta) {
+    constructor(uri, httpUrl, yaml) {
         this.uri = new media_uri_1.MediaUri(uri);
         this.httpUrl = httpUrl;
-        this.yaml = meta;
+        this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
             const extension = core_browser_1.getExtension(this.yaml.filename);
             if (extension != null) {
@@ -38,6 +39,7 @@ class ClientMediaAsset {
         if (this.isPlayable) {
             this.samples = new sample_1.SampleCollection(this);
         }
+        cache_1.assetCache.add(this.yaml.ref, this);
     }
     /**
      * The URI using the `ref` scheme.

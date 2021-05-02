@@ -3,6 +3,7 @@
 const assert = require('assert')
 
 const { createAsset } = require('./_helper')
+const { resetMediaCache } = require('../dist/node/cache')
 
 describe('Class “Sample”', function () {
   it('Default sample “complete”', function () {
@@ -39,5 +40,13 @@ describe('Class “Sample”', function () {
     assert.strictEqual(samples[1].title, 'Ausschnitt 1')
     assert.strictEqual(samples[2].title, 'Ausschnitt 2')
     assert.strictEqual(samples[3].title, 'Ausschnitt 3')
+  })
+
+  it('Error: two complete samples', function () {
+    assert.throws(() => {
+      createAsset({ mimeType: 'audio', path: 'dir/test.mp3', startTime: 1, samples: [
+        { ref: complete, startTime: 1 }
+      ] })
+    })
   })
 })

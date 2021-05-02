@@ -92,7 +92,6 @@ export class Resolver {
     const raw = await this.queryMediaServer(uri)
     const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
     const asset = new ClientMediaAsset(uri, httpUrl, raw)
-    assetCache.add(asset.ref, asset)
     return asset
   }
 

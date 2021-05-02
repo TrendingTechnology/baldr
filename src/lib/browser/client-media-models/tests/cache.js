@@ -2,16 +2,13 @@
 
 const assert = require('assert')
 const { createAsset } = require('./_helper.js')
-const { AssetCache } = require('../dist/node/cache.js')
+const { assetCache, sampleCache, AssetCache, resetMediaCache } = require('../dist/node/cache.js')
+
+resetMediaCache()
 
 const asset1 = createAsset({ ref: 'test1' })
 const asset2 = createAsset({ ref: 'test2' })
 const asset3 = createAsset({ ref: 'test3' })
-
-const assetCache = new AssetCache()
-assetCache.add(asset1.ref, asset1)
-assetCache.add(asset2.ref, asset2)
-assetCache.add(asset3.ref, asset3)
 
 describe('Class “AssetCache()”', function () {
   it('Method “add()”', function () {
@@ -33,6 +30,10 @@ describe('Class “AssetCache()”', function () {
   })
 
   it('Getter “size”', function () {
+    resetMediaCache()
+    createAsset({ ref: 'test1' })
+    createAsset({ ref: 'test2' })
+    createAsset({ ref: 'test3' })
     assert.strictEqual(assetCache.size, 3)
   })
 
@@ -40,5 +41,24 @@ describe('Class “AssetCache()”', function () {
     for (const asset of assetCache) {
       assert.ok(asset.ref)
     }
+  })
+})
+
+describe('Autofilling of the caches by instantiation', function () {
+  it('Create three assets and two samples', function () {
+    resetMediaCache()
+    createAsset({ ref: 'test1' })
+    createAsset({ ref: 'test2' })
+    createAsset({ mimeType: 'audio', path: 'dir/test.mp3', ref: 'test3', samples: [{ startTime: 1 }] })
+    assert.strictEqual(assetCache.size, 3)
+    assert.strictEqual(Object.keys(assetCache.mediaUriCache.refs).length, 3)
+    assert.strictEqual(Object.keys(assetCache.mediaUriCache.uuids).length, 3)
+    assert.strictEqual(sampleCache.size, 2)
+
+    resetMediaCache()
+    assert.strictEqual(assetCache.size, 0)
+    assert.strictEqual(Object.keys(assetCache.mediaUriCache.refs).length, 0)
+    assert.strictEqual(Object.keys(assetCache.mediaUriCache.uuids).length, 0)
+    assert.strictEqual(sampleCache.size, 0)
   })
 })

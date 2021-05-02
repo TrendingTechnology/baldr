@@ -5,6 +5,7 @@ import { mimeTypeManager } from './mime-type'
 import { MediaUri } from './media-uri'
 import { SampleCollection } from './sample'
 import { createHtmlElement } from './html-elements'
+import { assetCache } from './cache'
 
 /**
  * Hold various data of a media file as class properties.
@@ -43,12 +44,12 @@ export class ClientMediaAsset {
   samples?: SampleCollection
 
   /**
-   * @param meta - A raw javascript object read from the Rest API
+   * @param yaml - A raw javascript object read from the Rest API
    */
-  constructor (uri: string, httpUrl: string, meta: AssetType.RestApiRaw) {
+  constructor (uri: string, httpUrl: string, yaml: AssetType.RestApiRaw) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
-    this.yaml = meta
+    this.yaml = yaml
 
     if (this.yaml.extension == null && this.yaml.filename != null) {
       const extension = getExtension(this.yaml.filename)
@@ -70,6 +71,7 @@ export class ClientMediaAsset {
     if (this.isPlayable) {
       this.samples = new SampleCollection(this)
     }
+    assetCache.add(this.yaml.ref, this)
   }
 
   /**

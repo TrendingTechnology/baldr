@@ -3,6 +3,7 @@ import { mimeTypeManager } from './mime-type';
 import { MediaUri } from './media-uri';
 import { SampleCollection } from './sample';
 import { createHtmlElement } from './html-elements';
+import { assetCache } from './cache';
 /**
  * Hold various data of a media file as class properties.
  *
@@ -13,12 +14,12 @@ import { createHtmlElement } from './html-elements';
  */
 export class ClientMediaAsset {
     /**
-     * @param meta - A raw javascript object read from the Rest API
+     * @param yaml - A raw javascript object read from the Rest API
      */
-    constructor(uri, httpUrl, meta) {
+    constructor(uri, httpUrl, yaml) {
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
-        this.yaml = meta;
+        this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
             const extension = getExtension(this.yaml.filename);
             if (extension != null) {
@@ -35,6 +36,7 @@ export class ClientMediaAsset {
         if (this.isPlayable) {
             this.samples = new SampleCollection(this);
         }
+        assetCache.add(this.yaml.ref, this);
     }
     /**
      * The URI using the `ref` scheme.
