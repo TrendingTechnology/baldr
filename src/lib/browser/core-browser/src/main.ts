@@ -80,7 +80,7 @@ interface SelectionSubsetOption {
  *
  * @param options
  */
-export function selectSubset (subsetSelector: string, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[] {
+export function selectSubset (subsetSelector: string | undefined, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[] {
   const subset = []
   if (shiftSelector == null) shiftSelector = 0
 

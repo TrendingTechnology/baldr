@@ -60,7 +60,7 @@ interface SelectionSubsetOption {
  *
  * @param options
  */
-export declare function selectSubset(subsetSelector: string, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[];
+export declare function selectSubset(subsetSelector: string | undefined, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[];
 /**
  * Sort alphabetically an array of objects by some specific properties.
  *

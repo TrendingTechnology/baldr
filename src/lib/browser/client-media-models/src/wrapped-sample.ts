@@ -1,5 +1,11 @@
 import { Sample } from './sample'
 import { MediaUri } from './media-uri'
+
+interface SimpleSampleSpec {
+  uri: string
+  title?: string
+}
+
 /**
  * Wrap a sample with some meta data (mostly a custom title). Allow different
  * input specifications.
@@ -8,12 +14,12 @@ import { MediaUri } from './media-uri'
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
-  private sample_?: Sample
+  private readonly sample?: Sample
 
   /**
    * The manually set title.
    */
-  private title_?: string
+  private readonly title?: string
 
   /**
    * True if the title is set manually.
@@ -26,9 +32,10 @@ class WrappedSample {
   /**
    * The URI of a sample.
    */
-  uri: string
+  uri?: string
+
   /**
-   * @param {Object|String} spec - Different input specifications are
+   * @param spec - Different input specifications are
    *   possible:
    *
    *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
@@ -36,51 +43,33 @@ class WrappedSample {
    *      `ref:Fuer-Elise_HB Für Elise` or `Für Elise ref:Fuer-Elise_HB`)
    *   3. An object with the mandatory property `uri` (for example:
    *      `{ uri: 'ref:Fuer-Elise_HB'}`).
-   *   4. An instance of the class `Sample`.
    */
-  constructor (spec: string | Sample | { [prop: string]: string }) {
+  constructor (spec: string | SimpleSampleSpec) {
     this.isTitleSetManually = false
 
+    // string
     if (typeof spec === 'string') {
       if (spec.match(MediaUri.regExp) != null) {
-
         const match = spec.match(MediaUri.regExp)
-        if (match != null)
-          this.uri = match[0]
-
+        if (match != null) { this.uri = match[0] }
         let title = spec.replace(MediaUri.regExp, '')
-        if (title) {
+        if (title != null) {
           title = title.trim()
-          this.title_ = title
+          this.title = title
           this.isTitleSetManually = true
         }
       } else {
         throw new Error(`No media URI found in “${spec}”!`)
       }
-    } else if (typeof spec === 'object' && spec.uri != null && !spec.sample) {
-      this.uri = spec.uri
-    } else if (spec.constructor.name === 'Sample') {
-      this.uri = spec.uri
-      this.sample_ = spec
+      // interface SimpleSampleSpec
+    } else {
+      const simpleSample = spec
+      this.uri = simpleSample.uri
+      if (simpleSample.title != null) {
+        this.title = simpleSample.title
+        this.isTitleSetManually = true
+      }
     }
-
-    if (spec.title) {
-      this.isTitleSetManually = true
-      this.title_ = spec.title
-    }
-  }
-
-  /**
-   * The manually set title or, if not set, the `title` of the `sample`.
-   *
-   * We have to use a getter, because the sample may not be resolved at
-   * the constructor time.
-   *
-   * @returns {String}
-   */
-  get title () {
-    if (this.title_) return this.title_
-    if (this.sample && this.sample.title) return this.sample.title
   }
 
   /**
@@ -88,23 +77,10 @@ class WrappedSample {
    *
    * We have to use a getter, because the sample may not be resolved at
    * the constructor time.
-   *
-   * @returns {String}
    */
-  get titleSafe () {
-    if (this.title_) return this.title_
-    if (this.sample && this.sample.titleSafe) return this.sample.titleSafe
-  }
-
-  /**
-   * We have to use a getter, because the sample may not be resolved at
-   * the constructor time.
-   *
-   * @returns {module:@bldr/media-client~Sample}
-   */
-  get sample () {
-    if (this.sample_) return this.sample_
-    return store.getters['media/sampleByUri'](this.uri)
+  get titleSafe (): string | undefined {
+    if (this.title != null) return this.title
+    if (this.sample?.titleSafe != null) return this.sample.titleSafe
   }
 }
 
@@ -117,7 +93,16 @@ class WrappedSample {
  */
 export class WrappedSampleList {
   /**
-   * @param {Object|String|Array} spec - Different input specifications are
+   * True if the title of the first sample is set manually.
+   *
+   * This specification sets the property to `true`.
+   * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
+   */
+  isTitleSetManually: boolean
+
+  samples: WrappedSample[]
+  /**
+   * @param spec - Different input specifications are
    *   possible:
    *
    *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
@@ -126,7 +111,7 @@ export class WrappedSampleList {
    *   3. An instance of the class `Sample`.
    *   4. An array
    */
-  constructor (spec) {
+  constructor (spec: string | SimpleSampleSpec | string[] | SimpleSampleSpec[]) {
     // Make sure we have an array.
     let specArray
     if (!Array.isArray(spec)) {
@@ -135,23 +120,11 @@ export class WrappedSampleList {
       specArray = spec
     }
 
-    /**
-     * An array of instances of the class `WrappedSample`
-     * @type {Array}
-     */
     this.samples = []
     for (const sampleSpec of specArray) {
       this.samples.push(new WrappedSample(sampleSpec))
     }
 
-    /**
-     * True if the title of the first sample is set manually.
-     *
-     * This specification sets the property to `true`.
-     * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
-     *
-     * @type {Boolean}
-     */
     this.isTitleSetManually = false
     if (this.samples[0].isTitleSetManually) {
       this.isTitleSetManually = true
@@ -160,13 +133,11 @@ export class WrappedSampleList {
 
   /**
    * Get the URI of all wrapped samples.
-   *
-   * @returns {Array}
    */
-  get uris () {
+  get uris (): string[] {
     const uris = []
     for (const wrappedSample of this.samples) {
-      uris.push(wrappedSample.uri)
+      if (wrappedSample.uri != null) { uris.push(wrappedSample.uri) }
     }
     return uris
   }

@@ -43,6 +43,14 @@ describe('Function “selectSubset()”', function () {
     assert.deepStrictEqual(elements, [0, 1, 2, 3, 4])
   })
 
+  it('subsetSelector undefined', function () {
+    const elements = selectSubset(undefined, {
+      elementsCount: 5,
+      firstElementNo: 1
+    })
+    assert.deepStrictEqual(elements, [1, 2, 3, 4, 5])
+  })
+
   it('firstElementNo: 1', function () {
     const elements = selectSubset('', {
       elementsCount: 5,

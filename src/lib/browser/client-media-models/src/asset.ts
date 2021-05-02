@@ -222,8 +222,8 @@ export class ClientMediaAsset {
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-class MultiPartSelection {
-  selectionSpec: string
+export class MultiPartSelection {
+  selectionSpec?: string
   asset: ClientMediaAsset
   partNos: number[]
 
@@ -238,23 +238,21 @@ class MultiPartSelection {
    * @param selectionSpec - Can be a uri, everthing after `#`, for
    * example `ref:Song-2#2-5` -> `2-5`
    */
-  constructor (asset: ClientMediaAsset, selectionSpec: string) {
-    if (selectionSpec.indexOf('#') === -1 || !selectionSpec) {
-      selectionSpec = ''
-    } else if (typeof selectionSpec === 'string') {
-      selectionSpec = selectionSpec.replace(/^.*#/, '')
+  constructor (asset: ClientMediaAsset, selectionSpec?: string) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    if (selectionSpec != null && selectionSpec?.includes('#') && typeof selectionSpec === 'string') {
+      this.selectionSpec = selectionSpec.replace(/^.*#/, '')
     }
 
-    this.selectionSpec = selectionSpec
     this.asset = asset
 
-    if (!this.selectionSpec) {
+    if (this.selectionSpec == null) {
       this.uri = this.asset.uri.raw
     } else {
-      this.uri = `${this.asset.uri.raw}#${selectionSpec}`
+      this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`
     }
 
-    this.partNos = selectSubset(selectionSpec,
+    this.partNos = selectSubset(this.selectionSpec,
       { elementsCount: this.asset.multiPartCount, firstElementNo: 1 }
     )
   }
@@ -263,7 +261,7 @@ class MultiPartSelection {
    * The URI using the `ref` authority.
    */
   get uriRef (): string {
-    if (!this.selectionSpec) {
+    if (this.selectionSpec == null) {
       return this.asset.yaml.ref
     } else {
       return `${this.asset.yaml.ref}#${this.selectionSpec}`
@@ -274,7 +272,7 @@ class MultiPartSelection {
    * The URI using the `uuid` authority.
    */
   get uriUuid (): string {
-    if (!this.selectionSpec) {
+    if (this.selectionSpec == null) {
       return this.asset.yaml.uuid
     } else {
       return `${this.asset.yaml.uuid}#${this.selectionSpec}`
@@ -288,7 +286,7 @@ class MultiPartSelection {
   /**
    * Used for the preview to fake that this class is a normal asset.
    */
-  get httpUrl () {
+  get httpUrl (): string {
     return this.getMultiPartHttpUrlByNo(1)
   }
 
