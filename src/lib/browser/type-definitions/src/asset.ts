@@ -163,26 +163,8 @@ export interface RestApiRaw extends YamlFormat {
   timeModified: number
 
   /**
-   * The of count of parts if the media file is a multi part asset.
+   * The count of parts if the media file is a multi part asset.
    */
   multiPartCount?: number
   [property: string]: any
-}
-
-/**
- * A type for the possible property names.
- */
-export type PropName =
-  'ref' |
-  'uuid' |
-  'categories' |
-  'extension' |
-  'mainImage' |
-  'filePath'
-
-/**
- * Generic type of the Media asset file format.
- */
-export interface Generic {
-  [key: string]: any
 }

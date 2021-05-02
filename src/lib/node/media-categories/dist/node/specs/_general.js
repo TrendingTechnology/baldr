@@ -12,7 +12,7 @@ exports.general = {
     title: 'Allgemeiner Metadaten-Type',
     props: {
         ref: {
-            title: 'ID',
+            title: 'Referenz',
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },

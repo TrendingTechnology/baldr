@@ -26,8 +26,9 @@ async function action (url: string, id?: string, extension?: string): Promise<vo
   // Make images smaller.
   const convertedDestFile = await operations.convertAsset(destFile)
   if (convertedDestFile != null) {
-    const metaData: AssetType.Generic = { source: url }
-    await operations.initializeMetaYaml(destFile, metaData)
+    const metaData = { source: url }
+    const meta = metaData as unknown
+    await operations.initializeMetaYaml(destFile, meta as AssetType.YamlFormat)
   }
 }
 

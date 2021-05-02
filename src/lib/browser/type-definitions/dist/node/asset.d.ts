@@ -145,13 +145,3 @@ export interface RestApiRaw extends YamlFormat {
     multiPartCount?: number;
     [property: string]: any;
 }
-/**
- * A type for the possible property names.
- */
-export declare type PropName = 'ref' | 'uuid' | 'categories' | 'extension' | 'mainImage' | 'filePath';
-/**
- * Generic type of the Media asset file format.
- */
-export interface Generic {
-    [key: string]: any;
-}

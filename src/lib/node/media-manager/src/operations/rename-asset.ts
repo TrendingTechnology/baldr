@@ -1,7 +1,6 @@
 import path from 'path'
 
 import { getExtension, asciify } from '@bldr/core-browser'
-import { AssetType } from '@bldr/type-definitions'
 import { categoriesManagement } from '@bldr/media-categories'
 
 import { readAssetYaml, moveAsset } from '../main'
@@ -19,7 +18,7 @@ export function renameMediaAsset (oldPath: string): string {
   if (metaData?.categories != null) {
     metaData.extension = getExtension(oldPath)
     metaData.filePath = oldPath
-    const data = metaData as AssetType.YamlFormat
+    const data = metaData
     newPath = categoriesManagement.formatFilePath(data, oldPath)
   }
 

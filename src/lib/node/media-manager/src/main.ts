@@ -109,11 +109,11 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
-export function readAssetYaml (filePath: string): AssetType.YamlFormat | AssetType.Generic | undefined {
+export function readAssetYaml (filePath: string): AssetType.YamlFormat | undefined {
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
   if (fs.existsSync(filePath)) {
-    return loadYaml(filePath)
+    return loadYaml(filePath) as AssetType.YamlFormat
   }
 }
 

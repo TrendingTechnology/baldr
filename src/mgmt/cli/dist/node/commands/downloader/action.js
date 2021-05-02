@@ -32,7 +32,8 @@ function action(url, id, extension) {
         const convertedDestFile = yield media_manager_1.operations.convertAsset(destFile);
         if (convertedDestFile != null) {
             const metaData = { source: url };
-            yield media_manager_1.operations.initializeMetaYaml(destFile, metaData);
+            const meta = metaData;
+            yield media_manager_1.operations.initializeMetaYaml(destFile, meta);
         }
     });
 }

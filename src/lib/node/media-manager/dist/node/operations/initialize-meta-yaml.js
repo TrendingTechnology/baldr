@@ -15,9 +15,6 @@ const normalize_asset_1 = require("./normalize-asset");
 const yaml_1 = require("../yaml");
 /**
  * Rename, create metadata yaml and normalize the metadata file.
- *
- * @param filePath
- * @param metaData
  */
 function initializeMetaYaml(filePath, metaData) {
     return __awaiter(this, void 0, void 0, function* () {

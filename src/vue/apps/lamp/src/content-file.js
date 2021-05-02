@@ -405,7 +405,7 @@ export class Slide {
   }
 
   /**
-   * A value to identify a slide. The ID (from `slide.metaData.id`) of this
+   * A value to identify a slide. The ID (from `slide.metaData.ref`) of this
    * slide or the number (the same as `slide.no`) of this slide.
    *
    * @type {String}

@@ -125,8 +125,8 @@ function isValue (value: string | boolean | number): boolean {
  * @param category - The specification of one media category.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetType.YamlFormat | AssetType.YamlFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.YamlFormat | AssetType.YamlFormat {
-  function applyOneTypeSpec (props: MediaCategory.PropCollection, propName: AssetType.PropName, data: AssetType.Generic, func: Function, replaceValues: boolean): void {
+function applySpecToProps (data: AssetType.YamlFormat, func: Function, category: MediaCategory.Category, replaceValues: boolean = true): AssetType.YamlFormat | AssetType.YamlFormat {
+  function applyOneTypeSpec (props: MediaCategory.PropCollection, propName: string, data: AssetType.YamlFormat, func: Function, replaceValues: boolean): void {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
     if (replaceValues && isValue(value)) {
@@ -135,7 +135,7 @@ function applySpecToProps (data: AssetType.YamlFormat | AssetType.YamlFormat, fu
   }
   const propSpecs = category.props
   for (const propName in propSpecs) {
-    applyOneTypeSpec(propSpecs, propName as AssetType.PropName, data, func, replaceValues)
+    applyOneTypeSpec(propSpecs, propName, data, func, replaceValues)
   }
   return data
 }
@@ -174,7 +174,7 @@ function sortAndDeriveProps (data: AssetType.YamlFormat, category: MediaCategory
   // Loop over the propSpecs to get a sorted object
   const propSpecs = category.props
   for (const propName in propSpecs) {
-    const propSpec = propSpecs[propName as AssetType.PropName]
+    const propSpec = propSpecs[propName]
     const origValue = origData[propName]
 
     let derivedValue
@@ -262,7 +262,7 @@ function removeProps (data: AssetType.YamlFormat, category: MediaCategory.Catego
   for (const propName in category.props) {
     if (data[propName] != null) {
       const value = data[propName]
-      const propSpec = category.props[propName as AssetType.PropName]
+      const propSpec = category.props[propName]
       if (
         // eslint-disable-next-line
         !isValue(value) ||

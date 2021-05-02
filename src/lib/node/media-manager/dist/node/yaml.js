@@ -77,8 +77,8 @@ function writeMetaDataYaml(filePath, metaData, force) {
         if (metaData == null)
             metaData = {};
         const asset = new media_file_classes_1.Asset(filePath);
-        if (metaData.id == null) {
-            metaData.id = asset.basename;
+        if (metaData.ref == null) {
+            metaData.ref = asset.basename;
         }
         if (metaData.title == null) {
             metaData.title = core_browser_1.deasciify(asset.basename);
