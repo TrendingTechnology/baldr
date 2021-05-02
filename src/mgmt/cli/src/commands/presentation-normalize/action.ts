@@ -1,5 +1,6 @@
 // Project packages.
 import { operations, walk } from '@bldr/media-manager'
+import * as log from '@bldr/log'
 
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
@@ -10,7 +11,9 @@ import { operations, walk } from '@bldr/media-manager'
 async function action (filePaths: string[]): Promise<void> {
   await walk({
     presentation (filePath) {
-      operations.normalizePresentationFile(filePath)
+      log.info('\nNormalize the presentation file “%s”', filePath)
+      log.info('\nNew content:\n')
+      log.infoLog(operations.normalizePresentationFile(filePath))
     }
   }, {
     path: filePaths

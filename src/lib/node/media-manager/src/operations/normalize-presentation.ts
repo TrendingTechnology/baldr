@@ -52,7 +52,7 @@ function shortedMediaUris (rawYamlString: string, presentationId: string): strin
  *
  * @param filePath - A path of a text file.
  */
-export function normalizePresentationFile (filePath: string): void {
+export function normalizePresentationFile (filePath: string): string {
   let textContent = readFile(filePath)
   const presentation = loadYaml(filePath) as PresentationTypes.FileFormat
 
@@ -60,13 +60,13 @@ export function normalizePresentationFile (filePath: string): void {
   const title = new DeepTitle(filePath)
   const meta = title.generatePresetationMeta()
 
-  if (presentation.meta?.ref != null) {
+  if (presentation?.meta?.ref != null) {
     meta.ref = presentation.meta.ref
   }
-  if (presentation.meta?.curriculumUrl != null) {
+  if (presentation?.meta?.curriculumUrl != null) {
     meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  if (presentation.meta?.uuid == null) {
+  if (presentation?.meta?.uuid == null) {
     meta.uuid = genUuid()
   } else {
     meta.uuid = presentation.meta.uuid
@@ -94,6 +94,5 @@ export function normalizePresentationFile (filePath: string): void {
   // Remove single quotes.
   textContent = removeSingleQuotes(textContent)
   writeFile(filePath, textContent)
-
-  console.log(textContent)
+  return textContent
 }

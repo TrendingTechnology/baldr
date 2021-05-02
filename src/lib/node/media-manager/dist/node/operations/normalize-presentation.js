@@ -56,13 +56,13 @@ function normalizePresentationFile(filePath) {
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
-    if (((_a = presentation.meta) === null || _a === void 0 ? void 0 : _a.ref) != null) {
+    if (((_a = presentation === null || presentation === void 0 ? void 0 : presentation.meta) === null || _a === void 0 ? void 0 : _a.ref) != null) {
         meta.ref = presentation.meta.ref;
     }
-    if (((_b = presentation.meta) === null || _b === void 0 ? void 0 : _b.curriculumUrl) != null) {
+    if (((_b = presentation === null || presentation === void 0 ? void 0 : presentation.meta) === null || _b === void 0 ? void 0 : _b.curriculumUrl) != null) {
         meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    if (((_c = presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) == null) {
+    if (((_c = presentation === null || presentation === void 0 ? void 0 : presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) == null) {
         meta.uuid = core_browser_1.genUuid();
     }
     else {
@@ -88,6 +88,6 @@ function normalizePresentationFile(filePath) {
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
     core_node_1.writeFile(filePath, textContent);
-    console.log(textContent);
+    return textContent;
 }
 exports.normalizePresentationFile = normalizePresentationFile;
