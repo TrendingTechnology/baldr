@@ -1,5 +1,5 @@
 import type { AssetType } from '@bldr/type-definitions'
-import { getExtension, formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
 
 import { mimeTypeManager } from './mime-type'
 import { MediaUri } from './media-uri'
@@ -212,5 +212,94 @@ export class ClientMediaAsset {
       throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`)
     }
     return formatMultiPartAssetFileName(this.httpUrl, no)
+  }
+}
+
+/**
+ * A multipart asset can be restricted in different ways. This class holds the
+ * data of the restriction (for example all parts, only a single part, a
+ * subset of parts). A multi part asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+class MultiPartSelection {
+  selectionSpec: string
+  asset: ClientMediaAsset
+  partNos: number[]
+
+  /**
+   * The URI of the media asset suffixed with the selection specification.
+   * `ref:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
+   * means all parts.
+   */
+  uri: string
+
+  /**
+   * @param selectionSpec - Can be a uri, everthing after `#`, for
+   * example `ref:Song-2#2-5` -> `2-5`
+   */
+  constructor (asset: ClientMediaAsset, selectionSpec: string) {
+    if (selectionSpec.indexOf('#') === -1 || !selectionSpec) {
+      selectionSpec = ''
+    } else if (typeof selectionSpec === 'string') {
+      selectionSpec = selectionSpec.replace(/^.*#/, '')
+    }
+
+    this.selectionSpec = selectionSpec
+    this.asset = asset
+
+    if (!this.selectionSpec) {
+      this.uri = this.asset.uri.raw
+    } else {
+      this.uri = `${this.asset.uri.raw}#${selectionSpec}`
+    }
+
+    this.partNos = selectSubset(selectionSpec,
+      { elementsCount: this.asset.multiPartCount, firstElementNo: 1 }
+    )
+  }
+
+  /**
+   * The URI using the `ref` authority.
+   */
+  get uriRef (): string {
+    if (!this.selectionSpec) {
+      return this.asset.yaml.ref
+    } else {
+      return `${this.asset.yaml.ref}#${this.selectionSpec}`
+    }
+  }
+
+  /**
+   * The URI using the `uuid` authority.
+   */
+  get uriUuid (): string {
+    if (!this.selectionSpec) {
+      return this.asset.yaml.uuid
+    } else {
+      return `${this.asset.yaml.uuid}#${this.selectionSpec}`
+    }
+  }
+
+  get partCount (): number {
+    return this.partNos.length
+  }
+
+  /**
+   * Used for the preview to fake that this class is a normal asset.
+   */
+  get httpUrl () {
+    return this.getMultiPartHttpUrlByNo(1)
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param The part number starts with 1. We set a default value,
+   * because no is sometimes undefined when only one part is selected. The
+   * router then creates no step url (not /slide/1/step/1) but (/slide/1)
+   */
+  getMultiPartHttpUrlByNo (no = 1): string {
+    return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
   }
 }
