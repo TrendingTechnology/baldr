@@ -113,7 +113,7 @@ export class Resolver {
         promises.push(this.resolveSingle(mediaUri))
       }
       for (const asset of await Promise.all<ClientMediaAsset>(promises)) {
-        findMediaUris(asset.meta, mediaUris)
+        findMediaUris(asset.yaml, mediaUris)
         assets.push(asset)
         mediaUris.delete(asset.uri.raw)
       }

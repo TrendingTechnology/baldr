@@ -14,7 +14,7 @@ export declare class ClientMediaAsset {
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
      */
-    meta: AssetType.RestApiRaw;
+    yaml: AssetType.RestApiRaw;
     uri: MediaUri;
     /**
      * The keyboard shortcut to play the media

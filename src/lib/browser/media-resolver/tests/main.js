@@ -4,6 +4,15 @@ const { assetCache, resetMediaCache } = require('@bldr/client-media-models')
 
 const { Resolver } = require('../dist/node/main.js')
 
+const { makeHttpRequestInstance } = require('@bldr/http-request')
+
+const config = require('@bldr/config')
+const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
+
+async function update () {
+  await httpRequest.request('mgmt/update')
+}
+
 async function resolveByUuid(uuid) {
   return await resolver.resolve('uuid:' +  uuid)
 }
@@ -16,6 +25,8 @@ async function resolveSingleByUuid(uuid) {
 const resolver = new Resolver()
 describe('Package “@bldr/media-resolver”', function () {
   it('resolve single', async function () {
+    this.timeout(10000)
+    await update()
     const assets = await resolveByUuid('c64047d2-983d-4009-a35f-02c95534cb53')
     // 09/20_Kontext/20_Romantik/10_Programmmusik/35_Ausstellung/10_Ausstellung-Ueberblick/HB/10_Klav_Grosses-Tor-von-Kiew.m4a
     assert.strictEqual(assets[0].uri.raw, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')

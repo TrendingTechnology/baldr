@@ -38,29 +38,38 @@ declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'sto
  */
 export declare class Sample {
     /**
+     * The reference of the sample. The reference is used to build the URI of the sample, for
+     * example `uri#reference`: `ref:Beethoven#complete`
+     */
+    ref: string;
+    /**
+     * The title of the sample. For example `komplett`, `Hook-Line`.
+     */
+    title: string;
+    /**
      * The parent media file object.
      *
      */
     asset: ClientMediaAsset;
+    /**
+     * Raw data coming from the YAML format.
+     */
+    yaml: AssetType.SampleYamlFormat;
     /**
      * The corresponding HTML media element, a object of the
      * corresponding `<audio/>` or `<video/>` element.
      */
     htmlElement: HTMLMediaElement;
     /**
-     * The title of the sample. For example `komplett`, `Hook-Line`.
+     * The current volume of the parent media Element. This value gets stored
+     * when the sample is paused. It is needed to restore the volume.
      */
-    title: string;
+    private htmlElementCurrentVolume;
     /**
-     * The reference of the sample. The reference is used to build the URI of the sample, for
-     * example `uri#reference`: `ref:Beethoven#complete`
-     */
-    ref: string;
-    /**
-     * The URI of the sample in the format `uri#ref`: for example
-     * `ref:Beethoven#complete`
-     */
-    uri: string;
+      * The current time of the parent media Element. This value gets stored
+      * when the sample is paused.
+      */
+    private htmlElementCurrentTimeSec;
     /**
      * The start time in seconds. The sample is played from this start time
      * using the `mediaElement` of the `asset`. It is the “zero” second
@@ -80,16 +89,6 @@ export declare class Sample {
      */
     private readonly fadeOutSec_?;
     /**
-     * The current volume of the parent media Element. This value gets stored
-     * when the sample is paused. It is needed to restore the volume.
-     */
-    private mediaElementCurrentVolume;
-    /**
-     * The current time of the parent media Element. This value gets stored
-     * when the sample is paused.
-     */
-    private mediaElementCurrentTimeSec;
-    /**
      * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
      */
     shortcut?: string;
@@ -97,7 +96,7 @@ export declare class Sample {
     private readonly timeOut;
     private readonly customEventsManager;
     playbackState: PlaybackState;
-    constructor(asset: ClientMediaAsset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat);
+    constructor(asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat);
     /**
      * The URI using the `id` authority.
      */
@@ -116,8 +115,8 @@ export declare class Sample {
      */
     get artistSafe(): string | undefined;
     /**
-     * Combined value build from `this.asset.meta.creationDate` and
-     * `this.asset.meta.year`.
+     * Combined value build from `this.asset.yaml.creationDate` and
+     * `this.asset.yaml.year`.
      */
     get yearSafe(): string | undefined;
     /**

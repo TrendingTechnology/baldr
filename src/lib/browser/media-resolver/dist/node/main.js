@@ -119,7 +119,7 @@ class Resolver {
                     promises.push(this.resolveSingle(mediaUri));
                 }
                 for (const asset of yield Promise.all(promises)) {
-                    client_media_models_1.findMediaUris(asset.meta, mediaUris);
+                    client_media_models_1.findMediaUris(asset.yaml, mediaUris);
                     assets.push(asset);
                     mediaUris.delete(asset.uri.raw);
                 }

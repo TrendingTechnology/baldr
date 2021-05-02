@@ -22,5 +22,4 @@ describe('Class “ClientMediaAsset”', function () {
     assert.strictEqual(asset.getMultiPartHttpUrlByNo(13), 'http://example.com/test_no013.jpg')
     assert.throws(() => asset.getMultiPartHttpUrlByNo(14))
   })
-
 })

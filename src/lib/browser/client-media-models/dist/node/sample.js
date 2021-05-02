@@ -70,12 +70,12 @@ exports.shortcutManager = new ShortcutManager();
  */
 const defaultFadeInSec = 0.3;
 /**
-* We never stop. Instead we fade out very short and smoothly.
-*/
+ * We never stop. Instead we fade out very short and smoothly.
+ */
 const defaultFadeOutSec = 1;
 /**
-* Number of milliseconds to wait before the media file is played.
-*/
+ * Number of milliseconds to wait before the media file is played.
+ */
 const defaultPlayDelayMsec = 10;
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -101,50 +101,50 @@ const defaultPlayDelayMsec = 10;
  * ```
  */
 class Sample {
-    constructor(asset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+    constructor(asset, yaml) {
+        /**
+         * The current volume of the parent media Element. This value gets stored
+         * when the sample is paused. It is needed to restore the volume.
+         */
+        this.htmlElementCurrentVolume = 1;
+        /**
+          * The current time of the parent media Element. This value gets stored
+          * when the sample is paused.
+          */
+        this.htmlElementCurrentTimeSec = 0;
         /**
          * The start time in seconds. The sample is played from this start time
          * using the `mediaElement` of the `asset`. It is the “zero” second
          * for the sample.
          */
         this.startTimeSec = 0;
-        /**
-         * The current volume of the parent media Element. This value gets stored
-         * when the sample is paused. It is needed to restore the volume.
-         */
-        this.mediaElementCurrentVolume = 1;
-        /**
-         * The current time of the parent media Element. This value gets stored
-         * when the sample is paused.
-         */
-        this.mediaElementCurrentTimeSec = 0;
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
         this.customEventsManager = new events_1.CustomEventsManager();
         this.asset = asset;
+        this.yaml = yaml;
         this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
-        this.title = title == null ? 'komplett' : title;
-        this.ref = ref == null ? 'complete' : ref;
-        this.uri = `${this.asset.uri.uriWithoutFragment}#${this.ref}`;
-        if (startTime != null) {
-            this.startTimeSec = this.toSec(startTime);
+        this.title = this.yaml.title == null ? 'komplett' : this.yaml.title;
+        this.ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
+        if (this.yaml.startTime != null) {
+            this.startTimeSec = this.toSec(this.yaml.startTime);
         }
-        if (duration != null && endTime != null) {
+        if (this.yaml.duration != null && this.yaml.endTime != null) {
             throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.');
         }
-        if (duration != null) {
-            this.durationSec_ = this.toSec(duration);
+        if (this.yaml.duration != null) {
+            this.durationSec_ = this.toSec(this.yaml.duration);
         }
-        else if (endTime != null) {
-            this.durationSec_ = this.toSec(endTime) - this.startTimeSec;
+        else if (this.yaml.endTime != null) {
+            this.durationSec_ = this.toSec(this.yaml.endTime) - this.startTimeSec;
         }
-        if (fadeIn != null) {
-            this.fadeInSec_ = this.toSec(fadeIn);
+        if (this.yaml.fadeIn != null) {
+            this.fadeInSec_ = this.toSec(this.yaml.fadeIn);
         }
-        if (fadeOut != null) {
-            this.fadeOutSec_ = this.toSec(fadeOut);
+        if (this.yaml.fadeOut != null) {
+            this.fadeOutSec_ = this.toSec(this.yaml.fadeOut);
         }
-        this.shortcut = shortcut;
+        this.shortcut = this.yaml.shortcut;
         exports.shortcutManager.addShortcut(this);
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
@@ -181,11 +181,11 @@ class Sample {
     get artistSafe() {
         let artist = null;
         let composer = null;
-        if (this.asset.meta.artist != null) {
-            artist = `<em class="person">${this.asset.meta.artist}</em>`;
+        if (this.asset.yaml.artist != null) {
+            artist = `<em class="person">${this.asset.yaml.artist}</em>`;
         }
-        if (this.asset.meta.composer != null) {
-            composer = `<em class="person">${this.asset.meta.composer}</em>`;
+        if (this.asset.yaml.composer != null) {
+            composer = `<em class="person">${this.asset.yaml.composer}</em>`;
         }
         if (artist != null && composer != null) {
             return `${composer} (${artist})`;
@@ -198,15 +198,15 @@ class Sample {
         }
     }
     /**
-     * Combined value build from `this.asset.meta.creationDate` and
-     * `this.asset.meta.year`.
+     * Combined value build from `this.asset.yaml.creationDate` and
+     * `this.asset.yaml.year`.
      */
     get yearSafe() {
-        if (this.asset.meta.creationDate != null) {
-            return this.asset.meta.creationDate;
+        if (this.asset.yaml.creationDate != null) {
+            return this.asset.yaml.creationDate;
         }
-        else if (this.asset.meta.year != null) {
-            return this.asset.meta.year;
+        else if (this.asset.yaml.year != null) {
+            return this.asset.yaml.year;
         }
     }
     /**
@@ -369,8 +369,8 @@ class Sample {
         if (startTimeSec != null || startTimeSec === 0) {
             this.htmlElement.currentTime = startTimeSec;
         }
-        else if (this.mediaElementCurrentTimeSec != null) {
-            this.htmlElement.currentTime = this.mediaElementCurrentTimeSec;
+        else if (this.htmlElementCurrentTimeSec != null) {
+            this.htmlElement.currentTime = this.htmlElementCurrentTimeSec;
         }
         else {
             this.htmlElement.currentTime = this.startTimeSec;
@@ -472,8 +472,8 @@ class Sample {
             if (this.asset.mimeType === 'video') {
                 this.htmlElement.style.opacity = '0';
             }
-            this.mediaElementCurrentTimeSec = this.htmlElement.currentTime;
-            this.mediaElementCurrentVolume = this.htmlElement.volume;
+            this.htmlElementCurrentTimeSec = this.htmlElement.currentTime;
+            this.htmlElementCurrentVolume = this.htmlElement.volume;
         });
     }
     /**
@@ -579,12 +579,12 @@ class SampleCollection {
         }
     }
     addFromAsset(asset) {
-        if (asset.meta.samples != null) {
-            for (const sampleSpec of asset.meta.samples) {
+        if (asset.yaml.samples != null) {
+            for (const sampleSpec of asset.yaml.samples) {
                 this.add(asset, sampleSpec);
             }
         }
-        const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.meta);
+        const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.yaml);
         if (sampleFormat != null)
             this.add(asset, sampleFormat);
     }

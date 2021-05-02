@@ -63,6 +63,7 @@ class AssetCache {
         return Object.values(this.cache);
     }
     reset() {
+        this.mediaUriCache.reset();
         for (const ref in this.cache) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.cache[ref];

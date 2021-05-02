@@ -19,7 +19,7 @@ export class ClientMediaAsset {
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
-  meta: AssetType.RestApiRaw
+  yaml: AssetType.RestApiRaw
 
   uri: MediaUri
 
@@ -48,20 +48,20 @@ export class ClientMediaAsset {
   constructor (uri: string, httpUrl: string, meta: AssetType.RestApiRaw) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
-    this.meta = meta
+    this.yaml = meta
 
-    if (this.meta.extension == null && this.meta.filename != null) {
-      const extension = getExtension(this.meta.filename)
+    if (this.yaml.extension == null && this.yaml.filename != null) {
+      const extension = getExtension(this.yaml.filename)
       if (extension != null) {
-        this.meta.extension = extension
+        this.yaml.extension = extension
       }
     }
 
-    if (this.meta.extension == null) {
+    if (this.yaml.extension == null) {
       throw Error('The client media assets needs a extension')
     }
 
-    this.mimeType = mimeTypeManager.extensionToType(this.meta.extension)
+    this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension)
 
     this.samples = new SampleCollection(this)
 
@@ -74,14 +74,14 @@ export class ClientMediaAsset {
    * The URI using the `ref` scheme.
    */
   get ref (): string {
-    return this.meta.ref
+    return this.yaml.ref
   }
 
   /**
    * The URI using the `uuid` scheme.
    */
   get uuid (): string {
-    return this.meta.uuid
+    return this.yaml.uuid
   }
 
   /**
@@ -94,8 +94,8 @@ export class ClientMediaAsset {
   // }
 
   get titleSafe (): string {
-    if (this.meta.title != null) return this.meta.title
-    if (this.meta.filename != null) return this.meta.filename
+    if (this.yaml.title != null) return this.yaml.title
+    if (this.yaml.filename != null) return this.yaml.filename
     return this.uri.raw
   }
 
@@ -193,8 +193,8 @@ export class ClientMediaAsset {
    * the method returns 1, else the count of all the parts.
    */
   get multiPartCount (): number {
-    if (this.meta.multiPartCount == null) return 1
-    return this.meta.multiPartCount
+    if (this.yaml.multiPartCount == null) return 1
+    return this.yaml.multiPartCount
   }
 
   /**

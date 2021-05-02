@@ -84,13 +84,13 @@ type JumpDirection = 'forward' | 'backward'
 const defaultFadeInSec: number = 0.3
 
 /**
-* We never stop. Instead we fade out very short and smoothly.
-*/
+ * We never stop. Instead we fade out very short and smoothly.
+ */
 const defaultFadeOutSec: number = 1
 
 /**
-* Number of milliseconds to wait before the media file is played.
-*/
+ * Number of milliseconds to wait before the media file is played.
+ */
 const defaultPlayDelayMsec: number = 10
 
 /**
@@ -118,10 +118,26 @@ const defaultPlayDelayMsec: number = 10
  */
 export class Sample {
   /**
+   * The reference of the sample. The reference is used to build the URI of the sample, for
+   * example `uri#reference`: `ref:Beethoven#complete`
+   */
+  ref: string
+
+  /**
+   * The title of the sample. For example `komplett`, `Hook-Line`.
+   */
+  title: string
+
+  /**
    * The parent media file object.
    *
    */
   asset: ClientMediaAsset
+
+  /**
+   * Raw data coming from the YAML format.
+   */
+  yaml: AssetType.SampleYamlFormat
 
   /**
    * The corresponding HTML media element, a object of the
@@ -130,21 +146,16 @@ export class Sample {
   htmlElement: HTMLMediaElement
 
   /**
-   * The title of the sample. For example `komplett`, `Hook-Line`.
+   * The current volume of the parent media Element. This value gets stored
+   * when the sample is paused. It is needed to restore the volume.
    */
-  title: string
+  private htmlElementCurrentVolume: number = 1
 
   /**
-   * The reference of the sample. The reference is used to build the URI of the sample, for
-   * example `uri#reference`: `ref:Beethoven#complete`
-   */
-  ref: string
-
-  /**
-   * The URI of the sample in the format `uri#ref`: for example
-   * `ref:Beethoven#complete`
-   */
-  uri: string
+    * The current time of the parent media Element. This value gets stored
+    * when the sample is paused.
+    */
+  private htmlElementCurrentTimeSec: number = 0
 
   /**
    * The start time in seconds. The sample is played from this start time
@@ -169,18 +180,6 @@ export class Sample {
   private readonly fadeOutSec_?: number
 
   /**
-   * The current volume of the parent media Element. This value gets stored
-   * when the sample is paused. It is needed to restore the volume.
-   */
-  private mediaElementCurrentVolume: number = 1
-
-  /**
-   * The current time of the parent media Element. This value gets stored
-   * when the sample is paused.
-   */
-  private mediaElementCurrentTimeSec: number = 0
-
-  /**
    * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
    */
   shortcut?: string
@@ -193,40 +192,38 @@ export class Sample {
 
   playbackState: PlaybackState
 
-  constructor (
-    asset: ClientMediaAsset,
-    { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }: AssetType.SampleYamlFormat
-  ) {
+  constructor (asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat) {
     this.asset = asset
+
+    this.yaml = yaml
 
     this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl) as HTMLMediaElement
 
-    this.title = title == null ? 'komplett' : title
-    this.ref = ref == null ? 'complete' : ref
-    this.uri = `${this.asset.uri.uriWithoutFragment}#${this.ref}`
-    if (startTime != null) {
-      this.startTimeSec = this.toSec(startTime)
+    this.title = this.yaml.title == null ? 'komplett' : this.yaml.title
+    this.ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
+    if (this.yaml.startTime != null) {
+      this.startTimeSec = this.toSec(this.yaml.startTime)
     }
 
-    if (duration != null && endTime != null) {
+    if (this.yaml.duration != null && this.yaml.endTime != null) {
       throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.')
     }
 
-    if (duration != null) {
-      this.durationSec_ = this.toSec(duration)
-    } else if (endTime != null) {
-      this.durationSec_ = this.toSec(endTime) - this.startTimeSec
+    if (this.yaml.duration != null) {
+      this.durationSec_ = this.toSec(this.yaml.duration)
+    } else if (this.yaml.endTime != null) {
+      this.durationSec_ = this.toSec(this.yaml.endTime) - this.startTimeSec
     }
 
-    if (fadeIn != null) {
-      this.fadeInSec_ = this.toSec(fadeIn)
+    if (this.yaml.fadeIn != null) {
+      this.fadeInSec_ = this.toSec(this.yaml.fadeIn)
     }
 
-    if (fadeOut != null) {
-      this.fadeOutSec_ = this.toSec(fadeOut)
+    if (this.yaml.fadeOut != null) {
+      this.fadeOutSec_ = this.toSec(this.yaml.fadeOut)
     }
 
-    this.shortcut = shortcut
+    this.shortcut = this.yaml.shortcut
     shortcutManager.addShortcut(this)
     this.interval = new Interval()
     this.timeOut = new TimeOut()
@@ -266,11 +263,11 @@ export class Sample {
   get artistSafe (): string | undefined {
     let artist: string | null = null
     let composer: string | null = null
-    if (this.asset.meta.artist != null) {
-      artist = `<em class="person">${this.asset.meta.artist}</em>`
+    if (this.asset.yaml.artist != null) {
+      artist = `<em class="person">${this.asset.yaml.artist}</em>`
     }
-    if (this.asset.meta.composer != null) {
-      composer = `<em class="person">${this.asset.meta.composer}</em>`
+    if (this.asset.yaml.composer != null) {
+      composer = `<em class="person">${this.asset.yaml.composer}</em>`
     }
     if (artist != null && composer != null) {
       return `${composer} (${artist})`
@@ -282,14 +279,14 @@ export class Sample {
   }
 
   /**
-   * Combined value build from `this.asset.meta.creationDate` and
-   * `this.asset.meta.year`.
+   * Combined value build from `this.asset.yaml.creationDate` and
+   * `this.asset.yaml.year`.
    */
   get yearSafe (): string | undefined {
-    if (this.asset.meta.creationDate != null) {
-      return this.asset.meta.creationDate
-    } else if (this.asset.meta.year != null) {
-      return this.asset.meta.year
+    if (this.asset.yaml.creationDate != null) {
+      return this.asset.yaml.creationDate
+    } else if (this.asset.yaml.year != null) {
+      return this.asset.yaml.year
     }
   }
 
@@ -455,8 +452,8 @@ export class Sample {
     // have on this.startTimeSec 0.
     if (startTimeSec != null || startTimeSec === 0) {
       this.htmlElement.currentTime = startTimeSec
-    } else if (this.mediaElementCurrentTimeSec != null) {
-      this.htmlElement.currentTime = this.mediaElementCurrentTimeSec
+    } else if (this.htmlElementCurrentTimeSec != null) {
+      this.htmlElement.currentTime = this.htmlElementCurrentTimeSec
     } else {
       this.htmlElement.currentTime = this.startTimeSec
     }
@@ -561,8 +558,8 @@ export class Sample {
     if (this.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = '0'
     }
-    this.mediaElementCurrentTimeSec = this.htmlElement.currentTime
-    this.mediaElementCurrentVolume = this.htmlElement.volume
+    this.htmlElementCurrentTimeSec = this.htmlElement.currentTime
+    this.htmlElementCurrentVolume = this.htmlElement.volume
   }
 
   /**
@@ -671,12 +668,12 @@ export class SampleCollection {
   }
 
   private addFromAsset (asset: ClientMediaAsset): void {
-    if (asset.meta.samples != null) {
-      for (const sampleSpec of asset.meta.samples) {
+    if (asset.yaml.samples != null) {
+      for (const sampleSpec of asset.yaml.samples) {
         this.add(asset, sampleSpec)
       }
     }
-    const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.meta)
+    const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.yaml)
     if (sampleFormat != null) this.add(asset, sampleFormat)
   }
 }

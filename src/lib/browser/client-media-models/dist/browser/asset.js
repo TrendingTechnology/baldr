@@ -18,17 +18,17 @@ export class ClientMediaAsset {
     constructor(uri, httpUrl, meta) {
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
-        this.meta = meta;
-        if (this.meta.extension == null && this.meta.filename != null) {
-            const extension = getExtension(this.meta.filename);
+        this.yaml = meta;
+        if (this.yaml.extension == null && this.yaml.filename != null) {
+            const extension = getExtension(this.yaml.filename);
             if (extension != null) {
-                this.meta.extension = extension;
+                this.yaml.extension = extension;
             }
         }
-        if (this.meta.extension == null) {
+        if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');
         }
-        this.mimeType = mimeTypeManager.extensionToType(this.meta.extension);
+        this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension);
         this.samples = new SampleCollection(this);
         if (this.mimeType !== 'document') {
             this.htmlElement = createHtmlElement(this.mimeType, this.httpUrl);
@@ -38,13 +38,13 @@ export class ClientMediaAsset {
      * The URI using the `ref` scheme.
      */
     get ref() {
-        return this.meta.ref;
+        return this.yaml.ref;
     }
     /**
      * The URI using the `uuid` scheme.
      */
     get uuid() {
-        return this.meta.uuid;
+        return this.yaml.uuid;
     }
     /**
      * Store the file name from a HTTP URL.
@@ -55,10 +55,10 @@ export class ClientMediaAsset {
     //   this.filename = url.split('/').pop()
     // }
     get titleSafe() {
-        if (this.meta.title != null)
-            return this.meta.title;
-        if (this.meta.filename != null)
-            return this.meta.filename;
+        if (this.yaml.title != null)
+            return this.yaml.title;
+        if (this.yaml.filename != null)
+            return this.yaml.filename;
         return this.uri.raw;
     }
     /**
@@ -150,9 +150,9 @@ export class ClientMediaAsset {
      * the method returns 1, else the count of all the parts.
      */
     get multiPartCount() {
-        if (this.meta.multiPartCount == null)
+        if (this.yaml.multiPartCount == null)
             return 1;
-        return this.meta.multiPartCount;
+        return this.yaml.multiPartCount;
     }
     /**
      * Retrieve the HTTP URL of the multi part asset by the part number.
