@@ -1,5 +1,6 @@
 import type { AssetType } from '@bldr/type-definitions';
 import { ClientMediaAsset } from './asset';
+import { Cache } from './cache';
 export declare class ShortcutManager {
     private readonly audio;
     private readonly image;
@@ -229,20 +230,13 @@ export declare class Sample {
      */
     backward(interval?: number): void;
 }
-export declare class SampleCollection {
-    private cache;
+export declare class SampleCollection extends Cache<Sample> {
     constructor(asset: ClientMediaAsset);
+    private addSample;
     /**
-     * Retrieve a single sample.
-     *
-     * @param ref The sample reference, for example `complete`.
-     *
-     * @returns A sample.
+     * Gather informations to build the default sample “complete”.
      */
-    get(ref: string): Sample | undefined;
-    getAll(): Sample[];
-    private add;
-    private buildSampleYamlFromAssetYaml;
+    private gatherYamlFromRoot;
     private addFromAsset;
 }
 export {};

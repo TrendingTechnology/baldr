@@ -5,7 +5,7 @@ import { ClientMediaAsset } from './asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
 import { CustomEventsManager } from './events'
-import { sampleCache } from './cache'
+import { sampleCache, Cache } from './cache'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -200,8 +200,18 @@ export class Sample {
 
     this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl) as HTMLMediaElement
 
-    this.title = this.yaml.title == null ? 'komplett' : this.yaml.title
     this.ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
+
+    if (this.yaml.title == null) {
+      if (this.ref === 'complete') {
+        this.title = 'komplett'
+      } else {
+        this.title = this.ref
+      }
+    } else {
+      this.title = this.yaml.title
+    }
+
     if (this.yaml.startTime != null) {
       this.startTimeSec = this.toSec(this.yaml.startTime)
     }
@@ -616,60 +626,76 @@ export class Sample {
   }
 }
 
-export class SampleCollection {
-  private cache: { [ref: string]: Sample }
-
+export class SampleCollection extends Cache<Sample> {
   constructor (asset: ClientMediaAsset) {
-    this.cache = {}
+    super()
     this.addFromAsset(asset)
   }
 
-  /**
-   * Retrieve a single sample.
-   *
-   * @param ref The sample reference, for example `complete`.
-   *
-   * @returns A sample.
-   */
-  get (ref: string): Sample | undefined {
-    if (this.cache[ref] != null) {
-      return this.cache[ref]
-    }
-  }
-
-  getAll (): Sample[] {
-    return Object.values(this.cache)
-  }
-
-  private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
+  private addSample (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
-    sampleCache.add(sample.ref, sample)
-    if (this.cache[sample.ref] != null) {
-      throw new Error(`Duplicate sample with the id ${sample.ref}`)
+    if (this.get(sample.ref) != null) {
+      throw new Error(`Duplicate sample with the reference “${sample.ref}”.`)
     }
-    this.cache[sample.ref] = sample
+    sampleCache.add(sample.ref, sample)
+    this.add(sample.ref, sample)
   }
 
-  private buildSampleYamlFromAssetYaml (assetFormat: AssetType.YamlFormat): AssetType.SampleYamlFormat | undefined {
-    const sampleFormat: AssetType.SampleYamlFormat = {}
-    if (assetFormat.startTime != null) sampleFormat.startTime = assetFormat.startTime
-    if (assetFormat.duration != null) sampleFormat.duration = assetFormat.duration
-    if (assetFormat.endTime != null) sampleFormat.endTime = assetFormat.endTime
-    if (assetFormat.fadeIn != null) sampleFormat.startTime = assetFormat.fadeIn
-    if (assetFormat.fadeOut != null) sampleFormat.startTime = assetFormat.fadeOut
-    if (assetFormat.shortcut != null) sampleFormat.shortcut = assetFormat.shortcut
-    if (Object.keys(sampleFormat).length > 0) {
-      return sampleFormat
+  /**
+   * Gather informations to build the default sample “complete”.
+   */
+  private gatherYamlFromRoot (assetFormat: AssetType.YamlFormat): AssetType.SampleYamlFormat | undefined {
+    const yamlFormat: AssetType.SampleYamlFormat = {}
+    if (assetFormat.startTime != null) yamlFormat.startTime = assetFormat.startTime
+    if (assetFormat.duration != null) yamlFormat.duration = assetFormat.duration
+    if (assetFormat.endTime != null) yamlFormat.endTime = assetFormat.endTime
+    if (assetFormat.fadeIn != null) yamlFormat.startTime = assetFormat.fadeIn
+    if (assetFormat.fadeOut != null) yamlFormat.startTime = assetFormat.fadeOut
+    if (assetFormat.shortcut != null) yamlFormat.shortcut = assetFormat.shortcut
+    if (Object.keys(yamlFormat).length > 0) {
+      return yamlFormat
     }
   }
 
   private addFromAsset (asset: ClientMediaAsset): void {
+    // search the “complete” sample from the property “samples”.
+    let completeYamlFromSamples: AssetType.SampleYamlFormat | undefined
     if (asset.yaml.samples != null) {
-      for (const sampleSpec of asset.yaml.samples) {
-        this.add(asset, sampleSpec)
+      for (let i = 0; i < asset.yaml.samples.length; i++) {
+        const sampleYaml = asset.yaml.samples[i]
+        if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
+          completeYamlFromSamples = sampleYaml
+          asset.yaml.samples.splice(i, 1)
+          break
+        }
       }
     }
-    const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.yaml)
-    if (sampleFormat != null) this.add(asset, sampleFormat)
+
+    // First add default sample “complete”
+    const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml)
+
+    if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
+      throw new Error('Duplicate definition of the default complete sample')
+    } else if (completeYamlFromSamples != null) {
+      this.addSample(asset, completeYamlFromSamples)
+    } else if (completeYamlFromRoot != null) {
+      this.addSample(asset, completeYamlFromRoot)
+    } else {
+      this.addSample(asset, {})
+    }
+
+    let counter = 0
+
+    // Add samples from the YAML property “samples”
+    if (asset.yaml.samples != null) {
+      for (const sampleSpec of asset.yaml.samples) {
+        if (sampleSpec.ref == null && sampleSpec.title == null) {
+          counter++
+          sampleSpec.ref = `sample${counter}`
+          sampleSpec.title = `Ausschnitt ${counter}`
+        }
+        this.addSample(asset, sampleSpec)
+      }
+    }
   }
 }

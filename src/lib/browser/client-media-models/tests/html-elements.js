@@ -1,3 +1,5 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { createHtmlElement } = require('../dist/node/html-elements.js')
@@ -18,5 +20,4 @@ describe('createHtmlElement', function () {
     const image = createHtmlElement('audio', 'http://example.com/image.jpg')
     assert.strictEqual(image.src, 'http://example.com/image.jpg')
   })
-
 })

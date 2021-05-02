@@ -1,3 +1,5 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { ClientMediaAsset } = require('../dist/node/main.js')

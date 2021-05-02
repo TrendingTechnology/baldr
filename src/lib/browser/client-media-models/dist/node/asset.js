@@ -32,9 +32,11 @@ class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.yaml.extension);
-        this.samples = new sample_1.SampleCollection(this);
         if (this.mimeType !== 'document') {
             this.htmlElement = html_elements_1.createHtmlElement(this.mimeType, this.httpUrl);
+        }
+        if (this.isPlayable) {
+            this.samples = new sample_1.SampleCollection(this);
         }
     }
     /**

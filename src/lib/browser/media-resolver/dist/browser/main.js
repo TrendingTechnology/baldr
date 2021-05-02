@@ -94,7 +94,7 @@ export class Resolver {
             const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
             const asset = new ClientMediaAsset(uri, httpUrl, raw);
-            assetCache.add(asset);
+            assetCache.add(asset.ref, asset);
             return asset;
         });
     }

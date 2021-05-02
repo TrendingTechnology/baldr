@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.MediaUriCache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.MediaUriCache = exports.Cache = void 0;
 const sample_1 = require("./sample");
 class Cache {
     constructor() {
@@ -33,7 +33,13 @@ class Cache {
             delete this.cache[ref];
         }
     }
+    *[Symbol.iterator]() {
+        for (const ref in this.cache) {
+            yield this.cache[ref];
+        }
+    }
 }
+exports.Cache = Cache;
 /**
  * Media assets have two URIs: uuid:... and ref:...
  */
@@ -76,14 +82,14 @@ exports.MediaUriCache = MediaUriCache;
 class SampleCache extends Cache {
 }
 exports.sampleCache = new SampleCache();
-class AssetCache {
+class AssetCache extends Cache {
     constructor() {
-        this.cache = {};
+        super();
         this.mediaUriCache = new MediaUriCache();
     }
-    add(asset) {
+    add(ref, asset) {
         if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
-            this.cache[asset.ref] = asset;
+            super.add(ref, asset);
             return true;
         }
         return false;
@@ -91,18 +97,12 @@ class AssetCache {
     get(uuidOrRef) {
         const id = this.mediaUriCache.getRef(uuidOrRef);
         if (id != null && this.cache[id] != null) {
-            return this.cache[id];
+            return super.get(id);
         }
-    }
-    getAll() {
-        return Object.values(this.cache);
     }
     reset() {
+        super.reset();
         this.mediaUriCache.reset();
-        for (const ref in this.cache) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.cache[ref];
-        }
     }
 }
 exports.AssetCache = AssetCache;

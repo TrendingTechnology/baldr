@@ -1,5 +1,5 @@
 import { shortcutManager } from './sample';
-class Cache {
+export class Cache {
     constructor() {
         this.cache = {};
     }
@@ -28,6 +28,11 @@ class Cache {
         for (const ref in this.cache) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.cache[ref];
+        }
+    }
+    *[Symbol.iterator]() {
+        for (const ref in this.cache) {
+            yield this.cache[ref];
         }
     }
 }
@@ -72,14 +77,14 @@ export class MediaUriCache {
 class SampleCache extends Cache {
 }
 export const sampleCache = new SampleCache();
-export class AssetCache {
+export class AssetCache extends Cache {
     constructor() {
-        this.cache = {};
+        super();
         this.mediaUriCache = new MediaUriCache();
     }
-    add(asset) {
+    add(ref, asset) {
         if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
-            this.cache[asset.ref] = asset;
+            super.add(ref, asset);
             return true;
         }
         return false;
@@ -87,18 +92,12 @@ export class AssetCache {
     get(uuidOrRef) {
         const id = this.mediaUriCache.getRef(uuidOrRef);
         if (id != null && this.cache[id] != null) {
-            return this.cache[id];
+            return super.get(id);
         }
-    }
-    getAll() {
-        return Object.values(this.cache);
     }
     reset() {
+        super.reset();
         this.mediaUriCache.reset();
-        for (const ref in this.cache) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.cache[ref];
-        }
     }
 }
 export const assetCache = new AssetCache();

@@ -1,8 +1,8 @@
 import { Sample, shortcutManager } from './sample'
 import { ClientMediaAsset } from './asset'
 
-class Cache <T>{
-  private cache: { [ref: string]: T }
+export class Cache <T> {
+  protected cache: { [ref: string]: T }
   constructor () {
     this.cache = {}
   }
@@ -36,6 +36,12 @@ class Cache <T>{
     for (const ref in this.cache) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.cache[ref]
+    }
+  }
+
+  * [Symbol.iterator] (): Generator<T, any, any> {
+    for (const ref in this.cache) {
+      yield this.cache[ref]
     }
   }
 }
@@ -86,23 +92,21 @@ export class MediaUriCache {
   }
 }
 
-class SampleCache extends Cache<Sample>{}
+class SampleCache extends Cache<Sample> {}
 
 export const sampleCache = new SampleCache()
 
-export class AssetCache {
-  private cache: { [ref: string]: ClientMediaAsset }
-
+export class AssetCache extends Cache<ClientMediaAsset> {
   private readonly mediaUriCache: MediaUriCache
 
   constructor () {
-    this.cache = {}
+    super()
     this.mediaUriCache = new MediaUriCache()
   }
 
-  add (asset: ClientMediaAsset): boolean {
+  add (ref: string, asset: ClientMediaAsset): boolean {
     if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
-      this.cache[asset.ref] = asset
+      super.add(ref, asset)
       return true
     }
     return false
@@ -111,20 +115,13 @@ export class AssetCache {
   get (uuidOrRef: string): ClientMediaAsset | undefined {
     const id = this.mediaUriCache.getRef(uuidOrRef)
     if (id != null && this.cache[id] != null) {
-      return this.cache[id]
+      return super.get(id)
     }
-  }
-
-  getAll (): ClientMediaAsset[] {
-    return Object.values(this.cache)
   }
 
   reset (): void {
+    super.reset()
     this.mediaUriCache.reset()
-    for (const ref in this.cache) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.cache[ref]
-    }
   }
 }
 

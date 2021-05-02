@@ -1,7 +1,9 @@
 import { Sample } from './sample';
 import { ClientMediaAsset } from './asset';
-declare class Cache<T> {
-    private cache;
+export declare class Cache<T> {
+    protected cache: {
+        [ref: string]: T;
+    };
     constructor();
     add(ref: string, mediaObject: T): boolean;
     get(ref: string): T | undefined;
@@ -11,6 +13,7 @@ declare class Cache<T> {
     get size(): number;
     getAll(): T[];
     reset(): void;
+    [Symbol.iterator](): Generator<T, any, any>;
 }
 /**
  * Media assets have two URIs: uuid:... and ref:...
@@ -27,13 +30,11 @@ export declare class MediaUriCache {
 declare class SampleCache extends Cache<Sample> {
 }
 export declare const sampleCache: SampleCache;
-export declare class AssetCache {
-    private cache;
+export declare class AssetCache extends Cache<ClientMediaAsset> {
     private readonly mediaUriCache;
     constructor();
-    add(asset: ClientMediaAsset): boolean;
+    add(ref: string, asset: ClientMediaAsset): boolean;
     get(uuidOrRef: string): ClientMediaAsset | undefined;
-    getAll(): ClientMediaAsset[];
     reset(): void;
 }
 export declare const assetCache: AssetCache;

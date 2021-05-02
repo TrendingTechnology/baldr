@@ -1,3 +1,5 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { MediaUri, findMediaUris } = require('../dist/node/main.js')
@@ -28,19 +30,19 @@ describe('Class “MediaUri”', function () {
 
 describe('Function “findMediaUris()”', function () {
   it('In an array', function () {
-    uris = new Set()
+    const uris = new Set()
     findMediaUris(['ref:test'], uris)
     assert.strictEqual(uris.size, 1)
   })
 
   it('In an object', function () {
-    uris = new Set()
+    const uris = new Set()
     findMediaUris({ ref: 'ref:test', child: { ref: 'uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
     assert.strictEqual(uris.size, 2)
   })
 
   it('invalid', function () {
-    uris = new Set()
+    const uris = new Set()
     findMediaUris({ ref: 'reftest', child: { ref: 'uuid c262fe9b-c705-43fd-a5d4-4bb38178d9e7' } }, uris)
     assert.strictEqual(uris.size, 0)
   })

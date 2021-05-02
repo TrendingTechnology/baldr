@@ -125,8 +125,18 @@ class Sample {
         this.asset = asset;
         this.yaml = yaml;
         this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
-        this.title = this.yaml.title == null ? 'komplett' : this.yaml.title;
         this.ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
+        if (this.yaml.title == null) {
+            if (this.ref === 'complete') {
+                this.title = 'komplett';
+            }
+            else {
+                this.title = this.ref;
+            }
+        }
+        else {
+            this.title = this.yaml.title;
+        }
         if (this.yaml.startTime != null) {
             this.startTimeSec = this.toSec(this.yaml.startTime);
         }
@@ -529,61 +539,79 @@ class Sample {
     }
 }
 exports.Sample = Sample;
-class SampleCollection {
+class SampleCollection extends cache_1.Cache {
     constructor(asset) {
-        this.cache = {};
+        super();
         this.addFromAsset(asset);
     }
-    /**
-     * Retrieve a single sample.
-     *
-     * @param ref The sample reference, for example `complete`.
-     *
-     * @returns A sample.
-     */
-    get(ref) {
-        if (this.cache[ref] != null) {
-            return this.cache[ref];
-        }
-    }
-    getAll() {
-        return Object.values(this.cache);
-    }
-    add(asset, yamlFormat) {
+    addSample(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
-        cache_1.sampleCache.add(sample.ref, sample);
-        if (this.cache[sample.ref] != null) {
-            throw new Error(`Duplicate sample with the id ${sample.ref}`);
+        if (this.get(sample.ref) != null) {
+            throw new Error(`Duplicate sample with the reference “${sample.ref}”.`);
         }
-        this.cache[sample.ref] = sample;
+        cache_1.sampleCache.add(sample.ref, sample);
+        this.add(sample.ref, sample);
     }
-    buildSampleYamlFromAssetYaml(assetFormat) {
-        const sampleFormat = {};
+    /**
+     * Gather informations to build the default sample “complete”.
+     */
+    gatherYamlFromRoot(assetFormat) {
+        const yamlFormat = {};
         if (assetFormat.startTime != null)
-            sampleFormat.startTime = assetFormat.startTime;
+            yamlFormat.startTime = assetFormat.startTime;
         if (assetFormat.duration != null)
-            sampleFormat.duration = assetFormat.duration;
+            yamlFormat.duration = assetFormat.duration;
         if (assetFormat.endTime != null)
-            sampleFormat.endTime = assetFormat.endTime;
+            yamlFormat.endTime = assetFormat.endTime;
         if (assetFormat.fadeIn != null)
-            sampleFormat.startTime = assetFormat.fadeIn;
+            yamlFormat.startTime = assetFormat.fadeIn;
         if (assetFormat.fadeOut != null)
-            sampleFormat.startTime = assetFormat.fadeOut;
+            yamlFormat.startTime = assetFormat.fadeOut;
         if (assetFormat.shortcut != null)
-            sampleFormat.shortcut = assetFormat.shortcut;
-        if (Object.keys(sampleFormat).length > 0) {
-            return sampleFormat;
+            yamlFormat.shortcut = assetFormat.shortcut;
+        if (Object.keys(yamlFormat).length > 0) {
+            return yamlFormat;
         }
     }
     addFromAsset(asset) {
+        // search the “complete” sample from the property “samples”.
+        let completeYamlFromSamples;
         if (asset.yaml.samples != null) {
-            for (const sampleSpec of asset.yaml.samples) {
-                this.add(asset, sampleSpec);
+            for (let i = 0; i < asset.yaml.samples.length; i++) {
+                const sampleYaml = asset.yaml.samples[i];
+                if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
+                    completeYamlFromSamples = sampleYaml;
+                    asset.yaml.samples.splice(i, 1);
+                    break;
+                }
             }
         }
-        const sampleFormat = this.buildSampleYamlFromAssetYaml(asset.yaml);
-        if (sampleFormat != null)
-            this.add(asset, sampleFormat);
+        // First add default sample “complete”
+        const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml);
+        if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
+            throw new Error('Duplicate definition of the default complete sample');
+        }
+        else if (completeYamlFromSamples != null) {
+            this.addSample(asset, completeYamlFromSamples);
+        }
+        else if (completeYamlFromRoot != null) {
+            this.addSample(asset, completeYamlFromRoot);
+        }
+        else {
+            this.addSample(asset, {});
+        }
+        let counter = 0;
+        // Add samples from the YAML property “samples”
+        if (asset.yaml.samples != null) {
+            for (const sampleSpec of asset.yaml.samples) {
+                if (sampleSpec.ref == null && sampleSpec.title == null) {
+                    counter++;
+                    sampleSpec.ref = `sample${counter}`;
+                    sampleSpec.title = `Ausschnitt ${counter}`;
+                }
+                this.addSample(asset, sampleSpec);
+            }
+        }
     }
 }
 exports.SampleCollection = SampleCollection;
