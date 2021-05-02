@@ -11,6 +11,7 @@ import { convertDurationToSeconds } from '@bldr/core-browser';
 import { createHtmlElement } from './html-elements';
 import { Interval, TimeOut } from './timer';
 import { CustomEventsManager } from './events';
+import { sampleCache } from './cache';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -148,16 +149,11 @@ export class Sample {
         this.playbackState = 'stopped';
     }
     /**
-     * The URI using the `id` authority.
+     * The URI using two `ref` authorities, one from the asset and one from the sample.
+     * for example: `ref:Fuer-Elise#complete`
      */
     get uriRef() {
         return `${this.asset.ref}#${this.ref}`;
-    }
-    /**
-     * The URI using the `uuid` authority.
-     */
-    get uriUuid() {
-        return `${this.asset.uuid}#${this.ref}`;
     }
     /**
      * If the sample is the complete media file get the title of the media file.
@@ -545,11 +541,12 @@ export class SampleCollection {
             return this.cache[ref];
         }
     }
-    getAllAsArray() {
+    getAll() {
         return Object.values(this.cache);
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
+        sampleCache.add(sample);
         if (this.cache[sample.ref] != null) {
             throw new Error(`Duplicate sample with the id ${sample.ref}`);
         }

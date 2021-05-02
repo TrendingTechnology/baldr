@@ -14,6 +14,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const html_elements_1 = require("./html-elements");
 const timer_1 = require("./timer");
 const events_1 = require("./events");
+const cache_1 = require("./cache");
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -152,16 +153,11 @@ class Sample {
         this.playbackState = 'stopped';
     }
     /**
-     * The URI using the `id` authority.
+     * The URI using two `ref` authorities, one from the asset and one from the sample.
+     * for example: `ref:Fuer-Elise#complete`
      */
     get uriRef() {
         return `${this.asset.ref}#${this.ref}`;
-    }
-    /**
-     * The URI using the `uuid` authority.
-     */
-    get uriUuid() {
-        return `${this.asset.uuid}#${this.ref}`;
     }
     /**
      * If the sample is the complete media file get the title of the media file.
@@ -550,11 +546,12 @@ class SampleCollection {
             return this.cache[ref];
         }
     }
-    getAllAsArray() {
+    getAll() {
         return Object.values(this.cache);
     }
     add(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
+        cache_1.sampleCache.add(sample);
         if (this.cache[sample.ref] != null) {
             throw new Error(`Duplicate sample with the id ${sample.ref}`);
         }

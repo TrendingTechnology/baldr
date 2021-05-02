@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.MediaUriCache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.SampleCache = exports.MediaUriCache = void 0;
 const sample_1 = require("./sample");
 /**
  * Media assets have two URIs: uuid:... and ref:...
@@ -41,6 +41,29 @@ class MediaUriCache {
     }
 }
 exports.MediaUriCache = MediaUriCache;
+class SampleCache {
+    constructor() {
+        this.cache = {};
+    }
+    add(sample) {
+        if (this.cache[sample.uriRef] == null) {
+            this.cache[sample.uriRef] = sample;
+            return true;
+        }
+        return false;
+    }
+    getAll() {
+        return Object.values(this.cache);
+    }
+    reset() {
+        for (const uriRef in this.cache) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.cache[uriRef];
+        }
+    }
+}
+exports.SampleCache = SampleCache;
+exports.sampleCache = new SampleCache();
 class AssetCache {
     constructor() {
         this.cache = {};

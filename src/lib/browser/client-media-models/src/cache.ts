@@ -1,4 +1,4 @@
-import { shortcutManager } from './sample'
+import { Sample, shortcutManager } from './sample'
 import { ClientMediaAsset } from './asset'
 
 /**
@@ -47,6 +47,35 @@ export class MediaUriCache {
   }
 }
 
+export class SampleCache {
+  private cache: { [ref: string]: Sample }
+
+  constructor () {
+    this.cache = {}
+  }
+
+  add (sample: Sample): boolean {
+    if (this.cache[sample.uriRef] == null) {
+      this.cache[sample.uriRef] = sample
+      return true
+    }
+    return false
+  }
+
+  getAll (): Sample[] {
+    return Object.values(this.cache)
+  }
+
+  reset (): void {
+    for (const uriRef in this.cache) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.cache[uriRef]
+    }
+  }
+}
+
+export const sampleCache = new SampleCache()
+
 export class AssetCache {
   private cache: { [ref: string]: ClientMediaAsset }
 
@@ -88,6 +117,7 @@ export class AssetCache {
 export const assetCache = new AssetCache()
 
 export function resetMediaCache (): void {
+  sampleCache.reset()
   assetCache.reset()
   shortcutManager.reset()
 }

@@ -98,13 +98,10 @@ export declare class Sample {
     playbackState: PlaybackState;
     constructor(asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat);
     /**
-     * The URI using the `id` authority.
+     * The URI using two `ref` authorities, one from the asset and one from the sample.
+     * for example: `ref:Fuer-Elise#complete`
      */
     get uriRef(): string;
-    /**
-     * The URI using the `uuid` authority.
-     */
-    get uriUuid(): string;
     /**
      * If the sample is the complete media file get the title of the media file.
      * For example `Glocken (Das große Tor von Kiew)`
@@ -243,7 +240,7 @@ export declare class SampleCollection {
      * @returns A sample.
      */
     get(ref: string): Sample | undefined;
-    getAllAsArray(): Sample[];
+    getAll(): Sample[];
     private add;
     private buildSampleYamlFromAssetYaml;
     private addFromAsset;

@@ -5,6 +5,7 @@ import { ClientMediaAsset } from './asset'
 import { createHtmlElement } from './html-elements'
 import { Interval, TimeOut } from './timer'
 import { CustomEventsManager } from './events'
+import { sampleCache } from './cache'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -232,17 +233,11 @@ export class Sample {
   }
 
   /**
-   * The URI using the `id` authority.
+   * The URI using two `ref` authorities, one from the asset and one from the sample.
+   * for example: `ref:Fuer-Elise#complete`
    */
   get uriRef (): string {
     return `${this.asset.ref}#${this.ref}`
-  }
-
-  /**
-   * The URI using the `uuid` authority.
-   */
-  get uriUuid (): string {
-    return `${this.asset.uuid}#${this.ref}`
   }
 
   /**
@@ -642,12 +637,13 @@ export class SampleCollection {
     }
   }
 
-  getAllAsArray (): Sample[] {
+  getAll (): Sample[] {
     return Object.values(this.cache)
   }
 
   private add (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
+    sampleCache.add(sample)
     if (this.cache[sample.ref] != null) {
       throw new Error(`Duplicate sample with the id ${sample.ref}`)
     }

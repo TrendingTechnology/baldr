@@ -37,6 +37,28 @@ export class MediaUriCache {
         }
     }
 }
+export class SampleCache {
+    constructor() {
+        this.cache = {};
+    }
+    add(sample) {
+        if (this.cache[sample.uriRef] == null) {
+            this.cache[sample.uriRef] = sample;
+            return true;
+        }
+        return false;
+    }
+    getAll() {
+        return Object.values(this.cache);
+    }
+    reset() {
+        for (const uriRef in this.cache) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.cache[uriRef];
+        }
+    }
+}
+export const sampleCache = new SampleCache();
 export class AssetCache {
     constructor() {
         this.cache = {};
