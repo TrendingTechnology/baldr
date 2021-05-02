@@ -12,6 +12,7 @@ exports.TitleTree = exports.DeepTitle = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const config_1 = __importDefault(require("@bldr/config"));
 /**
  * Hold some meta data about a folder and its title.
  */
@@ -19,13 +20,15 @@ class FolderTitle {
     /**
      * @param data - Some meta data about the folder.
      */
-    constructor({ title, subtitle, folderName, path, hasPraesentation, level }) {
+    constructor({ title, subtitle, folderName, relPath, hasPraesentation, level }) {
         this.title = title;
         if (subtitle != null)
             this.subtitle = subtitle;
         this.folderName = folderName;
-        this.path = path;
-        this.hasPraesentation = (hasPraesentation != null && hasPraesentation);
+        relPath = relPath.replace(config_1.default.mediaServer.basePath, '');
+        relPath = relPath.replace(/^\//, '');
+        this.relPath = relPath;
+        this.hasPraesentation = hasPraesentation;
         this.level = level;
     }
 }
@@ -58,17 +61,27 @@ class DeepTitle {
     readTitleTxt(filePath) {
         const titleRaw = fs_1.default.readFileSync(filePath, { encoding: 'utf-8' });
         const titles = titleRaw.split('\n');
-        const folderTitle = new FolderTitle({});
+        let title;
+        if (titles.length === 0) {
+            throw new Error(`${filePath} is empty and has no title.`);
+        }
         if (titles.length > 0) {
-            folderTitle.title = titles[0];
+            title = titles[0];
         }
+        if (title == null) {
+            throw new Error(`No title found in title.txt ${filePath}.`);
+        }
+        let subtitle;
         if (titles.length > 1 && titles[1] != null && titles[1] !== '') {
-            folderTitle.subtitle = titles[1];
+            subtitle = titles[1];
         }
+        let hasPraesentation = false;
         if (fs_1.default.existsSync(path_1.default.join(path_1.default.dirname(filePath), 'Praesentation.baldr.yml'))) {
-            folderTitle.hasPraesentation = true;
+            hasPraesentation = true;
         }
-        return folderTitle;
+        const relPath = path_1.default.dirname(filePath);
+        const folderName = path_1.default.basename(relPath);
+        return new FolderTitle({ title, subtitle, hasPraesentation, relPath, folderName });
     }
     /**
      * Generate the path of the title.txt file `/var/data/baldr/media/05/title.txt`
@@ -135,8 +148,6 @@ class DeepTitle {
         let level = 1;
         for (const titleTxtPath of titleTxtPaths) {
             const folderTitle = this.readTitleTxt(titleTxtPath);
-            folderTitle.path = path_1.default.dirname(titleTxtPath);
-            folderTitle.folderName = path_1.default.basename(folderTitle.path);
             folderTitle.level = level++;
             this.titles.push(folderTitle);
         }

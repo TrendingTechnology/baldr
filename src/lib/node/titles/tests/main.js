@@ -9,6 +9,9 @@ describe('Package “@bldr/titles”', function () {
     assert.strictEqual(deep.title, 'Hör-Labyrinth')
     assert.strictEqual(deep.allTitles, '5. Jahrgangsstufe / Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen / Hör-Labyrinth')
     assert.strictEqual(deep.subtitle, 'Instrumente des Sinfonieorchesters')
+    assert.strictEqual(deep.titles[0].relPath, '05')
+    assert.strictEqual(deep.titles[1].relPath, '05/40_Grundlagen')
+    assert.strictEqual(deep.titles[2].relPath, '05/40_Grundlagen/97_Instrumente')
   })
 
   it('11/30_Politik/10_Lieder/10_Arbeiterlied-Weber/Praesentation.baldr.yml', function () {

@@ -8,7 +8,42 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { PresentationTypes } from '@bldr/type-definitions'
+import config from '@bldr/config'
+
+interface FolderTitleSpec {
+  /**
+   * The title. It is the first line in the file `titles.txt`.
+   */
+  title: string
+
+  /**
+   * The subtitle. It is the second line in the file `titles.txt`.
+   */
+  subtitle?: string
+
+  /**
+   * The name of the parent folder, for example `10_Konzertierende-Musiker`
+   */
+  folderName: string
+
+  /**
+   * The relative path of the folder inside the base path, for example
+   * `12/10_Interpreten/10_Konzertierende-Musiker`.
+   */
+  relPath: string
+
+  /**
+   * True if the folder contains a file with the file name
+   * `Praesentation.baldr.yml`
+   */
+  hasPraesentation: boolean
+
+  /**
+   * The level in a folder title tree, starting with 1. 1 ist the top level.
+   */
+  level?: number
+}
 
 /**
  * Hold some meta data about a folder and its title.
@@ -33,7 +68,7 @@ class FolderTitle {
    * The relative path of the folder inside the base path, for example
    * `12/10_Interpreten/10_Konzertierende-Musiker`.
    */
-  path: string
+  relPath: string
 
   /**
    * True if the folder contains a file with the file name
@@ -44,17 +79,19 @@ class FolderTitle {
   /**
    * The level in a folder title tree, starting with 1. 1 ist the top level.
    */
-  level: number
+  level?: number
 
   /**
    * @param data - Some meta data about the folder.
    */
-  constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: StringIndexedObject) {
+  constructor ({ title, subtitle, folderName, relPath, hasPraesentation, level }: FolderTitleSpec) {
     this.title = title
     if (subtitle != null) this.subtitle = subtitle
     this.folderName = folderName
-    this.path = path
-    this.hasPraesentation = (hasPraesentation != null && hasPraesentation)
+    relPath = relPath.replace(config.mediaServer.basePath, '')
+    relPath = relPath.replace(/^\//, '')
+    this.relPath = relPath
+    this.hasPraesentation = hasPraesentation
     this.level = level
   }
 }
@@ -101,17 +138,33 @@ export class DeepTitle {
   private readTitleTxt (filePath: string): FolderTitle {
     const titleRaw = fs.readFileSync(filePath, { encoding: 'utf-8' })
     const titles = titleRaw.split('\n')
-    const folderTitle = new FolderTitle({})
+
+    let title: string | undefined
+    if (titles.length === 0) {
+      throw new Error(`${filePath} is empty and has no title.`)
+    }
     if (titles.length > 0) {
-      folderTitle.title = titles[0]
+      title = titles[0]
     }
+    if (title == null) {
+      throw new Error(`No title found in title.txt ${filePath}.`)
+    }
+
+    let subtitle: string | undefined
     if (titles.length > 1 && titles[1] != null && titles[1] !== '') {
-      folderTitle.subtitle = titles[1]
+      subtitle = titles[1]
     }
+
+    let hasPraesentation: boolean = false
     if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
-      folderTitle.hasPraesentation = true
+      hasPraesentation = true
     }
-    return folderTitle
+
+    const relPath = path.dirname(filePath)
+
+    const folderName = path.basename(relPath)
+
+    return new FolderTitle({ title, subtitle, hasPraesentation, relPath, folderName })
   }
 
   /**
@@ -179,8 +232,6 @@ export class DeepTitle {
     let level: number = 1
     for (const titleTxtPath of titleTxtPaths) {
       const folderTitle = this.readTitleTxt(titleTxtPath)
-      folderTitle.path = path.dirname(titleTxtPath)
-      folderTitle.folderName = path.basename(folderTitle.path)
       folderTitle.level = level++
       this.titles.push(folderTitle)
     }

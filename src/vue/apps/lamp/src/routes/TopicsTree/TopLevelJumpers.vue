@@ -39,7 +39,7 @@ export default {
         if (topic) {
           topics.push({
             title: topic.title,
-            path: `/topics/${topic.path}`
+            path: `/topics/${topic.relPath}`
           })
         }
       }
