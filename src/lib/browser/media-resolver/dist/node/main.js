@@ -60,32 +60,6 @@ class Resolver {
         });
     }
     /**
-     * @private
-     *
-     * @param {String} uri - For example `uuid:... ref:...`
-     * @param {Object} data - Object from the REST API.
-     *
-     * @returns {module:@bldr/media-client.ClientMediaAsset}
-     */
-    // createAssetFromRestData_ (uri, data): ClientMediaAsset {
-    //   let asset
-    //   data.uri = uri
-    //   if (data.multiPartCount) {
-    //     // asset = new MultiPartAsset({ uri })
-    //     // store.commit('media/addMultiPartUri', asset.uriRaw)
-    //   } else {
-    //     asset = new ClientMediaAsset({ uri })
-    //     console.log(new ClientMediaAsset(data))
-    //   }
-    //   extractMediaUrisRecursive(data, this.linkedUris)
-    //   asset.addProperties(data)
-    //   asset.httpUrl = this.resolveHttpUrl_(asset)
-    //   if (asset.previewImage) {
-    //     asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
-    //   }
-    //   return asset
-    // }
-    /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
      */
@@ -96,8 +70,7 @@ class Resolver {
                 return cachedAsset;
             const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${exports.httpRequest.baseUrl}/${config_1.default.mediaServer.urlFillIn}/${raw.path}`;
-            const asset = new client_media_models_1.ClientMediaAsset(uri, httpUrl, raw);
-            return asset;
+            return new client_media_models_1.ClientMediaAsset(uri, httpUrl, raw);
         });
     }
     /**

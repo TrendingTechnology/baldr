@@ -22,14 +22,6 @@ export declare class Resolver {
      */
     private queryMediaServer;
     /**
-     * @private
-     *
-     * @param {String} uri - For example `uuid:... ref:...`
-     * @param {Object} data - Object from the REST API.
-     *
-     * @returns {module:@bldr/media-client.ClientMediaAsset}
-     */
-    /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
      */

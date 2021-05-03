@@ -93,9 +93,7 @@ class AssetCache extends Cache {
     }
     get(uuidOrRef) {
         const id = exports.mediaUriCache.getRef(uuidOrRef);
-        console.log(this.cache);
         if (id != null && this.cache[id] != null) {
-            console.log('from cache' + id);
             return super.get(id);
         }
     }
