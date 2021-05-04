@@ -1,4 +1,5 @@
 import { shortcutManager } from './sample';
+import { MediaUri } from './media-uri';
 export class Cache {
     constructor() {
         this.cache = {};
@@ -37,37 +38,78 @@ export class Cache {
     }
 }
 /**
- * Media assets have two URIs: uuid:... and ref:...
+ * Media assets have two URI schemes: `uuid:` and `ref:`. Internally we use only
+ * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
+ * URIs.
  */
 export class MediaUriCache {
     constructor() {
-        this.refs = {};
         this.uuids = {};
     }
+    /**
+     *
+     * @param ref The authority in the reference (`ref`) scheme. The prefixed
+     *   scheme can be omitted.
+     * @param uuid The authority in the Universally Unique Identifier (`uuid`)
+     *   scheme. The prefixed scheme can be omitted.
+     *
+     * @returns True, if the uri authority pair was successfully added, false
+     *   if the pair was already added.
+     */
     addPair(ref, uuid) {
-        if (this.refs[ref] == null && this.uuids[uuid] == null) {
-            this.refs[ref] = uuid;
+        ref = MediaUri.removeScheme(ref);
+        uuid = MediaUri.removeScheme(uuid);
+        if (this.uuids[uuid] == null) {
             this.uuids[uuid] = ref;
             return true;
         }
         return false;
     }
+    /**
+     * Get the reference authority from the Universally Unique Identifier (uuid)
+     * authority. The input must be specified without the scheme prefixes and the
+     * output is prefixed with the `ref:` scheme.
+     *
+     * @param uuid With out the scheme prefix.
+     *
+     * @returns The reference authority with `ref:`
+     */
     getRefFromUuid(uuid) {
+        uuid = MediaUri.removeScheme(uuid);
         if (this.uuids[uuid] != null) {
-            return this.uuids[uuid];
+            return 'ref:' + this.uuids[uuid];
         }
     }
+    /**
+     * Get the fully qualified media URI using the reference `ref` scheme. A URI
+     * specified with `uuid` is converted to the `ref` scheme. A fragment
+     * `#fragment` can be specified.
+     *
+     * @param uuidOrRef Scheme prefix is required, for example `ref:Mozart` or
+     * `uuid:…`
+     *
+     * @returns A fully qualified media URI using the reference `ref` scheme, for
+     * example `ref:Alla-Turca#complete`
+     */
     getRef(uuidOrRef) {
-        if (uuidOrRef.indexOf('uuid:') === 0) {
-            return this.getRefFromUuid(uuidOrRef);
+        let prefix;
+        const splittedUri = MediaUri.splitByFragment(uuidOrRef);
+        if (splittedUri.prefix.indexOf('uuid:') === 0) {
+            prefix = this.getRefFromUuid(splittedUri.prefix);
         }
-        return uuidOrRef;
+        else {
+            prefix = splittedUri.prefix;
+        }
+        if (prefix != null) {
+            if (splittedUri.fragment == null) {
+                return prefix;
+            }
+            else {
+                return `${prefix}#${splittedUri.fragment}`;
+            }
+        }
     }
     reset() {
-        for (const ref in this.refs) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.refs[ref];
-        }
         for (const uuid in this.uuids) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.uuids[uuid];
