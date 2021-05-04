@@ -4,37 +4,25 @@ const assert = require('assert')
 const { createAsset } = require('./_helper.js')
 const { assetCache, sampleCache, AssetCache, resetMediaCache, mediaUriCache } = require('../dist/node/cache.js')
 
-resetMediaCache()
-
-const asset1 = createAsset({ ref: 'test1' })
-const asset2 = createAsset({ ref: 'test2' })
-const asset3 = createAsset({ ref: 'test3' })
-
 describe('Class “AssetCache()”', function () {
   it('Method “add()”', function () {
     resetMediaCache()
-    const cache = new AssetCache()
-    cache.add(asset1.ref, asset1)
-    cache.add(asset2.ref, asset2)
-    cache.add(asset3.ref, asset3)
-    assert.strictEqual(cache.size, 3)
+    createAsset({ ref: 'test1' })
+    createAsset({ ref: 'test2' })
+    createAsset({ ref: 'test3' })
+    assert.strictEqual(assetCache.size, 3)
   })
 
   it('Method “get(ref)”', function () {
     resetMediaCache()
-    const cache = new AssetCache()
-    cache.add(asset1.ref, asset1)
+    const asset1 = createAsset({ ref: 'test1' })
     const asset = assetCache.get(asset1.ref)
-    console.log(cache)
-    console.log(asset1.ref)
-    console.log(mediaUriCache)
     assert.strictEqual(asset.ref, 'test1')
   })
 
   it('Method “getAll()”', function () {
     resetMediaCache()
-    const cache = new AssetCache()
-    cache.add(asset1.ref, asset1)
+    createAsset({ ref: 'test1' })
     const assets = assetCache.getAll()
     assert.strictEqual(assets[0].ref, 'test1')
   })

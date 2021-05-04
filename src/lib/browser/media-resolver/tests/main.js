@@ -92,6 +92,8 @@ describe('Package “@bldr/media-resolver”', function () {
     resetMediaCache()
     // ref: Bolero_HB_Bolero
     await resolveSingleByUuid('538204e4-6171-42d3-924c-b3f80a954a1a')
+    const samples = sampleCache.getAll()
+    assert.strictEqual(samples.length, 10)
     assert.strictEqual(sampleCache.size, 10)
   })
 })
