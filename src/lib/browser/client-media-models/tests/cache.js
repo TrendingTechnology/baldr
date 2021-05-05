@@ -17,14 +17,14 @@ describe('Class “AssetCache()”', function () {
     resetMediaCache()
     const asset1 = createAsset({ ref: 'test1' })
     const asset = assetCache.get(asset1.ref)
-    assert.strictEqual(asset.ref, 'test1')
+    assert.strictEqual(asset.ref, 'ref:test1')
   })
 
   it('Method “getAll()”', function () {
     resetMediaCache()
     createAsset({ ref: 'test1' })
     const assets = assetCache.getAll()
-    assert.strictEqual(assets[0].ref, 'test1')
+    assert.strictEqual(assets[0].ref, 'ref:test1')
   })
 
   it('Getter “size”', function () {

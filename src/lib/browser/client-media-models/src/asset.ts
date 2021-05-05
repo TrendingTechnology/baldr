@@ -71,21 +71,23 @@ export class ClientMediaAsset {
     if (this.isPlayable) {
       this.samples = new SampleCollection(this)
     }
-    assetCache.add(this.yaml.ref, this)
+    assetCache.add(this.ref, this)
   }
 
   /**
-   * The URI using the `ref` scheme.
+   * The reference authority of the URI using the `ref` scheme. The returned
+   * string is prefixed with `ref:`.
    */
   get ref (): string {
-    return this.yaml.ref
+    return 'ref:' + this.yaml.ref
   }
 
   /**
-   * The URI using the `uuid` scheme.
+   * The UUID authority of the URI using the `uuid` scheme. The returned
+   * string is prefixed with `uuid:`.
    */
   get uuid (): string {
-    return this.yaml.uuid
+    return 'uuid:' + this.yaml.uuid
   }
 
   /**

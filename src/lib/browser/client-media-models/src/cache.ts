@@ -53,7 +53,7 @@ export class Cache <T> {
  * URIs.
  */
 export class MediaUriCache {
-  private uuids: { [uiid: string]: string }
+  private uuids: { [uuid: string]: string }
 
   constructor () {
     this.uuids = {}

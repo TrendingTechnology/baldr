@@ -101,7 +101,8 @@ class Resolver {
                 for (const asset of yield Promise.all(promises)) {
                     client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragments);
                     assets.push(asset);
-                    urisWithoutFragments.delete(asset.uri.uriWithoutFragment);
+                    urisWithoutFragments.delete(asset.ref);
+                    urisWithoutFragments.delete(asset.uuid);
                 }
             }
             return assets;

@@ -35,11 +35,13 @@ export declare class ClientMediaAsset {
      */
     constructor(uri: string, httpUrl: string, yaml: AssetType.RestApiRaw);
     /**
-     * The URI using the `ref` scheme.
+     * The reference authority of the URI using the `ref` scheme. The returned
+     * string is prefixed with `ref:`.
      */
     get ref(): string;
     /**
-     * The URI using the `uuid` scheme.
+     * The UUID authority of the URI using the `uuid` scheme. The returned
+     * string is prefixed with `uuid:`.
      */
     get uuid(): string;
     /**

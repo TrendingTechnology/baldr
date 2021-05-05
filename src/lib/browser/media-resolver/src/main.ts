@@ -95,7 +95,8 @@ export class Resolver {
       for (const asset of await Promise.all<ClientMediaAsset>(promises)) {
         findMediaUris(asset.yaml, urisWithoutFragments)
         assets.push(asset)
-        urisWithoutFragments.delete(asset.uri.uriWithoutFragment)
+        urisWithoutFragments.delete(asset.ref)
+        urisWithoutFragments.delete(asset.uuid)
       }
     }
     return assets
