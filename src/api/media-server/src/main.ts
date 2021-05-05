@@ -73,9 +73,9 @@ import express from 'express'
 // Project packages.
 import config from '@bldr/config'
 import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
-import { convertPropertiesSnakeToCamel, convertFromYamlRaw } from '@bldr/yaml'
+import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
-import { walk } from '@bldr/media-manager'
+import { walk, loadYaml } from '@bldr/media-manager'
 import { TitleTree, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
@@ -141,27 +141,6 @@ class ServerMediaFile {
     this.absPath_ = path.resolve(filePath)
     this.path = filePath.replace(basePath, '').replace(/^\//, '')
     this.filename = path.basename(filePath)
-  }
-
-  /**
-   * Parse the info file of a media asset or the presenation file itself.
-   *
-   * Each media file can have a info file that stores additional
-   * metadata informations.
-   *
-   * File path:
-   * `/home/baldr/beethoven.jpg`
-   *
-   * Info file in the YAML file format:
-   * `/home/baldr/beethoven.jpg.yml`
-   *
-   * @param filePath - The path of the YAML file.
-   */
-  protected readYaml_ (filePath: string): StringIndexedObject {
-    if (fs.existsSync(filePath)) {
-      return convertFromYamlRaw(fs.readFileSync(filePath, 'utf8')) as StringIndexedObject
-    }
-    return {}
   }
 
   /**
@@ -248,7 +227,7 @@ class ServerMediaAsset extends ServerMediaFile {
   constructor (filePath: string) {
     super(filePath)
     this.infoFile_ = `${this.absPath_}.yml`
-    const data = this.readYaml_(this.infoFile_)
+    const data = loadYaml(this.infoFile_)
     this.importProperties(data)
     this.previewImage = false
   }
@@ -340,7 +319,7 @@ class ServerPresentation extends ServerMediaFile {
 
   constructor (filePath: string) {
     super(filePath)
-    const data = this.readYaml_(filePath)
+    const data = loadYaml(filePath)
     if (data != null) this.importProperties(data)
 
     const deepTitle = new DeepTitle(filePath)

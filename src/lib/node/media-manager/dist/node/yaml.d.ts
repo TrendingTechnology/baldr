@@ -1,18 +1,14 @@
-import { AssetType } from '@bldr/type-definitions';
+import { AssetType, StringIndexedObject } from '@bldr/type-definitions';
 /**
- * Load a YAML file and convert into a Javascript object. The string
- * properties are converted in the `camleCase` format. The function
- * returns a object with string properties to save Visual Studio Code
- * type checks (Not AssetType, PresentationTypes etc).
+ * Load a YAML file and convert it into a Javascript object. The string
+ * properties are converted into the `camleCase` format.
  *
- * @param filePath - The path of a YAML file.
+ * @param filePath - The path of a YAML file itself.
  *
  * @returns The parsed YAML file as an object. The string properties are
- * converted in the `camleCase` format.
+ * converted into the `camleCase` format.
  */
-export declare function loadYaml(filePath: string): {
-    [key: string]: any;
-};
+export declare function loadYaml(filePath: string): StringIndexedObject;
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
@@ -24,9 +20,7 @@ export declare function loadYaml(filePath: string): {
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-export declare function loadMetaDataYaml(filePath: string): {
-    [key: string]: any;
-};
+export declare function loadMetaDataYaml(filePath: string): StringIndexedObject;
 /**
  * Convert some data (usually Javascript objets) into the YAML format
  * and write the string into a text file. The property names are

@@ -154,26 +154,6 @@ var ServerMediaFile = /** @class */ (function () {
         this.filename = path_1.default.basename(filePath);
     }
     /**
-     * Parse the info file of a media asset or the presenation file itself.
-     *
-     * Each media file can have a info file that stores additional
-     * metadata informations.
-     *
-     * File path:
-     * `/home/baldr/beethoven.jpg`
-     *
-     * Info file in the YAML file format:
-     * `/home/baldr/beethoven.jpg.yml`
-     *
-     * @param filePath - The path of the YAML file.
-     */
-    ServerMediaFile.prototype.readYaml_ = function (filePath) {
-        if (fs_1.default.existsSync(filePath)) {
-            return yaml_1.convertFromYamlRaw(fs_1.default.readFileSync(filePath, 'utf8'));
-        }
-        return {};
-    };
-    /**
      * Add metadata from the file system, like file size or timeModifed.
      */
     ServerMediaFile.prototype.addFileInfos = function () {
@@ -241,7 +221,7 @@ var ServerMediaAsset = /** @class */ (function (_super) {
     function ServerMediaAsset(filePath) {
         var _this = _super.call(this, filePath) || this;
         _this.infoFile_ = _this.absPath_ + ".yml";
-        var data = _this.readYaml_(_this.infoFile_);
+        var data = media_manager_1.loadYaml(_this.infoFile_);
         _this.importProperties(data);
         _this.previewImage = false;
         return _this;
@@ -309,7 +289,7 @@ var ServerPresentation = /** @class */ (function (_super) {
     function ServerPresentation(filePath) {
         var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
-        var data = _this.readYaml_(filePath);
+        var data = media_manager_1.loadYaml(filePath);
         if (data != null)
             _this.importProperties(data);
         var deepTitle = new titles_1.DeepTitle(filePath);

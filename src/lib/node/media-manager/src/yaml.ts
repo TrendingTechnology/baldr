@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { AssetType } from '@bldr/type-definitions'
+import { AssetType, StringIndexedObject } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
 import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 
@@ -9,17 +9,15 @@ import { Asset } from './media-file-classes'
 import { categoriesManagement } from '@bldr/media-categories'
 
 /**
- * Load a YAML file and convert into a Javascript object. The string
- * properties are converted in the `camleCase` format. The function
- * returns a object with string properties to save Visual Studio Code
- * type checks (Not AssetType, PresentationTypes etc).
+ * Load a YAML file and convert it into a Javascript object. The string
+ * properties are converted into the `camleCase` format.
  *
- * @param filePath - The path of a YAML file.
+ * @param filePath - The path of a YAML file itself.
  *
  * @returns The parsed YAML file as an object. The string properties are
- * converted in the `camleCase` format.
+ * converted into the `camleCase` format.
  */
-export function loadYaml (filePath: string): { [key: string]: any } {
+export function loadYaml (filePath: string): StringIndexedObject {
   return convertFromYaml(readFile(filePath))
 }
 
@@ -34,7 +32,7 @@ export function loadYaml (filePath: string): { [key: string]: any } {
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-export function loadMetaDataYaml (filePath: string): { [key: string]: any } {
+export function loadMetaDataYaml (filePath: string): StringIndexedObject {
   return loadYaml(`${filePath}.yml`)
 }
 

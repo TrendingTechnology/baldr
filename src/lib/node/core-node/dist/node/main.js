@@ -113,6 +113,9 @@ exports.fetchFile = fetchFile;
  * @returns The content of the file in the `utf-8` format.
  */
 function readFile(filePath) {
+    if (!fs_1.default.existsSync(filePath)) {
+        throw new Error(`The file “${filePath}” cannot be read because it does not exist.`);
+    }
     return fs_1.default.readFileSync(filePath, { encoding: 'utf-8' });
 }
 exports.readFile = readFile;

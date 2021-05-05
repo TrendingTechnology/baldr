@@ -11,15 +11,13 @@ const core_browser_1 = require("@bldr/core-browser");
 const media_file_classes_1 = require("./media-file-classes");
 const media_categories_1 = require("@bldr/media-categories");
 /**
- * Load a YAML file and convert into a Javascript object. The string
- * properties are converted in the `camleCase` format. The function
- * returns a object with string properties to save Visual Studio Code
- * type checks (Not AssetType, PresentationTypes etc).
+ * Load a YAML file and convert it into a Javascript object. The string
+ * properties are converted into the `camleCase` format.
  *
- * @param filePath - The path of a YAML file.
+ * @param filePath - The path of a YAML file itself.
  *
  * @returns The parsed YAML file as an object. The string properties are
- * converted in the `camleCase` format.
+ * converted into the `camleCase` format.
  */
 function loadYaml(filePath) {
     return yaml_1.convertFromYaml(core_node_1.readFile(filePath));
