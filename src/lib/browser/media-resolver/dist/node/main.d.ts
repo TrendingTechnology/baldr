@@ -24,6 +24,10 @@ export declare class Resolver {
     /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
+     *
+     * @param uri A media URI (Uniform Resource Identifier) with an optional
+     *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
+     *   suffix is removed.
      */
     private resolveSingle;
     /**

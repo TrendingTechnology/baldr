@@ -127,6 +127,20 @@ export class MediaUri {
   }
 
   /**
+   * Remove the fragment suffix of an media URI.
+   *
+   * @param uri A media URI (Uniform Resource Identifier) with an optional
+   *   fragment suffix, for example `ref:Yesterday#complete`.
+   *
+   * @returns A media URI (Uniform Resource Identifier) without an optional
+   *   fragment suffix, for example `ref:Yesterday`.
+   */
+  static removeFragment (uri: string): string {
+    const splitted = MediaUri.splitByFragment(uri)
+    return splitted.prefix
+  }
+
+  /**
    * Remove the scheme prefix from a media URI, for example `ref:Fuer-Elise` is
    * converted to `Fuer-Elise`.
    *
@@ -168,6 +182,12 @@ export function makeMediaUris (uris: string | string[] | Set<string>): MediaUri[
   return mediaUris
 }
 
+/**
+ * Find recursively media URIs. Suffix fragments will be removed.
+ *
+ * @param data An object, an array or a string.
+ * @param uris This set is filled with the results.
+ */
 export function findMediaUris (data: any, uris: Set<string>): void {
   // Array
   if (Array.isArray(data)) {
@@ -181,7 +201,7 @@ export function findMediaUris (data: any, uris: Set<string>): void {
     }
   } else if (typeof data === 'string') {
     if (MediaUri.check(data)) {
-      uris.add(data)
+      uris.add(MediaUri.removeFragment(data))
     }
   }
 }

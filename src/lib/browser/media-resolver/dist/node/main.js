@@ -62,6 +62,10 @@ class Resolver {
     /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
+     *
+     * @param uri A media URI (Uniform Resource Identifier) with an optional
+     *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
+     *   suffix is removed.
      */
     resolveSingle(uri) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -83,17 +87,21 @@ class Resolver {
     resolve(uris) {
         return __awaiter(this, void 0, void 0, function* () {
             const mediaUris = core_browser_1.makeSet(uris);
+            const urisWithoutFragements = new Set();
+            for (const uri of mediaUris) {
+                urisWithoutFragements.add(client_media_models_1.MediaUri.removeFragment(uri));
+            }
             const assets = [];
             // Resolve the main media URIs
-            while (mediaUris.size > 0) {
+            while (urisWithoutFragements.size > 0) {
                 const promises = [];
-                for (const mediaUri of mediaUris) {
-                    promises.push(this.resolveSingle(mediaUri));
+                for (const uri of urisWithoutFragements) {
+                    promises.push(this.resolveSingle(uri));
                 }
                 for (const asset of yield Promise.all(promises)) {
-                    client_media_models_1.findMediaUris(asset.yaml, mediaUris);
+                    client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragements);
                     assets.push(asset);
-                    mediaUris.delete(asset.uri.raw);
+                    mediaUris.delete(asset.uri.uriWithoutFragment);
                 }
             }
             return assets;

@@ -96,4 +96,30 @@ describe('Package “@bldr/media-resolver”', function () {
     assert.strictEqual(samples.length, 10)
     assert.strictEqual(sampleCache.size, 10)
   })
+
+  describe('Resolve URI with fragments', function () {
+
+    // ref: 'Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew',
+    // uuid: 'c64047d2-983d-4009-a35f-02c95534cb53',
+
+    it('uuid without a fragment', async function () {
+      const assets = await resolver.resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53')
+      assert.strictEqual(assets[0].yaml.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    })
+
+    it('ref without a fragment', async function () {
+      const assets = await resolver.resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew')
+      assert.strictEqual(assets[0].yaml.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    })
+
+    it('uuid with a fragment', async function () {
+      const assets = await resolver.resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete')
+      assert.strictEqual(assets[0].yaml.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    })
+
+    it('ref with a fragment', async function () {
+      const assets = await resolver.resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew#complete')
+      assert.strictEqual(assets[0].yaml.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    })
+  })
 })
