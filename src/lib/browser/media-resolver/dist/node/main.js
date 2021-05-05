@@ -87,21 +87,21 @@ class Resolver {
     resolve(uris) {
         return __awaiter(this, void 0, void 0, function* () {
             const mediaUris = core_browser_1.makeSet(uris);
-            const urisWithoutFragements = new Set();
+            const urisWithoutFragments = new Set();
             for (const uri of mediaUris) {
-                urisWithoutFragements.add(client_media_models_1.MediaUri.removeFragment(uri));
+                urisWithoutFragments.add(client_media_models_1.MediaUri.removeFragment(uri));
             }
             const assets = [];
             // Resolve the main media URIs
-            while (urisWithoutFragements.size > 0) {
+            while (urisWithoutFragments.size > 0) {
                 const promises = [];
-                for (const uri of urisWithoutFragements) {
+                for (const uri of urisWithoutFragments) {
                     promises.push(this.resolveSingle(uri));
                 }
                 for (const asset of yield Promise.all(promises)) {
-                    client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragements);
+                    client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragments);
                     assets.push(asset);
-                    mediaUris.delete(asset.uri.uriWithoutFragment);
+                    urisWithoutFragments.delete(asset.uri.uriWithoutFragment);
                 }
             }
             return assets;
