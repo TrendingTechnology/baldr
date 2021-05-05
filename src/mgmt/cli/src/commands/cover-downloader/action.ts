@@ -5,7 +5,7 @@ import fs from 'fs'
 import chalk from 'chalk'
 
 // Project packages.
-import { loadYaml, walk } from '@bldr/media-manager'
+import { readYamlFile, walk } from '@bldr/media-manager'
 import { fetchFile } from '@bldr/core-node'
 
 /**
@@ -13,7 +13,7 @@ import { fetchFile } from '@bldr/core-node'
  */
 async function downloadCover (filePath: string): Promise<void> {
   const yamlFile = `${filePath}.yml`
-  const metaData = loadYaml(yamlFile)
+  const metaData = readYamlFile(yamlFile)
   console.log(metaData)
 
   if (metaData.coverSource == null) {

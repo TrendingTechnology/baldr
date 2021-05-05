@@ -117,7 +117,7 @@ function readAssetYaml(filePath) {
     if (extension !== 'yml')
         filePath = `${filePath}.yml`;
     if (fs_1.default.existsSync(filePath)) {
-        return yaml_1.loadYaml(filePath);
+        return yaml_1.readYamlFile(filePath);
     }
 }
 exports.readAssetYaml = readAssetYaml;

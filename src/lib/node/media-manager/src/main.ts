@@ -13,7 +13,7 @@ import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from '@bldr/titles'
-import { loadYaml } from './yaml'
+import { readYamlFile } from './yaml'
 
 // Operations
 import { convertAsset } from './operations/convert-asset'
@@ -113,7 +113,7 @@ export function readAssetYaml (filePath: string): AssetType.YamlFormat | undefin
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
   if (fs.existsSync(filePath)) {
-    return loadYaml(filePath) as AssetType.YamlFormat
+    return readYamlFile(filePath) as AssetType.YamlFormat
   }
 }
 

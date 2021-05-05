@@ -75,7 +75,7 @@ import config from '@bldr/config'
 import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
-import { walk, loadYaml } from '@bldr/media-manager'
+import { walk, readYamlFile } from '@bldr/media-manager'
 import { TitleTree, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
@@ -227,7 +227,7 @@ class ServerMediaAsset extends ServerMediaFile {
   constructor (filePath: string) {
     super(filePath)
     this.infoFile_ = `${this.absPath_}.yml`
-    const data = loadYaml(this.infoFile_)
+    const data = readYamlFile(this.infoFile_)
     this.importProperties(data)
     this.previewImage = false
   }
@@ -319,7 +319,7 @@ class ServerPresentation extends ServerMediaFile {
 
   constructor (filePath: string) {
     super(filePath)
-    const data = loadYaml(filePath)
+    const data = readYamlFile(filePath)
     if (data != null) this.importProperties(data)
 
     const deepTitle = new DeepTitle(filePath)

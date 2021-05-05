@@ -24,7 +24,7 @@ const core_node_1 = require("@bldr/core-node");
 function downloadCover(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const yamlFile = `${filePath}.yml`;
-        const metaData = media_manager_1.loadYaml(yamlFile);
+        const metaData = media_manager_1.readYamlFile(yamlFile);
         console.log(metaData);
         if (metaData.coverSource == null) {
             const previewFile = `${filePath}_preview.jpg`;

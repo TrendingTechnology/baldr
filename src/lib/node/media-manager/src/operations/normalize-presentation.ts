@@ -4,7 +4,7 @@ import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
 import { DeepTitle } from '@bldr/titles'
 
-import { loadYaml } from '../yaml'
+import { readYamlFile } from '../yaml'
 
 const comment = `
 #-----------------------------------------------------------------------
@@ -54,7 +54,7 @@ function shortedMediaUris (rawYamlString: string, presentationId: string): strin
  */
 export function normalizePresentationFile (filePath: string): string {
   let textContent = readFile(filePath)
-  const presentation = loadYaml(filePath) as PresentationTypes.FileFormat
+  const presentation = readYamlFile(filePath) as PresentationTypes.FileFormat
 
   // Generate meta.
   const title = new DeepTitle(filePath)

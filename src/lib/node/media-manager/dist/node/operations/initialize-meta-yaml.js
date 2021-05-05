@@ -19,7 +19,7 @@ const yaml_1 = require("../yaml");
 function initializeMetaYaml(filePath, metaData) {
     return __awaiter(this, void 0, void 0, function* () {
         const newPath = rename_asset_1.renameMediaAsset(filePath);
-        yaml_1.writeMetaDataYaml(newPath, metaData);
+        yaml_1.writeYamlMetaData(newPath, metaData);
         yield normalize_asset_1.normalizeMediaAsset(newPath, { wikidata: false });
     });
 }

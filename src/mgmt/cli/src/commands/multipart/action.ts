@@ -7,7 +7,7 @@ import glob from 'glob'
 
 // Project packages.
 import { formatMultiPartAssetFileName, getExtension } from '@bldr/core-browser'
-import { writeMetaDataYaml, operations } from '@bldr/media-manager'
+import { writeYamlMetaData, operations } from '@bldr/media-manager'
 
 interface CmdObj {
   dryRun: boolean
@@ -44,7 +44,7 @@ async function action (globPattern: string, prefix: string, cmdObj: CmdObj): Pro
   }
 
   if (fs.existsSync(firstNewFileName) && !cmdObj.dryRun) {
-    writeMetaDataYaml(firstNewFileName)
+    writeYamlMetaData(firstNewFileName)
     await operations.normalizeMediaAsset(firstNewFileName, { wikidata: false })
   }
 }

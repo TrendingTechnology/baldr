@@ -20,7 +20,7 @@ import {
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
 import { formatMultiPartAssetFileName, genUuid } from '@bldr/core-browser'
-import { writeYamlFile, loadYaml } from '@bldr/media-manager'
+import { writeYamlFile, readYamlFile } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
 
 import { listFiles, deleteFiles } from './utils'
@@ -432,7 +432,7 @@ export class IntermediateSong extends ExtendedSong {
 
   public generateMetaDataForMediaServer (): void {
     const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml')
-    const oldMetaData = loadYaml(yamlFilePath)
+    const oldMetaData = readYamlFile(yamlFilePath)
     let uuid: string
     if (oldMetaData?.uuid != null) {
       uuid = oldMetaData.uuid

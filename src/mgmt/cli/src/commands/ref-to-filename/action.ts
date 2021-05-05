@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import { moveAsset, walk, loadMetaDataYaml } from '@bldr/media-manager'
+import { moveAsset, walk, readYamlMetaData } from '@bldr/media-manager'
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -13,7 +13,7 @@ import { moveAsset, walk, loadMetaDataYaml } from '@bldr/media-manager'
 function renameFromIdOneFile (filePath: string): void {
   let result: { [key: string]: any }
   try {
-    result = loadMetaDataYaml(filePath)
+    result = readYamlMetaData(filePath)
   } catch (error) {
     console.log(filePath)
     console.log(error)

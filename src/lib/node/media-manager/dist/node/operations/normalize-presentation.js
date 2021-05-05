@@ -52,7 +52,7 @@ function shortedMediaUris(rawYamlString, presentationId) {
 function normalizePresentationFile(filePath) {
     var _a, _b, _c;
     let textContent = core_node_1.readFile(filePath);
-    const presentation = yaml_2.loadYaml(filePath);
+    const presentation = yaml_2.readYamlFile(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();

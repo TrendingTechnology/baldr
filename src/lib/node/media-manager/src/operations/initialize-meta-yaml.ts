@@ -2,13 +2,13 @@ import { AssetType } from '@bldr/type-definitions'
 
 import { renameMediaAsset } from './rename-asset'
 import { normalizeMediaAsset } from './normalize-asset'
-import { writeMetaDataYaml } from '../yaml'
+import { writeYamlMetaData } from '../yaml'
 
 /**
  * Rename, create metadata yaml and normalize the metadata file.
  */
 export async function initializeMetaYaml (filePath: string, metaData?: AssetType.YamlFormat): Promise<void> {
   const newPath = renameMediaAsset(filePath)
-  writeMetaDataYaml(newPath, metaData)
+  writeYamlMetaData(newPath, metaData)
   await normalizeMediaAsset(newPath, { wikidata: false })
 }

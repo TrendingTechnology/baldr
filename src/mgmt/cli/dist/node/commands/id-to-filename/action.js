@@ -25,7 +25,7 @@ const media_manager_1 = require("@bldr/media-manager");
 function renameFromIdOneFile(filePath) {
     let result;
     try {
-        result = media_manager_1.loadMetaDataYaml(filePath);
+        result = media_manager_1.readYamlMetaData(filePath);
     }
     catch (error) {
         console.log(filePath);

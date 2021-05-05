@@ -221,7 +221,7 @@ var ServerMediaAsset = /** @class */ (function (_super) {
     function ServerMediaAsset(filePath) {
         var _this = _super.call(this, filePath) || this;
         _this.infoFile_ = _this.absPath_ + ".yml";
-        var data = media_manager_1.loadYaml(_this.infoFile_);
+        var data = media_manager_1.readYamlFile(_this.infoFile_);
         _this.importProperties(data);
         _this.previewImage = false;
         return _this;
@@ -289,7 +289,7 @@ var ServerPresentation = /** @class */ (function (_super) {
     function ServerPresentation(filePath) {
         var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
-        var data = media_manager_1.loadYaml(filePath);
+        var data = media_manager_1.readYamlFile(filePath);
         if (data != null)
             _this.importProperties(data);
         var deepTitle = new titles_1.DeepTitle(filePath);

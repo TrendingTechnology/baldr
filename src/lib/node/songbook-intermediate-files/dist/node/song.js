@@ -339,7 +339,7 @@ class IntermediateSong extends ExtendedSong {
     }
     generateMetaDataForMediaServer() {
         const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml');
-        const oldMetaData = media_manager_1.loadYaml(yamlFilePath);
+        const oldMetaData = media_manager_1.readYamlFile(yamlFilePath);
         let uuid;
         if ((oldMetaData === null || oldMetaData === void 0 ? void 0 : oldMetaData.uuid) != null) {
             uuid = oldMetaData.uuid;

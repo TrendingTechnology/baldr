@@ -133,7 +133,7 @@ function convertAsset(filePath, cmdObj = {}) {
                         console.log(error);
                     }
                     if (metaData != null) {
-                        yaml_1.writeMetaDataYaml(outputFile, metaData);
+                        yaml_1.writeYamlMetaData(outputFile, metaData);
                     }
                 }
                 converted.add(outputFile);

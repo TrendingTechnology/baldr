@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadMetaDataYaml = exports.loadYaml = void 0;
+exports.writeYamlMetaData = exports.writeYamlFile = exports.readYamlMetaData = exports.readYamlFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const core_node_1 = require("@bldr/core-node");
 const yaml_1 = require("@bldr/yaml");
@@ -19,14 +19,14 @@ const media_categories_1 = require("@bldr/media-categories");
  * @returns The parsed YAML file as an object. The string properties are
  * converted into the `camleCase` format.
  */
-function loadYaml(filePath) {
+function readYamlFile(filePath) {
     return yaml_1.convertFromYaml(core_node_1.readFile(filePath));
 }
-exports.loadYaml = loadYaml;
+exports.readYamlFile = readYamlFile;
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
- * around `loadYaml`.
+ * around `readYamlFile`.
  *
  * @param filePath - The path of a media asset without the `yml`
  * extension. For example `Fuer-Elise.mp3` not `Fuer-Elise.mp3.yml`.
@@ -34,10 +34,10 @@ exports.loadYaml = loadYaml;
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-function loadMetaDataYaml(filePath) {
-    return loadYaml(`${filePath}.yml`);
+function readYamlMetaData(filePath) {
+    return readYamlFile(`${filePath}.yml`);
 }
-exports.loadMetaDataYaml = loadMetaDataYaml;
+exports.readYamlMetaData = readYamlMetaData;
 /**
  * Convert some data (usually Javascript objets) into the YAML format
  * and write the string into a text file. The property names are
@@ -65,7 +65,7 @@ exports.writeYamlFile = writeYamlFile;
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-function writeMetaDataYaml(filePath, metaData, force) {
+function writeYamlMetaData(filePath, metaData, force) {
     if (fs_1.default.lstatSync(filePath).isDirectory())
         return;
     const yamlFile = `${core_browser_1.asciify(filePath)}.yml`;
@@ -95,4 +95,4 @@ function writeMetaDataYaml(filePath, metaData, force) {
         msg: 'No action.'
     };
 }
-exports.writeMetaDataYaml = writeMetaDataYaml;
+exports.writeYamlMetaData = writeYamlMetaData;
