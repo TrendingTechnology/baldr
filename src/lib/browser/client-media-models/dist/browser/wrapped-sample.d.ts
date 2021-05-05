@@ -1,24 +1,26 @@
+/**
+ * Wrap a sample with some custom meta data (mostly a custom title). Allow
+ * different input specifications. Allow fuzzy specification of the samples.
+ *
+ * @module @bldr/wrapped-sample
+ */
 interface SimpleSampleSpec {
     uri: string;
     title?: string;
 }
 /**
- * Wrap a sample with some custom meta data (mostly a custom title). Allow
- * different input specifications.
- *
- * @see {@link module:@bldr/media-client.WrappedSampleList}
- * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
+ * This class holds the specification of the wrapped sample. The sample object
+ * itself is not included in this class.
  */
-declare class WrappedSample {
+declare class WrappedSampleSpec {
     /**
      * The URI of a sample.
      */
-    uri?: string;
-    private readonly sample?;
+    uri: string;
     /**
      * The manually set title.
      */
-    private readonly customTitle?;
+    readonly customTitle?: string;
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -30,21 +32,9 @@ declare class WrappedSample {
      *      `{ uri: 'ref:Fuer-Elise_HB'}`).
      */
     constructor(spec: string | SimpleSampleSpec);
-    /**
-     * The manually set custom title or, if not set, the `titleSafe` of the
-     * `sample`.
-     *
-     * We have to use a getter, because the sample may not be resolved at the
-     * constructor time.
-     */
-    get title(): string | undefined;
 }
-/**
- * Wrap some samples with metadata. Allow fuzzy specification of the samples.
- * Normalize the input.
- */
-export declare class WrappedSampleList {
-    samples: WrappedSample[];
+export declare class WrappedSampleSpecList {
+    specs: WrappedSampleSpec[];
     /**
      * @param spec - Different input specifications are
      *   possible:

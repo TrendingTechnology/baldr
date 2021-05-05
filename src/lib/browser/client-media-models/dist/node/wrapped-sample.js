@@ -1,15 +1,19 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSampleList = void 0;
-const media_uri_1 = require("./media-uri");
 /**
  * Wrap a sample with some custom meta data (mostly a custom title). Allow
- * different input specifications.
+ * different input specifications. Allow fuzzy specification of the samples.
  *
- * @see {@link module:@bldr/media-client.WrappedSampleList}
- * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
+ * @module @bldr/wrapped-sample
  */
-class WrappedSample {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WrappedSampleSpecList = void 0;
+const media_uri_1 = require("./media-uri");
+const cache_1 = require("./cache");
+/**
+ * This class holds the specification of the wrapped sample. The sample object
+ * itself is not included in this class.
+ */
+class WrappedSampleSpec {
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -23,19 +27,18 @@ class WrappedSample {
     constructor(spec) {
         // string
         if (typeof spec === 'string') {
-            if (spec.match(media_uri_1.MediaUri.regExp) != null) {
-                const match = spec.match(media_uri_1.MediaUri.regExp);
-                if (match != null) {
-                    this.uri = match[0];
-                }
-                let title = spec.replace(media_uri_1.MediaUri.regExp, '');
-                if (title != null) {
-                    title = title.trim();
-                    this.customTitle = title;
-                }
+            const match = spec.match(media_uri_1.MediaUri.regExp);
+            if (match != null) {
+                this.uri = match[0];
             }
             else {
                 throw new Error(`No media URI found in “${spec}”!`);
+            }
+            let title = spec.replace(media_uri_1.MediaUri.regExp, '');
+            if (title != null && title !== '') {
+                title = title.trim();
+                title = title.replace(/\s{2,}/g, ' ');
+                this.customTitle = title;
             }
             // interface SimpleSampleSpec
         }
@@ -47,26 +50,8 @@ class WrappedSample {
             }
         }
     }
-    /**
-     * The manually set custom title or, if not set, the `titleSafe` of the
-     * `sample`.
-     *
-     * We have to use a getter, because the sample may not be resolved at the
-     * constructor time.
-     */
-    get title() {
-        var _a;
-        if (this.customTitle != null)
-            return this.customTitle;
-        if (((_a = this.sample) === null || _a === void 0 ? void 0 : _a.titleSafe) != null)
-            return this.sample.titleSafe;
-    }
 }
-/**
- * Wrap some samples with metadata. Allow fuzzy specification of the samples.
- * Normalize the input.
- */
-class WrappedSampleList {
+class WrappedSampleSpecList {
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -85,9 +70,9 @@ class WrappedSampleList {
         else {
             specArray = spec;
         }
-        this.samples = [];
+        this.specs = [];
         for (const sampleSpec of specArray) {
-            this.samples.push(new WrappedSample(sampleSpec));
+            this.specs.push(new WrappedSampleSpec(sampleSpec));
         }
     }
     /**
@@ -95,12 +80,40 @@ class WrappedSampleList {
      */
     get uris() {
         const uris = [];
-        for (const wrappedSample of this.samples) {
-            if (wrappedSample.uri != null) {
-                uris.push(wrappedSample.uri);
+        for (const spec of this.specs) {
+            if (spec.uri != null) {
+                uris.push(spec.uri);
             }
         }
         return uris;
     }
 }
-exports.WrappedSampleList = WrappedSampleList;
+exports.WrappedSampleSpecList = WrappedSampleSpecList;
+/**
+ * This class holds the resolve sample object.
+ */
+class WrappedSample {
+    constructor(spec) {
+        this.spec = spec;
+        const sample = cache_1.sampleCache.get(this.spec.uri);
+        if (sample != null) {
+            this.sample = sample;
+        }
+        else {
+            throw new Error(`The sample with the URI “${this.spec.uri}” coudn’t be resolved.`);
+        }
+    }
+    /**
+     * The manually set custom title or, if not set, the `titleSafe` of the
+     * `sample`.
+     *
+     * We have to use a getter, because the sample may not be resolved at the
+     * constructor time.
+     */
+    get title() {
+        if (this.spec.customTitle != null)
+            return this.spec.customTitle;
+        if (this.sample.titleSafe != null)
+            return this.sample.titleSafe;
+    }
+}

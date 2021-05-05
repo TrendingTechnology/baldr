@@ -1,5 +1,13 @@
+/**
+ * Wrap a sample with some custom meta data (mostly a custom title). Allow
+ * different input specifications. Allow fuzzy specification of the samples.
+ *
+ * @module @bldr/wrapped-sample
+ */
+
 import { Sample } from './sample'
 import { MediaUri } from './media-uri'
+import { sampleCache } from './cache'
 
 interface SimpleSampleSpec {
   uri: string
@@ -7,24 +15,19 @@ interface SimpleSampleSpec {
 }
 
 /**
- * Wrap a sample with some custom meta data (mostly a custom title). Allow
- * different input specifications.
- *
- * @see {@link module:@bldr/media-client.WrappedSampleList}
- * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
+ * This class holds the specification of the wrapped sample. The sample object
+ * itself is not included in this class.
  */
-class WrappedSample {
+class WrappedSampleSpec {
   /**
    * The URI of a sample.
    */
-   uri?: string
-
-  private readonly sample?: Sample
+   uri: string
 
   /**
    * The manually set title.
    */
-  private readonly customTitle?: string
+  readonly customTitle?: string
 
   /**
    * @param spec - Different input specifications are
@@ -39,18 +42,19 @@ class WrappedSample {
   constructor (spec: string | SimpleSampleSpec) {
     // string
     if (typeof spec === 'string') {
-      if (spec.match(MediaUri.regExp) != null) {
-        const match = spec.match(MediaUri.regExp)
-        if (match != null) { this.uri = match[0] }
-        let title = spec.replace(MediaUri.regExp, '')
-        if (title != null) {
-          title = title.trim()
-          this.customTitle = title
-        }
+      const match = spec.match(MediaUri.regExp)
+      if (match != null) {
+        this.uri = match[0]
       } else {
         throw new Error(`No media URI found in “${spec}”!`)
       }
-      // interface SimpleSampleSpec
+      let title = spec.replace(MediaUri.regExp, '')
+      if (title != null && title !== '') {
+        title = title.trim()
+        title = title.replace(/\s{2,}/g, ' ')
+        this.customTitle = title
+      }
+    // interface SimpleSampleSpec
     } else {
       const simpleSample = spec
       this.uri = simpleSample.uri
@@ -59,27 +63,11 @@ class WrappedSample {
       }
     }
   }
-
-  /**
-   * The manually set custom title or, if not set, the `titleSafe` of the
-   * `sample`.
-   *
-   * We have to use a getter, because the sample may not be resolved at the
-   * constructor time.
-   */
-  get title (): string | undefined {
-    if (this.customTitle != null) return this.customTitle
-    if (this.sample?.titleSafe != null) return this.sample.titleSafe
-  }
 }
 
-/**
- * Wrap some samples with metadata. Allow fuzzy specification of the samples.
- * Normalize the input.
- */
-export class WrappedSampleList {
+ export class WrappedSampleSpecList {
 
-  samples: WrappedSample[]
+  specs: WrappedSampleSpec[]
   /**
    * @param spec - Different input specifications are
    *   possible:
@@ -98,9 +86,9 @@ export class WrappedSampleList {
       specArray = spec
     }
 
-    this.samples = []
+    this.specs = []
     for (const sampleSpec of specArray) {
-      this.samples.push(new WrappedSample(sampleSpec))
+      this.specs.push(new WrappedSampleSpec(sampleSpec))
     }
   }
 
@@ -109,11 +97,44 @@ export class WrappedSampleList {
    */
   get uris (): string[] {
     const uris = []
-    for (const wrappedSample of this.samples) {
-      if (wrappedSample.uri != null) {
-        uris.push(wrappedSample.uri)
+    for (const spec of this.specs) {
+      if (spec.uri != null) {
+        uris.push(spec.uri)
       }
     }
     return uris
+  }
+}
+
+/**
+ * This class holds the resolve sample object.
+ */
+class WrappedSample {
+
+  spec: WrappedSampleSpec
+
+  private readonly sample: Sample
+
+  constructor (spec: WrappedSampleSpec) {
+    this.spec = spec
+    const sample = sampleCache.get(this.spec.uri)
+
+    if (sample != null) {
+      this.sample = sample
+    } else {
+      throw new Error(`The sample with the URI “${this.spec.uri}” coudn’t be resolved.`)
+    }
+  }
+
+  /**
+   * The manually set custom title or, if not set, the `titleSafe` of the
+   * `sample`.
+   *
+   * We have to use a getter, because the sample may not be resolved at the
+   * constructor time.
+   */
+  get title (): string | undefined {
+    if (this.spec.customTitle != null) return this.spec.customTitle
+    if (this.sample.titleSafe != null) return this.sample.titleSafe
   }
 }

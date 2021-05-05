@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 
-const { WrappedSampleList } = require('../dist/node/wrapped-sample')
+const { WrappedSampleSpecList } = require('../dist/node/wrapped-sample')
 
 const test = {
   meta: {
@@ -20,23 +20,7 @@ const test = {
         'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro'
       ]
     },
-    {
-      title: 'With titles',
-      score_sample: {
-        heading: 'Hook-Line',
-        score: 'ref:Final-Countdown_NB_The-Final-Countdown'
-      },
-      audio_overlay: [
-        {
-          uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
-          title: 'Original'
-        },
-        {
-          uri: 'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro',
-          title: 'Bollywood'
-        }
-      ]
-    },
+
     {
       title: 'Object: only uri, long form, show titles',
       score_sample: {
@@ -86,23 +70,75 @@ const test = {
   ]
 }
 
-function createSamples(input) {
-  const list = new WrappedSampleList(input)
-  return list.samples
+function createSampleSpecs(input) {
+  const list = new WrappedSampleSpecList(input)
+  return list.specs
 }
 
-function createSamplesGetFirst(input) {
-  const samples = createSamples(input)
-  return samples[0]
+function createSampleSpecsGetFirst(input) {
+  const specs = createSampleSpecs(input)
+  return specs[0]
 }
 
 describe('Class “WrappedSampleList()”', function () {
   it('Single URI as a string', function () {
-    const sample = createSamplesGetFirst('ref:test')
-    assert.strictEqual(sample.uri, 'ref:test')
+    const spec = createSampleSpecsGetFirst('ref:test')
+    assert.strictEqual(spec.uri, 'ref:test')
   })
+
   it('Single URI as an array', function () {
-    const sample = createSamplesGetFirst(['ref:test'])
-    assert.strictEqual(sample.uri, 'ref:test')
+    const spec = createSampleSpecsGetFirst(['ref:test'])
+    assert.strictEqual(spec.uri, 'ref:test')
+  })
+
+  it('Single URI as a string with a custom title prefixed', function () {
+    const spec = createSampleSpecsGetFirst('A title ref:test')
+    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.customTitle, 'A title')
+  })
+
+  it('Single URI as a string with a custom title suffixed', function () {
+    const spec = createSampleSpecsGetFirst('ref:test A title')
+    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.customTitle, 'A title')
+  })
+
+  it('Single URI as a string with a custom title in the middle of the string', function () {
+    const spec = createSampleSpecsGetFirst('prefix ref:test suffix')
+    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.customTitle, 'prefix suffix')
+  })
+
+  it('Single uuid URI as a string with a custom title in the middle of the string', function () {
+    const spec = createSampleSpecsGetFirst('prefix uuid:c64047d2-983d-4009-a35f-02c95534cb53 suffix')
+    assert.strictEqual(spec.uri, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
+    assert.strictEqual(spec.customTitle, 'prefix suffix')
+  })
+
+  it('SimpleSampleSpec', function () {
+    const spec = createSampleSpecsGetFirst({
+      uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
+      title: 'Original'
+    })
+    assert.strictEqual(spec.uri, 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro')
+    assert.strictEqual(spec.customTitle, 'Original')
+  })
+
+  it('SimpleSampleSpec[]', function () {
+    const input = [
+      {
+        uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
+        title: 'Original'
+      },
+      {
+        uri: 'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro',
+        title: 'Bollywood'
+      }
+    ]
+    const specs = createSampleSpecs(input)
+    assert.strictEqual(specs[0].uri, 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro')
+    assert.strictEqual(specs[0].customTitle, 'Original')
+    assert.strictEqual(specs[1].uri, 'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro')
+    assert.strictEqual(specs[1].customTitle, 'Bollywood')
   })
 })
