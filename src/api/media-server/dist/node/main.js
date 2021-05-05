@@ -147,22 +147,12 @@ var titleTree = new titles_1.TitleTree(new titles_1.DeepTitle(config_1.default.m
 /**
  * Base class to be extended.
  */
-var MediaFile = /** @class */ (function () {
-    function MediaFile(filePath) {
+var ServerMediaFile = /** @class */ (function () {
+    function ServerMediaFile(filePath) {
         this.absPath_ = path_1.default.resolve(filePath);
         this.path = filePath.replace(basePath, '').replace(/^\//, '');
         this.filename = path_1.default.basename(filePath);
     }
-    MediaFile.prototype.addFileInfos_ = function () {
-        this.extension = core_browser_1.getExtension(this.absPath_);
-        if (this.extension != null) {
-            this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
-        }
-        else {
-            this.basename_ = path_1.default.basename(this.absPath_);
-        }
-        return this;
-    };
     /**
      * Parse the info file of a media asset or the presenation file itself.
      *
@@ -177,7 +167,7 @@ var MediaFile = /** @class */ (function () {
      *
      * @param filePath - The path of the YAML file.
      */
-    MediaFile.prototype.readYaml_ = function (filePath) {
+    ServerMediaFile.prototype.readYaml_ = function (filePath) {
         if (fs_1.default.existsSync(filePath)) {
             return yaml_1.convertFromYamlRaw(fs_1.default.readFileSync(filePath, 'utf8'));
         }
@@ -186,14 +176,21 @@ var MediaFile = /** @class */ (function () {
     /**
      * Add metadata from the file system, like file size or timeModifed.
      */
-    MediaFile.prototype.addFileInfos = function () {
-        return this.addFileInfos_();
+    ServerMediaFile.prototype.addFileInfos = function () {
+        this.extension = core_browser_1.getExtension(this.absPath_);
+        if (this.extension != null) {
+            this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
+        }
+        else {
+            this.basename_ = path_1.default.basename(this.absPath_);
+        }
+        return this;
     };
     /**
      * Delete the temporary properties of the object. Temporary properties end
      * with `_`.
      */
-    MediaFile.prototype.cleanTmpProperties = function () {
+    ServerMediaFile.prototype.cleanTmpProperties = function () {
         for (var property in this) {
             if (property.match(/_$/) != null) {
                 // eslint-disable-next-line
@@ -209,7 +206,7 @@ var MediaFile = /** @class */ (function () {
      *
      * @param properties - Add an object to the class properties.
      */
-    MediaFile.prototype.importProperties = function (properties) {
+    ServerMediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
             properties = yaml_1.convertPropertiesSnakeToCamel(properties);
             for (var property in properties) {
@@ -221,7 +218,7 @@ var MediaFile = /** @class */ (function () {
      * Prepare the object for the insert into the MongoDB database
      * Generate `id` and `title` if this properties are not present.
      */
-    MediaFile.prototype.prepareForInsert = function () {
+    ServerMediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
         if (this.id == null && this.basename_ != null)
             this.id = core_browser_1.asciify(this.basename_);
@@ -230,18 +227,18 @@ var MediaFile = /** @class */ (function () {
         this.cleanTmpProperties();
         return this;
     };
-    return MediaFile;
+    return ServerMediaFile;
 }());
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
-var Asset = /** @class */ (function (_super) {
-    __extends(Asset, _super);
+var ServerMediaAsset = /** @class */ (function (_super) {
+    __extends(ServerMediaAsset, _super);
     /**
      * @param filePath - The file path of the media file.
      */
-    function Asset(filePath) {
+    function ServerMediaAsset(filePath) {
         var _this = _super.call(this, filePath) || this;
         _this.infoFile_ = _this.absPath_ + ".yml";
         var data = _this.readYaml_(_this.infoFile_);
@@ -249,8 +246,8 @@ var Asset = /** @class */ (function (_super) {
         _this.previewImage = false;
         return _this;
     }
-    Asset.prototype.addFileInfos = function () {
-        this.addFileInfos_();
+    ServerMediaAsset.prototype.addFileInfos = function () {
+        _super.prototype.addFileInfos.call(this);
         var previewImage = this.absPath_ + "_preview.jpg";
         if (this.extension != null) {
             this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
@@ -265,7 +262,7 @@ var Asset = /** @class */ (function (_super) {
      * Search for mutlipart assets. The naming scheme of multipart assets is:
      * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
      */
-    Asset.prototype.detectMultiparts_ = function () {
+    ServerMediaAsset.prototype.detectMultiparts_ = function () {
         var _this = this;
         var nextAssetFileName = function (count) {
             var suffix;
@@ -301,15 +298,15 @@ var Asset = /** @class */ (function (_super) {
             this.multiPartCount = count;
         }
     };
-    return Asset;
-}(MediaFile));
+    return ServerMediaAsset;
+}(ServerMediaFile));
 /**
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
  */
-var Presentation = /** @class */ (function (_super) {
-    __extends(Presentation, _super);
-    function Presentation(filePath) {
+var ServerPresentation = /** @class */ (function (_super) {
+    __extends(ServerPresentation, _super);
+    function ServerPresentation(filePath) {
         var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
         var data = _this.readYaml_(filePath);
@@ -340,7 +337,7 @@ var Presentation = /** @class */ (function (_super) {
     /**
      * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
      */
-    Presentation.prototype.titleSubtitle_ = function () {
+    ServerPresentation.prototype.titleSubtitle_ = function () {
         var _a;
         if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
             return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
@@ -359,7 +356,7 @@ var Presentation = /** @class */ (function (_super) {
      * Johann Sebastian Bach: Musik als Bekenntnis /
      * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
      */
-    Presentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
+    ServerPresentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
         var _a;
         var all = folderTitles.allTitles;
         if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
@@ -367,9 +364,8 @@ var Presentation = /** @class */ (function (_super) {
         }
         return core_browser_1.stripTags(all);
     };
-    return Presentation;
-}(MediaFile));
-/* Insert *********************************************************************/
+    return ServerPresentation;
+}(ServerMediaFile));
 function insertObjectIntoDb(filePath, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
         var object, error_1, relPath, msg;
@@ -378,13 +374,13 @@ function insertObjectIntoDb(filePath, mediaType) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
-                        object = new Presentation(filePath);
+                        object = new ServerPresentation(filePath);
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
                         if (!fs_1.default.existsSync(filePath + ".yml"))
                             return [2 /*return*/];
-                        object = new Asset(filePath);
+                        object = new ServerMediaAsset(filePath);
                     }
                     if (object == null)
                         return [2 /*return*/];

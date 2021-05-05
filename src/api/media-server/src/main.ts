@@ -109,7 +109,7 @@ const titleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
 /**
  * Base class to be extended.
  */
-class MediaFile {
+class ServerMediaFile {
   /**
    * Absolute path ot the file.
    */
@@ -143,16 +143,6 @@ class MediaFile {
     this.filename = path.basename(filePath)
   }
 
-  protected addFileInfos_ (): MediaFile {
-    this.extension = getExtension(this.absPath_)
-    if (this.extension != null) {
-      this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
-    } else {
-      this.basename_ = path.basename(this.absPath_)
-    }
-    return this
-  }
-
   /**
    * Parse the info file of a media asset or the presenation file itself.
    *
@@ -177,15 +167,21 @@ class MediaFile {
   /**
    * Add metadata from the file system, like file size or timeModifed.
    */
-  addFileInfos (): MediaFile {
-    return this.addFileInfos_()
+  protected addFileInfos (): ServerMediaFile {
+    this.extension = getExtension(this.absPath_)
+    if (this.extension != null) {
+      this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
+    } else {
+      this.basename_ = path.basename(this.absPath_)
+    }
+    return this
   }
 
   /**
    * Delete the temporary properties of the object. Temporary properties end
    * with `_`.
    */
-  cleanTmpProperties (): MediaFile {
+  cleanTmpProperties (): ServerMediaFile {
     for (const property in this) {
       if (property.match(/_$/) != null) {
         // eslint-disable-next-line
@@ -215,7 +211,7 @@ class MediaFile {
    * Prepare the object for the insert into the MongoDB database
    * Generate `id` and `title` if this properties are not present.
    */
-  prepareForInsert (): MediaFile {
+  prepareForInsert (): ServerMediaFile {
     this.addFileInfos()
     if (this.id == null && this.basename_ != null) this.id = asciify(this.basename_)
     if (this.title == null && this.id != null) this.title = deasciify(this.id)
@@ -228,7 +224,7 @@ class MediaFile {
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
-class Asset extends MediaFile {
+class ServerMediaAsset extends ServerMediaFile {
   /**
    * The absolute path of the info file in the YAML format. On the absolute
    * media file path `.yml` is appended.
@@ -257,8 +253,8 @@ class Asset extends MediaFile {
     this.previewImage = false
   }
 
-  addFileInfos (): Asset {
-    this.addFileInfos_()
+  addFileInfos (): ServerMediaAsset {
+    super.addFileInfos()
     const previewImage = `${this.absPath_}_preview.jpg`
     if (this.extension != null) {
       this.mimeType = mimeTypeManager.extensionToType(this.extension)
@@ -312,7 +308,7 @@ class Asset extends MediaFile {
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
  */
-class Presentation extends MediaFile {
+class ServerPresentation extends ServerMediaFile {
   meta?: PresentationTypes.PresentationMeta
 
   /**
@@ -398,15 +394,17 @@ class Presentation extends MediaFile {
 
 /* Insert *********************************************************************/
 
-async function insertObjectIntoDb (filePath: string, mediaType: string): Promise<void> {
-  let object: Presentation | Asset | MediaFile | undefined
+type ServerMediaType = 'presentations' | 'assets'
+
+async function insertObjectIntoDb (filePath: string, mediaType: ServerMediaType): Promise<void> {
+  let object: ServerPresentation | ServerMediaAsset | ServerMediaFile | undefined
   try {
     if (mediaType === 'presentations') {
-      object = new Presentation(filePath)
+      object = new ServerPresentation(filePath)
     } else if (mediaType === 'assets') {
       // Now only with meta data yml. Fix problems with PDF lying around.
       if (!fs.existsSync(`${filePath}.yml`)) return
-      object = new Asset(filePath)
+      object = new ServerMediaAsset(filePath)
     }
     if (object == null) return
     object = object.prepareForInsert()
