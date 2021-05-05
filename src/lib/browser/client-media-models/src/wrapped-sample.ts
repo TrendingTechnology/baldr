@@ -14,25 +14,17 @@ interface SimpleSampleSpec {
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
+  /**
+   * The URI of a sample.
+   */
+   uri?: string
+
   private readonly sample?: Sample
 
   /**
    * The manually set title.
    */
-  private readonly title?: string
-
-  /**
-   * True if the title is set manually.
-   *
-   * This specification sets the property to `true`.
-   * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
-   */
-  isTitleSetManually: boolean = false
-
-  /**
-   * The URI of a sample.
-   */
-  uri?: string
+  private readonly customTitle?: string
 
   /**
    * @param spec - Different input specifications are
@@ -45,8 +37,6 @@ class WrappedSample {
    *      `{ uri: 'ref:Fuer-Elise_HB'}`).
    */
   constructor (spec: string | SimpleSampleSpec) {
-    this.isTitleSetManually = false
-
     // string
     if (typeof spec === 'string') {
       if (spec.match(MediaUri.regExp) != null) {
@@ -55,8 +45,7 @@ class WrappedSample {
         let title = spec.replace(MediaUri.regExp, '')
         if (title != null) {
           title = title.trim()
-          this.title = title
-          this.isTitleSetManually = true
+          this.customTitle = title
         }
       } else {
         throw new Error(`No media URI found in “${spec}”!`)
@@ -66,20 +55,20 @@ class WrappedSample {
       const simpleSample = spec
       this.uri = simpleSample.uri
       if (simpleSample.title != null) {
-        this.title = simpleSample.title
-        this.isTitleSetManually = true
+        this.customTitle = simpleSample.title
       }
     }
   }
 
   /**
-   * The manually set title or, if not set, the `titleSafe` of the `sample`.
+   * The manually set custom title or, if not set, the `titleSafe` of the
+   * `sample`.
    *
-   * We have to use a getter, because the sample may not be resolved at
-   * the constructor time.
+   * We have to use a getter, because the sample may not be resolved at the
+   * constructor time.
    */
-  get titleSafe (): string | undefined {
-    if (this.title != null) return this.title
+  get title (): string | undefined {
+    if (this.customTitle != null) return this.customTitle
     if (this.sample?.titleSafe != null) return this.sample.titleSafe
   }
 }
@@ -87,18 +76,8 @@ class WrappedSample {
 /**
  * Wrap some samples with metadata. Allow fuzzy specification of the samples.
  * Normalize the input.
- *
- * @see {@link module:@bldr/media-client~WrappedSample}
- * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 export class WrappedSampleList {
-  /**
-   * True if the title of the first sample is set manually.
-   *
-   * This specification sets the property to `true`.
-   * `{ title: 'My Title', uri: 'ref:Fuer-Elise' }`
-   */
-  isTitleSetManually: boolean
 
   samples: WrappedSample[]
   /**
@@ -108,8 +87,7 @@ export class WrappedSampleList {
    *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
    *   2. An object with the mandatory property `uri` (for example:
    *      `{ uri: 'ref:Fuer-Elise_HB'}`).
-   *   3. An instance of the class `Sample`.
-   *   4. An array
+   *   3. An array
    */
   constructor (spec: string | SimpleSampleSpec | string[] | SimpleSampleSpec[]) {
     // Make sure we have an array.
@@ -124,11 +102,6 @@ export class WrappedSampleList {
     for (const sampleSpec of specArray) {
       this.samples.push(new WrappedSample(sampleSpec))
     }
-
-    this.isTitleSetManually = false
-    if (this.samples[0].isTitleSetManually) {
-      this.isTitleSetManually = true
-    }
   }
 
   /**
@@ -137,7 +110,9 @@ export class WrappedSampleList {
   get uris (): string[] {
     const uris = []
     for (const wrappedSample of this.samples) {
-      if (wrappedSample.uri != null) { uris.push(wrappedSample.uri) }
+      if (wrappedSample.uri != null) {
+        uris.push(wrappedSample.uri)
+      }
     }
     return uris
   }
