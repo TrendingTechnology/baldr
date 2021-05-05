@@ -126,17 +126,6 @@ class MediaFile {
   filename: string
 
   /**
-   * The file size in bytes.
-   */
-  size?: number
-
-  /**
-   * The timestamp indicating the last time this file was modified
-   * expressed in milliseconds since the POSIX Epoch.
-   */
-  timeModified?: number
-
-  /**
    * The extension of the file.
    */
   extension?: string
@@ -155,9 +144,6 @@ class MediaFile {
   }
 
   protected addFileInfos_ (): MediaFile {
-    const stats = fs.statSync(this.absPath_)
-    this.size = stats.size
-    this.timeModified = stats.mtimeMs
     this.extension = getExtension(this.absPath_)
     if (this.extension != null) {
       this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
@@ -250,13 +236,13 @@ class Asset extends MediaFile {
   infoFile_: string
 
   /**
-   * Indicates if the asset has a preview image.
+   * Indicates whether the media asset has a preview image.
    */
   previewImage: boolean
   mimeType?: string
 
   /**
-   * The count of parts of a multipart asset.
+   * The number of parts of a multipart media asset.
    */
   multiPartCount?: number
 

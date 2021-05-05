@@ -136,11 +136,12 @@ export interface RestApiRaw extends YamlFormat {
      * `composer/Haydn_Joseph.jpg`.
      */
     path: string;
-    previewImage: boolean;
-    size: number;
-    timeModified: number;
     /**
-     * The of count of parts if the media file is a multi part asset.
+     * Indicates whether the media asset has a preview image.
+     */
+    previewImage: boolean;
+    /**
+     * The number of parts of a multipart media asset.
      */
     multiPartCount?: number;
     [property: string]: any;

@@ -154,9 +154,6 @@ var MediaFile = /** @class */ (function () {
         this.filename = path_1.default.basename(filePath);
     }
     MediaFile.prototype.addFileInfos_ = function () {
-        var stats = fs_1.default.statSync(this.absPath_);
-        this.size = stats.size;
-        this.timeModified = stats.mtimeMs;
         this.extension = core_browser_1.getExtension(this.absPath_);
         if (this.extension != null) {
             this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
