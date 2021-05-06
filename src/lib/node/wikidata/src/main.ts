@@ -372,7 +372,7 @@ export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Dat
     for (const propName in dataWiki) {
       if (propSpecs?.[propName]?.wikidata != null) {
         const propSpec = propSpecs[propName].wikidata
-        if (propSpec != null && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
+        if (propSpec != null && typeof propSpec !== 'boolean' && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
           typeData[propName] = dataWiki[propName]
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete dataOrig[propName]

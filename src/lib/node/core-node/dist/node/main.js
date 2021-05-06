@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.untildify = exports.writeFile = exports.readFile = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
+exports.untildify = exports.writeJsonFile = exports.readJsonFile = exports.writeFile = exports.readFile = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -127,8 +127,32 @@ exports.readFile = readFile;
  */
 function writeFile(filePath, content) {
     fs_1.default.writeFileSync(filePath, content);
+    return content;
 }
 exports.writeFile = writeFile;
+/**
+ * Read a JSON file and parse it.
+ *
+ * @param filePath - A path of a JSON file.
+ *
+ * @returns The parsed JSON object.
+ */
+function readJsonFile(filePath) {
+    return JSON.parse(readFile(filePath));
+}
+exports.readJsonFile = readJsonFile;
+/**
+ * Convert a value into a JSON string and write it into a file.
+ *
+ * @param filePath - A path of destination JSON file.
+ * @param value - A value to convert to JSON
+ *
+ * @returns The stringifed JSON content that was writen to the text file.
+ */
+function writeJsonFile(filePath, value) {
+    return writeFile(filePath, JSON.stringify(value, null, 2));
+}
+exports.writeJsonFile = writeJsonFile;
 /**
  * Replace ~ with the home folder path.
  *

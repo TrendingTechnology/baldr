@@ -110,9 +110,10 @@ export interface Prop {
      */
     validate?: ValidateFunc;
     /**
-     * See package `@bldr/wikidata`.
+     * See package `@bldr/wikidata`. In the stripped version of the media
+     * categories collection this property is converted to `true`.
      */
-    wikidata?: WikidataProp;
+    wikidata?: WikidataProp | boolean;
     /**
      * `absent` or `present`
      */

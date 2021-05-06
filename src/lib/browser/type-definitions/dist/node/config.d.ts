@@ -3,6 +3,7 @@
  *
  * @module @bldr/type-definitions/config
  */
+import * as MediaCategory from './media-category';
 interface ApiConfiguration {
     port: number;
 }
@@ -157,6 +158,10 @@ interface YoutubeConfiguration {
  */
 export interface Configuration {
     api: ApiConfiguration;
+    /**
+     * The file paths of then configuration paths.
+     */
+    configurationFileLocations: string[];
     databases: DatabasesConfiguration;
     doc: DocConfiguration;
     http: HttpConfiguration;
@@ -170,5 +175,10 @@ export interface Configuration {
     songbook: SongbookConfiguration;
     wire: WireConfiguration;
     youtube: YoutubeConfiguration;
+    /**
+     * Use the command line utility `baldr categories` to patch the media
+     * categories configurations into the json files at `/etc/baldr.json`
+     */
+    mediaCategories: MediaCategory.Collection;
 }
 export {};

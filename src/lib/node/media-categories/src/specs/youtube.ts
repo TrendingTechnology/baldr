@@ -61,10 +61,10 @@ export const youtube: MediaCategory.Category = {
     info: {
       title: 'Eigener längerer Informationstext'
     },
-    original_heading: {
+    originalHeading: {
       title: 'Die orignale Überschrift des YouTube-Videos'
     },
-    original_info: {
+    originalInfo: {
       title: 'Der orignale Informationstext des YouTube-Videos'
     }
   }

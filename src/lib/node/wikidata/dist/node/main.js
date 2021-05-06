@@ -341,7 +341,7 @@ function mergeData(data, dataWiki, categoryCollection) {
         for (const propName in dataWiki) {
             if (((_a = propSpecs === null || propSpecs === void 0 ? void 0 : propSpecs[propName]) === null || _a === void 0 ? void 0 : _a.wikidata) != null) {
                 const propSpec = propSpecs[propName].wikidata;
-                if (propSpec != null && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
+                if (propSpec != null && typeof propSpec !== 'boolean' && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
                     typeData[propName] = dataWiki[propName];
                     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                     delete dataOrig[propName];
