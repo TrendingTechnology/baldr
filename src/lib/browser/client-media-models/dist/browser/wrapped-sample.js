@@ -76,11 +76,9 @@ export class WrappedSampleSpecList {
      * Get the URI of all wrapped samples.
      */
     get uris() {
-        const uris = [];
+        const uris = new Set();
         for (const spec of this.specs) {
-            if (spec.uri != null) {
-                uris.push(spec.uri);
-            }
+            uris.add(spec.uri);
         }
         return uris;
     }
@@ -88,7 +86,7 @@ export class WrappedSampleSpecList {
 /**
  * This class holds the resolve sample object.
  */
-class WrappedSample {
+export class WrappedSample {
     constructor(spec) {
         this.spec = spec;
         const sample = sampleCache.get(this.spec.uri);

@@ -6,7 +6,7 @@
  * @module @bldr/wrapped-sample
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSampleSpecList = void 0;
+exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
 const media_uri_1 = require("./media-uri");
 const cache_1 = require("./cache");
 /**
@@ -79,11 +79,9 @@ class WrappedSampleSpecList {
      * Get the URI of all wrapped samples.
      */
     get uris() {
-        const uris = [];
+        const uris = new Set();
         for (const spec of this.specs) {
-            if (spec.uri != null) {
-                uris.push(spec.uri);
-            }
+            uris.add(spec.uri);
         }
         return uris;
     }
@@ -117,3 +115,4 @@ class WrappedSample {
             return this.sample.titleSafe;
     }
 }
+exports.WrappedSample = WrappedSample;

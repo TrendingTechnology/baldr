@@ -3,7 +3,6 @@
 const assert = require('assert')
 
 const { createAsset } = require('./_helper')
-const { resetMediaCache } = require('../dist/node/cache')
 
 describe('Class “Sample”', function () {
   it('Default sample “complete”', function () {
@@ -14,11 +13,15 @@ describe('Class “Sample”', function () {
   })
 
   it('Samples form the “samples” property', function () {
-    const asset = createAsset({ mimeType: 'audio', path: 'dir/test.mp3', samples: [
-      { ref: 'sample1' },
-      { ref: 'sample2' },
-      { ref: 'sample3' },
-    ] })
+    const asset = createAsset({
+      mimeType: 'audio',
+      path: 'dir/test.mp3',
+      samples: [
+        { ref: 'sample1' },
+        { ref: 'sample2' },
+        { ref: 'sample3' }
+      ]
+    })
     assert.strictEqual(asset.samples.size, 4)
     const samples = asset.samples.getAll()
     assert.strictEqual(samples[0].ref, 'complete')
@@ -29,11 +32,15 @@ describe('Class “Sample”', function () {
   })
 
   it('Samples without ref and title', function () {
-    const asset = createAsset({ mimeType: 'audio', path: 'dir/test.mp3', samples: [
-      { startTime: 1 },
-      { startTime: 2 },
-      { startTime: 3 },
-    ] })
+    const asset = createAsset({
+      mimeType: 'audio',
+      path: 'dir/test.mp3',
+      samples: [
+        { startTime: 1 },
+        { startTime: 2 },
+        { startTime: 3 }
+      ]
+    })
     const samples = asset.samples.getAll()
     assert.strictEqual(samples[0].ref, 'complete')
     assert.strictEqual(samples[1].ref, 'sample1')
@@ -44,9 +51,14 @@ describe('Class “Sample”', function () {
 
   it('Error: two complete samples', function () {
     assert.throws(() => {
-      createAsset({ mimeType: 'audio', path: 'dir/test.mp3', startTime: 1, samples: [
-        { ref: complete, startTime: 1 }
-      ] })
+      createAsset({
+        mimeType: 'audio',
+        path: 'dir/test.mp3',
+        startTime: 1,
+        samples: [
+          { ref: 'complete', startTime: 1 }
+        ]
+      })
     })
   })
 })

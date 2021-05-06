@@ -48,6 +48,22 @@ export declare class WrappedSampleSpecList {
     /**
      * Get the URI of all wrapped samples.
      */
-    get uris(): string[];
+    get uris(): Set<string>;
+}
+/**
+ * This class holds the resolve sample object.
+ */
+export declare class WrappedSample {
+    spec: WrappedSampleSpec;
+    private readonly sample;
+    constructor(spec: WrappedSampleSpec);
+    /**
+     * The manually set custom title or, if not set, the `titleSafe` of the
+     * `sample`.
+     *
+     * We have to use a getter, because the sample may not be resolved at the
+     * constructor time.
+     */
+    get title(): string | undefined;
 }
 export {};

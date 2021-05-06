@@ -22,7 +22,7 @@ class WrappedSampleSpec {
   /**
    * The URI of a sample.
    */
-   uri: string
+  uri: string
 
   /**
    * The manually set title.
@@ -65,8 +65,7 @@ class WrappedSampleSpec {
   }
 }
 
- export class WrappedSampleSpecList {
-
+export class WrappedSampleSpecList {
   specs: WrappedSampleSpec[]
   /**
    * @param spec - Different input specifications are
@@ -95,12 +94,10 @@ class WrappedSampleSpec {
   /**
    * Get the URI of all wrapped samples.
    */
-  get uris (): string[] {
-    const uris = []
+  get uris (): Set<string> {
+    const uris = new Set<string>()
     for (const spec of this.specs) {
-      if (spec.uri != null) {
-        uris.push(spec.uri)
-      }
+      uris.add(spec.uri)
     }
     return uris
   }
@@ -109,8 +106,7 @@ class WrappedSampleSpec {
 /**
  * This class holds the resolve sample object.
  */
-class WrappedSample {
-
+export class WrappedSample {
   spec: WrappedSampleSpec
 
   private readonly sample: Sample
