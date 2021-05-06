@@ -14,7 +14,8 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 
-import { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategory } from '@bldr/type-definitions'
+import { deepCopy } from '@bldr/core-browser'
 
 import { cloze } from './specs/cloze'
 import { composition } from './specs/composition'
@@ -49,4 +50,31 @@ export const categories: MediaCategory.Collection = {
   youtube,
   // Applied to all
   general
+}
+
+/**
+ * Remove all properties that can not represented in JSON. Remove absent
+ * properties.
+ *
+ * @returns A object that can be converted to JSON.
+ */
+export function stripCategories (): object {
+  // { [category: string]: MediaCategory.Category }
+  const cats = deepCopy(categories) as any
+  for (const name in cats) {
+    delete cats[name].detectCategoryByPath
+    const category = cats[name]
+    for (const propName in category.props) {
+      if (category.props[propName].wikidata != null) {
+        category.props[propName].wikidata = true
+      }
+      delete category.props[propName].removeByRegexp
+
+      if (category.props[propName].state === 'absent') {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete category.props[propName]
+      }
+    }
+  }
+  return cats
 }

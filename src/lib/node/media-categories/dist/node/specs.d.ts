@@ -13,5 +13,12 @@
  *
  * @module @bldr/media-manager/meta-type-specs
  */
-import { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategory } from '@bldr/type-definitions';
 export declare const categories: MediaCategory.Collection;
+/**
+ * Remove all properties that can not represented in JSON. Remove absent
+ * properties.
+ *
+ * @returns A object that can be converted to JSON.
+ */
+export declare function stripCategories(): object;

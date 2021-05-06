@@ -15,7 +15,8 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.categories = void 0;
+exports.stripCategories = exports.categories = void 0;
+const core_browser_1 = require("@bldr/core-browser");
 const cloze_1 = require("./specs/cloze");
 const composition_1 = require("./specs/composition");
 const cover_1 = require("./specs/cover");
@@ -49,3 +50,29 @@ exports.categories = {
     // Applied to all
     general: _general_1.general
 };
+/**
+ * Remove all properties that can not represented in JSON. Remove absent
+ * properties.
+ *
+ * @returns A object that can be converted to JSON.
+ */
+function stripCategories() {
+    // { [category: string]: MediaCategory.Category }
+    const cats = core_browser_1.deepCopy(exports.categories);
+    for (const name in cats) {
+        delete cats[name].detectCategoryByPath;
+        const category = cats[name];
+        for (const propName in category.props) {
+            if (category.props[propName].wikidata != null) {
+                category.props[propName].wikidata = true;
+            }
+            delete category.props[propName].removeByRegexp;
+            if (category.props[propName].state === 'absent') {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                delete category.props[propName];
+            }
+        }
+    }
+    return cats;
+}
+exports.stripCategories = stripCategories;
