@@ -2111,8 +2111,13 @@ class Media {
 
     const resolverNg = new mediaResolver.Resolver()
     await resolverNg.resolve(assetSpecs)
-    console.log(resolverNg.getAssets())
+    for (const asset of resolverNg.getAssets()) {
+      store.commit('media/addAssetNg', asset)
+    }
 
+    for (const sample of resolverNg.getSamples()) {
+      store.commit('media/addSampleNg', sample)
+    }
     return output
   }
 

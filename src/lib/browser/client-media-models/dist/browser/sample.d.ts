@@ -39,15 +39,6 @@ declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'sto
  */
 export declare class Sample {
     /**
-     * The reference of the sample. The reference is used to build the URI of the sample, for
-     * example `uri#reference`: `ref:Beethoven#complete`
-     */
-    ref: string;
-    /**
-     * The title of the sample. For example `komplett`, `Hook-Line`.
-     */
-    title: string;
-    /**
      * The parent media file object.
      *
      */
@@ -99,10 +90,14 @@ export declare class Sample {
     playbackState: PlaybackState;
     constructor(asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat);
     /**
-     * The URI using two `ref` authorities, one from the asset and one from the sample.
-     * for example: `ref:Fuer-Elise#complete`
+     * The reference of the sample. The reference is used to build the URI of the sample, for
+     * example `uri#reference`: `ref:Beethoven#complete`
      */
-    get uriRef(): string;
+    get ref(): string;
+    /**
+     * The title of the sample. For example `komplett`, `Hook-Line`.
+     */
+    get title(): string;
     /**
      * If the sample is the complete media file get the title of the media file.
      * For example `Glocken (Das große Tor von Kiew)`

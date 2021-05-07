@@ -119,17 +119,6 @@ const defaultPlayDelayMsec: number = 10
  */
 export class Sample {
   /**
-   * The reference of the sample. The reference is used to build the URI of the sample, for
-   * example `uri#reference`: `ref:Beethoven#complete`
-   */
-  ref: string
-
-  /**
-   * The title of the sample. For example `komplett`, `Hook-Line`.
-   */
-  title: string
-
-  /**
    * The parent media file object.
    *
    */
@@ -198,19 +187,11 @@ export class Sample {
 
     this.yaml = yaml
 
-    this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl) as HTMLMediaElement
-
-    this.ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
-
-    if (this.yaml.title == null) {
-      if (this.ref === 'complete') {
-        this.title = 'komplett'
-      } else {
-        this.title = this.ref
-      }
-    } else {
-      this.title = this.yaml.title
+    if (this.yaml.ref == null) {
+      this.yaml.ref = 'complete'
     }
+
+    this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl) as HTMLMediaElement
 
     if (this.yaml.startTime != null) {
       this.startTimeSec = this.toSec(this.yaml.startTime)
@@ -243,11 +224,25 @@ export class Sample {
   }
 
   /**
-   * The URI using two `ref` authorities, one from the asset and one from the sample.
-   * for example: `ref:Fuer-Elise#complete`
+   * The reference of the sample. The reference is used to build the URI of the sample, for
+   * example `uri#reference`: `ref:Beethoven#complete`
    */
-  get uriRef (): string {
-    return `${this.asset.ref}#${this.ref}`
+  get ref (): string {
+    const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
+    return `${this.asset.ref}#${ref}`
+  }
+
+  /**
+   * The title of the sample. For example `komplett`, `Hook-Line`.
+   */
+  get title (): string {
+    if (this.yaml.title != null) {
+      return this.yaml.title
+    }
+    if (this.yaml.ref != null && this.yaml.ref !== 'complete') {
+      return this.yaml.ref
+    }
+    return 'komplett'
   }
 
   /**
@@ -255,7 +250,7 @@ export class Sample {
    * For example `Glocken (Das große Tor von Kiew)`
    */
   get titleSafe (): string {
-    if (this.ref === 'complete') {
+    if (this.yaml.ref === 'complete') {
       return this.asset.titleSafe
     } else {
       return `${this.title} (${this.asset.titleSafe})`

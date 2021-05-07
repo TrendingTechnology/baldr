@@ -13,11 +13,13 @@ const state = {
   multiPartUris: new Set(),
   multiPartSelections: {},
   assets: {},
+  assetsNg: {},
   uuidToId: {},
   playList: [],
   playListNoCurrent: null,
   restApiServers: [],
   samples: {},
+  samplesNg: {},
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
   // to be played sample (loaded).
@@ -216,9 +218,15 @@ const mutations = {
     Vue.set(state.assets, asset.uriRef, asset)
     Vue.set(state.uuidToId, asset.uriUuid, asset.uriRef)
   },
+  addAssetNg (state, asset) {
+    Vue.set(state.assetsNg, asset.ref, asset)
+  },
   addSample (state, sample) {
     Vue.set(state.samples, sample.uriRef, sample)
     Vue.set(state.uuidToId, sample.uriUuid, sample.uriRef)
+  },
+  addSampleNg (state, sample) {
+    Vue.set(state.samplesNg, sample.ref, sample)
   },
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uriRef)

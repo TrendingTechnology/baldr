@@ -112,5 +112,8 @@ class Resolver {
     getAssets() {
         return client_media_models_1.assetCache.getAll();
     }
+    getSamples() {
+        return client_media_models_1.sampleCache.getAll();
+    }
 }
 exports.Resolver = Resolver;

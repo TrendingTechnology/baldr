@@ -1,4 +1,4 @@
-import { ClientMediaAsset } from '@bldr/client-media-models';
+import { ClientMediaAsset, Sample } from '@bldr/client-media-models';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -39,4 +39,5 @@ export declare class Resolver {
      */
     resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
     getAssets(): ClientMediaAsset[];
+    getSamples(): Sample[];
 }

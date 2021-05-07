@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { makeHttpRequestInstance } from '@bldr/http-request';
-import { ClientMediaAsset, MediaUri, findMediaUris, assetCache } from '@bldr/client-media-models';
+import { ClientMediaAsset, MediaUri, findMediaUris, assetCache, sampleCache } from '@bldr/client-media-models';
 import { makeSet } from '@bldr/core-browser';
 import config from '@bldr/config';
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
@@ -108,5 +108,8 @@ export class Resolver {
     }
     getAssets() {
         return assetCache.getAll();
+    }
+    getSamples() {
+        return sampleCache.getAll();
     }
 }

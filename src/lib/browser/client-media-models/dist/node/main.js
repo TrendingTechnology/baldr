@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.resetMediaCache = exports.sampleCache = exports.assetCache = exports.ClientMediaAsset = void 0;
+exports.Sample = exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.resetMediaCache = exports.sampleCache = exports.assetCache = exports.ClientMediaAsset = void 0;
 var asset_1 = require("./asset");
 Object.defineProperty(exports, "ClientMediaAsset", { enumerable: true, get: function () { return asset_1.ClientMediaAsset; } });
 var cache_1 = require("./cache");
@@ -12,3 +12,5 @@ Object.defineProperty(exports, "MediaUri", { enumerable: true, get: function () 
 Object.defineProperty(exports, "findMediaUris", { enumerable: true, get: function () { return media_uri_1.findMediaUris; } });
 var mime_type_1 = require("./mime-type");
 Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return mime_type_1.mimeTypeManager; } });
+var sample_1 = require("./sample");
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return sample_1.Sample; } });

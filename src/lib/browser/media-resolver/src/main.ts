@@ -1,5 +1,5 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import { ClientMediaAsset, MediaUri, findMediaUris, assetCache } from '@bldr/client-media-models'
+import { ClientMediaAsset, MediaUri, findMediaUris, assetCache, sampleCache, Sample } from '@bldr/client-media-models'
 import { makeSet } from '@bldr/core-browser'
 import config from '@bldr/config'
 import type { AssetType } from '@bldr/type-definitions'
@@ -105,5 +105,9 @@ export class Resolver {
 
   getAssets(): ClientMediaAsset[] {
     return assetCache.getAll()
+  }
+
+  getSamples(): Sample[] {
+    return sampleCache.getAll()
   }
 }
