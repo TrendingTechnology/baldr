@@ -18,6 +18,7 @@
     "@bldr/http-request": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/client-media-models": "*",
+    "@bldr/media-resolver": "*",
     "vuex": "3.5.1"
   },
   "publishConfig": {

@@ -35,6 +35,7 @@ import {
   removeDuplicatesFromArray
 } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
+import * as mediaResolver from '@bldr/media-resolver'
 
 import DynamicSelect from '@bldr/dynamic-select'
 
@@ -2107,6 +2108,11 @@ class Media {
       this.setPreviewImagesFromCoverProp_()
       this.addShortcutForSamples_()
     }
+
+    const resolverNg = new mediaResolver.Resolver()
+    await resolverNg.resolve(assetSpecs)
+    console.log(resolverNg.getAssets())
+
     return output
   }
 

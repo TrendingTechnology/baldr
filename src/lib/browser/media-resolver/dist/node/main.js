@@ -109,5 +109,8 @@ class Resolver {
             return assets;
         });
     }
+    getAssets() {
+        return client_media_models_1.assetCache.getAll();
+    }
 }
 exports.Resolver = Resolver;

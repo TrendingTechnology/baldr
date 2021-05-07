@@ -106,4 +106,7 @@ export class Resolver {
             return assets;
         });
     }
+    getAssets() {
+        return assetCache.getAll();
+    }
 }

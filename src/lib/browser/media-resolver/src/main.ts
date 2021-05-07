@@ -102,4 +102,8 @@ export class Resolver {
     }
     return assets
   }
+
+  getAssets(): ClientMediaAsset[] {
+    return assetCache.getAll()
+  }
 }

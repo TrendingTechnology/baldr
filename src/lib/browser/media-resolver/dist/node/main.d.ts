@@ -38,4 +38,5 @@ export declare class Resolver {
      * @param uris - A single media URI or an array of media URIs.
      */
     resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
+    getAssets(): ClientMediaAsset[];
 }

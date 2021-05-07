@@ -13,7 +13,7 @@ import { getHtmlBody } from './main.js'
 
 export default {
   props: {
-    ref: {
+    id: {
       type: String,
       required: true
     },
