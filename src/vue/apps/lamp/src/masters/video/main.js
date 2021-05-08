@@ -43,9 +43,15 @@ export default validateMasterSpec({
         httpUrl: asset.httpUrl,
         previewHttpUrl: asset.previewHttpUrl
       }
-      if (props.showMeta) result.showMeta = true
-      if (asset.title) result.title = asset.title
-      if (asset.description) result.description = asset.description
+      if (props.showMeta) {
+        result.showMeta = true
+      }
+      if (asset.title) {
+        result.title = asset.title
+      }
+      if (asset.description) {
+        result.description = asset.description
+      }
       return result
     },
     collectPropsPreview ({ propsMain }) {
