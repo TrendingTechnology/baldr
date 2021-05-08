@@ -33,6 +33,7 @@
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/tex-templates": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",

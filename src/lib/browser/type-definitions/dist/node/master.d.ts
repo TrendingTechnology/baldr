@@ -215,7 +215,23 @@ interface MasterHooks {
      */
     titleFromProps?: (payload: PropsBundle) => string;
     /**
-     * Generate a TeX markup from the current slide.
+     * Generate a TeX markup from the current slide. See TeX package
+     * `schule-baldr.dtx`.
+     *
+     * ```js
+     * import * as tex from '@bldr/tex-templates'
+     *
+     * export const default = {
+     *   hooks: {
+     *     generateTexMarkup ({ props, propsMain, propsPreview }) {
+     *       const yaml = propsMain.asset.yaml
+     *       return tex.environment('baldrPerson', yaml.shortBiography, {
+     *         name: yaml.name
+     *       })
+     *     }
+     *   }
+     * }
+     * ```
      */
     generateTexMarkup?: (payload: PropsBundle) => string;
     /**

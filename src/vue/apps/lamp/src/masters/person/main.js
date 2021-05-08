@@ -4,6 +4,8 @@
 
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
+import * as tex from '@bldr/tex-templates'
+
 function convertPersonIdToMediaId (personId) {
   return `ref:PR_${personId}`
 }
@@ -43,6 +45,12 @@ export default validateMasterSpec({
     },
     titleFromProps ({ propsMain }) {
       return propsMain.asset.yaml.name
+    },
+    generateTexMarkup ({ props, propsMain, propsPreview }) {
+      const yaml = propsMain.asset.yaml
+      return tex.environment('baldrPerson', yaml.shortBiography, {
+        name: yaml.name
+      })
     }
   }
 })
