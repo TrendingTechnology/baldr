@@ -260,8 +260,6 @@ export function formatToLocalDateTime (timeStampMsec: number): string {
 /**
  * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
  * hour 33 minutes 12 seconds) into seconds.
- *
- * @param duration
  */
 export function convertDurationToSeconds (duration: string | number): number {
   if (typeof duration === 'number') {
@@ -280,8 +278,6 @@ export function convertDurationToSeconds (duration: string | number): number {
 
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
- *
- * @param text
  */
 export function toTitleCase (text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)

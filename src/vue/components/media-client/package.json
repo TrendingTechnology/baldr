@@ -20,6 +20,7 @@
     "@bldr/dynamic-select": "*",
     "@bldr/http-request": "*",
     "@bldr/media-resolver": "*",
+    "@bldr/yaml": "*",
     "vuex": "3.5.1"
   },
   "publishConfig": {

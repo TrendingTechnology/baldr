@@ -4,7 +4,7 @@
     b-ui-theme="default"
   >
 
-    <h1>Media-Categories</h1>
+    <h1>Metadaten-Kategorien</h1>
 
     <ul>
       <li v-for="(category, name) in categories" :key="name">
@@ -12,7 +12,10 @@
 
         <ul>
           <li v-for="(prop, propName) in category.props" :key="propName">
-            {{ prop.title }} (<span class="machine-name smaller">{{ propName }}</span>)
+            {{ prop.title }} (<span class="machine-name smaller">{{ convertCamelToSnake(propName) }}</span>)
+            <p class="description smaller" v-if="prop.description" >
+              {{ prop.description }}
+            </p>
           </li>
         </ul>
 
@@ -22,8 +25,8 @@
 </template>
 
 <script>
-
 import config from '@bldr/config'
+import { convertCamelToSnake } from '@bldr/yaml'
 
 export default {
   name: 'MediaCategories',
@@ -31,6 +34,9 @@ export default {
     categories () {
       return config.mediaCategories
     }
+  },
+  methods: {
+    convertCamelToSnake
   }
 }
 </script>
@@ -39,6 +45,11 @@ export default {
   .vc_media_categories {
     .machine-name {
       font-family: mono;
+    }
+
+    p.description {
+      margin: 0;
+      padding: 0;
     }
   }
 </style>

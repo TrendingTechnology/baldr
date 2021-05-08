@@ -150,6 +150,12 @@ const menuTemplate = [
         keyboardShortcut: 'm'
       },
       {
+        label: 'Metadaten-Kategorien',
+        action: 'pushRouter',
+        arguments: 'media-categories',
+        keyboardShortcut: 'n'
+      },
+      {
         label: 'Themen',
         action: 'pushRouter',
         arguments: 'topics',
