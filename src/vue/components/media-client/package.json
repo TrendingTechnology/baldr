@@ -14,10 +14,11 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/core-browser": "*",
-    "@bldr/http-request": "*",
-    "@bldr/dynamic-select": "*",
     "@bldr/client-media-models": "*",
+    "@bldr/config": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/dynamic-select": "*",
+    "@bldr/http-request": "*",
     "@bldr/media-resolver": "*",
     "vuex": "3.5.1"
   },

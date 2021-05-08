@@ -36,17 +36,11 @@ import {
 } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 import * as mediaResolver from '@bldr/media-resolver'
-
 import DynamicSelect from '@bldr/dynamic-select'
 
-// Vue components
-import ComponentClientMediaAsset from './MediaAsset.vue'
-import ComponentMediaOverview from './MediaOverview/index.vue'
-import ComponentMediaPlayer from './MediaPlayer.vue'
-import ComponentHorizontalPlayButtons from './HorizontalPlayButtons.vue'
-import ComponentMediaCanvas from './MediaCanvas.vue'
-import ComponentPlayButton from './PlayButton.vue'
 import storeModule from './store.js'
+import { registerComponents } from './components.js'
+import { addRoutes } from './routes.js'
 
 export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/media')
 
@@ -2026,35 +2020,6 @@ class Media {
      * @type {module:@bldr/media-client~Canvas}
      */
     this.canvas = new Canvas()
-
-    if (router) {
-      const style = {
-        darkMode: false
-      }
-      const routes = [
-        {
-          path: '/media',
-          name: 'media-overview',
-          meta: {
-            shortcut: 'm',
-            title: 'Media',
-            style
-          },
-          component: ComponentMediaOverview
-        },
-        {
-          path: '/media/:uriScheme/:uriAuthority',
-          name: 'asset',
-          meta: {
-            title: 'Media file',
-            style
-          },
-          component: ComponentClientMediaAsset
-        }
-      ]
-      router.addRoutes(routes)
-      shortcuts.fromRoute(routes[0])
-    }
   }
 
   /**
@@ -2258,6 +2223,8 @@ const Plugin = {
     if (!shortcutsInstance) throw new Error('Pass in an instance of “Shortcuts“.')
     shortcuts = shortcutsInstance
 
+    addRoutes(router, shortcuts)
+
     Vue.use(DynamicSelect)
 
     Vue.filter('duration', formatDuration)
@@ -2267,10 +2234,7 @@ const Plugin = {
      * @type {module:@bldr/media-client~Media}
      */
     Vue.prototype.$media = new Media()
-    Vue.component('media-player', ComponentMediaPlayer)
-    Vue.component('horizontal-play-buttons', ComponentHorizontalPlayButtons)
-    Vue.component('play-button', ComponentPlayButton)
-    Vue.component('media-canvas', ComponentMediaCanvas)
+    registerComponents(Vue)
   }
 }
 
