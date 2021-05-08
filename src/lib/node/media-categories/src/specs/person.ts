@@ -53,13 +53,15 @@ export const person: MediaCategory.Category = {
   props: {
     personId: {
       title: 'Personen-ID',
+      description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
       derive: function ({ data }) {
         return `${idify(data.lastname)}_${idify(data.firstname)}`
       },
       overwriteByDerived: true
     },
     ref: {
-      title: 'ID der Person',
+      title: 'Referenz der Person',
+      description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
       derive: function ({ data, category }) {
         const personCategory = category as PersonCategory
         return `${personCategory.abbreviation}_${idify(data.lastname)}_${idify(data.firstname)}`

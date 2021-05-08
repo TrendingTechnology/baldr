@@ -334,3 +334,17 @@ interface DataCategoryFilePath {
    */
   filePath?: string
 }
+
+export interface CategoryPersonYamlFormat extends AssetType.YamlFormat {
+  personId: string
+  ref: string
+  title: string
+  firstname: string
+  lastname: string
+  name: string
+  shortBiography: string
+  birth: string
+  death?: string
+  mainImage: string
+  famousPieces?: string[]
+}
