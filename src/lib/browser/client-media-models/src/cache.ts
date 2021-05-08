@@ -52,7 +52,7 @@ export class Cache <T> {
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
  * URIs.
  */
-export class MediaUriCache {
+export class MediaUriTranslator {
   private uuids: { [uuid: string]: string }
 
   constructor () {
@@ -106,7 +106,7 @@ export class MediaUriCache {
    * @returns A fully qualified media URI using the reference `ref` scheme, for
    * example `ref:Alla-Turca#complete`
    */
-  getRef (uuidOrRef: string): string | undefined {
+  getRef (uuidOrRef: string, withoutFragment: boolean = false): string | undefined {
     let prefix: string | undefined
     const splittedUri = MediaUri.splitByFragment(uuidOrRef)
     if (splittedUri.prefix.indexOf('uuid:') === 0) {
@@ -115,7 +115,7 @@ export class MediaUriCache {
       prefix = splittedUri.prefix
     }
     if (prefix != null) {
-      if (splittedUri.fragment == null) {
+      if (splittedUri.fragment == null || withoutFragment) {
         return prefix
       } else {
         return `${prefix}#${splittedUri.fragment}`
@@ -131,7 +131,16 @@ export class MediaUriCache {
   }
 }
 
-export const mediaUriCache = new MediaUriCache()
+export const mediaUriTranslator = new MediaUriTranslator()
+
+/**
+ * @param uri A asset or sample URI in various formats
+ *
+ * @returns A asset uri (without the fragment) in the `ref` scheme.
+ */
+export function translateToAssetRef (uri: string): string | undefined {
+  return mediaUriTranslator.getRef(uri, true)
+}
 
 class SampleCache extends Cache<Sample> {}
 
@@ -139,7 +148,7 @@ export const sampleCache = new SampleCache()
 
 export class AssetCache extends Cache<ClientMediaAsset> {
   add (ref: string, asset: ClientMediaAsset): boolean {
-    if (mediaUriCache.addPair(asset.ref, asset.uuid)) {
+    if (mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
       super.add(ref, asset)
       return true
     }
@@ -147,7 +156,7 @@ export class AssetCache extends Cache<ClientMediaAsset> {
   }
 
   get (uuidOrRef: string): ClientMediaAsset | undefined {
-    const id = mediaUriCache.getRef(uuidOrRef)
+    const id = mediaUriTranslator.getRef(uuidOrRef)
     if (id != null) {
       return super.get(id)
     }
@@ -159,6 +168,6 @@ export const assetCache = new AssetCache()
 export function resetMediaCache (): void {
   sampleCache.reset()
   assetCache.reset()
-  mediaUriCache.reset()
+  mediaUriTranslator.reset()
   shortcutManager.reset()
 }

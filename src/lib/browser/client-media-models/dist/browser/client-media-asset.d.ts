@@ -59,7 +59,7 @@ export declare class ClientMediaAsset {
 }
 export declare class AssetCache {
     private cache;
-    private readonly mediaUriCache;
+    private readonly mediaUriTranslator;
     constructor();
     add(asset: ClientMediaAsset): boolean;
     get(uuidOrRef: string): ClientMediaAsset | undefined;

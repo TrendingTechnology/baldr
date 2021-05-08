@@ -42,16 +42,16 @@ describe('Package “@bldr/media-resolver”', function () {
       // ref:Grosses-Tor_HB_Orchester_Samples
       const asset = await resolveSingleByUuid('702ba259-349a-459f-bc58-cf1b0da37263')
       const samples = asset.samples
-      const sample = samples.get('menschen')
-      assert.strictEqual(sample.ref, 'menschen')
+      const sample = samples.get('ref:Grosses-Tor_HB_Orchester_Samples#menschen')
+      assert.strictEqual(sample.ref, 'ref:Grosses-Tor_HB_Orchester_Samples#menschen')
     })
 
     it('default complete sample', async function () {
       // ref:Fuge-Opfer_HB_Ricercar-a-3
       const asset = await resolveSingleByUuid('30a285e1-1fc1-418f-af6d-89cd37c0438d')
       const samples = asset.samples
-      const sample = samples.get('complete')
-      assert.strictEqual(sample.ref, 'complete')
+      const sample = samples.get('ref:Fuge-Opfer_HB_Ricercar-a-3#complete')
+      assert.strictEqual(sample.ref, 'ref:Fuge-Opfer_HB_Ricercar-a-3#complete')
       assert.strictEqual(sample.startTimeSec, 1)
     })
   })

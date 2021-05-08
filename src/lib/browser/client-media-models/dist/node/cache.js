@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.mediaUriCache = exports.MediaUriCache = exports.Cache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = void 0;
 const sample_1 = require("./sample");
 const media_uri_1 = require("./media-uri");
 class Cache {
@@ -46,7 +46,7 @@ exports.Cache = Cache;
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
  * URIs.
  */
-class MediaUriCache {
+class MediaUriTranslator {
     constructor() {
         this.uuids = {};
     }
@@ -95,7 +95,7 @@ class MediaUriCache {
      * @returns A fully qualified media URI using the reference `ref` scheme, for
      * example `ref:Alla-Turca#complete`
      */
-    getRef(uuidOrRef) {
+    getRef(uuidOrRef, withoutFragment = false) {
         let prefix;
         const splittedUri = media_uri_1.MediaUri.splitByFragment(uuidOrRef);
         if (splittedUri.prefix.indexOf('uuid:') === 0) {
@@ -105,7 +105,7 @@ class MediaUriCache {
             prefix = splittedUri.prefix;
         }
         if (prefix != null) {
-            if (splittedUri.fragment == null) {
+            if (splittedUri.fragment == null || withoutFragment) {
                 return prefix;
             }
             else {
@@ -120,21 +120,30 @@ class MediaUriCache {
         }
     }
 }
-exports.MediaUriCache = MediaUriCache;
-exports.mediaUriCache = new MediaUriCache();
+exports.MediaUriTranslator = MediaUriTranslator;
+exports.mediaUriTranslator = new MediaUriTranslator();
+/**
+ * @param uri A asset or sample URI in various formats
+ *
+ * @returns A asset uri (without the fragment) in the `ref` scheme.
+ */
+function translateToAssetRef(uri) {
+    return exports.mediaUriTranslator.getRef(uri, true);
+}
+exports.translateToAssetRef = translateToAssetRef;
 class SampleCache extends Cache {
 }
 exports.sampleCache = new SampleCache();
 class AssetCache extends Cache {
     add(ref, asset) {
-        if (exports.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+        if (exports.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
             super.add(ref, asset);
             return true;
         }
         return false;
     }
     get(uuidOrRef) {
-        const id = exports.mediaUriCache.getRef(uuidOrRef);
+        const id = exports.mediaUriTranslator.getRef(uuidOrRef);
         if (id != null) {
             return super.get(id);
         }
@@ -145,7 +154,7 @@ exports.assetCache = new AssetCache();
 function resetMediaCache() {
     exports.sampleCache.reset();
     exports.assetCache.reset();
-    exports.mediaUriCache.reset();
+    exports.mediaUriTranslator.reset();
     sample_1.shortcutManager.reset();
 }
 exports.resetMediaCache = resetMediaCache;
