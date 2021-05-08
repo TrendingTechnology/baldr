@@ -6,7 +6,9 @@
 
 import Vue from 'vue'
 
+import { translateToAssetRef } from '@bldr/client-media-models'
 import { makeHttpRequestInstance } from '@bldr/http-request'
+
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 
 const state = {
@@ -39,8 +41,17 @@ const getters = {
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
     return getters.assets[uri]
   },
+  assetNgByUri: (state, getters) => uri => {
+    const ref = translateToAssetRef(uri)
+    if (ref != null) {
+      return getters.assetsNg[uri]
+    }
+  },
   assets: state => {
     return state.assets
+  },
+  assetsNg: state => {
+    return state.assetsNg
   },
   assetsByType: (state, getters) => type => {
     const result = {}

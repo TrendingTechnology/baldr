@@ -20,7 +20,7 @@ export declare class Cache<T> {
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
  * URIs.
  */
-export declare class MediaUriCache {
+export declare class MediaUriTranslator {
     private uuids;
     constructor();
     /**
@@ -55,10 +55,16 @@ export declare class MediaUriCache {
      * @returns A fully qualified media URI using the reference `ref` scheme, for
      * example `ref:Alla-Turca#complete`
      */
-    getRef(uuidOrRef: string): string | undefined;
+    getRef(uuidOrRef: string, withoutFragment?: boolean): string | undefined;
     reset(): void;
 }
-export declare const mediaUriCache: MediaUriCache;
+export declare const mediaUriTranslator: MediaUriTranslator;
+/**
+ * @param uri A asset or sample URI in various formats
+ *
+ * @returns A asset uri (without the fragment) in the `ref` scheme.
+ */
+export declare function translateToAssetRef(uri: string): string | undefined;
 declare class SampleCache extends Cache<Sample> {
 }
 export declare const sampleCache: SampleCache;

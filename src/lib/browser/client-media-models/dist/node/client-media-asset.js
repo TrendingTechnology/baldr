@@ -81,17 +81,17 @@ exports.ClientMediaAsset = ClientMediaAsset;
 class AssetCache {
     constructor() {
         this.cache = {};
-        this.mediaUriCache = new media_uri_1.MediaUriCache();
+        this.mediaUriTranslator = new media_uri_1.MediaUriTranslator();
     }
     add(asset) {
-        if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
             this.cache[asset.ref] = asset;
             return true;
         }
         return false;
     }
     get(uuidOrRef) {
-        const id = this.mediaUriCache.getRef(uuidOrRef);
+        const id = this.mediaUriTranslator.getRef(uuidOrRef);
         if (id != null && this.cache[id] != null) {
             return this.cache[id];
         }

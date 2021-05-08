@@ -2,7 +2,14 @@
 
 const assert = require('assert')
 const { createAsset } = require('./_helper.js')
-const { assetCache, sampleCache, resetMediaCache, mediaUriCache, MediaUriCache } = require('../dist/node/cache.js')
+const {
+  assetCache,
+  sampleCache,
+  resetMediaCache,
+  mediaUriTranslator,
+  MediaUriTranslator,
+  translateToAssetRef
+} = require('../dist/node/cache.js')
 
 describe('Class “AssetCache()”', function () {
   it('Method “add()”', function () {
@@ -49,19 +56,19 @@ describe('Autofilling of the caches by instantiation', function () {
     createAsset({ ref: 'test2' })
     createAsset({ mimeType: 'audio', path: 'dir/test.mp3', ref: 'test3', samples: [{ startTime: 1 }] })
     assert.strictEqual(assetCache.size, 3)
-    assert.strictEqual(Object.keys(mediaUriCache.uuids).length, 3)
+    assert.strictEqual(Object.keys(mediaUriTranslator.uuids).length, 3)
     assert.strictEqual(sampleCache.size, 2)
 
     resetMediaCache()
     assert.strictEqual(assetCache.size, 0)
-    assert.strictEqual(Object.keys(mediaUriCache.uuids).length, 0)
+    assert.strictEqual(Object.keys(mediaUriTranslator.uuids).length, 0)
     assert.strictEqual(sampleCache.size, 0)
   })
 })
 
-describe('Class “MediaUriCache()”', function () {
+describe('Class “MediaUriTranslator()”', function () {
   it('Methode “getRef()”', function () {
-    const cache = new MediaUriCache()
+    const cache = new MediaUriTranslator()
     assert.strictEqual(cache.addPair('ref:test', 'uuid:e1eec3bb-3a65-4a9d-bc8c-2e2539a51c4e'), true)
     assert.strictEqual(cache.addPair('ref:test', 'uuid:e1eec3bb-3a65-4a9d-bc8c-2e2539a51c4e'), false)
     assert.strictEqual(cache.addPair('test', 'e1eec3bb-3a65-4a9d-bc8c-2e2539a51c4e'), false)
@@ -70,4 +77,14 @@ describe('Class “MediaUriCache()”', function () {
     assert.strictEqual(cache.getRef('ref:test'), 'ref:test')
     assert.strictEqual(cache.getRef('uuid:e1eec3bb-3a65-4a9d-bc8c-2e2539a51c4e#fragment'), 'ref:test#fragment')
   })
+})
+
+it('Function “tranlateToAssetRef()”', function () {
+  resetMediaCache()
+  createAsset({ ref: 'test1' })
+  const asset = assetCache.get('ref:test1')
+  assert.strictEqual(
+    translateToAssetRef(`uuid:${asset.yaml.uuid}#complete`),
+    'ref:test1'
+  )
 })

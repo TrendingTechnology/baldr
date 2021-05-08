@@ -103,11 +103,11 @@ export class Resolver {
     return assets
   }
 
-  getAssets(): ClientMediaAsset[] {
+  getAssets (): ClientMediaAsset[] {
     return assetCache.getAll()
   }
 
-  getSamples(): Sample[] {
+  getSamples (): Sample[] {
     return sampleCache.getAll()
   }
 }

@@ -1,6 +1,6 @@
 import { getExtension } from '@bldr/core-browser';
 import { mimeTypeManager } from './mime-type';
-import { MediaUri, MediaUriCache } from './media-uri';
+import { MediaUri, MediaUriTranslator } from './media-uri';
 import { SampleCollection } from './sample';
 import { createHtmlElement } from './html-elements';
 /**
@@ -77,17 +77,17 @@ export class ClientMediaAsset {
 export class AssetCache {
     constructor() {
         this.cache = {};
-        this.mediaUriCache = new MediaUriCache();
+        this.mediaUriTranslator = new MediaUriTranslator();
     }
     add(asset) {
-        if (this.mediaUriCache.addPair(asset.ref, asset.uuid)) {
+        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
             this.cache[asset.ref] = asset;
             return true;
         }
         return false;
     }
     get(uuidOrRef) {
-        const id = this.mediaUriCache.getRef(uuidOrRef);
+        const id = this.mediaUriTranslator.getRef(uuidOrRef);
         if (id != null && this.cache[id] != null) {
             return this.cache[id];
         }
