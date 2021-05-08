@@ -3,8 +3,8 @@
     <img class="img-contain" :src="asset.httpUrl">
     <p
       class="short-biography font-shadow small"
-      v-if="asset.shortBiography"
-      v-html="asset.shortBiography"
+      v-if="asset.yaml.shortBiography"
+      v-html="asset.yaml.shortBiography"
     />
     <div class="title-box">
       <p
@@ -13,15 +13,16 @@
       >
         {{ birth }} {{ death }}
       </p>
-      <p class="person important transparent-background font-shadow">{{ asset.name }}</p>
+      <p class="person important transparent-background font-shadow">{{ asset.yaml.name }}</p>
     </div>
 
     <external-sites :asset="asset"/>
+    <!--
     <horizontal-play-buttons
       :samples="asset.famousPieces"
       class="left-bottom-corner"
       v-if="asset.famousPieces"
-    />
+    /> -->
   </div>
 </template>
 
@@ -41,12 +42,16 @@ export default {
   },
   computed: {
     birth () {
-      if (this.asset.birth) return `* ${formatToLocalDate(this.asset.birth)}`
-      return ''
+      if (this.asset.yaml.birth != null) {
+        return `* ${formatToLocalDate(this.asset.yaml.birth)}`
+      }
+      return undefined
     },
     death () {
-      if (this.asset.death) return `† ${formatToLocalDate(this.asset.death)}`
-      return ''
+      if (this.asset.yaml.death != null) {
+        return `† ${formatToLocalDate(this.asset.yaml.death)}`
+      }
+      return undefined
     }
   }
 }

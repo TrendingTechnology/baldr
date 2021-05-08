@@ -43,53 +43,60 @@ export default {
     }
   },
   computed: {
-    imslp () {
-      if (this.asset.imslp) {
-        return formatImslpUrl(this.asset.imslp)
+    yaml () {
+      if (this.asset.yaml != null) {
+        return this.asset.yaml
+      } else {
+        return this.asset
       }
-      return ''
+    },
+    imslp () {
+      if (this.yaml.imslp) {
+        return formatImslpUrl(this.yaml.imslp)
+      }
+      return null
     },
     musicbrainzRecordingId () {
-      if (this.asset.musicbrainzRecordingId) {
-        return formatMusicbrainzRecordingUrl(this.asset.musicbrainzRecordingId)
+      if (this.yaml.musicbrainzRecordingId) {
+        return formatMusicbrainzRecordingUrl(this.yaml.musicbrainzRecordingId)
       }
-      return ''
+      return null
     },
     musicbrainzWorkId () {
-      if (this.asset.musicbrainzWorkId) {
-        return formatMusicbrainzWorkUrl(this.asset.musicbrainzWorkId)
+      if (this.yaml.musicbrainzWorkId) {
+        return formatMusicbrainzWorkUrl(this.yaml.musicbrainzWorkId)
       }
-      return ''
+      return null
     },
     wikicommons () {
-      if (this.asset.wikicommons) {
-        return formatWikicommonsUrl(this.asset.wikicommons)
+      if (this.yaml.wikicommons) {
+        return formatWikicommonsUrl(this.v.wikicommons)
       }
-      for (const prop in this.asset) {
-        const value = this.asset[prop]
+      for (const prop in this.yaml) {
+        const value = this.yaml[prop]
         if (value && typeof value === 'string' && value.match(/^wikicommons:/)) {
           return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
         }
       }
-      return ''
+      return null
     },
     wikidata () {
-      if (this.asset.wikidata) {
-        return formatWikidataUrl(this.asset.wikidata)
+      if (this.yaml.wikidata) {
+        return formatWikidataUrl(this.yaml.wikidata)
       }
-      return ''
+      return null
     },
     wikipedia () {
-      if (this.asset.wikipedia) {
-        return formatWikipediaUrl(this.asset.wikipedia)
+      if (this.yaml.wikipedia) {
+        return formatWikipediaUrl(this.yaml.wikipedia)
       }
-      return ''
+      return null
     },
     youtube () {
-      if (this.asset.youtube) {
-        return formatYoutubeUrl(this.asset.youtube)
+      if (this.yaml.youtube) {
+        return formatYoutubeUrl(this.yaml.youtube)
       }
-      return ''
+      return null
     }
   }
 }
