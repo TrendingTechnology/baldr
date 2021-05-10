@@ -1,30 +1,108 @@
 /**
- * Build the main menu for the Electron app and build a menu for the
- * web app.
+ * Provide a unifed interface for both the Electron and the @bldr/menu menu
+ * components.
  *
- * @module @bldr/lamp/menu
+ * src/vue/apps/lamp/src/MainApp.vue
+ *
+ * ```js
+ * const registerMenuItem = (raw) => {
+ *   let action
+ *   if (!raw.keyboardShortcut) return
+ *   if (raw.action === 'executeCallback') {
+ *     action = actions[raw.arguments]
+ *   } else if (raw.action === 'pushRouter') {
+ *     action = () => {
+ *       this.$router.push({ name: raw.arguments })
+ *     }
+ *   } else if (raw.action === 'openExternalUrl') {
+ *     action = () => {
+ *       window.open(raw.arguments, '_blank')
+ *     }
+ *   } else if (raw.action === 'clearCache') {
+ *     // Only in the electron app. Clear HTTP Cache.
+ *     return
+ *   } else {
+ *     throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
+ *   }
+ *   this.$shortcuts.add(normalizeKeyboardShortcuts(raw.keyboardShortcut), action, raw.label, raw.activeOnRoutes)
+ * }
+ * ```
+ *
+ * src/vue/apps/lamp/src/components/DropDownMenu.vue
+ *
+ * ```js
+ * function convertMenuItem (raw) {
+ *   const result = {}
+ *   if (raw.role) return
+ *   // label
+ *   if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
+ *   result.label = raw.label
+ *   // click
+ *   if (!raw.action) throw new Error(`Raw menu entry needs a key named action: ${raw}`)
+ *   let click
+ *   if (raw.action === 'openExternalUrl') {
+ *
+ *   } else if (raw.action === 'pushRouter') {
+ *     click = () => {
+ *       router.push({ name: raw.arguments })
+ *     }
+ *   } else if (raw.action === 'clearCache') {
+ *     // Only in the electron app. Clear HTTP Cache.
+ *     return
+ *   } else if (raw.action === 'executeCallback') {
+ *     click = actions[raw.arguments]
+ *   } else {
+ *     throw new Error(`Unkown action for raw menu entry: ${raw}`)
+ *   }
+ *   result.click = click
+ *   if (raw.keyboardShortcut) result.keyboardShortcut = raw.keyboardShortcut
+ *   return result
+ * }
+ * ```
+ *
+ * @module @bldr/menu-adapter
  */
 
-/**
- * @typedef RawMenuItem
- * @property {String} label - A short label of the menu entry.
- * @property {String} description - A longer description of the menu entry.
- * @property {String} action - For example “pushRoute”, “openExternalUrl”,
- *    “executeCallback”.
- * @property arguments - Arguments for the action, for example a callback name
- *   or a route name or a URL.
- * @property {Array} submenu - A array of menu entries to build a sub menu from.
- * @property {String} keyboardShortcut - Keyboard shortcuts to pass through mousetrap
- *   and to pass through the Electron Accelerator.
- * @property {Array} activeOnRoutes
- */
+interface RawMenuItem {
+  /**
+   * A short label of the menu entry.
+   */
+  label?: string
+
+  /**
+   * A longer description of the menu entry.
+   */
+  description?: string
+
+  action?: 'pushRouter' | 'openExternalUrl' | 'executeCallback' | 'clearCache'
+
+  /**
+   * Arguments for the action, for example a callback name or a route name or a URL.
+   */
+  arguments?: any
+
+  /**
+   * A array of menu entries to build a sub menu from.
+   */
+  submenu?: RawMenuItem[]
+
+  /**
+   * Keyboard shortcuts to pass through mousetrap
+   *   and to pass through the Electron Accelerator.
+   */
+  keyboardShortcut?: string
+
+  activeOnRoutes?: string[]
+
+  role?: any
+}
 
 /**
- * @param {String} keys - A raw keyboard shortcut specification.
- * @param {String} forClient - For which client the shortcuts have to
+ * @param keys - A raw keyboard shortcut specification.
+ * @param forClient - For which client the shortcuts have to
  *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
  */
-export function normalizeKeyboardShortcuts (keys, forClient = 'mousetrap') {
+export function normalizeKeyboardShortcuts (keys: string, forClient: 'mousetrap' | 'electron' = 'mousetrap'): string {
   if (forClient === 'mousetrap') {
     // See https://craig.is/killing/mice
     keys = keys.replace('Ctrl', 'ctrl')
@@ -38,24 +116,22 @@ export function normalizeKeyboardShortcuts (keys, forClient = 'mousetrap') {
   } else if (forClient === 'electron') {
     // https://www.electronjs.org/docs/api/accelerator
     keys = keys.replace('Ctrl', 'CommandOrControl')
-  } else {
-    throw new Error(`The argument “forClient” has to be “mousetrap” or “electron” not “${forClient}”`)
   }
   return keys.replace(/\s+\+\s+/g, '+')
 }
 
 /**
- * @param {Array.<RawMenuItem>} input - An array of raw menu items.
- * @param {Array} output - An array with processed menu items.
- * @param {Function} func - A function which is called with the argument
+ * @param input - An array of raw menu items.
+ * @param output - An array with processed menu items.
+ * @param func - A function which is called with the argument
  *   `rawMenuItem`.
  *
- * @returns {Array} A recursive array of processed menu items.
+ * @returns A recursive array of processed menu items.
  */
-function traverseMenuItemList (input, output, func) {
+function traverseMenuItemList (input: RawMenuItem[], output: any[], func: (input: RawMenuItem) => any): any[] {
   for (const rawMenuItem of input) {
     let result
-    if (rawMenuItem.submenu) {
+    if (rawMenuItem.submenu != null) {
       result = {
         label: rawMenuItem.label,
         submenu: traverseMenuItemList(rawMenuItem.submenu, [], func)
@@ -69,19 +145,19 @@ function traverseMenuItemList (input, output, func) {
 }
 
 /**
- * @param {Array} input - An array of raw menu items.
- * @param {Function} func - A function which is called with the argument
+ * @param input - An array of raw menu items.
+ * @param func - A function which is called with the argument
  *   `rawMenuItem`.
  *
- * @returns {Array} A recursive array of processed menu items.
+ * @returns A recursive array of processed menu items.
  */
-export function traverseMenu (input, func) {
-  const newMenu = []
+export function traverseMenu (input: RawMenuItem[], func: (input: RawMenuItem) => any): any[] {
+  const newMenu: any[] = []
   traverseMenuItemList(input, newMenu, func)
   return newMenu
 }
 
-const menuTemplate = [
+const menuTemplate: RawMenuItem[] = [
   {
     label: 'Datei',
     submenu: [
