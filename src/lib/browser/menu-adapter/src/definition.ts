@@ -1,5 +1,6 @@
 import type { RawMenuItem } from './main'
-const menuTemplate: RawMenuItem[] = [
+
+export const universalMenuDefinition: RawMenuItem[] = [
   {
     label: 'Datei',
     submenu: [
@@ -334,5 +335,3 @@ const menuTemplate: RawMenuItem[] = [
     ]
   }
 ]
-
-export default menuTemplate
