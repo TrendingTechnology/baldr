@@ -8,4 +8,4 @@
  *
  * @module @bldr/menu-adapter
  */
-export {};
+export { getEletronMenuDef, getWebappMenuDef } from './converter';

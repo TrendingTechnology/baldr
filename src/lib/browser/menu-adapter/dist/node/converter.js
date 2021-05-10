@@ -9,10 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEletronMenuDef = exports.convertMenuItemElectron = exports.convertMenuItemWebapp = void 0;
+exports.getWebappMenuDef = exports.getEletronMenuDef = exports.convertMenuItemElectron = exports.convertMenuItemWebapp = void 0;
 const definition_1 = require("./definition");
 const traverse_1 = require("./traverse");
-function convertMenuItemWebapp(raw, router, actions) {
+function convertMenuItemWebapp(raw, payload) {
+    const p = payload;
+    const router = p.router;
+    const actions = p.actions;
     if ('role' in raw)
         return;
     const universal = raw;
@@ -44,6 +47,8 @@ function convertMenuItemWebapp(raw, router, actions) {
     else {
         throw new Error(`Unkown action for raw menu entry: ${raw}`);
     }
+    if (click == null)
+        return;
     const result = {
         label,
         click
@@ -112,7 +117,11 @@ function convertMenuItemElectron(raw, payload) {
     return result;
 }
 exports.convertMenuItemElectron = convertMenuItemElectron;
-function getEletronMenuDef(shell, win) {
-    traverse_1.traverseMenu(definition_1.universalMenuDefinition, convertMenuItemElectron, { shell, window });
+function getEletronMenuDef(shell, window) {
+    return traverse_1.traverseMenu(definition_1.universalMenuDefinition, convertMenuItemElectron, { shell, window });
 }
 exports.getEletronMenuDef = getEletronMenuDef;
+function getWebappMenuDef(router, actions) {
+    return traverse_1.traverseMenu(definition_1.universalMenuDefinition, convertMenuItemWebapp, { router, actions });
+}
+exports.getWebappMenuDef = getWebappMenuDef;

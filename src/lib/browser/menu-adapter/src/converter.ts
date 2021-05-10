@@ -1,10 +1,19 @@
 import type { Shell, BrowserWindow } from 'electron'
-import type { RawMenuItem, UniversalMenuItem, WebappMenuItem, UniversalLeafMenuItem, ElectronMenuItem } from './main'
+import type { RawMenuItem, UniversalMenuItem, WebappMenuItem, UniversalLeafMenuItem, ElectronMenuItem, ActionCollection } from './main'
 
 import { universalMenuDefinition } from './definition'
 import { traverseMenu } from './traverse'
 
-export function convertMenuItemWebapp (raw: RawMenuItem, router: any, actions: any) {
+interface WebappPayload {
+  router: any
+  actions: ActionCollection
+}
+
+export function convertMenuItemWebapp (raw: RawMenuItem, payload: any) {
+  const p = payload as WebappPayload
+  const router = p.router
+  const actions = p.actions
+
   if ('role' in raw) return
 
   const universal: UniversalMenuItem = raw as UniversalMenuItem
@@ -34,6 +43,7 @@ export function convertMenuItemWebapp (raw: RawMenuItem, router: any, actions: a
   } else {
     throw new Error(`Unkown action for raw menu entry: ${raw}`)
   }
+  if (click == null) return
   const result: WebappMenuItem = {
     label,
     click
@@ -108,6 +118,10 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
   return result
 }
 
-export function getEletronMenuDef(shell: Shell, win: BrowserWindow) {
-  traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
+export function getEletronMenuDef (shell: Shell, window: BrowserWindow) {
+  return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
+}
+
+export function getWebappMenuDef (router: any, actions: any) {
+  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, {router, actions})
 }

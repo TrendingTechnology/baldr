@@ -11,6 +11,8 @@
 
 import type { MenuItemConstructorOptions } from 'electron'
 
+export { getEletronMenuDef, getWebappMenuDef } from './converter'
+
 export type ElectronMenuItem = MenuItemConstructorOptions
 
 export interface UniversalMenuItem {
@@ -53,10 +55,10 @@ export type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalIn
 
 export interface WebappMenuItem {
   label: string
-  click: () => {}
+  click: () => void
   keyboardShortcut?: string
 }
 
 export interface ActionCollection {
-  [actionName: string]: () => {}
+  [actionName: string]: () => void
 }

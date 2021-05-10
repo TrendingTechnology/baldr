@@ -79,7 +79,9 @@ export default {
   },
   computed: {
     menu () {
-      return traverseMenu(menuTemplate)
+      const out = traverseMenu(menuTemplate)
+      console.log(out)
+      return out
     }
   }
 }

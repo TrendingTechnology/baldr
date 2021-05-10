@@ -43,7 +43,9 @@ function traverseMenuItemList (input: RawMenuItem[], output: any[], func: (input
     } else {
       result = func(rawMenuItem, payload)
     }
-    output.push(result)
+    if (result != null) {
+      output.push(result)
+    }
   }
   return output
 }

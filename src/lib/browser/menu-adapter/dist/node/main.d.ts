@@ -9,6 +9,7 @@
  * @module @bldr/menu-adapter
  */
 import type { MenuItemConstructorOptions } from 'electron';
+export { getEletronMenuDef, getWebappMenuDef } from './converter';
 export declare type ElectronMenuItem = MenuItemConstructorOptions;
 export interface UniversalMenuItem {
     /**
@@ -42,9 +43,9 @@ export interface UniversalInnerMenuItem extends UniversalMenuItem {
 export declare type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalInnerMenuItem;
 export interface WebappMenuItem {
     label: string;
-    click: () => {};
+    click: () => void;
     keyboardShortcut?: string;
 }
 export interface ActionCollection {
-    [actionName: string]: () => {};
+    [actionName: string]: () => void;
 }

@@ -10,3 +10,7 @@
  * @module @bldr/menu-adapter
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getWebappMenuDef = exports.getEletronMenuDef = void 0;
+var converter_1 = require("./converter");
+Object.defineProperty(exports, "getEletronMenuDef", { enumerable: true, get: function () { return converter_1.getEletronMenuDef; } });
+Object.defineProperty(exports, "getWebappMenuDef", { enumerable: true, get: function () { return converter_1.getWebappMenuDef; } });

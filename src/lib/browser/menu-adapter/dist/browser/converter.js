@@ -9,7 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { universalMenuDefinition } from './definition';
 import { traverseMenu } from './traverse';
-export function convertMenuItemWebapp(raw, router, actions) {
+export function convertMenuItemWebapp(raw, payload) {
+    const p = payload;
+    const router = p.router;
+    const actions = p.actions;
     if ('role' in raw)
         return;
     const universal = raw;
@@ -41,6 +44,8 @@ export function convertMenuItemWebapp(raw, router, actions) {
     else {
         throw new Error(`Unkown action for raw menu entry: ${raw}`);
     }
+    if (click == null)
+        return;
     const result = {
         label,
         click
@@ -107,6 +112,9 @@ export function convertMenuItemElectron(raw, payload) {
     }
     return result;
 }
-export function getEletronMenuDef(shell, win) {
-    traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window });
+export function getEletronMenuDef(shell, window) {
+    return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window });
+}
+export function getWebappMenuDef(router, actions) {
+    return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions });
 }
