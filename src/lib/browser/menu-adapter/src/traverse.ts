@@ -50,7 +50,7 @@ function traverseMenuItemList (input: RawMenuItem[], output: any[], func: (input
   return output
 }
 
-function registerShortcuts (raw: RawMenuItem, router: any, shortcuts: any, actions: ActionCollection) {
+export function registerShortcuts (raw: RawMenuItem, router: any, shortcuts: any, actions: ActionCollection): void {
   let action
   if (!('keyboardShortcut' in raw) && !('action' in raw)) return
   const universal: UniversalLeafMenuItem = raw as UniversalLeafMenuItem

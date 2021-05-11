@@ -9,7 +9,7 @@ interface WebappPayload {
   actions: ActionCollection
 }
 
-export function convertMenuItemWebapp (raw: RawMenuItem, payload: any) {
+export function convertMenuItemWebapp (raw: RawMenuItem, payload: any): WebappMenuItem | undefined {
   const p = payload as WebappPayload
   const router = p.router
   const actions = p.actions
@@ -18,13 +18,13 @@ export function convertMenuItemWebapp (raw: RawMenuItem, payload: any) {
 
   const universal: UniversalMenuItem = raw as UniversalMenuItem
   // label
-  if (!universal.label) {
-    throw new Error(`Raw menu entry needs a key named label: ${raw}`)
+  if (universal.label == null) {
+    throw new Error('Raw menu entry needs a key named label')
   }
   const label = universal.label
   // click
   if (!('action' in universal)) {
-    throw new Error(`Raw menu entry needs a key named action: ${raw}`)
+    throw new Error(`Raw menu entry needs a key named action: ${universal.label}`)
   }
 
   const universalLeaf: UniversalLeafMenuItem = universal as UniversalLeafMenuItem
@@ -41,7 +41,7 @@ export function convertMenuItemWebapp (raw: RawMenuItem, payload: any) {
   } else if (universalLeaf.action === 'executeCallback') {
     click = actions[universalLeaf.arguments]
   } else {
-    throw new Error(`Unkown action for raw menu entry: ${raw}`)
+    throw new Error(`Unkown action for raw menu entry: ${universalLeaf.label}`)
   }
   if (click == null) return
   const result: WebappMenuItem = {
@@ -50,7 +50,7 @@ export function convertMenuItemWebapp (raw: RawMenuItem, payload: any) {
   }
 
   result.click = click
-  if (universalLeaf.keyboardShortcut) {
+  if (universalLeaf.keyboardShortcut != null) {
     result.keyboardShortcut = universalLeaf.keyboardShortcut
   }
   return result
@@ -73,12 +73,12 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
   const universal: UniversalMenuItem = raw as UniversalMenuItem
 
   if (universal.label == null) {
-    throw new Error(`Raw menu entry needs a key named label: ${raw}`)
+    throw new Error('Raw menu entry needs a key named label')
   }
   result.label = raw.label
   // click
   if (!('action' in universal)) {
-    throw new Error(`Raw menu entry needs a key named action: ${raw}`)
+    throw new Error(`Raw menu entry needs a key named action: ${universal.label}`)
   }
 
   const universalLeaf: UniversalLeafMenuItem = universal as UniversalLeafMenuItem
@@ -101,15 +101,15 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
       // Sometimes some images are not updated.
       // We have to delete the http cache.
       // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
-      window.webContents.session.clearCache()
-      window.webContents.session.clearStorageData()
+      window.webContents.session.clearCache().then(() => {}, () => {})
+      window.webContents.session.clearStorageData().then(() => {}, () => {})
     }
   } else {
-    throw new Error(`Unkown action for raw menu entry: ${raw}`)
+    throw new Error(`Unkown action for raw menu entry: ${universalLeaf.label}`)
   }
   result.click = click
   // accelerator
-  if (universalLeaf.keyboardShortcut) {
+  if (universalLeaf.keyboardShortcut != null) {
     result.accelerator = universalLeaf.keyboardShortcut
     // We handle the keyboard shortcuts on the render process side with
     // mousetrap.
@@ -118,10 +118,10 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
   return result
 }
 
-export function getEletronMenuDef (shell: Shell, window: BrowserWindow) {
+export function getEletronMenuDef (shell: Shell, window: BrowserWindow): ElectronMenuItem[] {
   return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
 }
 
-export function getWebappMenuDef (router: any, actions: any) {
-  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, {router, actions})
+export function getWebappMenuDef (router: any, actions: any): WebappMenuItem[] {
+  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions })
 }
