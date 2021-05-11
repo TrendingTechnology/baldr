@@ -1,4 +1,4 @@
-import type { RawMenuItem } from './main'
+import type { RawMenuItem } from './menu-item'
 
 export const universalMenuDefinition: RawMenuItem[] = [
   {

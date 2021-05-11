@@ -12,7 +12,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import contextMenu from 'electron-context-menu'
 
-import menuTemplate, { traverseMenu } from './menu.js'
+import { getEletronMenuDef } from '@bldr/menu-adapter'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -125,57 +125,5 @@ if (isDevelopment) {
   }
 }
 
-//
-
-// var remote = require('remote');
-// var win = remote.getCurrentWindow();
-// );
-
-/**
- * @param {module:@bldr/lamp/menu.RawMenuItem} raw
- */
-function convertMenuItem (raw) {
-  const result = {}
-  if (raw.role) return raw
-  // label
-  if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
-  result.label = raw.label
-  // click
-  if (!raw.action) throw new Error(`Raw menu entry needs a key named action: ${raw}`)
-  let click
-  if (raw.action === 'openExternalUrl') {
-    click = async () => {
-      await shell.openExternal(raw.arguments)
-    }
-  } else if (raw.action === 'pushRouter') {
-    click = () => {
-      win.webContents.send('navigate', { name: raw.arguments })
-    }
-  } else if (raw.action === 'executeCallback') {
-    click = () => {
-      win.webContents.send('action', raw.arguments)
-    }
-  } else if (raw.action === 'clearCache') {
-    click = () => {
-      // Sometimes some images are not updated.
-      // We have to delete the http cache.
-      // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
-      win.webContents.session.clearCache()
-      win.webContents.session.clearStorageData()
-    }
-  } else {
-    throw new Error(`Unkown action for raw menu entry: ${raw}`)
-  }
-  result.click = click
-  // accelerator
-  if (raw.keyboardShortcut) {
-    result.accelerator = raw.keyboardShortcut
-    // We handle the keyboard shortcuts on the render process side with
-    // mousetrap.
-    result.registerAccelerator = false
-  }
-  return result
-}
-
-const menu = Menu.buildFromTemplate(traverseMenu(menuTemplate, convertMenuItem))
+const menu = Menu.buildFromTemplate(getEletronMenuDef(shell, win))
 Menu.setApplicationMenu(menu)

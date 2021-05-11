@@ -9,56 +9,20 @@
  * @module @bldr/menu-adapter
  */
 
-import type { MenuItemConstructorOptions } from 'electron'
+import type { Shell, BrowserWindow } from 'electron'
 
-export { getEletronMenuDef, getWebappMenuDef } from './converter'
+import { traverseMenu } from './traverse'
+import { ElectronMenuItem, WebappMenuItem, convertMenuItemElectron, convertMenuItemWebapp, registerShortcut } from './menu-item'
+import { universalMenuDefinition } from './definition'
 
-export type ElectronMenuItem = MenuItemConstructorOptions
-
-export interface UniversalMenuItem {
-  /**
-   * A short label of the menu entry.
-   */
-  label: string
-
-  /**
-   * A longer description of the menu entry.
-   */
-  description?: string
-
-  /**
-   * Arguments for the action, for example a callback name or a route name or a URL.
-   */
-  arguments?: any
-
-  /**
-   * Keyboard shortcuts to pass through mousetrap
-   *   and to pass through the Electron Accelerator.
-   */
-  keyboardShortcut?: string
-
-  activeOnRoutes?: string[]
+export function getEletronMenuDef (shell: Shell, window: BrowserWindow): ElectronMenuItem[] {
+  return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
 }
 
-export interface UniversalLeafMenuItem extends UniversalMenuItem {
-  action: 'pushRouter' | 'openExternalUrl' | 'executeCallback' | 'clearCache'
+export function getWebappMenuDef (router: any, actions: any): WebappMenuItem[] {
+  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions })
 }
 
-export interface UniversalInnerMenuItem extends UniversalMenuItem {
-  /**
-   * A array of menu entries to build a sub menu from.
-   */
-  submenu?: RawMenuItem[]
-}
-
-export type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalInnerMenuItem
-
-export interface WebappMenuItem {
-  label: string
-  click: () => void
-  keyboardShortcut?: string
-}
-
-export interface ActionCollection {
-  [actionName: string]: () => void
+export function registerShortcuts (router: any, shortcuts: any, actions: any): void {
+  traverseMenu(universalMenuDefinition, registerShortcut, { router, shortcuts, actions })
 }

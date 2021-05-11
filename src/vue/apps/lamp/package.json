@@ -29,6 +29,7 @@
     "@bldr/master-question": "*",
     "@bldr/master-toolkit": "*",
     "@bldr/media-client": "*",
+    "@bldr/menu-adapter": "*",
     "@bldr/menu": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",

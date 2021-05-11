@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { universalMenuDefinition } from './definition';
-import { traverseMenu } from './traverse';
-export function convertMenuItemWebapp(raw, payload) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerShortcut = exports.normalizeKeyboardShortcuts = exports.convertMenuItemElectron = exports.convertMenuItemWebapp = void 0;
+function convertMenuItemWebapp(raw, payload) {
     const p = payload;
     const router = p.router;
     const actions = p.actions;
@@ -56,7 +57,8 @@ export function convertMenuItemWebapp(raw, payload) {
     }
     return result;
 }
-export function convertMenuItemElectron(raw, payload) {
+exports.convertMenuItemWebapp = convertMenuItemWebapp;
+function convertMenuItemElectron(raw, payload) {
     const p = payload;
     const shell = p.shell;
     const window = p.window;
@@ -112,9 +114,62 @@ export function convertMenuItemElectron(raw, payload) {
     }
     return result;
 }
-export function getEletronMenuDef(shell, window) {
-    return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window });
+exports.convertMenuItemElectron = convertMenuItemElectron;
+/**
+ * @param keys - A raw keyboard shortcut specification.
+ * @param forClient - For which client the shortcuts have to
+ *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
+ */
+function normalizeKeyboardShortcuts(keys, forClient = 'mousetrap') {
+    if (forClient === 'mousetrap') {
+        // See https://craig.is/killing/mice
+        keys = keys.replace('Ctrl', 'ctrl');
+        keys = keys.replace('Shift', 'shift');
+        keys = keys.replace('Alt', 'alt');
+        keys = keys.replace('Left', 'left');
+        keys = keys.replace('Right', 'right');
+        keys = keys.replace('Up', 'up');
+        keys = keys.replace('Down', 'down');
+        keys = keys.replace('Space', 'space');
+    }
+    else if (forClient === 'electron') {
+        // https://www.electronjs.org/docs/api/accelerator
+        keys = keys.replace('Ctrl', 'CommandOrControl');
+    }
+    return keys.replace(/\s+\+\s+/g, '+');
 }
-export function getWebappMenuDef(router, actions) {
-    return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions });
+exports.normalizeKeyboardShortcuts = normalizeKeyboardShortcuts;
+function registerShortcut(raw, payload) {
+    const p = payload;
+    const router = p.router;
+    const actions = p.actions;
+    const shortcuts = p.shortcuts;
+    let action;
+    if (!('keyboardShortcut' in raw) && !('action' in raw))
+        return;
+    const universal = raw;
+    if (universal.keyboardShortcut == null)
+        return;
+    if (universal.action === 'executeCallback') {
+        action = actions[raw.arguments];
+    }
+    else if (universal.action === 'pushRouter') {
+        action = () => {
+            router.push({ name: raw.arguments });
+        };
+    }
+    else if (universal.action === 'openExternalUrl') {
+        action = () => {
+            window.open(raw.arguments, '_blank');
+        };
+    }
+    else if (universal.action === 'clearCache') {
+        // Only in the electron app. Clear HTTP Cache.
+        return;
+    }
+    else {
+        throw new Error(`Unkown action for raw menu entry: ${raw.label}`);
+    }
+    shortcuts.add(normalizeKeyboardShortcuts(universal.keyboardShortcut), action, raw.label, raw.activeOnRoutes);
 }
+exports.registerShortcut = registerShortcut;

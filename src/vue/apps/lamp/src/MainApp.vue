@@ -34,7 +34,7 @@
 <script>
 import { receiveSocketMessage } from '@/remote-control.js'
 import actions from './actions.js'
-import menuTemplate, { traverseMenu, normalizeKeyboardShortcuts } from './menu.js'
+import { registerShortcuts } from '@bldr/menu-adapter'
 import { hideMouseAfterSec } from './lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
@@ -71,29 +71,7 @@ export default {
     window.addEventListener('error', (event) => {
       this.$notifyError(event.error)
     })
-    const registerMenuItem = (raw) => {
-      let action
-      if (!raw.keyboardShortcut) return
-      if (raw.action === 'executeCallback') {
-        action = actions[raw.arguments]
-      } else if (raw.action === 'pushRouter') {
-        action = () => {
-          this.$router.push({ name: raw.arguments })
-        }
-      } else if (raw.action === 'openExternalUrl') {
-        action = () => {
-          window.open(raw.arguments, '_blank')
-        }
-      } else if (raw.action === 'clearCache') {
-        // Only in the electron app. Clear HTTP Cache.
-        return
-      } else {
-        throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
-      }
-      this.$shortcuts.add(normalizeKeyboardShortcuts(raw.keyboardShortcut), action, raw.label, raw.activeOnRoutes)
-    }
-
-    traverseMenu(menuTemplate, registerMenuItem)
+    registerShortcuts(this.$router, this.$shortcuts, actions)
 
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {

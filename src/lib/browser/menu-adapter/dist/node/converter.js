@@ -20,13 +20,13 @@ function convertMenuItemWebapp(raw, payload) {
         return;
     const universal = raw;
     // label
-    if (!universal.label) {
-        throw new Error(`Raw menu entry needs a key named label: ${raw}`);
+    if (universal.label == null) {
+        throw new Error('Raw menu entry needs a key named label');
     }
     const label = universal.label;
     // click
     if (!('action' in universal)) {
-        throw new Error(`Raw menu entry needs a key named action: ${raw}`);
+        throw new Error(`Raw menu entry needs a key named action: ${universal.label}`);
     }
     const universalLeaf = universal;
     let click;
@@ -45,7 +45,7 @@ function convertMenuItemWebapp(raw, payload) {
         click = actions[universalLeaf.arguments];
     }
     else {
-        throw new Error(`Unkown action for raw menu entry: ${raw}`);
+        throw new Error(`Unkown action for raw menu entry: ${universalLeaf.label}`);
     }
     if (click == null)
         return;
@@ -54,7 +54,7 @@ function convertMenuItemWebapp(raw, payload) {
         click
     };
     result.click = click;
-    if (universalLeaf.keyboardShortcut) {
+    if (universalLeaf.keyboardShortcut != null) {
         result.keyboardShortcut = universalLeaf.keyboardShortcut;
     }
     return result;
@@ -70,12 +70,12 @@ function convertMenuItemElectron(raw, payload) {
     const result = {};
     const universal = raw;
     if (universal.label == null) {
-        throw new Error(`Raw menu entry needs a key named label: ${raw}`);
+        throw new Error('Raw menu entry needs a key named label');
     }
     result.label = raw.label;
     // click
     if (!('action' in universal)) {
-        throw new Error(`Raw menu entry needs a key named action: ${raw}`);
+        throw new Error(`Raw menu entry needs a key named action: ${universal.label}`);
     }
     const universalLeaf = universal;
     let click;
@@ -99,16 +99,16 @@ function convertMenuItemElectron(raw, payload) {
             // Sometimes some images are not updated.
             // We have to delete the http cache.
             // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
-            window.webContents.session.clearCache();
-            window.webContents.session.clearStorageData();
+            window.webContents.session.clearCache().then(() => { }, () => { });
+            window.webContents.session.clearStorageData().then(() => { }, () => { });
         };
     }
     else {
-        throw new Error(`Unkown action for raw menu entry: ${raw}`);
+        throw new Error(`Unkown action for raw menu entry: ${universalLeaf.label}`);
     }
     result.click = click;
     // accelerator
-    if (universalLeaf.keyboardShortcut) {
+    if (universalLeaf.keyboardShortcut != null) {
         result.accelerator = universalLeaf.keyboardShortcut;
         // We handle the keyboard shortcuts on the render process side with
         // mousetrap.

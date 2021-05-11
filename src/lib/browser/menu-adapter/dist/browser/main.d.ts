@@ -8,44 +8,8 @@
  *
  * @module @bldr/menu-adapter
  */
-import type { MenuItemConstructorOptions } from 'electron';
-export { getEletronMenuDef, getWebappMenuDef } from './converter';
-export declare type ElectronMenuItem = MenuItemConstructorOptions;
-export interface UniversalMenuItem {
-    /**
-     * A short label of the menu entry.
-     */
-    label: string;
-    /**
-     * A longer description of the menu entry.
-     */
-    description?: string;
-    /**
-     * Arguments for the action, for example a callback name or a route name or a URL.
-     */
-    arguments?: any;
-    /**
-     * Keyboard shortcuts to pass through mousetrap
-     *   and to pass through the Electron Accelerator.
-     */
-    keyboardShortcut?: string;
-    activeOnRoutes?: string[];
-}
-export interface UniversalLeafMenuItem extends UniversalMenuItem {
-    action: 'pushRouter' | 'openExternalUrl' | 'executeCallback' | 'clearCache';
-}
-export interface UniversalInnerMenuItem extends UniversalMenuItem {
-    /**
-     * A array of menu entries to build a sub menu from.
-     */
-    submenu?: RawMenuItem[];
-}
-export declare type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalInnerMenuItem;
-export interface WebappMenuItem {
-    label: string;
-    click: () => void;
-    keyboardShortcut?: string;
-}
-export interface ActionCollection {
-    [actionName: string]: () => void;
-}
+import type { Shell, BrowserWindow } from 'electron';
+import { ElectronMenuItem, WebappMenuItem } from './menu-item';
+export declare function getEletronMenuDef(shell: Shell, window: BrowserWindow): ElectronMenuItem[];
+export declare function getWebappMenuDef(router: any, actions: any): WebappMenuItem[];
+export declare function registerShortcuts(router: any, shortcuts: any, actions: any): any[];

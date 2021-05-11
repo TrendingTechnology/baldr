@@ -1,8 +1,54 @@
-import type { Shell, BrowserWindow } from 'electron'
-import type { RawMenuItem, UniversalMenuItem, WebappMenuItem, UniversalLeafMenuItem, ElectronMenuItem, ActionCollection } from './main'
+import type { Shell, BrowserWindow, MenuItemConstructorOptions } from 'electron'
 
-import { universalMenuDefinition } from './definition'
-import { traverseMenu } from './traverse'
+export type ElectronMenuItem = MenuItemConstructorOptions
+
+export interface UniversalMenuItem {
+  /**
+   * A short label of the menu entry.
+   */
+  label: string
+
+  /**
+   * A longer description of the menu entry.
+   */
+  description?: string
+
+  /**
+   * Arguments for the action, for example a callback name or a route name or a URL.
+   */
+  arguments?: any
+
+  /**
+   * Keyboard shortcuts to pass through mousetrap
+   *   and to pass through the Electron Accelerator.
+   */
+  keyboardShortcut?: string
+
+  activeOnRoutes?: string[]
+}
+
+export interface UniversalLeafMenuItem extends UniversalMenuItem {
+  action: 'pushRouter' | 'openExternalUrl' | 'executeCallback' | 'clearCache'
+}
+
+export interface UniversalInnerMenuItem extends UniversalMenuItem {
+  /**
+   * A array of menu entries to build a sub menu from.
+   */
+  submenu?: RawMenuItem[]
+}
+
+export type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalInnerMenuItem
+
+export interface WebappMenuItem {
+  label: string
+  click: () => void
+  keyboardShortcut?: string
+}
+
+export interface ActionCollection {
+  [actionName: string]: () => void
+}
 
 interface WebappPayload {
   router: any
@@ -118,10 +164,60 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
   return result
 }
 
-export function getEletronMenuDef (shell: Shell, window: BrowserWindow): ElectronMenuItem[] {
-  return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
+/**
+ * @param keys - A raw keyboard shortcut specification.
+ * @param forClient - For which client the shortcuts have to
+ *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
+ */
+export function normalizeKeyboardShortcuts (keys: string, forClient: 'mousetrap' | 'electron' = 'mousetrap'): string {
+  if (forClient === 'mousetrap') {
+    // See https://craig.is/killing/mice
+    keys = keys.replace('Ctrl', 'ctrl')
+    keys = keys.replace('Shift', 'shift')
+    keys = keys.replace('Alt', 'alt')
+    keys = keys.replace('Left', 'left')
+    keys = keys.replace('Right', 'right')
+    keys = keys.replace('Up', 'up')
+    keys = keys.replace('Down', 'down')
+    keys = keys.replace('Space', 'space')
+  } else if (forClient === 'electron') {
+    // https://www.electronjs.org/docs/api/accelerator
+    keys = keys.replace('Ctrl', 'CommandOrControl')
+  }
+  return keys.replace(/\s+\+\s+/g, '+')
 }
 
-export function getWebappMenuDef (router: any, actions: any): WebappMenuItem[] {
-  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions })
+interface RegisterShortcutsPayload {
+  router: any
+  shortcuts: any
+  actions: ActionCollection
+}
+
+export function registerShortcut (raw: RawMenuItem, payload: RegisterShortcutsPayload): void {
+  const p = payload
+  const router = p.router
+  const actions = p.actions
+  const shortcuts = p.shortcuts
+
+  let action
+  if (!('keyboardShortcut' in raw) && !('action' in raw)) return
+  const universal: UniversalLeafMenuItem = raw as UniversalLeafMenuItem
+  if (universal.keyboardShortcut == null) return
+  if (universal.action === 'executeCallback') {
+    action = actions[raw.arguments]
+  } else if (universal.action === 'pushRouter') {
+    action = () => {
+      router.push({ name: raw.arguments })
+    }
+  } else if (universal.action === 'openExternalUrl') {
+    action = () => {
+      window.open(raw.arguments, '_blank')
+    }
+  } else if (universal.action === 'clearCache') {
+    // Only in the electron app. Clear HTTP Cache.
+    return
+  } else {
+    throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
+  }
+  shortcuts.add(normalizeKeyboardShortcuts(universal.keyboardShortcut), action, raw.label, raw.activeOnRoutes)
 }
