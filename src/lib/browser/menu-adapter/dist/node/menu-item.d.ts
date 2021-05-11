@@ -1,4 +1,5 @@
 import type { MenuItemConstructorOptions } from 'electron';
+import type VueRouter from 'vue-router';
 export declare type ElectronMenuItem = MenuItemConstructorOptions;
 export interface UniversalMenuItem {
     /**
@@ -47,7 +48,7 @@ export declare function convertMenuItemElectron(raw: RawMenuItem, payload: any):
  */
 export declare function normalizeKeyboardShortcuts(keys: string, forClient?: 'mousetrap' | 'electron'): string;
 interface RegisterShortcutsPayload {
-    router: any;
+    router: VueRouter;
     shortcuts: any;
     actions: ActionCollection;
 }

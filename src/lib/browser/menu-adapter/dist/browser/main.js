@@ -18,5 +18,5 @@ export function getWebappMenuDef(router, actions) {
     return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions });
 }
 export function registerShortcuts(router, shortcuts, actions) {
-    return traverseMenu(universalMenuDefinition, registerShortcut, { router, shortcuts, actions });
+    traverseMenu(universalMenuDefinition, registerShortcut, { router, shortcuts, actions });
 }

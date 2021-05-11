@@ -10,6 +10,7 @@
  */
 
 import type { Shell, BrowserWindow } from 'electron'
+import type VueRouter from 'vue-router'
 
 import { traverseMenu } from './traverse'
 import { ElectronMenuItem, WebappMenuItem, convertMenuItemElectron, convertMenuItemWebapp, registerShortcut } from './menu-item'
@@ -19,10 +20,10 @@ export function getEletronMenuDef (shell: Shell, window: BrowserWindow): Electro
   return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window })
 }
 
-export function getWebappMenuDef (router: any, actions: any): WebappMenuItem[] {
+export function getWebappMenuDef (router: VueRouter, actions: any): WebappMenuItem[] {
   return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions })
 }
 
-export function registerShortcuts (router: any, shortcuts: any, actions: any): void {
+export function registerShortcuts (router: VueRouter, shortcuts: any, actions: any): void {
   traverseMenu(universalMenuDefinition, registerShortcut, { router, shortcuts, actions })
 }

@@ -23,6 +23,6 @@ function getWebappMenuDef(router, actions) {
 }
 exports.getWebappMenuDef = getWebappMenuDef;
 function registerShortcuts(router, shortcuts, actions) {
-    return traverse_1.traverseMenu(definition_1.universalMenuDefinition, menu_item_1.registerShortcut, { router, shortcuts, actions });
+    traverse_1.traverseMenu(definition_1.universalMenuDefinition, menu_item_1.registerShortcut, { router, shortcuts, actions });
 }
 exports.registerShortcuts = registerShortcuts;

@@ -9,7 +9,8 @@
  * @module @bldr/menu-adapter
  */
 import type { Shell, BrowserWindow } from 'electron';
+import type VueRouter from 'vue-router';
 import { ElectronMenuItem, WebappMenuItem } from './menu-item';
 export declare function getEletronMenuDef(shell: Shell, window: BrowserWindow): ElectronMenuItem[];
-export declare function getWebappMenuDef(router: any, actions: any): WebappMenuItem[];
-export declare function registerShortcuts(router: any, shortcuts: any, actions: any): any[];
+export declare function getWebappMenuDef(router: VueRouter, actions: any): WebappMenuItem[];
+export declare function registerShortcuts(router: VueRouter, shortcuts: any, actions: any): void;
