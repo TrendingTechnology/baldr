@@ -1,3 +1,7 @@
+type EventCallbackFunction = (...args: any) => {}
+
+type EventName = 'fadeinbegin' | 'fadeinend' | 'fadeoutbegin' | 'fadeoutend'
+
 /**
  * A simple wrapper class for a custom event system. Used in the classes
  * `Sample()` and `Player()`.
@@ -6,7 +10,7 @@ export class CustomEventsManager {
   /**
    * An object of callback functions
    */
-  private callbacks: {[key: string]: any}
+  private callbacks: {[key: string]: EventCallbackFunction[]}
 
   constructor () {
     this.callbacks = {}
@@ -20,7 +24,7 @@ export class CustomEventsManager {
    * @param args - One ore more additonal arguments to pass through
    *   the callbacks.
    */
-  trigger (name: string): void {
+  trigger (name: EventName): void {
     const args = Array.from(arguments)
     args.shift()
     if (!(name in this.callbacks)) {
@@ -39,7 +43,7 @@ export class CustomEventsManager {
    * @param callback - A function which gets called when the
    *   event is triggered.
    */
-  on (name: string, callback: Function): void {
+  on (name: EventName, callback: EventCallbackFunction): void {
     if (!(name in this.callbacks)) {
       this.callbacks[name] = []
     }

@@ -1,3 +1,5 @@
+declare type EventCallbackFunction = (...args: any) => {};
+declare type EventName = 'fadeinbegin' | 'fadeinend' | 'fadeoutbegin' | 'fadeoutend';
 /**
  * A simple wrapper class for a custom event system. Used in the classes
  * `Sample()` and `Player()`.
@@ -16,7 +18,7 @@ export declare class CustomEventsManager {
      * @param args - One ore more additonal arguments to pass through
      *   the callbacks.
      */
-    trigger(name: string): void;
+    trigger(name: EventName): void;
     /**
      * Register callbacks for specific custom event.
      *
@@ -25,5 +27,6 @@ export declare class CustomEventsManager {
      * @param callback - A function which gets called when the
      *   event is triggered.
      */
-    on(name: string, callback: Function): void;
+    on(name: EventName, callback: EventCallbackFunction): void;
 }
+export {};
