@@ -86,7 +86,7 @@ export declare class Sample {
     shortcut?: string;
     private readonly interval;
     private readonly timeOut;
-    private readonly customEventsManager;
+    private readonly events;
     playbackState: PlaybackState;
     constructor(asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat);
     /**

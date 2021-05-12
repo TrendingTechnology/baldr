@@ -117,7 +117,7 @@ export class Sample {
         this.startTimeSec = 0;
         this.interval = new Interval();
         this.timeOut = new TimeOut();
-        this.customEventsManager = new CustomEventsManager();
+        this.events = new CustomEventsManager();
         this.asset = asset;
         this.yaml = yaml;
         if (this.yaml.ref == null) {
@@ -146,7 +146,7 @@ export class Sample {
         shortcutManager.addShortcut(this);
         this.interval = new Interval();
         this.timeOut = new TimeOut();
-        this.customEventsManager = new CustomEventsManager();
+        this.events = new CustomEventsManager();
         this.playbackState = 'stopped';
     }
     /**
@@ -324,7 +324,7 @@ export class Sample {
                 // Fade in can triggered when a fade out process is started and
                 // not yet finished.
                 this.interval.clear();
-                this.customEventsManager.trigger('fadeinbegin');
+                this.events.trigger('fadeinbegin');
                 this.playbackState = 'fadein';
                 let actualVolume = 0;
                 this.htmlElement.volume = 0;
@@ -341,7 +341,7 @@ export class Sample {
                     }
                     else {
                         this.interval.clear();
-                        this.customEventsManager.trigger('fadeinend');
+                        this.events.trigger('fadeinend');
                         this.playbackState = 'playing';
                         resolve();
                     }
@@ -416,7 +416,7 @@ export class Sample {
                 // Fade out can triggered when a fade out process is started and
                 // not yet finished.
                 this.interval.clear();
-                this.customEventsManager.trigger('fadeoutbegin');
+                this.events.trigger('fadeoutbegin');
                 this.playbackState = 'fadeout';
                 // Number from 0 - 1
                 let actualVolume = this.htmlElement.volume;
@@ -436,7 +436,7 @@ export class Sample {
                         if (this.htmlElement != null)
                             this.htmlElement.pause();
                         this.interval.clear();
-                        this.customEventsManager.trigger('fadeoutend');
+                        this.events.trigger('fadeoutend');
                         this.playbackState = 'stopped';
                         resolve();
                     }

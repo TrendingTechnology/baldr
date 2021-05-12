@@ -121,7 +121,7 @@ class Sample {
         this.startTimeSec = 0;
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
-        this.customEventsManager = new events_1.CustomEventsManager();
+        this.events = new events_1.CustomEventsManager();
         this.asset = asset;
         this.yaml = yaml;
         if (this.yaml.ref == null) {
@@ -150,7 +150,7 @@ class Sample {
         exports.shortcutManager.addShortcut(this);
         this.interval = new timer_1.Interval();
         this.timeOut = new timer_1.TimeOut();
-        this.customEventsManager = new events_1.CustomEventsManager();
+        this.events = new events_1.CustomEventsManager();
         this.playbackState = 'stopped';
     }
     /**
@@ -328,7 +328,7 @@ class Sample {
                 // Fade in can triggered when a fade out process is started and
                 // not yet finished.
                 this.interval.clear();
-                this.customEventsManager.trigger('fadeinbegin');
+                this.events.trigger('fadeinbegin');
                 this.playbackState = 'fadein';
                 let actualVolume = 0;
                 this.htmlElement.volume = 0;
@@ -345,7 +345,7 @@ class Sample {
                     }
                     else {
                         this.interval.clear();
-                        this.customEventsManager.trigger('fadeinend');
+                        this.events.trigger('fadeinend');
                         this.playbackState = 'playing';
                         resolve();
                     }
@@ -420,7 +420,7 @@ class Sample {
                 // Fade out can triggered when a fade out process is started and
                 // not yet finished.
                 this.interval.clear();
-                this.customEventsManager.trigger('fadeoutbegin');
+                this.events.trigger('fadeoutbegin');
                 this.playbackState = 'fadeout';
                 // Number from 0 - 1
                 let actualVolume = this.htmlElement.volume;
@@ -440,7 +440,7 @@ class Sample {
                         if (this.htmlElement != null)
                             this.htmlElement.pause();
                         this.interval.clear();
-                        this.customEventsManager.trigger('fadeoutend');
+                        this.events.trigger('fadeoutend');
                         this.playbackState = 'stopped';
                         resolve();
                     }

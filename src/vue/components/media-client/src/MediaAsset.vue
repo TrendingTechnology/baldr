@@ -11,11 +11,11 @@
         </thead>
         <tbody>
           <tr
-            v-for="key in asset.propertiesSorted"
+            v-for="(value, key) in asset.yaml"
             :key="key"
           >
-            <th class="key" v-if="typeof asset[key] !== 'object'">{{ key }}</th>
-            <td class="value" v-if="typeof asset[key] !== 'object'">{{ asset[key] }}</td>
+            <th class="key">{{ key }}</th>
+            <td class="value">{{ value }}</td>
           </tr>
         </tbody>
       </table>
@@ -65,7 +65,7 @@ export default {
       return `${params.uriScheme}:${params.uriAuthority}`
     },
     asset () {
-      return this.$store.getters['media/assetByUri'](this.uri)
+      return this.$store.getters['media/assetNgByUri'](this.uri)
     }
   },
   methods: {
@@ -83,11 +83,13 @@ export default {
     formatMusicbrainzRecordingUrl
   },
   async mounted () {
-    if (!this.asset) await this.$media.resolve(this.uri)
-    if (this.asset.isPlayable) {
-      this.asset.mediaElement.controls = true
+    if (!this.asset) {
+      await this.$media.resolve(this.uri)
     }
-    this.$refs.mediaElementContainer.appendChild(this.asset.mediaElement)
+    if (this.asset.isPlayable) {
+      this.asset.htmlElement.controls = true
+    }
+    this.$refs.mediaElementContainer.appendChild(this.asset.htmlElement)
   }
 }
 </script>

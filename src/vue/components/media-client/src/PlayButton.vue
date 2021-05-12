@@ -72,7 +72,7 @@ export default {
       // stopped
       // stoppable
       status: 'stopped',
-      mediaElement: null
+      htmlElement: null
     }
   },
   computed: {
@@ -85,16 +85,23 @@ export default {
   },
   methods: {
     registerEvents () {
-      this.mediaElement = this.sample.mediaElement
+      // TODO: remove this.sample.mediaElement
+      if (this.sample.mediaElement != null) {
+        this.htmlElement = this.sample.mediaElement
+      } else {
+        this.htmlElement = this.sample.htmlElement
+      }
       // Mount a playing media element.
-      if (!this.mediaElement.paused) {
+      if (!this.htmlElement.paused) {
         this.status = 'playing'
       } else {
         this.status = 'stopped'
       }
 
       this.$media.player.events.on('start', (loadedSample) => {
-        if (loadedSample.uri === this.sample.uri) this.status = 'starting'
+        if (loadedSample.uri === this.sample.uri) {
+          this.status = 'starting'
+        }
       })
 
       this.$el.onmouseenter = () => {
@@ -104,7 +111,7 @@ export default {
       }
 
       this.$el.onmouseleave = () => {
-          if (!this.mediaElement.paused) {
+          if (!this.htmlElement.paused) {
           if (this.sample.playbackState === 'fadeout') {
             this.status = 'fadeout'
           } else {
@@ -113,7 +120,7 @@ export default {
         }
       }
 
-      this.mediaElement.ontimeupdate = (event) => {
+      this.htmlElement.ontimeupdate = (event) => {
         if (!this.$refs.progress) return
         this.setProgress(this.sample.progress)
       }
@@ -122,11 +129,11 @@ export default {
         this.status = 'playing'
       })
 
-      this.mediaElement.onplay = (event) => {
+      this.htmlElement.onplay = (event) => {
         this.status = 'fadein'
       }
 
-      this.mediaElement.onpause = (event) => {
+      this.htmlElement.onpause = (event) => {
         this.status = 'stopped'
       }
 
@@ -148,7 +155,7 @@ export default {
       this.$refs.progress.style.strokeDashoffset = -(circumference * progress)
     },
     actByStatus () {
-      if (!this.mediaElement.paused) {
+      if (!this.htmlElement.paused) {
         this.$media.player.stop()
       } else if (this.status === 'stopped') {
         this.start()
