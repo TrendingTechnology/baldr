@@ -30,7 +30,7 @@
     "@bldr/master-toolkit": "*",
     "@bldr/media-client": "*",
     "@bldr/menu-adapter": "*",
-    "@bldr/menu": "*",
+    "@bldr/menu-webapp": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
     "@bldr/tex-markdown-converter": "*",

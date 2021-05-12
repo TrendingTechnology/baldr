@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/menu",
+  "name": "@bldr/menu-webapp",
   "version": "0.1.0",
-  "description": "Dropdown menu",
+  "description": "Dropdown menu for the web app. Simulate the Electron menu.",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
