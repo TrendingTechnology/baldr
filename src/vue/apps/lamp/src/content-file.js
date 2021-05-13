@@ -216,7 +216,7 @@ class AudioOverlay {
   get samples () {
     const samples = []
     for (const uri of this.mediaUris) {
-      samples.push(store.getters['media/sampleByUri'](uri))
+      samples.push(store.getters['media/sampleNgByUri'](uri))
     }
     return samples
   }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sample = exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.translateToAssetRef = exports.sampleCache = exports.resetMediaCache = exports.assetCache = exports.ClientMediaAsset = void 0;
+exports.Sample = exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.translateToSampleRef = exports.translateToAssetRef = exports.sampleCache = exports.resetMediaCache = exports.assetCache = exports.ClientMediaAsset = void 0;
 var asset_1 = require("./asset");
 Object.defineProperty(exports, "ClientMediaAsset", { enumerable: true, get: function () { return asset_1.ClientMediaAsset; } });
 var cache_1 = require("./cache");
@@ -8,6 +8,7 @@ Object.defineProperty(exports, "assetCache", { enumerable: true, get: function (
 Object.defineProperty(exports, "resetMediaCache", { enumerable: true, get: function () { return cache_1.resetMediaCache; } });
 Object.defineProperty(exports, "sampleCache", { enumerable: true, get: function () { return cache_1.sampleCache; } });
 Object.defineProperty(exports, "translateToAssetRef", { enumerable: true, get: function () { return cache_1.translateToAssetRef; } });
+Object.defineProperty(exports, "translateToSampleRef", { enumerable: true, get: function () { return cache_1.translateToSampleRef; } });
 var media_uri_1 = require("./media-uri");
 Object.defineProperty(exports, "MediaUri", { enumerable: true, get: function () { return media_uri_1.MediaUri; } });
 Object.defineProperty(exports, "findMediaUris", { enumerable: true, get: function () { return media_uri_1.findMediaUris; } });

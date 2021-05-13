@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 
-import { translateToAssetRef } from '@bldr/client-media-models'
+import { translateToAssetRef, translateToSampleRef } from '@bldr/client-media-models'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
@@ -100,6 +100,9 @@ const getters = {
   samples: state => {
     return state.samples
   },
+  samplesNg: state => {
+    return state.samplesNg
+  },
   samplePlaying: state => {
     return state.samplePlaying
   },
@@ -109,6 +112,14 @@ const getters = {
     if (uri.indexOf('#') === -1) uri = `${uri}#complete`
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
     return samples[uri]
+  },
+  sampleNgByUri: (state, getters) => uri => {
+    if (!uri) return
+    const samplesNg = getters.samplesNg
+    console.log(uri)
+    const ref = translateToSampleRef(uri)
+    console.log(ref)
+    return samplesNg[ref]
   },
   samplePlayListCurrent: (state, getters) => {
     return getters.samples[getters.playList[getters.playListNoCurrent - 1]]

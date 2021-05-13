@@ -250,7 +250,7 @@ class Player {
     } else {
       let uri = uriOrSample
       if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-      sample = store.getters['media/sampleByUri'](uri)
+      sample = store.getters['media/sampleNgByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.sampleLoaded = sample
@@ -1145,7 +1145,7 @@ class WrappedSample {
    */
   get sample () {
     if (this.sample_) return this.sample_
-    return store.getters['media/sampleByUri'](this.uri)
+    return store.getters['media/sampleNgByUri'](this.uri)
   }
 }
 

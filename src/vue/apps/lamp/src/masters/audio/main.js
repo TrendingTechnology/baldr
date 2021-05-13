@@ -83,7 +83,7 @@ export default validateMasterSpec({
       return uris
     },
     collectPropsMain (props) {
-      const sample = this.$store.getters['media/sampleByUri'](props.src)
+      const sample = this.$store.getters['media/sampleNgByUri'](props.src)
       const asset = sample.asset
 
       const grab = new GrabFromObjects(props, asset)

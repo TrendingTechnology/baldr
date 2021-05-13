@@ -78,7 +78,7 @@ export default validateMasterSpec({
       const slide = this.$get('slide')
       if (slide.propsMain.asset) {
         const uri = youtubeIdToUri(slide.props.id)
-        const sample = this.$store.getters['media/sampleByUri'](uri)
+        const sample = this.$store.getters['media/sampleNgByUri'](uri)
         const videoWrapper = document.querySelector('#youtube-offline-video')
         videoWrapper.innerHTML = ''
         videoWrapper.appendChild(sample.mediaElement)

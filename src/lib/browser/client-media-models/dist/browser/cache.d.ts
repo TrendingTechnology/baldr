@@ -60,11 +60,20 @@ export declare class MediaUriTranslator {
 }
 export declare const mediaUriTranslator: MediaUriTranslator;
 /**
- * @param uri A asset or sample URI in various formats
+ * @param uri A asset URI in various formats.
  *
- * @returns A asset uri (without the fragment) in the `ref` scheme.
+ * @returns A asset URI (without the fragment) in the `ref` scheme.
  */
 export declare function translateToAssetRef(uri: string): string | undefined;
+/**
+ * for example: translates `ref:test` into `ref:test#complete` or
+ * `uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3` into `ref:test#complete`
+ *
+ * @param uri A asset or sample URI in various formats.
+ *
+ * @returns A sample URI in the `ref` scheme. A missing fragment is added with `#complete`.
+ */
+export declare function translateToSampleRef(uri: string): string | undefined;
 declare class SampleCache extends Cache<Sample> {
 }
 export declare const sampleCache: SampleCache;

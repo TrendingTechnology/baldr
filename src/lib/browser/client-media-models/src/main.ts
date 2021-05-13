@@ -3,7 +3,8 @@ export {
   assetCache,
   resetMediaCache,
   sampleCache,
-  translateToAssetRef
+  translateToAssetRef,
+  translateToSampleRef
 } from './cache'
 export { MediaUri, findMediaUris } from './media-uri'
 export { mimeTypeManager } from './mime-type'

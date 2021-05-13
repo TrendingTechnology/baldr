@@ -49,7 +49,7 @@ export default validateMasterSpec({
     },
     collectPropsMain (props) {
       let audioSample
-      const audio = this.$store.getters['media/sampleByUri'](props.audio)
+      const audio = this.$store.getters['media/sampleNgByUri'](props.audio)
       if (audio) {
         audioSample = audio
       }

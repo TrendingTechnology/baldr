@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = void 0;
 const sample_1 = require("./sample");
 const media_uri_1 = require("./media-uri");
 class Cache {
@@ -123,14 +123,29 @@ class MediaUriTranslator {
 exports.MediaUriTranslator = MediaUriTranslator;
 exports.mediaUriTranslator = new MediaUriTranslator();
 /**
- * @param uri A asset or sample URI in various formats
+ * @param uri A asset URI in various formats.
  *
- * @returns A asset uri (without the fragment) in the `ref` scheme.
+ * @returns A asset URI (without the fragment) in the `ref` scheme.
  */
 function translateToAssetRef(uri) {
     return exports.mediaUriTranslator.getRef(uri, true);
 }
 exports.translateToAssetRef = translateToAssetRef;
+/**
+ * for example: translates `ref:test` into `ref:test#complete` or
+ * `uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3` into `ref:test#complete`
+ *
+ * @param uri A asset or sample URI in various formats.
+ *
+ * @returns A sample URI in the `ref` scheme. A missing fragment is added with `#complete`.
+ */
+function translateToSampleRef(uri) {
+    if (!uri.includes('#')) {
+        uri = uri + '#complete';
+    }
+    return exports.mediaUriTranslator.getRef(uri);
+}
+exports.translateToSampleRef = translateToSampleRef;
 class SampleCache extends Cache {
 }
 exports.sampleCache = new SampleCache();

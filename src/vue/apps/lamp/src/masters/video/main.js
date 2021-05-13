@@ -63,7 +63,7 @@ export default validateMasterSpec({
     async afterSlideNoChangeOnComponent () {
       if (!this.isPublic) return
       const slide = this.$get('slide')
-      const sample = this.$store.getters['media/sampleByUri'](slide.props.src)
+      const sample = this.$store.getters['media/sampleNgByUri'](slide.props.src)
       const videoWrapper = document.querySelector('#video_master-container')
       videoWrapper.innerHTML = ''
       videoWrapper.appendChild(sample.mediaElement)

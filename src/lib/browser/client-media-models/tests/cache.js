@@ -8,7 +8,8 @@ const {
   resetMediaCache,
   mediaUriTranslator,
   MediaUriTranslator,
-  translateToAssetRef
+  translateToAssetRef,
+  translateToSampleRef
 } = require('../dist/node/cache.js')
 
 describe('Class “AssetCache()”', function () {
@@ -79,12 +80,38 @@ describe('Class “MediaUriTranslator()”', function () {
   })
 })
 
-it('Function “tranlateToAssetRef()”', function () {
+it('Function “translateToAssetRef()”', function () {
   resetMediaCache()
   createAsset({ ref: 'test1' })
   const asset = assetCache.get('ref:test1')
   assert.strictEqual(
     translateToAssetRef(`uuid:${asset.yaml.uuid}#complete`),
     'ref:test1'
+  )
+})
+
+it('Function “translateToSampleRef()”', function () {
+  resetMediaCache()
+  createAsset({ ref: 'test1' })
+  const asset = assetCache.get('ref:test1')
+
+  assert.strictEqual(
+    translateToSampleRef(`uuid:${asset.yaml.uuid}#complete`),
+    'ref:test1#complete'
+  )
+
+  assert.strictEqual(
+    translateToSampleRef(`uuid:${asset.yaml.uuid}`),
+    'ref:test1#complete'
+  )
+
+  assert.strictEqual(
+    translateToSampleRef('ref:test1#complete'),
+    'ref:test1#complete'
+  )
+
+  assert.strictEqual(
+    translateToSampleRef('ref:test1'),
+    'ref:test1#complete'
   )
 })
