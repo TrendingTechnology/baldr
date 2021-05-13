@@ -753,7 +753,8 @@ export class Presentation {
    * Resolve the media assets associated with the presentation. This have to be
    * done asynchronously, therefore it can’t be accomplished in the constructor.
    */
-  async resolveMedia () {
+  async resolveMedia (vmExternal) {
+    const vmInternal = vm == null ? vmExternal : vm
     if (this.parentDir) {
       // Problems with multipart selections.
       // await vm.$media.resolveByParentDir(this.parentDir)
@@ -762,41 +763,41 @@ export class Presentation {
       /**
        * @type {Object}
        */
-      this.media = await vm.$media.resolve(this.mediaUris, true) // throw exceptions.
+      this.media = await vmInternal.$media.resolve(this.mediaUris, true) // throw exceptions.
     }
 
     if (this.optionalMediaUris.length > 0) {
-      await vm.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
+      await vmInternal.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
     }
 
     // After media resolution.
     for (const slide of this.slides) {
-      await slide.master.afterMediaResolution(slide.props, vm)
+      await slide.master.afterMediaResolution(slide.props, vmInternal)
     }
 
     for (const slide of this.slides) {
       slide.master.renderInlineMedia(slide.props)
-      slide.propsMain = slide.master.collectPropsMain(slide.props, vm)
+      slide.propsMain = slide.master.collectPropsMain(slide.props, vmInternal)
       slide.propsPreview = slide.master.collectPropsPreview(
         {
           props: slide.props,
           propsMain: slide.propsMain,
           slide
         },
-        vm
+        vmInternal
       )
       slide.texMarkup = slide.master.generateTexMarkup({
         props: slide.props,
         propsMain: slide.propsMain,
         propsPreview: slide.propsPreview
-      }, vm)
+      }, vmInternal)
       const steps = slide.master.calculateStepCount({
         props: slide.props,
         propsMain: slide.propsMain,
         propsPreview: slide.propsPreview,
         slide,
         master: slide.master
-      }, vm)
+      }, vmInternal)
       if (Number.isInteger(steps)) {
         slide.stepCount = steps
       } else if (Array.isArray(steps)) {

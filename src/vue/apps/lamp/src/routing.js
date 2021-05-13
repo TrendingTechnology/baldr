@@ -173,7 +173,7 @@ async function loadPresentationById (vm, presRef) {
     if (masterMatch) {
       const masterName = masterMatch[1]
       const master = vm.$masters.get(masterName)
-      await vm.$store.dispatch('lamp/openPresentation', { rawYamlString: master.example })
+      await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString: master.example })
       return
     }
 
@@ -182,6 +182,7 @@ async function loadPresentationById (vm, presRef) {
     if (commonMatch) {
       const commonName = commonMatch[1]
       await vm.$store.dispatch('lamp/openPresentation', {
+        vm,
         rawYamlString: vm.$store.getters['lamp/rawYamlExamples'].common[commonName]
       })
       return
