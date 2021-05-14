@@ -8,7 +8,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
-const cache_1 = require("./cache");
+const internal_1 = require("./internal");
 /**
  * This class holds the specification of the wrapped sample. The sample object
  * itself is not included in this class.
@@ -93,7 +93,7 @@ exports.WrappedSampleSpecList = WrappedSampleSpecList;
 class WrappedSample {
     constructor(spec) {
         this.spec = spec;
-        const sample = cache_1.sampleCache.get(this.spec.uri);
+        const sample = internal_1.sampleCache.get(this.spec.uri);
         if (sample != null) {
             this.sample = sample;
         }

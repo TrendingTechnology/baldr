@@ -1,5 +1,4 @@
-import { ClientMediaAsset } from './asset';
-import { Sample } from './sample';
+import { ClientMediaAsset, Sample } from './internal';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

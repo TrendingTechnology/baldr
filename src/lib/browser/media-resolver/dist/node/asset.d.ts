@@ -1,6 +1,6 @@
 import type { AssetType } from '@bldr/type-definitions';
 import { MediaUri } from '@bldr/client-media-models';
-import { SampleCollection } from './sample';
+import { SampleCollection } from './internal';
 /**
  * Hold various data of a media file as class properties.
  *

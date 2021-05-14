@@ -3,9 +3,7 @@ import type { AssetType } from '@bldr/type-definitions'
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
-import { assetCache } from './cache'
-import { createHtmlElement } from './html-elements'
-import { SampleCollection } from './sample'
+import { assetCache, createHtmlElement, SampleCollection } from './internal'
 
 /**
  * Hold various data of a media file as class properties.

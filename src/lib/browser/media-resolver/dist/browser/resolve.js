@@ -11,8 +11,7 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
 import config from '@bldr/config';
-import { assetCache, sampleCache } from './cache';
-import { ClientMediaAsset } from './asset';
+import { assetCache, sampleCache, ClientMediaAsset } from './internal';
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

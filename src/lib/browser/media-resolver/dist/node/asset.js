@@ -3,9 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MultiPartSelection = exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
-const cache_1 = require("./cache");
-const html_elements_1 = require("./html-elements");
-const sample_1 = require("./sample");
+const internal_1 = require("./internal");
 /**
  * Hold various data of a media file as class properties.
  *
@@ -33,12 +31,12 @@ class ClientMediaAsset {
         }
         this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.yaml.extension);
         if (this.mimeType !== 'document') {
-            this.htmlElement = html_elements_1.createHtmlElement(this.mimeType, this.httpUrl);
+            this.htmlElement = internal_1.createHtmlElement(this.mimeType, this.httpUrl);
         }
         if (this.isPlayable) {
-            this.samples = new sample_1.SampleCollection(this);
+            this.samples = new internal_1.SampleCollection(this);
         }
-        cache_1.assetCache.add(this.ref, this);
+        internal_1.assetCache.add(this.ref, this);
     }
     /**
      * The reference authority of the URI using the `ref` scheme. The returned

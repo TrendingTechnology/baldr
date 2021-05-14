@@ -5,9 +5,7 @@ import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 import config from '@bldr/config'
 
-import { assetCache, sampleCache } from './cache'
-import { ClientMediaAsset } from './asset'
-import { Sample } from './sample'
+import { assetCache, sampleCache, ClientMediaAsset, Sample } from './internal'
 
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 

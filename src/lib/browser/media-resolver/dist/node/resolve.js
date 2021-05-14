@@ -14,8 +14,7 @@ const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const config_1 = require("@bldr/config");
-const cache_1 = require("./cache");
-const asset_1 = require("./asset");
+const internal_1 = require("./internal");
 exports.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -71,12 +70,12 @@ class Resolver {
      */
     resolveSingle(uri) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cachedAsset = cache_1.assetCache.get(uri);
+            const cachedAsset = internal_1.assetCache.get(uri);
             if (cachedAsset != null)
                 return cachedAsset;
             const raw = yield this.queryMediaServer(uri);
             const httpUrl = `${exports.httpRequest.baseUrl}/${config_1.default.mediaServer.urlFillIn}/${raw.path}`;
-            return new asset_1.ClientMediaAsset(uri, httpUrl, raw);
+            return new internal_1.ClientMediaAsset(uri, httpUrl, raw);
         });
     }
     /**
@@ -112,10 +111,10 @@ class Resolver {
         });
     }
     getAssets() {
-        return cache_1.assetCache.getAll();
+        return internal_1.assetCache.getAll();
     }
     getSamples() {
-        return cache_1.sampleCache.getAll();
+        return internal_1.sampleCache.getAll();
     }
 }
 exports.Resolver = Resolver;

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = void 0;
-const sample_1 = require("./sample");
 const client_media_models_1 = require("@bldr/client-media-models");
+const internal_1 = require("./internal");
 class Cache {
     constructor() {
         this.cache = {};
@@ -170,6 +170,6 @@ function resetMediaCache() {
     exports.sampleCache.reset();
     exports.assetCache.reset();
     exports.mediaUriTranslator.reset();
-    sample_1.shortcutManager.reset();
+    internal_1.shortcutManager.reset();
 }
 exports.resetMediaCache = resetMediaCache;

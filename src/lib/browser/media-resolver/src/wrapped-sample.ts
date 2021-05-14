@@ -7,8 +7,7 @@
 
 import { MediaUri } from '@bldr/client-media-models'
 
-import { Sample } from './sample'
-import { sampleCache } from './cache'
+import { Sample, sampleCache } from './internal'
 
 interface SimpleSampleSpec {
   uri: string

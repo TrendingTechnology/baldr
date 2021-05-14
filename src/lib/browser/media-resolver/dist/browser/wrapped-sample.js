@@ -5,7 +5,7 @@
  * @module @bldr/wrapped-sample
  */
 import { MediaUri } from '@bldr/client-media-models';
-import { sampleCache } from './cache';
+import { sampleCache } from './internal';
 /**
  * This class holds the specification of the wrapped sample. The sample object
  * itself is not included in this class.

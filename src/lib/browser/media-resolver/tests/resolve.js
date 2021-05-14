@@ -3,7 +3,7 @@ const assert = require('assert')
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 
 const { assetCache, sampleCache, resetMediaCache } = require('../dist/node/cache.js')
-const { Resolver } = require('../dist/node/resolver.js')
+const { Resolver } = require('../dist/node/resolve.js')
 
 const config = require('@bldr/config')
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')

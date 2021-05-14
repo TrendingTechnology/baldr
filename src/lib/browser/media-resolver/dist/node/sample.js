@@ -11,10 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SampleCollection = exports.Sample = exports.shortcutManager = exports.ShortcutManager = void 0;
 const core_browser_1 = require("@bldr/core-browser");
-const html_elements_1 = require("./html-elements");
-const events_1 = require("./events");
-const timer_1 = require("./timer");
-const cache_1 = require("./cache");
+const internal_1 = require("./internal");
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -119,15 +116,15 @@ class Sample {
          * for the sample.
          */
         this.startTimeSec = 0;
-        this.interval = new timer_1.Interval();
-        this.timeOut = new timer_1.TimeOut();
-        this.events = new events_1.CustomEventsManager();
+        this.interval = new internal_1.Interval();
+        this.timeOut = new internal_1.TimeOut();
+        this.events = new internal_1.CustomEventsManager();
         this.asset = asset;
         this.yaml = yaml;
         if (this.yaml.ref == null) {
             this.yaml.ref = 'complete';
         }
-        this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
+        this.htmlElement = internal_1.createHtmlElement(asset.mimeType, asset.httpUrl);
         if (this.yaml.startTime != null) {
             this.startTimeSec = this.toSec(this.yaml.startTime);
         }
@@ -148,9 +145,9 @@ class Sample {
         }
         this.shortcut = this.yaml.shortcut;
         exports.shortcutManager.addShortcut(this);
-        this.interval = new timer_1.Interval();
-        this.timeOut = new timer_1.TimeOut();
-        this.events = new events_1.CustomEventsManager();
+        this.interval = new internal_1.Interval();
+        this.timeOut = new internal_1.TimeOut();
+        this.events = new internal_1.CustomEventsManager();
         this.playbackState = 'stopped';
     }
     /**
@@ -543,7 +540,7 @@ class Sample {
     }
 }
 exports.Sample = Sample;
-class SampleCollection extends cache_1.Cache {
+class SampleCollection extends internal_1.Cache {
     constructor(asset) {
         super();
         this.addFromAsset(asset);
@@ -553,7 +550,7 @@ class SampleCollection extends cache_1.Cache {
         if (this.get(sample.ref) != null) {
             throw new Error(`Duplicate sample with the reference “${sample.ref}”.`);
         }
-        cache_1.sampleCache.add(sample.ref, sample);
+        internal_1.sampleCache.add(sample.ref, sample);
         this.add(sample.ref, sample);
     }
     /**

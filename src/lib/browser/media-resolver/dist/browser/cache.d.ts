@@ -1,5 +1,4 @@
-import { Sample } from './sample';
-import { ClientMediaAsset } from './asset';
+import { Sample, ClientMediaAsset } from './internal';
 export declare class Cache<T> {
     protected cache: {
         [ref: string]: T;

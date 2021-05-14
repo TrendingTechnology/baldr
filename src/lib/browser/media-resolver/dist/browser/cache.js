@@ -1,5 +1,5 @@
-import { shortcutManager } from './sample';
 import { MediaUri } from '@bldr/client-media-models';
+import { shortcutManager } from './internal';
 export class Cache {
     constructor() {
         this.cache = {};

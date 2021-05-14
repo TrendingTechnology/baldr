@@ -1,6 +1,5 @@
 import type { AssetType } from '@bldr/type-definitions';
-import { ClientMediaAsset } from './asset';
-import { Cache } from './cache';
+import { ClientMediaAsset, Cache } from './internal';
 export declare class ShortcutManager {
     private readonly audio;
     private readonly image;
