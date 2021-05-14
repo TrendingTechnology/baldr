@@ -99,7 +99,11 @@ export default {
       }
 
       this.$media.player.events.on('start', (loadedSample) => {
-        if (loadedSample.uri === this.sample.uri) {
+        // TODO use only ref
+        if (
+          (loadedSample.uri != null && loadedSample.uri === this.sample.uri) ||
+          (loadedSample.ref != null && loadedSample.ref === this.sample.ref)
+        ) {
           this.status = 'starting'
         }
       })
