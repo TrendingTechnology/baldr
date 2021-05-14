@@ -1,4 +1,3 @@
-
 class Timer {
   /**
    * An array of `setTimeout` IDs.

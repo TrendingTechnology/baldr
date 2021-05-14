@@ -13,8 +13,7 @@
   "scripts": {
     "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node && npm run patch:jsdom",
-    "patch:jsdom": "sed -i 's#// <- ##' ./dist/node/html-elements.js",
+    "build:node": "tsc --module commonjs --outDir dist/node",
     "lint": "ts-standard --fix src/*.ts && standard --fix tests/*.js",
     "test": "npm run build && npm run lint && mocha tests/*"
   },
@@ -31,7 +30,6 @@
     "@bldr/core-browser": "*"
   },
   "devDependencies": {
-    "@bldr/type-definitions": "*",
-    "jsdom": "16.5.3"
+    "@bldr/type-definitions": "*"
   }
 }

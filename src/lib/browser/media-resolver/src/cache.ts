@@ -1,6 +1,6 @@
 import { Sample, shortcutManager } from './sample'
 import { ClientMediaAsset } from './asset'
-import { MediaUri } from './media-uri'
+import { MediaUri } from '@bldr/client-media-models'
 
 export class Cache <T> {
   protected cache: { [ref: string]: T }

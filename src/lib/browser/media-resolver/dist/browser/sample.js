@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,13 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleCollection = exports.Sample = exports.shortcutManager = exports.ShortcutManager = void 0;
-const core_browser_1 = require("@bldr/core-browser");
-const html_elements_1 = require("./html-elements");
-const timer_1 = require("./timer");
-const events_1 = require("./events");
-const cache_1 = require("./cache");
+import { convertDurationToSeconds } from '@bldr/core-browser';
+import { createHtmlElement } from './html-elements';
+import { CustomEventsManager } from './events';
+import { Interval, TimeOut } from './timer';
+import { sampleCache, Cache } from './cache';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -39,7 +36,7 @@ class MimeTypeShortcutCounter {
         this.count = 0;
     }
 }
-class ShortcutManager {
+export class ShortcutManager {
     constructor() {
         this.audio = new MimeTypeShortcutCounter('a');
         this.image = new MimeTypeShortcutCounter('i');
@@ -64,8 +61,7 @@ class ShortcutManager {
         this.video.reset();
     }
 }
-exports.ShortcutManager = ShortcutManager;
-exports.shortcutManager = new ShortcutManager();
+export const shortcutManager = new ShortcutManager();
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */
@@ -101,7 +97,7 @@ const defaultPlayDelayMsec = 10;
  *  | <-      durationSec      ->|
  * ```
  */
-class Sample {
+export class Sample {
     constructor(asset, yaml) {
         /**
          * The current volume of the parent media Element. This value gets stored
@@ -119,15 +115,15 @@ class Sample {
          * for the sample.
          */
         this.startTimeSec = 0;
-        this.interval = new timer_1.Interval();
-        this.timeOut = new timer_1.TimeOut();
-        this.events = new events_1.CustomEventsManager();
+        this.interval = new Interval();
+        this.timeOut = new TimeOut();
+        this.events = new CustomEventsManager();
         this.asset = asset;
         this.yaml = yaml;
         if (this.yaml.ref == null) {
             this.yaml.ref = 'complete';
         }
-        this.htmlElement = html_elements_1.createHtmlElement(asset.mimeType, asset.httpUrl);
+        this.htmlElement = createHtmlElement(asset.mimeType, asset.httpUrl);
         if (this.yaml.startTime != null) {
             this.startTimeSec = this.toSec(this.yaml.startTime);
         }
@@ -147,10 +143,10 @@ class Sample {
             this.fadeOutSec_ = this.toSec(this.yaml.fadeOut);
         }
         this.shortcut = this.yaml.shortcut;
-        exports.shortcutManager.addShortcut(this);
-        this.interval = new timer_1.Interval();
-        this.timeOut = new timer_1.TimeOut();
-        this.events = new events_1.CustomEventsManager();
+        shortcutManager.addShortcut(this);
+        this.interval = new Interval();
+        this.timeOut = new TimeOut();
+        this.events = new CustomEventsManager();
         this.playbackState = 'stopped';
     }
     /**
@@ -223,7 +219,7 @@ class Sample {
      * Convert strings to numbers, so we can use them as seconds.
      */
     toSec(timeIntervaleString) {
-        return core_browser_1.convertDurationToSeconds(timeIntervaleString);
+        return convertDurationToSeconds(timeIntervaleString);
     }
     /**
      * The current time of the sample. It starts from zero.
@@ -542,8 +538,7 @@ class Sample {
         this.jump(interval, 'backward');
     }
 }
-exports.Sample = Sample;
-class SampleCollection extends cache_1.Cache {
+export class SampleCollection extends Cache {
     constructor(asset) {
         super();
         this.addFromAsset(asset);
@@ -553,7 +548,7 @@ class SampleCollection extends cache_1.Cache {
         if (this.get(sample.ref) != null) {
             throw new Error(`Duplicate sample with the reference “${sample.ref}”.`);
         }
-        cache_1.sampleCache.add(sample.ref, sample);
+        sampleCache.add(sample.ref, sample);
         this.add(sample.ref, sample);
     }
     /**
@@ -618,4 +613,3 @@ class SampleCollection extends cache_1.Cache {
         }
     }
 }
-exports.SampleCollection = SampleCollection;

@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MultiPartSelection = exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
-const mime_type_1 = require("./mime-type");
-const media_uri_1 = require("./media-uri");
-const sample_1 = require("./sample");
-const html_elements_1 = require("./html-elements");
+const client_media_models_1 = require("@bldr/client-media-models");
 const cache_1 = require("./cache");
+const html_elements_1 = require("./html-elements");
+const sample_1 = require("./sample");
 /**
  * Hold various data of a media file as class properties.
  *
@@ -20,7 +19,7 @@ class ClientMediaAsset {
      * @param yaml - A raw javascript object read from the Rest API
      */
     constructor(uri, httpUrl, yaml) {
-        this.uri = new media_uri_1.MediaUri(uri);
+        this.uri = new client_media_models_1.MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
@@ -32,7 +31,7 @@ class ClientMediaAsset {
         if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');
         }
-        this.mimeType = mime_type_1.mimeTypeManager.extensionToType(this.yaml.extension);
+        this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.yaml.extension);
         if (this.mimeType !== 'document') {
             this.htmlElement = html_elements_1.createHtmlElement(this.mimeType, this.httpUrl);
         }

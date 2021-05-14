@@ -1,14 +1,11 @@
-"use strict";
 /**
  * Wrap a sample with some custom meta data (mostly a custom title). Allow
  * different input specifications. Allow fuzzy specification of the samples.
  *
  * @module @bldr/wrapped-sample
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
-const media_uri_1 = require("./media-uri");
-const cache_1 = require("./cache");
+import { MediaUri } from '@bldr/client-media-models';
+import { sampleCache } from './cache';
 /**
  * This class holds the specification of the wrapped sample. The sample object
  * itself is not included in this class.
@@ -27,14 +24,14 @@ class WrappedSampleSpec {
     constructor(spec) {
         // string
         if (typeof spec === 'string') {
-            const match = spec.match(media_uri_1.MediaUri.regExp);
+            const match = spec.match(MediaUri.regExp);
             if (match != null) {
                 this.uri = match[0];
             }
             else {
                 throw new Error(`No media URI found in “${spec}”!`);
             }
-            let title = spec.replace(media_uri_1.MediaUri.regExp, '');
+            let title = spec.replace(MediaUri.regExp, '');
             if (title != null && title !== '') {
                 title = title.trim();
                 title = title.replace(/\s{2,}/g, ' ');
@@ -51,7 +48,7 @@ class WrappedSampleSpec {
         }
     }
 }
-class WrappedSampleSpecList {
+export class WrappedSampleSpecList {
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -86,14 +83,13 @@ class WrappedSampleSpecList {
         return uris;
     }
 }
-exports.WrappedSampleSpecList = WrappedSampleSpecList;
 /**
  * This class holds the resolve sample object.
  */
-class WrappedSample {
+export class WrappedSample {
     constructor(spec) {
         this.spec = spec;
-        const sample = cache_1.sampleCache.get(this.spec.uri);
+        const sample = sampleCache.get(this.spec.uri);
         if (sample != null) {
             this.sample = sample;
         }
@@ -115,4 +111,3 @@ class WrappedSample {
             return this.sample.titleSafe;
     }
 }
-exports.WrappedSample = WrappedSample;

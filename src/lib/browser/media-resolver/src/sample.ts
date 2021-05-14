@@ -1,10 +1,11 @@
-import { convertDurationToSeconds } from '@bldr/core-browser'
 import type { AssetType } from '@bldr/type-definitions'
+
+import { convertDurationToSeconds } from '@bldr/core-browser'
 
 import { ClientMediaAsset } from './asset'
 import { createHtmlElement } from './html-elements'
-import { Interval, TimeOut } from './timer'
 import { CustomEventsManager } from './events'
+import { Interval, TimeOut } from './timer'
 import { sampleCache, Cache } from './cache'
 
 /**

@@ -5,8 +5,9 @@
  * @module @bldr/wrapped-sample
  */
 
+import { MediaUri } from '@bldr/client-media-models'
+
 import { Sample } from './sample'
-import { MediaUri } from './media-uri'
 import { sampleCache } from './cache'
 
 interface SimpleSampleSpec {

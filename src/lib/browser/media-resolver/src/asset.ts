@@ -1,11 +1,11 @@
 import type { AssetType } from '@bldr/type-definitions'
-import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
 
-import { mimeTypeManager } from './mime-type'
-import { MediaUri } from './media-uri'
-import { SampleCollection } from './sample'
-import { createHtmlElement } from './html-elements'
+import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
+import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
+
 import { assetCache } from './cache'
+import { createHtmlElement } from './html-elements'
+import { SampleCollection } from './sample'
 
 /**
  * Hold various data of a media file as class properties.
