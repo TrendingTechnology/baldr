@@ -18,7 +18,7 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/me
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
-export class Resolver {
+class Resolver {
     constructor() {
         this.cache = {};
     }
@@ -113,4 +113,17 @@ export class Resolver {
     getSamples() {
         return sampleCache.getAll();
     }
+}
+export const resolver = new Resolver();
+/**
+ * Resolve one or more remote media files by their URIs.
+ *
+ * Linked media URIs are resolved recursively.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ */
+export function resolve(uris) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield resolver.resolve(uris);
+    });
 }

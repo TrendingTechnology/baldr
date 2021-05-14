@@ -19,5 +19,6 @@ __exportStar(require("./asset"), exports);
 __exportStar(require("./cache"), exports);
 __exportStar(require("./events"), exports);
 __exportStar(require("./html-elements"), exports);
+__exportStar(require("./resolve"), exports);
 __exportStar(require("./sample"), exports);
 __exportStar(require("./timer"), exports);

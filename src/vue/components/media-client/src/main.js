@@ -2074,13 +2074,12 @@ class Media {
       this.addShortcutForSamples_()
     }
 
-    const resolverNg = new mediaResolver.Resolver()
-    await resolverNg.resolve(assetSpecs)
-    for (const asset of resolverNg.getAssets()) {
+    await mediaResolver.resolver.resolve(assetSpecs)
+    for (const asset of mediaResolver.resolver.getAssets()) {
       store.commit('media/addAssetNg', asset)
     }
 
-    for (const sample of resolverNg.getSamples()) {
+    for (const sample of mediaResolver.resolver.getSamples()) {
       store.commit('media/addSampleNg', sample)
     }
     return output

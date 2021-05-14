@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 
-import { translateToAssetRef, translateToSampleRef } from '@bldr/client-media-models'
+import { translateToAssetRef, translateToSampleRef } from '@bldr/media-resolver'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
@@ -116,9 +116,7 @@ const getters = {
   sampleNgByUri: (state, getters) => uri => {
     if (!uri) return
     const samplesNg = getters.samplesNg
-    console.log(uri)
     const ref = translateToSampleRef(uri)
-    console.log(ref)
     return samplesNg[ref]
   },
   samplePlayListCurrent: (state, getters) => {

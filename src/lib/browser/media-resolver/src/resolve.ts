@@ -14,7 +14,7 @@ export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/me
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
-export class Resolver {
+class Resolver {
   /**
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
@@ -114,4 +114,17 @@ export class Resolver {
   getSamples (): Sample[] {
     return sampleCache.getAll()
   }
+}
+
+export const resolver = new Resolver()
+
+/**
+ * Resolve one or more remote media files by their URIs.
+ *
+ * Linked media URIs are resolved recursively.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ */
+export async function resolve (uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]> {
+  return await resolver.resolve(uris)
 }

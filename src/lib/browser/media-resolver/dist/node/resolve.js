@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Resolver = exports.httpRequest = void 0;
+exports.resolve = exports.resolver = exports.httpRequest = void 0;
 const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
@@ -117,4 +117,17 @@ class Resolver {
         return internal_1.sampleCache.getAll();
     }
 }
-exports.Resolver = Resolver;
+exports.resolver = new Resolver();
+/**
+ * Resolve one or more remote media files by their URIs.
+ *
+ * Linked media URIs are resolved recursively.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ */
+function resolve(uris) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield exports.resolver.resolve(uris);
+    });
+}
+exports.resolve = resolve;

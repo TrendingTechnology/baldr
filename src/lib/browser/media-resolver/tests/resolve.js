@@ -3,7 +3,7 @@ const assert = require('assert')
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 
 const { assetCache, sampleCache, resetMediaCache } = require('../dist/node/cache.js')
-const { Resolver } = require('../dist/node/resolve.js')
+const { resolve } = require('../dist/node/resolve.js')
 
 const config = require('@bldr/config')
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
@@ -13,7 +13,7 @@ async function update () {
 }
 
 async function resolveByUuid(uuid) {
-  return await resolver.resolve('uuid:' +  uuid)
+  return await resolve('uuid:' +  uuid)
 }
 
 async function resolveSingleByUuid(uuid) {
@@ -21,7 +21,6 @@ async function resolveSingleByUuid(uuid) {
   return assets[0]
 }
 
-const resolver = new Resolver()
 describe('Package “@bldr/media-resolver”', function () {
   it('resolve single', async function () {
     this.timeout(10000)
@@ -101,22 +100,22 @@ describe('Package “@bldr/media-resolver”', function () {
     // uuid: 'c64047d2-983d-4009-a35f-02c95534cb53',
 
     it('uuid without a fragment', async function () {
-      const assets = await resolver.resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53')
+      const assets = await resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53')
       assert.strictEqual(assets[0].uuid, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
     })
 
     it('ref without a fragment', async function () {
-      const assets = await resolver.resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew')
+      const assets = await resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew')
       assert.strictEqual(assets[0].uuid, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
     })
 
     it('uuid with a fragment', async function () {
-      const assets = await resolver.resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete')
+      const assets = await resolve('uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete')
       assert.strictEqual(assets[0].uuid, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
     })
 
     it('ref with a fragment', async function () {
-      const assets = await resolver.resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew#complete')
+      const assets = await resolve('ref:Ausstellung-Ueberblick_HB_10_Klav_Grosses-Tor-von-Kiew#complete')
       assert.strictEqual(assets[0].uuid, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
     })
   })

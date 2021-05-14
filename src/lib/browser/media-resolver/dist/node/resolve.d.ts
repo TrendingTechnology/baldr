@@ -5,7 +5,7 @@ export declare const httpRequest: import("@bldr/http-request").HttpRequest;
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
-export declare class Resolver {
+declare class Resolver {
     /**
      * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.
@@ -41,3 +41,13 @@ export declare class Resolver {
     getAssets(): ClientMediaAsset[];
     getSamples(): Sample[];
 }
+export declare const resolver: Resolver;
+/**
+ * Resolve one or more remote media files by their URIs.
+ *
+ * Linked media URIs are resolved recursively.
+ *
+ * @param uris - A single media URI or an array of media URIs.
+ */
+export declare function resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
+export {};
