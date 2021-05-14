@@ -326,7 +326,7 @@ export class Sample {
   /**
    * In how many milliseconds we have to start a fade out process.
    */
-  private get fadeOutStartTimeMsec_ (): number {
+  private get fadeOutStartTimeMsec (): number {
     return (this.durationRemainingSec - this.fadeOutSec) * 1000
   }
 
@@ -338,20 +338,15 @@ export class Sample {
     if (this.durationSec_ == null) {
       // Samples without duration play until the end fo the media file.
       return this.htmlElement.duration - this.startTimeSec
-    } else if (this.durationSec_ != null) {
-      return this.durationSec_
     }
-    return 0
+    return this.durationSec_
   }
 
   /**
    * The remaining duration of the sample in seconds.
    */
   get durationRemainingSec (): number {
-    if (this.durationSec_ != null) {
-      return this.durationSec_ - this.currentTimeSec
-    }
-    return 0
+    return this.durationSec - this.currentTimeSec
   }
 
   /**
@@ -359,11 +354,10 @@ export class Sample {
    * the sample reaches the end.
    */
   get progress (): number {
-    if (this.durationSec_ == null) return 0
     // for example:
     // current time: 6s duration: 60s
     // 6 / 60 = 0.1
-    return this.currentTimeSec / this.durationSec_
+    return this.currentTimeSec / this.durationSec
   }
 
   get volume (): number {
@@ -479,7 +473,7 @@ export class Sample {
           () => {}
         )
       },
-      this.fadeOutStartTimeMsec_
+      this.fadeOutStartTimeMsec
     )
   }
 

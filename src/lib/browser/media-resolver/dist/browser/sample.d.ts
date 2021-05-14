@@ -130,7 +130,7 @@ export declare class Sample {
     /**
      * In how many milliseconds we have to start a fade out process.
      */
-    private get fadeOutStartTimeMsec_();
+    private get fadeOutStartTimeMsec();
     /**
      * The duration of the sample in seconds. If the duration is set on the
      * sample, it is the same as `sample.durationSec_`.
