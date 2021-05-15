@@ -15,8 +15,7 @@ declare class Resolver {
     /**
      * Query the media server to get meta informations and the location of the file.
      *
-     * @param field - For example `id` or `uuid`
-     * @param search - For example `Fuer-Elise_HB`
+     * @param uri - For example `ref:Fuer-Elise`
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
      */
@@ -28,6 +27,8 @@ declare class Resolver {
      * @param uri A media URI (Uniform Resource Identifier) with an optional
      *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
      *   suffix is removed.
+     * @param throwException - Throw an exception if the media URI
+     *  cannot be resolved (default: `true`).
      */
     private resolveSingle;
     /**
@@ -36,8 +37,10 @@ declare class Resolver {
      * Linked media URIs are resolved recursively.
      *
      * @param uris - A single media URI or an array of media URIs.
+     * @param throwException - Throw an exception if the media URI
+     *  cannot be resolved (default: `true`).
      */
-    resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
+    resolve(uris: string | string[] | Set<string>, throwException?: boolean): Promise<ClientMediaAsset[]>;
     getAssets(): ClientMediaAsset[];
     getSamples(): Sample[];
 }
