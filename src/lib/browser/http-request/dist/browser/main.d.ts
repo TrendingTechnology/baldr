@@ -53,8 +53,14 @@ export declare class HttpRequest {
      */
     constructor(config: Configuration, restEndPoint: RestEndPoint, urlFillIn?: string);
     /**
-     * @property url - A path relative to REST endpoints base URL. if
-     *   `url` starts with `/` the `urlFillin` is not used.
+     * Format the URL.
+     *
+     * - `query`: `http://localhost/api/media/query`
+     * - `/query`: `http://localhost/query`
+     * - `http://example.com`: `http://example.com`
+     *
+     * @property url - A path relative to the REST endpoints base URL or a HTTP
+     *   URL. If `url` starts with `/` the `urlFillin` is not used.
      */
     private formatUrl;
     /**
@@ -104,4 +110,12 @@ export declare class HttpRequest {
  * @returns A instance of the class `HttpRequest()`.
  */
 export declare function makeHttpRequestInstance(config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string): HttpRequest;
+/**
+ * Check if a URL is reachable.
+ *
+ * @param url A fully qualified HTTP URL
+ *
+ * @returns True if the URL is reachable, false else.
+ */
+export declare function checkReachability(url: string): Promise<boolean>;
 export {};

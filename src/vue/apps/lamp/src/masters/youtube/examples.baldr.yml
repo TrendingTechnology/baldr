@@ -1,5 +1,7 @@
 ---
 slides:
+- title: Downloaded video
+  youtube: J0Aulg2ePWA
 
 - title: Short form
   youtube: 5BBahdS6wu4
@@ -12,9 +14,7 @@ slides:
   youtube:
     id: lTDrUzUUglA
     heading: <em class="person">Chet Baker</em> Live
-
-- title: Heading and info
-  youtube:
-    id: OqQWVrfjatA
-    heading: <em class="person">Chet Baker</em> Live
     info: <em class="person">Stan Getz</em> & <em class="person">Chet Baker</em> in Stockholm 1983
+
+- title: Video not available
+  youtube: xxxxxxxxxxx

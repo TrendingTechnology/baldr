@@ -68,11 +68,20 @@ export class HttpRequest {
         this.axiosInstance = axios.create(axiosConfig);
     }
     /**
-     * @property url - A path relative to REST endpoints base URL. if
-     *   `url` starts with `/` the `urlFillin` is not used.
+     * Format the URL.
+     *
+     * - `query`: `http://localhost/api/media/query`
+     * - `/query`: `http://localhost/query`
+     * - `http://example.com`: `http://example.com`
+     *
+     * @property url - A path relative to the REST endpoints base URL or a HTTP
+     *   URL. If `url` starts with `/` the `urlFillin` is not used.
      */
     formatUrl(url) {
-        if (this.urlFillIn !== null && typeof this.urlFillIn === 'string' && url.substr(0, 1) !== '/') {
+        if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
+            return url;
+        }
+        if (this.urlFillIn != null && url.substr(0, 1) !== '/') {
             return `${this.urlFillIn}/${url}`;
         }
         return url;
@@ -138,4 +147,22 @@ export class HttpRequest {
  */
 export function makeHttpRequestInstance(config, restEndPoint, urlFillIn) {
     return new HttpRequest(config, restEndPoint, urlFillIn);
+}
+/**
+ * Check if a URL is reachable.
+ *
+ * @param url A fully qualified HTTP URL
+ *
+ * @returns True if the URL is reachable, false else.
+ */
+export function checkReachability(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield axios.get(url);
+        }
+        catch (error) {
+            return false;
+        }
+        return true;
+    });
 }

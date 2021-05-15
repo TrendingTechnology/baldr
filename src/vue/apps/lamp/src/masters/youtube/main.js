@@ -55,7 +55,7 @@ export default validateMasterSpec({
       const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
       const propsMain = Object.assign({}, props)
       propsMain.asset = asset
-      if (asset) {
+      if (asset != null) {
         if (!props.heading && asset.heading) {
           propsMain.heading = convertMarkdownToHtml(asset.heading)
         } else if (!props.heading && asset.originalHeading) {

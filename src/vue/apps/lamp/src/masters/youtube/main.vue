@@ -3,7 +3,7 @@
     <div class="source smaller">
       <span class="important">Quelle:</span>
       <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">
-        www.youtube.com/watch?v={{ id }}
+        youtu.be/{{ id }}
       </a>
     </div>
 
