@@ -1,3 +1,4 @@
+/* globals describe it */
 const assert = require('assert')
 
 const { convertToYaml, convertFromYaml } = require('../dist/node/main.js')
@@ -14,7 +15,6 @@ function assertFrom (actual, expected) {
 
 describe('Package “@bldr/yaml”', function () {
   describe('Function “convertToYaml()”', function () {
-
     it('{ propertyOne: 1 }', function () {
       assert.strictEqual(convertToYaml({ propertyOne: 1 }), '---\nproperty_one: 1\n')
     })

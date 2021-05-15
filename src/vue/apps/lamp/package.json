@@ -38,6 +38,7 @@
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",
+    "@bldr/youtube-api": "*",
     "axios": "0.21.1",
     "core-js": "3.7.0",
     "electron-context-menu": "2.3.0",

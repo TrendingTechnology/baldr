@@ -166,3 +166,6 @@ export function checkReachability(url) {
         return true;
     });
 }
+export function get(url, requestConfig) {
+    return axios.get(url, requestConfig);
+}

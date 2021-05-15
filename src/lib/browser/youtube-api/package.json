@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/yaml",
+  "name": "@bldr/youtube-api",
   "version": "0.1.0",
-  "description": "Parse YAML strings and convert Javascript data into YAML strings",
+  "description": "A small wrapper around the YouTube API",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -29,11 +29,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/type-definitions": "*",
-    "js-yaml": "4.1.0"
-  },
-  "devDependencies": {
-    "@types/js-yaml": "4.0.0"
+    "@bldr/config": "*",
+    "axios": "0.21.1"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

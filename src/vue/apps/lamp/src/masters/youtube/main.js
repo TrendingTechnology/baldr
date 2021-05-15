@@ -8,7 +8,7 @@
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/master-toolkit'
-import { checkReachability } from '@bldr/http-request'
+import { checkAvailability } from '@bldr/youtube-api'
 
 function youtubeIdToUri (youtubeId) {
   return `ref:YT_${youtubeId}`
@@ -77,10 +77,9 @@ export default validateMasterSpec({
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
-
-      checkReachability(findPreviewHttpUrl(props.id, asset)).then((result) => {
+      checkAvailability(props.id).then((result) => {
         if (!result) {
-          console.log(`YouTube video “${props.id}” is not reachable.`)
+          this.$notifyError(`The YouTube video “${props.id}” is on longer available online.`)
         }
       })
       const propsMain = Object.assign({}, props)

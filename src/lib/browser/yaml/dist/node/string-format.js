@@ -25,7 +25,7 @@ exports.convertCamelToSnake = convertCamelToSnake;
  * Convert a string that is in the `snake_case` or `kebab-case` format into
  * `camelCase` formatted string.
  *
- * @param text - A snake or kebab cased string
+ * @param text - A snake or kebab cased string.
  *
  * @returns A string formatted in `camelCase`.
  *

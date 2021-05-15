@@ -194,3 +194,7 @@ export async function checkReachability (url: string): Promise<boolean> {
   }
   return true
 }
+
+// export function get (url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+//   return axios.get(url, requestConfig)
+// }
