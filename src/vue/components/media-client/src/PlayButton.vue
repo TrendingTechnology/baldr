@@ -85,9 +85,9 @@ export default {
   },
   methods: {
     registerEvents () {
-      // TODO: remove this.sample.mediaElement
-      if (this.sample.mediaElement != null) {
-        this.htmlElement = this.sample.mediaElement
+      // TODO: remove this.sample.htmlElement
+      if (this.sample.htmlElement != null) {
+        this.htmlElement = this.sample.htmlElement
       } else {
         this.htmlElement = this.sample.htmlElement
       }

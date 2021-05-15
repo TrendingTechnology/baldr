@@ -66,7 +66,7 @@ export default validateMasterSpec({
       const sample = this.$store.getters['media/sampleNgByUri'](slide.props.src)
       const videoWrapper = document.querySelector('#video_master-container')
       videoWrapper.innerHTML = ''
-      videoWrapper.appendChild(sample.mediaElement)
+      videoWrapper.appendChild(sample.htmlElement)
       this.$media.player.load(slide.props.src)
       if (slide.props.autoplay) {
         await this.$media.player.start()

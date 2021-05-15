@@ -2174,7 +2174,7 @@ class Media {
               this.player.load(sample.uri)
               this.player.start()
               if (sample.asset.isVisible) {
-                this.canvas.show(sample.mediaElement)
+                this.canvas.show(sample.htmlElement)
               }
             },
             // Play

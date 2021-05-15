@@ -74,7 +74,7 @@ export default {
       if (this.sample) return this.sample.asset;
     },
     mediaElement() {
-      if (this.sample) return this.sample.mediaElement;
+      if (this.sample) return this.sample.htmlElement;
     },
     no() {
       return this.$store.getters["media/playListNoCurrent"];

@@ -81,7 +81,7 @@ export default validateMasterSpec({
         const sample = this.$store.getters['media/sampleNgByUri'](uri)
         const videoWrapper = document.querySelector('#youtube-offline-video')
         videoWrapper.innerHTML = ''
-        videoWrapper.appendChild(sample.mediaElement)
+        videoWrapper.appendChild(sample.htmlElement)
         this.$media.player.load(uri)
       }
     }
