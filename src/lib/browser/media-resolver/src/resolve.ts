@@ -33,7 +33,6 @@ class Resolver {
    *  cannot be resolved (default: `true`).
    */
   private async queryMediaServer (uri: string, throwException: boolean = true): Promise<AssetType.RestApiRaw | undefined> {
-    console.log(uri)
     const mediaUri = new MediaUri(uri)
     const field = mediaUri.scheme
     const search = mediaUri.authority
@@ -104,6 +103,7 @@ class Resolver {
       const promises = []
       for (const uri of urisWithoutFragments) {
         promises.push(this.resolveSingle(uri, throwException))
+        urisWithoutFragments.delete(uri)
       }
       for (const asset of await Promise.all<ClientMediaAsset | undefined>(promises)) {
         if (asset != null) {

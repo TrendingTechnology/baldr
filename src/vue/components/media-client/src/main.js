@@ -2074,7 +2074,7 @@ class Media {
       this.addShortcutForSamples_()
     }
 
-    await mediaResolver.resolver.resolve(assetSpecs)
+    await mediaResolver.resolver.resolve(assetSpecs, throwException)
     for (const asset of mediaResolver.resolver.getAssets()) {
       store.commit('media/addAssetNg', asset)
     }

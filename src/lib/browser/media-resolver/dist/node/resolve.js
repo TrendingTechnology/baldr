@@ -34,7 +34,6 @@ class Resolver {
      */
     queryMediaServer(uri, throwException = true) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(uri);
             const mediaUri = new client_media_models_1.MediaUri(uri);
             const field = mediaUri.scheme;
             const search = mediaUri.authority;
@@ -108,6 +107,7 @@ class Resolver {
                 const promises = [];
                 for (const uri of urisWithoutFragments) {
                     promises.push(this.resolveSingle(uri, throwException));
+                    urisWithoutFragments.delete(uri);
                 }
                 for (const asset of yield Promise.all(promises)) {
                     if (asset != null) {
