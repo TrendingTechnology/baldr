@@ -8,9 +8,33 @@
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/master-toolkit'
+import { checkReachability } from '@bldr/http-request'
 
 function youtubeIdToUri (youtubeId) {
   return `ref:YT_${youtubeId}`
+}
+
+/**
+ * https://stackoverflow.com/a/55890696/10193818
+ *
+ * Low quality
+ * https://img.youtube.com/vi/[video-id]/sddefault.jpg
+ *
+ * medium quality
+ * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
+ *
+ * High quality
+ * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
+ *
+ * maximum resolution
+ * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
+ */
+export function findPreviewHttpUrl (youtubeId, asset) {
+  if (asset == null) {
+    return `http://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+  } else {
+    return asset.previewHttpUrl
+  }
 }
 
 export default validateMasterSpec({
@@ -53,6 +77,12 @@ export default validateMasterSpec({
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
+
+      checkReachability(findPreviewHttpUrl(props.id, asset)).then((result) => {
+        if (!result) {
+          console.log(`YouTube video “${props.id}” is not reachable.`)
+        }
+      })
       const propsMain = Object.assign({}, props)
       propsMain.asset = asset
       if (asset != null) {

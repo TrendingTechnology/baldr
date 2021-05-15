@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { findPreviewHttpUrl } from './main.js'
 export default {
   props: {
     asset: {
@@ -36,27 +37,8 @@ export default {
     }
   },
   computed: {
-    /**
-     * https://stackoverflow.com/a/55890696/10193818
-     *
-     * Low quality
-     * https://img.youtube.com/vi/[video-id]/sddefault.jpg
-     *
-     * medium quality
-     * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
-     *
-     * High quality
-     * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
-     *
-     * maximum resolution
-     * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
-     */
     httpUrl () {
-      if (!this.asset) {
-        return `http://img.youtube.com/vi/${this.id}/hqdefault.jpg`
-      } else {
-        return this.asset.previewHttpUrl
-      }
+      return findPreviewHttpUrl(this.id, this.asset)
     }
   }
 }
