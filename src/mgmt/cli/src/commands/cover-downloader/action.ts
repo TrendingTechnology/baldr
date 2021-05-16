@@ -16,7 +16,7 @@ async function downloadCover (filePath: string): Promise<void> {
   const metaData = readYamlFile(yamlFile)
   console.log(metaData)
 
-  if (metaData.coverSource == null) {
+  if (metaData.coverSource != null) {
     const previewFile = `${filePath}_preview.jpg`
     await fetchFile(metaData.coverSource, previewFile)
   } else {

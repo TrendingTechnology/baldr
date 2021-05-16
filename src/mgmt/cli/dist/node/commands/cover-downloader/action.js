@@ -26,7 +26,7 @@ function downloadCover(filePath) {
         const yamlFile = `${filePath}.yml`;
         const metaData = media_manager_1.readYamlFile(yamlFile);
         console.log(metaData);
-        if (metaData.coverSource == null) {
+        if (metaData.coverSource != null) {
             const previewFile = `${filePath}_preview.jpg`;
             yield core_node_1.fetchFile(metaData.coverSource, previewFile);
         }
