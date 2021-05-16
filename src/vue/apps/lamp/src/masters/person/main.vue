@@ -17,12 +17,12 @@
     </div>
 
     <external-sites :asset="asset"/>
-    <!--
+
     <horizontal-play-buttons
-      :samples="asset.famousPieces"
+      :samples="asset.yaml.famousPieces"
       class="left-bottom-corner"
-      v-if="asset.famousPieces"
-    /> -->
+      v-if="asset.yaml.famousPieces"
+    />
   </div>
 </template>
 

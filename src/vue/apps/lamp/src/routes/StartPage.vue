@@ -11,28 +11,6 @@
     <open-interface/>
 
     <recent-presentations/>
-
-    <section class="sub-projects">
-      <a href="/" class="baldr">
-        <material-icon color="red" name="baldr"/>
-        Baldr
-      </a>
-
-      <a href="/presentation/">
-        <material-icon color="orange" name="presentation" outline="circle"/>
-        Präsentation
-      </a>
-
-      <a href="/songbook/">
-        <material-icon color="green" name="music" outline="circle"/>
-        Liederbuch
-      </a>
-
-      <a href="/seating-plan/">
-        <material-icon color="blue" name="seat-outline" outline="circle"/>
-        Sitzplan
-      </a>
-    </section>
   </div>
 </template>
 
@@ -63,27 +41,6 @@ export default {
     .vc_open_interface {
       display: table-cell;
       vertical-align: middle;
-    }
-
-    .sub-projects {
-      position: absolute;
-      bottom: 3vw;
-      left: 0;
-      width: 100%;
-      text-align: center;
-
-      .baldr-icon_baldr {
-        font-size: 6vw;
-        transform: translate(0, 1.3vw);
-      }
-
-      a {
-        padding-right: 1vw;
-      }
-
-      .baldr {
-        padding-right: 3vw;
-      }
     }
 
     .top-icon {
