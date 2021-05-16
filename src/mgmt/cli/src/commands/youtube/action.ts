@@ -2,29 +2,28 @@
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
-import axios from 'axios'
-
 // Project packages.
+import type { AssetType } from '@bldr/type-definitions'
+
 import { CommandRunner } from '@bldr/cli-utils'
 import { operations, locationIndicator } from '@bldr/media-manager'
-import config from '@bldr/config'
-import { AssetType } from '@bldr/type-definitions'
+import { getSnippet } from '@bldr/youtube-api'
+import * as log from '@bldr/log'
 
-async function requestYoutubeApi (youtubeId: string): Promise<object> {
-  const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
-    params: {
-      part: 'snippet',
-      ref: youtubeId,
-      key: config.youtube.apiKey
+interface VideoMeta {
+  youtubeId: string
+  originalHeading: string
+  originalInfo: string
+}
+
+async function requestYoutubeApi (youtubeId: string): Promise<VideoMeta | undefined> {
+  const snippet = await getSnippet(youtubeId)
+  if (snippet != null) {
+    return {
+      youtubeId,
+      originalHeading: snippet.title,
+      originalInfo: snippet.description
     }
-  })
-
-  const snippet = result.data.items[0].snippet
-  return {
-    youtubeId,
-    originalHeading: snippet.title,
-    originalInfo: snippet.description
   }
 }
 
@@ -32,7 +31,13 @@ async function requestYoutubeApi (youtubeId: string): Promise<object> {
  *
  */
 async function action (youtubeId: string): Promise<void> {
-  const metaData = await requestYoutubeApi(youtubeId) as AssetType.YamlFormat
+  const meta = await requestYoutubeApi(youtubeId) as unknown
+  if (meta == null) {
+    log.error('Metadata of the YouTube video “%s” could not be fetched.', youtubeId)
+    return
+  }
+
+  const metaData = meta as AssetType.YamlFormat
   console.log(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())
