@@ -534,11 +534,10 @@ export class SampleCollection extends Cache {
     }
     addSample(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);
-        if (this.get(sample.ref) != null) {
-            throw new Error(`Duplicate sample with the reference “${sample.ref}”.`);
+        if (this.get(sample.ref) == null) {
+            sampleCache.add(sample.ref, sample);
+            this.add(sample.ref, sample);
         }
-        sampleCache.add(sample.ref, sample);
-        this.add(sample.ref, sample);
     }
     /**
      * Gather informations to build the default sample “complete”.

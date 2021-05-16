@@ -620,11 +620,10 @@ export class SampleCollection extends Cache<Sample> {
 
   private addSample (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
-    if (this.get(sample.ref) != null) {
-      throw new Error(`Duplicate sample with the reference “${sample.ref}”.`)
+    if (this.get(sample.ref) == null) {
+      sampleCache.add(sample.ref, sample)
+      this.add(sample.ref, sample)
     }
-    sampleCache.add(sample.ref, sample)
-    this.add(sample.ref, sample)
   }
 
   /**

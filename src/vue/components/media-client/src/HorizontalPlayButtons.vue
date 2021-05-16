@@ -21,7 +21,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
-import { store, WrappedSampleList } from './main.js'
+import { WrappedSampleList } from './main.js'
 
 export default {
   name: 'HorizontalPlayButtons',
@@ -40,6 +40,10 @@ export default {
     showTitles: {
       type: Boolean,
       default: false
+    },
+    loadFirstSample: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -51,13 +55,38 @@ export default {
       }
       return this.wrappedSampleListNormalized.samples
     },
+    firstSample () {
+      return this.samplesNormalized[0].sample
+    },
     wrappedSampleListNormalized () {
-      if (this.wrappedSampleList) return this.wrappedSampleList
-      if (this.samples) return new WrappedSampleList(this.samples)
+      if (this.wrappedSampleList != null) {
+        return this.wrappedSampleList
+      }
+      if (this.samples != null) {
+        return new WrappedSampleList(this.samples)
+      }
     },
     showTitlesNormalized () {
-      if (this.wrappedSampleListNormalized.isTitleSetManually) return true
+      if (this.wrappedSampleListNormalized.isTitleSetManually) {
+        return true
+      }
       return this.showTitles
+    }
+  },
+  mounted () {
+    this.loadSample()
+  },
+  methods: {
+    loadSample () {
+      this.$media.player.load(this.firstSample)
+    }
+  },
+  watch: {
+    samples (val, oldVal) {
+      this.loadSample()
+    },
+    wrappedSampleList (val, oldVal) {
+      this.loadSample()
     }
   }
 }
