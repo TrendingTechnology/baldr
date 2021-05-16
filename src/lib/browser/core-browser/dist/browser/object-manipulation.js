@@ -76,3 +76,43 @@ export class RawDataObject {
         }
     }
 }
+/**
+ * Grab / select values from two objects. The first object is preferred. The
+ * first object can be for example props and the second a object from the media
+ * server.
+ */
+export class ObjectPropertyPicker {
+    constructor(object1, object2) {
+        this.object1 = object1;
+        this.object2 = object2;
+    }
+    /**
+     * Grab a value from two objects.
+     *
+     * @param propName - The name of property to look for
+     */
+    pickProperty(propName) {
+        if (this.object1[propName] != null) {
+            return this.object1[propName];
+        }
+        if (this.object2 != null && this.object2[propName] != null) {
+            return this.object2[propName];
+        }
+    }
+    /**
+     * Grab multiple properties.
+     *
+     * @param properties - An array of property names.
+     *
+     * @returns A new object containing the key and value pairs.
+     */
+    pickMultipleProperties(properties) {
+        const result = {};
+        for (const propName of properties) {
+            const value = this.pickProperty(propName);
+            if (value)
+                result[propName] = value;
+        }
+        return result;
+    }
+}

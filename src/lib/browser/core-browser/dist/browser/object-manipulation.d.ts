@@ -3,6 +3,7 @@
  *
  * @module @bldr/core-browser/object-manipulation
  */
+import { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Convert various data to a string. Meant for error messages. Objects
  * are converted to a string using `JSON.stringify`
@@ -46,4 +47,28 @@ export declare class RawDataObject {
      * Throw an exception if the stored raw data is not empty yet.
      */
     throwExecptionIfNotEmpty(): void;
+}
+/**
+ * Grab / select values from two objects. The first object is preferred. The
+ * first object can be for example props and the second a object from the media
+ * server.
+ */
+export declare class ObjectPropertyPicker {
+    private object1;
+    private object2;
+    constructor(object1: StringIndexedObject, object2: StringIndexedObject);
+    /**
+     * Grab a value from two objects.
+     *
+     * @param propName - The name of property to look for
+     */
+    pickProperty(propName: string): string | undefined;
+    /**
+     * Grab multiple properties.
+     *
+     * @param properties - An array of property names.
+     *
+     * @returns A new object containing the key and value pairs.
+     */
+    pickMultipleProperties(properties: string[]): StringIndexedObject;
 }

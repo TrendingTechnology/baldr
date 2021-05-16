@@ -5,7 +5,6 @@
  */
 
 import vue from '@/main.js'
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 /**
  * Check if the input is a valid URI. Prefix with `ref:` if necessary.
@@ -57,58 +56,6 @@ export function hideMouseAfterSec (seconds = 5) {
       cursorVisible = true
     }
     mouseTimer = window.setTimeout(disappearCursor, seconds * 1000)
-  }
-}
-
-/**
- * Grab / select values from two objects. The first object is preferred. The
- * first object can be for example props and the second a object from the media
- * server.
- */
-export class GrabFromObjects {
-  /**
-   * @param {Object} object1
-   * @param {Object} object2
-   * @param {Boolean} markup - Apply `convertMarkdownToHtml()` to the values of the
-   *   second object.
-   */
-  constructor (object1, object2, markup = true) {
-    this.object1 = object1
-    this.object2 = object2
-    this.markup = markup
-  }
-
-  /**
-   * Grab a value from two objects.
-   *
-   * @param {String} property - The name of property to look for
-   * @returns {Mixed}
-   */
-  property (property) {
-    if (this.object1[property]) return this.object1[property]
-    if (this.object2 && this.object2[property]) {
-      if (this.markup) {
-        return convertMarkdownToHtml(this.object2[property])
-      } else {
-        return this.object2[property]
-      }
-    }
-  }
-
-  /**
-   * Grab multiple properties.
-   *
-   * @param {Array} properties - An array of property names.
-   *
-   * @returns {object} - A new object containing the key and value pairs.
-   */
-  multipleProperties (properties) {
-    const result = {}
-    for (const property of properties) {
-      const value = this.property(property)
-      if (value) result[property] = value
-    }
-    return result
   }
 }
 

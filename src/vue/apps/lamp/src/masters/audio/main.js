@@ -7,7 +7,7 @@
  * @module @bldr/lamp/masters/audio
  */
 
-import { GrabFromObjects } from '@/lib.js'
+import { ObjectPropertyPicker } from '@bldr/core-browser'
 
 import { validateMasterSpec } from '@bldr/master-toolkit'
 export default validateMasterSpec({
@@ -86,11 +86,11 @@ export default validateMasterSpec({
       const sample = this.$store.getters['media/sampleNgByUri'](props.src)
       const asset = sample.asset
 
-      const grab = new GrabFromObjects(props, asset.yaml)
-      const artist = grab.property('artist')
-      const composer = grab.property('composer')
-      const description = grab.property('description')
-      const partOf = grab.property('partOf')
+      const grab = new ObjectPropertyPicker(props, asset.yaml)
+      const artist = grab.pickProperty('artist')
+      const composer = grab.pickProperty('composer')
+      const description = grab.pickProperty('description')
+      const partOf = grab.pickProperty('partOf')
 
       let title
       if (props.title != null) {

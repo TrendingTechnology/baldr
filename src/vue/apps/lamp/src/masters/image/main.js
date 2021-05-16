@@ -2,10 +2,8 @@
  * @module @bldr/lamp/masters/image
  */
 
-import { splitHtmlIntoChunks } from '@bldr/core-browser'
+import { splitHtmlIntoChunks, ObjectPropertyPicker } from '@bldr/core-browser'
 import { validateMasterSpec } from '@bldr/master-toolkit'
-
-import { GrabFromObjects } from '@/lib.js'
 
 const DESCRIPTION_TEASER_LENGTH = 200
 
@@ -56,10 +54,10 @@ export default validateMasterSpec({
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](props.src)
 
-      const grab = new GrabFromObjects(props, asset)
+      const picker = new ObjectPropertyPicker(props, asset)
 
-      const title = grab.property('title')
-      const description = grab.property('description')
+      const title = picker.pickProperty('title')
+      const description = picker.pickProperty('description')
 
       let descriptionTeaser = description
       let isLongDescription = false
