@@ -11,6 +11,12 @@ import { SampleCollection } from './internal';
  */
 export declare class ClientMediaAsset {
     /**
+     * To be able to distinguish the old and the new version of the class.
+     *
+     * TODO remove
+     */
+    ng: boolean;
+    /**
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
      */
@@ -28,6 +34,10 @@ export declare class ClientMediaAsset {
      * The media type, for example `image`, `audio` or `video`.
      */
     mimeType: string;
+    /**
+     * HTTP Uniform Resource Locator, for example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
+     */
     httpUrl: string;
     samples?: SampleCollection;
     /**
@@ -49,6 +59,12 @@ export declare class ClientMediaAsset {
      *
      * @param {String} url
      */
+    /**
+     * Each media asset can have a preview image. The suffix `_preview.jpg`
+     * is appended on the path. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
+     */
+    get previewHttpUrl(): string | undefined;
     get titleSafe(): string;
     /**
      * True if the media file is playable, for example an audio or a video file.

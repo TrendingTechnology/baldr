@@ -86,24 +86,24 @@ export default validateMasterSpec({
       const sample = this.$store.getters['media/sampleNgByUri'](props.src)
       const asset = sample.asset
 
-      const grab = new GrabFromObjects(props, asset)
+      const grab = new GrabFromObjects(props, asset.yaml)
       const artist = grab.property('artist')
       const composer = grab.property('composer')
       const description = grab.property('description')
       const partOf = grab.property('partOf')
 
       let title
-      if (props.title) {
+      if (props.title != null) {
         title = props.title
       } else {
         title = sample.titleSafe
       }
 
       let previewHttpUrl
-      if (props.cover) {
+      if (props.cover != null) {
         const coverFile = this.$store.getters['media/assetByUri'](props.cover)
         previewHttpUrl = coverFile.httpUrl
-      } else if ('previewHttpUrl' in asset) {
+      } else if (asset.previewHttpUrl != null) {
         previewHttpUrl = asset.previewHttpUrl
       }
       return {
@@ -118,9 +118,13 @@ export default validateMasterSpec({
       }
     },
     titleFromProps ({ props, propsMain }) {
-      if (props.title) return props.title
+      if (props.title != null) {
+        return props.title
+      }
       const asset = propsMain.mediaAsset
-      if (asset.title) return asset.title
+      if (asset.title != null) {
+        return asset.title
+      }
     },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {

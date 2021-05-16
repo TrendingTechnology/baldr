@@ -38,6 +38,12 @@ declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'sto
  */
 export declare class Sample {
     /**
+     * To be able to distinguish the old and the new version of the class.
+     *
+     * TODO remove
+     */
+    ng: boolean;
+    /**
      * The parent media file object.
      *
      */

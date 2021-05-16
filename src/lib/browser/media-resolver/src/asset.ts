@@ -15,6 +15,13 @@ import { assetCache, createHtmlElement, SampleCollection } from './internal'
  */
 export class ClientMediaAsset {
   /**
+   * To be able to distinguish the old and the new version of the class.
+   *
+   * TODO remove
+   */
+  ng: boolean = true
+
+  /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
@@ -37,6 +44,10 @@ export class ClientMediaAsset {
    */
   mimeType: string
 
+  /**
+   * HTTP Uniform Resource Locator, for example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
+   */
   httpUrl: string
 
   samples?: SampleCollection
@@ -97,9 +108,24 @@ export class ClientMediaAsset {
   //   this.filename = url.split('/').pop()
   // }
 
+  /**
+   * Each media asset can have a preview image. The suffix `_preview.jpg`
+   * is appended on the path. For example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
+   */
+  get previewHttpUrl (): string | undefined {
+    if (this.yaml.previewImage) {
+      return `${this.httpUrl}_preview.jpg`
+    }
+  }
+
   get titleSafe (): string {
-    if (this.yaml.title != null) return this.yaml.title
-    if (this.yaml.filename != null) return this.yaml.filename
+    if (this.yaml.title != null) {
+      return this.yaml.title
+    }
+    if (this.yaml.filename != null) {
+      return this.yaml.filename
+    }
     return this.uri.raw
   }
 

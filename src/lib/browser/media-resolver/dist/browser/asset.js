@@ -14,6 +14,12 @@ export class ClientMediaAsset {
      * @param yaml - A raw javascript object read from the Rest API
      */
     constructor(uri, httpUrl, yaml) {
+        /**
+         * To be able to distinguish the old and the new version of the class.
+         *
+         * TODO remove
+         */
+        this.ng = true;
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
@@ -57,11 +63,23 @@ export class ClientMediaAsset {
     // filenameFromHTTPUrl (url) {
     //   this.filename = url.split('/').pop()
     // }
+    /**
+     * Each media asset can have a preview image. The suffix `_preview.jpg`
+     * is appended on the path. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
+     */
+    get previewHttpUrl() {
+        if (this.yaml.previewImage) {
+            return `${this.httpUrl}_preview.jpg`;
+        }
+    }
     get titleSafe() {
-        if (this.yaml.title != null)
+        if (this.yaml.title != null) {
             return this.yaml.title;
-        if (this.yaml.filename != null)
+        }
+        if (this.yaml.filename != null) {
             return this.yaml.filename;
+        }
         return this.uri.raw;
     }
     /**
