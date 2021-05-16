@@ -132,7 +132,7 @@ const actions = {
       headers: { 'Cache-Control': 'no-cache' }
     })
     const rawYamlString = response.data
-    await dispatch('openPresentation', { rawYamlString, mongoDbObject })
+    await dispatch('openPresentation', { vm, rawYamlString, mongoDbObject })
   },
   /**
    * Reload the presentation and switch to the current slide (the same slide no)
@@ -141,7 +141,7 @@ const actions = {
   async reloadPresentation ({ dispatch, getters }) {
     const presentation = getters.presentation
     if (presentation && presentation.meta && presentation.meta.ref) {
-      await dispatch('openPresentationById', presentation.meta.ref)
+      await dispatch('openPresentationById', { vm: vue, presRef: presentation.meta.ref })
       dispatch('setSlideNoCurrent', getters.slide.no)
     }
   },
