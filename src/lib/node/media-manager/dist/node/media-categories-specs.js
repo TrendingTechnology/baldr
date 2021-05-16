@@ -259,7 +259,7 @@ const group = {
             },
             format: function (value, { data, category }) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = helper_1.idify(value);
+                value = helper_1.referencify(value);
                 return value;
             },
             overwriteByDerived: true
@@ -271,7 +271,7 @@ const group = {
             },
             format: function (value, { data, category }) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = helper_1.idify(value);
+                value = helper_1.referencify(value);
                 return `GR_${value}`;
             },
             overwriteByDerived: true
@@ -366,14 +366,14 @@ const instrument = {
         instrumentId: {
             title: 'Instrumenten-ID',
             derive: function ({ data }) {
-                return helper_1.idify(data.name);
+                return helper_1.referencify(data.name);
             }
         },
         ref: {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
             derive: function ({ data, category }) {
                 // IS: Instrument
-                return `${category.abbreviation}_${helper_1.idify(data.name)}`;
+                return `${category.abbreviation}_${helper_1.referencify(data.name)}`;
             },
             overwriteByDerived: true
         },
@@ -451,14 +451,14 @@ const person = {
         personId: {
             title: 'Personen-ID',
             derive: function ({ data }) {
-                return `${helper_1.idify(data.lastname)}_${helper_1.idify(data.firstname)}`;
+                return `${helper_1.referencify(data.lastname)}_${helper_1.referencify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
         ref: {
             title: 'ID der Person',
             derive: function ({ data, category }) {
-                return `${category.abbreviation}_${helper_1.idify(data.lastname)}_${helper_1.idify(data.firstname)}`;
+                return `${category.abbreviation}_${helper_1.referencify(data.lastname)}_${helper_1.referencify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
@@ -860,7 +860,7 @@ const general = {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
             format: function (value, { data, category }) {
-                value = helper_1.idify(value);
+                value = helper_1.referencify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 value = value.replace(/^[va]-/, '');
                 if (data.filePath && data.categories.indexOf('youtube') === -1) {

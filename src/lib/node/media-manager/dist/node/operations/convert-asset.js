@@ -59,7 +59,7 @@ function convertAsset(filePath, cmdObj = {}) {
             return;
         }
         const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
-        const outputFileName = `${core_browser_1.idify(asset.basename)}.${outputExtension}`;
+        const outputFileName = `${core_browser_1.referencify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
             return;

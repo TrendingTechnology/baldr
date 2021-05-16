@@ -1,12 +1,14 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 
 const config = require('@bldr/config')
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
-//const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
+// const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
 
-let httpRequest
+const httpRequest = localHttpRequest
 
 function runTests () {
   it('/api/media/mgmt/update', async function () {
@@ -120,7 +122,6 @@ function runTests () {
   })
 }
 
-httpRequest = localHttpRequest
 describe('local: /api/media', runTests)
 // httpRequest = remoteHttpRequest
 // describe('remote: /api/media', runTests)

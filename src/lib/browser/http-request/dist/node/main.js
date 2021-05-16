@@ -18,7 +18,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get = exports.checkReachability = exports.makeHttpRequestInstance = exports.HttpRequest = void 0;
+exports.checkReachability = exports.makeHttpRequestInstance = exports.HttpRequest = void 0;
 /* globals location */
 const axios_1 = require("axios");
 // Do not remove this lines. The comments are removed by the build script.
@@ -172,7 +172,6 @@ function checkReachability(url) {
     });
 }
 exports.checkReachability = checkReachability;
-function get(url, requestConfig) {
-    return axios_1.default.get(url, requestConfig);
-}
-exports.get = get;
+// export function get (url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+//   return axios.get(url, requestConfig)
+// }

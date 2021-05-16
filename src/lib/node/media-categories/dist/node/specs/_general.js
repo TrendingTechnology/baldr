@@ -18,7 +18,7 @@ exports.general = {
             },
             format: function (value, { data, filePath }) {
                 var _a;
-                let raw = core_browser_1.idify(value);
+                let raw = core_browser_1.referencify(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
                 // eslint-disable-next-line

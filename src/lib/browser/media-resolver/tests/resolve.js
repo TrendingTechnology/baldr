@@ -1,3 +1,5 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
@@ -12,12 +14,12 @@ async function update () {
   await httpRequest.request('mgmt/update')
 }
 
-async function resolveByUuid(uuid) {
-  return await resolve('uuid:' +  uuid)
+async function resolveByUuid (uuid) {
+  return resolve('uuid:' + uuid)
 }
 
-async function resolveSingleByUuid(uuid) {
-  assets = await resolveByUuid(uuid)
+async function resolveSingleByUuid (uuid) {
+  const assets = await resolveByUuid(uuid)
   return assets[0]
 }
 
@@ -70,7 +72,7 @@ describe('Package “@bldr/media-resolver”', function () {
 
   it('Samples shortcuts', async function () {
     resetMediaCache()
-     //ref: Stars-on-45_HB_Stars-on-45
+    // ref: Stars-on-45_HB_Stars-on-45
     const asset = await resolveSingleByUuid('6a3c5972-b039-4faa-ad3f-3152b2413b65')
     const samples = asset.samples.getAll()
     assert.strictEqual(samples[0].shortcut, 'a 1')

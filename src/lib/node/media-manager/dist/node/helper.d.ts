@@ -11,7 +11,7 @@ export declare function asciify(input: string): string;
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-export declare function idify(input: string): string;
+export declare function referencify(input: string): string;
 /**
  * This function can be used to generate a title from an ID string.
  */

@@ -79,8 +79,8 @@ export function convertMenuItemWebapp (raw: RawMenuItem, payload: any): WebappMe
   if (universalLeaf.action === 'openExternalUrl') {
 
   } else if (universalLeaf.action === 'pushRouter') {
-    click = () => {
-      router.push({ name: universalLeaf.arguments })
+    click = async () => {
+      await router.push({ name: universalLeaf.arguments })
     }
   } else if (universalLeaf.action === 'clearCache') {
     // Only in the electron app. Clear HTTP Cache.
@@ -207,8 +207,8 @@ export function registerShortcut (raw: RawMenuItem, payload: RegisterShortcutsPa
   if (universal.action === 'executeCallback') {
     action = actions[raw.arguments]
   } else if (universal.action === 'pushRouter') {
-    action = () => {
-      router.push({ name: raw.arguments })
+    action = async () => {
+      await router.push({ name: raw.arguments })
     }
   } else if (universal.action === 'openExternalUrl') {
     action = () => {

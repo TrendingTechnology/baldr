@@ -27,7 +27,7 @@ exports.instrument = {
         instrumentId: {
             title: 'Instrumenten-ID',
             derive: function ({ data }) {
-                return core_browser_1.idify(data.name);
+                return core_browser_1.referencify(data.name);
             }
         },
         ref: {
@@ -36,7 +36,7 @@ exports.instrument = {
                 // IS: Instrument
                 const instrumentCategory = category;
                 const instrumentData = data;
-                return `${instrumentCategory.abbreviation}_${core_browser_1.idify(instrumentData.name)}`;
+                return `${instrumentCategory.abbreviation}_${core_browser_1.referencify(instrumentData.name)}`;
             },
             overwriteByDerived: true
         },

@@ -250,8 +250,6 @@ export function formatToLocalDateTime(timeStampMsec) {
 /**
  * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
  * hour 33 minutes 12 seconds) into seconds.
- *
- * @param duration
  */
 export function convertDurationToSeconds(duration) {
     if (typeof duration === 'number') {
@@ -270,8 +268,6 @@ export function convertDurationToSeconds(duration) {
 }
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
- *
- * @param text
  */
 export function toTitleCase(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
@@ -312,7 +308,7 @@ export function asciify(input) {
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-export function idify(input) {
+export function referencify(input) {
     let output = asciify(input);
     // asciify is used by rename. We can not remove dots because of the exentions
     output = output.replace(/\./g, '');

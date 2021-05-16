@@ -7,7 +7,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
-import { idify } from '@bldr/core-browser'
+import { referencify } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
@@ -48,7 +48,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     return
   }
   const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
-  const outputFileName = `${idify(asset.basename)}.${outputExtension}`
+  const outputFileName = `${referencify(asset.basename)}.${outputExtension}`
   let outputFile = path.join(path.dirname(filePath), outputFileName)
   if (converted.has(outputFile)) return
 

@@ -1,7 +1,7 @@
 import path from 'path'
 
 import type { MediaCategory, AssetType } from '@bldr/type-definitions'
-import { idify } from '@bldr/core-browser'
+import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
 import { validateDate } from '../main'
@@ -55,7 +55,7 @@ export const person: MediaCategory.Category = {
       title: 'Personen-ID',
       description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
       derive: function ({ data }) {
-        return `${idify(data.lastname)}_${idify(data.firstname)}`
+        return `${referencify(data.lastname)}_${referencify(data.firstname)}`
       },
       overwriteByDerived: true
     },
@@ -64,7 +64,7 @@ export const person: MediaCategory.Category = {
       description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
       derive: function ({ data, category }) {
         const personCategory = category as PersonCategory
-        return `${personCategory.abbreviation}_${idify(data.lastname)}_${idify(data.firstname)}`
+        return `${personCategory.abbreviation}_${referencify(data.lastname)}_${referencify(data.firstname)}`
       },
       overwriteByDerived: true
     },

@@ -1,7 +1,7 @@
 import path from 'path'
 
 import type { MediaCategory, AssetType } from '@bldr/type-definitions'
-import { idify } from '@bldr/core-browser'
+import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
 import { validateDate } from '../main'
@@ -40,7 +40,7 @@ export const group: MediaCategory.Category = {
       },
       format: function (value) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
-        value = idify(value)
+        value = referencify(value)
         return value
       },
       overwriteByDerived: true
@@ -52,7 +52,7 @@ export const group: MediaCategory.Category = {
       },
       format: function (value) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
-        return `GR_${idify(value)}`
+        return `GR_${referencify(value)}`
       },
       overwriteByDerived: true
     },

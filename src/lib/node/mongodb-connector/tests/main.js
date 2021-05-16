@@ -1,3 +1,5 @@
+/* globals describe it */
+
 const assert = require('assert')
 
 const { connectDb } = require('../dist/node/main.js')

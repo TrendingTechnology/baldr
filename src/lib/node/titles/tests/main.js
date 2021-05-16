@@ -1,3 +1,4 @@
+/* globals describe it */
 const assert = require('assert')
 
 const { DeepTitle } = require('../dist/node/main.js')

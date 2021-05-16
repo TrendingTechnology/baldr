@@ -7,7 +7,7 @@ import childProcess from 'child_process'
 import chalk from 'chalk'
 
 // Project packages.
-import { getExtension, idify, asciify } from '@bldr/core-browser'
+import { getExtension, referencify, asciify } from '@bldr/core-browser'
 import {
   moveAsset,
   writeYamlFile,
@@ -195,7 +195,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promi
   // a Earth, Wind & Fire - Shining Star.mp3
   let fileName = path.basename(newPath)
   fileName = fileName.replace(/\.mp3$/i, '')
-  fileName = idify(fileName)
+  fileName = referencify(fileName)
   fileName = `${fileName}.mp3`
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
   fileName = fileName.replace(/^a-/, '')

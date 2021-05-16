@@ -31,7 +31,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = core_browser_1.idify(value);
+                value = core_browser_1.referencify(value);
                 return value;
             },
             overwriteByDerived: true
@@ -43,7 +43,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                return `GR_${core_browser_1.idify(value)}`;
+                return `GR_${core_browser_1.referencify(value)}`;
             },
             overwriteByDerived: true
         },

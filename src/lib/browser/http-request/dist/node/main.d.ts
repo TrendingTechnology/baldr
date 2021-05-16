@@ -118,5 +118,4 @@ export declare function makeHttpRequestInstance(config: Configuration, restEndPo
  * @returns True if the URL is reachable, false else.
  */
 export declare function checkReachability(url: string): Promise<boolean>;
-export declare function get(url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>>;
 export {};

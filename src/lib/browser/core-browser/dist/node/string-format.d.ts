@@ -119,14 +119,10 @@ export declare function formatToLocalDateTime(timeStampMsec: number): string;
 /**
  * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
  * hour 33 minutes 12 seconds) into seconds.
- *
- * @param duration
  */
 export declare function convertDurationToSeconds(duration: string | number): number;
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
- *
- * @param text
  */
 export declare function toTitleCase(text: string): string;
 /**
@@ -145,7 +141,7 @@ export declare function asciify(input: string): string;
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-export declare function idify(input: string): string;
+export declare function referencify(input: string): string;
 /**
  * This function can be used to generate a title from an ID string.
  */

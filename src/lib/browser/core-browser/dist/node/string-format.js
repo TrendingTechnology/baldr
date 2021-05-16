@@ -5,7 +5,7 @@
  * @module @bldr/core-browser/string-format
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deasciify = exports.idify = exports.asciify = exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = void 0;
+exports.deasciify = exports.referencify = exports.asciify = exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = void 0;
 const transliteration_1 = require("transliteration");
 /**
  * Escape some characters with HTML entities.
@@ -267,8 +267,6 @@ exports.formatToLocalDateTime = formatToLocalDateTime;
 /**
  * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
  * hour 33 minutes 12 seconds) into seconds.
- *
- * @param duration
  */
 function convertDurationToSeconds(duration) {
     if (typeof duration === 'number') {
@@ -288,8 +286,6 @@ function convertDurationToSeconds(duration) {
 exports.convertDurationToSeconds = convertDurationToSeconds;
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
- *
- * @param text
  */
 function toTitleCase(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
@@ -333,7 +329,7 @@ exports.asciify = asciify;
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-function idify(input) {
+function referencify(input) {
     let output = asciify(input);
     // asciify is used by rename. We can not remove dots because of the exentions
     output = output.replace(/\./g, '');
@@ -344,7 +340,7 @@ function idify(input) {
     output = output.replace(/[^A-Za-z0-9-_]+/g, '');
     return output;
 }
-exports.idify = idify;
+exports.referencify = referencify;
 /**
  * This function can be used to generate a title from an ID string.
  */

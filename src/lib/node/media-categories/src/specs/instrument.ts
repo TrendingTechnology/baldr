@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { idify } from '@bldr/core-browser'
+import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 import type { MediaCategory, AssetType } from '@bldr/type-definitions'
 
@@ -34,7 +34,7 @@ export const instrument: MediaCategory.Category = {
     instrumentId: {
       title: 'Instrumenten-ID',
       derive: function ({ data }) {
-        return idify(data.name)
+        return referencify(data.name)
       }
     },
     ref: {
@@ -43,7 +43,7 @@ export const instrument: MediaCategory.Category = {
         // IS: Instrument
         const instrumentCategory = category as InstrumentCategory
         const instrumentData = data as InstrumentFileFormat
-        return `${instrumentCategory.abbreviation}_${idify(instrumentData.name)}`
+        return `${instrumentCategory.abbreviation}_${referencify(instrumentData.name)}`
       },
       overwriteByDerived: true
     },

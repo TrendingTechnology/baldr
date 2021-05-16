@@ -1,3 +1,4 @@
+/* globals describe it */
 
 const assert = require('assert')
 
@@ -38,7 +39,7 @@ describe('Function “selectSubset()”', function () {
 
   it('firstElementNo: unset', function () {
     const elements = selectSubset('', {
-      elementsCount: 5,
+      elementsCount: 5
     })
     assert.deepStrictEqual(elements, [0, 1, 2, 3, 4])
   })

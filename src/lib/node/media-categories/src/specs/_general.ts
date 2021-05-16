@@ -1,5 +1,5 @@
 import type { MediaCategory } from '@bldr/type-definitions'
-import { deasciify, idify, genUuid } from '@bldr/core-browser'
+import { deasciify, referencify, genUuid } from '@bldr/core-browser'
 import { getTwoLetterAbbreviations, checkForTwoLetterDir } from '../two-letter-abbreviations'
 
 import { generateIdPrefix, validateYoutubeId } from '../main'
@@ -17,7 +17,7 @@ export const general: MediaCategory.Category = {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
       format: function (value, { data, filePath }) {
-        let raw = idify(value)
+        let raw = referencify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         raw = raw.replace(/^[va]-/, '')

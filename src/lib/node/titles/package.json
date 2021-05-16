@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts",
+    "lint": "ts-standard --fix 'src/*.ts' && standard --fix 'tests/*.js'",
     "test": "npm run build && npm run lint && mocha tests/*"
   },
   "license": "MIT",

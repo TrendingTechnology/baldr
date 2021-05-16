@@ -166,6 +166,6 @@ export function checkReachability(url) {
         return true;
     });
 }
-export function get(url, requestConfig) {
-    return axios.get(url, requestConfig);
-}
+// export function get (url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
+//   return axios.get(url, requestConfig)
+// }

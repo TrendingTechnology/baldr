@@ -43,7 +43,7 @@ exports.person = {
             title: 'Personen-ID',
             description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
             derive: function ({ data }) {
-                return `${core_browser_1.idify(data.lastname)}_${core_browser_1.idify(data.firstname)}`;
+                return `${core_browser_1.referencify(data.lastname)}_${core_browser_1.referencify(data.firstname)}`;
             },
             overwriteByDerived: true
         },
@@ -52,7 +52,7 @@ exports.person = {
             description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
             derive: function ({ data, category }) {
                 const personCategory = category;
-                return `${personCategory.abbreviation}_${core_browser_1.idify(data.lastname)}_${core_browser_1.idify(data.firstname)}`;
+                return `${personCategory.abbreviation}_${core_browser_1.referencify(data.lastname)}_${core_browser_1.referencify(data.firstname)}`;
             },
             overwriteByDerived: true
         },

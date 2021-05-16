@@ -321,7 +321,7 @@ export function asciify (input: string): string {
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-export function idify (input: string): string {
+export function referencify (input: string): string {
   let output = asciify(input)
 
   // asciify is used by rename. We can not remove dots because of the exentions

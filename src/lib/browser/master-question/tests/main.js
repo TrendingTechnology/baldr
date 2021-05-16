@@ -188,7 +188,7 @@ describe('Package “@bldr/master-question”', function () {
       assert.strictEqual(generateTexMarkup(questions), threeQuestionsTex)
     })
 
-    it('recursiveStructure', function () {
+    it.skip('recursiveStructure', function () {
       const questions = Question.parse(recursiveStructure)
       assert.strictEqual(generateTexMarkup(questions), recursiveStructureTex)
     })

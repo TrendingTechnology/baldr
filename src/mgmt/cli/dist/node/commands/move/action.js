@@ -190,7 +190,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         // a Earth, Wind & Fire - Shining Star.mp3
         let fileName = path_1.default.basename(newPath);
         fileName = fileName.replace(/\.mp3$/i, '');
-        fileName = core_browser_1.idify(fileName);
+        fileName = core_browser_1.referencify(fileName);
         fileName = `${fileName}.mp3`;
         // a-Fletcher-Henderson_Aint-she-sweet.mp3
         fileName = fileName.replace(/^a-/, '');

@@ -130,7 +130,7 @@ export function writeFile (filePath: string, content: string): string {
  *
  * @returns The parsed JSON object.
  */
- export function readJsonFile (filePath: string): any {
+export function readJsonFile (filePath: string): any {
   return JSON.parse(readFile(filePath))
 }
 

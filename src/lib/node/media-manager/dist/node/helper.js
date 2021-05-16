@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.untildify = exports.deasciify = exports.idify = exports.asciify = void 0;
+exports.untildify = exports.deasciify = exports.referencify = exports.asciify = void 0;
 const transliteration_1 = require("transliteration");
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
@@ -39,7 +39,7 @@ exports.asciify = asciify;
  * It performes some addictional replacements which can not be done in `asciify`
  * (`asciffy` is sometimes applied to paths.)
  */
-function idify(input) {
+function referencify(input) {
     let output = asciify(input);
     // asciify is used by rename. We can not remove dots because of the exentions
     output = output.replace(/\./g, '');
@@ -50,7 +50,7 @@ function idify(input) {
     output = output.replace(/[^A-Za-z0-9-_]+/g, '');
     return output;
 }
-exports.idify = idify;
+exports.referencify = referencify;
 /**
  * This function can be used to generate a title from an ID string.
  */

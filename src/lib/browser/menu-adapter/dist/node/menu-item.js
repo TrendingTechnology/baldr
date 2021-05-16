@@ -31,9 +31,9 @@ function convertMenuItemWebapp(raw, payload) {
     if (universalLeaf.action === 'openExternalUrl') {
     }
     else if (universalLeaf.action === 'pushRouter') {
-        click = () => {
-            router.push({ name: universalLeaf.arguments });
-        };
+        click = () => __awaiter(this, void 0, void 0, function* () {
+            yield router.push({ name: universalLeaf.arguments });
+        });
     }
     else if (universalLeaf.action === 'clearCache') {
         // Only in the electron app. Clear HTTP Cache.
@@ -154,9 +154,9 @@ function registerShortcut(raw, payload) {
         action = actions[raw.arguments];
     }
     else if (universal.action === 'pushRouter') {
-        action = () => {
-            router.push({ name: raw.arguments });
-        };
+        action = () => __awaiter(this, void 0, void 0, function* () {
+            yield router.push({ name: raw.arguments });
+        });
     }
     else if (universal.action === 'openExternalUrl') {
         action = () => {
