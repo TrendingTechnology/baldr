@@ -5,7 +5,7 @@ import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
 import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal'
 
-export const imageShortcutCounter = new MimeTypeShortcutCounter('a')
+export const imageShortcutCounter = new MimeTypeShortcutCounter('i')
 
 /**
  * Hold various data of a media file as class properties.
@@ -32,7 +32,8 @@ export class ClientMediaAsset {
   uri: MediaUri
 
   /**
-   * The keyboard shortcut to play the media
+   * The keyboard shortcut to launch the media asset. At the moment only used by
+   * images.
    */
   shortcut?: string
 

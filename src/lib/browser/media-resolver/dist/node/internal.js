@@ -15,8 +15,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./asset"), exports);
+// has to be before asset
 __exportStar(require("./cache"), exports);
+__exportStar(require("./asset"), exports);
 __exportStar(require("./events"), exports);
 __exportStar(require("./html-elements"), exports);
 __exportStar(require("./resolve"), exports);

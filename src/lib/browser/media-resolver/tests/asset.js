@@ -16,6 +16,6 @@ describe('Class “ClientMediaAsset”', function () {
   it('property “shortcut”', function () {
     resetMediaCache()
     const asset = createAsset()
-    assert.strictEqual(asset.shortcut, 'a 1')
+    assert.strictEqual(asset.shortcut, 'i 1')
   })
 })

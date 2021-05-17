@@ -1,5 +1,29 @@
 import { MediaUri } from '@bldr/client-media-models';
 import { sampleShortcutManager, imageShortcutCounter } from './internal';
+/**
+ * This class manages the counter for one MIME type (`audio`, `image` and `video`).
+ */
+export class MimeTypeShortcutCounter {
+    constructor(triggerKey) {
+        this.triggerKey = triggerKey;
+        this.count = 0;
+    }
+    /**
+     * Get the next available shortcut: `a 1`, `a 2`
+     */
+    get() {
+        if (this.count < 10) {
+            this.count++;
+            if (this.count === 10) {
+                return `${this.triggerKey} 0`;
+            }
+            return `${this.triggerKey} ${this.count}`;
+        }
+    }
+    reset() {
+        this.count = 0;
+    }
+}
 export class Cache {
     constructor() {
         this.cache = {};

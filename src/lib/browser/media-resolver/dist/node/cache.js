@@ -1,8 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = void 0;
+exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
+/**
+ * This class manages the counter for one MIME type (`audio`, `image` and `video`).
+ */
+class MimeTypeShortcutCounter {
+    constructor(triggerKey) {
+        this.triggerKey = triggerKey;
+        this.count = 0;
+    }
+    /**
+     * Get the next available shortcut: `a 1`, `a 2`
+     */
+    get() {
+        if (this.count < 10) {
+            this.count++;
+            if (this.count === 10) {
+                return `${this.triggerKey} 0`;
+            }
+            return `${this.triggerKey} ${this.count}`;
+        }
+    }
+    reset() {
+        this.count = 0;
+    }
+}
+exports.MimeTypeShortcutCounter = MimeTypeShortcutCounter;
 class Cache {
     constructor() {
         this.cache = {};

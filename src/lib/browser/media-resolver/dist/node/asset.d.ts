@@ -24,7 +24,8 @@ export declare class ClientMediaAsset {
     yaml: AssetType.RestApiRaw;
     uri: MediaUri;
     /**
-     * The keyboard shortcut to play the media
+     * The keyboard shortcut to launch the media asset. At the moment only used by
+     * images.
      */
     shortcut?: string;
     /**

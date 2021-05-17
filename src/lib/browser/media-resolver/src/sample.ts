@@ -2,41 +2,7 @@ import type { AssetType } from '@bldr/type-definitions'
 
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
-import { ClientMediaAsset, createHtmlElement, CustomEventsManager, Interval, TimeOut, sampleCache, Cache } from './internal'
-
-/**
- * This class manages the counter for one MIME type (`audio`, `image` and `video`).
- */
-export class MimeTypeShortcutCounter {
-  /**
-   * `a` for audio files and `v` for video files.
-   */
-  private readonly triggerKey: string
-
-  private count: number
-
-  constructor (triggerKey: string) {
-    this.triggerKey = triggerKey
-    this.count = 0
-  }
-
-  /**
-   * Get the next available shortcut: `a 1`, `a 2`
-   */
-  get (): string | undefined {
-    if (this.count < 10) {
-      this.count++
-      if (this.count === 10) {
-        return `${this.triggerKey} 0`
-      }
-      return `${this.triggerKey} ${this.count}`
-    }
-  }
-
-  reset (): void {
-    this.count = 0
-  }
-}
+import { ClientMediaAsset, createHtmlElement, CustomEventsManager, Interval, TimeOut, sampleCache, Cache, MimeTypeShortcutCounter } from './internal'
 
 export class SampleShortcutManager {
   private readonly audio: MimeTypeShortcutCounter

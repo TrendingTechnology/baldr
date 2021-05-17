@@ -4,7 +4,7 @@ exports.MultiPartSelection = exports.ClientMediaAsset = exports.imageShortcutCou
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
-exports.imageShortcutCounter = new internal_1.MimeTypeShortcutCounter('a');
+exports.imageShortcutCounter = new internal_1.MimeTypeShortcutCounter('i');
 /**
  * Hold various data of a media file as class properties.
  *

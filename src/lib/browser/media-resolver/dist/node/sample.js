@@ -9,38 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleCollection = exports.Sample = exports.sampleShortcutManager = exports.SampleShortcutManager = exports.MimeTypeShortcutCounter = void 0;
+exports.SampleCollection = exports.Sample = exports.sampleShortcutManager = exports.SampleShortcutManager = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const internal_1 = require("./internal");
-/**
- * This class manages the counter for one MIME type (`audio`, `image` and `video`).
- */
-class MimeTypeShortcutCounter {
-    constructor(triggerKey) {
-        this.triggerKey = triggerKey;
-        this.count = 0;
-    }
-    /**
-     * Get the next available shortcut: `a 1`, `a 2`
-     */
-    get() {
-        if (this.count < 10) {
-            this.count++;
-            if (this.count === 10) {
-                return `${this.triggerKey} 0`;
-            }
-            return `${this.triggerKey} ${this.count}`;
-        }
-    }
-    reset() {
-        this.count = 0;
-    }
-}
-exports.MimeTypeShortcutCounter = MimeTypeShortcutCounter;
 class SampleShortcutManager {
     constructor() {
-        this.audio = new MimeTypeShortcutCounter('a');
-        this.video = new MimeTypeShortcutCounter('v');
+        this.audio = new internal_1.MimeTypeShortcutCounter('a');
+        this.video = new internal_1.MimeTypeShortcutCounter('v');
     }
     addShortcut(sample) {
         if (sample.shortcut != null)

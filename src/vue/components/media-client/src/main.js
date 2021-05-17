@@ -2074,6 +2074,7 @@ class Media {
 
     await mediaResolver.resolver.resolve(assetSpecs, throwException)
     for (const asset of mediaResolver.resolver.getAssets()) {
+      this.registerAssetShortcut(asset)
       store.commit('media/addAssetNg', asset)
     }
 
@@ -2097,8 +2098,21 @@ class Media {
           this.canvas.show(sample.htmlElement)
         }
       },
-      // Play
       `Spiele Ausschnitt „${sample.titleSafe}“`
+    )
+  }
+
+  registerAssetShortcut (asset) {
+    if (asset.shortcut == null) return
+    shortcuts.add(
+      asset.shortcut,
+      () => {
+        // TODO: Start the same video twice behaves very strange.
+        this.canvas.hide()
+        this.player.stop()
+        this.canvas.show(asset.mediaElement)
+      },
+      `Zeige Bild  „${asset.titleSafe}“`
     )
   }
 
@@ -2119,36 +2133,6 @@ class Media {
           throw new Error(`Unable to resolve the preview cover: ${asset.cover}`)
         }
         asset.previewHttpUrl = cover.httpUrl
-      }
-    }
-  }
-
-  /**
-   * Add shortcuts for media files. At the momenten only for images. Video
-   * and audio are samples and handled separately.
-   *
-   * @private
-   */
-  addShortcutForAssets_ () {
-    const assets = store.getters['media/assets']
-    let shortcutNo = 1
-    for (const uri in assets) {
-      // i 10 does not work.
-      if (shortcutNo > 9) return
-      const asset = assets[uri]
-      if (!asset.shortcut && asset.type === 'image') {
-        asset.shortcut = `i ${shortcutNo}`
-        shortcuts.add(
-          asset.shortcut,
-          () => {
-            this.canvas.hide()
-            this.player.stop()
-            this.canvas.show(asset.mediaElement)
-          },
-          // Play
-          `Zeige Bild „${asset.titleSafe}“`
-        )
-        shortcutNo += 1
       }
     }
   }

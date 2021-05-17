@@ -1,7 +1,7 @@
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal';
-export const imageShortcutCounter = new MimeTypeShortcutCounter('a');
+export const imageShortcutCounter = new MimeTypeShortcutCounter('i');
 /**
  * Hold various data of a media file as class properties.
  *
