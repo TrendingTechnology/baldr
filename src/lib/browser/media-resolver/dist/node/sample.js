@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleCollection = exports.Sample = exports.shortcutManager = exports.ShortcutManager = void 0;
+exports.SampleCollection = exports.Sample = exports.sampleShortcutManager = exports.SampleShortcutManager = exports.MimeTypeShortcutCounter = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const internal_1 = require("./internal");
 /**
@@ -36,10 +36,10 @@ class MimeTypeShortcutCounter {
         this.count = 0;
     }
 }
-class ShortcutManager {
+exports.MimeTypeShortcutCounter = MimeTypeShortcutCounter;
+class SampleShortcutManager {
     constructor() {
         this.audio = new MimeTypeShortcutCounter('a');
-        this.image = new MimeTypeShortcutCounter('i');
         this.video = new MimeTypeShortcutCounter('v');
     }
     addShortcut(sample) {
@@ -48,21 +48,17 @@ class ShortcutManager {
         if (sample.asset.mimeType === 'audio') {
             sample.shortcut = this.audio.get();
         }
-        else if (sample.asset.mimeType === 'image') {
-            sample.shortcut = this.image.get();
-        }
         else if (sample.asset.mimeType === 'video') {
             sample.shortcut = this.video.get();
         }
     }
     reset() {
         this.audio.reset();
-        this.image.reset();
         this.video.reset();
     }
 }
-exports.ShortcutManager = ShortcutManager;
-exports.shortcutManager = new ShortcutManager();
+exports.SampleShortcutManager = SampleShortcutManager;
+exports.sampleShortcutManager = new SampleShortcutManager();
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */
@@ -150,7 +146,7 @@ class Sample {
             this.fadeOutSec_ = this.toSec(this.yaml.fadeOut);
         }
         this.shortcut = this.yaml.shortcut;
-        exports.shortcutManager.addShortcut(this);
+        exports.sampleShortcutManager.addShortcut(this);
         this.interval = new internal_1.Interval();
         this.timeOut = new internal_1.TimeOut();
         this.events = new internal_1.CustomEventsManager();

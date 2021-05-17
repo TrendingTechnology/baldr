@@ -1,5 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models';
-import { shortcutManager } from './internal';
+import { sampleShortcutManager, imageShortcutCounter } from './internal';
 export class Cache {
     constructor() {
         this.cache = {};
@@ -162,5 +162,6 @@ export function resetMediaCache() {
     sampleCache.reset();
     assetCache.reset();
     mediaUriTranslator.reset();
-    shortcutManager.reset();
+    sampleShortcutManager.reset();
+    imageShortcutCounter.reset();
 }

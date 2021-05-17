@@ -1,6 +1,7 @@
 import type { AssetType } from '@bldr/type-definitions';
 import { MediaUri } from '@bldr/client-media-models';
-import { SampleCollection } from './internal';
+import { SampleCollection, MimeTypeShortcutCounter } from './internal';
+export declare const imageShortcutCounter: MimeTypeShortcutCounter;
 /**
  * Hold various data of a media file as class properties.
  *

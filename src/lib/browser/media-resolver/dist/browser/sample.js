@@ -12,7 +12,7 @@ import { createHtmlElement, CustomEventsManager, Interval, TimeOut, sampleCache,
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
-class MimeTypeShortcutCounter {
+export class MimeTypeShortcutCounter {
     constructor(triggerKey) {
         this.triggerKey = triggerKey;
         this.count = 0;
@@ -33,10 +33,9 @@ class MimeTypeShortcutCounter {
         this.count = 0;
     }
 }
-export class ShortcutManager {
+export class SampleShortcutManager {
     constructor() {
         this.audio = new MimeTypeShortcutCounter('a');
-        this.image = new MimeTypeShortcutCounter('i');
         this.video = new MimeTypeShortcutCounter('v');
     }
     addShortcut(sample) {
@@ -45,20 +44,16 @@ export class ShortcutManager {
         if (sample.asset.mimeType === 'audio') {
             sample.shortcut = this.audio.get();
         }
-        else if (sample.asset.mimeType === 'image') {
-            sample.shortcut = this.image.get();
-        }
         else if (sample.asset.mimeType === 'video') {
             sample.shortcut = this.video.get();
         }
     }
     reset() {
         this.audio.reset();
-        this.image.reset();
         this.video.reset();
     }
 }
-export const shortcutManager = new ShortcutManager();
+export const sampleShortcutManager = new SampleShortcutManager();
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */
@@ -146,7 +141,7 @@ export class Sample {
             this.fadeOutSec_ = this.toSec(this.yaml.fadeOut);
         }
         this.shortcut = this.yaml.shortcut;
-        shortcutManager.addShortcut(this);
+        sampleShortcutManager.addShortcut(this);
         this.interval = new Interval();
         this.timeOut = new TimeOut();
         this.events = new CustomEventsManager();

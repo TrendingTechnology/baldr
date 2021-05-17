@@ -170,6 +170,7 @@ function resetMediaCache() {
     exports.sampleCache.reset();
     exports.assetCache.reset();
     exports.mediaUriTranslator.reset();
-    internal_1.shortcutManager.reset();
+    internal_1.sampleShortcutManager.reset();
+    internal_1.imageShortcutCounter.reset();
 }
 exports.resetMediaCache = resetMediaCache;

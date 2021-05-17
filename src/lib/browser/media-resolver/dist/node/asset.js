@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MultiPartSelection = exports.ClientMediaAsset = void 0;
+exports.MultiPartSelection = exports.ClientMediaAsset = exports.imageShortcutCounter = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
+exports.imageShortcutCounter = new internal_1.MimeTypeShortcutCounter('a');
 /**
  * Hold various data of a media file as class properties.
  *
@@ -36,6 +37,9 @@ class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.yaml.extension);
+        if (this.mimeType === 'image') {
+            this.shortcut = exports.imageShortcutCounter.get();
+        }
         if (this.mimeType !== 'document') {
             this.htmlElement = internal_1.createHtmlElement(this.mimeType, this.httpUrl);
         }

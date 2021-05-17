@@ -7,13 +7,13 @@ import { ClientMediaAsset, createHtmlElement, CustomEventsManager, Interval, Tim
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
-class MimeTypeShortcutCounter {
+export class MimeTypeShortcutCounter {
   /**
    * `a` for audio files and `v` for video files.
    */
-  triggerKey: string
+  private readonly triggerKey: string
 
-  count: number
+  private count: number
 
   constructor (triggerKey: string) {
     this.triggerKey = triggerKey
@@ -38,14 +38,12 @@ class MimeTypeShortcutCounter {
   }
 }
 
-export class ShortcutManager {
+export class SampleShortcutManager {
   private readonly audio: MimeTypeShortcutCounter
-  private readonly image: MimeTypeShortcutCounter
   private readonly video: MimeTypeShortcutCounter
 
   constructor () {
     this.audio = new MimeTypeShortcutCounter('a')
-    this.image = new MimeTypeShortcutCounter('i')
     this.video = new MimeTypeShortcutCounter('v')
   }
 
@@ -53,8 +51,6 @@ export class ShortcutManager {
     if (sample.shortcut != null) return
     if (sample.asset.mimeType === 'audio') {
       sample.shortcut = this.audio.get()
-    } else if (sample.asset.mimeType === 'image') {
-      sample.shortcut = this.image.get()
     } else if (sample.asset.mimeType === 'video') {
       sample.shortcut = this.video.get()
     }
@@ -62,12 +58,11 @@ export class ShortcutManager {
 
   reset (): void {
     this.audio.reset()
-    this.image.reset()
     this.video.reset()
   }
 }
 
-export const shortcutManager = new ShortcutManager()
+export const sampleShortcutManager = new SampleShortcutManager()
 
 /**
  * The state of the current playback.
@@ -120,7 +115,7 @@ export class Sample {
    *
    * TODO remove
    */
-   ng: boolean = true
+  ng: boolean = true
 
   /**
    * The parent media file object.
@@ -220,7 +215,7 @@ export class Sample {
     }
 
     this.shortcut = this.yaml.shortcut
-    shortcutManager.addShortcut(this)
+    sampleShortcutManager.addShortcut(this)
     this.interval = new Interval()
     this.timeOut = new TimeOut()
     this.events = new CustomEventsManager()

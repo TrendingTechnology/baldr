@@ -1,6 +1,7 @@
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
-import { assetCache, createHtmlElement, SampleCollection } from './internal';
+import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal';
+export const imageShortcutCounter = new MimeTypeShortcutCounter('a');
 /**
  * Hold various data of a media file as class properties.
  *
@@ -33,6 +34,9 @@ export class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension);
+        if (this.mimeType === 'image') {
+            this.shortcut = imageShortcutCounter.get();
+        }
         if (this.mimeType !== 'document') {
             this.htmlElement = createHtmlElement(this.mimeType, this.httpUrl);
         }
