@@ -2069,9 +2069,7 @@ class Media {
         const multiPartSelection = new MultiPartSelection(asset, uri)
         store.commit('media/addMultiPartSelection', multiPartSelection)
       }
-      this.addShortcutForAssets_()
       this.setPreviewImagesFromCoverProp_()
-      this.addShortcutForSamples_()
     }
 
     await mediaResolver.resolver.resolve(assetSpecs, throwException)
@@ -2080,9 +2078,28 @@ class Media {
     }
 
     for (const sample of mediaResolver.resolver.getSamples()) {
+      this.registerSampleShortcut(sample)
       store.commit('media/addSampleNg', sample)
     }
     return output
+  }
+
+  registerSampleShortcut (sample) {
+    if (sample.shortcut == null) return
+    shortcuts.add(
+      sample.shortcut,
+      () => {
+        // TODO: Start the same video twice behaves very strange.
+        this.canvas.hide()
+        this.player.load(sample.ref)
+        this.player.start()
+        if (sample.asset.isVisible) {
+          this.canvas.show(sample.htmlElement)
+        }
+      },
+      // Play
+      `Spiele Ausschnitt „${sample.titleSafe}“`
+    )
   }
 
   /**
@@ -2133,77 +2150,6 @@ class Media {
         )
         shortcutNo += 1
       }
-    }
-  }
-
-  /**
-   * Add shortcut for each sample. Audio samples are triggered by “a number” and
-   * video files are trigger by “v number”.
-   *
-   * @private
-   */
-  addShortcutForSamples_ () {
-    // We have to loop through all samples to get the latest shortcut number.
-    const samples = store.getters['media/samples']
-    const firstTriggerKeyByType = (type) => {
-      if (type === 'audio') {
-        return 'a'
-      } else if (type === 'video') {
-        return 'v'
-      }
-    }
-
-    const addShortcutsByType = (samples, type) => {
-      let counter = store.getters['media/shortcutCounterByType'](type)
-      // a 10 does not work.
-      if (counter > 9) return
-      for (const sampleUri in samples) {
-        const sample = samples[sampleUri]
-        if (!sample.shortcutCustom && !sample.shortcut && sample.asset.type === type) {
-          counter = store.getters['media/shortcutCounterByType'](type)
-          // a 10 does not work.
-          if (counter > 9) return
-          sample.shortcutNo = counter
-          store.dispatch('media/incrementShortcutCounterByType', type)
-          sample.shortcut = `${firstTriggerKeyByType(sample.asset.type)} ${sample.shortcutNo}`
-          shortcuts.add(
-            sample.shortcut,
-            () => {
-              // TODO: Start the same video twice behaves very strange.
-              this.canvas.hide()
-              this.player.load(sample.uri)
-              this.player.start()
-              if (sample.asset.isVisible) {
-                this.canvas.show(sample.htmlElement)
-              }
-            },
-            // Play
-            `Spiele Ausschnitt „${sample.titleSafe}“`
-          )
-        }
-      }
-    }
-
-    const addShortcutsCustom = (samples) => {
-      for (const sampleUri in samples) {
-        const sample = samples[sampleUri]
-        if (sample.shortcutCustom && !sample.shortcut) {
-          sample.shortcut = sample.shortcutCustom
-          shortcuts.add(
-            sample.shortcut,
-            () => {
-              this.player.load(sample.uri)
-              this.player.start()
-            },
-            // Play
-            `Spiele Ausschnitt „${sample.titleSafe}“`
-          )
-        }
-      }
-    }
-    addShortcutsCustom(samples)
-    for (const mimeType of ['audio', 'video']) {
-      addShortcutsByType(samples, mimeType)
     }
   }
 }
