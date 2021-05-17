@@ -2107,10 +2107,10 @@ class Media {
     shortcuts.add(
       asset.shortcut,
       () => {
-        // TODO: Start the same video twice behaves very strange.
         this.canvas.hide()
         this.player.stop()
-        this.canvas.show(asset.mediaElement)
+        console.log(asset)
+        this.canvas.show(asset.htmlElement)
       },
       `Zeige Bild  „${asset.titleSafe}“`
     )
