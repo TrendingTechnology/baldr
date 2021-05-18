@@ -7,19 +7,12 @@
     <h1>Metadaten-Kategorien</h1>
 
     <ul>
-      <li v-for="(category, name) in categories" :key="name">
-        {{ category.title }} (<span class="machine-name smaller">{{ name }}</span>)
-
-        <ul>
-          <li v-for="(prop, propName) in category.props" :key="propName">
-            {{ prop.title }} (<span class="machine-name smaller">{{ convertCamelToSnake(propName) }}</span>)
-            <p class="description smaller" v-if="prop.description" >
-              {{ prop.description }}
-            </p>
-          </li>
-        </ul>
-
-      </li>
+      <media-category
+        :category=category
+        :name=name
+        v-for="(category, name) in categories"
+        :key="name"
+      />
     </ul>
   </div>
 </template>
@@ -27,9 +20,13 @@
 <script>
 import config from '@bldr/config'
 import { convertCamelToSnake } from '@bldr/yaml'
+import MediaCategory from './MediaCategory.vue'
 
 export default {
   name: 'MediaCategories',
+  components: {
+    MediaCategory
+  },
   computed: {
     categories () {
       return config.mediaCategories
@@ -50,6 +47,10 @@ export default {
     p.description {
       margin: 0;
       padding: 0;
+    }
+
+    .derived {
+      opacity: 0.4;
     }
   }
 </style>
