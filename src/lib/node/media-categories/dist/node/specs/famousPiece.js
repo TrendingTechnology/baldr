@@ -14,7 +14,7 @@ function readPersonYaml(filePath) {
     }
 }
 /**
- * The meta data type specification “famousePiece”.
+ * The meta data type specification “famousPiece”.
  */
 exports.famousPiece = {
     title: 'Bekanntes Stück',

@@ -12,7 +12,7 @@ function readPersonYaml (filePath: string): StringIndexedObject | undefined {
 }
 
 /**
- * The meta data type specification “famousePiece”.
+ * The meta data type specification “famousPiece”.
  */
 export const famousPiece: MediaCategory.Category = {
   title: 'Bekanntes Stück',
