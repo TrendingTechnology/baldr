@@ -1,4 +1,5 @@
 import type { MediaCategory } from '@bldr/type-definitions'
+import { readYamlFile } from '@bldr/file-reader-writer'
 
 import path from 'path'
 
@@ -10,11 +11,16 @@ export const famousPiece: MediaCategory.Category = {
   detectCategoryByPath: new RegExp('^.*/Personen/\\w/.*(m4a|mp3)$'),
   props: {
     famousPieceFrom: {
-      title: 'Bekanntest Stück von',
+      title: 'Bekanntes Stück von',
       description: 'Der/die Interpret/in Komponist/in eines bekannten Musikstücks.',
       derive: function ({ filePath }) {
         if (filePath != null) {
-          return path.dirname(filePath)
+          const match = filePath.match(/^.*\/Personen\/\w/)
+          if (match != null) {
+            const prefix = match[0]
+            const personYaml = readYamlFile(path.join(prefix, 'main.jpg.yml'))
+            return personYaml.personId
+          }
         }
       },
       overwriteByDerived: true

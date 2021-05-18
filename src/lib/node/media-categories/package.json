@@ -28,6 +28,7 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
+    "@bldr/file-reader-writer": "*",
     "@bldr/titles": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*"
