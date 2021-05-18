@@ -1,0 +1,33 @@
+{
+  "name": "@bldr/file-reader-writer",
+  "version": "0.1.0",
+  "description": "Read and write text, YAML and JSON files.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "lint": "ts-standard --fix 'src/*.ts' && standard --fix 'tests/*.js'",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/node/main.js",
+  "dependencies": {
+    "@bldr/yaml": "*"
+  },
+  "devDependencies": {
+    "@types/node": "14.14.7",
+    "@bldr/type-definitions": "*"
+  }
+}

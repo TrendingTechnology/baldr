@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { AssetType, StringIndexedObject } from '@bldr/type-definitions'
+import type { AssetType, StringIndexedObject } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
 import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 
