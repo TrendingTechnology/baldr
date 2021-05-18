@@ -15,7 +15,8 @@ export const score: MediaCategory.Category = {
       description: 'Z. B.: The_Firebird_(Stravinsky,_Igor)'
     },
     imslpScoreId: {
-      title: 'IMSLP Partitur-ID: z. B. PMLP179424-PMLUS00570-Complete_Score_1.pdf'
+      title: 'IMSLP Partitur-ID',
+      description: 'Z. B.: PMLP179424-PMLUS00570-Complete_Score_1.pdf'
     },
     publisher: {
       title: 'Verlag'

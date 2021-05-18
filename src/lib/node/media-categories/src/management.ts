@@ -337,6 +337,9 @@ export function mergeNames (...name: string[]): string {
  *   `*.extension.yml` file.
  */
 export function process (data: AssetType.YamlFormat, filePath?: string): AssetType.YamlFormat {
+  if (filePath != null) {
+    filePath = path.resolve(filePath)
+  }
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat

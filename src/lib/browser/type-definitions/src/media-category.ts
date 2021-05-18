@@ -269,6 +269,7 @@ export type Name =
   'cloze' |
   'composition' |
   'cover' |
+  'famousPiece' |
   'group' |
   'instrument' |
   'person' |
@@ -303,6 +304,7 @@ export interface Collection {
   cloze: Category
   composition: Category
   cover: Category
+  famousPiece: Category
   group: Category
   instrument: Category
   person: Category

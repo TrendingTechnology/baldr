@@ -48,7 +48,8 @@ exports.youtube = {
             overwriteByDerived: true
         },
         youtubeId: {
-            title: 'Die ID eines YouTube-Videos (z. B. gZ_kez7WVUU)',
+            title: 'Die ID eines YouTube-Videos',
+            description: 'z. B.: gZ_kez7WVUU',
             validate: main_1.validateYoutubeId
         },
         heading: {

@@ -313,6 +313,9 @@ exports.mergeNames = mergeNames;
  *   `*.extension.yml` file.
  */
 function process(data, filePath) {
+    if (filePath != null) {
+        filePath = path_1.default.resolve(filePath);
+    }
     // The media category specification is in camel case. The meta data is
     // stored in the YAML format in snake case
     data = yaml_1.convertPropertiesSnakeToCamel(data);

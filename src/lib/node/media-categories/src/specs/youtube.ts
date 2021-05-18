@@ -52,7 +52,8 @@ export const youtube: MediaCategory.Category = {
       overwriteByDerived: true
     },
     youtubeId: {
-      title: 'Die ID eines YouTube-Videos (z. B. gZ_kez7WVUU)',
+      title: 'Die ID eines YouTube-Videos',
+      description: 'z. B.: gZ_kez7WVUU',
       validate: validateYoutubeId
     },
     heading: {

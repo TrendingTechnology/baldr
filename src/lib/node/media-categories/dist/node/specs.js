@@ -20,6 +20,8 @@ const core_browser_1 = require("@bldr/core-browser");
 const cloze_1 = require("./specs/cloze");
 const composition_1 = require("./specs/composition");
 const cover_1 = require("./specs/cover");
+const famousPiece_1 = require("./specs/famousPiece");
+const _general_1 = require("./specs/_general");
 const group_1 = require("./specs/group");
 const instrument_1 = require("./specs/instrument");
 const person_1 = require("./specs/person");
@@ -31,11 +33,11 @@ const score_1 = require("./specs/score");
 const song_1 = require("./specs/song");
 const worksheet_1 = require("./specs/worksheet");
 const youtube_1 = require("./specs/youtube");
-const _general_1 = require("./specs/_general");
 exports.categories = {
     cloze: cloze_1.cloze,
     composition: composition_1.composition,
     cover: cover_1.cover,
+    famousPiece: famousPiece_1.famousPiece,
     group: group_1.group,
     instrument: instrument_1.instrument,
     person: person_1.person,
