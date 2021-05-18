@@ -5,6 +5,7 @@ import { MediaCategory } from '@bldr/type-definitions'
 const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
+  BS: 'Bekanntes Stück',
   EP: 'Example',
   FT: 'Foto',
   GN: 'Graphische Notation',

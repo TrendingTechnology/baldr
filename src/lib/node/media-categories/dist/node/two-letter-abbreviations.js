@@ -8,6 +8,7 @@ const path_1 = __importDefault(require("path"));
 const abbreviations = {
     AB: 'Arbeitsblatt',
     BD: 'Bild',
+    BS: 'Bekanntes Stück',
     EP: 'Example',
     FT: 'Foto',
     GN: 'Graphische Notation',
