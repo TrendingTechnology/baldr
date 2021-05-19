@@ -6,7 +6,7 @@ import csv from 'csv-parser'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import { writeFile } from '@bldr/core-node'
+import { writeFile } from '@bldr/file-reader-writer'
 
 const documentTemplate = {
   grades: {},

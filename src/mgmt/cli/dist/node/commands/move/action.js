@@ -22,7 +22,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const core_browser_1 = require("@bldr/core-browser");
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
-const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
@@ -57,11 +57,11 @@ function relocate(oldPath, extension, cmdObj) {
     const newPath = path_1.default.join(parentDir, twoLetterFolder, path_1.default.basename(oldPath));
     if (oldPath !== newPath) {
         if (extension === 'tex') {
-            const oldContent = core_node_1.readFile(oldPath);
+            const oldContent = file_reader_writer_1.readFile(oldPath);
             // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
             const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/');
             if (oldContent !== newContent) {
-                core_node_1.writeFile(oldPath, newContent);
+                file_reader_writer_1.writeFile(oldPath, newContent);
             }
         }
         media_manager_1.moveAsset(oldPath, newPath, cmdObj);
@@ -131,7 +131,7 @@ function moveTex(oldPath, newPath, cmdObj) {
     // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
     if (media_manager_1.locationIndicator.isInDeactivatedDir(oldPath))
         return;
-    const content = core_node_1.readFile(oldPath);
+    const content = file_reader_writer_1.readFile(oldPath);
     // \begin{grafikumlauf}{Inserat}
     // \grafik[0.8\linewidth]{Freight-Train-Blues}
     const matches = content.matchAll(/(\\grafik|\\begin\{grafikumlauf\}).*?\{(.+?)\}/g);
@@ -164,11 +164,11 @@ function moveTex(oldPath, newPath, cmdObj) {
     media_manager_1.moveAsset(oldPath, newPath, cmdObj);
     // Maybe --dry-run is specified
     if (fs_1.default.existsSync(newPath)) {
-        let newContent = core_node_1.readFile(newPath);
+        let newContent = file_reader_writer_1.readFile(newPath);
         for (const replacement of replacements) {
             newContent = newContent.replace(replacement[0], replacement[1]);
         }
-        core_node_1.writeFile(newPath, newContent);
+        file_reader_writer_1.writeFile(newPath, newContent);
     }
 }
 function getMbrainzRecordingId(filePath) {
@@ -213,7 +213,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         // To get ID prefix
         metaData.filePath = newPath;
         const result = media_categories_1.categoriesManagement.process(metaData);
-        media_manager_1.writeYamlFile(`${newPath}.yml`, result);
+        file_reader_writer_1.writeYamlFile(`${newPath}.yml`, result);
         // Delete MP3.
         fs_1.default.unlinkSync(tmpMp3Path);
     });
@@ -242,7 +242,7 @@ function moveReference(oldPath, cmdObj) {
         metaData.release_data = 2009;
         metaData.edition = 1;
         metaData.isbn = '978-3-85061-460-3';
-        media_manager_1.writeYamlFile(`${newPath}.yml`, metaData);
+        file_reader_writer_1.writeYamlFile(`${newPath}.yml`, metaData);
     });
 }
 /**

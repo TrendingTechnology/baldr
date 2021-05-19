@@ -21,9 +21,11 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/**/*.ts"
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:ts-standard": "ts-standard --fix 'src/**/*.ts'",
+    "lint": "npm run lint:ts-standard && npm run lint:depcheck"
   },
   "dependencies": {
     "@bldr/audio-metadata": "*",
@@ -31,7 +33,7 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
-    "@bldr/icons": "*",
+    "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",
     "@bldr/media-categories": "*",
     "@bldr/media-manager": "*",
@@ -44,15 +46,13 @@
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*",
     "@bldr/youtube-api": "*",
-    "axios": "0.21.1",
     "chalk": "4.1.0",
     "color": "3.1.3",
     "commander": "7.1.0",
     "csv-parser": "3.0.0",
     "fs-extra": "9.1.0",
     "jsdoc-api": "7.0.0",
-    "node-fetch": "2.6.1",
-    "ora": "5.3.0",
+    "glob": "7.1.7",
     "webfont": "9.0.0"
   },
   "devDependencies": {

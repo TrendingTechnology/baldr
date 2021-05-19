@@ -5,7 +5,8 @@ import { AssetType, MediaCategory, StringIndexedObject } from '@bldr/type-defini
 import wikidata from '@bldr/wikidata'
 
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { readAssetYaml, writeYamlFile } from '../main'
+import { readAssetYaml } from '../main'
+import { writeYamlFile } from '@bldr/file-reader-writer'
 
 async function queryWikidata (metaData: AssetType.YamlFormat, categoryNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<AssetType.YamlFormat> {
   const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, categoryCollection)

@@ -10,14 +10,13 @@ import chalk from 'chalk'
 import { getExtension, referencify, asciify } from '@bldr/core-browser'
 import {
   moveAsset,
-  writeYamlFile,
   walk,
   readAssetYaml,
   operations,
   locationIndicator
 } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
-import { readFile, writeFile } from '@bldr/core-node'
+import { readFile, writeFile, writeYamlFile } from '@bldr/file-reader-writer'
 import type { AssetType } from '@bldr/type-definitions'
 
 interface CmdObj {

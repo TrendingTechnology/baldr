@@ -1,5 +1,5 @@
 import { stripCategories } from '@bldr/media-categories'
-import { readJsonFile, writeJsonFile } from '@bldr/core-node'
+import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 import config from '@bldr/config'
 

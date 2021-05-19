@@ -2,8 +2,7 @@
 import chalk from 'chalk'
 
 // Project packages.
-import { writeYamlFile } from '@bldr/media-manager'
-import { readFile } from '@bldr/core-node'
+import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { asciify } from '@bldr/core-browser'
 
 /**

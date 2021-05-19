@@ -23,6 +23,7 @@ const media_manager_1 = require("@bldr/media-manager");
 const titles_1 = require("@bldr/titles");
 const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
     return __awaiter(this, void 0, void 0, function* () {
         const cwd = path_1.default.dirname(tmpPdfFile);
@@ -36,9 +37,9 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         // Convert into SVG
         child_process_1.default.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo.toString()], { cwd });
         // Remove width="" and height="" attributes
-        let svgContent = core_node_1.readFile(svgFilePath);
+        let svgContent = file_reader_writer_1.readFile(svgFilePath);
         svgContent = svgContent.replace(/(width|height)=".+?" /g, '');
-        core_node_1.writeFile(svgFilePath, svgContent);
+        file_reader_writer_1.writeFile(svgFilePath, svgContent);
         // Write info yaml
         const titles = new titles_1.DeepTitle(tmpPdfFile);
         const infoYaml = {
@@ -48,7 +49,7 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
             cloze_page_no: pageNo,
             cloze_page_count: pageCount
         };
-        core_node_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), yaml_1.convertToYaml(infoYaml));
+        file_reader_writer_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), yaml_1.convertToYaml(infoYaml));
         // Move to LT (Lückentext) subdir.
         const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
         media_manager_1.moveAsset(svgFilePath, newPath);
@@ -60,7 +61,7 @@ function generateClozeSvg(filePath) {
         filePath = path_1.default.resolve(filePath);
         console.log(filePath);
         const cwd = path_1.default.dirname(filePath);
-        let texFileContent = core_node_1.readFile(filePath);
+        let texFileContent = file_reader_writer_1.readFile(filePath);
         if (!texFileContent.includes('cloze')) {
             console.log(`${chalk_1.default.red(filePath)} has no cloze texts.`);
             return;
@@ -93,7 +94,7 @@ function generateClozeSvg(filePath) {
             }
             return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`;
         });
-        core_node_1.writeFile(tmpTexFile, texFileContent);
+        file_reader_writer_1.writeFile(tmpTexFile, texFileContent);
         const result = child_process_1.default.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd, encoding: 'utf-8' });
         if (result.status !== 0) {
             console.log(result.stdout);

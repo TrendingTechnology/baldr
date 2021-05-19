@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizePresentationFile = void 0;
-const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
 const yaml_1 = require("@bldr/yaml");
 const titles_1 = require("@bldr/titles");
-const yaml_2 = require("../yaml");
+const file_reader_writer_2 = require("@bldr/file-reader-writer");
 const comment = `
 #-----------------------------------------------------------------------
 #
@@ -51,8 +51,8 @@ function shortedMediaUris(rawYamlString, presentationId) {
  */
 function normalizePresentationFile(filePath) {
     var _a, _b, _c;
-    let textContent = core_node_1.readFile(filePath);
-    const presentation = yaml_2.readYamlFile(filePath);
+    let textContent = file_reader_writer_1.readFile(filePath);
+    const presentation = file_reader_writer_2.readYamlFile(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
@@ -87,7 +87,7 @@ function normalizePresentationFile(filePath) {
     }
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
-    core_node_1.writeFile(filePath, textContent);
+    file_reader_writer_1.writeFile(filePath, textContent);
     return textContent;
 }
 exports.normalizePresentationFile = normalizePresentationFile;

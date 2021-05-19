@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { convertMdToTex } from '@bldr/tex-markdown-converter'
 import { walk } from '@bldr/media-manager'
 import { DeepTitle } from '@bldr/titles'
-import { readFile, writeFile } from '@bldr/core-node'
+import { readFile, writeFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 /**
  * ```tex

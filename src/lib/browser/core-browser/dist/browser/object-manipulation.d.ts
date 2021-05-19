@@ -54,8 +54,8 @@ export declare class RawDataObject {
  * server.
  */
 export declare class ObjectPropertyPicker {
-    private object1;
-    private object2;
+    private readonly object1;
+    private readonly object2;
     constructor(object1: StringIndexedObject, object2: StringIndexedObject);
     /**
      * Grab a value from two objects.

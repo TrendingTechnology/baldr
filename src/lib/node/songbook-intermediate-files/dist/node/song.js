@@ -34,7 +34,7 @@ const fs = __importStar(require("fs-extra"));
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
 const core_browser_1 = require("@bldr/core-browser");
-const media_manager_1 = require("@bldr/media-manager");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const yaml_1 = require("@bldr/yaml");
 const utils_1 = require("./utils");
 const main_1 = require("./main");
@@ -339,7 +339,7 @@ class IntermediateSong extends ExtendedSong {
     }
     generateMetaDataForMediaServer() {
         const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml');
-        const oldMetaData = media_manager_1.readYamlFile(yamlFilePath);
+        const oldMetaData = file_reader_writer_1.readYamlFile(yamlFilePath);
         let uuid;
         if ((oldMetaData === null || oldMetaData === void 0 ? void 0 : oldMetaData.uuid) != null) {
             uuid = oldMetaData.uuid;
@@ -350,7 +350,7 @@ class IntermediateSong extends ExtendedSong {
         const newMetaData = this.metaDataCombined.toJSON();
         newMetaData.uuid = uuid;
         const metaData = Object.assign({ ref: `LD_${this.songId}` }, newMetaData);
-        media_manager_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
+        file_reader_writer_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
     }
     /**
      * Generate SVG files in the slides subfolder.

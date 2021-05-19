@@ -6,7 +6,7 @@ import path from 'path'
 import chalk from 'chalk'
 
 // Project packages.
-import { writeYamlFile } from '@bldr/media-manager'
+import { writeYamlFile } from '@bldr/file-reader-writer'
 import { categoriesManagement, categories } from '@bldr/media-categories'
 import type { AssetType } from '@bldr/type-definitions'
 import config from '@bldr/config'

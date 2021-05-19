@@ -10,7 +10,8 @@ import chalk from 'chalk'
 import { moveAsset, operations, locationIndicator, walk } from '@bldr/media-manager'
 import { DeepTitle } from '@bldr/titles'
 import { convertToYaml } from '@bldr/yaml'
-import { getPdfPageCount, readFile, writeFile } from '@bldr/core-node'
+import { getPdfPageCount } from '@bldr/core-node'
+import { readFile, writeFile } from '@bldr/file-reader-writer'
 
 async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number): Promise<void> {
   const cwd = path.dirname(tmpPdfFile)

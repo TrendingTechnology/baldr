@@ -5,7 +5,8 @@ import fs from 'fs'
 import chalk from 'chalk'
 
 // Project packages.
-import { readYamlFile, walk } from '@bldr/media-manager'
+import { walk } from '@bldr/media-manager'
+import { readYamlFile } from '@bldr/file-reader-writer'
 import { fetchFile } from '@bldr/core-node'
 
 /**

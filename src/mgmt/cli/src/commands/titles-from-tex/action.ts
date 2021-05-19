@@ -8,7 +8,7 @@ import chalk from 'chalk'
 // Project packages.
 import { convertTexToMd } from '@bldr/tex-markdown-converter'
 import { walk } from '@bldr/media-manager'
-import { readFile, writeFile } from '@bldr/core-node'
+import { readFile, writeFile } from '@bldr/file-reader-writer'
 
 function clean (text: string): string {
   text = text.replace(/\n/g, ' ')

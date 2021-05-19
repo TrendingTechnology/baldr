@@ -1,25 +1,11 @@
 import fs from 'fs'
 
 import type { AssetType, StringIndexedObject } from '@bldr/type-definitions'
-import { readFile, writeFile } from '@bldr/core-node'
-import { convertToYaml, convertFromYaml } from '@bldr/yaml'
+import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify } from '@bldr/core-browser'
 import { Asset } from './media-file-classes'
 import { categoriesManagement } from '@bldr/media-categories'
-
-/**
- * Load a YAML file and convert it into a Javascript object. The string
- * properties are converted into the `camleCase` format.
- *
- * @param filePath - The path of a YAML file itself.
- *
- * @returns The parsed YAML file as an object. The string properties are
- * converted into the `camleCase` format.
- */
-export function readYamlFile (filePath: string): StringIndexedObject {
-  return convertFromYaml(readFile(filePath))
-}
 
 /**
  * Load the metadata file in the YAML format of a media asset. This
@@ -34,24 +20,6 @@ export function readYamlFile (filePath: string): StringIndexedObject {
  */
 export function readYamlMetaData (filePath: string): StringIndexedObject {
   return readYamlFile(`${filePath}.yml`)
-}
-
-/**
- * Convert some data (usually Javascript objets) into the YAML format
- * and write the string into a text file. The property names are
- * converted to `snake_case`.
- *
- * @param filePath - The file path of the destination yaml file. The yml
- *   extension has to be included.
- * @param data - Some data to convert into yaml and write into a text
- *   file.
- *
- * @returns The data converted to YAML as a string.
- */
-export function writeYamlFile (filePath: string, data: object): string {
-  const yaml = convertToYaml(data)
-  writeFile(filePath, yaml)
-  return yaml
 }
 
 /**

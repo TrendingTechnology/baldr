@@ -20,7 +20,7 @@ import {
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
 import { formatMultiPartAssetFileName, genUuid } from '@bldr/core-browser'
-import { writeYamlFile, readYamlFile } from '@bldr/media-manager'
+import { writeYamlFile, readYamlFile } from '@bldr/file-reader-writer'
 import { convertFromYamlRaw } from '@bldr/yaml'
 
 import { listFiles, deleteFiles } from './utils'

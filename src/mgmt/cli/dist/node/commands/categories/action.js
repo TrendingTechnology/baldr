@@ -23,16 +23,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const media_categories_1 = require("@bldr/media-categories");
-const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
 const config_1 = __importDefault(require("@bldr/config"));
 function action() {
     media_categories_1.stripCategories();
-    const configJson = core_node_1.readJsonFile(config_1.default.configurationFileLocations[1]);
+    const configJson = file_reader_writer_1.readJsonFile(config_1.default.configurationFileLocations[1]);
     configJson.mediaCategories = media_categories_1.stripCategories();
     for (const filePath of config_1.default.configurationFileLocations) {
         log.info('Patch configuration file %s\n', filePath);
-        log.infoLog(core_node_1.writeJsonFile(filePath, configJson));
+        log.infoLog(file_reader_writer_1.writeJsonFile(filePath, configJson));
     }
 }
 module.exports = action;

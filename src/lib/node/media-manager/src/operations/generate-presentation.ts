@@ -4,7 +4,7 @@ import path from 'path'
 
 // Project packages.
 import { objectifyTexItemize, objectifyTexZitat } from '@bldr/tex-markdown-converter'
-import { readFile, writeFile } from '@bldr/core-node'
+import { readFile, writeFile } from '@bldr/file-reader-writer'
 import { convertToYaml } from '@bldr/yaml'
 
 import { makeAsset } from '../media-file-classes'

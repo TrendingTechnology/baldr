@@ -23,13 +23,14 @@
   },
   "dependencies": {
     "@bldr/audio-metadata": "*",
+    "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
+    "@bldr/file-reader-writer": "*",
     "@bldr/media-categories": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/titles": "*",
-    "@bldr/client-media-models": "*",
     "@bldr/type-definitions": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*"

@@ -30,7 +30,10 @@
   "scripts": {
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix 'src/*.ts' && standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "lint:depcheck": "depcheck",
     "test": "npm run build && npm run lint && mocha tests/*"
   }
 }

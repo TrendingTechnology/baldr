@@ -13,7 +13,7 @@ import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from '@bldr/titles'
-import { readYamlFile } from './yaml'
+import { readYamlFile } from '@bldr/file-reader-writer'
 
 // Operations
 import { convertAsset } from './operations/convert-asset'

@@ -95,7 +95,7 @@ export class ObjectPropertyPicker {
         if (this.object1[propName] != null) {
             return this.object1[propName];
         }
-        if (this.object2 != null && this.object2[propName] != null) {
+        if (this.object2[propName] != null) {
             return this.object2[propName];
         }
     }
@@ -110,8 +110,9 @@ export class ObjectPropertyPicker {
         const result = {};
         for (const propName of properties) {
             const value = this.pickProperty(propName);
-            if (value)
+            if (value != null) {
                 result[propName] = value;
+            }
         }
         return result;
     }

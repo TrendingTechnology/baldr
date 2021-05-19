@@ -128,6 +128,7 @@ var config_1 = __importDefault(require("@bldr/config"));
 var core_browser_1 = require("@bldr/core-browser");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
+var file_reader_writer_1 = require("@bldr/file-reader-writer");
 var titles_1 = require("@bldr/titles");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
 var client_media_models_1 = require("@bldr/client-media-models");
@@ -221,7 +222,7 @@ var ServerMediaAsset = /** @class */ (function (_super) {
     function ServerMediaAsset(filePath) {
         var _this = _super.call(this, filePath) || this;
         _this.infoFile_ = _this.absPath_ + ".yml";
-        var data = media_manager_1.readYamlFile(_this.infoFile_);
+        var data = file_reader_writer_1.readYamlFile(_this.infoFile_);
         _this.importProperties(data);
         _this.previewImage = false;
         return _this;
@@ -289,7 +290,7 @@ var ServerPresentation = /** @class */ (function (_super) {
     function ServerPresentation(filePath) {
         var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
-        var data = media_manager_1.readYamlFile(filePath);
+        var data = file_reader_writer_1.readYamlFile(filePath);
         if (data != null)
             _this.importProperties(data);
         var deepTitle = new titles_1.DeepTitle(filePath);

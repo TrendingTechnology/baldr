@@ -17,16 +17,14 @@
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
-    "@bldr/core-node": "*",
     "@bldr/media-manager": "*",
     "@bldr/mongodb-connector": "*",
     "@bldr/open-with": "*",
+    "@bldr/file-reader-writer": "*",
     "@bldr/titles": "*",
     "@bldr/yaml": "*",
     "cors": "2.8.5",
-    "express": "4.17.1",
-    "saslprep": "1.0.3",
-    "transliteration": "2.2.0"
+    "express": "4.17.1"
   },
   "devDependencies": {
     "@bldr/http-request": "*",
@@ -36,10 +34,13 @@
     "@types/node": "14.14.7"
   },
   "scripts": {
-    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix 'src/*.ts' && standard --fix 'tests/*.js'",
-    "test": "npm run build && npm run lint && mocha tests/*"
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
   },
   "publishConfig": {
     "access": "public"

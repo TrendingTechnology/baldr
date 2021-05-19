@@ -17,7 +17,7 @@ const path_1 = __importDefault(require("path"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const media_manager_1 = require("@bldr/media-manager");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const media_categories_1 = require("@bldr/media-categories");
 const config_1 = __importDefault(require("@bldr/config"));
 const wikidata_1 = require("@bldr/wikidata");
@@ -65,7 +65,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         if (!fs_1.default.existsSync(yamlFile)) {
             if (!cmdObj.dryRun) {
                 console.log(`Write YAML file: ${chalk_1.default.green(yamlFile)}`);
-                media_manager_1.writeYamlFile(yamlFile, data);
+                file_reader_writer_1.writeYamlFile(yamlFile, data);
             }
         }
         else {

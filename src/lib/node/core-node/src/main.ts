@@ -97,56 +97,6 @@ export async function fetchFile (url: string, dest: string): Promise<void> {
 }
 
 /**
- * Read the content of a text file in the `utf-8` format.
- *
- * A wrapper around `fs.readFileSync()`
- *
- * @param filePath - A path of a text file.
- *
- * @returns The content of the file in the `utf-8` format.
- */
-export function readFile (filePath: string): string {
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`The file “${filePath}” cannot be read because it does not exist.`)
-  }
-  return fs.readFileSync(filePath, { encoding: 'utf-8' })
-}
-
-/**
- * Write some text content into a file.
- *
- * @param filePath - A path of a text file.
- * @param content - Some text to write to a file.
- */
-export function writeFile (filePath: string, content: string): string {
-  fs.writeFileSync(filePath, content)
-  return content
-}
-
-/**
- * Read a JSON file and parse it.
- *
- * @param filePath - A path of a JSON file.
- *
- * @returns The parsed JSON object.
- */
-export function readJsonFile (filePath: string): any {
-  return JSON.parse(readFile(filePath))
-}
-
-/**
- * Convert a value into a JSON string and write it into a file.
- *
- * @param filePath - A path of destination JSON file.
- * @param value - A value to convert to JSON
- *
- * @returns The stringifed JSON content that was writen to the text file.
- */
-export function writeJsonFile (filePath: string, value: any): string {
-  return writeFile(filePath, JSON.stringify(value, null, 2))
-}
-
-/**
  * Replace ~ with the home folder path.
  *
  * @see {@link https://stackoverflow.com/a/36221905/10193818}

@@ -3,7 +3,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { walk } from '@bldr/media-manager'
-import { readFile, writeFile } from '@bldr/core-node'
+import { readFile, writeFile } from '@bldr/file-reader-writer'
 
 /**
  * Fix some typographic issues, for example quotes “…” -> „…“.

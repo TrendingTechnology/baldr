@@ -25,7 +25,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("@bldr/titles");
-const yaml_1 = require("./yaml");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 // Operations
 const convert_asset_1 = require("./operations/convert-asset");
 const generate_presentation_1 = require("./operations/generate-presentation");
@@ -117,7 +117,7 @@ function readAssetYaml(filePath) {
     if (extension !== 'yml')
         filePath = `${filePath}.yml`;
     if (fs_1.default.existsSync(filePath)) {
-        return yaml_1.readYamlFile(filePath);
+        return file_reader_writer_1.readYamlFile(filePath);
     }
 }
 exports.readAssetYaml = readAssetYaml;

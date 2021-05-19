@@ -75,7 +75,8 @@ import config from '@bldr/config'
 import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
-import { walk, readYamlFile } from '@bldr/media-manager'
+import { walk } from '@bldr/media-manager'
+import { readYamlFile } from '@bldr/file-reader-writer'
 import { TitleTree, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'

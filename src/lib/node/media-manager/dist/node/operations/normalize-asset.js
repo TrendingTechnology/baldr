@@ -18,6 +18,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const media_categories_1 = require("@bldr/media-categories");
 const main_1 = require("../main");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 function queryWikidata(metaData, categoryNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
         const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, categoryCollection);
@@ -66,7 +67,7 @@ function normalizeMediaAsset(filePath, options) {
                 assert_1.default.deepStrictEqual(comparable, result);
             }
             catch (error) {
-                main_1.writeYamlFile(yamlFile, result);
+                file_reader_writer_1.writeYamlFile(yamlFile, result);
             }
         }
         catch (error) {

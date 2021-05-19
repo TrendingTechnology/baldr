@@ -17,6 +17,7 @@
   "dependencies": {
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
+    "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",
     "@bldr/media-manager": "*",
     "@bldr/songbook-core": "*",

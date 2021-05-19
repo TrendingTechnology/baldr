@@ -18,7 +18,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
-const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const yaml_1 = require("@bldr/yaml");
 const media_file_classes_1 = require("../media-file-classes");
 const directory_tree_walk_1 = require("../directory-tree-walk");
@@ -76,19 +76,19 @@ function generatePresentation(filePath) {
         }, { path: basePath });
         const notePath = path_1.default.join(basePath, 'Hefteintrag.tex');
         if (fs_1.default.existsSync(notePath)) {
-            const noteContent = core_node_1.readFile(notePath);
+            const noteContent = file_reader_writer_1.readFile(notePath);
             slides = slides.concat(slidify('note', tex_markdown_converter_1.objectifyTexItemize(noteContent), { source: 'Hefteintrag.tex' }));
         }
         const worksheetPath = path_1.default.join(basePath, 'Arbeitsblatt.tex');
         if (fs_1.default.existsSync(worksheetPath)) {
-            const worksheetContent = core_node_1.readFile(worksheetPath);
+            const worksheetContent = file_reader_writer_1.readFile(worksheetPath);
             slides = slides.concat(slidify('quote', tex_markdown_converter_1.objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }));
         }
         const result = yaml_1.convertToYaml({
             slides
         });
         console.log(result);
-        core_node_1.writeFile(filePath, result);
+        file_reader_writer_1.writeFile(filePath, result);
     });
 }
 exports.generatePresentation = generatePresentation;

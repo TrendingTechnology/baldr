@@ -17,6 +17,7 @@ const fs_1 = __importDefault(require("fs"));
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_node_1 = require("@bldr/core-node");
 /**
  * @param {String} filePath - The media asset file path.
@@ -24,7 +25,7 @@ const core_node_1 = require("@bldr/core-node");
 function downloadCover(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const yamlFile = `${filePath}.yml`;
-        const metaData = media_manager_1.readYamlFile(yamlFile);
+        const metaData = file_reader_writer_1.readYamlFile(yamlFile);
         console.log(metaData);
         if (metaData.coverSource != null) {
             const previewFile = `${filePath}_preview.jpg`;

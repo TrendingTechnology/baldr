@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const media_manager_1 = require("@bldr/media-manager");
-const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * Convert a Audacity text mark file into a YAML file.
@@ -36,7 +35,7 @@ const core_browser_1 = require("@bldr/core-browser");
  *   file.
  */
 function action(filePath) {
-    const text = core_node_1.readFile(filePath);
+    const text = file_reader_writer_1.readFile(filePath);
     console.log(`The content of the source file “${chalk_1.default.yellow(filePath)}”:\n`);
     console.log(text);
     const lines = text.split('\n');
@@ -83,6 +82,6 @@ function action(filePath) {
     }
     const dest = `${filePath}.yml`;
     console.log(`The content of the destination file “${chalk_1.default.green(dest)}”:\n`);
-    media_manager_1.writeYamlFile(dest, samples);
+    file_reader_writer_1.writeYamlFile(dest, samples);
 }
 module.exports = action;
