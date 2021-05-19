@@ -1,10 +1,25 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
+const log = __importStar(require("@bldr/log"));
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
 /**
@@ -36,8 +51,8 @@ const core_browser_1 = require("@bldr/core-browser");
  */
 function action(filePath) {
     const text = file_reader_writer_1.readFile(filePath);
-    console.log(`The content of the source file “${chalk_1.default.yellow(filePath)}”:\n`);
-    console.log(text);
+    log.info('The content of the source file “%s”:\n', filePath);
+    log.info(text);
     const lines = text.split('\n');
     const samples = [];
     // Text mark maybe have no description. We use a counter instead
@@ -81,7 +96,7 @@ function action(filePath) {
         index++;
     }
     const dest = `${filePath}.yml`;
-    console.log(`The content of the destination file “${chalk_1.default.green(dest)}”:\n`);
+    log.info('The content of the destination file “%s”:\n', dest);
     file_reader_writer_1.writeYamlFile(dest, samples);
 }
 module.exports = action;

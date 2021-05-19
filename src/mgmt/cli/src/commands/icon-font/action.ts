@@ -8,10 +8,10 @@ import path from 'path'
 import os from 'os'
 
 // Third party packages.
-import chalk from 'chalk'
 import webfont from 'webfont'
 
 // Project packages.
+import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
 import { IconFontMapping, IconFontConfiguration, IconDefintion } from '@bldr/type-definitions'
@@ -58,7 +58,7 @@ async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string)
 
     await downloadIcon(url, oldName, newName)
     count++
-    cmd.updateProgress(count / iconsCount, `download icon “${chalk.blue(oldName)}”`)
+    cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName))
   }
   cmd.stopProgress()
 }
@@ -73,11 +73,10 @@ function copyIcons (srcFolder: string, destFolder: string): void {
   const icons = fs.readdirSync(srcFolder)
   for (const icon of icons) {
     if (icon.includes('.svg')) {
-      fs.copyFileSync(
-        path.join(srcFolder, icon),
-        path.join(destFolder, icon)
-      )
-      console.log(`Copy the file “${chalk.magenta(icon)}” from the destination folder “${chalk.green(icon)}” to the destination folder “${chalk.yellow(icon)}”.`)
+      const src = path.join(srcFolder, icon)
+      const dest = path.join(destFolder, icon)
+      fs.copyFileSync(src, dest)
+      log.info('Copy the file “%s” from the source folder “%s” to the destination folder “%s”.', icon, src, dest)
     }
   }
 }
@@ -85,7 +84,7 @@ function copyIcons (srcFolder: string, destFolder: string): void {
 function writeFileToDest (destFileName: string, content: string): void {
   const destPath = getIconPath(destFileName)
   fs.writeFileSync(destPath, content)
-  console.log(`Create file: ${chalk.cyan(destPath)}`)
+  log.info('Create file: %s', destPath)
 }
 
 interface WebFontConfig {
@@ -117,7 +116,7 @@ function convertIntoFontFiles (config: WebFontConfig): void {
 }
 `
         css.push(cssGlyph)
-        console.log(`name: ${chalk.red(name)} unicode glyph: ${chalk.yellow(unicodeGlyph)} unicode escape hex: ${chalk.green(cssUnicodeEscape)}`)
+        log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape)
       }
       writeFileToDest('style.css', css.join('\n'))
       writeFileToDest('baldr-icons.woff', result.woff)
@@ -151,7 +150,7 @@ async function buildFont (options: IconFontConfiguration[]): Promise<void> {
 async function action (): Promise<void> {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
-  console.log(`The SVG files of the icons are download to: ${chalk.yellow(tmpDir)}`)
+  log.info('The SVG files of the icons are download to: %s', tmpDir)
 
   await buildFont([
     config.iconFont,

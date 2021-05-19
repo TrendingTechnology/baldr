@@ -45,15 +45,11 @@ const ora_1 = __importDefault(require("ora"));
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'
 const gauge_1 = __importDefault(require("gauge"));
-const chalk_1 = __importDefault(require("chalk"));
+const log = __importStar(require("@bldr/log"));
 /**
  * Run commands on the command line in a nice and secure fashion.
  */
 class CommandRunner {
-    /**
-     * @param {Object} options
-     * @property {Boolean} verbose
-     */
     constructor(options) {
         this.verbose = ((options === null || options === void 0 ? void 0 : options.verbose) != null && (options === null || options === void 0 ? void 0 : options.verbose));
         this.spinner = ora_1.default({ spinner: 'line' });
@@ -101,7 +97,7 @@ class CommandRunner {
      * @param options - See `childProcess.spawn()`
      *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      *
-     * @returns {Object}
+     * @returns
      *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      */
     exec(args, options) {
@@ -127,7 +123,7 @@ class CommandRunner {
                     commandString = `${args[0]} ${args.slice(1).join(' ')}`;
                 }
                 if (this.verbose) {
-                    this.message = `Exec: ${chalk_1.default.yellow(commandString)}`;
+                    this.message = log.format('Exec: %s', commandString);
                 }
                 if ((options === null || options === void 0 ? void 0 : options.detached) != null && options.detached) {
                     command.unref();

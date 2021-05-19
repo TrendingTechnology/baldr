@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,9 +35,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
+const log = __importStar(require("@bldr/log"));
 const media_manager_1 = require("@bldr/media-manager");
 const titles_1 = require("@bldr/titles");
 const yaml_1 = require("@bldr/yaml");
@@ -31,7 +49,7 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         if (pageCount > 1) {
             counterSuffix = `_${pageNo}`;
         }
-        console.log(`Convert page ${chalk_1.default.green(pageNo)}`);
+        log.info('Convert page %s', pageNo);
         const svgFileName = `Lueckentext${counterSuffix}.svg`;
         const svgFilePath = path_1.default.join(cwd, svgFileName);
         // Convert into SVG
@@ -63,11 +81,11 @@ function generateClozeSvg(filePath) {
         const cwd = path_1.default.dirname(filePath);
         let texFileContent = file_reader_writer_1.readFile(filePath);
         if (!texFileContent.includes('cloze')) {
-            console.log(`${chalk_1.default.red(filePath)} has no cloze texts.`);
+            log.info('has no cloze texts.', filePath);
             return;
         }
         const tmpTexFile = filePath.replace('.tex', '_Loesung.tex');
-        console.log(`Generate SVGs from the file ${chalk_1.default.yellow(filePath)}.`);
+        log.info('Generate SVGs from the file %s.', filePath);
         const jobName = path_1.default.basename(tmpTexFile).replace('.tex', '');
         // Show cloze texts by patching the TeX file and generate a PDF file.
         // \documentclass[angabe,querformat]{schule-arbeitsblatt}

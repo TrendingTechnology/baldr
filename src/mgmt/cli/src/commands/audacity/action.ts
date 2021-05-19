@@ -1,7 +1,5 @@
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
+import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { asciify } from '@bldr/core-browser'
 
@@ -34,8 +32,8 @@ import { asciify } from '@bldr/core-browser'
  */
 function action (filePath: string): void {
   const text = readFile(filePath)
-  console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`)
-  console.log(text)
+  log.info('The content of the source file “%s”:\n', filePath)
+  log.info(text)
 
   const lines = text.split('\n')
   const samples = []
@@ -79,7 +77,7 @@ function action (filePath: string): void {
     index++
   }
   const dest = `${filePath}.yml`
-  console.log(`The content of the destination file “${chalk.green(dest)}”:\n`)
+  log.info('The content of the destination file “%s”:\n', dest)
   writeYamlFile(dest, samples)
 }
 

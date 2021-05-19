@@ -28,9 +28,9 @@
     "access": "public"
   },
   "dependencies": {
+    "@bldr/log": "*",
     "gauge": "3.0.0",
-    "ora": "5.4.0",
-    "chalk": "4.1.1"
+    "ora": "5.4.0"
   },
   "devDependencies": {
     "@types/node": "14.14.35"

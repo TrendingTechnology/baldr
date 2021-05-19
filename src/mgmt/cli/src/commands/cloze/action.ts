@@ -3,10 +3,8 @@ import childProcess from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
+import * as log from '@bldr/log'
 import { moveAsset, operations, locationIndicator, walk } from '@bldr/media-manager'
 import { DeepTitle } from '@bldr/titles'
 import { convertToYaml } from '@bldr/yaml'
@@ -19,7 +17,7 @@ async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageN
   if (pageCount > 1) {
     counterSuffix = `_${pageNo}`
   }
-  console.log(`Convert page ${chalk.green(pageNo)}`)
+  log.info('Convert page %s', pageNo)
   const svgFileName = `Lueckentext${counterSuffix}.svg`
   const svgFilePath = path.join(cwd, svgFileName)
 
@@ -58,13 +56,13 @@ async function generateClozeSvg (filePath: string): Promise<void> {
   const cwd = path.dirname(filePath)
   let texFileContent = readFile(filePath)
   if (!texFileContent.includes('cloze')) {
-    console.log(`${chalk.red(filePath)} has no cloze texts.`)
+    log.info('has no cloze texts.', filePath)
     return
   }
 
   const tmpTexFile = filePath.replace('.tex', '_Loesung.tex')
 
-  console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`)
+  log.info('Generate SVGs from the file %s.', filePath)
   const jobName = path.basename(tmpTexFile).replace('.tex', '')
   // Show cloze texts by patching the TeX file and generate a PDF file.
   // \documentclass[angabe,querformat]{schule-arbeitsblatt}

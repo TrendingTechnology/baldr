@@ -13,7 +13,7 @@ import ora from 'ora'
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'
 import Gauge from 'gauge'
-import chalk from 'chalk'
+import * as log from '@bldr/log'
 
 interface CommandRunnerOption {
   verbose: boolean
@@ -59,10 +59,7 @@ export class CommandRunner {
    * stdout and stderr to this message.
    */
   private message: string
-  /**
-   * @param {Object} options
-   * @property {Boolean} verbose
-   */
+
   constructor (options?: CommandRunnerOption) {
     this.verbose = (options?.verbose != null && options?.verbose)
     this.spinner = ora({ spinner: 'line' })
@@ -116,7 +113,7 @@ export class CommandRunner {
    * @param options - See `childProcess.spawn()`
    *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    *
-   * @returns {Object}
+   * @returns
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
   async exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult> {
@@ -139,7 +136,7 @@ export class CommandRunner {
       }
 
       if (this.verbose) {
-        this.message = `Exec: ${chalk.yellow(commandString)}`
+        this.message = log.format('Exec: %s', commandString)
       }
 
       if (options?.detached != null && options.detached) {

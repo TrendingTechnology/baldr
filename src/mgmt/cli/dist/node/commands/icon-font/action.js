@@ -1,6 +1,25 @@
 #! /usr/bin/env node
 "use strict";
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -18,9 +37,9 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
 // Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 const webfont_1 = __importDefault(require("webfont"));
 // Project packages.
+const log = __importStar(require("@bldr/log"));
 const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
 const cmd = new cli_utils_1.CommandRunner();
@@ -65,7 +84,7 @@ function downloadIcons(iconMapping, urlTemplate) {
             }
             yield downloadIcon(url, oldName, newName);
             count++;
-            cmd.updateProgress(count / iconsCount, `download icon “${chalk_1.default.blue(oldName)}”`);
+            cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName));
         }
         cmd.stopProgress();
     });
@@ -80,15 +99,17 @@ function copyIcons(srcFolder, destFolder) {
     const icons = fs_1.default.readdirSync(srcFolder);
     for (const icon of icons) {
         if (icon.includes('.svg')) {
-            fs_1.default.copyFileSync(path_1.default.join(srcFolder, icon), path_1.default.join(destFolder, icon));
-            console.log(`Copy the file “${chalk_1.default.magenta(icon)}” from the destination folder “${chalk_1.default.green(icon)}” to the destination folder “${chalk_1.default.yellow(icon)}”.`);
+            const src = path_1.default.join(srcFolder, icon);
+            const dest = path_1.default.join(destFolder, icon);
+            fs_1.default.copyFileSync(src, dest);
+            log.info('Copy the file “%s” from the source folder “%s” to the destination folder “%s”.', icon, src, dest);
         }
     }
 }
 function writeFileToDest(destFileName, content) {
     const destPath = getIconPath(destFileName);
     fs_1.default.writeFileSync(destPath, content);
-    console.log(`Create file: ${chalk_1.default.cyan(destPath)}`);
+    log.info('Create file: %s', destPath);
 }
 function convertIntoFontFiles(config) {
     console.log(config);
@@ -109,7 +130,7 @@ function convertIntoFontFiles(config) {
 }
 `;
             css.push(cssGlyph);
-            console.log(`name: ${chalk_1.default.red(name)} unicode glyph: ${chalk_1.default.yellow(unicodeGlyph)} unicode escape hex: ${chalk_1.default.green(cssUnicodeEscape)}`);
+            log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape);
         }
         writeFileToDest('style.css', css.join('\n'));
         writeFileToDest('baldr-icons.woff', result.woff);
@@ -144,7 +165,7 @@ function buildFont(options) {
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
-        console.log(`The SVG files of the icons are download to: ${chalk_1.default.yellow(tmpDir)}`);
+        log.info('The SVG files of the icons are download to: %s', tmpDir);
         yield buildFont([
             config_1.default.iconFont,
             {
