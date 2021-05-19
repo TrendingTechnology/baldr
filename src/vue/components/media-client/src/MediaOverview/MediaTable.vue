@@ -1,11 +1,11 @@
 <template>
-  <section class="vc_media_table" v-if="typeCount(type)">
+  <section class="vc_media_table" v-if="assetsByMimeType.length > 0">
     <h2>
       <material-icon
-        :name="`file-${type}`"
-        :color="typeToColor(type)"
+        :name="`file-${mimeType}`"
+        :color="typeToColor(mimeType)"
       />
-        {{ type }}
+        {{ mimeType }}
     </h2>
     <table>
       <thead>
@@ -19,8 +19,8 @@
       </thead>
       <tbody>
         <table-row
-          v-for="asset in assetsByType(type)"
-          :key="asset.uri"
+          v-for="asset in assetsByMimeType"
+          :key="asset.ref"
           :asset="asset"
         />
       </tbody>
@@ -39,8 +39,24 @@ export default {
   components: {
     TableRow
   },
-  props: ['assets', 'type'],
-  computed: mapGetters(['assetsByType', 'typeCount']),
+  props: {
+    mimeType: {
+      type: String
+    }
+  },
+  computed: {
+    ...mapGetters(['assetsNg']),
+    assetsByMimeType () {
+      const output = []
+      for (const ref in this.assetsNg) {
+        const asset = this.assetsNg[ref]
+        if (asset.mimeType === this.mimeType) {
+          output.push(asset)
+        }
+      }
+      return output
+    }
+  },
   methods: {
     typeToColor (type) {
       return mimeTypeManager.typeToColor(type)

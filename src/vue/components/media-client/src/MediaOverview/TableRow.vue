@@ -1,14 +1,14 @@
 <template>
   <tr class="vc_table_row">
-    <td><preview-image @click.native="play(asset.uri)" :asset="asset"/></td>
+    <td><preview-image @click.native="play(asset.ref)" :asset="asset"/></td>
     <td>
       <router-link
         title="Medien-Datei-Überblick öffnen"
         :to="{
           name: 'asset',
           params: {
-            uriScheme: asset.uriScheme,
-            uriAuthority: asset.uriAuthority
+            uriScheme: 'ref',
+            uriAuthority: asset.yaml.ref
           }
         }"
         v-html="asset.titleSafe"
@@ -43,15 +43,18 @@ export default {
   components: {
     PreviewImage
   },
-  props: ['asset'],
+  props: {
+    asset: {
+      type: Object
+    }
+  },
   computed: {
     dimension () {
-      const file = this.asset
-      let dimension
-      if (this.asset.type === 'image') {
-        dimension = `${file.mediaElement.width} x ${file.mediaElement.height}`
-      } else {
-        dimension = formatDuration(file.mediaElement.duration)
+      let dimension = ''
+      if (this.asset.mimeType === 'image') {
+        dimension = `${this.asset.htmlElement.width} x ${this.asset.htmlElement.height}`
+      } else if (this.asset.isPlayable) {
+        dimension = formatDuration(this.asset.htmlElement.duration)
       }
       return dimension
     },

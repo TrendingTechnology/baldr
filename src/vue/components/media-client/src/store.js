@@ -53,15 +53,6 @@ const getters = {
   assetsNg: state => {
     return state.assetsNg
   },
-  assetsByType: (state, getters) => type => {
-    const result = {}
-    for (const uri in getters.assets) {
-      if (getters.assets[uri].type === type) {
-        result[uri] = getters.assets[uri]
-      }
-    }
-    return result
-  },
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.assets
     if (uri in media) {
@@ -124,9 +115,6 @@ const getters = {
   },
   shortcutCounterByType: state => type => {
     return state.shortcutCounter[type]
-  },
-  typeCount: (state, getters) => type => {
-    return Object.keys(getters.assetsByType(type)).length
   }
 }
 

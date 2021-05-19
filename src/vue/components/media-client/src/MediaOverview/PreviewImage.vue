@@ -4,16 +4,14 @@ export default {
   name: 'PreviewImage',
   props: ['asset'],
   render: function (createElement) {
-    const file = this.asset
-
-    if (file.type === 'image') {
-      return createElement('img', { attrs: { src: file.httpUrl } })
-    } else if (file.isPlayable && 'previewHttpUrl' in file) {
-      return createElement('img', { attrs: { src: file.previewHttpUrl, title: 'abspielen' } })
-    } else if (file.type === 'video') {
-      return createElement('video', { attrs: { src: file.httpUrl, title: 'abspielen' } })
+    if (this.asset.mimeType === 'image') {
+      return createElement('img', { attrs: { src: this.asset.httpUrl } })
+    } else if (this.asset.isPlayable && 'previewHttpUrl' in this.asset) {
+      return createElement('img', { attrs: { src: this.asset.previewHttpUrl, title: 'abspielen' } })
+    } else if (this.asset.mimeType === 'video') {
+      return createElement('video', { attrs: { src: this.asset.httpUrl, title: 'abspielen' } })
     } else {
-      return createElement('material-icon', { props: { name: `file-${file.type}` } })
+      return createElement('material-icon', { props: { name: `file-${this.asset.mimeType}` } })
     }
   }
 }

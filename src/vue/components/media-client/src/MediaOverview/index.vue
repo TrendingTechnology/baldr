@@ -7,9 +7,10 @@
     <media-search/>
 
     <div v-if="isMedia">
-      <media-table type="audio"/>
-      <media-table type="video"/>
-      <media-table type="image"/>
+      <media-table mime-type="audio"/>
+      <media-table mime-type="video"/>
+      <media-table mime-type="image"/>
+      <media-table mime-type="document"/>
     </div>
 
     <p v-else>Keine Medien-Dateien geladen.</p>
