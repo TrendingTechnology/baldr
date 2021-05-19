@@ -581,9 +581,16 @@ export class Sample {
 }
 
 export class SampleCollection extends Cache<Sample> {
+  private readonly asset: ClientMediaAsset
+
   constructor (asset: ClientMediaAsset) {
     super()
+    this.asset = asset
     this.addFromAsset(asset)
+  }
+
+  get complete (): Sample | undefined {
+    return this.get(this.asset.ref + '#complete')
   }
 
   private addSample (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {

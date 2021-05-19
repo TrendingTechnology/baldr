@@ -230,7 +230,9 @@ export declare class Sample {
     backward(interval?: number): void;
 }
 export declare class SampleCollection extends Cache<Sample> {
+    private readonly asset;
     constructor(asset: ClientMediaAsset);
+    get complete(): Sample | undefined;
     private addSample;
     /**
      * Gather informations to build the default sample “complete”.

@@ -507,7 +507,11 @@ export class Sample {
 export class SampleCollection extends Cache {
     constructor(asset) {
         super();
+        this.asset = asset;
         this.addFromAsset(asset);
+    }
+    get complete() {
+        return this.get(this.asset.ref + '#complete');
     }
     addSample(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);

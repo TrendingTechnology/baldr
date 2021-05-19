@@ -512,7 +512,11 @@ exports.Sample = Sample;
 class SampleCollection extends internal_1.Cache {
     constructor(asset) {
         super();
+        this.asset = asset;
         this.addFromAsset(asset);
+    }
+    get complete() {
+        return this.get(this.asset.ref + '#complete');
     }
     addSample(asset, yamlFormat) {
         const sample = new Sample(asset, yamlFormat);

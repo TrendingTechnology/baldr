@@ -62,6 +62,18 @@ class ClientMediaAsset {
     get uuid() {
         return 'uuid:' + this.yaml.uuid;
     }
+    set shortcut(value) {
+        this.shortcut_ = value;
+    }
+    get shortcut() {
+        var _a;
+        if (this.shortcut_ != null) {
+            return this.shortcut_;
+        }
+        if (((_a = this.samples) === null || _a === void 0 ? void 0 : _a.complete) != null) {
+            return this.samples.complete.shortcut;
+        }
+    }
     /**
      * Store the file name from a HTTP URL.
      *

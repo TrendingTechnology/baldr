@@ -27,7 +27,7 @@ export declare class ClientMediaAsset {
      * The keyboard shortcut to launch the media asset. At the moment only used by
      * images.
      */
-    shortcut?: string;
+    private shortcut_?;
     /**
      * The HTMLMediaElement of the media file.
      */
@@ -56,6 +56,8 @@ export declare class ClientMediaAsset {
      * string is prefixed with `uuid:`.
      */
     get uuid(): string;
+    set shortcut(value: string | undefined);
+    get shortcut(): string | undefined;
     /**
      * Store the file name from a HTTP URL.
      *

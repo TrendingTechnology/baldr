@@ -35,7 +35,7 @@ export class ClientMediaAsset {
    * The keyboard shortcut to launch the media asset. At the moment only used by
    * images.
    */
-  shortcut?: string
+  private shortcut_?: string
 
   /**
    * The HTMLMediaElement of the media file.
@@ -104,6 +104,19 @@ export class ClientMediaAsset {
    */
   get uuid (): string {
     return 'uuid:' + this.yaml.uuid
+  }
+
+  set shortcut (value: string | undefined) {
+    this.shortcut_ = value
+  }
+
+  get shortcut (): string | undefined {
+    if (this.shortcut_ != null) {
+      return this.shortcut_
+    }
+    if (this.samples?.complete != null) {
+      return this.samples.complete.shortcut
+    }
   }
 
   /**

@@ -13,9 +13,24 @@ describe('Class “ClientMediaAsset”', function () {
     assert.throws(() => asset.getMultiPartHttpUrlByNo(14))
   })
 
-  it('property “shortcut”', function () {
-    resetMediaCache()
-    const asset = createAsset()
-    assert.strictEqual(asset.shortcut, 'i 1')
+  describe('property “shortcut”', function () {
+    it('on an image', function () {
+      resetMediaCache()
+      const asset = createAsset()
+      assert.strictEqual(asset.shortcut, 'i 1')
+    })
+
+    it('on an audio (over sample complete)', function () {
+      resetMediaCache()
+      const asset = createAsset({ mimeType: 'audio', path: 'dir/test.mp3' })
+      assert.strictEqual(asset.shortcut, 'a 1')
+    })
+
+    it('manual set', function () {
+      resetMediaCache()
+      const asset = createAsset({ mimeType: 'audio', path: 'dir/test.mp3' })
+      asset.shortcut = 'xxx'
+      assert.strictEqual(asset.shortcut, 'xxx')
+    })
   })
 })

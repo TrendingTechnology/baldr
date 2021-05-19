@@ -3,6 +3,7 @@
 const assert = require('assert')
 
 const { createAsset } = require('./_helper')
+const { resetMediaCache } = require('../dist/node/cache.js')
 
 describe('Class “Sample”', function () {
   it('Default sample “complete”', function () {
@@ -60,5 +61,16 @@ describe('Class “Sample”', function () {
         ]
       })
     })
+  })
+})
+
+describe('Class “SampleCollection”', function () {
+  it('getter “complete”', function () {
+    resetMediaCache()
+    const asset = createAsset({ mimeType: 'audio', path: 'dir/test.mp3' })
+    const sample = asset.samples.complete
+    assert.strictEqual(sample.ref, 'ref:test#complete')
+    assert.strictEqual(sample.title, 'komplett')
+    assert.strictEqual(sample.shortcut, 'a 1')
   })
 })
