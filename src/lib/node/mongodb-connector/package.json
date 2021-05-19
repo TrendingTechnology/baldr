@@ -22,12 +22,12 @@
     "@bldr/type-definitions": "*"
   },
   "scripts": {
-    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
-    "lint:standard": "standard --fix 'tests/*.js'",
-    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "build": "npm run build:node",
     "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
     "test": "npm run build && npm run lint && mocha tests/*"
   },
   "publishConfig": {

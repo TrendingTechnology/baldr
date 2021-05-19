@@ -5,7 +5,6 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
 const yaml_1 = require("@bldr/yaml");
 const titles_1 = require("@bldr/titles");
-const file_reader_writer_2 = require("@bldr/file-reader-writer");
 const comment = `
 #-----------------------------------------------------------------------
 #
@@ -52,7 +51,7 @@ function shortedMediaUris(rawYamlString, presentationId) {
 function normalizePresentationFile(filePath) {
     var _a, _b, _c;
     let textContent = file_reader_writer_1.readFile(filePath);
-    const presentation = file_reader_writer_2.readYamlFile(filePath);
+    const presentation = file_reader_writer_1.readYamlFile(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();

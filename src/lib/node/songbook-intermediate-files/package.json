@@ -19,12 +19,9 @@
     "@bldr/core-browser": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",
-    "@bldr/media-manager": "*",
     "@bldr/songbook-core": "*",
-    "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",
     "better-sqlite3": "7.1.2",
-    "chalk": "4.1.0",
     "fs-extra": "9.1.0",
     "glob": "7.1.6"
   },
@@ -39,8 +36,10 @@
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "scripts": {
-    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts"
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck && npm run lint:ts-standard"
   }
 }

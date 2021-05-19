@@ -11,11 +11,13 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build": "npm run build:browser && npm run build:node",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
     "build:pegjs": "npx pegjs --plugin ./node_modules/ts-pegjs --format commonjs -o src/markdown-to-tex.ts src/markdown-to-tex.pegjs",
-    "lint": "ts-standard --fix src/*.ts"
+    "build": "npm run build:browser && npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard"
   },
   "license": "MIT",
   "author": {

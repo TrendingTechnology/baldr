@@ -7,9 +7,11 @@
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
   "scripts": {
-    "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "lint": "ts-standard --fix src/*.ts"
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard"
   },
   "repository": {
     "type": "git",

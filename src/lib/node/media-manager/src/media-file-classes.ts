@@ -50,7 +50,7 @@ export class Asset extends MediaFile {
     super(filePath)
     const data = readAssetYaml(this.absPath)
     if (data != null) {
-      this.metaData = data as AssetType.YamlFormat
+      this.metaData = data
     }
   }
 

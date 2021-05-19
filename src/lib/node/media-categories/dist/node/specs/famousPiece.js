@@ -29,7 +29,7 @@ exports.famousPiece = {
                 title = title.replace(/ \(Bekanntes Stück.*/, '');
                 if (filePath != null) {
                     const personYaml = readPersonYaml(filePath);
-                    if (personYaml != null && personYaml.name != null) {
+                    if ((personYaml === null || personYaml === void 0 ? void 0 : personYaml.name) != null) {
                         return `${title} (Bekanntes Stück von „${personYaml.name}“)`;
                     }
                 }
