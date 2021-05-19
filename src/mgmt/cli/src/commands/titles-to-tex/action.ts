@@ -25,7 +25,7 @@ function patchTexFileWithTitles (filePath: string): void {
   log.info('\nReplace titles in TeX file “%s”', filePath)
   const titles = new DeepTitle(filePath)
 
-  log.infoLog(titles)
+  log.info(titles)
 
   const setzeTitle: { [key: string]: string } = {
     jahrgangsstufe: titles.grade.toString()

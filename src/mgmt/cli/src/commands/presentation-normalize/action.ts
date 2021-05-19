@@ -13,7 +13,7 @@ async function action (filePaths: string[]): Promise<void> {
     presentation (filePath) {
       log.info('\nNormalize the presentation file “%s”', filePath)
       log.info('\nNew content:\n')
-      log.infoLog(operations.normalizePresentationFile(filePath))
+      log.info(operations.normalizePresentationFile(filePath))
     }
   }, {
     path: filePaths

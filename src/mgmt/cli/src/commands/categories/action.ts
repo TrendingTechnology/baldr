@@ -10,7 +10,7 @@ function action (): void {
 
   for (const filePath of config.configurationFileLocations) {
     log.info('Patch configuration file %s\n', filePath)
-    log.infoLog(writeJsonFile(filePath, configJson))
+    log.info(writeJsonFile(filePath, configJson))
   }
 }
 

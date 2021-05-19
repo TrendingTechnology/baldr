@@ -42,7 +42,7 @@ function action(filePaths) {
             presentation(filePath) {
                 log.info('\nNormalize the presentation file “%s”', filePath);
                 log.info('\nNew content:\n');
-                log.infoLog(media_manager_1.operations.normalizePresentationFile(filePath));
+                log.info(media_manager_1.operations.normalizePresentationFile(filePath));
             }
         }, {
             path: filePaths

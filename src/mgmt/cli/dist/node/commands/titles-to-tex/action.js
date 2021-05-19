@@ -55,7 +55,7 @@ const log = __importStar(require("@bldr/log"));
 function patchTexFileWithTitles(filePath) {
     log.info('\nReplace titles in TeX file “%s”', filePath);
     const titles = new titles_1.DeepTitle(filePath);
-    log.infoLog(titles);
+    log.info(titles);
     const setzeTitle = {
         jahrgangsstufe: titles.grade.toString()
     };
