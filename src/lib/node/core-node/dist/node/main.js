@@ -18,28 +18,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
+exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 const os_1 = __importDefault(require("os"));
-const util_1 = __importDefault(require("util"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
 // Third party packages.
 const git_rev_sync_1 = __importDefault(require("git-rev-sync"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
-/**
- * A wrapper function around the functions `util.format()` and `console.log()`.
- *
- * ```js
- * util.format('%s:%s', 'foo', 'bar');
- * ```
- */
-function log(format, ...args) {
-    console.log(util_1.default.format(format, ...args));
-}
-exports.log = log;
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  */

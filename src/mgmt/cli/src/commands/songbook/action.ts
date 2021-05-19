@@ -2,7 +2,7 @@
 import chalk from 'chalk'
 
 // Project packages.
-import { log } from '@bldr/core-node'
+import * as log from '@bldr/log'
 import {
   IntermediateLibrary,
   GenerationMode
@@ -52,13 +52,13 @@ function action (cmdObj: CmdObj): void {
     cmdObj.pageTurnOptimized = false
   }
 
-  log(
+  log.info(
     'The base path of the song collection is located at:\n    %s\n',
     chalk.cyan(config.songbook.path)
   )
 
   const library = new IntermediateLibrary(config.songbook.path)
-  log('Found %s songs.', library.countSongs())
+  log.info('Found %s songs.', library.countSongs())
   if (cmdObj.list != null) library.loadSongList(cmdObj.list)
 
   if (cmdObj.clean) {

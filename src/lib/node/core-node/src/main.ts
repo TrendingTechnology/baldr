@@ -17,17 +17,6 @@ import { URL } from 'url'
 import git from 'git-rev-sync'
 import fetch from 'node-fetch'
 
-/**
- * A wrapper function around the functions `util.format()` and `console.log()`.
- *
- * ```js
- * util.format('%s:%s', 'foo', 'bar');
- * ```
- */
-export function log (format: string, ...args: any): void {
-  console.log(util.format(format, ...args))
-}
-
 interface GitHead {
   short: string
   long: string
