@@ -1,10 +1,8 @@
 import type { PresentationTypes } from '@bldr/type-definitions'
-import { readFile, writeFile } from '@bldr/file-reader-writer'
+import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
 import { DeepTitle } from '@bldr/titles'
-
-import { readYamlFile } from '@bldr/file-reader-writer'
 
 const comment = `
 #-----------------------------------------------------------------------

@@ -11,7 +11,9 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "compile": "sassc --style=expanded --sourcemap styles.scss styles.css"
+    "compile": "sassc --style=expanded --sourcemap styles.scss styles.css",
+    "lint:depcheck": "depcheck",
+    "lint": "npm run lint:depcheck"
   },
   "license": "MIT",
   "author": {

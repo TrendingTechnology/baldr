@@ -27,8 +27,8 @@ export const famousPiece: MediaCategory.Category = {
         title = title.replace(/ \(Bekanntes Stück.*/, '')
         if (filePath != null) {
           const personYaml = readPersonYaml(filePath)
-          if (personYaml != null && personYaml.name != null) {
-            return `${title} (Bekanntes Stück von „${personYaml.name}“)`
+          if (personYaml?.name != null) {
+            return `${title} (Bekanntes Stück von „${personYaml.name as string}“)`
           }
         }
         return title

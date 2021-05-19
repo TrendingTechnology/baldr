@@ -18,7 +18,7 @@
   },
   "scripts": {
     "lint": "standard --fix src/**/*.js",
-    "test": "npm run lint && mocha tests/*"
+    "test": "npm run lint && mocha 'tests/*'"
   },
   "dependencies": {
     "@bldr/type-definitions": "0.1.0"
