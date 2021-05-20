@@ -13,9 +13,10 @@ interface CommandRunnerExecOption {
     shell?: true;
     encoding?: string;
 }
-interface CommandRunnerResult {
-    stdout: string;
-    stderr: string;
+declare class CommandResult {
+    stdout?: string;
+    stderr?: string;
+    constructor({ stdout, stderr }: any);
 }
 /**
  * Run commands on the command line in a nice and secure fashion.
@@ -73,7 +74,8 @@ export declare class CommandRunner {
      * @returns
      *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      */
-    exec(args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult>;
+    exec(args: string[], options?: CommandRunnerExecOption): Promise<CommandResult>;
+    execSync(args: string[]): CommandResult;
     /**
      * Append the buffed data stream from the child process to the spinner text.
      *

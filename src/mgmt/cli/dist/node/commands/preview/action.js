@@ -30,53 +30,77 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
-const path_1 = __importDefault(require("path"));
 // Project packages.
-const media_manager_1 = require("@bldr/media-manager");
+const fs_1 = __importDefault(require("fs"));
 const log = __importStar(require("@bldr/log"));
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const core_node_1 = require("@bldr/core-node");
 const cli_utils_1 = require("@bldr/cli-utils");
+const media_manager_1 = require("@bldr/media-manager");
 const cmd = new cli_utils_1.CommandRunner({ verbose: true });
+/**
+ * @param srcPath - The media asset file path.
+ */
+function createAudioPreview(srcPath, destPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const yamlFile = `${srcPath}.yml`;
+        const metaData = file_reader_writer_1.readYamlFile(yamlFile);
+        if (metaData.coverSource != null) {
+            yield core_node_1.fetchFile(metaData.coverSource, destPath);
+        }
+        else {
+            log.error('No property “cover_source” found.');
+        }
+    });
+}
 /**
  * Create a video preview image.
  */
 function createVideoPreview(srcPath, destPath, second = 10) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let secondString;
-        if (typeof second === 'number') {
-            secondString = second.toString();
-        }
-        else {
-            secondString = second;
-        }
-        yield cmd.exec(['ffmpeg',
-            '-i', srcPath,
-            '-ss', secondString,
-            '-vframes', '1',
-            '-qscale:v', '10',
-            '-y',
-            destPath
-        ]);
-    });
+    let secondString;
+    if (typeof second === 'number') {
+        secondString = second.toString();
+    }
+    else {
+        secondString = second;
+    }
+    cmd.execSync(['ffmpeg',
+        '-i', srcPath,
+        '-ss', secondString,
+        '-vframes', '1',
+        '-qscale:v', '10',
+        '-y',
+        destPath
+    ]);
 }
 function createPdfPreview(srcPath, destPath) {
-    return __awaiter(this, void 0, void 0, function* () {
-        cmd.exec(['magick',
-            'convert', `${srcPath}[0]`, destPath
-        ]);
-    });
+    destPath = destPath.replace('.jpg', '');
+    cmd.execSync([
+        'pdftocairo',
+        '-jpeg', '-jpegopt', 'quality=20,optimize=y',
+        '-singlefile',
+        '-scale-to', '500',
+        srcPath, destPath
+    ]);
 }
 function createPreviewOneFile(srcPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         const mimeType = media_manager_1.filePathToMimeType(srcPath);
         const destPath = `${srcPath}_preview.jpg`;
-        const destFileName = path_1.default.basename(destPath);
-        log.info('Create preview image %s of %s file.', destFileName, mimeType);
+        if (fs_1.default.existsSync(destPath) && !cmdObj.force) {
+            return;
+        }
         if (mimeType === 'video') {
-            yield createVideoPreview(srcPath, destPath, cmdObj.second);
+            log.info('Create preview image %s of a video file.', destPath);
+            createVideoPreview(srcPath, destPath, cmdObj.second);
         }
         else if (mimeType === 'document') {
-            yield createPdfPreview(srcPath, destPath);
+            log.info('Create preview image %s of a PDF file.', destPath);
+            createPdfPreview(srcPath, destPath);
+        }
+        else if (mimeType === 'audio') {
+            log.info('Create preview image %s of an audio file.', destPath);
+            yield createAudioPreview(srcPath, destPath);
         }
     });
 }

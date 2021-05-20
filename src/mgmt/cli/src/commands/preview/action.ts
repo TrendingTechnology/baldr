@@ -2,27 +2,46 @@
 import path from 'path'
 
 // Project packages.
-import { filePathToMimeType, walk } from '@bldr/media-manager'
+import fs from 'fs'
+
 import * as log from '@bldr/log'
+import { readYamlFile } from '@bldr/file-reader-writer'
+import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
+import { filePathToMimeType, walk } from '@bldr/media-manager'
 
 interface CmdObj {
   second: number
+  force: boolean
 }
 
 const cmd = new CommandRunner({ verbose: true })
 
 /**
+ * @param srcPath - The media asset file path.
+ */
+async function createAudioPreview (srcPath: string, destPath: string): Promise<void> {
+  const yamlFile = `${srcPath}.yml`
+  const metaData = readYamlFile(yamlFile)
+
+  if (metaData.coverSource != null) {
+    await fetchFile(metaData.coverSource, destPath)
+  } else {
+    log.error('No property “cover_source” found.')
+  }
+}
+
+/**
  * Create a video preview image.
  */
-async function createVideoPreview (srcPath: string, destPath: string, second: number = 10): Promise<void> {
+function createVideoPreview (srcPath: string, destPath: string, second: number = 10): void {
   let secondString: string
   if (typeof second === 'number') {
     secondString = second.toString()
   } else {
     secondString = second
   }
-  await cmd.exec(['ffmpeg',
+  cmd.execSync(['ffmpeg',
     '-i', srcPath,
     '-ss', secondString, // Position in seconds
     '-vframes', '1', // only handle one video frame
@@ -32,21 +51,34 @@ async function createVideoPreview (srcPath: string, destPath: string, second: nu
   ])
 }
 
-async function createPdfPreview (srcPath: string, destPath: string): Promise<void> {
-  cmd.exec(['magick',
-    'convert', `${srcPath}[0]`, destPath
+function createPdfPreview (srcPath: string, destPath: string): void {
+  destPath = destPath.replace('.jpg', '')
+  cmd.execSync([
+    'pdftocairo',
+    '-jpeg', '-jpegopt', 'quality=20,optimize=y',
+    '-singlefile',
+    '-scale-to', '500',
+    srcPath, destPath
   ])
 }
 
 async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<void> {
   const mimeType = filePathToMimeType(srcPath)
   const destPath = `${srcPath}_preview.jpg`
-  const destFileName = path.basename(destPath)
-  log.info('Create preview image %s of %s file.', destFileName, mimeType)
+
+  if (fs.existsSync(destPath) && !cmdObj.force) {
+    return
+  }
+
   if (mimeType === 'video') {
-    await createVideoPreview(srcPath, destPath, cmdObj.second)
+    log.info('Create preview image %s of a video file.', destPath)
+    createVideoPreview(srcPath, destPath, cmdObj.second)
   } else if (mimeType === 'document') {
-    await createPdfPreview(srcPath, destPath)
+    log.info('Create preview image %s of a PDF file.', destPath)
+    createPdfPreview(srcPath, destPath)
+  } else if (mimeType === 'audio') {
+    log.info('Create preview image %s of an audio file.', destPath)
+    await createAudioPreview(srcPath, destPath)
   }
 }
 

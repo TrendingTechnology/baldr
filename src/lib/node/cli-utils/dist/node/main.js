@@ -46,6 +46,29 @@ const ora_1 = __importDefault(require("ora"));
 // Error: Cannot find module 'object-assign'
 const gauge_1 = __importDefault(require("gauge"));
 const log = __importStar(require("@bldr/log"));
+class CommandResult {
+    constructor({ stdout, stderr }) {
+        this.stdout = stdout;
+        this.stderr = stderr;
+    }
+}
+class ArgsParser {
+    constructor(args) {
+        this.args = [];
+        this.command = args[0];
+        if (args.length > 1) {
+            this.args = args.slice(1);
+        }
+    }
+    toString() {
+        if (this.args.length > 0) {
+            return `${this.command} ${this.args.join(' ')}`;
+        }
+        else {
+            return this.command;
+        }
+    }
+}
 /**
  * Run commands on the command line in a nice and secure fashion.
  */
@@ -102,33 +125,28 @@ class CommandRunner {
      */
     exec(args, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.verbose)
+            const argsParser = new ArgsParser(args);
+            if (this.verbose) {
                 this.startSpin();
+            }
             // To get error messages on unkown commands
-            if (options == null)
+            if (options == null) {
                 options = {};
-            if (options.shell === undefined)
+            }
+            if (options.shell === undefined) {
                 options.shell = true;
-            if (options.encoding === undefined)
+            }
+            if (options.encoding === undefined) {
                 options.encoding = 'utf-8';
+            }
             return yield new Promise((resolve, reject) => {
-                let command;
-                let commandString;
-                if (args.length === 1) {
-                    command = childProcess.spawn(args[0], options);
-                    commandString = args[0];
-                }
-                else {
-                    command = childProcess.spawn(args[0], args.slice(1), options);
-                    commandString = `${args[0]} ${args.slice(1).join(' ')}`;
-                }
+                const command = childProcess.spawn(argsParser.command, argsParser.args, options);
                 if (this.verbose) {
-                    this.message = log.format('Exec: %s', commandString);
+                    this.message = log.format('Exec: %s', argsParser.toString());
                 }
                 if ((options === null || options === void 0 ? void 0 : options.detached) != null && options.detached) {
                     command.unref();
-                    const result = { stderr: '', stdout: '' };
-                    resolve(result);
+                    resolve(new CommandResult({}));
                 }
                 let stdout = '';
                 let stderr = '';
@@ -146,8 +164,7 @@ class CommandRunner {
                 });
                 command.on('exit', (code) => {
                     if (code === 0) {
-                        const result = { stdout, stderr };
-                        resolve(result);
+                        resolve(new CommandResult({ stdout, stderr }));
                     }
                     else {
                         reject(new Error(stderr));
@@ -155,6 +172,17 @@ class CommandRunner {
                 });
             });
         });
+    }
+    execSync(args) {
+        const argsParser = new ArgsParser(args);
+        const command = childProcess.spawnSync(argsParser.command, argsParser.args, { encoding: 'utf-8', shell: true });
+        if (command.status !== 0) {
+            if (command.stderr != null) {
+                log.error(command.stderr);
+            }
+            throw new Error(log.formatWithoutColor('Command “%s” exists with a nonzero exit code.', argsParser.toString()));
+        }
+        return new CommandResult(command);
     }
     /**
      * Append the buffed data stream from the child process to the spinner text.

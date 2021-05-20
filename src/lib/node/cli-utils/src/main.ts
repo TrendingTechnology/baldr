@@ -26,9 +26,33 @@ interface CommandRunnerExecOption {
   encoding?: string
 }
 
-interface CommandRunnerResult {
-  stdout: string
-  stderr: string
+class CommandResult {
+  stdout?: string
+  stderr?: string
+
+  constructor ({ stdout, stderr }: any) {
+    this.stdout = stdout
+    this.stderr = stderr
+  }
+}
+
+class ArgsParser {
+  command: string
+  args: string[] = []
+  constructor (args: any[]) {
+    this.command = args[0]
+    if (args.length > 1) {
+      this.args = args.slice(1)
+    }
+  }
+
+  toString (): string {
+    if (this.args.length > 0) {
+      return `${this.command} ${this.args.join(' ')}`
+    } else {
+      return this.command
+    }
+  }
 }
 
 /**
@@ -116,33 +140,36 @@ export class CommandRunner {
    * @returns
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  async exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult> {
-    if (this.verbose) this.startSpin()
+  async exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandResult> {
+    const argsParser = new ArgsParser(args)
+
+    if (this.verbose) {
+      this.startSpin()
+    }
 
     // To get error messages on unkown commands
-    if (options == null) options = {}
+    if (options == null) {
+      options = {}
+    }
 
-    if (options.shell === undefined) options.shell = true
-    if (options.encoding === undefined) options.encoding = 'utf-8'
+    if (options.shell === undefined) {
+      options.shell = true
+    }
+
+    if (options.encoding === undefined) {
+      options.encoding = 'utf-8'
+    }
+
     return await new Promise((resolve, reject) => {
-      let command
-      let commandString
-      if (args.length === 1) {
-        command = childProcess.spawn(args[0], options)
-        commandString = args[0]
-      } else {
-        command = childProcess.spawn(args[0], args.slice(1), options)
-        commandString = `${args[0]} ${args.slice(1).join(' ')}`
-      }
+      const command = childProcess.spawn(argsParser.command, argsParser.args, options)
 
       if (this.verbose) {
-        this.message = log.format('Exec: %s', commandString)
+        this.message = log.format('Exec: %s', argsParser.toString())
       }
 
       if (options?.detached != null && options.detached) {
         command.unref()
-        const result: CommandRunnerResult = { stderr: '', stdout: '' }
-        resolve(result)
+        resolve(new CommandResult({}))
       }
 
       let stdout: string = ''
@@ -165,13 +192,24 @@ export class CommandRunner {
 
       command.on('exit', (code) => {
         if (code === 0) {
-          const result: CommandRunnerResult = { stdout, stderr }
-          resolve(result)
+          resolve(new CommandResult({ stdout, stderr }))
         } else {
           reject(new Error(stderr))
         }
       })
     })
+  }
+
+  execSync (args: string[]): CommandResult {
+    const argsParser = new ArgsParser(args)
+    const command = childProcess.spawnSync(argsParser.command, argsParser.args, { encoding: 'utf-8', shell: true })
+    if (command.status !== 0) {
+      if (command.stderr != null) {
+        log.error(command.stderr)
+      }
+      throw new Error(log.formatWithoutColor('Command “%s” exists with a nonzero exit code.', argsParser.toString()))
+    }
+    return new CommandResult(command)
   }
 
   /**
