@@ -17,18 +17,34 @@ interface CmdObj {
 
 const cmd = new CommandRunner({ verbose: true })
 
-/**
- * @param srcPath - The media asset file path.
- */
+function createAudioWaveForm (srcPath: string) {
+  const destPath = `${srcPath}_waveform.png`
+  cmd.execSync([
+    'ffmpeg',
+    '-t', '60', // duration
+    '-i', srcPath,
+    '-filter_complex', 'aformat=channel_layouts=mono,compand,showwavespic=size=500x500:colors=white',
+    '-frames:v', '1',
+    '-y', // Overwrite output files without asking
+     destPath
+  ])
+  log.info('Download waveform image %s from %s.', destPath)
+}
+
+async function downloadCover (coverHttp: string, destPath: string): Promise<void> {
+  await fetchFile(coverHttp, destPath)
+  log.info('Download preview image %s from %s.', destPath, coverHttp)
+}
+
 async function createAudioPreview (srcPath: string, destPath: string): Promise<void> {
   const yamlFile = `${srcPath}.yml`
   const metaData = readYamlFile(yamlFile)
 
   if (metaData.coverSource != null) {
-    await fetchFile(metaData.coverSource, destPath)
-    log.info('Create preview image %s of an audio file.', destPath)
+    await downloadCover(metaData.coverSource, destPath)
   } else {
     log.error('No property “cover_source” found.')
+    createAudioWaveForm(srcPath)
   }
 }
 

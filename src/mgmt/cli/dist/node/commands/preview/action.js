@@ -38,19 +38,35 @@ const core_node_1 = require("@bldr/core-node");
 const cli_utils_1 = require("@bldr/cli-utils");
 const media_manager_1 = require("@bldr/media-manager");
 const cmd = new cli_utils_1.CommandRunner({ verbose: true });
-/**
- * @param srcPath - The media asset file path.
- */
+function createAudioWaveForm(srcPath) {
+    const destPath = `${srcPath}_waveform.png`;
+    cmd.execSync([
+        'ffmpeg',
+        '-t', '60',
+        '-i', srcPath,
+        '-filter_complex', 'aformat=channel_layouts=mono,compand,showwavespic=size=500x500:colors=white',
+        '-frames:v', '1',
+        '-y',
+        destPath
+    ]);
+    log.info('Download waveform image %s from %s.', destPath);
+}
+function downloadCover(coverHttp, destPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield core_node_1.fetchFile(coverHttp, destPath);
+        log.info('Download preview image %s from %s.', destPath, coverHttp);
+    });
+}
 function createAudioPreview(srcPath, destPath) {
     return __awaiter(this, void 0, void 0, function* () {
         const yamlFile = `${srcPath}.yml`;
         const metaData = file_reader_writer_1.readYamlFile(yamlFile);
         if (metaData.coverSource != null) {
-            yield core_node_1.fetchFile(metaData.coverSource, destPath);
-            log.info('Create preview image %s of an audio file.', destPath);
+            yield downloadCover(metaData.coverSource, destPath);
         }
         else {
             log.error('No property “cover_source” found.');
+            createAudioWaveForm(srcPath);
         }
     });
 }
