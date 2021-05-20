@@ -28,7 +28,7 @@ function createVideoPreviewImageOneFile(filePath, second) {
     if (second == null) {
         second = 10;
     }
-    const mimeType = media_manager_1.filePathToAssetType(filePath);
+    const mimeType = media_manager_1.filePathToMimeType(filePath);
     if (mimeType === 'video') {
         const output = `${filePath}_preview.jpg`;
         const outputFileName = path_1.default.basename(output);

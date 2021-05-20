@@ -6,7 +6,7 @@ import path from 'path'
 import chalk from 'chalk'
 
 // Project packages.
-import { filePathToAssetType, walk } from '@bldr/media-manager'
+import { filePathToMimeType, walk } from '@bldr/media-manager'
 
 /**
  * Create a video preview image.
@@ -16,7 +16,7 @@ import { filePathToAssetType, walk } from '@bldr/media-manager'
  */
 function createVideoPreviewImageOneFile (filePath: string, second: number | string): void {
   if (second == null) { second = 10 }
-  const mimeType = filePathToAssetType(filePath)
+  const mimeType = filePathToMimeType(filePath)
   if (mimeType === 'video') {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)

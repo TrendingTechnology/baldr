@@ -85,7 +85,7 @@ export function makeAsset (filePath: string): Asset {
 /**
  * @param filePath - The file path of the media asset.
  */
-export function filePathToAssetType (filePath: string): string | undefined {
+export function filePathToMimeType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
   if (asset.extension != null) { return mimeTypeManager.extensionToType(asset.extension) }
 }

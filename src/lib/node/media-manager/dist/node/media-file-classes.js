@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isPresentation = exports.isAsset = exports.filePathToAssetType = exports.makeAsset = exports.Asset = void 0;
+exports.isPresentation = exports.isAsset = exports.filePathToMimeType = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
@@ -80,13 +80,13 @@ exports.makeAsset = makeAsset;
 /**
  * @param filePath - The file path of the media asset.
  */
-function filePathToAssetType(filePath) {
+function filePathToMimeType(filePath) {
     const asset = makeAsset(filePath);
     if (asset.extension != null) {
         return client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
     }
 }
-exports.filePathToAssetType = filePathToAssetType;
+exports.filePathToMimeType = filePathToMimeType;
 /**
  * Check if the given file is a media asset.
  *

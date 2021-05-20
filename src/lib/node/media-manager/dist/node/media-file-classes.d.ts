@@ -46,7 +46,7 @@ export declare function makeAsset(filePath: string): Asset;
 /**
  * @param filePath - The file path of the media asset.
  */
-export declare function filePathToAssetType(filePath: string): string | undefined;
+export declare function filePathToMimeType(filePath: string): string | undefined;
 /**
  * Check if the given file is a media asset.
  *
