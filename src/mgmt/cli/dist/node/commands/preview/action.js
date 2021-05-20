@@ -47,6 +47,7 @@ function createAudioPreview(srcPath, destPath) {
         const metaData = file_reader_writer_1.readYamlFile(yamlFile);
         if (metaData.coverSource != null) {
             yield core_node_1.fetchFile(metaData.coverSource, destPath);
+            log.info('Create preview image %s of an audio file.', destPath);
         }
         else {
             log.error('No property “cover_source” found.');
@@ -72,16 +73,18 @@ function createVideoPreview(srcPath, destPath, second = 10) {
         '-y',
         destPath
     ]);
+    log.info('Create preview image %s of a video file.', destPath);
 }
 function createPdfPreview(srcPath, destPath) {
     destPath = destPath.replace('.jpg', '');
     cmd.execSync([
         'pdftocairo',
-        '-jpeg', '-jpegopt', 'quality=20,optimize=y',
+        '-jpeg', '-jpegopt', 'quality=30,optimize=y',
         '-singlefile',
         '-scale-to', '500',
         srcPath, destPath
     ]);
+    log.info('Create preview image %s of a PDF file.', destPath);
 }
 function createPreviewOneFile(srcPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -91,15 +94,12 @@ function createPreviewOneFile(srcPath, cmdObj) {
             return;
         }
         if (mimeType === 'video') {
-            log.info('Create preview image %s of a video file.', destPath);
             createVideoPreview(srcPath, destPath, cmdObj.second);
         }
         else if (mimeType === 'document') {
-            log.info('Create preview image %s of a PDF file.', destPath);
             createPdfPreview(srcPath, destPath);
         }
         else if (mimeType === 'audio') {
-            log.info('Create preview image %s of an audio file.', destPath);
             yield createAudioPreview(srcPath, destPath);
         }
     });

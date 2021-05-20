@@ -26,6 +26,7 @@ async function createAudioPreview (srcPath: string, destPath: string): Promise<v
 
   if (metaData.coverSource != null) {
     await fetchFile(metaData.coverSource, destPath)
+    log.info('Create preview image %s of an audio file.', destPath)
   } else {
     log.error('No property “cover_source” found.')
   }
@@ -49,17 +50,19 @@ function createVideoPreview (srcPath: string, destPath: string, second: number =
     '-y', // Overwrite output files without asking
     destPath
   ])
+  log.info('Create preview image %s of a video file.', destPath)
 }
 
 function createPdfPreview (srcPath: string, destPath: string): void {
   destPath = destPath.replace('.jpg', '')
   cmd.execSync([
     'pdftocairo',
-    '-jpeg', '-jpegopt', 'quality=20,optimize=y',
+    '-jpeg', '-jpegopt', 'quality=30,optimize=y',
     '-singlefile',
     '-scale-to', '500',
     srcPath, destPath
   ])
+  log.info('Create preview image %s of a PDF file.', destPath)
 }
 
 async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<void> {
@@ -71,13 +74,10 @@ async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<v
   }
 
   if (mimeType === 'video') {
-    log.info('Create preview image %s of a video file.', destPath)
     createVideoPreview(srcPath, destPath, cmdObj.second)
   } else if (mimeType === 'document') {
-    log.info('Create preview image %s of a PDF file.', destPath)
     createPdfPreview(srcPath, destPath)
   } else if (mimeType === 'audio') {
-    log.info('Create preview image %s of an audio file.', destPath)
     await createAudioPreview(srcPath, destPath)
   }
 }

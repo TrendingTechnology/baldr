@@ -26,6 +26,7 @@ export default validateMasterSpec({
   },
   styleConfig: {
     centerVertically: false,
+    darkMode: true,
     contentTheme: 'default'
   },
   hooks: {

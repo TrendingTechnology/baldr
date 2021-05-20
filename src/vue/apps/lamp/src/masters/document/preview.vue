@@ -5,7 +5,8 @@
       slide-preview-fullscreen
     "
   >
-    <pdf-viewer :page="pageComputed" :src="asset.httpUrl"/>
+    <img v-if="asset.previewHttpUrl" :src="asset.previewHttpUrl" class="image-contain"/>
+    <pdf-viewer v-else :page="pageComputed" :src="asset.httpUrl"/>
   </div>
 </template>
 
@@ -26,7 +27,9 @@ export default {
   },
   computed: {
     pageComputed () {
-      if (this.page) return this.page
+      if (this.page) {
+        return this.page
+      }
       return 1
     }
   }
