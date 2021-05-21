@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
 // Node packages.
@@ -28,21 +26,21 @@ let tmpDir: string
  * @returns An absolute path.
  */
 function getIconPath (...args: string[]): string {
-  return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
+  return path.join(config.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments)
 }
 
-async function downloadIcon (url: string, name: string, newName: string): Promise<void> {
+function downloadIcon (url: string, name: string, newName: string): void {
   let destName: string
-  if (newName != null) {
+  if (newName != null && newName !== '') {
     destName = newName
   } else {
     destName = name
   }
   const destination = path.join(tmpDir, `${destName}.svg`)
-  await cmd.exec(['wget', '-O', destination, url])
+  cmd.execSync(['wget', '-O', destination, url])
 }
 
-async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): Promise<void> {
+function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): void {
   cmd.startProgress()
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
@@ -50,13 +48,13 @@ async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string)
     const url = urlTemplate.replace('{icon}', oldName)
     let newName: string = oldName
     const iconDef: string | IconDefintion = iconMapping[oldName]
-    if (iconDef != null && typeof iconDef === 'string') {
+    if (typeof iconDef === 'string') {
       newName = iconDef
     } else if (typeof iconDef === 'object' && iconDef.newName != null) {
       newName = iconDef.newName
     }
 
-    await downloadIcon(url, oldName, newName)
+    downloadIcon(url, oldName, newName)
     count++
     cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName))
   }
@@ -96,10 +94,10 @@ interface WebFontConfig {
 }
 
 function convertIntoFontFiles (config: WebFontConfig): void {
-  console.log(config)
+  log.info(config)
   webfont(config)
     .then((result: { [key: string]: any }) => {
-      console.log(result)
+      log.info(result)
       const css = []
       const names = []
 
@@ -125,15 +123,15 @@ function convertIntoFontFiles (config: WebFontConfig): void {
       return result
     })
     .catch((error: Error) => {
-      console.log(error)
+      log.error(error)
       throw error
     })
 }
 
-async function buildFont (options: IconFontConfiguration[]): Promise<void> {
+function buildFont (options: IconFontConfiguration[]): void {
   for (const task of options) {
     if (task.urlTemplate != null) {
-      await downloadIcons(task.iconMapping, task.urlTemplate)
+      downloadIcons(task.iconMapping, task.urlTemplate)
     } else if (task.folder != null) {
       copyIcons(task.folder, tmpDir)
     }
@@ -147,12 +145,12 @@ async function buildFont (options: IconFontConfiguration[]): Promise<void> {
   })
 }
 
-async function action (): Promise<void> {
+function action (): void {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
   log.info('The SVG files of the icons are download to: %s', tmpDir)
 
-  await buildFont([
+  buildFont([
     config.iconFont,
     {
       folder: getIconPath('icons'),
