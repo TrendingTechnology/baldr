@@ -12,7 +12,7 @@ import webfont from 'webfont'
 import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
-import { IconFontMapping, IconFontConfiguration, IconDefintion } from '@bldr/type-definitions'
+import { IconFontMapping, IconDefintion } from '@bldr/type-definitions'
 
 const cmd = new CommandRunner()
 
@@ -36,8 +36,7 @@ function downloadIcon (url: string, name: string, newName: string): void {
   } else {
     destName = name
   }
-  const destination = path.join(tmpDir, `${destName}.svg`)
-  cmd.execSync(['wget', '-O', destination, url])
+  cmd.execSync(['wget', '-O', path.join(tmpDir, `${destName}.svg`), url])
 }
 
 function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): void {
@@ -47,7 +46,7 @@ function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): void
   for (const oldName in iconMapping) {
     const url = urlTemplate.replace('{icon}', oldName)
     let newName: string = oldName
-    const iconDef: string | IconDefintion = iconMapping[oldName]
+    const iconDef: false | string | IconDefintion = iconMapping[oldName]
     if (typeof iconDef === 'string') {
       newName = iconDef
     } else if (typeof iconDef === 'object' && iconDef.newName != null) {
@@ -93,78 +92,57 @@ interface WebFontConfig {
   descent: number
 }
 
-function convertIntoFontFiles (config: WebFontConfig): void {
+async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
   log.info(config)
-  webfont(config)
-    .then((result: { [key: string]: any }) => {
-      log.info(result)
-      const css = []
-      const names = []
 
-      const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
-      css.push(header)
+  try {
+    const result = await webfont(config)
+    log.info(result)
 
-      for (const glyphData of result.glyphsData) {
-        const name: string = glyphData.metadata.name
-        names.push(name)
-        const unicodeGlyph: string = glyphData.metadata.unicode[0]
-        const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
-        const cssGlyph = `.baldr-icon_${name}::before {
-  content: "${cssUnicodeEscape}";
+    const css = []
+    const names = []
+
+    const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
+    css.push(header)
+
+    for (const glyphData of result.glyphsData) {
+      const name: string = glyphData.metadata.name
+      names.push(name)
+      const unicodeGlyph: string = glyphData.metadata.unicode[0]
+      const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
+      const cssGlyph = `.baldr-icon_${name}::before {
+content: "${cssUnicodeEscape}";
 }
 `
-        css.push(cssGlyph)
-        log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape)
-      }
-      writeFileToDest('style.css', css.join('\n'))
-      writeFileToDest('baldr-icons.woff', result.woff)
-      writeFileToDest('baldr-icons.woff2', result.woff2)
-      writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
-      return result
-    })
-    .catch((error: Error) => {
-      log.error(error)
-      throw error
-    })
+      css.push(cssGlyph)
+      log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape)
+    }
+    writeFileToDest('style.css', css.join('\n'))
+    writeFileToDest('baldr-icons.woff', result.woff)
+    writeFileToDest('baldr-icons.woff2', result.woff2)
+    writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
+    return result
+
+  } catch (error) {
+    log.error(error)
+    throw error
+  }
 }
 
-function buildFont (options: IconFontConfiguration[]): void {
-  for (const task of options) {
-    if (task.urlTemplate != null) {
-      downloadIcons(task.iconMapping, task.urlTemplate)
-    } else if (task.folder != null) {
-      copyIcons(task.folder, tmpDir)
-    }
-  }
-  convertIntoFontFiles({
+async function action (): Promise<void> {
+  tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
+
+  log.info('The SVG files of the icons are download to: %s', tmpDir)
+
+  downloadIcons(config.iconFont.iconMapping, config.iconFont.urlTemplate)
+  copyIcons(getIconPath('icons'), tmpDir)
+  await convertIntoFontFiles({
     files: `${tmpDir}/*.svg`,
     fontName: 'baldr-icons',
     formats: ['woff', 'woff2'],
     fontHeight: 512,
     descent: 64
   })
-}
-
-function action (): void {
-  tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
-
-  log.info('The SVG files of the icons are download to: %s', tmpDir)
-
-  buildFont([
-    config.iconFont,
-    {
-      folder: getIconPath('icons'),
-      // iconMapping not used
-      iconMapping: {
-        baldr: '',
-        musescore: '',
-        wikidata: '',
-        'document-camera': '',
-        // Google icon „overscan“, not downloadable via github?
-        fullscreen: ''
-      }
-    }
-  ])
 }
 
 export = action

@@ -49,7 +49,7 @@ function createAudioWaveForm(srcPath) {
         '-y',
         destPath
     ]);
-    log.info('Download waveform image %s from %s.', destPath);
+    log.info('Create waveform image %s from %s.', destPath);
 }
 function downloadCover(coverHttp, destPath) {
     return __awaiter(this, void 0, void 0, function* () {

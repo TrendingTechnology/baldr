@@ -88,13 +88,13 @@ export interface IconDefintion {
  * ```
  */
 export interface IconFontMapping {
-    [key: string]: string | IconDefintion;
+    [key: string]: false | string | IconDefintion;
 }
 export interface IconFontConfiguration {
     /**
      * `"https://raw.github...svg/{icon}.svg"`
      */
-    urlTemplate?: string;
+    urlTemplate: string;
     /**
      * ```json
      * {
@@ -111,10 +111,6 @@ export interface IconFontConfiguration {
      * ```
      */
     iconMapping: IconFontMapping;
-    /**
-     * A path of a local folder containing SVGs to build an icon font from.
-     */
-    folder?: string;
 }
 interface AssetType {
     allowedExtensions: string[];

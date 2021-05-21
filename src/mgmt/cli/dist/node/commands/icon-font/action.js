@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 "use strict";
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -19,6 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -53,9 +61,7 @@ function downloadIcon(url, name, newName) {
     else {
         destName = name;
     }
-    console.log(`${destName}.svg`);
-    const destination = path_1.default.join(tmpDir, `${destName}.svg`);
-    cmd.execSync(['wget', '-O', destination, url]);
+    cmd.execSync(['wget', '-O', path_1.default.join(tmpDir, `${destName}.svg`), url]);
 }
 function downloadIcons(iconMapping, urlTemplate) {
     cmd.startProgress();
@@ -71,7 +77,6 @@ function downloadIcons(iconMapping, urlTemplate) {
         else if (typeof iconDef === 'object' && iconDef.newName != null) {
             newName = iconDef.newName;
         }
-        console.log(url, oldName, newName);
         downloadIcon(url, oldName, newName);
         count++;
         cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName));
@@ -101,71 +106,52 @@ function writeFileToDest(destFileName, content) {
     log.info('Create file: %s', destPath);
 }
 function convertIntoFontFiles(config) {
-    log.info(config);
-    webfont_1.default(config)
-        .then((result) => {
-        log.info(result);
-        const css = [];
-        const names = [];
-        const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
-        css.push(header);
-        for (const glyphData of result.glyphsData) {
-            const name = glyphData.metadata.name;
-            names.push(name);
-            const unicodeGlyph = glyphData.metadata.unicode[0];
-            const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16);
-            const cssGlyph = `.baldr-icon_${name}::before {
-  content: "${cssUnicodeEscape}";
+    return __awaiter(this, void 0, void 0, function* () {
+        log.info(config);
+        try {
+            const result = yield webfont_1.default(config);
+            log.info(result);
+            const css = [];
+            const names = [];
+            const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
+            css.push(header);
+            for (const glyphData of result.glyphsData) {
+                const name = glyphData.metadata.name;
+                names.push(name);
+                const unicodeGlyph = glyphData.metadata.unicode[0];
+                const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16);
+                const cssGlyph = `.baldr-icon_${name}::before {
+content: "${cssUnicodeEscape}";
 }
 `;
-            css.push(cssGlyph);
-            log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape);
+                css.push(cssGlyph);
+                log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape);
+            }
+            writeFileToDest('style.css', css.join('\n'));
+            writeFileToDest('baldr-icons.woff', result.woff);
+            writeFileToDest('baldr-icons.woff2', result.woff2);
+            writeFileToDest('icons.json', JSON.stringify(names, null, '  '));
+            return result;
         }
-        writeFileToDest('style.css', css.join('\n'));
-        writeFileToDest('baldr-icons.woff', result.woff);
-        writeFileToDest('baldr-icons.woff2', result.woff2);
-        writeFileToDest('icons.json', JSON.stringify(names, null, '  '));
-        return result;
-    })
-        .catch((error) => {
-        log.info(error);
-        throw error;
-    });
-}
-function buildFont(options) {
-    for (const task of options) {
-        if (task.urlTemplate != null) {
-            downloadIcons(task.iconMapping, task.urlTemplate);
+        catch (error) {
+            log.error(error);
+            throw error;
         }
-        else if (task.folder != null) {
-            copyIcons(task.folder, tmpDir);
-        }
-    }
-    convertIntoFontFiles({
-        files: `${tmpDir}/*.svg`,
-        fontName: 'baldr-icons',
-        formats: ['woff', 'woff2'],
-        fontHeight: 512,
-        descent: 64
     });
 }
 function action() {
-    tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
-    log.info('The SVG files of the icons are download to: %s', tmpDir);
-    buildFont([
-        config_1.default.iconFont,
-        {
-            folder: getIconPath('icons'),
-            // iconMapping not used
-            iconMapping: {
-                baldr: '',
-                musescore: '',
-                wikidata: '',
-                'document-camera': '',
-                // Google icon „overscan“, not downloadable via github?
-                fullscreen: ''
-            }
-        }
-    ]);
+    return __awaiter(this, void 0, void 0, function* () {
+        tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+        log.info('The SVG files of the icons are download to: %s', tmpDir);
+        downloadIcons(config_1.default.iconFont.iconMapping, config_1.default.iconFont.urlTemplate);
+        copyIcons(getIconPath('icons'), tmpDir);
+        yield convertIntoFontFiles({
+            files: `${tmpDir}/*.svg`,
+            fontName: 'baldr-icons',
+            formats: ['woff', 'woff2'],
+            fontHeight: 512,
+            descent: 64
+        });
+    });
 }
 module.exports = action;
