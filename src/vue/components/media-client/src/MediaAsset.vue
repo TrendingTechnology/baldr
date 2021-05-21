@@ -21,7 +21,7 @@
       </table>
 
       <div ref="mediaElementContainer" class="asset-element">
-        <img v-if="asset.previewImage" :src="asset.previewHttpUrl"/>
+        <img v-if="asset.previewHttpUrl" :src="asset.previewHttpUrl"/>
         <ol class="samples" >
           <li v-for="sample in asset.samples" :key="sample.uri">
             <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
@@ -86,10 +86,13 @@ export default {
     if (!this.asset) {
       await this.$media.resolve(this.uri)
     }
-    if (this.asset.isPlayable) {
-      this.asset.htmlElement.controls = true
+    if (this.asset.htmlElement != null) {
+      if (this.asset.isPlayable) {
+        this.asset.htmlElement.controls = true
+      }
+      this.$refs.mediaElementContainer.appendChild(this.asset.htmlElement)
     }
-    this.$refs.mediaElementContainer.appendChild(this.asset.htmlElement)
+
   }
 }
 </script>

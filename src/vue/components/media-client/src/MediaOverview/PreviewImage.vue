@@ -6,7 +6,9 @@ export default {
   render: function (createElement) {
     if (this.asset.mimeType === 'image') {
       return createElement('img', { attrs: { src: this.asset.httpUrl } })
-    } else if (this.asset.isPlayable && 'previewHttpUrl' in this.asset) {
+    } else if (this.asset.mimeType === 'document' && this.asset.previewHttpUrl != null) {
+      return createElement('img', { attrs: { src: this.asset.previewHttpUrl } })
+    } else if (this.asset.isPlayable && this.asset.previewHttpUrl != null) {
       return createElement('img', { attrs: { src: this.asset.previewHttpUrl, title: 'abspielen' } })
     } else if (this.asset.mimeType === 'video') {
       return createElement('video', { attrs: { src: this.asset.httpUrl, title: 'abspielen' } })

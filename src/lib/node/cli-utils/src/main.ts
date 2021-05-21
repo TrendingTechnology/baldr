@@ -93,9 +93,6 @@ export class CommandRunner {
     this.message = ''
   }
 
-  /**
-   *
-   */
   checkRoot (): void {
     const user = os.userInfo()
     if (user.username !== 'root') {
@@ -120,6 +117,9 @@ export class CommandRunner {
 
   /**
    * Update the Gauge progress bar.
+   *
+   * @param completed -  The percent completed as a value between 0 and 1.
+   * @param text - The text displayed to the right of the image.
    */
   updateProgress (completed: number, text: string): void {
     this.gauge.pulse()

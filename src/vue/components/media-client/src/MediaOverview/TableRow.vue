@@ -51,7 +51,7 @@ export default {
   computed: {
     dimension () {
       let dimension = ''
-      if (this.asset.mimeType === 'image') {
+      if (this.asset.mimeType === 'image' && this.asset.htmlElement.width !== 0 && this.asset.htmlElement.height !== 0) {
         dimension = `${this.asset.htmlElement.width} x ${this.asset.htmlElement.height}`
       } else if (this.asset.isPlayable) {
         dimension = formatDuration(this.asset.htmlElement.duration)
@@ -94,9 +94,14 @@ export default {
         width: 12vw;
       }
 
+      // dimension
+      &:nth-child(4) {
+        width: 10vw;
+      }
+
       &:last-child {
         text-align: right;
-        width: 10vw;
+        width: 1vw;
       }
 
       .shortcut-title {

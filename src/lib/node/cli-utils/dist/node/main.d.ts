@@ -44,9 +44,6 @@ export declare class CommandRunner {
      */
     private message;
     constructor(options?: CommandRunnerOption);
-    /**
-     *
-     */
     checkRoot(): void;
     /**
      * Start the Ora terminal spinner.
@@ -58,6 +55,9 @@ export declare class CommandRunner {
     startProgress(): void;
     /**
      * Update the Gauge progress bar.
+     *
+     * @param completed -  The percent completed as a value between 0 and 1.
+     * @param text - The text displayed to the right of the image.
      */
     updateProgress(completed: number, text: string): void;
     /**

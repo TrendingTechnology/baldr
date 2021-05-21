@@ -132,7 +132,9 @@ function action(filePaths, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         yield media_manager_1.walk({
             asset(relPath) {
-                createPreviewOneFile(relPath, cmdObj);
+                return __awaiter(this, void 0, void 0, function* () {
+                    yield createPreviewOneFile(relPath, cmdObj);
+                });
             }
         }, {
             path: filePaths

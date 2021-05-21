@@ -80,9 +80,6 @@ class CommandRunner {
         this.gauge.setTheme('ASCII');
         this.message = '';
     }
-    /**
-     *
-     */
     checkRoot() {
         const user = os_1.default.userInfo();
         if (user.username !== 'root') {
@@ -104,8 +101,12 @@ class CommandRunner {
     }
     /**
      * Update the Gauge progress bar.
+     *
+     * @param completed -  The percent completed as a value between 0 and 1.
+     * @param text - The text displayed to the right of the image.
      */
     updateProgress(completed, text) {
+        console.log(completed);
         this.gauge.pulse();
         this.gauge.show(text, completed);
     }
