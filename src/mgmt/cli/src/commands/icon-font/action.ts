@@ -122,7 +122,6 @@ content: "${cssUnicodeEscape}";
     writeFileToDest('baldr-icons.woff2', result.woff2)
     writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
     return result
-
   } catch (error) {
     log.error(error)
     throw error

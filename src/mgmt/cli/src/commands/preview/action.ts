@@ -1,6 +1,3 @@
-// Node packages.
-import path from 'path'
-
 // Project packages.
 import fs from 'fs'
 
@@ -17,7 +14,7 @@ interface CmdObj {
 
 const cmd = new CommandRunner({ verbose: true })
 
-function createAudioWaveForm (srcPath: string) {
+function createAudioWaveForm (srcPath: string): void {
   const destPath = `${srcPath}_waveform.png`
   cmd.execSync([
     'ffmpeg',
@@ -26,7 +23,7 @@ function createAudioWaveForm (srcPath: string) {
     '-filter_complex', 'aformat=channel_layouts=mono,compand,showwavespic=size=500x500:colors=white',
     '-frames:v', '1',
     '-y', // Overwrite output files without asking
-     destPath
+    destPath
   ])
   log.info('Create waveform image %s from %s.', destPath)
 }
@@ -108,8 +105,8 @@ async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<v
  */
 async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
   await walk({
-    asset (relPath) {
-      createPreviewOneFile(relPath, cmdObj)
+    async asset (relPath) {
+      await createPreviewOneFile(relPath, cmdObj)
     }
   }, {
     path: filePaths
