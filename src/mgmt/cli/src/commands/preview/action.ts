@@ -28,7 +28,7 @@ function createAudioWaveForm (srcPath: string) {
     '-y', // Overwrite output files without asking
      destPath
   ])
-  log.info('Download waveform image %s from %s.', destPath)
+  log.info('Create waveform image %s from %s.', destPath)
 }
 
 async function downloadCover (coverHttp: string, destPath: string): Promise<void> {
