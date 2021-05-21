@@ -20,15 +20,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -52,42 +43,40 @@ let tmpDir;
  * @returns An absolute path.
  */
 function getIconPath(...args) {
-    return path_1.default.join(config_1.default.localRepo, 'src', 'icons', 'src', ...arguments);
+    return path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments);
 }
 function downloadIcon(url, name, newName) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let destName;
-        if (newName != null) {
-            destName = newName;
-        }
-        else {
-            destName = name;
-        }
-        const destination = path_1.default.join(tmpDir, `${destName}.svg`);
-        yield cmd.exec(['wget', '-O', destination, url]);
-    });
+    let destName;
+    if (newName != null && newName !== '') {
+        destName = newName;
+    }
+    else {
+        destName = name;
+    }
+    console.log(`${destName}.svg`);
+    const destination = path_1.default.join(tmpDir, `${destName}.svg`);
+    cmd.execSync(['wget', '-O', destination, url]);
 }
 function downloadIcons(iconMapping, urlTemplate) {
-    return __awaiter(this, void 0, void 0, function* () {
-        cmd.startProgress();
-        const iconsCount = Object.keys(iconMapping).length;
-        let count = 0;
-        for (const oldName in iconMapping) {
-            const url = urlTemplate.replace('{icon}', oldName);
-            let newName = oldName;
-            const iconDef = iconMapping[oldName];
-            if (iconDef != null && typeof iconDef === 'string') {
-                newName = iconDef;
-            }
-            else if (typeof iconDef === 'object' && iconDef.newName != null) {
-                newName = iconDef.newName;
-            }
-            yield downloadIcon(url, oldName, newName);
-            count++;
-            cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName));
+    cmd.startProgress();
+    const iconsCount = Object.keys(iconMapping).length;
+    let count = 0;
+    for (const oldName in iconMapping) {
+        const url = urlTemplate.replace('{icon}', oldName);
+        let newName = oldName;
+        const iconDef = iconMapping[oldName];
+        if (typeof iconDef === 'string') {
+            newName = iconDef;
         }
-        cmd.stopProgress();
-    });
+        else if (typeof iconDef === 'object' && iconDef.newName != null) {
+            newName = iconDef.newName;
+        }
+        console.log(url, oldName, newName);
+        downloadIcon(url, oldName, newName);
+        count++;
+        cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName));
+    }
+    cmd.stopProgress();
 }
 /**
  * Copy svg icons for a source folder to a destination folder.
@@ -112,10 +101,10 @@ function writeFileToDest(destFileName, content) {
     log.info('Create file: %s', destPath);
 }
 function convertIntoFontFiles(config) {
-    console.log(config);
+    log.info(config);
     webfont_1.default(config)
         .then((result) => {
-        console.log(result);
+        log.info(result);
         const css = [];
         const names = [];
         const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
@@ -139,48 +128,44 @@ function convertIntoFontFiles(config) {
         return result;
     })
         .catch((error) => {
-        console.log(error);
+        log.info(error);
         throw error;
     });
 }
 function buildFont(options) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const task of options) {
-            if (task.urlTemplate != null) {
-                yield downloadIcons(task.iconMapping, task.urlTemplate);
-            }
-            else if (task.folder != null) {
-                copyIcons(task.folder, tmpDir);
-            }
+    for (const task of options) {
+        if (task.urlTemplate != null) {
+            downloadIcons(task.iconMapping, task.urlTemplate);
         }
-        convertIntoFontFiles({
-            files: `${tmpDir}/*.svg`,
-            fontName: 'baldr-icons',
-            formats: ['woff', 'woff2'],
-            fontHeight: 512,
-            descent: 64
-        });
+        else if (task.folder != null) {
+            copyIcons(task.folder, tmpDir);
+        }
+    }
+    convertIntoFontFiles({
+        files: `${tmpDir}/*.svg`,
+        fontName: 'baldr-icons',
+        formats: ['woff', 'woff2'],
+        fontHeight: 512,
+        descent: 64
     });
 }
 function action() {
-    return __awaiter(this, void 0, void 0, function* () {
-        tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
-        log.info('The SVG files of the icons are download to: %s', tmpDir);
-        yield buildFont([
-            config_1.default.iconFont,
-            {
-                folder: getIconPath('icons'),
-                // iconMapping not used
-                iconMapping: {
-                    baldr: '',
-                    musescore: '',
-                    wikidata: '',
-                    'document-camera': '',
-                    // Google icon „overscan“, not downloadable via github?
-                    fullscreen: ''
-                }
+    tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+    log.info('The SVG files of the icons are download to: %s', tmpDir);
+    buildFont([
+        config_1.default.iconFont,
+        {
+            folder: getIconPath('icons'),
+            // iconMapping not used
+            iconMapping: {
+                baldr: '',
+                musescore: '',
+                wikidata: '',
+                'document-camera': '',
+                // Google icon „overscan“, not downloadable via github?
+                fullscreen: ''
             }
-        ]);
-    });
+        }
+    ]);
 }
 module.exports = action;

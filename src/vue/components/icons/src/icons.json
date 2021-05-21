@@ -24,6 +24,7 @@
   "export",
   "fadeout",
   "file-audio",
+  "file-document",
   "file-image",
   "file-outline",
   "file-presentation-box",
