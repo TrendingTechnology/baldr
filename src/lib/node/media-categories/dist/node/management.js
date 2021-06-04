@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.process = exports.mergeNames = exports.formatFilePath = exports.detectCategoryByPath = void 0;
+exports.process = exports.searchUnknownProps = exports.mergeNames = exports.formatFilePath = exports.detectCategoryByPath = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 // Project packages.
@@ -102,7 +102,7 @@ function formatFilePath(data, oldPath) {
 }
 exports.formatFilePath = formatFilePath;
 /**
- * Check if the given argument is has value and is no empty string.
+ * Check if the given argument has a value and is no empty string.
  */
 function isValue(value) {
     if (!['string', 'boolean', 'number'].includes(typeof value)) {
@@ -303,6 +303,41 @@ function mergeNames(...name) {
 }
 exports.mergeNames = mergeNames;
 /**
+ * Add `general` to the categories name string.
+ *
+ * @param categoriesNames - A comma separated string of categories names.
+ *
+ * @returns A normalized categories names string.
+ */
+function generalizeCategoriesNames(categoriesNames) {
+    if (categoriesNames == null) {
+        categoriesNames = 'general';
+    }
+    else if (!categoriesNames.includes('general')) {
+        categoriesNames = `${categoriesNames},general`;
+    }
+    return mergeNames(...categoriesNames.split(','));
+}
+/**
+ * @returns An array of unknown props.
+ */
+function searchUnknownProps(data) {
+    data = core_browser_1.deepCopy(data);
+    data = yaml_1.convertPropertiesSnakeToCamel(data);
+    data.categories = generalizeCategoriesNames(data.categories);
+    for (const categoryName of data.categories.split(',')) {
+        const category = specs_1.categories[categoryName];
+        for (const propName in category.props) {
+            if (data[propName] != null) {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                delete data[propName];
+            }
+        }
+    }
+    return Object.keys(data);
+}
+exports.searchUnknownProps = searchUnknownProps;
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.
@@ -313,24 +348,20 @@ function process(data, filePath) {
     if (filePath != null) {
         filePath = path_1.default.resolve(filePath);
     }
+    const unknownProps = searchUnknownProps(data);
+    if (unknownProps.length > 0) {
+        throw new Error(`unknown properties: ${unknownProps.join(', ')}`);
+    }
     // The media category specification is in camel case. The meta data is
     // stored in the YAML format in snake case
     data = yaml_1.convertPropertiesSnakeToCamel(data);
-    if (data.categories == null) {
-        data.categories = 'general';
+    data.categories = generalizeCategoriesNames(data.categories);
+    for (const name of data.categories.split(',')) {
+        data = processByType(data, name, filePath);
     }
-    else if (!data.categories.includes('general')) {
-        data.categories = `${data.categories},general`;
-    }
-    if (data.categories != null) {
-        for (const name of data.categories.split(',')) {
-            data = processByType(data, name, filePath);
-        }
-    }
-    const result = data;
     // Do not convert back. This conversion should be the last step, before
     // object is converted to YAML.
     // convertProperties(data, 'camel-to-snake')
-    return result;
+    return data;
 }
 exports.process = process;

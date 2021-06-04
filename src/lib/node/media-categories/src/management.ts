@@ -99,7 +99,7 @@ export function formatFilePath (data: AssetType.YamlFormat, oldPath?: string): s
 }
 
 /**
- * Check if the given argument is has value and is no empty string.
+ * Check if the given argument has a value and is no empty string.
  */
 function isValue (value: string | boolean | number): boolean {
   if (!['string', 'boolean', 'number'].includes(typeof value)) {
@@ -327,6 +327,42 @@ export function mergeNames (...name: string[]): string {
 }
 
 /**
+ * Add `general` to the categories name string.
+ *
+ * @param categoriesNames - A comma separated string of categories names.
+ *
+ * @returns A normalized categories names string.
+ */
+function generalizeCategoriesNames (categoriesNames?: string): string {
+  if (categoriesNames == null) {
+    categoriesNames = 'general'
+  } else if (!categoriesNames.includes('general')) {
+    categoriesNames = `${categoriesNames},general`
+  }
+  return mergeNames(...categoriesNames.split(','))
+}
+
+/**
+ * @returns An array of unknown props.
+ */
+export function searchUnknownProps (data: AssetType.YamlFormat): string[] {
+  data = deepCopy(data) as AssetType.YamlFormat
+  data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
+  data.categories = generalizeCategoriesNames(data.categories)
+
+  for (const categoryName of data.categories.split(',')) {
+    const category = categories[categoryName as MediaCategory.Name]
+    for (const propName in category.props) {
+      if (data[propName] != null) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete data[propName]
+      }
+    }
+  }
+  return Object.keys(data)
+}
+
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.
@@ -337,22 +373,20 @@ export function process (data: AssetType.YamlFormat, filePath?: string): AssetTy
   if (filePath != null) {
     filePath = path.resolve(filePath)
   }
+
+  const unknownProps = searchUnknownProps(data)
+  if (unknownProps.length > 0) {
+    throw new Error(`unknown properties: ${unknownProps.join(', ')}`)
+  }
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
-  if (data.categories == null) {
-    data.categories = 'general'
-  } else if (!data.categories.includes('general')) {
-    data.categories = `${data.categories},general`
+  data.categories = generalizeCategoriesNames(data.categories)
+  for (const name of data.categories.split(',')) {
+    data = processByType(data, name as MediaCategory.Name, filePath)
   }
-  if (data.categories != null) {
-    for (const name of data.categories.split(',')) {
-      data = processByType(data, name as MediaCategory.Name, filePath)
-    }
-  }
-  const result = data
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.
   // convertProperties(data, 'camel-to-snake')
-  return result
+  return data
 }

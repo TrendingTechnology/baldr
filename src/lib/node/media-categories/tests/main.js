@@ -22,12 +22,39 @@ describe('Package “@bldr/media-categories”', function () {
     assert.strictEqual(result.cloze.props.title.title, 'Titel des Lückentextes')
     // absent
     assert.strictEqual(result.general.props.extension, undefined)
+  })
 
-    // for (const key in result) {
-    //   if (Object.hasOwnProperty.call(result, key)) {
-    //     const element = result[key]
-    //     console.log(element)
-    //   }
-    // }
+  describe('Function “searchUnknownProps()”', function () {
+    it('all known', function () {
+      const result = categoriesManagement.searchUnknownProps({
+        ref: 'test'
+      })
+      assert.deepStrictEqual(result, [])
+    })
+
+    it('unknown', function () {
+      const result = categoriesManagement.searchUnknownProps({
+        ref: 'test',
+        xxx: 'Unknown'
+      })
+      assert.deepStrictEqual(result, ['xxx'])
+    })
+
+    it('reference_subtitle unknown', function () {
+      const result = categoriesManagement.searchUnknownProps({
+        ref: 'test',
+        reference_subtitle: 'Unknown'
+      })
+      assert.deepStrictEqual(result, ['referenceSubtitle'])
+    })
+
+    it('reference_subtitle known', function () {
+      const result = categoriesManagement.searchUnknownProps({
+        ref: 'test',
+        reference_subtitle: 'Unknown',
+        categories: 'reference'
+      })
+      assert.deepStrictEqual(result, [])
+    })
   })
 })

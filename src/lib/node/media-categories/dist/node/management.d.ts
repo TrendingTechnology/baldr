@@ -30,6 +30,10 @@ export declare function formatFilePath(data: AssetType.YamlFormat, oldPath?: str
  */
 export declare function mergeNames(...name: string[]): string;
 /**
+ * @returns An array of unknown props.
+ */
+export declare function searchUnknownProps(data: AssetType.YamlFormat): string[];
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.

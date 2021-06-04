@@ -28,9 +28,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateIdPrefix = exports.validateYoutubeId = exports.validateUuid = exports.validateMediaId = exports.validateDate = exports.twoLetterAbbreviations = exports.categoriesManagement = void 0;
 const path_1 = __importDefault(require("path"));
 const client_media_models_1 = require("@bldr/client-media-models");
+const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
 exports.categoriesManagement = __importStar(require("./management"));
 __exportStar(require("./specs"), exports);
-const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
 exports.twoLetterAbbreviations = two_letter_abbreviations_1.abbreviations;
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
