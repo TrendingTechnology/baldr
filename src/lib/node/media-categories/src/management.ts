@@ -374,16 +374,16 @@ export function process (data: AssetType.YamlFormat, filePath?: string): AssetTy
     filePath = path.resolve(filePath)
   }
 
-  const unknownProps = searchUnknownProps(data)
-  if (unknownProps.length > 0) {
-    throw new Error(`unknown properties: ${unknownProps.join(', ')}`)
-  }
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
   data.categories = generalizeCategoriesNames(data.categories)
   for (const name of data.categories.split(',')) {
     data = processByType(data, name as MediaCategory.Name, filePath)
+  }
+  const unknownProps = searchUnknownProps(data)
+  if (unknownProps.length > 0) {
+    throw new Error(`unknown properties: ${unknownProps.join(', ')}`)
   }
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.

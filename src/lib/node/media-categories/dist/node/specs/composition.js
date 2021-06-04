@@ -49,9 +49,6 @@ exports.composition = {
             title: 'Veröffentlichungsdatum',
             state: 'absent'
         },
-        partOf: {
-            title: 'Teil eines übergeordneten Werks'
-        },
         // now combined in creationDate
         firstPerformance: {
             title: 'Uraufführung',

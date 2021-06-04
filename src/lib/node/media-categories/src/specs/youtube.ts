@@ -18,9 +18,7 @@ interface YoutubeCategory extends MediaCategory.Category {
 export const youtube: MediaCategory.Category = {
   title: 'YouTube-Video',
   abbreviation: 'YT',
-  detectCategoryByPath: function () {
-    return new RegExp('^.*/YT/.*.mp4$')
-  },
+  detectCategoryByPath: new RegExp('^.*/YT/.*.mp4$'),
   relPath ({ data, oldRelPath }) {
     const youtubeData = data as YoutubeFileFormat
     const oldRelDir = path.dirname(oldRelPath)

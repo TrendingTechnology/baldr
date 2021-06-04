@@ -12,9 +12,7 @@ const main_1 = require("../main");
 exports.youtube = {
     title: 'YouTube-Video',
     abbreviation: 'YT',
-    detectCategoryByPath: function () {
-        return new RegExp('^.*/YT/.*.mp4$');
-    },
+    detectCategoryByPath: new RegExp('^.*/YT/.*.mp4$'),
     relPath({ data, oldRelPath }) {
         const youtubeData = data;
         const oldRelDir = path_1.default.dirname(oldRelPath);

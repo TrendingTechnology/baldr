@@ -111,6 +111,9 @@ export const general: MediaCategory.Category = {
         alwaysUpdate: true
       }
     },
+    wikicommons: {
+      title: 'Wikicommons'
+    },
     youtube: {
       title: 'Youtube-Video-ID',
       description: 'Die Youtube-Video-ID',
@@ -120,6 +123,18 @@ export const general: MediaCategory.Category = {
         fromClaim: 'P1651',
         format: 'formatSingleValue'
       }
+    },
+    description: {
+      title: 'Beschreibung'
+    },
+    source: {
+      title: 'Quelle'
+    },
+    partOf: {
+      title: 'Teil eines übergeordneten Werks'
+    },
+    startTime: {
+      title: 'Startzeit'
     },
     // tmp property needed to generate id prefix
     filePath: {

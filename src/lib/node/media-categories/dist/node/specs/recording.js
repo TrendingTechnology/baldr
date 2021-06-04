@@ -37,6 +37,14 @@ exports.recording = {
             //   format: 'formatYear'
             // }
         },
+        album: {
+            title: 'Album',
+            state: 'absent'
+        },
+        recordingYear: {
+            title: 'Aufnahme-Jahr',
+            state: 'absent'
+        },
         cover: {
             title: 'Vorschau-Bild',
             validate: main_1.validateMediaId
