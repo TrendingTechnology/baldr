@@ -75,6 +75,9 @@ function createWindow () {
   win.on('closed', () => {
     win = null
   })
+  const menu = Menu.buildFromTemplate(getEletronMenuDef(shell, win))
+  Menu.setApplicationMenu(menu)
+  disposeContextMenu()
 }
 
 // Quit when all windows are closed.
@@ -107,7 +110,6 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  disposeContextMenu()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -124,6 +126,3 @@ if (isDevelopment) {
     })
   }
 }
-
-const menu = Menu.buildFromTemplate(getEletronMenuDef(shell, win))
-Menu.setApplicationMenu(menu)
