@@ -202,4 +202,16 @@ export interface Configuration {
    * categories configurations into the json files at `/etc/baldr.json`
    */
   mediaCategories: MediaCategory.Collection
+
+  /**
+   * Subfolders are abbreviated with uppercase two letter names:
+   *
+   * ```js
+   * {
+   *   AB: 'Arbeitsblatt',
+   *   BD: 'Bild'
+   * }
+   * ```
+   */
+  twoLetterAbbreviations: { [abbreviation: string]: string }
 }

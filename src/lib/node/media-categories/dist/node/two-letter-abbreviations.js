@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkTypeAbbreviations = exports.checkForTwoLetterDir = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = void 0;
+exports.checkTypeAbbreviations = exports.checkForTwoLetterDir = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = exports.abbreviations = void 0;
 const path_1 = __importDefault(require("path"));
-const abbreviations = {
+exports.abbreviations = {
     AB: 'Arbeitsblatt',
     BD: 'Bild',
     BS: 'Bekanntes Stück',
@@ -27,11 +27,11 @@ const abbreviations = {
     YT: 'YouTube-Video'
 };
 function isValidTwoLetterAbbreviation(abbreviation) {
-    return abbreviations[abbreviation] != null;
+    return exports.abbreviations[abbreviation] != null;
 }
 exports.isValidTwoLetterAbbreviation = isValidTwoLetterAbbreviation;
 function getTwoLetterAbbreviations() {
-    return Object.keys(abbreviations);
+    return Object.keys(exports.abbreviations);
 }
 exports.getTwoLetterAbbreviations = getTwoLetterAbbreviations;
 /**

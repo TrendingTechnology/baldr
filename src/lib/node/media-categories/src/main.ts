@@ -6,6 +6,10 @@ import { MediaUri } from '@bldr/client-media-models'
 export * as categoriesManagement from './management'
 export * from './specs'
 
+import { abbreviations } from './two-letter-abbreviations'
+
+export const twoLetterAbbreviations = abbreviations
+
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */

@@ -1,5 +1,8 @@
 export * as categoriesManagement from './management';
 export * from './specs';
+export declare const twoLetterAbbreviations: {
+    [key: string]: string;
+};
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */

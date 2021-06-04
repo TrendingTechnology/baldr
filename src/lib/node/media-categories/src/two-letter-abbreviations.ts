@@ -2,7 +2,7 @@ import path from 'path'
 
 import { MediaCategory } from '@bldr/type-definitions'
 
-const abbreviations: { [key: string]: string } = {
+export const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
   BS: 'Bekanntes Stück',

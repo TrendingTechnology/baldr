@@ -1,17 +1,22 @@
 <template>
-      <li>
-        {{ category.title }} (<span class="machine-name smaller">{{ convertCamelToSnake(name) }}</span>)
+  <li>
+    {{ category.title }}
+    (<span class="machine-name smaller">{{ convertCamelToSnake(name) }}</span>)
+    <span
+      class="machine-name smaller"
+      v-if="category.abbreviation"
+    >[{{ category.abbreviation }}]</span>
 
-        <ul>
-          <media-category-prop
-            :prop=prop
-            :name=propName
-            v-for="(prop, propName) in category.props"
-            :key="propName"
-          />
-        </ul>
+    <ul>
+      <media-category-prop
+        :prop=prop
+        :name=propName
+        v-for="(prop, propName) in category.props"
+        :key="propName"
+      />
+    </ul>
 
-      </li>
+  </li>
 </template>
 
 <script>

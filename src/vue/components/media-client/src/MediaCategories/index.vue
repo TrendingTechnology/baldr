@@ -4,7 +4,20 @@
     b-ui-theme="default"
   >
 
-    <h1>Metadaten-Kategorien</h1>
+
+    <h2>Zwei-Buchstaben-Abkürzungen</h2>
+
+    <table>
+      <tr
+        v-for="(title, abbreviation) in twoLetterAbbreviations"
+        :key="abbreviation"
+      >
+        <td class="machine-name">{{ abbreviation }}</td>
+        <td>{{ title }}</td>
+      </tr>
+    </table>
+
+    <h2>Metadaten-Kategorien</h2>
 
     <ul>
       <media-category
@@ -30,6 +43,9 @@ export default {
   computed: {
     categories () {
       return config.mediaCategories
+    },
+    twoLetterAbbreviations () {
+      return config.twoLetterAbbreviations
     }
   },
   methods: {
