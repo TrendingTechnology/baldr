@@ -9,7 +9,7 @@
         <play-button
           :sample="wrappedSample.sample"
         />
-        <span v-html="wrappedSample.titleSafe"/>
+        <span v-html="wrappedSample.title"/>
       </li>
     </ol>
   </div>

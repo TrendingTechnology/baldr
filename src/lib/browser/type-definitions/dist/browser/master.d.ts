@@ -123,9 +123,10 @@ interface MasterHooks {
      */
     afterLoading?: () => Promise<void>;
     /**
-     * This hook gets executed after the media resolution. Wait for this hook to
-     * finish. Go not in the background. Called during the parsing the YAML file
-     * (`Praesentation.baldr.yml`). Blocks.
+     * This hook gets executed after the media resolution. All media assets are
+     * resolved and stored in the corresponding caches. This hook does not go into
+     * the background. `afterMediaResolution` is called during the parsing the
+     * YAML file (`Praesentation.baldr.yml`).
      *
      * - `this`: is the main Vue instance.
      *
@@ -133,6 +134,17 @@ interface MasterHooks {
      * export const default = {
      *   hooks {
      *     async afterMediaResolution ({ props, master }) {
+     *       const svg = master.$get('svgByUri')(props.src)
+     *       if (!svg) {
+     *         const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
+     *         const response = await this.$media.httpRequest.request({
+     *           url: `/media/${mediaAsset.path}`,
+     *           method: 'get'
+     *         })
+     *         if (response.data) {
+     *           master.$commit('addSvg', { uri: props.src, markup: response.data })
+     *         }
+     *       }
      *     }
      *   }
      * }

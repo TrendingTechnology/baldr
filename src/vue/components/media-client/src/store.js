@@ -121,9 +121,9 @@ const getters = {
 const actions = {
   addAsset ({ commit, dispatch }, asset) {
     commit('addAsset', asset)
-    for (const sampleUri in asset.samples) {
-      dispatch('addSampleToPlayList', asset.samples[sampleUri])
-    }
+    // for (const sampleUri in asset.samples) {
+    //   dispatch('addSampleToPlayList', asset.samples[sampleUri])
+    // }
   },
   addSampleToPlayList ({ commit, getters }, sample) {
     const list = getters.playList

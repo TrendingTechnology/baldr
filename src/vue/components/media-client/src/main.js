@@ -457,6 +457,8 @@ class Sample {
    * @property {String} specs.shortcut - A custom shortcut
    */
   constructor (asset, { title, ref, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+    console.log(asset)
+    console.log(ref)
     /**
      * We fade in very short and smoothly to avoid audio artefacts.
      *
@@ -1732,65 +1734,6 @@ class Resolver {
   }
 
   /**
-   * Create samples for each playable media file. By default each media file
-   * has one sample called “complete”.
-   *
-   * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
-   *   `asset` object, a client side representation of a media asset.
-   *
-   * @returns {module:@bldr/media-client~Sample[]}
-   */
-  createSamples_ (asset) {
-    if (asset.isPlayable) {
-      // First sample of each playable media file is the “complete” track.
-      const completeSampleSpec = {
-        title: 'komplett',
-        ref: 'complete',
-        startTime: 0
-      }
-      for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
-        if (asset[prop]) {
-          completeSampleSpec[prop] = asset[prop]
-          delete asset[prop]
-        }
-      }
-
-      // Store all sample specs in a object to check if there is already a
-      // sample with the ref “complete”.
-      let sampleSpecs = null
-      if (asset.samples) {
-        sampleSpecs = {}
-        for (const sampleSpec of asset.samples) {
-          sampleSpecs[sampleSpec.ref] = sampleSpec
-        }
-      }
-
-      // Create the sample “complete”.
-      let sample
-      const samples = {}
-      if (!sampleSpecs || (sampleSpecs && !('complete' in sampleSpecs))) {
-        sample = new Sample(asset, completeSampleSpec)
-        samples[sample.uri] = sample
-      }
-
-      // Add further samples specifed in the yaml section.
-      if (sampleSpecs) {
-        for (const sampleId in sampleSpecs) {
-          const sampleSpec = sampleSpecs[sampleId]
-          sample = new Sample(asset, sampleSpec)
-          samples[sample.uri] = sample
-        }
-      }
-
-      for (const sampleUri in samples) {
-        samples[sampleUri].mediaElement = createMediaElement(asset)
-        store.commit('media/addSample', samples[sampleUri])
-      }
-      return samples
-    }
-  }
-
-  /**
    * @private
    *
    * @param {String} uri - For example `uuid:... ref:...`
@@ -1849,10 +1792,6 @@ class Resolver {
     // After type
     if (asset.type !== 'document') {
       asset.mediaElement = createMediaElement(asset)
-    }
-    const samples = this.createSamples_(asset)
-    if (samples) {
-      asset.samples = samples
     }
   }
 

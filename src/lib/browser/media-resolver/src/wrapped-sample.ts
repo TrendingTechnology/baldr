@@ -15,7 +15,7 @@ interface SimpleSampleSpec {
 }
 
 /**
- * This class holds the specification of the wrapped sample. The sample object
+ * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
 class WrappedSampleSpec {
@@ -65,15 +65,18 @@ class WrappedSampleSpec {
   }
 }
 
+/**
+ * This class holds the specification of a list of wrapped samples. The sample
+ * objects itself are not included in this class.
+ */
 export class WrappedSampleSpecList {
   specs: WrappedSampleSpec[]
   /**
-   * @param spec - Different input specifications are
-   *   possible:
+   * @param spec - This input options are available:
    *
    *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
    *   2. An object with the mandatory property `uri` (for example:
-   *      `{ uri: 'ref:Fuer-Elise_HB'}`).
+   *      `{ uri: 'ref:Fuer-Elise_HB' }`).
    *   3. An array
    */
   constructor (spec: string | SimpleSampleSpec | string[] | SimpleSampleSpec[]) {
@@ -101,25 +104,25 @@ export class WrappedSampleSpecList {
     }
     return uris
   }
+
+  * [Symbol.iterator] (): Generator<WrappedSampleSpec, any, any> {
+    for (const spec of this.specs) {
+      yield spec
+    }
+  }
 }
 
 /**
  * This class holds the resolve sample object.
  */
 export class WrappedSample {
-  spec: WrappedSampleSpec
+  private spec: WrappedSampleSpec
 
   private readonly sample: Sample
 
-  constructor (spec: WrappedSampleSpec) {
+  constructor (spec: WrappedSampleSpec, sample: Sample) {
     this.spec = spec
-    const sample = sampleCache.get(this.spec.uri)
-
-    if (sample != null) {
-      this.sample = sample
-    } else {
-      throw new Error(`The sample with the URI “${this.spec.uri}” coudn’t be resolved.`)
-    }
+    this.sample = sample
   }
 
   /**
@@ -130,7 +133,28 @@ export class WrappedSample {
    * constructor time.
    */
   get title (): string | undefined {
-    if (this.spec.customTitle != null) return this.spec.customTitle
-    if (this.sample.titleSafe != null) return this.sample.titleSafe
+    if (this.spec.customTitle != null) {
+      return this.spec.customTitle
+    }
+    if (this.sample.titleSafe != null) {
+      return this.sample.titleSafe
+    }
+  }
+}
+
+export class WrappedSampleList {
+  private samples: WrappedSample[]
+  constructor () {
+    this.samples = []
+  }
+
+  add(spec: WrappedSampleSpec, sample: Sample) {
+    this.samples.push(new WrappedSample(spec, sample))
+  }
+
+  * [Symbol.iterator] (): Generator<WrappedSample, any, any> {
+    for (const sample of this.samples) {
+      yield sample
+    }
   }
 }

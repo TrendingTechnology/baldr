@@ -6,11 +6,10 @@
  * @module @bldr/wrapped-sample
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
+exports.WrappedSampleList = exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
-const internal_1 = require("./internal");
 /**
- * This class holds the specification of the wrapped sample. The sample object
+ * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
 class WrappedSampleSpec {
@@ -51,14 +50,17 @@ class WrappedSampleSpec {
         }
     }
 }
+/**
+ * This class holds the specification of a list of wrapped samples. The sample
+ * objects itself are not included in this class.
+ */
 class WrappedSampleSpecList {
     /**
-     * @param spec - Different input specifications are
-     *   possible:
+     * @param spec - This input options are available:
      *
      *   1. The sample URI as a string (for example: `ref:Fuer-Elise_HB`).
      *   2. An object with the mandatory property `uri` (for example:
-     *      `{ uri: 'ref:Fuer-Elise_HB'}`).
+     *      `{ uri: 'ref:Fuer-Elise_HB' }`).
      *   3. An array
      */
     constructor(spec) {
@@ -85,21 +87,20 @@ class WrappedSampleSpecList {
         }
         return uris;
     }
+    *[Symbol.iterator]() {
+        for (const spec of this.specs) {
+            yield spec;
+        }
+    }
 }
 exports.WrappedSampleSpecList = WrappedSampleSpecList;
 /**
  * This class holds the resolve sample object.
  */
 class WrappedSample {
-    constructor(spec) {
+    constructor(spec, sample) {
         this.spec = spec;
-        const sample = internal_1.sampleCache.get(this.spec.uri);
-        if (sample != null) {
-            this.sample = sample;
-        }
-        else {
-            throw new Error(`The sample with the URI “${this.spec.uri}” coudn’t be resolved.`);
-        }
+        this.sample = sample;
     }
     /**
      * The manually set custom title or, if not set, the `titleSafe` of the
@@ -109,10 +110,26 @@ class WrappedSample {
      * constructor time.
      */
     get title() {
-        if (this.spec.customTitle != null)
+        if (this.spec.customTitle != null) {
             return this.spec.customTitle;
-        if (this.sample.titleSafe != null)
+        }
+        if (this.sample.titleSafe != null) {
             return this.sample.titleSafe;
+        }
     }
 }
 exports.WrappedSample = WrappedSample;
+class WrappedSampleList {
+    constructor() {
+        this.samples = [];
+    }
+    add(spec, sample) {
+        this.samples.push(new WrappedSample(spec, sample));
+    }
+    *[Symbol.iterator]() {
+        for (const sample of this.samples) {
+            yield sample;
+        }
+    }
+}
+exports.WrappedSampleList = WrappedSampleList;

@@ -2,13 +2,18 @@
  * @module @bldr/lamp/masters/sampleList
  */
 
-import { WrappedSampleList } from '@bldr/media-client'
+import { WrappedSampleSpecList, WrappedSampleList } from '@bldr/media-resolver'
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 export default validateMasterSpec({
   name: 'sampleList',
   title: 'Audio-Ausschnitte',
   propsDef: {
+    sampleSpecs: {
+      type: Array,
+      required: true,
+      description: 'Eine Liste von Audio-Ausschnitten-Spezifikationen (ohne Sample-Objekt).'
+    },
     samples: {
       type: Array,
       required: true,
@@ -38,11 +43,12 @@ export default validateMasterSpec({
       if (typeof props === 'string' || Array.isArray(props)) {
         props = { samples: props }
       }
-      props.samples = new WrappedSampleList(props.samples)
+      props.sampleSpecs = new WrappedSampleSpecList(props.samples)
+      props.samples = props.sampleSpecs
       return props
     },
     resolveMediaUris (props) {
-      return props.samples.uris
+      return props.sampleSpecs.uris
     },
     collectPropsMain (props) {
       return props
@@ -52,6 +58,13 @@ export default validateMasterSpec({
         return props.heading
       }
       return 'Audio-Ausschnitte'
+    },
+    async afterMediaResolution ({ props }) {
+      props.samples = new WrappedSampleList()
+      for (const sampleSpec of props.sampleSpecs) {
+        const sample = this.$store.getters['media/sampleNgByUri'](sampleSpec.uri)
+        props.samples.add(sampleSpec, sample)
+      }
     }
     // no enterSlide hook: $media is not ready yet.
     // async afterSlideNoChangeOnComponent () {
