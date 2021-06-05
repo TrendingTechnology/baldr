@@ -6,7 +6,7 @@
  * @module @bldr/wrapped-sample
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSampleList = exports.WrappedSample = exports.WrappedSampleSpecList = void 0;
+exports.WrappedSampleList = exports.WrappedSample = exports.getUrisFromWrappedSpecs = exports.WrappedSampleSpecList = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * This class holds the specification of a wrapped sample. The sample object
@@ -94,6 +94,10 @@ class WrappedSampleSpecList {
     }
 }
 exports.WrappedSampleSpecList = WrappedSampleSpecList;
+function getUrisFromWrappedSpecs(spec) {
+    return new WrappedSampleSpecList(spec).uris;
+}
+exports.getUrisFromWrappedSpecs = getUrisFromWrappedSpecs;
 /**
  * This class holds the resolve sample object.
  */

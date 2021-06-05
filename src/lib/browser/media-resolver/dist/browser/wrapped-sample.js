@@ -90,6 +90,9 @@ export class WrappedSampleSpecList {
         }
     }
 }
+export function getUrisFromWrappedSpecs(spec) {
+    return new WrappedSampleSpecList(spec).uris;
+}
 /**
  * This class holds the resolve sample object.
  */

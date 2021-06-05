@@ -5,4 +5,8 @@ export {
   resolver
 } from './internal'
 
-export { WrappedSampleSpecList, WrappedSampleList } from './wrapped-sample'
+export {
+  getUrisFromWrappedSpecs,
+  WrappedSampleList,
+  WrappedSampleSpecList
+} from './wrapped-sample'

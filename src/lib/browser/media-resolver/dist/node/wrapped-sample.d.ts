@@ -34,6 +34,7 @@ declare class WrappedSampleSpec {
      */
     constructor(spec: string | SimpleSampleSpec);
 }
+declare type WrappedSampleSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[];
 /**
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
@@ -48,18 +49,19 @@ export declare class WrappedSampleSpecList {
      *      `{ uri: 'ref:Fuer-Elise_HB' }`).
      *   3. An array
      */
-    constructor(spec: string | SimpleSampleSpec | string[] | SimpleSampleSpec[]);
+    constructor(spec: WrappedSampleSpecInput);
     /**
      * Get the URI of all wrapped samples.
      */
     get uris(): Set<string>;
     [Symbol.iterator](): Generator<WrappedSampleSpec, any, any>;
 }
+export declare function getUrisFromWrappedSpecs(spec: WrappedSampleSpecInput): Set<string>;
 /**
  * This class holds the resolve sample object.
  */
 export declare class WrappedSample {
-    private spec;
+    private readonly spec;
     private readonly sample;
     constructor(spec: WrappedSampleSpec, sample: Sample);
     /**
@@ -72,7 +74,7 @@ export declare class WrappedSample {
     get title(): string | undefined;
 }
 export declare class WrappedSampleList {
-    private samples;
+    private readonly samples;
     constructor();
     add(spec: WrappedSampleSpec, sample: Sample): void;
     [Symbol.iterator](): Generator<WrappedSample, any, any>;

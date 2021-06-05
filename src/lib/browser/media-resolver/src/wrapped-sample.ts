@@ -7,7 +7,7 @@
 
 import { MediaUri } from '@bldr/client-media-models'
 
-import { Sample, sampleCache } from './internal'
+import { Sample } from './internal'
 
 interface SimpleSampleSpec {
   uri: string
@@ -65,6 +65,8 @@ class WrappedSampleSpec {
   }
 }
 
+type WrappedSampleSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[]
+
 /**
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
@@ -79,7 +81,7 @@ export class WrappedSampleSpecList {
    *      `{ uri: 'ref:Fuer-Elise_HB' }`).
    *   3. An array
    */
-  constructor (spec: string | SimpleSampleSpec | string[] | SimpleSampleSpec[]) {
+  constructor (spec: WrappedSampleSpecInput) {
     // Make sure we have an array.
     let specArray
     if (!Array.isArray(spec)) {
@@ -112,11 +114,15 @@ export class WrappedSampleSpecList {
   }
 }
 
+export function getUrisFromWrappedSpecs (spec: WrappedSampleSpecInput): Set<string> {
+  return new WrappedSampleSpecList(spec).uris
+}
+
 /**
  * This class holds the resolve sample object.
  */
 export class WrappedSample {
-  private spec: WrappedSampleSpec
+  private readonly spec: WrappedSampleSpec
 
   private readonly sample: Sample
 
@@ -143,12 +149,12 @@ export class WrappedSample {
 }
 
 export class WrappedSampleList {
-  private samples: WrappedSample[]
+  private readonly samples: WrappedSample[]
   constructor () {
     this.samples = []
   }
 
-  add(spec: WrappedSampleSpec, sample: Sample) {
+  add (spec: WrappedSampleSpec, sample: Sample): void {
     this.samples.push(new WrappedSample(spec, sample))
   }
 
