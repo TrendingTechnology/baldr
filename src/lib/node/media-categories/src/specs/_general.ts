@@ -71,7 +71,7 @@ export const general: MediaCategory.Category = {
     },
     metaType: {
       title: 'Metadaten-Type',
-      description: 'Heißt jetzt “metaTypes”',
+      description: 'Heißt jetzt “categories”',
       state: 'absent'
     },
     metaTypes: {
@@ -85,7 +85,7 @@ export const general: MediaCategory.Category = {
       overwriteByDerived: false,
       format: function (value) {
         // a Strawinsky Petruschka Abschnitt 0_22
-        value = value.replace(/^[va] /, '')
+        value = String(value).replace(/^[va] /, '')
         return value
       },
       derive: function ({ data }) {
@@ -135,6 +135,12 @@ export const general: MediaCategory.Category = {
     },
     startTime: {
       title: 'Startzeit'
+    },
+    fadeIn: {
+      title: 'Einblendzeit'
+    },
+    shortcut: {
+      title: 'Tastenkürzel'
     },
     // tmp property needed to generate id prefix
     filePath: {

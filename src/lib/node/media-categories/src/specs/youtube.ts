@@ -65,6 +65,9 @@ export const youtube: MediaCategory.Category = {
     },
     originalInfo: {
       title: 'Der orignale Informationstext des YouTube-Videos'
+    },
+    transcription: {
+      title: 'Transkription'
     }
   }
 }

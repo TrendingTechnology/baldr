@@ -20,6 +20,7 @@ import { deepCopy } from '@bldr/core-browser'
 import { cloze } from './specs/cloze'
 import { composition } from './specs/composition'
 import { cover } from './specs/cover'
+import { documentation } from './specs/documentation'
 import { famousPiece } from './specs/famousPiece'
 import { general } from './specs/_general'
 import { group } from './specs/group'
@@ -31,6 +32,7 @@ import { recording } from './specs/recording'
 import { reference } from './specs/reference'
 import { score } from './specs/score'
 import { song } from './specs/song'
+import { videoClip } from './specs/videoClip'
 import { worksheet } from './specs/worksheet'
 import { youtube } from './specs/youtube'
 
@@ -38,6 +40,7 @@ export const categories: MediaCategory.Collection = {
   cloze,
   composition,
   cover,
+  documentation,
   famousPiece,
   group,
   instrument,
@@ -48,6 +51,7 @@ export const categories: MediaCategory.Collection = {
   reference,
   score,
   song,
+  videoClip,
   worksheet,
   youtube,
   // Applied to all

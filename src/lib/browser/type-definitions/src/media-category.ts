@@ -269,6 +269,7 @@ export type Name =
   'cloze' |
   'composition' |
   'cover' |
+  'documentation' |
   'famousPiece' |
   'group' |
   'instrument' |
@@ -279,6 +280,7 @@ export type Name =
   'reference' |
   'score' |
   'song' |
+  'videoClip' |
   'worksheet' |
   'youtube' |
   'general'
@@ -304,6 +306,7 @@ export interface Collection {
   cloze: Category
   composition: Category
   cover: Category
+  documentation: Category
   famousPiece: Category
   group: Category
   instrument: Category
@@ -314,6 +317,7 @@ export interface Collection {
   reference: Category
   score: Category
   song: Category
+  videoClip: Category
   worksheet: Category
   youtube: Category
   general: Category

@@ -61,6 +61,9 @@ exports.youtube = {
         },
         originalInfo: {
             title: 'Der orignale Informationstext des YouTube-Videos'
+        },
+        transcription: {
+            title: 'Transkription'
         }
     }
 };

@@ -68,7 +68,7 @@ exports.general = {
         },
         metaType: {
             title: 'Metadaten-Type',
-            description: 'Heißt jetzt “metaTypes”',
+            description: 'Heißt jetzt “categories”',
             state: 'absent'
         },
         metaTypes: {
@@ -82,7 +82,7 @@ exports.general = {
             overwriteByDerived: false,
             format: function (value) {
                 // a Strawinsky Petruschka Abschnitt 0_22
-                value = value.replace(/^[va] /, '');
+                value = String(value).replace(/^[va] /, '');
                 return value;
             },
             derive: function ({ data }) {
@@ -132,6 +132,12 @@ exports.general = {
         },
         startTime: {
             title: 'Startzeit'
+        },
+        fadeIn: {
+            title: 'Einblendzeit'
+        },
+        shortcut: {
+            title: 'Tastenkürzel'
         },
         // tmp property needed to generate id prefix
         filePath: {

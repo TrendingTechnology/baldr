@@ -20,6 +20,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const cloze_1 = require("./specs/cloze");
 const composition_1 = require("./specs/composition");
 const cover_1 = require("./specs/cover");
+const documentation_1 = require("./specs/documentation");
 const famousPiece_1 = require("./specs/famousPiece");
 const _general_1 = require("./specs/_general");
 const group_1 = require("./specs/group");
@@ -31,12 +32,14 @@ const recording_1 = require("./specs/recording");
 const reference_1 = require("./specs/reference");
 const score_1 = require("./specs/score");
 const song_1 = require("./specs/song");
+const videoClip_1 = require("./specs/videoClip");
 const worksheet_1 = require("./specs/worksheet");
 const youtube_1 = require("./specs/youtube");
 exports.categories = {
     cloze: cloze_1.cloze,
     composition: composition_1.composition,
     cover: cover_1.cover,
+    documentation: documentation_1.documentation,
     famousPiece: famousPiece_1.famousPiece,
     group: group_1.group,
     instrument: instrument_1.instrument,
@@ -47,6 +50,7 @@ exports.categories = {
     reference: reference_1.reference,
     score: score_1.score,
     song: song_1.song,
+    videoClip: videoClip_1.videoClip,
     worksheet: worksheet_1.worksheet,
     youtube: youtube_1.youtube,
     // Applied to all

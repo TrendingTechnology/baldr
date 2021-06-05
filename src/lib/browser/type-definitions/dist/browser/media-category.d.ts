@@ -227,7 +227,7 @@ export interface Category {
 /**
  * The name of a meta type, for example `person`, `group`.
  */
-export declare type Name = 'cloze' | 'composition' | 'cover' | 'famousPiece' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'worksheet' | 'youtube' | 'general';
+export declare type Name = 'cloze' | 'composition' | 'cover' | 'documentation' | 'famousPiece' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'videoClip' | 'worksheet' | 'youtube' | 'general';
 /**
  * Multiple meta data type names, separated by commas, for example
  * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
@@ -248,6 +248,7 @@ export interface Collection {
     cloze: Category;
     composition: Category;
     cover: Category;
+    documentation: Category;
     famousPiece: Category;
     group: Category;
     instrument: Category;
@@ -258,6 +259,7 @@ export interface Collection {
     reference: Category;
     score: Category;
     song: Category;
+    videoClip: Category;
     worksheet: Category;
     youtube: Category;
     general: Category;
