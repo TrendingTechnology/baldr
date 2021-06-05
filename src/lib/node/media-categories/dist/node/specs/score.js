@@ -1,16 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.score = void 0;
+const core_node_1 = require("@bldr/core-node");
 /**
  * The meta data type specification “score”.
  */
 exports.score = {
     title: 'Partitur',
     abbreviation: 'PT',
-    detectCategoryByPath: function () {
-        return new RegExp('^.*/PT/.*.pdf$');
-    },
+    detectCategoryByPath: new RegExp('^.*/PT/.*\.(pdf|svg|png)$'),
     props: {
+        composer: {
+            title: 'Komponist'
+        },
         imslpWorkId: {
             title: 'IMSLP-Werk-ID',
             description: 'Z. B.: The_Firebird_(Stravinsky,_Igor)'
@@ -21,6 +23,16 @@ exports.score = {
         },
         publisher: {
             title: 'Verlag'
+        },
+        pageCount: {
+            title: 'Seitenanzahl des PDFs',
+            description: 'Die Seitenanzahl dieses PDFs',
+            derive({ filePath }) {
+                if (filePath != null && filePath.match(/\.pdf$/gi)) {
+                    return core_node_1.getPdfPageCount(filePath);
+                }
+            },
+            overwriteByDerived: true
         }
     }
 };

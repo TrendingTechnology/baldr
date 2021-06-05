@@ -1,15 +1,18 @@
 import type { MediaCategory } from '@bldr/type-definitions'
 
+import { getPdfPageCount } from '@bldr/core-node'
+
 /**
  * The meta data type specification “score”.
  */
 export const score: MediaCategory.Category = {
   title: 'Partitur',
   abbreviation: 'PT',
-  detectCategoryByPath: function () {
-    return new RegExp('^.*/PT/.*.pdf$')
-  },
+  detectCategoryByPath: new RegExp('^.*/PT/.*\.(pdf|svg|png)$'),
   props: {
+    composer: {
+      title: 'Komponist'
+    },
     imslpWorkId: {
       title: 'IMSLP-Werk-ID',
       description: 'Z. B.: The_Firebird_(Stravinsky,_Igor)'
@@ -20,6 +23,16 @@ export const score: MediaCategory.Category = {
     },
     publisher: {
       title: 'Verlag'
+    },
+    pageCount: {
+      title: 'Seitenanzahl des PDFs',
+      description: 'Die Seitenanzahl dieses PDFs',
+      derive ({ filePath }) {
+        if (filePath != null && filePath.match(/\.pdf$/gi)) {
+          return getPdfPageCount(filePath)
+        }
+      },
+      overwriteByDerived: true
     }
   }
 }
