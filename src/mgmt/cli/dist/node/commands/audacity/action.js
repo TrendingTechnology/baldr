@@ -97,6 +97,6 @@ function action(filePath) {
     }
     const dest = `${filePath}.yml`;
     log.info('The content of the destination file “%s”:\n', dest);
-    file_reader_writer_1.writeYamlFile(dest, samples);
+    log.info(file_reader_writer_1.writeYamlFile(dest, { samples }));
 }
 module.exports = action;

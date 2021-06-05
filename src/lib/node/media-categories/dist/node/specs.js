@@ -21,6 +21,7 @@ const cloze_1 = require("./specs/cloze");
 const composition_1 = require("./specs/composition");
 const cover_1 = require("./specs/cover");
 const documentation_1 = require("./specs/documentation");
+const excerpt_1 = require("./specs/excerpt");
 const famousPiece_1 = require("./specs/famousPiece");
 const _general_1 = require("./specs/_general");
 const group_1 = require("./specs/group");
@@ -40,6 +41,7 @@ exports.categories = {
     composition: composition_1.composition,
     cover: cover_1.cover,
     documentation: documentation_1.documentation,
+    excerpt: excerpt_1.excerpt,
     famousPiece: famousPiece_1.famousPiece,
     group: group_1.group,
     instrument: instrument_1.instrument,

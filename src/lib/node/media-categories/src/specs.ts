@@ -21,6 +21,7 @@ import { cloze } from './specs/cloze'
 import { composition } from './specs/composition'
 import { cover } from './specs/cover'
 import { documentation } from './specs/documentation'
+import { excerpt } from './specs/excerpt'
 import { famousPiece } from './specs/famousPiece'
 import { general } from './specs/_general'
 import { group } from './specs/group'
@@ -41,6 +42,7 @@ export const categories: MediaCategory.Collection = {
   composition,
   cover,
   documentation,
+  excerpt,
   famousPiece,
   group,
   instrument,

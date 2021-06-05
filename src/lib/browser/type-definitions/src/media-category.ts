@@ -274,6 +274,7 @@ export type Name =
   'group' |
   'instrument' |
   'person' |
+  'excerpt' |
   'photo' |
   'radio' |
   'recording' |
@@ -307,6 +308,7 @@ export interface Collection {
   composition: Category
   cover: Category
   documentation: Category
+  excerpt: Category
   famousPiece: Category
   group: Category
   instrument: Category

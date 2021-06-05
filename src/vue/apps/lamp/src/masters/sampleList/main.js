@@ -3,8 +3,8 @@
  */
 
 import { WrappedSampleList } from '@bldr/media-client'
-
 import { validateMasterSpec } from '@bldr/master-toolkit'
+
 export default validateMasterSpec({
   name: 'sampleList',
   title: 'Audio-Ausschnitte',
@@ -47,8 +47,10 @@ export default validateMasterSpec({
     collectPropsMain (props) {
       return props
     },
-    titleFromProps ({ props, propsMain }) {
-      if (props.heading) return props.heading
+    titleFromProps ({ props }) {
+      if (props.heading) {
+        return props.heading
+      }
       return 'Audio-Ausschnitte'
     }
     // no enterSlide hook: $media is not ready yet.

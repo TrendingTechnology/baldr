@@ -78,7 +78,7 @@ function action (filePath: string): void {
   }
   const dest = `${filePath}.yml`
   log.info('The content of the destination file “%s”:\n', dest)
-  writeYamlFile(dest, samples)
+  log.info(writeYamlFile(dest, { samples }))
 }
 
 export = action
