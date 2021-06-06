@@ -3,13 +3,18 @@
     <h2 v-if="heading" v-html="heading"/>
     <ol :class="cssClassNotNumbered">
       <li
-        v-for="wrappedSample in samples.samples"
+        v-for="wrappedSample in samples"
         :key="wrappedSample.uri"
       >
         <play-button
+          v-if="wrappedSample.sample"
           :sample="wrappedSample.sample"
         />
-        <span v-html="wrappedSample.title"/>
+        <play-button
+          v-else
+          :sample="wrappedSample"
+        />
+        <span v-html="wrappedSample.titleSafe"/>
       </li>
     </ol>
   </div>

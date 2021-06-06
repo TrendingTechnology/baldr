@@ -7,7 +7,7 @@
     <h2 v-if="heading" v-html="heading"/>
     <ol>
       <li
-        v-for="wrappedSample in samples.samples"
+        v-for="wrappedSample in samples"
         :key="wrappedSample.uri"
         v-html="wrappedSample.titleSafe"
       />

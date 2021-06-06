@@ -54,17 +54,19 @@ function action (filePath: string): void {
         title = match[3]
       }
       title = title.trim()
-      const id = asciify(title.toLowerCase())
+      const ref = asciify(title.toLowerCase())
 
       if (startTime === endTime) {
         endTime = undefined
       }
       const sample: { [key: string]: any } = {
-        id,
+        ref,
         title,
-        startTime: startTime
+        startTime
       }
-      if (endTime == null) sample.endTime = endTime
+      if (endTime == null) {
+        sample.endTime = endTime
+      }
       samples.push(sample)
     }
     counter += 1

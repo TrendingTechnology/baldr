@@ -2,26 +2,10 @@
 
 const assert = require('assert')
 
-const { makeHttpRequestInstance } = require('@bldr/http-request')
-
 const { assetCache, sampleCache, resetMediaCache } = require('../dist/node/cache.js')
 const { resolve } = require('../dist/node/resolve.js')
 
-const config = require('@bldr/config')
-const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
-
-async function update () {
-  await httpRequest.request('mgmt/update')
-}
-
-async function resolveByUuid (uuid) {
-  return resolve('uuid:' + uuid)
-}
-
-async function resolveSingleByUuid (uuid) {
-  const assets = await resolveByUuid(uuid)
-  return assets[0]
-}
+const { update, resolveSingleByUuid, resolveByUuid } = require('./_helper.js')
 
 describe('Package “@bldr/media-resolver”', function () {
   it('resolve single', async function () {
@@ -88,13 +72,22 @@ describe('Package “@bldr/media-resolver”', function () {
     assert.strictEqual(samples[10].shortcut, undefined)
   })
 
-  it('sampleCache', async function () {
+  it('sampleCache ref: Bolero_HB_Bolero', async function () {
     resetMediaCache()
     // ref: Bolero_HB_Bolero
     await resolveSingleByUuid('538204e4-6171-42d3-924c-b3f80a954a1a')
     const samples = sampleCache.getAll()
     assert.strictEqual(samples.length, 10)
     assert.strictEqual(sampleCache.size, 10)
+  })
+
+  it('sampleCache ref: Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall', async function () {
+    resetMediaCache()
+    // ref: Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall
+    await resolveSingleByUuid('1eb60211-f3d5-45a1-a426-44926f14a32a')
+    const samples = sampleCache.getAll()
+    assert.strictEqual(samples.length, 7)
+    assert.strictEqual(sampleCache.size, 7)
   })
 
   describe('Resolve URI with fragments', function () {

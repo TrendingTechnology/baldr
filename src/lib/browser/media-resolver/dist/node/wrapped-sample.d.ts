@@ -4,6 +4,8 @@
  *
  * @module @bldr/wrapped-sample
  */
+import { ClientMediaAsset, Sample } from './internal';
+import { SampleCollection } from './sample';
 interface SimpleSampleSpec {
     uri: string;
     title?: string;
@@ -69,12 +71,20 @@ export declare class WrappedSample {
      * We have to use a getter, because the sample may not be resolved at the
      * constructor time.
      */
-    get title(): string | undefined;
+    get titleSafe(): string | undefined;
+    getSample(): Sample;
+    getAsset(): ClientMediaAsset;
 }
 export declare class WrappedSampleList {
     private readonly samples;
     constructor(specs: WrappedSpecInput);
     [Symbol.iterator](): Generator<WrappedSample, any, any>;
+    /**
+     * If the wrapped sample list has only one sample in the list and the samples
+     * of the first included asset are more than one, than return this sample
+     * collection.
+     */
+    getSamplesFromFirst(): SampleCollection | undefined;
 }
 export declare function getUrisFromWrappedSpecs(spec: WrappedSpecInput): Set<string>;
 export declare function getWrappedSampleList(spec: WrappedSpecInput): WrappedSampleList;

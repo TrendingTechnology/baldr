@@ -2,7 +2,9 @@
 
 const assert = require('assert')
 
-const { WrappedSpecList } = require('../dist/node/wrapped-sample')
+const { WrappedSpecList, WrappedSampleList } = require('../dist/node/wrapped-sample')
+const { resolveSingleByUuid, update } = require('./_helper.js')
+const { resetMediaCache } = require('../dist/node/cache.js')
 
 function createSampleSpecs (input) {
   const list = new WrappedSpecList(input)
@@ -14,38 +16,38 @@ function createSampleSpecsGetFirst (input) {
   return specs[0]
 }
 
-describe('Class “WrappedSampleList()”', function () {
+describe('Class “WrappedSpecList()”', function () {
   it('Single URI as a string', function () {
     const spec = createSampleSpecsGetFirst('ref:test')
-    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.uri, 'ref:test#complete')
   })
 
   it('Single URI as an array', function () {
     const spec = createSampleSpecsGetFirst(['ref:test'])
-    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.uri, 'ref:test#complete')
   })
 
   it('Single URI as a string with a custom title prefixed', function () {
     const spec = createSampleSpecsGetFirst('A title ref:test')
-    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.uri, 'ref:test#complete')
     assert.strictEqual(spec.customTitle, 'A title')
   })
 
   it('Single URI as a string with a custom title suffixed', function () {
     const spec = createSampleSpecsGetFirst('ref:test A title')
-    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.uri, 'ref:test#complete')
     assert.strictEqual(spec.customTitle, 'A title')
   })
 
   it('Single URI as a string with a custom title in the middle of the string', function () {
     const spec = createSampleSpecsGetFirst('prefix ref:test suffix')
-    assert.strictEqual(spec.uri, 'ref:test')
+    assert.strictEqual(spec.uri, 'ref:test#complete')
     assert.strictEqual(spec.customTitle, 'prefix suffix')
   })
 
   it('Single uuid URI as a string with a custom title in the middle of the string', function () {
     const spec = createSampleSpecsGetFirst('prefix uuid:c64047d2-983d-4009-a35f-02c95534cb53 suffix')
-    assert.strictEqual(spec.uri, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
+    assert.strictEqual(spec.uri, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete')
     assert.strictEqual(spec.customTitle, 'prefix suffix')
   })
 
@@ -60,8 +62,8 @@ describe('Class “WrappedSampleList()”', function () {
 
   it('string[]', function () {
     const specs = createSampleSpecs(['ref:test1', 'ref:test2'])
-    assert.strictEqual(specs[0].uri, 'ref:test1')
-    assert.strictEqual(specs[1].uri, 'ref:test2')
+    assert.strictEqual(specs[0].uri, 'ref:test1#complete')
+    assert.strictEqual(specs[1].uri, 'ref:test2#complete')
   })
 
   it('SimpleSampleSpec[]', function () {
@@ -88,4 +90,19 @@ describe('Class “WrappedSampleList()”', function () {
     assert.strictEqual(iterator.next().value, 'ref:test1#1')
     assert.strictEqual(iterator.next().value, 'ref:test2#2')
   })
+})
+
+it('class “WrappedSampleList()”', async function () {
+  this.timeout(10000)
+  await update()
+  resetMediaCache()
+  // ref: Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall
+  await resolveSingleByUuid('1eb60211-f3d5-45a1-a426-44926f14a32a')
+
+  const list = new WrappedSampleList('ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall')
+  const samplesCollection = list.getSamplesFromFirst()
+  assert.ok(samplesCollection != null)
+  const samples = samplesCollection.getAll()
+  assert.strictEqual(samples[0].ref, 'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#complete')
+  assert.strictEqual(samples[1].ref, 'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#1_strophe')
 })

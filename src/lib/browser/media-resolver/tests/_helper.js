@@ -2,6 +2,9 @@ const path = require('path')
 
 const { ClientMediaAsset } = require('../dist/node/asset.js')
 const { deepCopy, genUuid, getExtension } = require('@bldr/core-browser')
+const { makeHttpRequestInstance } = require('@bldr/http-request')
+const config = require('@bldr/config')
+const { resolve } = require('../dist/node/resolve.js')
 
 const assetYamlSkeleton = {
   ref: 'test',
@@ -26,6 +29,24 @@ function createAsset (spec = {}) {
   return new ClientMediaAsset(`ref:${yaml.ref}`, `http://localhost/${yaml.path}`, yaml)
 }
 
+const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
+
+async function update () {
+  await httpRequest.request('mgmt/update')
+}
+
+async function resolveByUuid (uuid) {
+  return resolve('uuid:' + uuid)
+}
+
+async function resolveSingleByUuid (uuid) {
+  const assets = await resolveByUuid(uuid)
+  return assets[0]
+}
+
 module.exports = {
-  createAsset
+  createAsset,
+  resolveSingleByUuid,
+  resolveByUuid,
+  update
 }

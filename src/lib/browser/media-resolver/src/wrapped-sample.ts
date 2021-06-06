@@ -7,7 +7,8 @@
 
 import { MediaUri } from '@bldr/client-media-models'
 
-import { Sample, sampleCache } from './internal'
+import { ClientMediaAsset, Sample, sampleCache } from './internal'
+import { SampleCollection } from './sample'
 
 interface SimpleSampleSpec {
   uri: string
@@ -61,6 +62,10 @@ class WrappedSpec {
       if (simpleSample.title != null) {
         this.customTitle = simpleSample.title
       }
+    }
+
+    if (!this.uri.includes('#')) {
+      this.uri = this.uri + '#complete'
     }
   }
 }
@@ -138,13 +143,21 @@ export class WrappedSample {
    * We have to use a getter, because the sample may not be resolved at the
    * constructor time.
    */
-  get title (): string | undefined {
+  get titleSafe (): string | undefined {
     if (this.spec.customTitle != null) {
       return this.spec.customTitle
     }
     if (this.sample.titleSafe != null) {
       return this.sample.titleSafe
     }
+  }
+
+  getSample (): Sample {
+    return this.sample
+  }
+
+  getAsset (): ClientMediaAsset {
+    return this.getSample().asset
   }
 }
 
@@ -160,6 +173,24 @@ export class WrappedSampleList {
   * [Symbol.iterator] (): Generator<WrappedSample, any, any> {
     for (const sample of this.samples) {
       yield sample
+    }
+  }
+
+  /**
+   * If the wrapped sample list has only one sample in the list and the samples
+   * of the first included asset are more than one, than return this sample
+   * collection.
+   */
+  getSamplesFromFirst (): SampleCollection | undefined {
+    if (this.samples.length === 1) {
+      const sample = this.samples[0]
+      const asset = sample.getAsset()
+      if (asset.samples != null) {
+        const samples = asset.samples
+        if (samples.size > 1) {
+          return samples
+        }
+      }
     }
   }
 }

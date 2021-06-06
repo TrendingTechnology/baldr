@@ -44,6 +44,8 @@ import { addRoutes } from './routes.js'
 
 export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/media')
 
+export const resolver = mediaResolver
+
 /**
  * The {@link https://vuex.vuejs.org/ vuex} store instance.
  * @type {Object}

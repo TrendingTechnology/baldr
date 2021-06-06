@@ -49,6 +49,9 @@ class WrappedSpec {
                 this.customTitle = simpleSample.title;
             }
         }
+        if (!this.uri.includes('#')) {
+            this.uri = this.uri + '#complete';
+        }
     }
 }
 /**
@@ -114,13 +117,19 @@ class WrappedSample {
      * We have to use a getter, because the sample may not be resolved at the
      * constructor time.
      */
-    get title() {
+    get titleSafe() {
         if (this.spec.customTitle != null) {
             return this.spec.customTitle;
         }
         if (this.sample.titleSafe != null) {
             return this.sample.titleSafe;
         }
+    }
+    getSample() {
+        return this.sample;
+    }
+    getAsset() {
+        return this.getSample().asset;
     }
 }
 exports.WrappedSample = WrappedSample;
@@ -134,6 +143,23 @@ class WrappedSampleList {
     *[Symbol.iterator]() {
         for (const sample of this.samples) {
             yield sample;
+        }
+    }
+    /**
+     * If the wrapped sample list has only one sample in the list and the samples
+     * of the first included asset are more than one, than return this sample
+     * collection.
+     */
+    getSamplesFromFirst() {
+        if (this.samples.length === 1) {
+            const sample = this.samples[0];
+            const asset = sample.getAsset();
+            if (asset.samples != null) {
+                const samples = asset.samples;
+                if (samples.size > 1) {
+                    return samples;
+                }
+            }
         }
     }
 }

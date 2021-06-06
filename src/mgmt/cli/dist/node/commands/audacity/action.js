@@ -73,17 +73,18 @@ function action(filePath) {
                 title = match[3];
             }
             title = title.trim();
-            const id = core_browser_1.asciify(title.toLowerCase());
+            const ref = core_browser_1.asciify(title.toLowerCase());
             if (startTime === endTime) {
                 endTime = undefined;
             }
             const sample = {
-                id,
+                ref,
                 title,
-                startTime: startTime
+                startTime
             };
-            if (endTime == null)
+            if (endTime == null) {
                 sample.endTime = endTime;
+            }
             samples.push(sample);
         }
         counter += 1;
