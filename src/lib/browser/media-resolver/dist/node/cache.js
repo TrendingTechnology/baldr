@@ -172,6 +172,12 @@ function translateToSampleRef(uri) {
 }
 exports.translateToSampleRef = translateToSampleRef;
 class SampleCache extends Cache {
+    get(uuidOrRef) {
+        const ref = exports.mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
 }
 exports.sampleCache = new SampleCache();
 class AssetCache extends Cache {
@@ -183,9 +189,9 @@ class AssetCache extends Cache {
         return false;
     }
     get(uuidOrRef) {
-        const id = exports.mediaUriTranslator.getRef(uuidOrRef);
-        if (id != null) {
-            return super.get(id);
+        const ref = exports.mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
         }
     }
 }

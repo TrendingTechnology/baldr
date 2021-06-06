@@ -90,6 +90,7 @@ export declare function translateToAssetRef(uri: string): string | undefined;
  */
 export declare function translateToSampleRef(uri: string): string | undefined;
 declare class SampleCache extends Cache<Sample> {
+    get(uuidOrRef: string): Sample | undefined;
 }
 export declare const sampleCache: SampleCache;
 export declare class AssetCache extends Cache<ClientMediaAsset> {
