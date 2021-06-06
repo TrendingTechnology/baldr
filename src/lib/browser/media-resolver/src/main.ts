@@ -8,5 +8,5 @@ export {
 export {
   getUrisFromWrappedSpecs,
   WrappedSampleList,
-  WrappedSampleSpecList
+  WrappedSpecList
 } from './wrapped-sample'

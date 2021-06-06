@@ -7,7 +7,7 @@
 
 import { MediaUri } from '@bldr/client-media-models'
 
-import { Sample } from './internal'
+import { Sample, sampleCache } from './internal'
 
 interface SimpleSampleSpec {
   uri: string
@@ -18,7 +18,7 @@ interface SimpleSampleSpec {
  * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
-class WrappedSampleSpec {
+class WrappedSpec {
   /**
    * The URI of a sample.
    */
@@ -65,14 +65,14 @@ class WrappedSampleSpec {
   }
 }
 
-type WrappedSampleSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[]
+type WrappedSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[]
 
 /**
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
  */
-export class WrappedSampleSpecList {
-  specs: WrappedSampleSpec[]
+export class WrappedSpecList {
+  specs: WrappedSpec[]
   /**
    * @param spec - This input options are available:
    *
@@ -81,7 +81,7 @@ export class WrappedSampleSpecList {
    *      `{ uri: 'ref:Fuer-Elise_HB' }`).
    *   3. An array
    */
-  constructor (spec: WrappedSampleSpecInput) {
+  constructor (spec: WrappedSpecInput) {
     // Make sure we have an array.
     let specArray
     if (!Array.isArray(spec)) {
@@ -92,7 +92,7 @@ export class WrappedSampleSpecList {
 
     this.specs = []
     for (const sampleSpec of specArray) {
-      this.specs.push(new WrappedSampleSpec(sampleSpec))
+      this.specs.push(new WrappedSpec(sampleSpec))
     }
   }
 
@@ -107,27 +107,27 @@ export class WrappedSampleSpecList {
     return uris
   }
 
-  * [Symbol.iterator] (): Generator<WrappedSampleSpec, any, any> {
+  * [Symbol.iterator] (): Generator<WrappedSpec, any, any> {
     for (const spec of this.specs) {
       yield spec
     }
   }
 }
 
-export function getUrisFromWrappedSpecs (spec: WrappedSampleSpecInput): Set<string> {
-  return new WrappedSampleSpecList(spec).uris
-}
-
 /**
  * This class holds the resolve sample object.
  */
 export class WrappedSample {
-  private readonly spec: WrappedSampleSpec
+  private readonly spec: WrappedSpec
 
   private readonly sample: Sample
 
-  constructor (spec: WrappedSampleSpec, sample: Sample) {
+  constructor (spec: WrappedSpec) {
     this.spec = spec
+    const sample = sampleCache.get(this.spec.uri)
+    if (sample == null) {
+      throw new Error(`The sample “${this.spec.uri}” couldn’t be loaded.`)
+    }
     this.sample = sample
   }
 
@@ -150,12 +150,11 @@ export class WrappedSample {
 
 export class WrappedSampleList {
   private readonly samples: WrappedSample[]
-  constructor () {
+  constructor (specs: WrappedSpecInput) {
     this.samples = []
-  }
-
-  add (spec: WrappedSampleSpec, sample: Sample): void {
-    this.samples.push(new WrappedSample(spec, sample))
+    for (const spec of new WrappedSpecList(specs)) {
+      this.samples.push(new WrappedSample(spec))
+    }
   }
 
   * [Symbol.iterator] (): Generator<WrappedSample, any, any> {
@@ -163,4 +162,12 @@ export class WrappedSampleList {
       yield sample
     }
   }
+}
+
+export function getUrisFromWrappedSpecs (spec: WrappedSpecInput): Set<string> {
+  return new WrappedSpecList(spec).uris
+}
+
+export function getWrappedSampleList (spec: WrappedSpecInput): WrappedSampleList {
+  return new WrappedSampleList(spec)
 }

@@ -6,13 +6,14 @@
  * @module @bldr/wrapped-sample
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSampleList = exports.WrappedSample = exports.getUrisFromWrappedSpecs = exports.WrappedSampleSpecList = void 0;
+exports.getWrappedSampleList = exports.getUrisFromWrappedSpecs = exports.WrappedSampleList = exports.WrappedSample = exports.WrappedSpecList = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
+const internal_1 = require("./internal");
 /**
  * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
-class WrappedSampleSpec {
+class WrappedSpec {
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -54,7 +55,7 @@ class WrappedSampleSpec {
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
  */
-class WrappedSampleSpecList {
+class WrappedSpecList {
     /**
      * @param spec - This input options are available:
      *
@@ -74,7 +75,7 @@ class WrappedSampleSpecList {
         }
         this.specs = [];
         for (const sampleSpec of specArray) {
-            this.specs.push(new WrappedSampleSpec(sampleSpec));
+            this.specs.push(new WrappedSpec(sampleSpec));
         }
     }
     /**
@@ -93,17 +94,17 @@ class WrappedSampleSpecList {
         }
     }
 }
-exports.WrappedSampleSpecList = WrappedSampleSpecList;
-function getUrisFromWrappedSpecs(spec) {
-    return new WrappedSampleSpecList(spec).uris;
-}
-exports.getUrisFromWrappedSpecs = getUrisFromWrappedSpecs;
+exports.WrappedSpecList = WrappedSpecList;
 /**
  * This class holds the resolve sample object.
  */
 class WrappedSample {
-    constructor(spec, sample) {
+    constructor(spec) {
         this.spec = spec;
+        const sample = internal_1.sampleCache.get(this.spec.uri);
+        if (sample == null) {
+            throw new Error(`The sample “${this.spec.uri}” couldn’t be loaded.`);
+        }
         this.sample = sample;
     }
     /**
@@ -124,11 +125,11 @@ class WrappedSample {
 }
 exports.WrappedSample = WrappedSample;
 class WrappedSampleList {
-    constructor() {
+    constructor(specs) {
         this.samples = [];
-    }
-    add(spec, sample) {
-        this.samples.push(new WrappedSample(spec, sample));
+        for (const spec of new WrappedSpecList(specs)) {
+            this.samples.push(new WrappedSample(spec));
+        }
     }
     *[Symbol.iterator]() {
         for (const sample of this.samples) {
@@ -137,3 +138,11 @@ class WrappedSampleList {
     }
 }
 exports.WrappedSampleList = WrappedSampleList;
+function getUrisFromWrappedSpecs(spec) {
+    return new WrappedSpecList(spec).uris;
+}
+exports.getUrisFromWrappedSpecs = getUrisFromWrappedSpecs;
+function getWrappedSampleList(spec) {
+    return new WrappedSampleList(spec);
+}
+exports.getWrappedSampleList = getWrappedSampleList;

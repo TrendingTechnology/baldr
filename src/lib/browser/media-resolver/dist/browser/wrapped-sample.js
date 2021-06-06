@@ -5,11 +5,12 @@
  * @module @bldr/wrapped-sample
  */
 import { MediaUri } from '@bldr/client-media-models';
+import { sampleCache } from './internal';
 /**
  * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
-class WrappedSampleSpec {
+class WrappedSpec {
     /**
      * @param spec - Different input specifications are
      *   possible:
@@ -51,7 +52,7 @@ class WrappedSampleSpec {
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
  */
-export class WrappedSampleSpecList {
+export class WrappedSpecList {
     /**
      * @param spec - This input options are available:
      *
@@ -71,7 +72,7 @@ export class WrappedSampleSpecList {
         }
         this.specs = [];
         for (const sampleSpec of specArray) {
-            this.specs.push(new WrappedSampleSpec(sampleSpec));
+            this.specs.push(new WrappedSpec(sampleSpec));
         }
     }
     /**
@@ -90,15 +91,16 @@ export class WrappedSampleSpecList {
         }
     }
 }
-export function getUrisFromWrappedSpecs(spec) {
-    return new WrappedSampleSpecList(spec).uris;
-}
 /**
  * This class holds the resolve sample object.
  */
 export class WrappedSample {
-    constructor(spec, sample) {
+    constructor(spec) {
         this.spec = spec;
+        const sample = sampleCache.get(this.spec.uri);
+        if (sample == null) {
+            throw new Error(`The sample “${this.spec.uri}” couldn’t be loaded.`);
+        }
         this.sample = sample;
     }
     /**
@@ -118,15 +120,21 @@ export class WrappedSample {
     }
 }
 export class WrappedSampleList {
-    constructor() {
+    constructor(specs) {
         this.samples = [];
-    }
-    add(spec, sample) {
-        this.samples.push(new WrappedSample(spec, sample));
+        for (const spec of new WrappedSpecList(specs)) {
+            this.samples.push(new WrappedSample(spec));
+        }
     }
     *[Symbol.iterator]() {
         for (const sample of this.samples) {
             yield sample;
         }
     }
+}
+export function getUrisFromWrappedSpecs(spec) {
+    return new WrappedSpecList(spec).uris;
+}
+export function getWrappedSampleList(spec) {
+    return new WrappedSampleList(spec);
 }

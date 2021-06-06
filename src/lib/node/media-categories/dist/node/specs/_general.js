@@ -130,6 +130,9 @@ exports.general = {
         partOf: {
             title: 'Teil eines übergeordneten Werks'
         },
+        samples: {
+            title: 'Ausschnitte'
+        },
         startTime: {
             title: 'Startzeitpunkt des Samples'
         },

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WrappedSampleSpecList = exports.WrappedSampleList = exports.getUrisFromWrappedSpecs = exports.resolver = exports.resolve = exports.translateToSampleRef = exports.translateToAssetRef = void 0;
+exports.WrappedSpecList = exports.WrappedSampleList = exports.getUrisFromWrappedSpecs = exports.resolver = exports.resolve = exports.translateToSampleRef = exports.translateToAssetRef = void 0;
 var internal_1 = require("./internal");
 Object.defineProperty(exports, "translateToAssetRef", { enumerable: true, get: function () { return internal_1.translateToAssetRef; } });
 Object.defineProperty(exports, "translateToSampleRef", { enumerable: true, get: function () { return internal_1.translateToSampleRef; } });
@@ -9,4 +9,4 @@ Object.defineProperty(exports, "resolver", { enumerable: true, get: function () 
 var wrapped_sample_1 = require("./wrapped-sample");
 Object.defineProperty(exports, "getUrisFromWrappedSpecs", { enumerable: true, get: function () { return wrapped_sample_1.getUrisFromWrappedSpecs; } });
 Object.defineProperty(exports, "WrappedSampleList", { enumerable: true, get: function () { return wrapped_sample_1.WrappedSampleList; } });
-Object.defineProperty(exports, "WrappedSampleSpecList", { enumerable: true, get: function () { return wrapped_sample_1.WrappedSampleSpecList; } });
+Object.defineProperty(exports, "WrappedSpecList", { enumerable: true, get: function () { return wrapped_sample_1.WrappedSpecList; } });

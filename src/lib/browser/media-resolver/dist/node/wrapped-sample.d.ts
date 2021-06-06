@@ -4,7 +4,6 @@
  *
  * @module @bldr/wrapped-sample
  */
-import { Sample } from './internal';
 interface SimpleSampleSpec {
     uri: string;
     title?: string;
@@ -13,7 +12,7 @@ interface SimpleSampleSpec {
  * This class holds the specification of a wrapped sample. The sample object
  * itself is not included in this class.
  */
-declare class WrappedSampleSpec {
+declare class WrappedSpec {
     /**
      * The URI of a sample.
      */
@@ -34,13 +33,13 @@ declare class WrappedSampleSpec {
      */
     constructor(spec: string | SimpleSampleSpec);
 }
-declare type WrappedSampleSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[];
+declare type WrappedSpecInput = string | SimpleSampleSpec | string[] | SimpleSampleSpec[];
 /**
  * This class holds the specification of a list of wrapped samples. The sample
  * objects itself are not included in this class.
  */
-export declare class WrappedSampleSpecList {
-    specs: WrappedSampleSpec[];
+export declare class WrappedSpecList {
+    specs: WrappedSpec[];
     /**
      * @param spec - This input options are available:
      *
@@ -49,21 +48,20 @@ export declare class WrappedSampleSpecList {
      *      `{ uri: 'ref:Fuer-Elise_HB' }`).
      *   3. An array
      */
-    constructor(spec: WrappedSampleSpecInput);
+    constructor(spec: WrappedSpecInput);
     /**
      * Get the URI of all wrapped samples.
      */
     get uris(): Set<string>;
-    [Symbol.iterator](): Generator<WrappedSampleSpec, any, any>;
+    [Symbol.iterator](): Generator<WrappedSpec, any, any>;
 }
-export declare function getUrisFromWrappedSpecs(spec: WrappedSampleSpecInput): Set<string>;
 /**
  * This class holds the resolve sample object.
  */
 export declare class WrappedSample {
     private readonly spec;
     private readonly sample;
-    constructor(spec: WrappedSampleSpec, sample: Sample);
+    constructor(spec: WrappedSpec);
     /**
      * The manually set custom title or, if not set, the `titleSafe` of the
      * `sample`.
@@ -75,8 +73,9 @@ export declare class WrappedSample {
 }
 export declare class WrappedSampleList {
     private readonly samples;
-    constructor();
-    add(spec: WrappedSampleSpec, sample: Sample): void;
+    constructor(specs: WrappedSpecInput);
     [Symbol.iterator](): Generator<WrappedSample, any, any>;
 }
+export declare function getUrisFromWrappedSpecs(spec: WrappedSpecInput): Set<string>;
+export declare function getWrappedSampleList(spec: WrappedSpecInput): WrappedSampleList;
 export {};

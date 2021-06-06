@@ -2,10 +2,10 @@
 
 const assert = require('assert')
 
-const { WrappedSampleSpecList } = require('../dist/node/wrapped-sample')
+const { WrappedSpecList } = require('../dist/node/wrapped-sample')
 
 function createSampleSpecs (input) {
-  const list = new WrappedSampleSpecList(input)
+  const list = new WrappedSpecList(input)
   return list.specs
 }
 
@@ -83,7 +83,7 @@ describe('Class “WrappedSampleList()”', function () {
   })
 
   it('getter “uris”', function () {
-    const list = new WrappedSampleSpecList(['ref:test1#1', 'ref:test2#2'])
+    const list = new WrappedSpecList(['ref:test1#1', 'ref:test2#2'])
     const iterator = list.uris.values()
     assert.strictEqual(iterator.next().value, 'ref:test1#1')
     assert.strictEqual(iterator.next().value, 'ref:test2#2')

@@ -101,8 +101,8 @@ export function formatFilePath (data: AssetType.YamlFormat, oldPath?: string): s
 /**
  * Check if the given argument has a value and is no empty string.
  */
-function isValue (value: string | boolean | number): boolean {
-  if (!['string', 'boolean', 'number'].includes(typeof value)) {
+function isValue (value: any): boolean {
+  if (value == null) {
     return false
   }
 

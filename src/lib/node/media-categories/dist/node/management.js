@@ -105,7 +105,7 @@ exports.formatFilePath = formatFilePath;
  * Check if the given argument has a value and is no empty string.
  */
 function isValue(value) {
-    if (!['string', 'boolean', 'number'].includes(typeof value)) {
+    if (value == null) {
         return false;
     }
     if (value === '') {

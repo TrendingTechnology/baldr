@@ -133,6 +133,9 @@ export const general: MediaCategory.Category = {
     partOf: {
       title: 'Teil eines übergeordneten Werks'
     },
+    samples: {
+      title: 'Ausschnitte'
+    },
     startTime: {
       title: 'Startzeitpunkt des Samples'
     },
