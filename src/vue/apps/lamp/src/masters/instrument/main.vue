@@ -1,10 +1,12 @@
 <template>
   <div class="vc_instrument_master">
     <img class="img-contain" :src="asset.httpUrl">
-    <p class="name important">{{ asset.name }}</p>
-    <p class="info-box font-shadow smaller" v-if="asset.description" v-html="asset.description"></p>
+    <p class="name important">{{ asset.yaml.name }}</p>
+    <p class="info-box font-shadow smaller" v-if="asset.yaml.description" v-html="asset.yaml.description"></p>
     <horizontal-play-buttons
-      :wrapped-samples="wrappedSampleList"
+      :samples="asset.yaml.audioSamples"
+      class="left-bottom-corner"
+      v-if="asset.yaml.audioSamples"
     />
     <external-sites :asset="asset"/>
   </div>
@@ -16,9 +18,6 @@ import ExternalSites from '@/components/ExternalSites.vue'
 export default {
   props: {
     asset: {
-      type: Object
-    },
-    wrappedSampleList: {
       type: Object
     }
   },
@@ -47,12 +46,6 @@ export default {
     .info-box {
       left: 3em;
       top: 30vh;
-    }
-
-    .vc_horizontal_play_buttons {
-      position: absolute;
-      bottom: 0.5em;
-      left: 0.5em;
     }
   }
 </style>

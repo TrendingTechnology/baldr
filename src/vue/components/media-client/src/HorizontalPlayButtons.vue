@@ -21,7 +21,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
-import { WrappedSampleList } from './main.js'
+import { resolver } from './main.js'
 
 export default {
   name: 'HorizontalPlayButtons',
@@ -63,7 +63,7 @@ export default {
         return this.wrappedSampleList
       }
       if (this.samples != null) {
-        return new WrappedSampleList(this.samples)
+        return resolver.getWrappedSampleList(this.samples)
       }
     },
     showTitlesNormalized () {

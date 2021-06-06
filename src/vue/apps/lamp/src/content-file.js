@@ -8,7 +8,7 @@
 
 import { convertToYamlRaw, convertFromYamlRaw, convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import { convertToString, shortenText, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
-import { WrappedSampleList } from '@bldr/media-client'
+import { resolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
@@ -189,25 +189,26 @@ class AudioOverlay {
     /**
      * @type {boolean}
      */
-    this.showTitles = false
+    this.showTitles = true
 
     /**
      * @type {module:@bldr/media-client.WrappedSampleList}
      */
-    this.wrappedSampleList = null
-    if (typeof rawData === 'object' && rawData.samples && rawData.showTitles) {
-      this.wrappedSampleList = new WrappedSampleList(rawData.samples)
+    // this.wrappedSampleList = null
+    if (typeof rawData === 'object' && rawData.samples != null) {
       this.showTitles = rawData.showTitles
+      this.rawData = rawData.samples
     } else {
-      this.wrappedSampleList = new WrappedSampleList(rawData)
+      this.rawData = rawData
     }
+  }
 
-    /**
-     * Media URIs as an array.
-     *
-     * @type {Array}
-     */
-    this.mediaUris = this.wrappedSampleList.uris
+  get mediaUris () {
+    return resolver.getUrisFromWrappedSpecs(this.rawData)
+  }
+
+  get wrappedSampleList () {
+    return resolver.getWrappedSampleList(this.rawData)
   }
 
   /**
