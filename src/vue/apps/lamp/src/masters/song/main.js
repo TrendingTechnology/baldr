@@ -4,6 +4,10 @@
 
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
+function convertSongIdToRef (songId) {
+  return `ref:LD_${songId}`
+}
+
 export default validateMasterSpec({
   name: 'song',
   title: 'Lied',
@@ -11,10 +15,6 @@ export default validateMasterSpec({
     songId: {
       type: String,
       description: 'Die ID des Liedes'
-    },
-    imageUri: {
-      type: String,
-      description: 'URI zu einer mehrteiligen speziellen Bild-Datei mit Lied-Informationen.'
     }
   },
   icon: {
@@ -33,20 +33,17 @@ export default validateMasterSpec({
       } else {
         propsNormalized = props
       }
-      if (!propsNormalized.imageUri) {
-        propsNormalized.imageUri = `ref:LD_${propsNormalized.songId}`
-      }
       return propsNormalized
     },
     resolveMediaUris (props) {
-      return props.imageUri
+      return convertSongIdToRef(props.songId)
     },
     calculateStepCount ({ props }) {
-      const image = this.$store.getters['media/assetByUri'](props.imageUri)
-      return image.multiPartCountActual
+      const image = this.$store.getters['media/assetNgByUri'](convertSongIdToRef(props.songId))
+      return image.multiPartCount
     },
     collectPropsMain (props) {
-      const image = this.$store.getters['media/assetByUri'](props.imageUri)
+      const image = this.$store.getters['media/assetNgByUri'](convertSongIdToRef(props.songId))
       return {
         image
       }
@@ -54,7 +51,7 @@ export default validateMasterSpec({
     collectPropsPreview ({ propsMain }) {
       return {
         imageHttpUrl: propsMain.image.httpUrl,
-        title: propsMain.image.titleCombined
+        title: propsMain.image.yaml.title
       }
     }
   }

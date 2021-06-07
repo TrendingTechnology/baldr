@@ -1,6 +1,6 @@
 <template>
   <div class="vc_song_master">
-    <h1 v-if="navNos.stepNo === 1">{{ image.titleCombined }}</h1>
+    <h1 v-if="navNos.stepNo === 1">{{ image.yaml.title }}</h1>
     <img :src="image.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
   </div>
 </template>
