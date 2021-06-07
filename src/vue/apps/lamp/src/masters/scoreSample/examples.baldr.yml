@@ -13,6 +13,12 @@ slides:
     score: uuid:fd782f52-7182-41e1-9f62-45585eb48454
     audio: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
 
+- title: With heading
+  score_sample:
+    heading: Heading
+    score: uuid:fd782f52-7182-41e1-9f62-45585eb48454
+    audio: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
+
 - title: Multi part score file
   score_sample:
     score: uuid:a3fdc611-57e6-452b-9058-248836504048

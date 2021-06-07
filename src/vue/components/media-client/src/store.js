@@ -43,9 +43,8 @@ const getters = {
   },
   assetNgByUri: (state, getters) => uri => {
     const ref = translateToAssetRef(uri)
-    console.log(ref)
     if (ref != null) {
-      return getters.assetsNg[uri]
+      return getters.assetsNg[ref]
     }
   },
   assets: state => {

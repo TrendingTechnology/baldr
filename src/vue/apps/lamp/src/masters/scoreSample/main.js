@@ -54,14 +54,11 @@ export default validateMasterSpec({
         audioSample = audio
       }
       let asset
-      console.log(props.score)
       const multiPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-      console.log(multiPartSelection)
       if (multiPartSelection) {
         asset = multiPartSelection
       } else {
         asset = this.$store.getters['media/assetNgByUri'](props.score)
-        console.log(asset)
       }
 
       return {
