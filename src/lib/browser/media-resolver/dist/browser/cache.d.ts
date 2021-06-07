@@ -1,4 +1,4 @@
-import { Sample, ClientMediaAsset } from './internal';
+import { ClientMediaAsset, MultiPartSelection, Sample } from './internal';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -98,5 +98,15 @@ export declare class AssetCache extends Cache<ClientMediaAsset> {
     get(uuidOrRef: string): ClientMediaAsset | undefined;
 }
 export declare const assetCache: AssetCache;
+/**
+ * The media asset of the multipart selection must be present in the
+ * AssetCache(), the media asset must be resolved first.
+ */
+export declare class MultiPartSelectionCache extends Cache<MultiPartSelection> {
+    get(uri: string): MultiPartSelection | undefined;
+    add(ref: string, selection: MultiPartSelection): boolean;
+}
+export declare const multiPartSelectionCache: MultiPartSelectionCache;
+export declare function getMultipartSelection(uri: string): MultiPartSelection | undefined;
 export declare function resetMediaCache(): void;
 export {};

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
+exports.resetMediaCache = exports.getMultipartSelection = exports.multiPartSelectionCache = exports.MultiPartSelectionCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
 /**
@@ -197,8 +197,45 @@ class AssetCache extends Cache {
 }
 exports.AssetCache = AssetCache;
 exports.assetCache = new AssetCache();
+/**
+ * The media asset of the multipart selection must be present in the
+ * AssetCache(), the media asset must be resolved first.
+ */
+class MultiPartSelectionCache extends Cache {
+    get(uri) {
+        if (!uri.includes('#')) {
+            throw new Error(`A multipart selection asset must have a fragment in its URI: ${uri}`);
+        }
+        const ref = exports.mediaUriTranslator.getRef(uri);
+        if (ref != null) {
+            let selection = super.get(ref);
+            if (selection != null) {
+                return selection;
+            }
+            const uriRef = new client_media_models_1.MediaUri(ref);
+            const asset = exports.assetCache.get(uriRef.uriWithoutFragment);
+            if (asset == null) {
+                throw new Error(`A client media asset must be resolved first: ${uriRef.uriWithoutFragment}`);
+            }
+            selection = new internal_1.MultiPartSelection(asset, uriRef.fragment);
+            this.add(ref, selection);
+            return selection;
+        }
+    }
+    add(ref, selection) {
+        super.add(ref, selection);
+        return true;
+    }
+}
+exports.MultiPartSelectionCache = MultiPartSelectionCache;
+exports.multiPartSelectionCache = new MultiPartSelectionCache();
+function getMultipartSelection(uri) {
+    return exports.multiPartSelectionCache.get(uri);
+}
+exports.getMultipartSelection = getMultipartSelection;
 function resetMediaCache() {
     exports.sampleCache.reset();
+    exports.multiPartSelectionCache.reset();
     exports.assetCache.reset();
     exports.mediaUriTranslator.reset();
     internal_1.sampleShortcutManager.reset();

@@ -1,6 +1,12 @@
 import { MediaUri } from '@bldr/client-media-models'
 
-import { Sample, sampleShortcutManager, ClientMediaAsset, imageShortcutCounter } from './internal'
+import {
+  ClientMediaAsset,
+  imageShortcutCounter,
+  MultiPartSelection,
+  Sample,
+  sampleShortcutManager
+} from './internal'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -221,8 +227,47 @@ export class AssetCache extends Cache<ClientMediaAsset> {
 
 export const assetCache = new AssetCache()
 
+/**
+ * The media asset of the multipart selection must be present in the
+ * AssetCache(), the media asset must be resolved first.
+ */
+export class MultiPartSelectionCache extends Cache<MultiPartSelection> {
+  get (uri: string): MultiPartSelection | undefined {
+    if (!uri.includes('#')) {
+      throw new Error(`A multipart selection asset must have a fragment in its URI: ${uri}`)
+    }
+    const ref = mediaUriTranslator.getRef(uri)
+    if (ref != null) {
+      let selection = super.get(ref)
+      if (selection != null) {
+        return selection
+      }
+      const uriRef = new MediaUri(ref)
+      const asset = assetCache.get(uriRef.uriWithoutFragment)
+      if (asset == null) {
+        throw new Error(`A client media asset must be resolved first: ${uriRef.uriWithoutFragment}`)
+      }
+      selection = new MultiPartSelection(asset, uriRef.fragment)
+      this.add(ref, selection)
+      return selection
+    }
+  }
+
+  add (ref: string, selection: MultiPartSelection): boolean {
+    super.add(ref, selection)
+    return true
+  }
+}
+
+export const multiPartSelectionCache = new MultiPartSelectionCache()
+
+export function getMultipartSelection (uri: string): MultiPartSelection | undefined {
+  return multiPartSelectionCache.get(uri)
+}
+
 export function resetMediaCache (): void {
   sampleCache.reset()
+  multiPartSelectionCache.reset()
   assetCache.reset()
   mediaUriTranslator.reset()
   sampleShortcutManager.reset()
