@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     pageComputed () {
-      if (this.page) {
+      if (this.page != null) {
         return this.page
       }
       return 1

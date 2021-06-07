@@ -52,9 +52,9 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetNgByUri'](props.src)
 
-      const picker = new ObjectPropertyPicker(props, asset)
+      const picker = new ObjectPropertyPicker(props, asset.yaml)
 
       const title = picker.pickProperty('title')
       const description = picker.pickProperty('description')
@@ -88,9 +88,13 @@ export default validateMasterSpec({
       }
     },
     titleFromProps ({ props, propsMain }) {
-      if (props.title) return props.title
+      if (props.title) {
+        return props.title
+      }
       const asset = propsMain.mediaAsset
-      if (asset.title) return asset.title
+      if (asset.yaml.title) {
+        return asset.yaml.title
+      }
     },
     afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
       // overlay

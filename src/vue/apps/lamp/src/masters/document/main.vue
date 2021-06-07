@@ -25,7 +25,9 @@ export default {
   },
   computed: {
     pageComputed () {
-      if (this.page) return this.page
+      if (this.page != null) {
+        return this.page
+      }
       return this.navNos.stepNo
     }
   }

@@ -3,8 +3,8 @@
     <img class="img-contain" :src="asset.httpUrl">
     <p
       class="short-history font-shadow"
-      v-if="asset.shortHistory"
-      v-html="asset.shortHistory"
+      v-if="asset.yaml.shortHistory"
+      v-html="asset.yaml.shortHistory"
     />
     <p class="members transparent-box font-shadow">
       <span class="important big">Mitglieder: </span>
@@ -19,13 +19,13 @@
         <span v-if="startDate" class="start-date">Gründung: {{ startDate }}</span>
         <span v-if="endDate" class="end-date">Auflösung: {{ endDate }}</span>
       </div>
-      <p class="name important transparent-background font-shadow">{{ asset.name }}</p>
+      <p class="name important transparent-background font-shadow">{{ asset.yaml.name }}</p>
     </div>
     <external-sites :asset="asset"/>
     <horizontal-play-buttons
-      :samples="asset.famousPieces"
+      :samples="asset.yaml.famousPieces"
       class="left-bottom-corner"
-      v-if="asset.famousPieces"
+      v-if="asset.yaml.famousPieces"
     />
   </div>
 </template>
@@ -45,18 +45,22 @@ export default {
   },
   computed: {
     startDate () {
-      if (this.asset.startDate) return formatToYear(this.asset.startDate)
-      return ''
+      if (this.asset.yaml.startDate) {
+        return formatToYear(this.asset.yaml.startDate)
+      }
+      return false
     },
     endDate () {
-      if (this.asset.endDate) return formatToYear(this.asset.endDate)
-      return ''
+      if (this.asset.yaml.endDate) {
+        return formatToYear(this.asset.yaml.endDate)
+      }
+      return false
     },
     members () {
-      if (Array.isArray(this.asset.members)) {
-        return this.asset.members
-      } else if (typeof this.asset.members === 'string') {
-        return [this.asset.members]
+      if (Array.isArray(this.asset.yaml.members)) {
+        return this.asset.yaml.members
+      } else if (typeof this.asset.yaml.members === 'string') {
+        return [this.asset.yaml.members]
       }
       return []
     }

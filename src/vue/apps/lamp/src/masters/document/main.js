@@ -42,22 +42,26 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetNgByUri'](props.src)
       const output = {
         asset
       }
-      if (props.page) output.page = props.page
+      if (props.page) {
+        output.page = props.page
+      }
       return output
     },
     calculateStepCount ({ propsMain }) {
       if (propsMain.page) return 1
       const asset = propsMain.asset
-      if (asset.pageCount && asset.pageCount > 1) {
-        return asset.pageCount
+      if (asset.yaml.pageCount != null && asset.yaml.pageCount > 1) {
+        return asset.yaml.pageCount
       }
     },
     titleFromProps ({ propsMain }) {
-      if (propsMain.asset.title) return propsMain.asset.title
+      if (propsMain.asset.yaml.title != null) {
+        return propsMain.asset.title
+      }
     }
     // Fit into slide main
     // afterStepNoChangeOnComponent () {
