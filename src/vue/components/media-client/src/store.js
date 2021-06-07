@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 
-import { translateToAssetRef, translateToSampleRef } from '@bldr/media-resolver'
+import * as resolver from '@bldr/media-resolver'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
@@ -42,7 +42,7 @@ const getters = {
     return getters.assets[uri]
   },
   assetNgByUri: (state, getters) => uri => {
-    const ref = translateToAssetRef(uri)
+    const ref = resolver.translateToAssetRef(uri)
     if (ref != null) {
       return getters.assetsNg[ref]
     }
@@ -67,6 +67,7 @@ const getters = {
     return Object.keys(getters.assets).length > 0
   },
   multiPartSelectionByUri: state => uri => {
+    resolver.getMultipartSelection(uri)
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
     return state.multiPartSelections[uri]
   },
@@ -107,7 +108,7 @@ const getters = {
   sampleNgByUri: (state, getters) => uri => {
     if (!uri) return
     const samplesNg = getters.samplesNg
-    const ref = translateToSampleRef(uri)
+    const ref = resolver.translateToSampleRef(uri)
     return samplesNg[ref]
   },
   samplePlayListCurrent: (state, getters) => {

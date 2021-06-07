@@ -1,2 +1,2 @@
-export { translateToAssetRef, translateToSampleRef, resolve, resolver } from './internal';
+export { getMultipartSelection, resolve, resolver, translateToAssetRef, translateToSampleRef } from './internal';
 export { getUrisFromWrappedSpecs, getWrappedSampleList } from './wrapped-sample';

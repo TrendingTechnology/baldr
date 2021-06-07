@@ -1,8 +1,9 @@
 export {
-  translateToAssetRef,
-  translateToSampleRef,
+  getMultipartSelection,
   resolve,
-  resolver
+  resolver,
+  translateToAssetRef,
+  translateToSampleRef
 } from './internal'
 
 export {

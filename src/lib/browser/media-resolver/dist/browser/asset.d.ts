@@ -117,7 +117,7 @@ export declare class ClientMediaAsset {
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export declare class MultiPartSelection {
-    selectionSpec?: string;
+    selectionSpec: string;
     asset: ClientMediaAsset;
     partNos: number[];
     /**
@@ -127,10 +127,10 @@ export declare class MultiPartSelection {
      */
     uri: string;
     /**
-     * @param selectionSpec - Can be a uri, everthing after `#`, for
+     * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
      */
-    constructor(asset: ClientMediaAsset, selectionSpec?: string);
+    constructor(asset: ClientMediaAsset, selectionSpec: string);
     /**
      * The URI using the `ref` authority.
      */

@@ -214,14 +214,11 @@ export class ClientMediaAsset {
  */
 export class MultiPartSelection {
     /**
-     * @param selectionSpec - Can be a uri, everthing after `#`, for
+     * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
      */
     constructor(asset, selectionSpec) {
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-        if (selectionSpec != null && (selectionSpec === null || selectionSpec === void 0 ? void 0 : selectionSpec.includes('#')) && typeof selectionSpec === 'string') {
-            this.selectionSpec = selectionSpec.replace(/^.*#/, '');
-        }
+        this.selectionSpec = selectionSpec.replace(/^.*#/, '');
         this.asset = asset;
         if (this.selectionSpec == null) {
             this.uri = this.asset.uri.raw;

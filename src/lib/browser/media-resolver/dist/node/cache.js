@@ -204,7 +204,7 @@ exports.assetCache = new AssetCache();
 class MultiPartSelectionCache extends Cache {
     get(uri) {
         if (!uri.includes('#')) {
-            throw new Error(`A multipart selection asset must have a fragment in its URI: ${uri}`);
+            return;
         }
         const ref = exports.mediaUriTranslator.getRef(uri);
         if (ref != null) {
@@ -217,7 +217,7 @@ class MultiPartSelectionCache extends Cache {
             if (asset == null) {
                 throw new Error(`A client media asset must be resolved first: ${uriRef.uriWithoutFragment}`);
             }
-            selection = new internal_1.MultiPartSelection(asset, uriRef.fragment);
+            selection = new internal_1.MultiPartSelection(asset, ref);
             this.add(ref, selection);
             return selection;
         }

@@ -269,7 +269,7 @@ export class ClientMediaAsset {
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export class MultiPartSelection {
-  selectionSpec?: string
+  selectionSpec: string
   asset: ClientMediaAsset
   partNos: number[]
 
@@ -281,14 +281,11 @@ export class MultiPartSelection {
   uri: string
 
   /**
-   * @param selectionSpec - Can be a uri, everthing after `#`, for
+   * @param selectionSpec - Can be a URI, everthing after `#`, for
    * example `ref:Song-2#2-5` -> `2-5`
    */
-  constructor (asset: ClientMediaAsset, selectionSpec?: string) {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (selectionSpec != null && selectionSpec?.includes('#') && typeof selectionSpec === 'string') {
-      this.selectionSpec = selectionSpec.replace(/^.*#/, '')
-    }
+  constructor (asset: ClientMediaAsset, selectionSpec: string) {
+    this.selectionSpec = selectionSpec.replace(/^.*#/, '')
 
     this.asset = asset
 

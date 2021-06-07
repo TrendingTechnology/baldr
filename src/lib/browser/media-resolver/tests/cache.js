@@ -6,6 +6,8 @@ const {
   assetCache,
   sampleCache,
   resetMediaCache,
+  multiPartSelectionCache,
+  getMultipartSelection,
   mediaUriTranslator,
   MediaUriTranslator,
   translateToAssetRef,
@@ -114,4 +116,16 @@ it('Function “translateToSampleRef()”', function () {
     translateToSampleRef('ref:test1'),
     'ref:test1#complete'
   )
+})
+
+it('Instance “multipartSelectionCache()”', function () {
+  resetMediaCache()
+  createAsset({ ref: 'test1' })
+  const selection = getMultipartSelection('ref:test1#1,2')
+  assert.strictEqual(multiPartSelectionCache.size, 1)
+  assert.strictEqual(selection.selectionSpec, '1,2')
+  getMultipartSelection('ref:test1#1,2')
+  assert.strictEqual(multiPartSelectionCache.size, 1)
+  getMultipartSelection('ref:test1#3')
+  assert.strictEqual(multiPartSelectionCache.size, 2)
 })
