@@ -75,14 +75,6 @@ class ClientMediaAsset {
         }
     }
     /**
-     * Store the file name from a HTTP URL.
-     *
-     * @param {String} url
-     */
-    // filenameFromHTTPUrl (url) {
-    //   this.filename = url.split('/').pop()
-    // }
-    /**
      * Each media asset can have a preview image. The suffix `_preview.jpg`
      * is appended on the path. For example
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
@@ -113,78 +105,6 @@ class ClientMediaAsset {
     get isVisible() {
         return ['image', 'video'].includes(this.mimeType);
     }
-    /**
-     * All plain text collected from the properties except some special properties.
-     *
-     * @type {string}
-     */
-    // get plainText () {
-    //   const output = []
-    //   const excludedProperties = [
-    //     'mimeType',
-    //     'extension',
-    //     'filename',
-    //     'httpUrl',
-    //     'id',
-    //     'mediaElement',
-    //     'categories',
-    //     'musicbrainzRecordingId',
-    //     'musicbrainzWorkId',
-    //     'path',
-    //     'previewHttpUrl',
-    //     'previewImage',
-    //     'samples',
-    //     'mainImage',
-    //     'shortcut',
-    //     'size',
-    //     'source',
-    //     'timeModified',
-    //     'type',
-    //     'uri',
-    //     'uriAuthority',
-    //     'uriRaw',
-    //     'uriScheme',
-    //     'uuid',
-    //     'wikidata',
-    //     'youtube'
-    //   ]
-    //   for (const property in this) {
-    //     if (this[property] && !excludedProperties.includes(property)) {
-    //       output.push(this[property])
-    //     }
-    //   }
-    //   return convertHtmlToPlainText(output.join(' | '))
-    // }
-    /**
-     * The vue router link of the component `MediaAsset.vue`.
-     *
-     * Examples:
-     * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
-     *
-     * @type {string}
-     */
-    // get routerLink () {
-    //   return `#/media/${this.uriScheme}/${this.uriAuthority}`
-    // }
-    /**
-     * Sort properties alphabetically aand move some important ones to the
-     * begining of the array.
-     *
-     * @return {Array}
-     */
-    // get propertiesSorted () {
-    //   let properties = Object.keys(this)
-    //   properties = properties.sort()
-    //   function moveOnFirstPosition (properties, property) {
-    //     properties = properties.filter(item => item !== property)
-    //     properties.unshift(property)
-    //     return properties
-    //   }
-    //   for (const property of ['id', 'uri', 'title']) {
-    //     properties = moveOnFirstPosition(properties, property)
-    //   }
-    //   return properties
-    // }
     /**
      * The actual multi part asset count. If the multi part asset is restricted
      * the method returns 1, else the count of all the parts.
@@ -235,23 +155,12 @@ class MultiPartSelection {
     /**
      * The URI using the `ref` authority.
      */
-    get uriRef() {
+    get ref() {
         if (this.selectionSpec == null) {
             return this.asset.yaml.ref;
         }
         else {
             return `${this.asset.yaml.ref}#${this.selectionSpec}`;
-        }
-    }
-    /**
-     * The URI using the `uuid` authority.
-     */
-    get uriUuid() {
-        if (this.selectionSpec == null) {
-            return this.asset.yaml.uuid;
-        }
-        else {
-            return `${this.asset.yaml.uuid}#${this.selectionSpec}`;
         }
     }
     get partCount() {

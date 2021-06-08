@@ -59,11 +59,6 @@ export declare class ClientMediaAsset {
     set shortcut(value: string | undefined);
     get shortcut(): string | undefined;
     /**
-     * Store the file name from a HTTP URL.
-     *
-     * @param {String} url
-     */
-    /**
      * Each media asset can have a preview image. The suffix `_preview.jpg`
      * is appended on the path. For example
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
@@ -78,25 +73,6 @@ export declare class ClientMediaAsset {
      * True if the media file is visible, for example an image or a video file.
      */
     get isVisible(): boolean;
-    /**
-     * All plain text collected from the properties except some special properties.
-     *
-     * @type {string}
-     */
-    /**
-     * The vue router link of the component `MediaAsset.vue`.
-     *
-     * Examples:
-     * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
-     *
-     * @type {string}
-     */
-    /**
-     * Sort properties alphabetically aand move some important ones to the
-     * begining of the array.
-     *
-     * @return {Array}
-     */
     /**
      * The actual multi part asset count. If the multi part asset is restricted
      * the method returns 1, else the count of all the parts.
@@ -134,11 +110,7 @@ export declare class MultiPartSelection {
     /**
      * The URI using the `ref` authority.
      */
-    get uriRef(): string;
-    /**
-     * The URI using the `uuid` authority.
-     */
-    get uriUuid(): string;
+    get ref(): string;
     get partCount(): number;
     /**
      * Used for the preview to fake that this class is a normal asset.

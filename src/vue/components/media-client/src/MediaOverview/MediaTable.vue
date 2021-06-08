@@ -45,11 +45,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['assetsNg']),
+    ...mapGetters(['assets']),
     assetsByMimeType () {
       const output = []
-      for (const ref in this.assetsNg) {
-        const asset = this.assetsNg[ref]
+      for (const ref in this.assets) {
+        const asset = this.assets[ref]
         if (asset.mimeType === this.mimeType) {
           output.push(asset)
         }
