@@ -60,20 +60,22 @@ export default validateMasterSpec({
     async afterMediaResolution ({ props, master }) {
       const svg = master.$get('svgByUri')(props.src)
       if (!svg) {
-        const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
+        const mediaAsset = this.$store.getters['media/assetNgByUri'](props.src)
         const response = await this.$media.httpRequest.request({
-          url: `/media/${mediaAsset.path}`,
+          url: `/media/${mediaAsset.yaml.path}`,
           method: 'get'
         })
-        if (response.data) master.$commit('addSvg', { uri: props.src, markup: response.data })
+        if (response.data) {
+          master.$commit('addSvg', { uri: props.src, markup: response.data })
+        }
       }
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetNgByUri'](props.src)
       return {
         src: props.src,
-        svgPath: asset.path,
-        svgTitle: asset.title,
+        svgPath: asset.yaml.path,
+        svgTitle: asset.yaml.title,
         svgHttpUrl: asset.httpUrl,
         stepSelector: props.stepSelector,
         stepSubset: props.stepSubset

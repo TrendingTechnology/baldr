@@ -465,7 +465,7 @@ export class Slide {
   get assets () {
     const assets = []
     for (const mediaUri of this.mediaUris) {
-      assets.push(store.getters['media/assetByUri'](mediaUri))
+      assets.push(store.getters['media/assetNgByUri'](mediaUri))
     }
     return assets
   }

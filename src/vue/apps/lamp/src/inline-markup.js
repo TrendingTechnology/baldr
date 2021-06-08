@@ -97,16 +97,16 @@ export function render (item) {
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.uri) {
-    const asset = vue.$store.getters['media/assetByUri'](item.uri)
+    const asset = vue.$store.getters['media/assetNgByUri'](item.uri)
 
     let controls = ''
     let htmlTag
-    if (asset.type === 'image') {
+    if (asset.mimeType === 'image') {
       htmlTag = 'img'
-    } else if (asset.type === 'audio') {
+    } else if (asset.mimeType === 'audio') {
       htmlTag = 'audio'
       controls = 'controls'
-    } else if (asset.type === 'video') {
+    } else if (asset.mimeType === 'video') {
       htmlTag = 'video'
       controls = 'controls'
     }

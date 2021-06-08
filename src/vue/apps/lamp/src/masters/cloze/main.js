@@ -99,20 +99,22 @@ export default validateMasterSpec({
     async afterMediaResolution ({ props, master }) {
       const svg = master.$get('svgByUri')(props.src)
       if (!svg) {
-        const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
+        const mediaAsset = this.$store.getters['media/assetNgByUri'](props.src)
         const response = await this.$media.httpRequest.request({
-          url: `/media/${mediaAsset.path}`,
+          url: `/media/${mediaAsset.yaml.path}`,
           method: 'get'
         })
-        if (response.data) master.$commit('addSvg', { uri: props.src, markup: response.data })
+        if (response.data) {
+          master.$commit('addSvg', { uri: props.src, markup: response.data })
+        }
       }
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetNgByUri'](props.src)
       return {
         asset,
         src: props.src,
-        svgPath: asset.path,
+        svgPath: asset.yaml.path,
         svgHttpUrl: asset.httpUrl
       }
     },
@@ -129,7 +131,9 @@ export default validateMasterSpec({
       return count
     },
     titleFromProps ({ propsMain }) {
-      if (propsMain.asset.title) return propsMain.asset.title
+      if (propsMain.asset.yaml.title) {
+        return propsMain.asset.yaml.title
+      }
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)

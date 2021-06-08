@@ -67,9 +67,7 @@ const getters = {
     return Object.keys(getters.assets).length > 0
   },
   multiPartSelectionByUri: state => uri => {
-    resolver.getMultipartSelection(uri)
-    if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
-    return state.multiPartSelections[uri]
+    return resolver.getMultipartSelection(uri)
   },
   multiPartSelections: state => {
     return state.multiPartSelections
