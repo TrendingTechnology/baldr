@@ -17,7 +17,6 @@ import DocumentationOverview from '@/routes/DocumentationOverview.vue'
 import MasterDocumentation from '@/routes/MasterDocumentation.vue'
 import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
-import RestApiOverview from '@/routes/RestApiOverview.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
 import SlideView from '@/routes/SlideView'
 import SpeakerView from '@/routes/SpeakerView/index.vue'
@@ -150,15 +149,6 @@ const routes = [
     component: MasterDocumentation,
     meta: {
       title: 'Master Documentation'
-    }
-  },
-  {
-    path: '/rest-api',
-    name: 'rest-api',
-    component: RestApiOverview,
-    meta: {
-      shortcut: 'r',
-      title: 'Überblick REST-API-Server'
     }
   },
   {

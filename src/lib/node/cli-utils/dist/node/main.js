@@ -106,7 +106,6 @@ class CommandRunner {
      * @param text - The text displayed to the right of the image.
      */
     updateProgress(completed, text) {
-        console.log(completed);
         this.gauge.pulse();
         this.gauge.show(text, completed);
     }

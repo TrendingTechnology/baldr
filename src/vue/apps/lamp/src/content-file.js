@@ -4,7 +4,7 @@
  * @module @bldr/lamp/content-file
  */
 
-/* globals defaultThemeSassVars FileReader */
+/* globals defaultThemeSassVars */
 
 import { convertToYamlRaw, convertFromYamlRaw, convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import { convertToString, shortenText, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
@@ -889,39 +889,5 @@ export class Presentation {
    */
   get curriculum () {
     if (this.meta && this.meta.curriculum) return this.meta.curriculum
-  }
-}
-
-/**
- * Open, analyze and handle a file, which is dragged into the application or
- * opened with the file dialog. Distinct between media files and the YAML
- * *.baldr.yml file format.
- *
- * @param {File} file - A file interface.
- */
-function openFile (file) {
-  if (file.type === 'application/x-yaml' &&
-      file.name.toLowerCase().indexOf('.baldr.yml') > -1) {
-    const reader = new FileReader()
-    reader.readAsText(file, 'utf-8')
-    reader.onload = readerEvent => {
-      const content = readerEvent.target.result
-      store.dispatch('lamp/openPresentation', content).then(() => {
-        if (router.currentRoute.name !== 'slide') router.push({ name: 'slide' })
-      })
-    }
-  } else {
-    vm.$media.resolve(file)
-  }
-}
-
-/**
- * Open multiple files.
- *
- * @param {array} files - An array of File objects.
- */
-export function openFiles (files) {
-  for (const file of files) {
-    openFile(file)
   }
 }
