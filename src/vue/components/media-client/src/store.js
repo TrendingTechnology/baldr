@@ -12,46 +12,28 @@ import { makeHttpRequestInstance } from '@bldr/http-request'
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 
 const state = {
-  multiPartUris: new Set(),
   multiPartSelections: {},
   assets: {},
-  assetsNg: {},
-  uuidToId: {},
   playList: [],
   playListNoCurrent: null,
   restApiServers: [],
   samples: {},
-  samplesNg: {},
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
   // to be played sample (loaded).
   sampleLoaded: null,
-  samplePlaying: null,
-  shortcutCounter: {
-    audio: 1,
-    video: 1,
-    image: 1
-  }
+  samplePlaying: null
 }
 
 const getters = {
   assetByUri: (state, getters) => uri => {
-    // asset URI is specifed as a sample
-    if (uri.indexOf('#') > -1) uri = uri.replace(/#.*$/, '')
-    if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
-    return getters.assets[uri]
-  },
-  assetNgByUri: (state, getters) => uri => {
     const ref = resolver.translateToAssetRef(uri)
     if (ref != null) {
-      return getters.assetsNg[ref]
+      return getters.assets[ref]
     }
   },
   assets: state => {
     return state.assets
-  },
-  assetsNg: state => {
-    return state.assetsNg
   },
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.assets
@@ -90,24 +72,13 @@ const getters = {
   samples: state => {
     return state.samples
   },
-  samplesNg: state => {
-    return state.samplesNg
-  },
   samplePlaying: state => {
     return state.samplePlaying
   },
   sampleByUri: (state, getters) => uri => {
     if (!uri) return
-    const samples = getters.samples
-    if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-    if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
-    return samples[uri]
-  },
-  sampleNgByUri: (state, getters) => uri => {
-    if (!uri) return
-    const samplesNg = getters.samplesNg
     const ref = resolver.translateToSampleRef(uri)
-    return samplesNg[ref]
+    return getters.samples[ref]
   },
   samplePlayListCurrent: (state, getters) => {
     return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
@@ -120,9 +91,6 @@ const getters = {
 const actions = {
   addAsset ({ commit, dispatch }, asset) {
     commit('addAsset', asset)
-    // for (const sampleUri in asset.samples) {
-    //   dispatch('addSampleToPlayList', asset.samples[sampleUri])
-    // }
   },
   addSampleToPlayList ({ commit, getters }, sample) {
     const list = getters.playList
@@ -133,11 +101,9 @@ const actions = {
   clear ({ dispatch, commit }) {
     dispatch('removeAssetsAll')
     dispatch('removeMultiPartSelections')
-    commit('clearMultiPartUris')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
-    commit('resetShortcutCounter')
   },
   incrementShortcutCounterByType ({ commit, getters }, type) {
     const counter = getters.shortcutCounterByType(type) + 1
@@ -211,29 +177,14 @@ const actions = {
 }
 
 const mutations = {
-  addMultiPartUri (state, multiPartUri) {
-    state.multiPartUris.add(multiPartUri)
-  },
   addMultiPartSelection (state, selection) {
     Vue.set(state.multiPartSelections, selection.uriRef, selection)
-    Vue.set(state.uuidToId, selection.uriUuid, selection.uriRef)
-  },
-  clearMultiPartUris (state) {
-    state.multiPartUris.clear()
   },
   addAsset (state, asset) {
-    Vue.set(state.assets, asset.uriRef, asset)
-    Vue.set(state.uuidToId, asset.uriUuid, asset.uriRef)
-  },
-  addAssetNg (state, asset) {
-    Vue.set(state.assetsNg, asset.ref, asset)
+    Vue.set(state.assets, asset.ref, asset)
   },
   addSample (state, sample) {
-    Vue.set(state.samples, sample.uriRef, sample)
-    Vue.set(state.uuidToId, sample.uriUuid, sample.uriRef)
-  },
-  addSampleNg (state, sample) {
-    Vue.set(state.samplesNg, sample.ref, sample)
+    Vue.set(state.samples, sample.ref, sample)
   },
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uriRef)
@@ -254,11 +205,6 @@ const mutations = {
         state.playList.splice(index, 1)
       }
     }
-  },
-  resetShortcutCounter (state) {
-    state.shortcutCounter.audio = 1
-    state.shortcutCounter.video = 1
-    state.shortcutCounter.image = 1
   },
   setPlayListNoCurrent (state, no) {
     state.playListNoCurrent = no

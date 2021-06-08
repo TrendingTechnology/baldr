@@ -76,7 +76,7 @@ export default validateMasterSpec({
       return youtubeIdToUri(props.id)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetNgByUri'](youtubeIdToUri(props.id))
+      const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
       checkAvailability(props.id).then((result) => {
         if (!result) {
           this.$notifyError(`The YouTube video “${props.id}” is no longer available online.`)
@@ -107,7 +107,7 @@ export default validateMasterSpec({
       const slide = this.$get('slide')
       if (slide.propsMain.asset) {
         const uri = youtubeIdToUri(slide.props.id)
-        const sample = this.$store.getters['media/sampleNgByUri'](uri)
+        const sample = this.$store.getters['media/sampleByUri'](uri)
         const videoWrapper = document.querySelector('#youtube-offline-video')
         videoWrapper.innerHTML = ''
         videoWrapper.appendChild(sample.htmlElement)

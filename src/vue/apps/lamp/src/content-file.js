@@ -217,7 +217,7 @@ class AudioOverlay {
   get samples () {
     const samples = []
     for (const uri of this.mediaUris) {
-      samples.push(store.getters['media/sampleNgByUri'](uri))
+      samples.push(store.getters['media/sampleByUri'](uri))
     }
     return samples
   }
@@ -465,7 +465,7 @@ export class Slide {
   get assets () {
     const assets = []
     for (const mediaUri of this.mediaUris) {
-      assets.push(store.getters['media/assetNgByUri'](mediaUri))
+      assets.push(store.getters['media/assetByUri'](mediaUri))
     }
     return assets
   }

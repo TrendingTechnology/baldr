@@ -65,7 +65,7 @@ export default {
       return `${params.uriScheme}:${params.uriAuthority}`
     },
     asset () {
-      return this.$store.getters['media/assetNgByUri'](this.uri)
+      return this.$store.getters['media/assetByUri'](this.uri)
     }
   },
   methods: {

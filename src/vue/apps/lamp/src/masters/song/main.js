@@ -39,11 +39,11 @@ export default validateMasterSpec({
       return convertSongIdToRef(props.songId)
     },
     calculateStepCount ({ props }) {
-      const image = this.$store.getters['media/assetNgByUri'](convertSongIdToRef(props.songId))
+      const image = this.$store.getters['media/assetByUri'](convertSongIdToRef(props.songId))
       return image.multiPartCount
     },
     collectPropsMain (props) {
-      const image = this.$store.getters['media/assetNgByUri'](convertSongIdToRef(props.songId))
+      const image = this.$store.getters['media/assetByUri'](convertSongIdToRef(props.songId))
       return {
         image
       }

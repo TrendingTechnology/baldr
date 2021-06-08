@@ -42,7 +42,7 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetNgByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
       const output = {
         asset
       }

@@ -131,7 +131,7 @@ class Player {
     } else {
       let uri = uriOrSample
       if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-      sample = store.getters['media/sampleNgByUri'](uri)
+      sample = store.getters['media/sampleByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.sampleLoaded = sample
@@ -376,12 +376,12 @@ class Media {
     await mediaResolver.resolver.resolve(assetSpecs, throwException)
     for (const asset of mediaResolver.resolver.getAssets()) {
       this.registerAssetShortcut(asset)
-      store.commit('media/addAssetNg', asset)
+      store.commit('media/addAsset', asset)
     }
 
     for (const sample of mediaResolver.resolver.getSamples()) {
       this.registerSampleShortcut(sample)
-      store.commit('media/addSampleNg', sample)
+      store.commit('media/addSample', sample)
     }
   }
 

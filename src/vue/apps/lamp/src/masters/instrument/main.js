@@ -38,7 +38,7 @@ export default validateMasterSpec({
       return convertInstrumentIdToMediaId(props.instrumentId)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetNgByUri'](convertInstrumentIdToMediaId(props.instrumentId))
+      const asset = this.$store.getters['media/assetByUri'](convertInstrumentIdToMediaId(props.instrumentId))
       const propsMain = { asset }
       return propsMain
     },

@@ -97,7 +97,7 @@ export function render (item) {
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.uri) {
-    const asset = vue.$store.getters['media/assetNgByUri'](item.uri)
+    const asset = vue.$store.getters['media/assetByUri'](item.uri)
 
     let controls = ''
     let htmlTag

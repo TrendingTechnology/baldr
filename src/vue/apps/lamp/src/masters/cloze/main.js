@@ -99,7 +99,7 @@ export default validateMasterSpec({
     async afterMediaResolution ({ props, master }) {
       const svg = master.$get('svgByUri')(props.src)
       if (!svg) {
-        const mediaAsset = this.$store.getters['media/assetNgByUri'](props.src)
+        const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
         const response = await this.$media.httpRequest.request({
           url: `/media/${mediaAsset.yaml.path}`,
           method: 'get'
@@ -110,7 +110,7 @@ export default validateMasterSpec({
       }
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetNgByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
       return {
         asset,
         src: props.src,
