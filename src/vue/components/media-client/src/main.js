@@ -27,13 +27,6 @@
 /* globals config document Audio Image File */
 
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import {
-  formatMultiPartAssetFileName,
-  convertHtmlToPlainText,
-  selectSubset,
-  removeDuplicatesFromArray
-} from '@bldr/core-browser'
-import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 import * as mediaResolver from '@bldr/media-resolver'
 import DynamicSelect from '@bldr/dynamic-select'
 

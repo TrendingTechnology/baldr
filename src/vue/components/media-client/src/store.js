@@ -89,7 +89,7 @@ const getters = {
 }
 
 const actions = {
-  addAsset ({ commit, dispatch }, asset) {
+  addAsset ({ commit, getters }, asset) {
     commit('addAsset', asset)
   },
   addSampleToPlayList ({ commit, getters }, sample) {
@@ -181,10 +181,14 @@ const mutations = {
     Vue.set(state.multiPartSelections, selection.uriRef, selection)
   },
   addAsset (state, asset) {
-    Vue.set(state.assets, asset.ref, asset)
+    if (state.assets[asset.ref] == null) {
+      Vue.set(state.assets, asset.ref, asset)
+    }
   },
   addSample (state, sample) {
-    Vue.set(state.samples, sample.ref, sample)
+    if (state.samples[sample.ref] == null) {
+      Vue.set(state.samples, sample.ref, sample)
+    }
   },
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uriRef)

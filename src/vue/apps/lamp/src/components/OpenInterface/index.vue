@@ -2,7 +2,6 @@
   <div class="vc_open_interface">
     <div class="flex-container">
       <search-presentation/>
-      <open-files/>
     </div>
   </div>
 </template>
