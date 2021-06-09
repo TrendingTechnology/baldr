@@ -27,7 +27,7 @@
 /* globals config document Audio Image File */
 
 import { makeHttpRequestInstance } from '@bldr/http-request'
-import * as mediaResolver from '@bldr/media-resolver'
+import * as tmpMediaResolver from '@bldr/media-resolver'
 import DynamicSelect from '@bldr/dynamic-select'
 
 import storeModule from './store.js'
@@ -36,7 +36,7 @@ import { addRoutes } from './routes.js'
 
 export const httpRequest = makeHttpRequestInstance(config, 'automatic','/api/media')
 
-export const resolver = mediaResolver
+export const mediaResolver = tmpMediaResolver
 
 /**
  * The {@link https://vuex.vuejs.org/ vuex} store instance.

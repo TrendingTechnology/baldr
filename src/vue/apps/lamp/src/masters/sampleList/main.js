@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/sampleList
  */
 
-import { resolver } from '@bldr/media-client'
+import { mediaResolver } from '@bldr/media-client'
 import { validateMasterSpec } from '@bldr/master-toolkit'
 
 export default validateMasterSpec({
@@ -41,7 +41,7 @@ export default validateMasterSpec({
       return props
     },
     resolveMediaUris (props) {
-      return resolver.getUrisFromWrappedSpecs(props.samples)
+      return mediaResolver.getUrisFromWrappedSpecs(props.samples)
     },
     collectPropsMain (props) {
       return props
@@ -53,7 +53,7 @@ export default validateMasterSpec({
       return 'Audio-Ausschnitte'
     },
     async afterMediaResolution ({ props }) {
-      const wrappedSampleList = resolver.getWrappedSampleList(props.samples)
+      const wrappedSampleList = mediaResolver.getWrappedSampleList(props.samples)
       const samplesCollection = wrappedSampleList.getSamplesFromFirst()
       if (samplesCollection != null) {
         props.samples = samplesCollection

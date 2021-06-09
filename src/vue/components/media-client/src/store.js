@@ -6,10 +6,7 @@
 
 import Vue from 'vue'
 
-import * as resolver from '@bldr/media-resolver'
-import { makeHttpRequestInstance } from '@bldr/http-request'
-
-const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
+import * as mediaResolver from '@bldr/media-resolver'
 
 const state = {
   assets: {},
@@ -25,7 +22,7 @@ const state = {
 
 const getters = {
   assetByUri: (state, getters) => uri => {
-    const ref = resolver.translateToAssetRef(uri)
+    const ref = mediaResolver.translateToAssetRef(uri)
     if (ref != null) {
       return getters.assets[ref]
     }
@@ -44,7 +41,7 @@ const getters = {
     return Object.keys(getters.assets).length > 0
   },
   multiPartSelectionByUri: state => uri => {
-    return resolver.getMultipartSelection(uri)
+    return mediaResolver.getMultipartSelection(uri)
   },
   playList: state => {
     return state.playList
@@ -63,7 +60,7 @@ const getters = {
   },
   sampleByUri: (state, getters) => uri => {
     if (!uri) return
-    const ref = resolver.translateToSampleRef(uri)
+    const ref = mediaResolver.translateToSampleRef(uri)
     return getters.samples[ref]
   },
   samplePlayListCurrent: (state, getters) => {
@@ -87,7 +84,7 @@ const actions = {
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
-    resolver.resetMediaCache()
+    mediaResolver.resetMediaCache()
   },
   incrementShortcutCounterByType ({ commit, getters }, type) {
     const counter = getters.shortcutCounterByType(type) + 1

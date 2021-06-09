@@ -8,7 +8,7 @@
 
 import { convertToYamlRaw, convertFromYamlRaw, convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import { convertToString, shortenText, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
-import { resolver } from '@bldr/media-client'
+import { mediaResolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
@@ -204,11 +204,11 @@ class AudioOverlay {
   }
 
   get mediaUris () {
-    return resolver.getUrisFromWrappedSpecs(this.rawData)
+    return mediaResolver.getUrisFromWrappedSpecs(this.rawData)
   }
 
   get wrappedSampleList () {
-    return resolver.getWrappedSampleList(this.rawData)
+    return mediaResolver.getWrappedSampleList(this.rawData)
   }
 
   /**
