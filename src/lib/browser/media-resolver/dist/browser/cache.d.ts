@@ -89,15 +89,12 @@ export declare function translateToAssetRef(uri: string): string | undefined;
  * @returns A sample URI in the `ref` scheme. A missing fragment is added with `#complete`.
  */
 export declare function translateToSampleRef(uri: string): string | undefined;
-declare class SampleCache extends Cache<Sample> {
-    get(uuidOrRef: string): Sample | undefined;
-}
-export declare const sampleCache: SampleCache;
 export declare class AssetCache extends Cache<ClientMediaAsset> {
     add(ref: string, asset: ClientMediaAsset): boolean;
     get(uuidOrRef: string): ClientMediaAsset | undefined;
 }
 export declare const assetCache: AssetCache;
+export declare function getAssets(): ClientMediaAsset[];
 /**
  * The media asset of the multipart selection must be present in the
  * AssetCache(), the media asset must be resolved first.
@@ -108,5 +105,10 @@ export declare class MultiPartSelectionCache extends Cache<MultiPartSelection> {
 }
 export declare const multiPartSelectionCache: MultiPartSelectionCache;
 export declare function getMultipartSelection(uri: string): MultiPartSelection | undefined;
+declare class SampleCache extends Cache<Sample> {
+    get(uuidOrRef: string): Sample | undefined;
+}
+export declare const sampleCache: SampleCache;
+export declare function getSamples(): Sample[];
 export declare function resetMediaCache(): void;
 export {};

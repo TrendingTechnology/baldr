@@ -5,9 +5,11 @@ import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 import config from '@bldr/config'
 
-import { assetCache, sampleCache, ClientMediaAsset, Sample } from './internal'
+import { assetCache, ClientMediaAsset } from './internal'
 
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
+
+type UrisSpec = string | string[] | Set<string>
 
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -90,7 +92,7 @@ class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  async resolve (uris: string | string[] | Set<string>, throwException: boolean = true): Promise<ClientMediaAsset[]> {
+  async resolve (uris: UrisSpec, throwException: boolean = true): Promise<ClientMediaAsset[]> {
     const mediaUris = makeSet(uris)
     const urisWithoutFragments = new Set<string>()
     for (const uri of mediaUris) {
@@ -117,25 +119,19 @@ class Resolver {
     }
     return assets
   }
-
-  getAssets (): ClientMediaAsset[] {
-    return assetCache.getAll()
-  }
-
-  getSamples (): Sample[] {
-    return sampleCache.getAll()
-  }
 }
 
 export const resolver = new Resolver()
 
 /**
- * Resolve one or more remote media files by their URIs.
+ * Resolve one or more remote media files by URIs.
  *
  * Linked media URIs are resolved recursively.
  *
  * @param uris - A single media URI or an array of media URIs.
+ * @param throwException - Throw an exception if the media URI
+ *  cannot be resolved (default: `true`).
  */
-export async function resolve (uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]> {
+export async function resolve (uris: UrisSpec, throwException: boolean = true): Promise<ClientMediaAsset[]> {
   return await resolver.resolve(uris)
 }

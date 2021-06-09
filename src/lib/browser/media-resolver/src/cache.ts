@@ -184,7 +184,7 @@ export function translateToAssetRef (uri: string): string | undefined {
 
 /**
  * for example: translates `ref:test` into `ref:test#complete` or
- * `uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3` into `ref:test#complete`
+ * `uuid:88ad5df3-d7f9-4e9e-9d522-e205f51eedb3` into `ref:test#complete`
  *
  * @param uri A asset or sample URI in various formats.
  *
@@ -196,17 +196,6 @@ export function translateToSampleRef (uri: string): string | undefined {
   }
   return mediaUriTranslator.getRef(uri)
 }
-
-class SampleCache extends Cache<Sample> {
-  get (uuidOrRef: string): Sample | undefined {
-    const ref = mediaUriTranslator.getRef(uuidOrRef)
-    if (ref != null) {
-      return super.get(ref)
-    }
-  }
-}
-
-export const sampleCache = new SampleCache()
 
 export class AssetCache extends Cache<ClientMediaAsset> {
   add (ref: string, asset: ClientMediaAsset): boolean {
@@ -226,6 +215,10 @@ export class AssetCache extends Cache<ClientMediaAsset> {
 }
 
 export const assetCache = new AssetCache()
+
+export function getAssets (): ClientMediaAsset[] {
+  return assetCache.getAll()
+}
 
 /**
  * The media asset of the multipart selection must be present in the
@@ -263,6 +256,21 @@ export const multiPartSelectionCache = new MultiPartSelectionCache()
 
 export function getMultipartSelection (uri: string): MultiPartSelection | undefined {
   return multiPartSelectionCache.get(uri)
+}
+
+class SampleCache extends Cache<Sample> {
+  get (uuidOrRef: string): Sample | undefined {
+    const ref = mediaUriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
+  }
+}
+
+export const sampleCache = new SampleCache()
+
+export function getSamples (): Sample[] {
+  return sampleCache.getAll()
 }
 
 export function resetMediaCache (): void {

@@ -1,5 +1,6 @@
-import { ClientMediaAsset, Sample } from './internal';
+import { ClientMediaAsset } from './internal';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
+declare type UrisSpec = string | string[] | Set<string>;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -40,17 +41,17 @@ declare class Resolver {
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
      */
-    resolve(uris: string | string[] | Set<string>, throwException?: boolean): Promise<ClientMediaAsset[]>;
-    getAssets(): ClientMediaAsset[];
-    getSamples(): Sample[];
+    resolve(uris: UrisSpec, throwException?: boolean): Promise<ClientMediaAsset[]>;
 }
 export declare const resolver: Resolver;
 /**
- * Resolve one or more remote media files by their URIs.
+ * Resolve one or more remote media files by URIs.
  *
  * Linked media URIs are resolved recursively.
  *
  * @param uris - A single media URI or an array of media URIs.
+ * @param throwException - Throw an exception if the media URI
+ *  cannot be resolved (default: `true`).
  */
-export declare function resolve(uris: string | string[] | Set<string>): Promise<ClientMediaAsset[]>;
+export declare function resolve(uris: UrisSpec, throwException?: boolean): Promise<ClientMediaAsset[]>;
 export {};

@@ -11,7 +11,7 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
 import config from '@bldr/config';
-import { assetCache, sampleCache, ClientMediaAsset } from './internal';
+import { assetCache, ClientMediaAsset } from './internal';
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -119,22 +119,18 @@ class Resolver {
             return assets;
         });
     }
-    getAssets() {
-        return assetCache.getAll();
-    }
-    getSamples() {
-        return sampleCache.getAll();
-    }
 }
 export const resolver = new Resolver();
 /**
- * Resolve one or more remote media files by their URIs.
+ * Resolve one or more remote media files by URIs.
  *
  * Linked media URIs are resolved recursively.
  *
  * @param uris - A single media URI or an array of media URIs.
+ * @param throwException - Throw an exception if the media URI
+ *  cannot be resolved (default: `true`).
  */
-export function resolve(uris) {
+export function resolve(uris, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield resolver.resolve(uris);
     });

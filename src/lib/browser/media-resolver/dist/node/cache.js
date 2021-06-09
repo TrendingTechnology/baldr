@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetMediaCache = exports.getMultipartSelection = exports.multiPartSelectionCache = exports.MultiPartSelectionCache = exports.assetCache = exports.AssetCache = exports.sampleCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
+exports.resetMediaCache = exports.getSamples = exports.sampleCache = exports.getMultipartSelection = exports.multiPartSelectionCache = exports.MultiPartSelectionCache = exports.getAssets = exports.assetCache = exports.AssetCache = exports.translateToSampleRef = exports.translateToAssetRef = exports.mediaUriTranslator = exports.MediaUriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
 /**
@@ -171,15 +171,6 @@ function translateToSampleRef(uri) {
     return exports.mediaUriTranslator.getRef(uri);
 }
 exports.translateToSampleRef = translateToSampleRef;
-class SampleCache extends Cache {
-    get(uuidOrRef) {
-        const ref = exports.mediaUriTranslator.getRef(uuidOrRef);
-        if (ref != null) {
-            return super.get(ref);
-        }
-    }
-}
-exports.sampleCache = new SampleCache();
 class AssetCache extends Cache {
     add(ref, asset) {
         if (exports.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
@@ -197,6 +188,10 @@ class AssetCache extends Cache {
 }
 exports.AssetCache = AssetCache;
 exports.assetCache = new AssetCache();
+function getAssets() {
+    return exports.assetCache.getAll();
+}
+exports.getAssets = getAssets;
 /**
  * The media asset of the multipart selection must be present in the
  * AssetCache(), the media asset must be resolved first.
@@ -233,6 +228,19 @@ function getMultipartSelection(uri) {
     return exports.multiPartSelectionCache.get(uri);
 }
 exports.getMultipartSelection = getMultipartSelection;
+class SampleCache extends Cache {
+    get(uuidOrRef) {
+        const ref = exports.mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+exports.sampleCache = new SampleCache();
+function getSamples() {
+    return exports.sampleCache.getAll();
+}
+exports.getSamples = getSamples;
 function resetMediaCache() {
     exports.sampleCache.reset();
     exports.multiPartSelectionCache.reset();

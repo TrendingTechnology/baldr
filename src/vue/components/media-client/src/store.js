@@ -12,11 +12,9 @@ import { makeHttpRequestInstance } from '@bldr/http-request'
 const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
 
 const state = {
-  multiPartSelections: {},
   assets: {},
   playList: [],
   playListNoCurrent: null,
-  restApiServers: [],
   samples: {},
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
@@ -42,29 +40,17 @@ const getters = {
     }
     return null
   },
-  idByUuid: (state, getters) => uuid => {
-    return state.uuidToId[uuid]
-  },
   isMedia: (state, getters) => {
     return Object.keys(getters.assets).length > 0
   },
   multiPartSelectionByUri: state => uri => {
     return resolver.getMultipartSelection(uri)
   },
-  multiPartSelections: state => {
-    return state.multiPartSelections
-  },
-  multiPartUris: state => {
-    return state.multiPartUris
-  },
   playList: state => {
     return state.playList
   },
   playListNoCurrent: state => {
     return state.playListNoCurrent
-  },
-  restApiServers: state => {
-    return state.restApiServers
   },
   sampleLoaded: state => {
     return state.sampleLoaded
@@ -82,9 +68,6 @@ const getters = {
   },
   samplePlayListCurrent: (state, getters) => {
     return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
-  },
-  shortcutCounterByType: state => type => {
-    return state.shortcutCounter[type]
   }
 }
 
@@ -104,6 +87,7 @@ const actions = {
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
+    resolver.resetMediaCache()
   },
   incrementShortcutCounterByType ({ commit, getters }, type) {
     const counter = getters.shortcutCounterByType(type) + 1
@@ -112,20 +96,15 @@ const actions = {
     })
   },
   removeAsset ({ commit }, asset) {
-    for (const sampleUri in asset.samples) {
-      commit('removeSample', sampleUri)
-      commit('removeSampleFromPlayList', sampleUri)
+    for (const sampleRef in asset.samples) {
+      commit('removeSample', sampleRef)
+      commit('removeSampleFromPlayList', sampleRef)
     }
-    commit('removeAsset', asset.uriRef)
+    commit('removeAsset', asset.ref)
   },
   removeAssetsAll ({ dispatch, getters }) {
     for (const assetUri in getters.assets) {
       dispatch('removeAsset', getters.assets[assetUri])
-    }
-  },
-  removeMultiPartSelections ({ commit, getters }) {
-    for (const uri in getters.multiPartSelections) {
-      commit('removeMultiPartSelection', uri)
     }
   },
   setPlayListSampleCurrent ({ commit, getters }, sample) {
@@ -153,23 +132,6 @@ const actions = {
       commit('setPlayListNoCurrent', no - 1)
     }
   },
-  async setRestApiServers ({ commit }) {
-    const versions = await httpRequest.request('version')
-    const counts = await httpRequest.request('stats/count')
-    const updates = await httpRequest.request('stats/updates')
-
-    const result = []
-    result.push({
-      name: 'localhost',
-      baseUrl: 'localhost',
-      version: versions.data.version,
-      count: counts.data,
-      update: updates.data[0].begin,
-      commitId: updates.data[0].lastCommitId
-    })
-
-    commit('setRestApiServers', result)
-  },
   setSamplePlaying ({ commit, dispatch }, sample) {
     commit('setSamplePlaying', sample)
     if (sample) dispatch('setPlayListSampleCurrent', sample)
@@ -196,9 +158,6 @@ const mutations = {
   removeAsset (state, uri) {
     Vue.delete(state.assets, uri)
   },
-  removeMultiPartSelection (state, uri) {
-    Vue.delete(state.multiPartSelections, uri)
-  },
   removeSample (state, uri) {
     Vue.delete(state.samples, uri)
   },
@@ -213,17 +172,11 @@ const mutations = {
   setPlayListNoCurrent (state, no) {
     state.playListNoCurrent = no
   },
-  setRestApiServers (state, restApiServers) {
-    Vue.set(state, 'restApiServers', restApiServers)
-  },
   setSampleLoaded (state, sample) {
     state.sampleLoaded = sample
   },
   setSamplePlaying (state, sample) {
     state.samplePlaying = sample
-  },
-  setShortcutCounterByType (state, { type, counter }) {
-    state.shortcutCounter[type] = counter
   }
 }
 

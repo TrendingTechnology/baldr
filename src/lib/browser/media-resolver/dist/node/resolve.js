@@ -122,22 +122,18 @@ class Resolver {
             return assets;
         });
     }
-    getAssets() {
-        return internal_1.assetCache.getAll();
-    }
-    getSamples() {
-        return internal_1.sampleCache.getAll();
-    }
 }
 exports.resolver = new Resolver();
 /**
- * Resolve one or more remote media files by their URIs.
+ * Resolve one or more remote media files by URIs.
  *
  * Linked media URIs are resolved recursively.
  *
  * @param uris - A single media URI or an array of media URIs.
+ * @param throwException - Throw an exception if the media URI
+ *  cannot be resolved (default: `true`).
  */
-function resolve(uris) {
+function resolve(uris, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield exports.resolver.resolve(uris);
     });

@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getWrappedSampleList = exports.getUrisFromWrappedSpecs = exports.translateToSampleRef = exports.translateToAssetRef = exports.resolver = exports.resolve = exports.getMultipartSelection = void 0;
+exports.getWrappedSampleList = exports.getUrisFromWrappedSpecs = exports.translateToSampleRef = exports.translateToAssetRef = exports.resolve = exports.resetMediaCache = exports.getSamples = exports.getMultipartSelection = exports.getAssets = void 0;
 var internal_1 = require("./internal");
+Object.defineProperty(exports, "getAssets", { enumerable: true, get: function () { return internal_1.getAssets; } });
 Object.defineProperty(exports, "getMultipartSelection", { enumerable: true, get: function () { return internal_1.getMultipartSelection; } });
+Object.defineProperty(exports, "getSamples", { enumerable: true, get: function () { return internal_1.getSamples; } });
+Object.defineProperty(exports, "resetMediaCache", { enumerable: true, get: function () { return internal_1.resetMediaCache; } });
 Object.defineProperty(exports, "resolve", { enumerable: true, get: function () { return internal_1.resolve; } });
-Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return internal_1.resolver; } });
 Object.defineProperty(exports, "translateToAssetRef", { enumerable: true, get: function () { return internal_1.translateToAssetRef; } });
 Object.defineProperty(exports, "translateToSampleRef", { enumerable: true, get: function () { return internal_1.translateToSampleRef; } });
 var wrapped_sample_1 = require("./wrapped-sample");

@@ -1,7 +1,9 @@
 export {
+  getAssets,
   getMultipartSelection,
+  getSamples,
+  resetMediaCache,
   resolve,
-  resolver,
   translateToAssetRef,
   translateToSampleRef
 } from './internal'

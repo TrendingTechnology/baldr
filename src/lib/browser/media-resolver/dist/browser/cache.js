@@ -163,15 +163,6 @@ export function translateToSampleRef(uri) {
     }
     return mediaUriTranslator.getRef(uri);
 }
-class SampleCache extends Cache {
-    get(uuidOrRef) {
-        const ref = mediaUriTranslator.getRef(uuidOrRef);
-        if (ref != null) {
-            return super.get(ref);
-        }
-    }
-}
-export const sampleCache = new SampleCache();
 export class AssetCache extends Cache {
     add(ref, asset) {
         if (mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
@@ -188,6 +179,9 @@ export class AssetCache extends Cache {
     }
 }
 export const assetCache = new AssetCache();
+export function getAssets() {
+    return assetCache.getAll();
+}
 /**
  * The media asset of the multipart selection must be present in the
  * AssetCache(), the media asset must be resolved first.
@@ -221,6 +215,18 @@ export class MultiPartSelectionCache extends Cache {
 export const multiPartSelectionCache = new MultiPartSelectionCache();
 export function getMultipartSelection(uri) {
     return multiPartSelectionCache.get(uri);
+}
+class SampleCache extends Cache {
+    get(uuidOrRef) {
+        const ref = mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+export const sampleCache = new SampleCache();
+export function getSamples() {
+    return sampleCache.getAll();
 }
 export function resetMediaCache() {
     sampleCache.reset();

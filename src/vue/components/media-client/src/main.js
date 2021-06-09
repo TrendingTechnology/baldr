@@ -366,13 +366,13 @@ class Media {
    * @returns {Object}
    */
   async resolve (assetSpecs, throwException = true) {
-    await mediaResolver.resolver.resolve(assetSpecs, throwException)
-    for (const asset of mediaResolver.resolver.getAssets()) {
+    await mediaResolver.resolve(assetSpecs, throwException)
+    for (const asset of mediaResolver.getAssets()) {
       this.registerAssetShortcut(asset)
       store.commit('media/addAsset', asset)
     }
 
-    for (const sample of mediaResolver.resolver.getSamples()) {
+    for (const sample of mediaResolver.getSamples()) {
       this.registerSampleShortcut(sample)
       store.commit('media/addSample', sample)
     }
