@@ -31,6 +31,7 @@ const photo_1 = require("./specs/photo");
 const radio_1 = require("./specs/radio");
 const recording_1 = require("./specs/recording");
 const reference_1 = require("./specs/reference");
+const sample_1 = require("./specs/sample");
 const score_1 = require("./specs/score");
 const song_1 = require("./specs/song");
 const videoClip_1 = require("./specs/videoClip");
@@ -51,6 +52,7 @@ exports.categories = {
     recording: recording_1.recording,
     reference: reference_1.reference,
     score: score_1.score,
+    sample: sample_1.sample,
     song: song_1.song,
     videoClip: videoClip_1.videoClip,
     worksheet: worksheet_1.worksheet,

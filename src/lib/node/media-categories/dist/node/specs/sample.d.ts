@@ -1,0 +1,7 @@
+import type { MediaCategory } from '@bldr/type-definitions';
+/**
+ * The meta data type specification “sample”.
+ *
+ * @see @bldr/type-definitions/asset.SampleYamlFormat
+ */
+export declare const sample: MediaCategory.Category;

@@ -31,6 +31,7 @@ import { photo } from './specs/photo'
 import { radio } from './specs/radio'
 import { recording } from './specs/recording'
 import { reference } from './specs/reference'
+import { sample } from './specs/sample'
 import { score } from './specs/score'
 import { song } from './specs/song'
 import { videoClip } from './specs/videoClip'
@@ -52,6 +53,7 @@ export const categories: MediaCategory.Collection = {
   recording,
   reference,
   score,
+  sample,
   song,
   videoClip,
   worksheet,

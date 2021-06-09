@@ -270,15 +270,16 @@ export type Name =
   'composition' |
   'cover' |
   'documentation' |
+  'excerpt' |
   'famousPiece' |
   'group' |
   'instrument' |
   'person' |
-  'excerpt' |
   'photo' |
   'radio' |
   'recording' |
   'reference' |
+  'sample' |
   'score' |
   'song' |
   'videoClip' |
@@ -317,6 +318,7 @@ export interface Collection {
   radio: Category
   recording: Category
   reference: Category
+  sample: Category
   score: Category
   song: Category
   videoClip: Category

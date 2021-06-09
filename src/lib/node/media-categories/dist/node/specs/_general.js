@@ -130,21 +130,6 @@ exports.general = {
         partOf: {
             title: 'Teil eines übergeordneten Werks'
         },
-        samples: {
-            title: 'Ausschnitte'
-        },
-        startTime: {
-            title: 'Startzeitpunkt des Samples'
-        },
-        endTime: {
-            title: 'Endzeitpunkt des Samples'
-        },
-        fadeIn: {
-            title: 'Dauer der Einblendzeit'
-        },
-        fadeOut: {
-            title: 'Dauer der Ausblendzeit'
-        },
         shortcut: {
             title: 'Tastenkürzel'
         },
