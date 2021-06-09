@@ -80,7 +80,6 @@ const actions = {
   },
   clear ({ dispatch, commit }) {
     dispatch('removeAssetsAll')
-    dispatch('removeMultiPartSelections')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
