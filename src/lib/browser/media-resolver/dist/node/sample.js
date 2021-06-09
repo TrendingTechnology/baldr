@@ -72,12 +72,6 @@ const defaultPlayDelayMsec = 10;
 class Sample {
     constructor(asset, yaml) {
         /**
-         * To be able to distinguish the old and the new version of the class.
-         *
-         * TODO remove
-         */
-        this.ng = true;
-        /**
          * The current volume of the parent media Element. This value gets stored
          * when the sample is paused. It is needed to restore the volume.
          */

@@ -77,13 +77,6 @@ const defaultPlayDelayMsec: number = 10
  */
 export class Sample {
   /**
-   * To be able to distinguish the old and the new version of the class.
-   *
-   * TODO remove
-   */
-  ng: boolean = true
-
-  /**
    * The parent media file object.
    *
    */

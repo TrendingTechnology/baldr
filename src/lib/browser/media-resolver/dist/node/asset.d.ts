@@ -12,12 +12,6 @@ export declare const imageShortcutCounter: MimeTypeShortcutCounter;
  */
 export declare class ClientMediaAsset {
     /**
-     * To be able to distinguish the old and the new version of the class.
-     *
-     * TODO remove
-     */
-    ng: boolean;
-    /**
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
      */

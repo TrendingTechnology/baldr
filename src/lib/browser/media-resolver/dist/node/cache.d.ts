@@ -82,7 +82,7 @@ export declare const mediaUriTranslator: MediaUriTranslator;
 export declare function translateToAssetRef(uri: string): string | undefined;
 /**
  * for example: translates `ref:test` into `ref:test#complete` or
- * `uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3` into `ref:test#complete`
+ * `uuid:88ad5df3-d7f9-4e9e-9d522-e205f51eedb3` into `ref:test#complete`
  *
  * @param uri A asset or sample URI in various formats.
  *

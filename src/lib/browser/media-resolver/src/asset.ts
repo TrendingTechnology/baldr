@@ -17,13 +17,6 @@ export const imageShortcutCounter = new MimeTypeShortcutCounter('i')
  */
 export class ClientMediaAsset {
   /**
-   * To be able to distinguish the old and the new version of the class.
-   *
-   * TODO remove
-   */
-  ng: boolean = true
-
-  /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */

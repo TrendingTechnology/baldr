@@ -15,12 +15,6 @@ export class ClientMediaAsset {
      * @param yaml - A raw javascript object read from the Rest API
      */
     constructor(uri, httpUrl, yaml) {
-        /**
-         * To be able to distinguish the old and the new version of the class.
-         *
-         * TODO remove
-         */
-        this.ng = true;
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
