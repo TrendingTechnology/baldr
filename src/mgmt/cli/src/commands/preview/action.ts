@@ -8,7 +8,7 @@ import { CommandRunner } from '@bldr/cli-utils'
 import { filePathToMimeType, walk } from '@bldr/media-manager'
 
 interface CmdObj {
-  second: number
+  seconds: number
   force: boolean
 }
 
@@ -87,7 +87,7 @@ async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<v
   }
 
   if (mimeType === 'video') {
-    createVideoPreview(srcPath, destPath, cmdObj.second)
+    createVideoPreview(srcPath, destPath, cmdObj.seconds)
   } else if (mimeType === 'document') {
     createPdfPreview(srcPath, destPath)
   } else if (mimeType === 'audio') {

@@ -110,7 +110,7 @@ function createPreviewOneFile(srcPath, cmdObj) {
             return;
         }
         if (mimeType === 'video') {
-            createVideoPreview(srcPath, destPath, cmdObj.second);
+            createVideoPreview(srcPath, destPath, cmdObj.seconds);
         }
         else if (mimeType === 'document') {
             createPdfPreview(srcPath, destPath);
