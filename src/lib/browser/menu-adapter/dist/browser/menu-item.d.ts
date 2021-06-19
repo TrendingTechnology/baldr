@@ -1,6 +1,13 @@
 import type { MenuItemConstructorOptions } from 'electron';
 import type VueRouter from 'vue-router';
 export declare type ElectronMenuItem = MenuItemConstructorOptions;
+/**
+ * Sourround `+` with spaces: `Ctrl + f`
+ *
+ * Special keys:
+ * `Ctrl`, `Shift`, `Alt`, `Left`, `Right`, `Up`, `Down`, `Space`
+ */
+declare type RawKeyboardShortcutSpecification = string;
 export interface UniversalMenuItem {
     /**
      * A short label of the menu entry.
@@ -15,10 +22,10 @@ export interface UniversalMenuItem {
      */
     arguments?: any;
     /**
-     * Keyboard shortcuts to pass through mousetrap
-     *   and to pass through the Electron Accelerator.
+     * Keyboard shortcuts to pass through mousetrap and to pass through the
+     * Electron Accelerator.
      */
-    keyboardShortcut?: string;
+    keyboardShortcut?: RawKeyboardShortcutSpecification;
     activeOnRoutes?: string[];
 }
 export interface UniversalLeafMenuItem extends UniversalMenuItem {
@@ -42,11 +49,13 @@ export interface ActionCollection {
 export declare function convertMenuItemWebapp(raw: RawMenuItem, payload: any): WebappMenuItem | undefined;
 export declare function convertMenuItemElectron(raw: RawMenuItem, payload: any): ElectronMenuItem;
 /**
+ * Normalize the keyboard shortcuts.
+ *
  * @param keys - A raw keyboard shortcut specification.
  * @param forClient - For which client the shortcuts have to
  *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
  */
-export declare function normalizeKeyboardShortcuts(keys: string, forClient?: 'mousetrap' | 'electron'): string;
+export declare function normalizeKeyboardShortcuts(keys: RawKeyboardShortcutSpecification, forClient?: 'mousetrap' | 'electron'): string;
 interface RegisterShortcutsPayload {
     router: VueRouter;
     shortcuts: any;

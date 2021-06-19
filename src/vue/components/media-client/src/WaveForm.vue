@@ -38,7 +38,6 @@ export default {
         div.style.width = `${audio.currentTime / audio.duration * width}px`
         div.style.marginLeft = `${img.offsetLeft}px`
         div.style.marginTop = `${img.offsetTop}px`
-
       })
     }
   },

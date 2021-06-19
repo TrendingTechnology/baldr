@@ -111,6 +111,8 @@ export function convertMenuItemElectron(raw, payload) {
     return result;
 }
 /**
+ * Normalize the keyboard shortcuts.
+ *
  * @param keys - A raw keyboard shortcut specification.
  * @param forClient - For which client the shortcuts have to
  *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
