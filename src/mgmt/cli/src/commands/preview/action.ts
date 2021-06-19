@@ -6,6 +6,7 @@ import { readYamlFile } from '@bldr/file-reader-writer'
 import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
 import { filePathToMimeType, walk } from '@bldr/media-manager'
+import collectAudioMetaData from '@bldr/audio-metadata'
 
 interface CmdObj {
   seconds: number
@@ -14,41 +15,41 @@ interface CmdObj {
 
 const cmd = new CommandRunner({ verbose: true })
 
-function createAudioWaveForm (srcPath: string): void {
+async function createAudioWaveForm (srcPath: string): Promise<void> {
+  const meta = await collectAudioMetaData(srcPath)
+  let width = '500'
+  if (meta?.duration != null) {
+    width = (meta.duration * 5).toFixed(0)
+  }
   const destPath = `${srcPath}_waveform.png`
   cmd.execSync([
     'ffmpeg',
-    '-t', '60', // duration
+    // '-t', '60',
     '-i', srcPath,
-    '-filter_complex', 'aformat=channel_layouts=mono,compand,showwavespic=size=500x500:colors=white',
+    '-filter_complex', `aformat=channel_layouts=mono,compand,showwavespic=size=${width}x500:colors=black`,
     '-frames:v', '1',
     '-y', // Overwrite output files without asking
     destPath
   ])
-  log.info('Create waveform image %s from %s.', destPath)
+  log.info('Create waveform image %s from %s.', destPath, srcPath)
 }
 
-async function downloadCover (coverHttp: string, destPath: string): Promise<void> {
-  await fetchFile(coverHttp, destPath)
-  log.info('Download preview image %s from %s.', destPath, coverHttp)
-}
-
-async function createAudioPreview (srcPath: string, destPath: string): Promise<void> {
+async function downloadAudioCoverImage (srcPath: string, destPath: string): Promise<void> {
   const yamlFile = `${srcPath}.yml`
   const metaData = readYamlFile(yamlFile)
 
   if (metaData.coverSource != null) {
-    await downloadCover(metaData.coverSource, destPath)
+    await fetchFile(metaData.coverSource, destPath)
+    log.info('Download preview image %s from %s.', destPath, metaData.coverSource)
   } else {
     log.error('No property “cover_source” found.')
-    createAudioWaveForm(srcPath)
   }
 }
 
 /**
  * Create a video preview image.
  */
-function createVideoPreview (srcPath: string, destPath: string, second: number = 10): void {
+function extractFrameFromVideo (srcPath: string, destPath: string, second: number = 10): void {
   let secondString: string
   if (typeof second === 'number') {
     secondString = second.toString()
@@ -66,7 +67,7 @@ function createVideoPreview (srcPath: string, destPath: string, second: number =
   log.info('Create preview image %s of a video file.', destPath)
 }
 
-function createPdfPreview (srcPath: string, destPath: string): void {
+function convertFirstPdfPageToJpg (srcPath: string, destPath: string): void {
   destPath = destPath.replace('.jpg', '')
   cmd.execSync([
     'pdftocairo',
@@ -80,18 +81,23 @@ function createPdfPreview (srcPath: string, destPath: string): void {
 
 async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<void> {
   const mimeType = filePathToMimeType(srcPath)
-  const destPath = `${srcPath}_preview.jpg`
+  const destPathPreview = `${srcPath}_preview.jpg`
+  const destPathWavefrom = `${srcPath}_waveform.png`
 
-  if (fs.existsSync(destPath) && !cmdObj.force) {
+  if (mimeType === 'audio' && (!fs.existsSync(destPathWavefrom) || cmdObj?.force)) {
+    await createAudioWaveForm(srcPath)
+  }
+
+  if (fs.existsSync(destPathPreview) && !cmdObj.force) {
     return
   }
 
   if (mimeType === 'video') {
-    createVideoPreview(srcPath, destPath, cmdObj.seconds)
+    extractFrameFromVideo(srcPath, destPathPreview, cmdObj.seconds)
   } else if (mimeType === 'document') {
-    createPdfPreview(srcPath, destPath)
+    convertFirstPdfPageToJpg(srcPath, destPathPreview)
   } else if (mimeType === 'audio') {
-    await createAudioPreview(srcPath, destPath)
+    await downloadAudioCoverImage(srcPath, destPathPreview)
   }
 }
 

@@ -4,6 +4,7 @@ interface AudioMetadataContainer {
     composer?: string;
     album?: string;
     musicbrainz_recording_id?: string;
+    duration?: number;
 }
 /**
  * Output from `music-metadata`:
