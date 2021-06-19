@@ -85,12 +85,7 @@ export default {
   },
   methods: {
     registerEvents () {
-      // TODO: remove this.sample.htmlElement
-      if (this.sample.htmlElement != null) {
-        this.htmlElement = this.sample.htmlElement
-      } else {
-        this.htmlElement = this.sample.htmlElement
-      }
+      this.htmlElement = this.sample.htmlElement
       // Mount a playing media element.
       if (!this.htmlElement.paused) {
         this.status = 'playing'
@@ -108,13 +103,13 @@ export default {
         }
       })
 
-      this.$el.onmouseenter = () => {
+      this.$el.addEventListener('mouseenter', () => {
         if (this.status === 'playing') {
           this.status = 'stoppable'
         }
-      }
+      })
 
-      this.$el.onmouseleave = () => {
+      this.$el.addEventListener('mouseleave', () => {
           if (!this.htmlElement.paused) {
           if (this.sample.playbackState === 'fadeout') {
             this.status = 'fadeout'
@@ -122,24 +117,24 @@ export default {
             this.status = 'playing'
           }
         }
-      }
+      })
 
-      this.htmlElement.ontimeupdate = (event) => {
+      this.htmlElement.addEventListener('timeupdate', (event) => {
         if (!this.$refs.progress) return
         this.setProgress(this.sample.progress)
-      }
+      })
 
       this.sample.events.on('fadeinend', () => {
         this.status = 'playing'
       })
 
-      this.htmlElement.onplay = (event) => {
+      this.htmlElement.addEventListener('play', (event) => {
         this.status = 'fadein'
-      }
+      })
 
-      this.htmlElement.onpause = (event) => {
+      this.htmlElement.addEventListener('pause', (event) => {
         this.status = 'stopped'
-      }
+      })
 
       this.sample.events.on('fadeoutbegin', () => {
         this.status = 'fadeout'
