@@ -6,6 +6,7 @@ interface AudioMetadataContainer {
   composer?: string
   album?: string
   musicbrainz_recording_id?: string
+  duration?: number
 }
 
 /**
@@ -65,15 +66,29 @@ interface AudioMetadataContainer {
  */
 async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataContainer | undefined> {
   const metaData = await musicMetadata.parseFile(inputFile)
+  const output: AudioMetadataContainer = { title: '' }
 
-  if ('common' in metaData) {
-    const output: AudioMetadataContainer = { title: '' }
+  if (metaData.format.duration != null) {
+    output.duration = metaData.format.duration
+  }
+
+  if (metaData.common != null) {
     const common = metaData.common
-    if (common.title != null) output.title = common.title
-    if (common.albumartist != null) output.artist = common.albumartist
-    if (common.artist != null) output.composer = common.artist
-    if (common.album != null) output.album = common.album
-    if (common.musicbrainz_recordingid != null) output.musicbrainz_recording_id = common.musicbrainz_recordingid
+    if (common.title != null) {
+      output.title = common.title
+    }
+    if (common.albumartist != null) {
+      output.artist = common.albumartist
+    }
+    if (common.artist != null) {
+      output.composer = common.artist
+    }
+    if (common.album != null) {
+      output.album = common.album
+    }
+    if (common.musicbrainz_recordingid != null) {
+      output.musicbrainz_recording_id = common.musicbrainz_recordingid
+    }
     if (output.album != null && output.title != null) {
       output.title = `${output.album}: ${output.title}`
       delete output.album

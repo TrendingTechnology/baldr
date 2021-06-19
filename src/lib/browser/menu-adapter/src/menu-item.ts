@@ -3,6 +3,14 @@ import type VueRouter from 'vue-router'
 
 export type ElectronMenuItem = MenuItemConstructorOptions
 
+/**
+ * Sourround `+` with spaces: `Ctrl + f`
+ *
+ * Special keys:
+ * `Ctrl`, `Shift`, `Alt`, `Left`, `Right`, `Up`, `Down`, `Space`
+ */
+type RawKeyboardShortcutSpecification = string
+
 export interface UniversalMenuItem {
   /**
    * A short label of the menu entry.
@@ -20,10 +28,10 @@ export interface UniversalMenuItem {
   arguments?: any
 
   /**
-   * Keyboard shortcuts to pass through mousetrap
-   *   and to pass through the Electron Accelerator.
+   * Keyboard shortcuts to pass through mousetrap and to pass through the
+   * Electron Accelerator.
    */
-  keyboardShortcut?: string
+  keyboardShortcut?: RawKeyboardShortcutSpecification
 
   activeOnRoutes?: string[]
 }
@@ -166,11 +174,13 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
 }
 
 /**
+ * Normalize the keyboard shortcuts.
+ *
  * @param keys - A raw keyboard shortcut specification.
  * @param forClient - For which client the shortcuts have to
  *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
  */
-export function normalizeKeyboardShortcuts (keys: string, forClient: 'mousetrap' | 'electron' = 'mousetrap'): string {
+export function normalizeKeyboardShortcuts (keys: RawKeyboardShortcutSpecification, forClient: 'mousetrap' | 'electron' = 'mousetrap'): string {
   if (forClient === 'mousetrap') {
     // See https://craig.is/killing/mice
     keys = keys.replace('Ctrl', 'ctrl')

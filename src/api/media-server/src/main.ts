@@ -147,7 +147,7 @@ class ServerMediaFile {
   /**
    * Add metadata from the file system, like file size or timeModifed.
    */
-  protected addFileInfos (): ServerMediaFile {
+  protected startBuild (): ServerMediaFile {
     this.extension = getExtension(this.absPath_)
     if (this.extension != null) {
       this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
@@ -161,7 +161,7 @@ class ServerMediaFile {
    * Delete the temporary properties of the object. Temporary properties end
    * with `_`.
    */
-  cleanTmpProperties (): ServerMediaFile {
+   protected cleanTmpProperties (): ServerMediaFile {
     for (const property in this) {
       if (property.match(/_$/) != null) {
         // eslint-disable-next-line
@@ -178,7 +178,7 @@ class ServerMediaFile {
    *
    * @param properties - Add an object to the class properties.
    */
-  importProperties (properties: StringIndexedObject): void {
+   protected importProperties (properties: StringIndexedObject): void {
     if (typeof properties === 'object') {
       properties = convertPropertiesSnakeToCamel(properties)
       for (const property in properties) {
@@ -191,10 +191,14 @@ class ServerMediaFile {
    * Prepare the object for the insert into the MongoDB database
    * Generate `id` and `title` if this properties are not present.
    */
-  prepareForInsert (): ServerMediaFile {
-    this.addFileInfos()
-    if (this.id == null && this.basename_ != null) this.id = asciify(this.basename_)
-    if (this.title == null && this.id != null) this.title = deasciify(this.id)
+  public build (): ServerMediaFile {
+    this.startBuild()
+    if (this.id == null && this.basename_ != null) {
+      this.id = asciify(this.basename_)
+    }
+    if (this.title == null && this.id != null) {
+      this.title = deasciify(this.id)
+    }
     this.cleanTmpProperties()
     return this
   }
@@ -209,18 +213,22 @@ class ServerMediaAsset extends ServerMediaFile {
    * The absolute path of the info file in the YAML format. On the absolute
    * media file path `.yml` is appended.
    */
-  infoFile_: string
+  private infoFile_: string
 
   /**
-   * Indicates whether the media asset has a preview image.
+   * Indicates whether the media asset has a preview image (`_preview.jpg`).
    */
-  previewImage: boolean
-  mimeType?: string
+  public previewImage: boolean = false
+
+  /**
+   * Indicates wheter the media asset has a waveform image (`_waveform.png`).
+   */
+  public hasWaveform: boolean = false
 
   /**
    * The number of parts of a multipart media asset.
    */
-  multiPartCount?: number
+  public multiPartCount?: number
 
   /**
    * @param filePath - The file path of the media file.
@@ -230,19 +238,21 @@ class ServerMediaAsset extends ServerMediaFile {
     this.infoFile_ = `${this.absPath_}.yml`
     const data = readYamlFile(this.infoFile_)
     this.importProperties(data)
-    this.previewImage = false
   }
 
-  addFileInfos (): ServerMediaAsset {
-    super.addFileInfos()
+  private detectPreview (): ServerMediaAsset {
     const previewImage = `${this.absPath_}_preview.jpg`
-    if (this.extension != null) {
-      this.mimeType = mimeTypeManager.extensionToType(this.extension)
-    }
     if (fs.existsSync(previewImage)) {
       this.previewImage = true
     }
-    this.detectMultiparts_()
+    return this
+  }
+
+  private detectWaveform (): ServerMediaAsset {
+    const waveformImage = `${this.absPath_}_waveform.png`
+    if (fs.existsSync(waveformImage)) {
+      this.hasWaveform = true
+    }
     return this
   }
 
@@ -250,7 +260,7 @@ class ServerMediaAsset extends ServerMediaFile {
    * Search for mutlipart assets. The naming scheme of multipart assets is:
    * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
    */
-  detectMultiparts_ (): void {
+  private detectMultiparts (): ServerMediaAsset {
     const nextAssetFileName = (count: number): string => {
       let suffix
       if (count < 10) {
@@ -281,6 +291,25 @@ class ServerMediaAsset extends ServerMediaFile {
     if (count > 1) {
       this.multiPartCount = count
     }
+    return this
+  }
+
+  private detectMimeType(): ServerMediaAsset {
+    if (this.extension != null) {
+      this.mimeType = mimeTypeManager.extensionToType(this.extension)
+    }
+    return this
+  }
+
+  protected startBuild (): ServerMediaAsset {
+    super.startBuild()
+
+    this
+      .detectMultiparts()
+      .detectPreview()
+      .detectWaveform()
+      .detectMimeType()
+    return this
   }
 }
 
@@ -387,7 +416,7 @@ async function insertObjectIntoDb (filePath: string, mediaType: ServerMediaType)
       object = new ServerMediaAsset(filePath)
     }
     if (object == null) return
-    object = object.prepareForInsert()
+    object = object.build()
     await database.db.collection(mediaType).insertOne(object)
   } catch (error) {
     console.log(error)

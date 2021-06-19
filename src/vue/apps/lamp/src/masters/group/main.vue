@@ -6,7 +6,7 @@
       v-if="asset.yaml.shortHistory"
       v-html="asset.yaml.shortHistory"
     />
-    <p class="members transparent-box font-shadow">
+    <p class="members transparent-box font-shadow" v-if="members.length > 0">
       <span class="important big">Mitglieder: </span>
       <ul>
         <li class="person" v-for="member in members" :key="member">
@@ -81,9 +81,9 @@ export default {
 
     .members {
       font-size: 0.8em;
-      position: absolute;
-      top: 2em;
       left: 1em;
+      position: absolute;
+      top: 4vh;
     }
 
     .title-box {

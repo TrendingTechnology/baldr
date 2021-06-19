@@ -157,7 +157,7 @@ var ServerMediaFile = /** @class */ (function () {
     /**
      * Add metadata from the file system, like file size or timeModifed.
      */
-    ServerMediaFile.prototype.addFileInfos = function () {
+    ServerMediaFile.prototype.startBuild = function () {
         this.extension = core_browser_1.getExtension(this.absPath_);
         if (this.extension != null) {
             this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
@@ -199,12 +199,14 @@ var ServerMediaFile = /** @class */ (function () {
      * Prepare the object for the insert into the MongoDB database
      * Generate `id` and `title` if this properties are not present.
      */
-    ServerMediaFile.prototype.prepareForInsert = function () {
-        this.addFileInfos();
-        if (this.id == null && this.basename_ != null)
+    ServerMediaFile.prototype.build = function () {
+        this.startBuild();
+        if (this.id == null && this.basename_ != null) {
             this.id = core_browser_1.asciify(this.basename_);
-        if (this.title == null && this.id != null)
+        }
+        if (this.title == null && this.id != null) {
             this.title = core_browser_1.deasciify(this.id);
+        }
         this.cleanTmpProperties();
         return this;
     };
@@ -221,29 +223,38 @@ var ServerMediaAsset = /** @class */ (function (_super) {
      */
     function ServerMediaAsset(filePath) {
         var _this = _super.call(this, filePath) || this;
+        /**
+         * Indicates whether the media asset has a preview image (`_preview.jpg`).
+         */
+        _this.previewImage = false;
+        /**
+         * Indicates wheter the media asset has a waveform image (`_waveform.png`).
+         */
+        _this.hasWaveform = false;
         _this.infoFile_ = _this.absPath_ + ".yml";
         var data = file_reader_writer_1.readYamlFile(_this.infoFile_);
         _this.importProperties(data);
-        _this.previewImage = false;
         return _this;
     }
-    ServerMediaAsset.prototype.addFileInfos = function () {
-        _super.prototype.addFileInfos.call(this);
+    ServerMediaAsset.prototype.detectPreview = function () {
         var previewImage = this.absPath_ + "_preview.jpg";
-        if (this.extension != null) {
-            this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
-        }
         if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;
         }
-        this.detectMultiparts_();
+        return this;
+    };
+    ServerMediaAsset.prototype.detectWaveform = function () {
+        var waveformImage = this.absPath_ + "_waveform.png";
+        if (fs_1.default.existsSync(waveformImage)) {
+            this.hasWaveform = true;
+        }
         return this;
     };
     /**
      * Search for mutlipart assets. The naming scheme of multipart assets is:
      * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
      */
-    ServerMediaAsset.prototype.detectMultiparts_ = function () {
+    ServerMediaAsset.prototype.detectMultiparts = function () {
         var _this = this;
         var nextAssetFileName = function (count) {
             var suffix;
@@ -278,6 +289,22 @@ var ServerMediaAsset = /** @class */ (function (_super) {
         if (count > 1) {
             this.multiPartCount = count;
         }
+        return this;
+    };
+    ServerMediaAsset.prototype.detectMimeType = function () {
+        if (this.extension != null) {
+            this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
+        }
+        return this;
+    };
+    ServerMediaAsset.prototype.startBuild = function () {
+        _super.prototype.startBuild.call(this);
+        this
+            .detectMultiparts()
+            .detectPreview()
+            .detectWaveform()
+            .detectMimeType();
+        return this;
     };
     return ServerMediaAsset;
 }(ServerMediaFile));
@@ -365,7 +392,7 @@ function insertObjectIntoDb(filePath, mediaType) {
                     }
                     if (object == null)
                         return [2 /*return*/];
-                    object = object.prepareForInsert();
+                    object = object.build();
                     return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
                 case 1:
                     _a.sent();

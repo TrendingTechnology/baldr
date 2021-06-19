@@ -37,6 +37,8 @@
       v-html="artist"
     />
 
+    <wave-form :sample="sample"/>
+
     <play-button class="left-bottom-corner" :sample="sample"/>
     <external-sites :asset="mediaAsset"/>
   </div>
@@ -104,6 +106,11 @@ export default {
       height: 10em;
       width: 10em;
       object-fit: cover;
+    }
+
+    .vc_wave_form {
+      text-align: center;
+      margin: 0 auto;
     }
 
     .description {

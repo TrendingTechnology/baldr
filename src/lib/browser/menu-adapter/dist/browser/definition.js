@@ -168,7 +168,7 @@ export const universalMenuDefinition = [
                         label: 'Spiele/Pausiere',
                         action: 'executeCallback',
                         arguments: 'togglePlayer',
-                        keyboardShortcut: 'space'
+                        keyboardShortcut: 'Space'
                     },
                     {
                         label: 'Stop',
@@ -188,35 +188,35 @@ export const universalMenuDefinition = [
                         description: 'Starte geladenen Audio/Video-Ausschnitt',
                         action: 'executeCallback',
                         arguments: 'startPlayer',
-                        keyboardShortcut: 'ctrl+space'
+                        keyboardShortcut: 'Ctrl + Space'
                     },
                     {
                         label: 'Vorhergehender Ausschnitt',
                         description: 'Spiele den vorhergehenden Ausschnitt.',
                         action: 'executeCallback',
                         arguments: 'startPreviousInPlaylist',
-                        keyboardShortcut: 'ctrl+left'
+                        keyboardShortcut: 'Ctrl + Alt + Left'
                     },
                     {
                         label: 'Nächster Ausschnitt',
                         description: 'Spiele den nächsten Ausschnitt.',
                         action: 'executeCallback',
                         arguments: 'startNextInPlaylist',
-                        keyboardShortcut: 'ctrl+right'
+                        keyboardShortcut: 'Ctrl + Alt + Right'
                     },
                     {
                         label: 'vorspulen',
                         description: 'Um 10s nach vorne springen.',
                         action: 'executeCallback',
                         arguments: 'forwardPlayer',
-                        keyboardShortcut: 'ctrl+shift+right'
+                        keyboardShortcut: 'Ctrl + Shift + Right'
                     },
                     {
                         label: 'zurückspulen',
                         description: 'Um 10s nach hinten springen.',
                         action: 'executeCallback',
                         arguments: 'backwardPlayer',
-                        keyboardShortcut: 'ctrl+shift+left'
+                        keyboardShortcut: 'Ctrl + Shift + Left'
                     }
                 ]
             }

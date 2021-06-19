@@ -5,12 +5,10 @@ const assert = require('assert')
 const { assetCache, sampleCache, resetMediaCache } = require('../dist/node/cache.js')
 const { resolve } = require('../dist/node/resolve.js')
 
-const { update, resolveSingleByUuid, resolveByUuid } = require('./_helper.js')
+const { resolveSingleByUuid, resolveByUuid } = require('./_helper.js')
 
-describe('Package “@bldr/media-resolver”', function () {
+describe('Package “@bldr/media-resolver”: File “resolve.js”', function () {
   it('resolve single', async function () {
-    this.timeout(10000)
-    await update()
     const assets = await resolveByUuid('c64047d2-983d-4009-a35f-02c95534cb53')
     // 09/20_Kontext/20_Romantik/10_Programmmusik/35_Ausstellung/10_Ausstellung-Ueberblick/HB/10_Klav_Grosses-Tor-von-Kiew.m4a
     assert.strictEqual(assets[0].uri.raw, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')

@@ -25,12 +25,11 @@
     "build": "npm run build:node",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
-    "lint": "npm run lint:depcheck & npm run lint:ts-standard"
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
   },
   "dependencies": {
-    "music-metadata": "7.8.1"
-  },
-  "devDependencies": {
-    "@types/node": "14.14.35"
+    "music-metadata": "7.8.6"
   }
 }
