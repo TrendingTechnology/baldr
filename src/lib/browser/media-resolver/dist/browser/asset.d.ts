@@ -58,6 +58,12 @@ export declare class ClientMediaAsset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl(): string | undefined;
+    /**
+     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+     * is appended on the HTTP URL. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
+     */
+    get waveformHttpUrl(): string | undefined;
     get titleSafe(): string;
     /**
      * True if the media file is playable, for example an audio or a video file.

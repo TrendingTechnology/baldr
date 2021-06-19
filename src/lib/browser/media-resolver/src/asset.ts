@@ -123,6 +123,17 @@ export class ClientMediaAsset {
     }
   }
 
+  /**
+   * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+   * is appended on the HTTP URL. For example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
+   */
+  get waveformHttpUrl (): string | undefined {
+    if (this.yaml.hasWaveform) {
+      return `${this.httpUrl}_waveform.png`
+    }
+  }
+
   get titleSafe (): string {
     if (this.yaml.title != null) {
       return this.yaml.title
