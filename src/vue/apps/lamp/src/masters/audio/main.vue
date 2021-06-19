@@ -37,6 +37,8 @@
       v-html="artist"
     />
 
+    <wave-form :asset="mediaAsset"/>
+
     <play-button class="left-bottom-corner" :sample="sample"/>
     <external-sites :asset="mediaAsset"/>
   </div>
@@ -44,6 +46,7 @@
 
 <script>
 import ExternalSites from '@/components/ExternalSites.vue'
+import WaveForm from './WaveForm.vue'
 
 export default {
   props: {
@@ -74,7 +77,8 @@ export default {
     }
   },
   components: {
-    ExternalSites
+    ExternalSites,
+    WaveForm
   }
 }
 </script>
