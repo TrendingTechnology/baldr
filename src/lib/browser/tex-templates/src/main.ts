@@ -1,4 +1,3 @@
-
 interface KeyValuePairs {[key: string]: string}
 
 /**

@@ -41,6 +41,7 @@
     "@bldr/open-with": "*",
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
     "@bldr/type-definitions": "*",
     "@bldr/wikidata": "*",

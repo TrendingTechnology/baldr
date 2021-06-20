@@ -27,17 +27,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
 const titles_1 = require("@bldr/titles");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
+const tex = __importStar(require("@bldr/tex-templates"));
+/**
+ * @returns A TeX markup like this output:
+ *
+ * ```tex
+ * \setzetitel{
+ *   jahrgangsstufe = {6},
+ *   ebenei = {Musik und ihre Grundlagen},
+ *   ebeneii = {Systeme und Strukturen},
+ *   ebeneiii = {die Tongeschlechter Dur und Moll},
+ *   titel = {Dur- und Moll-Tonleiter},
+ *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ * }
+ * ```
+ */
+function makeTexMarkup(titles) {
+    const setzeTitle = {
+        jahrgangsstufe: titles.grade.toString()
+    };
+    const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev'];
+    for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
+        setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index];
+    }
+    setzeTitle.titel = titles.title;
+    if (titles.subtitle != null) {
+        setzeTitle.untertitel = titles.subtitle;
+    }
+    // Replace semantic markup
+    for (const key in setzeTitle) {
+        setzeTitle[key] = tex_markdown_converter_1.convertMdToTex(setzeTitle[key]);
+    }
+    return tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n';
+}
 /**
  * ```tex
  * \setzetitel{
@@ -55,44 +83,23 @@ const log = __importStar(require("@bldr/log"));
 function patchTexFileWithTitles(filePath) {
     log.info('\nReplace titles in TeX file “%s”', filePath);
     const titles = new titles_1.DeepTitle(filePath);
-    log.info(titles);
-    const setzeTitle = {
-        jahrgangsstufe: titles.grade.toString()
-    };
-    const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev'];
-    for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
-        setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index];
+    const patchedTitles = makeTexMarkup(titles);
+    const texFileContent = file_reader_writer_1.readFile(filePath);
+    let texFileContentPatched;
+    if (texFileContent.includes('\\setztetitel{')) {
+        // /s s (dotall) modifier, +? one or more (non-greedy)
+        const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
+        texFileContentPatched = texFileContent.replace(regexp, patchedTitles);
     }
-    setzeTitle.titel = titles.title;
-    if (titles.subtitle != null) {
-        setzeTitle.untertitel = titles.subtitle;
+    else {
+        texFileContentPatched = texFileContent.replace(/\\documentclass(\[.*\])?\{schule-arbeitsblatt\}/, '$1\n\n' + patchedTitles);
     }
-    // Replace semantic markup
-    for (const key in setzeTitle) {
-        setzeTitle[key] = tex_markdown_converter_1.convertMdToTex(setzeTitle[key]);
-    }
-    const lines = ['\\setzetitel{'];
-    for (const key in setzeTitle) {
-        lines.push(`  ${key} = {${setzeTitle[key]}},`);
-    }
-    lines.push('}');
-    lines.push(''); // to get an empty line
-    const patchedTitles = lines.join('\n');
-    let texFileString = file_reader_writer_1.readFile(filePath);
-    // /s s (dotall) modifier, +? one or more (non-greedy)
-    const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
-    const match = texFileString.match(regexp);
-    if (match != null) {
-        const unpatchedTitles = match[0];
-        if (unpatchedTitles !== patchedTitles) {
-            console.log(chalk_1.default.yellow(unpatchedTitles));
-            texFileString = texFileString.replace(regexp, patchedTitles);
-            file_reader_writer_1.writeFile(filePath, texFileString);
-        }
+    if (texFileContent !== texFileContentPatched) {
         log.info(patchedTitles);
-        if (unpatchedTitles === patchedTitles) {
-            log.info('No changes!');
-        }
+        file_reader_writer_1.writeFile(filePath, texFileContentPatched);
+    }
+    else {
+        log.info('No changes!');
     }
 }
 /**

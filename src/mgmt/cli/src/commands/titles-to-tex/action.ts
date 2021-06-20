@@ -1,13 +1,14 @@
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import { convertMdToTex } from '@bldr/tex-markdown-converter'
 import { walk } from '@bldr/media-manager'
 import { DeepTitle } from '@bldr/titles'
 import { readFile, writeFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
+import * as tex from '@bldr/tex-templates'
+
 /**
+ * @returns A TeX markup like this output:
+ *
  * ```tex
  * \setzetitel{
  *   jahrgangsstufe = {6},
@@ -18,15 +19,8 @@ import * as log from '@bldr/log'
  *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
  * }
  * ```
- *
- * @param filePath - The path of a TeX file.
  */
-function patchTexFileWithTitles (filePath: string): void {
-  log.info('\nReplace titles in TeX file “%s”', filePath)
-  const titles = new DeepTitle(filePath)
-
-  log.info(titles)
-
+function makeTexMarkup (titles: DeepTitle): string {
   const setzeTitle: { [key: string]: string } = {
     jahrgangsstufe: titles.grade.toString()
   }
@@ -45,32 +39,46 @@ function patchTexFileWithTitles (filePath: string): void {
     setzeTitle[key] = convertMdToTex(setzeTitle[key])
   }
 
-  const lines = ['\\setzetitel{']
-  for (const key in setzeTitle) {
-    lines.push(`  ${key} = {${setzeTitle[key]}},`)
+  return tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n'
+}
+
+/**
+ * ```tex
+ * \setzetitel{
+ *   jahrgangsstufe = {6},
+ *   ebenei = {Musik und ihre Grundlagen},
+ *   ebeneii = {Systeme und Strukturen},
+ *   ebeneiii = {die Tongeschlechter Dur und Moll},
+ *   titel = {Dur- und Moll-Tonleiter},
+ *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ * }
+ * ```
+ *
+ * @param filePath - The path of a TeX file.
+ */
+function patchTexFileWithTitles (filePath: string): void {
+  log.info('\nReplace titles in TeX file “%s”', filePath)
+  const titles = new DeepTitle(filePath)
+  const patchedTitles = makeTexMarkup(titles)
+  const texFileContent = readFile(filePath)
+  let texFileContentPatched: string
+
+  if (texFileContent.includes('\\setztetitel{')) {
+    // /s s (dotall) modifier, +? one or more (non-greedy)
+    const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's')
+    texFileContentPatched = texFileContent.replace(regexp, patchedTitles)
+  } else {
+    texFileContentPatched = texFileContent.replace(
+      /\\documentclass(\[.*\])?\{schule-arbeitsblatt\}/,
+      '$1\n\n' + patchedTitles
+    )
   }
-  lines.push('}')
-  lines.push('') // to get an empty line
 
-  const patchedTitles = lines.join('\n')
-
-  let texFileString = readFile(filePath)
-  // /s s (dotall) modifier, +? one or more (non-greedy)
-  const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's')
-
-  const match = texFileString.match(regexp)
-  if (match != null) {
-    const unpatchedTitles = match[0]
-    if (unpatchedTitles !== patchedTitles) {
-      console.log(chalk.yellow(unpatchedTitles))
-      texFileString = texFileString.replace(regexp, patchedTitles)
-      writeFile(filePath, texFileString)
-    }
-
+  if (texFileContent !== texFileContentPatched) {
     log.info(patchedTitles)
-    if (unpatchedTitles === patchedTitles) {
-      log.info('No changes!')
-    }
+    writeFile(filePath, texFileContentPatched)
+  } else {
+    log.info('No changes!')
   }
 }
 
