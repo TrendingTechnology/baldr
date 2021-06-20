@@ -8,10 +8,5 @@
     "src/vue/apps/*",
     "src/vue/components/*"
   ],
-  "version": "independent",
-  "command": {
-    "bootstrap": {
-      "npmClientArgs": ["--legacy-peer-deps"]
-    }
-  }
+  "version": "independent"
 }

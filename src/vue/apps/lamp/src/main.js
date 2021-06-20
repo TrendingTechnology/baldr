@@ -195,7 +195,6 @@ Vue.config.productionTip = false
  * Set multiple attributes at the same time
  */
 class MultipleAttributes {
-  attributeName: string
   constructor () {
     this.attributeName = ''
   }
@@ -222,9 +221,6 @@ class MultipleAttributes {
  *
  */
 class BodyAttributes {
-  attributeName: string
-  state: false
-  bodyEl_: HTMLElement
   constructor () {
     this.attributeName = ''
     this.state = false
