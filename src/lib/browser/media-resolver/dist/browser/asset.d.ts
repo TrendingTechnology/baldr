@@ -74,8 +74,7 @@ export declare class ClientMediaAsset {
      */
     get isVisible(): boolean;
     /**
-     * The actual multi part asset count. If the multi part asset is restricted
-     * the method returns 1, else the count of all the parts.
+     * The number of parts of a multipart media asset.
      */
     get multiPartCount(): number;
     /**
@@ -111,7 +110,10 @@ export declare class MultiPartSelection {
      * The URI using the `ref` authority.
      */
     get ref(): string;
-    get partCount(): number;
+    /**
+     * The number of parts of a multipart media asset.
+     */
+    get multiPartCount(): number;
     /**
      * Used for the preview to fake that this class is a normal asset.
      */

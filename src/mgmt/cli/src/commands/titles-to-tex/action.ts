@@ -57,19 +57,19 @@ function makeTexMarkup (titles: DeepTitle): string {
  * @param filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles (filePath: string): void {
-  log.info('\nReplace titles in TeX file “%s”', filePath)
+  log.info('\nReplace titles in the TeX file “%s”:\n', filePath)
   const titles = new DeepTitle(filePath)
   const patchedTitles = makeTexMarkup(titles)
   const texFileContent = readFile(filePath)
   let texFileContentPatched: string
 
-  if (texFileContent.includes('\\setztetitel{')) {
+  if (texFileContent.includes('\\setzetitel{')) {
     // /s s (dotall) modifier, +? one or more (non-greedy)
     const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's')
     texFileContentPatched = texFileContent.replace(regexp, patchedTitles)
   } else {
     texFileContentPatched = texFileContent.replace(
-      /\\documentclass(\[.*\])?\{schule-arbeitsblatt\}/,
+      /(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/,
       '$1\n\n' + patchedTitles
     )
   }

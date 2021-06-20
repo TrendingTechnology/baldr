@@ -81,18 +81,18 @@ function makeTexMarkup(titles) {
  * @param filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles(filePath) {
-    log.info('\nReplace titles in TeX file “%s”', filePath);
+    log.info('\nReplace titles in the TeX file “%s”:\n', filePath);
     const titles = new titles_1.DeepTitle(filePath);
     const patchedTitles = makeTexMarkup(titles);
     const texFileContent = file_reader_writer_1.readFile(filePath);
     let texFileContentPatched;
-    if (texFileContent.includes('\\setztetitel{')) {
+    if (texFileContent.includes('\\setzetitel{')) {
         // /s s (dotall) modifier, +? one or more (non-greedy)
         const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
         texFileContentPatched = texFileContent.replace(regexp, patchedTitles);
     }
     else {
-        texFileContentPatched = texFileContent.replace(/\\documentclass(\[.*\])?\{schule-arbeitsblatt\}/, '$1\n\n' + patchedTitles);
+        texFileContentPatched = texFileContent.replace(/(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/, '$1\n\n' + patchedTitles);
     }
     if (texFileContent !== texFileContentPatched) {
         log.info(patchedTitles);

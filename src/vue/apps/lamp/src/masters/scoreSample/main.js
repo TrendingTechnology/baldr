@@ -79,11 +79,8 @@ export default validateMasterSpec({
       }
       return propsPreview
     },
-    calculateStepCount ({ props }) {
-      const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-      if (muliPartSelection) {
-        return muliPartSelection.partCount
-      }
+    calculateStepCount ({ props, propsMain }) {
+      return propsMain.asset.multiPartCount
     },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {

@@ -107,12 +107,12 @@ export class ClientMediaAsset {
         return ['image', 'video'].includes(this.mimeType);
     }
     /**
-     * The actual multi part asset count. If the multi part asset is restricted
-     * the method returns 1, else the count of all the parts.
+     * The number of parts of a multipart media asset.
      */
     get multiPartCount() {
-        if (this.yaml.multiPartCount == null)
+        if (this.yaml.multiPartCount == null) {
             return 1;
+        }
         return this.yaml.multiPartCount;
     }
     /**
@@ -163,7 +163,10 @@ export class MultiPartSelection {
             return `${this.asset.yaml.ref}#${this.selectionSpec}`;
         }
     }
-    get partCount() {
+    /**
+     * The number of parts of a multipart media asset.
+     */
+    get multiPartCount() {
         return this.partNos.length;
     }
     /**
