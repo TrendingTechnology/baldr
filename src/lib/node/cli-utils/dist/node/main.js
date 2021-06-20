@@ -44,6 +44,7 @@ const os_1 = __importDefault(require("os"));
 const ora_1 = __importDefault(require("ora"));
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'
+require("object-assign");
 const gauge_1 = __importDefault(require("gauge"));
 const log = __importStar(require("@bldr/log"));
 class CommandResult {

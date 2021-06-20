@@ -4,6 +4,7 @@
  * @module @bldr/cli-utils
  */
 /// <reference types="node" />
+import 'object-assign';
 interface CommandRunnerOption {
     verbose: boolean;
 }

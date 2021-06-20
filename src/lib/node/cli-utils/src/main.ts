@@ -12,6 +12,7 @@ import os from 'os'
 import ora from 'ora'
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'
+import 'object-assign'
 import Gauge from 'gauge'
 import * as log from '@bldr/log'
 
