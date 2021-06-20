@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "lib": ["ES6", "ES2017", "DOM"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "paths": {
+      "*": [
+        "./typings/*"
+      ]
+    }
+  },
+  "include": ["src/*.ts"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}

@@ -14,7 +14,7 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "mousetrap": "1.6.5",
+    "@bldr/mousetrap-wrapper": "*",
     "vue": "2.6.12"
   },
   "publishConfig": {
