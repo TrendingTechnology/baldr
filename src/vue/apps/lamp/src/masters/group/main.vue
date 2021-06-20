@@ -9,7 +9,7 @@
     <p class="members transparent-box font-shadow" v-if="members.length > 0">
       <span class="important big">Mitglieder: </span>
       <ul>
-        <li class="person" v-for="member in members" :key="member">
+        <li class="important person" v-for="member in members" :key="member">
           {{ member }}
         </li>
       </ul>
@@ -81,9 +81,13 @@ export default {
 
     .members {
       font-size: 0.8em;
-      left: 1em;
+      left: 2%;
       position: absolute;
-      top: 4vh;
+      top: 9%;
+
+      ul li::before {
+        content: "";
+      }
     }
 
     .title-box {
