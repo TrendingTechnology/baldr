@@ -203,7 +203,7 @@ class MultipleAttributes {
     const elements = document.querySelectorAll(`[${this.attributeName}]`)
     for (const element of elements) {
       // Preview slide editor has content-theme handwriting, which should
-      // be anchangeable.
+      // be unchangeable.
       if (
         this.attributeName !== 'b-content-theme' ||
             (

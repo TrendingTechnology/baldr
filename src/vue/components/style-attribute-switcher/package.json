@@ -1,0 +1,23 @@
+{
+  "name": "@bldr/style-attribute-switcher",
+  "version": "0.1.0",
+  "description": "Switch HTML attributes like `b-content-theme`, `b-ui-theme`, `b-dark-mode` from true to false and vice versa.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "src/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@bldr/type-definitions": "*"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+}
