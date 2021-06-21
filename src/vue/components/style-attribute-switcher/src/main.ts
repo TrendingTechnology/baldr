@@ -1,32 +1,32 @@
 import { MasterTypes } from '@bldr/type-definitions'
 
-class AttributeSwitcher {
+class AttributeSetter {
   attributeName: string
-  state: boolean = true
+  attributeValue: boolean = true
 
   constructor (attributeName: string) {
     this.attributeName = attributeName
   }
 
   get stateAsString (): string {
-    return `${this.state}`
+    return `${this.attributeValue}`
   }
 
   set (state: boolean = false): void {
-    this.state = state
+    this.attributeValue = state
   }
 
   toggle (): boolean {
-    this.set(!this.state)
-    return this.state
+    this.set(!this.attributeValue)
+    return this.attributeValue
   }
 }
 
 /**
  * Set multiple attributes at the same time
  */
- class MultipleAttributesSwitcher extends AttributeSwitcher{
-   attributeName: string
+class MultipleAttributesSwitcher extends AttributeSetter {
+  attributeName: string
   constructor (attributeName: string) {
     super(attributeName)
   }
@@ -40,7 +40,7 @@ class AttributeSwitcher {
   }
 }
 
-class BodyAttributesSwitcher extends AttributeSwitcher {
+class BodyAttributesSwitcher extends AttributeSetter {
   bodyElement: HTMLBodyElement
   constructor (attributeName: string) {
     super(attributeName)
@@ -53,20 +53,20 @@ class BodyAttributesSwitcher extends AttributeSwitcher {
   }
 }
 
-class DarkMode extends BodyAttributesSwitcher {
+class DarkModeSetter extends BodyAttributesSwitcher {
   constructor () {
     super('b-dark-mode')
-    this.state = false
+    this.attributeValue = false
   }
 }
 
-class ContentTheme extends MultipleAttributesSwitcher {
+class ContentThemeSetter extends MultipleAttributesSwitcher {
   constructor () {
     super('b-content-theme')
   }
 
   set (state: boolean = false) {
-    this.state = state
+    this.attributeValue = state
     const elements = document.querySelectorAll(`[${this.attributeName}]`)
     for (const element of elements) {
       // Preview slide editor has content-theme handwriting, which should
@@ -78,23 +78,24 @@ class ContentTheme extends MultipleAttributesSwitcher {
   }
 }
 
-class UiTheme extends MultipleAttributesSwitcher {
+class UiThemeSetter extends MultipleAttributesSwitcher {
   constructor () {
     super('b-ui-theme')
   }
 }
 
-
 /**
  *
  */
 class StyleConfigurator {
+  darkModeSetter = new DarkModeSetter()
+  contentThemeSetter = new ContentThemeSetter()
+  uiThemeSetter = new UiThemeSetter()
+
   constructor () {
-    this.configObjects = {
-      darkMode: new DarkMode(),
-      contentTheme: new ContentTheme(),
-      uiTheme: new UiTheme()
-    }
+    this.darkModeSetter = new DarkModeSetter()
+    this.contentThemeSetter = new ContentThemeSetter()
+    this.uiThemeSetter = new UiThemeSetter()
   }
 
   /**
