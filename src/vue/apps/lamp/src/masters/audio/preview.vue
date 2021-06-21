@@ -6,7 +6,12 @@
     <img
       :src="previewHttpUrl"
       class="image-contain"
-      v-if="previewHttpUrl"
+      v-if="previewHttpUrl != null"
+    />
+    <img
+      :src="waveformHttpUrl"
+      class="waveform image-contain"
+      v-if="previewHttpUrl == null && waveformHttpUrl != null"
     />
     <div class="metadata">
       <p
@@ -28,6 +33,9 @@
 export default {
   props: {
     previewHttpUrl: {
+      type: String
+    },
+    waveformHttpUrl: {
       type: String
     },
     title: {
@@ -61,6 +69,11 @@ export default {
 
     .title {
       font-size: 2em;
+    }
+
+    img.waveform {
+      filter: invert(100%);
+      opacity: 0.8;
     }
   }
 </style>

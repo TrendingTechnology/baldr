@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_audio_master">
+  <div class="vc_audio_master main-app-padding big">
 
     <p
       class="description"

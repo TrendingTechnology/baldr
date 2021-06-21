@@ -109,6 +109,7 @@ export default validateMasterSpec({
       return {
         sample,
         previewHttpUrl,
+        waveformHttpUrl: asset.waveformHttpUrl,
         artist,
         composer,
         title,
