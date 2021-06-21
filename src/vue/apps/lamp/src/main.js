@@ -27,11 +27,10 @@
  * - `this.$router`
  * - `this.$shortcuts`
  * - `this.$store`
- * - `this.$styleConfig`
+ * - `this.$style`
  *
  * ```js
  * function mounted () {
- *   this.$styleConfig.setDefault()
  *
  *   // Set presentation app to fullscreen:
  *   this.$fullscreen()
@@ -111,6 +110,7 @@ import ModalDialog from '@bldr/modal-dialog'
 import DynamicSelect from '@bldr/dynamic-select'
 import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
+import StyleConfigurator from '@bldr/style-configurator'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
@@ -122,6 +122,7 @@ Vue.use(notifications)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
+Vue.use(StyleConfigurator)
 Vue.use(Websocket, config.wire.localUri, {
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
@@ -190,146 +191,6 @@ Vue.config.productionTip = false
  */
 
 /******************************************************************************/
-
-/**
- * Set multiple attributes at the same time
- */
-class MultipleAttributes {
-  constructor () {
-    this.attributeName = ''
-  }
-
-  set (value) {
-    const elements = document.querySelectorAll(`[${this.attributeName}]`)
-    for (const element of elements) {
-      // Preview slide editor has content-theme handwriting, which should
-      // be unchangeable.
-      if (
-        this.attributeName !== 'b-content-theme' ||
-            (
-              this.attributeName === 'b-content-theme' &&
-              !element.attributes['b-content-theme-unchangeable']
-            )
-      ) {
-        element.attributes[this.attributeName].value = value
-      }
-    }
-  }
-}
-
-/**
- *
- */
-class BodyAttributes {
-  constructor () {
-    this.attributeName = ''
-    this.state = false
-    this.bodyEl_ = document.querySelector('body')
-  }
-
-  toggle () {
-    this.set(!this.state)
-  }
-
-  set (state = false) {
-    this.bodyEl_.setAttribute(this.attributeName, state)
-    this.state = state
-  }
-}
-
-/**
- *
- */
-class DarkMode extends BodyAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-dark-mode'
-    this.state = false
-  }
-}
-
-/**
- *
- */
-class ContentTheme extends MultipleAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-content-theme'
-  }
-}
-
-/**
- *
- */
-class UiTheme extends MultipleAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-ui-theme'
-  }
-}
-
-/**
- * @typedef styleConfig
- * @type {object}
- * @property {styleConfig.darkMode}
- * @property {styleConfig.contentTheme}
- * @property {styleConfig.uiTheme}
- */
-
-/**
- *
- */
-class StyleConfig {
-  constructor () {
-    this.configObjects = {
-      darkMode: new DarkMode(),
-      contentTheme: new ContentTheme(),
-      uiTheme: new UiTheme()
-    }
-  }
-
-  /**
-   * @private
-   */
-  defaults_ () {
-    return {
-      darkMode: false,
-      contentTheme: 'default',
-      uiTheme: 'default'
-    }
-  }
-
-  setDefaults () {
-    this.set_(this.defaults_())
-  }
-
-  /**
-   * @private
-   */
-  set_ (styleConfig) {
-    for (const config in styleConfig) {
-      if (config in this.configObjects) {
-        this.configObjects[config].set(styleConfig[config])
-      } else {
-        throw new Error(`Unkown style config “${config}”.`)
-      }
-    }
-  }
-
-  /**
-   * @param {module:@bldr/lamp~styleConfig} styleConfig
-   */
-  set (styleConfig) {
-    if (!styleConfig) styleConfig = {}
-    this.set_(Object.assign(this.defaults_(), styleConfig))
-  }
-}
-
-/**
- * $styleConfig
- * @type {module:@bldr/lamp~StyleConfig}
- */
-Vue.prototype.$styleConfig = new StyleConfig()
 
 /**
  * $notifySuccess

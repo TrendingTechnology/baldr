@@ -75,7 +75,7 @@ export default {
 
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {
-        this.$styleConfig.set(to.meta.style)
+        this.$style.set(to.meta.style)
       }
     })
 

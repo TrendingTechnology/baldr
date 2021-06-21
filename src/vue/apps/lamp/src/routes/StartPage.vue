@@ -28,7 +28,7 @@ export default {
     DropDownMenu
   },
   mounted: function () {
-    this.$styleConfig.set()
+    this.$style.reset()
   }
 }
 </script>

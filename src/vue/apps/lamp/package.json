@@ -18,6 +18,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@bldr/style-configurator": "*",
     "@bldr/client-media-models": "*",
     "@bldr/components-collection": "*",
     "@bldr/config": "*",

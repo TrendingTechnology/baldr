@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/style-attribute-switcher",
+  "name": "@bldr/style-configurator",
   "version": "0.1.0",
-  "description": "Switch HTML attributes like `b-content-theme`, `b-ui-theme`, `b-dark-mode` from true to false and vice versa.",
+  "description": "Configure the style by switching HTML attributes like `b-content-theme`, `b-ui-theme`, `b-dark-mode`.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
@@ -12,12 +12,15 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "src/main.js",
+  "main": "dist/browser/main.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@bldr/type-definitions": "*"
+  },
+  "devDependencies": {
+    "vue": "2.6.11"
   },
   "scripts": {
     "build:browser": "tsc --module es2015 --outDir dist/browser",
