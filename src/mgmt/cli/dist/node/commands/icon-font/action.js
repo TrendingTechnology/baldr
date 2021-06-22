@@ -128,6 +128,7 @@ content: "${cssUnicodeEscape}";
                 log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape);
             }
             writeFileToDest('style.css', css.join('\n'));
+            writeFileToDest('baldr-icons.ttf', result.ttf);
             writeFileToDest('baldr-icons.woff', result.woff);
             writeFileToDest('baldr-icons.woff2', result.woff2);
             writeFileToDest('icons.json', JSON.stringify(names, null, '  '));
@@ -142,13 +143,13 @@ content: "${cssUnicodeEscape}";
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
-        log.info('The SVG files of the icons are download to: %s', tmpDir);
+        log.info('The SVG files of the icons are downloaded to this temporary directory: %s', tmpDir);
         downloadIcons(config_1.default.iconFont.iconMapping, config_1.default.iconFont.urlTemplate);
         copyIcons(getIconPath('icons'), tmpDir);
         yield convertIntoFontFiles({
             files: `${tmpDir}/*.svg`,
             fontName: 'baldr-icons',
-            formats: ['woff', 'woff2'],
+            formats: ['woff', 'woff2', 'ttf'],
             fontHeight: 512,
             descent: 64
         });

@@ -18,7 +18,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'comment-alert',
+    name: 'task',
     color: 'yellow-dark',
     size: 'large'
   },

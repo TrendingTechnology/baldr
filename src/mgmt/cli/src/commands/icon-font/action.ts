@@ -118,6 +118,7 @@ content: "${cssUnicodeEscape}";
       log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape)
     }
     writeFileToDest('style.css', css.join('\n'))
+    writeFileToDest('baldr-icons.ttf', result.ttf)
     writeFileToDest('baldr-icons.woff', result.woff)
     writeFileToDest('baldr-icons.woff2', result.woff2)
     writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
@@ -131,14 +132,14 @@ content: "${cssUnicodeEscape}";
 async function action (): Promise<void> {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
-  log.info('The SVG files of the icons are download to: %s', tmpDir)
+  log.info('The SVG files of the icons are downloaded to this temporary directory: %s', tmpDir)
 
   downloadIcons(config.iconFont.iconMapping, config.iconFont.urlTemplate)
   copyIcons(getIconPath('icons'), tmpDir)
   await convertIntoFontFiles({
     files: `${tmpDir}/*.svg`,
     fontName: 'baldr-icons',
-    formats: ['woff', 'woff2'],
+    formats: ['woff', 'woff2', 'ttf'],
     fontHeight: 512,
     descent: 64
   })

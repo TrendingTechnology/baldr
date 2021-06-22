@@ -77,7 +77,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'comment-question',
+    name: 'question',
     color: 'yellow',
     size: 'large'
   },
