@@ -1,0 +1,38 @@
+{
+  "name": "@bldr/icon-font-generator",
+  "version": "0.1.0",
+  "description": "Generate a custom icon font (some custom icons, most icons from materialdesignicons).",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@bldr/cli-utils": "*",
+    "@bldr/config": "*",
+    "@bldr/log": "*",
+    "@bldr/type-definitions": "*",
+    "webfont": "11.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "15.12.4"
+  },
+  "scripts": {
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
+  }
+}
