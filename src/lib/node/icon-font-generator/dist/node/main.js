@@ -140,7 +140,7 @@ function createCssFile(metadataCollection) {
 }
 /**
  * ```tex
- * \def\bSymbolTask{{\BaldrIconFont\char"0EA3A}}
+ * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
  * ```
  */
 function createTexFile(metadataCollection) {
@@ -149,7 +149,7 @@ function createTexFile(metadataCollection) {
         const unicodeGlyph = glyphData.unicode[0];
         const unicode = unicodeGlyph.charCodeAt(0).toString(16).toUpperCase();
         const name = glyphData.name.replace(/(-[a-z])/g, (group) => group.toUpperCase().replace('-', ''));
-        const glyph = `\\def\\bSymbol${core_browser_1.toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
+        const glyph = `\\def\\bIcon${core_browser_1.toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
         output.push(glyph);
     }
     writeFileToDest('baldr-icons-macros.tex', output.join('\n'));

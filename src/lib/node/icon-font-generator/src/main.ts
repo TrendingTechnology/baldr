@@ -139,7 +139,7 @@ function createCssFile (metadataCollection: GlyphMetadata[]) {
 
 /**
  * ```tex
- * \def\bSymbolTask{{\BaldrIconFont\char"0EA3A}}
+ * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
  * ```
  */
  function createTexFile (metadataCollection: GlyphMetadata[]) {
@@ -151,7 +151,7 @@ function createCssFile (metadataCollection: GlyphMetadata[]) {
         /(-[a-z])/g,
         (group) => group.toUpperCase().replace('-', '')
       )
-      const glyph = `\\def\\bSymbol${toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`
+      const glyph = `\\def\\bIcon${toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`
       output.push(glyph)
   }
   writeFileToDest('baldr-icons-macros.tex', output.join('\n'))
