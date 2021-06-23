@@ -45,6 +45,7 @@ const webfont_1 = __importDefault(require("webfont"));
 const log = __importStar(require("@bldr/log"));
 const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
+const core_browser_1 = require("@bldr/core-browser");
 const cmd = new cli_utils_1.CommandRunner();
 let tmpDir;
 /**
@@ -118,36 +119,68 @@ function writeBufferFileToDest(destFileName, content) {
     fs_1.default.writeFileSync(destPath, content);
     log.info('Create file: %s', destPath);
 }
+/**
+ * ```css
+ * .baldr-icon_account-group::before {
+ *   content: "\ea01";
+ * }
+ * ```
+ */
+function createCssFile(metadataCollection) {
+    const output = [];
+    const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
+    output.push(header);
+    for (const glyphData of metadataCollection) {
+        const unicodeGlyph = glyphData.unicode[0];
+        const unicode = '\\' + unicodeGlyph.charCodeAt(0).toString(16);
+        const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`;
+        output.push(glyph);
+    }
+    writeFileToDest('style.css', output.join('\n'));
+}
+/**
+ * ```tex
+ * \def\bSymbolTask{{\BaldrIconFont\char"0EA3A}}
+ * ```
+ */
+function createTexFile(metadataCollection) {
+    const output = [];
+    for (const glyphData of metadataCollection) {
+        const unicodeGlyph = glyphData.unicode[0];
+        const unicode = unicodeGlyph.charCodeAt(0).toString(16).toUpperCase();
+        const name = glyphData.name.replace(/(-[a-z])/g, (group) => group.toUpperCase().replace('-', ''));
+        const glyph = `\\def\\bSymbol${core_browser_1.toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
+        output.push(glyph);
+    }
+    writeFileToDest('baldr-icons-macros.tex', output.join('\n'));
+}
+function createJsonFile(metadataCollection) {
+    const output = [];
+    for (const glyphData of metadataCollection) {
+        output.push(glyphData.name);
+    }
+    writeFileToDest('icons.json', JSON.stringify(output, null, '  '));
+}
 function convertIntoFontFiles(config) {
     return __awaiter(this, void 0, void 0, function* () {
         log.info(config);
         try {
             const result = yield webfont_1.default(config);
             log.info(result);
-            const css = [];
-            const names = [];
-            const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
-            css.push(header);
             if (result.glyphsData == null) {
                 throw new Error('No glyphs data found.');
             }
+            const metadataCollection = [];
             for (const glyphData of result.glyphsData) {
-                if (glyphData.metadata != null) {
-                    const metadata = glyphData.metadata;
-                    const name = metadata.name;
-                    names.push(name);
-                    const unicodeGlyph = metadata.unicode[0];
-                    const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16);
-                    const cssGlyph = `.baldr-icon_${name}::before {\n  content: "${cssUnicodeEscape}";\n}\n`;
-                    css.push(cssGlyph);
-                    log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape);
-                }
+                const metadata = glyphData.metadata;
+                metadataCollection.push(metadata);
             }
-            writeFileToDest('style.css', css.join('\n'));
+            createCssFile(metadataCollection);
+            createTexFile(metadataCollection);
+            createJsonFile(metadataCollection);
             writeBufferFileToDest('baldr-icons.ttf', result.ttf);
             writeBufferFileToDest('baldr-icons.woff', result.woff);
             writeBufferFileToDest('baldr-icons.woff2', result.woff2);
-            writeFileToDest('icons.json', JSON.stringify(names, null, '  '));
         }
         catch (error) {
             log.error(error);

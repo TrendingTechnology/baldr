@@ -16,6 +16,7 @@ import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
 import { IconFontMapping, IconDefintion } from '@bldr/type-definitions'
+import { toTitleCase } from '@bldr/core-browser'
 
 const cmd = new CommandRunner()
 
@@ -116,6 +117,54 @@ interface GlyphMetadata {
   height: number
 }
 
+/**
+ * ```css
+ * .baldr-icon_account-group::before {
+ *   content: "\ea01";
+ * }
+ * ```
+ */
+function createCssFile (metadataCollection: GlyphMetadata[]) {
+  const output = []
+  const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
+  output.push(header)
+  for (const glyphData of metadataCollection) {
+      const unicodeGlyph: string = glyphData.unicode[0]
+      const unicode = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
+      const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`
+      output.push(glyph)
+  }
+  writeFileToDest('style.css', output.join('\n'))
+}
+
+/**
+ * ```tex
+ * \def\bSymbolTask{{\BaldrIconFont\char"0EA3A}}
+ * ```
+ */
+ function createTexFile (metadataCollection: GlyphMetadata[]) {
+  const output = []
+  for (const glyphData of metadataCollection) {
+      const unicodeGlyph: string = glyphData.unicode[0]
+      const unicode = unicodeGlyph.charCodeAt(0).toString(16).toUpperCase()
+      const name =  glyphData.name.replace(
+        /(-[a-z])/g,
+        (group) => group.toUpperCase().replace('-', '')
+      )
+      const glyph = `\\def\\bSymbol${toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`
+      output.push(glyph)
+  }
+  writeFileToDest('baldr-icons-macros.tex', output.join('\n'))
+}
+
+function createJsonFile (metadataCollection: GlyphMetadata[]) {
+  const output = []
+  for (const glyphData of metadataCollection) {
+    output.push(glyphData.name)
+  }
+  writeFileToDest('icons.json', JSON.stringify(output, null, '  '))
+}
+
 async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
   log.info(config)
 
@@ -123,33 +172,23 @@ async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
     const result = await webfont(config)
     log.info(result)
 
-    const css = []
-    const names = []
-
-    const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
-    css.push(header)
-
     if (result.glyphsData == null) {
       throw new Error('No glyphs data found.')
     }
 
+    const metadataCollection: GlyphMetadata[] = []
     for (const glyphData of result.glyphsData) {
-      if (glyphData.metadata != null) {
-        const metadata: GlyphMetadata = glyphData.metadata as GlyphMetadata
-        const name: string = metadata.name
-        names.push(name)
-        const unicodeGlyph: string = metadata.unicode[0]
-        const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
-        const cssGlyph = `.baldr-icon_${name}::before {\n  content: "${cssUnicodeEscape}";\n}\n`
-        css.push(cssGlyph)
-        log.info('name: %s unicode glyph: %s unicode escape hex: %s', name, unicodeGlyph, cssUnicodeEscape)
-      }
+      const metadata: GlyphMetadata = glyphData.metadata as GlyphMetadata
+      metadataCollection.push(metadata)
     }
-    writeFileToDest('style.css', css.join('\n'))
+
+    createCssFile(metadataCollection)
+    createTexFile(metadataCollection)
+    createJsonFile(metadataCollection)
+
     writeBufferFileToDest('baldr-icons.ttf', result.ttf)
     writeBufferFileToDest('baldr-icons.woff', result.woff)
     writeBufferFileToDest('baldr-icons.woff2', result.woff2)
-    writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
   } catch (error) {
     log.error(error)
     throw error
