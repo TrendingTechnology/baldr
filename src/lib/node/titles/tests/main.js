@@ -1,7 +1,7 @@
 /* globals describe it */
 const assert = require('assert')
 const path = require('path')
-const { DeepTitle } = require('../dist/node/main.js')
+const { DeepTitle } = require('../dist/node/deep-title.js')
 const { TreeFactory } = require('../dist/node/tree-factory.js')
 
 const config = require('@bldr/config')
@@ -51,7 +51,34 @@ describe('Package “@bldr/titles”', function () {
       add('30_Intervalle-Bach-Inventionen/Praesentation.baldr.yml')
       add('Praesentation.baldr.yml')
 
-      console.dir(factory.getTree(), { depth: null })
+      const tree = factory.getTree()
+
+      assert.ok(
+        tree['06']
+          .subTree['40_Grundlagen']
+          .subTree['05_Intervalle-Feinbestimmung']
+          .subTree['10_Bach-Thema-regium'].title.hasPraesentation
+      )
+
+      assert.ok(
+        tree['06']
+          .subTree['40_Grundlagen']
+          .subTree['05_Intervalle-Feinbestimmung']
+          .subTree['20_Bach-Matthaus-Komm-suesses-Kreuz'].title.hasPraesentation
+      )
+
+      assert.ok(
+        tree['06']
+          .subTree['40_Grundlagen']
+          .subTree['05_Intervalle-Feinbestimmung']
+          .subTree['30_Intervalle-Bach-Inventionen'].title.hasPraesentation
+      )
+
+      assert.strictEqual(
+        tree['06']
+          .subTree['40_Grundlagen']
+          .subTree['05_Intervalle-Feinbestimmung'].title.folderName, '05_Intervalle-Feinbestimmung'
+      )
     })
   })
 })

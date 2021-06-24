@@ -12,7 +12,6 @@ import path from 'path'
 import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
-import { DeepTitle, TitleTree } from '@bldr/titles'
 import { readYamlFile } from '@bldr/file-reader-writer'
 
 // Operations
@@ -115,9 +114,4 @@ export function readAssetYaml (filePath: string): AssetType.YamlFormat | undefin
   if (fs.existsSync(filePath)) {
     return readYamlFile(filePath) as AssetType.YamlFormat
   }
-}
-
-export default {
-  DeepTitle,
-  TitleTree
 }

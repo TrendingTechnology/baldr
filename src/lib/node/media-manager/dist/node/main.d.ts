@@ -6,7 +6,6 @@
  * @module @bldr/media-manager
  */
 import { AssetType } from '@bldr/type-definitions';
-import { DeepTitle, TitleTree } from '@bldr/titles';
 import { convertAsset } from './operations/convert-asset';
 import { generatePresentation } from './operations/generate-presentation';
 import { initializeMetaYaml } from './operations/initialize-meta-yaml';
@@ -48,8 +47,3 @@ export declare function moveAsset(oldPath: string, newPath: string, opts?: MoveA
  *   extension `.yml`).
  */
 export declare function readAssetYaml(filePath: string): AssetType.YamlFormat | undefined;
-declare const _default: {
-    DeepTitle: typeof DeepTitle;
-    TitleTree: typeof TitleTree;
-};
-export default _default;

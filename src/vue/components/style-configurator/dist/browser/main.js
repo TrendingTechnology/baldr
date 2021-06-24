@@ -5,7 +5,7 @@ class AttributeSetter {
         this.defaultValue = defaultValue;
     }
     get attributeValueAsString() {
-        return `${this.attributeValue}`;
+        return String(this.attributeValue);
     }
     set(attributeValue) {
         this.attributeValue = attributeValue;
@@ -19,14 +19,8 @@ class AttributeSetter {
     }
 }
 class StringAttributeSetter extends AttributeSetter {
-    constructor(attributeName, defaultValue) {
-        super(attributeName, defaultValue);
-    }
 }
 class BooleanAttributeSetter extends AttributeSetter {
-    constructor(attributeName, defaultValue) {
-        super(attributeName, defaultValue);
-    }
     toggle() {
         this.set(!this.attributeValue);
         return this.attributeValue;
@@ -52,7 +46,7 @@ class ContentThemeSetter extends StringAttributeSetter {
         for (const element of elements) {
             // Preview slide editor has content-theme handwriting, which should
             // be unchangeable.
-            if (!element.attributes['b-content-theme-unchangeable']) {
+            if ((element.attributes['b-content-theme-unchangeable']) == null) {
                 element.attributes[this.attributeName].value = this.attributeValueAsString;
             }
         }

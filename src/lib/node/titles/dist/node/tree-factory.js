@@ -20,6 +20,7 @@ class TreeFactory {
                 list = list[folderName].subTree;
             }
         } while (folderName != null);
+        return deepTitle;
     }
     getTree() {
         return this.rootList;

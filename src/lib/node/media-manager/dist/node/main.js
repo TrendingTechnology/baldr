@@ -24,7 +24,6 @@ exports.readAssetYaml = exports.moveAsset = exports.operations = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const titles_1 = require("@bldr/titles");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 // Operations
 const convert_asset_1 = require("./operations/convert-asset");
@@ -121,7 +120,3 @@ function readAssetYaml(filePath) {
     }
 }
 exports.readAssetYaml = readAssetYaml;
-exports.default = {
-    DeepTitle: titles_1.DeepTitle,
-    TitleTree: titles_1.TitleTree
-};

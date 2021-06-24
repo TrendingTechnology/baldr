@@ -77,7 +77,7 @@ import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
 import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
-import { TitleTree, DeepTitle } from '@bldr/titles'
+import { TreeFactory, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
 import type { MediaType } from './operations'
@@ -105,7 +105,7 @@ export let database: Database
 
 /* Media objects **************************************************************/
 
-const titleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
+let titleTreeFactory: TreeFactory
 
 /**
  * Base class to be extended.
@@ -352,8 +352,7 @@ class ServerPresentation extends ServerMediaFile {
     const data = readYamlFile(filePath)
     if (data != null) this.importProperties(data)
 
-    const deepTitle = new DeepTitle(filePath)
-    titleTree.add(deepTitle)
+    const deepTitle = titleTreeFactory.addTitleByPath(filePath)
 
     if (this.meta == null) {
       // eslint-disable-next-line
@@ -461,6 +460,8 @@ function gitPull (): void {
  * @returns {Promise.<Object>}
  */
 async function update (full: boolean = false): Promise<StringIndexedObject> {
+  // To get a fresh title tree, otherwise changes of the titles are not updated
+  titleTreeFactory = new TreeFactory()
   if (full) gitPull()
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
     cwd: basePath,
@@ -509,7 +510,7 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
 
   // .replaceOne and upsert: Problems with merged objects?
   await database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })
-  const tree = titleTree.get()
+  const tree = titleTreeFactory.getTree()
   await database.db.collection('folderTitleTree').insertOne({
     ref: 'root', // To avoid duplicate trees.
     tree

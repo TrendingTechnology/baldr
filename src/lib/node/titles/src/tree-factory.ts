@@ -8,7 +8,7 @@ export class TreeFactory {
     this.rootList = {}
   }
 
-  addTitleByPath (filePath: string): void {
+  addTitleByPath (filePath: string): DeepTitle {
     const deepTitle = new DeepTitle(filePath)
     let folderName: string | undefined
 
@@ -23,6 +23,7 @@ export class TreeFactory {
         list = list[folderName].subTree
       }
     } while (folderName != null)
+    return deepTitle
   }
 
   getTree (): TreeTitleList {

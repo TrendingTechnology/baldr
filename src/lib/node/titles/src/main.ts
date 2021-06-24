@@ -4,5 +4,5 @@
  * @module @bldr/titles
  */
 
-export * from './deep-title'
-export * from './tree-title'
+export { DeepTitle } from './deep-title'
+export { TreeFactory } from './tree-factory'

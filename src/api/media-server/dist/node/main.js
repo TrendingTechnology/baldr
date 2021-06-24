@@ -144,7 +144,7 @@ var basePath = config_1.default.mediaServer.basePath;
  */
 var errors = [];
 /* Media objects **************************************************************/
-var titleTree = new titles_1.TitleTree(new titles_1.DeepTitle(config_1.default.mediaServer.basePath));
+var titleTreeFactory;
 /**
  * Base class to be extended.
  */
@@ -320,8 +320,7 @@ var ServerPresentation = /** @class */ (function (_super) {
         var data = file_reader_writer_1.readYamlFile(filePath);
         if (data != null)
             _this.importProperties(data);
-        var deepTitle = new titles_1.DeepTitle(filePath);
-        titleTree.add(deepTitle);
+        var deepTitle = titleTreeFactory.addTitleByPath(filePath);
         if (_this.meta == null) {
             // eslint-disable-next-line
             _this.meta = {};
@@ -442,6 +441,8 @@ function update(full) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    // To get a fresh title tree, otherwise changes of the titles are not updated
+                    titleTreeFactory = new titles_1.TreeFactory();
                     if (full)
                         gitPull();
                     gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
@@ -516,7 +517,7 @@ function update(full) {
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
-                    tree = titleTree.get();
+                    tree = titleTreeFactory.getTree();
                     return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
                             ref: 'root',
                             tree: tree

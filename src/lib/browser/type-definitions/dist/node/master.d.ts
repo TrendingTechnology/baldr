@@ -458,8 +458,19 @@ export interface MasterIconSpec {
 }
 export interface StyleConfig {
     centerVertically?: boolean;
+    /**
+     * ```html
+     * <body b-dark-mode="true"></body>
+     * ```
+     */
     darkMode?: boolean;
+    /**
+     *
+     */
     contentTheme?: string;
+    /**
+     *
+     */
     uiTheme?: string;
 }
 export interface PropsDefintion {
