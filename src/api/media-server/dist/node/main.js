@@ -326,16 +326,21 @@ var ServerPresentation = /** @class */ (function (_super) {
             // eslint-disable-next-line
             _this.meta = {};
         }
-        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.ref) == null)
+        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.ref) == null) {
             _this.meta.ref = deepTitle.ref;
-        if (((_b = _this.meta) === null || _b === void 0 ? void 0 : _b.title) == null)
+        }
+        if (((_b = _this.meta) === null || _b === void 0 ? void 0 : _b.title) == null) {
             _this.meta.title = deepTitle.title;
-        if (((_c = _this.meta) === null || _c === void 0 ? void 0 : _c.subtitle) == null)
+        }
+        if (((_c = _this.meta) === null || _c === void 0 ? void 0 : _c.subtitle) == null) {
             _this.meta.subtitle = deepTitle.subtitle;
-        if (((_d = _this.meta) === null || _d === void 0 ? void 0 : _d.curriculum) == null)
+        }
+        if (((_d = _this.meta) === null || _d === void 0 ? void 0 : _d.curriculum) == null) {
             _this.meta.curriculum = deepTitle.curriculum;
-        if (((_e = _this.meta) === null || _e === void 0 ? void 0 : _e.grade) == null)
+        }
+        if (((_e = _this.meta) === null || _e === void 0 ? void 0 : _e.grade) == null) {
             _this.meta.grade = deepTitle.grade;
+        }
         _this.title = core_browser_1.stripTags(_this.meta.title);
         _this.titleSubtitle = _this.titleSubtitle_();
         _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
@@ -432,7 +437,7 @@ function gitPull() {
 function update(full) {
     if (full === void 0) { full = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var gitRevParse, lastCommitId, begin, end;
+        var gitRevParse, assetCounter, presentationCounter, lastCommitId, begin, tree, end;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -443,6 +448,8 @@ function update(full) {
                         cwd: basePath,
                         encoding: 'utf-8'
                     });
+                    assetCounter = 0;
+                    presentationCounter = 0;
                     lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
                     return [4 /*yield*/, exports.database.connect()];
                 case 1:
@@ -475,22 +482,28 @@ function update(full) {
                                     }
                                 }
                             },
-                            presentation: function (filePath) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'presentations')];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            }); }); },
-                            asset: function (filePath) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'assets')];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            }); }); }
+                            presentation: function (filePath) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'presentations')];
+                                        case 1:
+                                            _a.sent();
+                                            presentationCounter++;
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); },
+                            asset: function (filePath) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'assets')];
+                                        case 1:
+                                            _a.sent();
+                                            assetCounter++;
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }
                         }, {
                             path: basePath
                         })
@@ -503,12 +516,14 @@ function update(full) {
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
+                    tree = titleTree.get();
                     return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
                             ref: 'root',
-                            tree: titleTree.get()
+                            tree: tree
                         })];
                 case 7:
                     _a.sent();
+                    file_reader_writer_1.writeJsonFile(path_1.default.join(config_1.default.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
                     return [4 /*yield*/, exports.database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
                 case 8:
@@ -519,7 +534,11 @@ function update(full) {
                             end: end,
                             duration: end - begin,
                             lastCommitId: lastCommitId,
-                            errors: errors
+                            errors: errors,
+                            count: {
+                                assets: assetCounter,
+                                presentations: presentationCounter
+                            }
                         }];
             }
         });

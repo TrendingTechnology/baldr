@@ -22,8 +22,9 @@ class FolderTitle {
      */
     constructor({ title, subtitle, folderName, relPath, hasPraesentation, level }) {
         this.title = title;
-        if (subtitle != null)
+        if (subtitle != null) {
             this.subtitle = subtitle;
+        }
         this.folderName = folderName;
         relPath = relPath.replace(config_1.default.mediaServer.basePath, '');
         relPath = relPath.replace(/^\//, '');
@@ -310,8 +311,9 @@ class TitleTree {
      */
     add(deepTitle) {
         const folderName = deepTitle.shiftFolderName();
-        if (folderName == null)
+        if (folderName == null) {
             return;
+        }
         if (this.subTree[folderName] == null) {
             this.subTree[folderName] = new TitleTree(deepTitle, folderName);
         }

@@ -76,7 +76,7 @@ import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
 import { walk } from '@bldr/media-manager'
-import { readYamlFile } from '@bldr/file-reader-writer'
+import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TitleTree, DeepTitle } from '@bldr/titles'
 
 import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
@@ -360,11 +360,21 @@ class ServerPresentation extends ServerMediaFile {
       this.meta = {} as PresentationTypes.PresentationMeta
     }
 
-    if (this.meta?.ref == null) this.meta.ref = deepTitle.ref
-    if (this.meta?.title == null) this.meta.title = deepTitle.title
-    if (this.meta?.subtitle == null) this.meta.subtitle = deepTitle.subtitle
-    if (this.meta?.curriculum == null) this.meta.curriculum = deepTitle.curriculum
-    if (this.meta?.grade == null) this.meta.grade = deepTitle.grade
+    if (this.meta?.ref == null) {
+      this.meta.ref = deepTitle.ref
+    }
+    if (this.meta?.title == null) {
+      this.meta.title = deepTitle.title
+    }
+    if (this.meta?.subtitle == null) {
+      this.meta.subtitle = deepTitle.subtitle
+    }
+    if (this.meta?.curriculum == null) {
+      this.meta.curriculum = deepTitle.curriculum
+    }
+    if (this.meta?.grade == null) {
+      this.meta.grade = deepTitle.grade
+    }
     this.title = stripTags(this.meta.title)
     this.titleSubtitle = this.titleSubtitle_()
     this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle)
@@ -456,6 +466,8 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
     cwd: basePath,
     encoding: 'utf-8'
   })
+  let assetCounter = 0
+  let presentationCounter = 0
   const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
   await database.connect()
   await database.initialize()
@@ -482,8 +494,14 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
         }
       }
     },
-    presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
-    asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
+    presentation: async (filePath) => {
+      await insertObjectIntoDb(filePath, 'presentations')
+      presentationCounter++;
+    },
+    asset: async (filePath) => {
+      await insertObjectIntoDb(filePath, 'assets')
+      assetCounter++;
+    }
   },
   {
     path: basePath
@@ -491,10 +509,12 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
 
   // .replaceOne and upsert: Problems with merged objects?
   await database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })
+  const tree = titleTree.get()
   await database.db.collection('folderTitleTree').insertOne({
     ref: 'root', // To avoid duplicate trees.
-    tree: titleTree.get()
+    tree
   })
+  writeJsonFile(path.join(config.mediaServer.basePath, 'title-tree.json'), tree)
   const end = new Date().getTime()
   await database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
@@ -503,7 +523,11 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
     end,
     duration: end - begin,
     lastCommitId,
-    errors
+    errors,
+    count: {
+      assets: assetCounter,
+      presentations: presentationCounter
+    }
   }
 }
 

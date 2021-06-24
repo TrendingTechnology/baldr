@@ -86,7 +86,9 @@ class FolderTitle {
    */
   constructor ({ title, subtitle, folderName, relPath, hasPraesentation, level }: FolderTitleSpec) {
     this.title = title
-    if (subtitle != null) this.subtitle = subtitle
+    if (subtitle != null) {
+      this.subtitle = subtitle
+    }
     this.folderName = folderName
     relPath = relPath.replace(config.mediaServer.basePath, '')
     relPath = relPath.replace(/^\//, '')
@@ -161,9 +163,7 @@ export class DeepTitle {
     }
 
     const relPath = path.dirname(filePath)
-
     const folderName = path.basename(relPath)
-
     return new FolderTitle({ title, subtitle, hasPraesentation, relPath, folderName })
   }
 
@@ -412,7 +412,9 @@ export class TitleTree {
    */
   add (deepTitle: DeepTitle): void {
     const folderName = deepTitle.shiftFolderName()
-    if (folderName == null) return
+    if (folderName == null) {
+      return
+    }
     if (this.subTree[folderName] == null) {
       this.subTree[folderName] = new TitleTree(deepTitle, folderName)
     } else {
