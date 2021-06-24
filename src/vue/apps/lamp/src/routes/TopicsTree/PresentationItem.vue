@@ -1,18 +1,14 @@
 <template>
-  <div class="vc_presentation_item">
+  <div class="vc_presentation_treeTitle">
     <presentation-link
-      :hasPraesentation="hasPraesentation"
-      :presRef="presRef"
-      :subtitle="subtitle"
-      :title="title"
-      :level="level"
+      :tree-title="treeTitle"
     />
     <ul :class="`ul-level-${level}`" v-if="hasChilds">
       <li
-        v-for="item in childs"
-        :key="item.title.path"
+        v-for="treeTitle in childs"
+        :key="treeTitle.title.path"
       >
-        <presentation-item :item="item"/>
+        <presentation-item :treeTitle="treeTitle"/>
       </li>
     </ul>
   </div>
@@ -27,14 +23,14 @@ export default {
     PresentationLink
   },
   props: {
-    item: {
+    treeTitle: {
       type: Object
     }
   },
   computed: {
     folderTitle () {
-      if (this.item && this.item.title) {
-        return this.item.title
+      if (this.treeTitle && this.treeTitle.title) {
+        return this.treeTitle.title
       }
       return ''
     },
@@ -70,23 +66,23 @@ export default {
       return ''
     },
     hasChilds () {
-      return this.item && this.item.subTree && Object.keys(this.item.subTree).length >= 1
+      return this.treeTitle && this.treeTitle.subTree && Object.keys(this.treeTitle.subTree).length >= 1
     },
     childs () {
-      if (!this.item || !this.item.subTree) return []
-      const item = []
-      const keys = Object.keys(this.item.subTree).sort()
+      if (!this.treeTitle || !this.treeTitle.subTree) return []
+      const treeTitle = []
+      const keys = Object.keys(this.treeTitle.subTree).sort()
       for (const key of keys) {
-        item.push(this.item.subTree[key])
+        treeTitle.push(this.treeTitle.subTree[key])
       }
-      return item
+      return treeTitle
     }
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_presentation_item {
+  .vc_presentation_treeTitle {
     ul li:before {
       content: '' !important;
     }

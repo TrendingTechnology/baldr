@@ -1,15 +1,22 @@
 <template>
   <span class="vc_presentation_link" :class="classObject">
     <span
-      v-if="hasPraesentation"
+      v-if="treeTitle.title.hasPraesentation"
       class="title link"
       :id="`PREF_${presRef}`"
       @click="openPresentation(presRef)"
       :title="`ID: ${presRef}`"
-      v-html="title"
+      v-html="treeTitle.title.title"
     />
-    <span class="title" v-else v-html="title"/>
-    <span v-if="subtitle"> - <span class="subtitle"  v-html="subtitle"/></span>
+    <router-link
+      class="title"
+      :to="`/topics/${this.treeTitle.title.relPath}`"
+      v-else
+      v-html="treeTitle.title.title"
+    />
+    <span v-if="treeTitle.title.subtitle"> -
+      <span class="subtitle" v-html="treeTitle.title.subtitle"/>
+    </span>
   </span>
 </template>
 
@@ -20,21 +27,8 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 export default {
   name: 'PresentationLink',
   props: {
-    // ref is a reserved attribute
-    presRef: {
-      type: String
-    },
-    title: {
-      type: String
-    },
-    subtitle: {
-      type: String
-    },
-    hasPraesentation: {
-      type: Boolean
-    },
-    level: {
-      type: Number
+    treeTitle: {
+      type: Object
     }
   },
   methods: {
@@ -44,10 +38,17 @@ export default {
   },
   computed: {
     ...mapGetters(['presentation']),
+    presRef: function () {
+      return this.treeTitle.title.folderName.substr(3)
+    },
     classObject: function () {
       const result = {}
-      result[`level-${this.level}`] = true
-      if (this.hasPraesentation && this.presentation && this.presRef === this.presentation.ref) {
+      result[`level-${this.treeTitle.title.level}`] = true
+      if (
+        this.treeTitle.title.hasPraesentation &&
+        this.presentation != null &&
+        this.presRef === this.presentation.ref
+      ) {
         result.active = true
       }
       return result
