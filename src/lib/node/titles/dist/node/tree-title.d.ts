@@ -38,7 +38,7 @@ export interface TreeTitleList {
  * ```
  */
 export declare class TreeTitle {
-    subTree: TreeTitleList;
-    title: FolderTitle;
+    sub: TreeTitleList;
+    folder: FolderTitle;
     constructor(deepTitle: DeepTitle, folderName: string);
 }

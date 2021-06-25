@@ -55,29 +55,29 @@ describe('Package “@bldr/titles”', function () {
 
       assert.ok(
         tree['06']
-          .subTree['40_Grundlagen']
-          .subTree['05_Intervalle-Feinbestimmung']
-          .subTree['10_Bach-Thema-regium'].title.hasPraesentation
+          .sub['40_Grundlagen']
+          .sub['05_Intervalle-Feinbestimmung']
+          .sub['10_Bach-Thema-regium'].folder.hasPraesentation
       )
 
       assert.ok(
         tree['06']
-          .subTree['40_Grundlagen']
-          .subTree['05_Intervalle-Feinbestimmung']
-          .subTree['20_Bach-Matthaus-Komm-suesses-Kreuz'].title.hasPraesentation
+          .sub['40_Grundlagen']
+          .sub['05_Intervalle-Feinbestimmung']
+          .sub['20_Bach-Matthaus-Komm-suesses-Kreuz'].folder.hasPraesentation
       )
 
       assert.ok(
         tree['06']
-          .subTree['40_Grundlagen']
-          .subTree['05_Intervalle-Feinbestimmung']
-          .subTree['30_Intervalle-Bach-Inventionen'].title.hasPraesentation
+          .sub['40_Grundlagen']
+          .sub['05_Intervalle-Feinbestimmung']
+          .sub['30_Intervalle-Bach-Inventionen'].folder.hasPraesentation
       )
 
       assert.strictEqual(
         tree['06']
-          .subTree['40_Grundlagen']
-          .subTree['05_Intervalle-Feinbestimmung'].title.folderName, '05_Intervalle-Feinbestimmung'
+          .sub['40_Grundlagen']
+          .sub['05_Intervalle-Feinbestimmung'].folder.folderName, '05_Intervalle-Feinbestimmung'
       )
     })
   })

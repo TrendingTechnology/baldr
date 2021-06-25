@@ -34,12 +34,12 @@ exports.TreeTitle = void 0;
  */
 class TreeTitle {
     constructor(deepTitle, folderName) {
-        this.subTree = {};
+        this.sub = {};
         const folderTitle = deepTitle.getFolderTitleByFolderName(folderName);
         if (folderTitle == null) {
             throw new Error('no folder title');
         }
-        this.title = folderTitle;
+        this.folder = folderTitle;
     }
 }
 exports.TreeTitle = TreeTitle;

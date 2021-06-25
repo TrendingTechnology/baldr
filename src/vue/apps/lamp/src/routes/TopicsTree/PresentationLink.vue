@@ -1,21 +1,21 @@
 <template>
   <span class="vc_presentation_link" :class="classObject">
     <span
-      v-if="treeTitle.title.hasPraesentation"
+      v-if="treeTitle.folder.hasPraesentation"
       class="title link"
       :id="`PREF_${presRef}`"
       @click="openPresentation(presRef)"
       :title="`ID: ${presRef}`"
-      v-html="treeTitle.title.title"
+      v-html="treeTitle.folder.title"
     />
     <router-link
       class="title"
-      :to="`/topics/${this.treeTitle.title.relPath}`"
+      :to="`/topics/${this.treeTitle.folder.relPath}`"
       v-else
-      v-html="treeTitle.title.title"
+      v-html="treeTitle.folder.title"
     />
-    <span v-if="treeTitle.title.subtitle"> -
-      <span class="subtitle" v-html="treeTitle.title.subtitle"/>
+    <span v-if="treeTitle.folder.subtitle"> -
+      <span class="subtitle" v-html="treeTitle.folder.subtitle"/>
     </span>
   </span>
 </template>
@@ -39,13 +39,13 @@ export default {
   computed: {
     ...mapGetters(['presentation']),
     presRef: function () {
-      return this.treeTitle.title.folderName.substr(3)
+      return this.treeTitle.folder.folderName.substr(3)
     },
     classObject: function () {
       const result = {}
-      result[`level-${this.treeTitle.title.level}`] = true
+      result[`level-${this.treeTitle.folder.level}`] = true
       if (
-        this.treeTitle.title.hasPraesentation &&
+        this.treeTitle.folder.hasPraesentation &&
         this.presentation != null &&
         this.presRef === this.presentation.ref
       ) {

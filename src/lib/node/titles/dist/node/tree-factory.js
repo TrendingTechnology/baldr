@@ -17,7 +17,7 @@ class TreeFactory {
                 if (list[folderName] == null) {
                     list[folderName] = new tree_title_1.TreeTitle(deepTitle, folderName);
                 }
-                list = list[folderName].subTree;
+                list = list[folderName].sub;
             }
         } while (folderName != null);
         return deepTitle;

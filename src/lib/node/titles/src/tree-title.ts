@@ -40,14 +40,14 @@ export interface TreeTitleList {
  * ```
  */
 export class TreeTitle {
-  subTree: TreeTitleList
-  title: FolderTitle
+  sub: TreeTitleList
+  folder: FolderTitle
   constructor (deepTitle: DeepTitle, folderName: string) {
-    this.subTree = {}
+    this.sub = {}
     const folderTitle = deepTitle.getFolderTitleByFolderName(folderName)
     if (folderTitle == null) {
       throw new Error('no folder title')
     }
-    this.title = folderTitle
+    this.folder = folderTitle
   }
 }

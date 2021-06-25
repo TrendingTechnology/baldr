@@ -63,7 +63,9 @@ export default {
       refs = refs.split('/')
       let tree = this.folderTitleTree
       for (const ref of refs) {
-        if (tree && tree.subTree) tree = tree.subTree[ref]
+        if (tree && tree.sub) {
+          tree = tree.sub[ref]
+        }
       }
       this.subFolderTitleTree = tree
     }
@@ -73,10 +75,10 @@ export default {
   },
   computed: {
     folderTitleTree () {
-      const subTree = this.$store.getters['lamp/folderTitleTree']
+      const sub = this.$store.getters['lamp/folderTitleTree']
       return {
-        subTree,
-        title: {
+        sub,
+        folder: {
           title: 'Fach Musik',
           level: 0,
           hasPresentation: false,

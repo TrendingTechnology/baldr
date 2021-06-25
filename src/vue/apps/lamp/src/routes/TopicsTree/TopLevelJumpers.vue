@@ -33,9 +33,9 @@ export default {
         }
       }
       const topics = []
-      if (!tree || !tree.subTree) return
-      for (const folderName of Object.keys(tree.subTree).sort()) {
-        const topic = tree.subTree[folderName].title
+      if (!tree || !tree.sub) return
+      for (const folderName of Object.keys(tree.sub).sort()) {
+        const topic = tree.sub[folderName].title
         if (topic) {
           topics.push({
             title: topic.title,
