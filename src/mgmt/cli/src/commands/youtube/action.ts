@@ -65,6 +65,7 @@ async function action (youtubeId: string): Promise<void> {
   const ytFile = path.resolve(ytDir, `${youtubeId}.mp4`)
 
   cmd.log('Creating the metadata file in the YAML format.')
+  metaData.categories = 'youtube'
   await operations.initializeMetaYaml(ytFile, metaData)
   cmd.log('Normalizing the metadata file.')
   await operations.normalizeMediaAsset(ytFile)

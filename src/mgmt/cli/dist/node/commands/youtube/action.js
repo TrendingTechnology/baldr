@@ -80,6 +80,7 @@ function action(youtubeId) {
         ], { cwd: ytDir });
         const ytFile = path_1.default.resolve(ytDir, `${youtubeId}.mp4`);
         cmd.log('Creating the metadata file in the YAML format.');
+        metaData.categories = 'youtube';
         yield media_manager_1.operations.initializeMetaYaml(ytFile, metaData);
         cmd.log('Normalizing the metadata file.');
         yield media_manager_1.operations.normalizeMediaAsset(ytFile);
