@@ -248,3 +248,37 @@ export function makeSet(values) {
 export function genUuid() {
     return uuidv4();
 }
+/**
+ * @param duration - in seconds
+ *
+ * @return `01:23`
+ */
+export function formatDuration(duration, short = false) {
+    duration = Number(duration);
+    let from = 11;
+    let length = 8;
+    if (duration < 3600 && short) {
+        from = 14;
+        length = 5;
+    }
+    return new Date(Number(duration) * 1000).toISOString().substr(from, length);
+    // durationNumber = Math.floor(durationNumber)
+    // if (durationNumber <= 0) {
+    //   return '00:00'
+    // }
+    // let seconds = durationNumber % 60
+    // let secondsOutput: string
+    // if (seconds < 10) {
+    //   secondsOutput = `0${seconds}`
+    // } else {
+    //   secondsOutput = `${seconds}`
+    // }
+    // let minutesOutput: string
+    // let minutes = durationNumber / 60
+    // if (minutes < 10) {
+    //   minutesOutput = `0${minutes}`
+    // } else {
+    //   minutesOutput = `${minutes}`
+    // }
+    // return `${minutesOutput}:${secondsOutput}`
+}

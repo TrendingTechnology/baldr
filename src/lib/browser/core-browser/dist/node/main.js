@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
 const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -270,3 +270,38 @@ function genUuid() {
     return uuid_1.v4();
 }
 exports.genUuid = genUuid;
+/**
+ * @param duration - in seconds
+ *
+ * @return `01:23`
+ */
+function formatDuration(duration, short = false) {
+    duration = Number(duration);
+    let from = 11;
+    let length = 8;
+    if (duration < 3600 && short) {
+        from = 14;
+        length = 5;
+    }
+    return new Date(Number(duration) * 1000).toISOString().substr(from, length);
+    // durationNumber = Math.floor(durationNumber)
+    // if (durationNumber <= 0) {
+    //   return '00:00'
+    // }
+    // let seconds = durationNumber % 60
+    // let secondsOutput: string
+    // if (seconds < 10) {
+    //   secondsOutput = `0${seconds}`
+    // } else {
+    //   secondsOutput = `${seconds}`
+    // }
+    // let minutesOutput: string
+    // let minutes = durationNumber / 60
+    // if (minutes < 10) {
+    //   minutesOutput = `0${minutes}`
+    // } else {
+    //   minutesOutput = `${minutes}`
+    // }
+    // return `${minutesOutput}:${secondsOutput}`
+}
+exports.formatDuration = formatDuration;

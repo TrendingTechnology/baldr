@@ -115,3 +115,9 @@ export declare function makeSet(values: string | string[] | Set<string>): Set<st
  * @returns An UUID version 4
  */
 export declare function genUuid(): string;
+/**
+ * @param duration - in seconds
+ *
+ * @return `01:23`
+ */
+export declare function formatDuration(duration: number | string, short?: boolean): string;

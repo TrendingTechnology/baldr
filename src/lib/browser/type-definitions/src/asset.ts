@@ -23,31 +23,31 @@ export interface SampleYamlFormat {
    * The start time in seconds or as a duration string like `1:23:45` = 1 hour
    * 23 minutes and 45 seconds, for example `61.123435`.
    */
-  startTime?: number
+  startTime?: number | string
 
   /**
    * The duration in seconds or as a duration string like `1:23:45` = 1 hour 23
    * minutes and 45 seconds, mutually exclusive to `endTime`, for example `12`.
    */
-  duration?: number
+  duration?: number | string
 
   /**
    * The end time in seconds or as a duration string like `1:23:45` = 1 hour 23
    * minutes and 45 seconds, mutually exclusive to `duration` `163.12376`.
    */
-  endTime?: number
+  endTime?: number | string
 
   /**
    * The fade in time in seconds or as a duration string like `1:23:45` = 1 hour
    * 23 minutes and 45 seconds for example `5`.
    */
-  fadeIn?: number
+  fadeIn?: number | string
 
   /**
    * The fade out time in seconds or as a duration string like `1:23:45` = 1
    * hour 23 minutes and 45 seconds for example `5`.
    */
-  fadeOut?: number
+  fadeOut?: number | string
 
   /**
    * A custom shortcut for mousetrap, for example `o 1`.

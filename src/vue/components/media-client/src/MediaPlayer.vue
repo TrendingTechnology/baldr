@@ -48,7 +48,7 @@
 <script>
 /* globals compilationTime gitHead */
 import { MaterialIcon } from "@bldr/icons";
-import { formatDuration } from "./main.js";
+import { formatDuration } from '@bldr/core-browser'
 
 export default {
   name: "MediaPlayer",

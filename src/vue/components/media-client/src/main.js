@@ -29,6 +29,7 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import * as tmpMediaResolver from '@bldr/media-resolver'
 import DynamicSelect from '@bldr/dynamic-select'
+import { formatDuration } from '@bldr/core-browser'
 
 import storeModule from './store.js'
 import { registerComponents } from './components.js'
@@ -57,25 +58,6 @@ export let router
  * @type {module:@bldr/shortcuts~Shortcuts}
  */
 export let shortcuts
-
-/**
- * @param {String} duration - in seconds
- *
- * @return {String}
- */
-export function formatDuration (duration) {
-  if (!duration || duration <= 0) return '00:00'
-  duration = parseInt(duration)
-  let seconds = duration % 60
-  if (seconds < 10) {
-    seconds = `0${seconds}`
-  }
-  let minutes = parseInt(duration / 60)
-  if (minutes < 10) {
-    minutes = `0${minutes}`
-  }
-  return `${minutes}:${seconds}`
-}
 
 /**
  * A deeply with vuex coupled media player. Only one media file can be

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { formatDuration } from '../main.js'
+import { formatDuration } from '@bldr/core-browser'
 import PreviewImage from './PreviewImage.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions } = createNamespacedHelpers('media')
