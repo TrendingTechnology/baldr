@@ -1,5 +1,18 @@
+/* eslint-disable */
+
 import type { MasterTypes } from '@bldr/type-definitions'
-import type { VueConstructor } from 'vue'
+
+import _Vue from 'vue'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+     $style: StyleConfigurator
+  }
+
+  interface VueConstructor {
+     $style: StyleConfigurator
+    }
+}
 
 class AttributeSetter<T> {
   protected attributeName: string
@@ -128,10 +141,9 @@ class StyleConfigurator {
   }
 }
 
-const Plugin = {
-  install (Vue: VueConstructor) {
+// export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
+export default {
+  install (Vue: typeof _Vue, options?: any): void {
     Vue.prototype.$style = new StyleConfigurator()
   }
 }
-
-export default Plugin

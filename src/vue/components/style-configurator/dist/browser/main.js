@@ -1,3 +1,4 @@
+/* eslint-disable */
 class AttributeSetter {
     constructor(attributeName, defaultValue) {
         this.attributeName = attributeName;
@@ -101,9 +102,9 @@ class StyleConfigurator {
         this.setterCollection.uiTheme.set(themeName);
     }
 }
-const Plugin = {
-    install(Vue) {
+// export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
+export default {
+    install(Vue, options) {
         Vue.prototype.$style = new StyleConfigurator();
     }
 };
-export default Plugin;
