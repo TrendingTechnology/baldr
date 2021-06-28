@@ -42,7 +42,7 @@ function toggleLastRoute (routeNameTo) {
 function callOpenRestApi (openWith, archive = false, create = false) {
   const presentation = store.getters['lamp/presentation']
   if (!presentation || Object.keys(presentation).length === 0) {
-    vm.$notifyError(
+    vm.$showMessage.error(
       'Es ist keine Präsentation geladen.',
       'Der übergeordnete Ordner konnte nicht geöffnet werden.'
     )
@@ -224,13 +224,13 @@ export default {
       store.dispatch('lamp/updateFolderTitleTree')
       if (result.data.errors.length) {
         for (const errorMsg of result.data.errors) {
-          vm.$notifyError(errorMsg)
+          vm.$showMessage.error(errorMsg)
         }
       } else {
-        vm.$notifySuccess(`Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`)
+        vm.$showMessage.success(`Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`)
       }
     } catch (error) {
-      vm.$notifyError(error)
+      vm.$showMessage.error(error)
     }
   },
   openEditor () {
@@ -249,7 +249,7 @@ export default {
         }
       })
     } else {
-      vm.$notifyError('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
+      vm.$showMessage.error('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
     }
   },
   openParent () {
@@ -265,14 +265,14 @@ export default {
   async reloadPresentation () {
     const presentation = store.getters['lamp/presentation']
     if (!presentation) {
-      vm.$notifyError('Keine Präsention geladen.')
+      vm.$showMessage.error('Keine Präsention geladen.')
       return
     }
     try {
       await store.dispatch('lamp/reloadPresentation')
-      vm.$notifySuccess('Die Präsentation wurde neu geladen.')
+      vm.$showMessage.success('Die Präsentation wurde neu geladen.')
     } catch (error) {
-      vm.$notifyError(error)
+      vm.$showMessage.error(error)
     }
   },
   toggleMetaDataOverlay () {

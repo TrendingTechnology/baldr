@@ -4,9 +4,14 @@ import notifications, { NotificationOptions } from 'vue-notification'
 
 import _Vue from 'vue'
 
-_Vue.use(notifications)
-
 class Notification {
+
+  Vue: typeof _Vue
+
+  constructor(Vue: typeof _Vue) {
+    this.Vue = Vue
+    this.Vue.use(notifications)
+  }
 
   success(text: string, title?: string) {
     const notification: NotificationOptions = {
@@ -18,7 +23,7 @@ class Notification {
     if (title != null) {
       notification.title = title
     }
-    _Vue.prototype.$notify(notification)
+    this.Vue.prototype.$notify(notification)
   }
 
   /**
@@ -40,7 +45,7 @@ class Notification {
     if (title) {
       notification.title = title
     }
-    _Vue.prototype.$notify(notification)
+    this.Vue.prototype.$notify(notification)
   }
 }
 
@@ -57,6 +62,6 @@ declare module 'vue/types/vue' {
 // export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
   install(Vue: typeof _Vue, options?: any): void {
-    Vue.prototype.$notify = new Notification()
+    Vue.prototype.$showMessage = new Notification(Vue)
   }
 }

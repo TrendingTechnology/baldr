@@ -79,7 +79,7 @@ export default validateMasterSpec({
       const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
       checkAvailability(props.id).then((result) => {
         if (!result) {
-          this.$notifyError(`The YouTube video “${props.id}” is no longer available online.`)
+          this.$showMessage.error(`The YouTube video “${props.id}” is no longer available online.`)
         }
       })
       const propsMain = Object.assign({}, props)

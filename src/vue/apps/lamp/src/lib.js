@@ -73,7 +73,7 @@ export function warnSvgWidthHeight (filePath) {
   for (const svg of svgs) {
     if (svg.attributes.height || svg.attributes.width) {
       if (filePath) filePath = ` (${filePath})`
-      vue.$notifyError(`SVG file${filePath} has width and height attributes set.`)
+      vue.$showMessage.error(`SVG file${filePath} has width and height attributes set.`)
     }
   }
 }

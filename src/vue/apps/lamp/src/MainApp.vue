@@ -69,7 +69,7 @@ export default {
       })
     }
     window.addEventListener('error', (event) => {
-      this.$notifyError(event.error)
+      this.$showMessage.error(event.error)
     })
     registerShortcuts(this.$router, this.$shortcuts, actions)
 

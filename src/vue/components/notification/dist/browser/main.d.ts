@@ -1,5 +1,7 @@
 import _Vue from 'vue';
 declare class Notification {
+    Vue: typeof _Vue;
+    constructor(Vue: typeof _Vue);
     success(text: string, title?: string): void;
     /**
      * @params An error object or a text for the notification.

@@ -211,7 +211,7 @@ async function loadPresentationByRoute (vm, route) {
       }
     }
   } catch (error) {
-    vm.$notifyError(error)
+    vm.$showMessage.error(error)
   }
 }
 

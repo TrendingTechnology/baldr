@@ -21,8 +21,8 @@
  * - `this.$media`
  * - `this.$modal`
  * - `this.$notify()`: An instance of the package `vue-notifications`.
- * - `this.$notifyError`
- * - `this.$notifySuccess`
+ * - `this.$showMessage.error`
+ * - `this.$showMessage.success`
  * - `this.$route`
  * - `this.$router`
  * - `this.$shortcuts`
@@ -103,7 +103,6 @@ import { registerMasterComponents, masters } from '@/masters.js'
 // Vue plugins.
 import { router } from '@/routes.js'
 import store from '@/store/index.js'
-import notifications from 'vue-notification'
 import shortcuts from '@bldr/shortcuts'
 import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/modal-dialog'
@@ -111,13 +110,14 @@ import DynamicSelect from '@bldr/dynamic-select'
 import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 import StyleConfigurator from '@bldr/style-configurator'
+import Notification from '@bldr/notification'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
-Vue.use(notifications)
+Vue.use(Notification, Vue)
 
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
@@ -192,42 +192,6 @@ Vue.config.productionTip = false
 
 /******************************************************************************/
 
-/**
- * $notifySuccess
- */
-Vue.prototype.$notifySuccess = function (text, title) {
-  const notification = {
-    group: 'default',
-    text,
-    duration: 5000,
-    type: 'success'
-  }
-  if (title) notification.title = title
-  Vue.prototype.$notify(notification)
-}
-
-/**
- * $notifyError
- *
- * @params {(Object|String)} - An error object or a text for the notification.
- */
-Vue.prototype.$notifyError = function (text, title) {
-  if (typeof text === 'object') {
-    const error = text
-    text = error.message
-    title = error.name
-    console.log(error) // eslint-disable-line
-  }
-  const notification = {
-    group: 'default',
-    text,
-    duration: 10000,
-    type: 'error'
-  }
-  if (title) notification.title = title
-  Vue.prototype.$notify(notification)
-}
-
 /******************************************************************************/
 
 /**
@@ -247,13 +211,13 @@ store.subscribe((mutation, state) => {
   if (mutation.type === 'media/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {
-      Vue.prototype.$notifySuccess(`hinzugefügt: <a href="${asset.routerLink}">${asset.filename}</a>.`)
+      Vue.prototype.$showMessage.success(`hinzugefügt: <a href="${asset.routerLink}">${asset.filename}</a>.`)
     }
   }
 })
 
 Vue.config.errorHandler = function (error, vm, info) {
-  vm.$notifyError(error)
+  vm.$showMessage.error(error)
 }
 
 /**

@@ -1,8 +1,10 @@
 /* eslint-disable */
 import notifications from 'vue-notification';
-import _Vue from 'vue';
-_Vue.use(notifications);
 class Notification {
+    constructor(Vue) {
+        this.Vue = Vue;
+        this.Vue.use(notifications);
+    }
     success(text, title) {
         const notification = {
             group: 'default',
@@ -13,7 +15,7 @@ class Notification {
         if (title != null) {
             notification.title = title;
         }
-        _Vue.prototype.$notify(notification);
+        this.Vue.prototype.$notify(notification);
     }
     /**
      * @params An error object or a text for the notification.
@@ -34,12 +36,12 @@ class Notification {
         if (title) {
             notification.title = title;
         }
-        _Vue.prototype.$notify(notification);
+        this.Vue.prototype.$notify(notification);
     }
 }
 // export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
     install(Vue, options) {
-        Vue.prototype.$notify = new Notification();
+        Vue.prototype.$showMessage = new Notification(Vue);
     }
 };
