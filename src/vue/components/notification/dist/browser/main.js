@@ -1,0 +1,45 @@
+/* eslint-disable */
+import notifications from 'vue-notification';
+import _Vue from 'vue';
+_Vue.use(notifications);
+class Notification {
+    success(text, title) {
+        const notification = {
+            group: 'default',
+            text,
+            duration: 5000,
+            type: 'success'
+        };
+        if (title != null) {
+            notification.title = title;
+        }
+        _Vue.prototype.$notify(notification);
+    }
+    /**
+     * @params An error object or a text for the notification.
+     */
+    error(text, title) {
+        if (typeof text === 'object') {
+            const error = text;
+            text = error.message;
+            title = error.name;
+            console.log(error); // eslint-disable-line
+        }
+        const notification = {
+            group: 'default',
+            text,
+            duration: 10000,
+            type: 'error'
+        };
+        if (title) {
+            notification.title = title;
+        }
+        _Vue.prototype.$notify(notification);
+    }
+}
+// export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
+export default {
+    install(Vue, options) {
+        Vue.prototype.$notify = new Notification();
+    }
+};
