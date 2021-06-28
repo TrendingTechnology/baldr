@@ -11,6 +11,10 @@ class Notification {
   constructor(Vue: typeof _Vue) {
     this.Vue = Vue
     this.Vue.use(notifications)
+
+    Vue.config.errorHandler = (error: Error, vm: Vue, info) => {
+      this.error(error)
+    }
   }
 
   success(text: string, title?: string) {

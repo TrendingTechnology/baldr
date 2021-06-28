@@ -9,7 +9,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Presentation } from '@/content-file.js'
-import vue, { customStore } from '@/main.js'
+import vue, { customStore } from '@/main'
 import nav from './nav.js'
 import preview from './preview.js'
 import masters from './masters.js'

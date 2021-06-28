@@ -111,18 +111,19 @@ import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 import StyleConfigurator from '@bldr/style-configurator'
 import Notification from '@bldr/notification'
+import config from '@bldr/config'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
-Vue.use(Notification, Vue)
+Vue.use(Notification as any, Vue)
 
-Vue.use(DynamicSelect)
+Vue.use(DynamicSelect as any)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.use(StyleConfigurator)
+Vue.use(StyleConfigurator as any)
 Vue.use(Websocket, config.wire.localUri, {
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
@@ -216,14 +217,10 @@ store.subscribe((mutation, state) => {
   }
 })
 
-Vue.config.errorHandler = function (error, vm, info) {
-  vm.$showMessage.error(error)
-}
-
 /**
  * Shortcut for `this.$store.getters['lamp/getterName']`
  */
-Vue.prototype.$get = function (getterName) {
+Vue.prototype.$get = function (getterName: string) {
   return store.getters[`lamp/${getterName}`]
 }
 
@@ -235,9 +232,6 @@ Vue.prototype.$isElectron = userAgent.indexOf('electron') > -1
 
 /**
  * The main vue instance
- * @namespace Vue
- *
- * @type {object}
  */
 const vm = new Vue({
   router,

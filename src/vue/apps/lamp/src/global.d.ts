@@ -1,0 +1,5 @@
+declare module '@bldr/icons'
+declare module '@bldr/shortcuts'
+declare module '@bldr/modal-dialog'
+declare module '@bldr/media-client'
+declare module 'vue-native-websocket'

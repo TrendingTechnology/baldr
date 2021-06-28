@@ -4,7 +4,7 @@
 
 /* globals DOMParser NodeList */
 
-import vue from '@/main.js'
+import vue from '@/main'
 import { selectSubset } from '@bldr/core-browser'
 import store from '@/store/index.js'
 

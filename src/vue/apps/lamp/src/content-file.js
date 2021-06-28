@@ -14,7 +14,7 @@ import { masters } from '@/masters.js'
 import store from '@/store/index.js'
 import { router } from '@/routes.js'
 import { routerViews } from '@/routing.js'
-import vm from '@/main.js'
+import vm from '@/main'
 
 /**
  * A raw slide object or a raw slide string.

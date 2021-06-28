@@ -4,7 +4,7 @@
  * @module @bldr/lamp/lib
  */
 
-import vue from '@/main.js'
+import vue from '@/main'
 
 /**
  * Check if the input is a valid URI. Prefix with `ref:` if necessary.

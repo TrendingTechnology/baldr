@@ -1,4 +1,4 @@
-import vue from '@/main.js'
+import vue from '@/main'
 
 import { MediaUri } from '@bldr/client-media-models'
 

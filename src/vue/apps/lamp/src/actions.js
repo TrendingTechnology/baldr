@@ -6,7 +6,7 @@
  */
 
 import store from './store/index.js'
-import vm from './main.js'
+import vm from './main'
 import { router } from './routes.js'
 
 /**

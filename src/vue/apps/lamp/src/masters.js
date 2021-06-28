@@ -6,7 +6,7 @@
 
 /* globals rawYamlExamples */
 
-import { customStore } from './main.js'
+import { customStore } from '@/main'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib.js'
 import inlineMarkup from './inline-markup.js'

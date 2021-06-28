@@ -4,6 +4,9 @@ class Notification {
     constructor(Vue) {
         this.Vue = Vue;
         this.Vue.use(notifications);
+        Vue.config.errorHandler = (error, vm, info) => {
+            this.error(error);
+        };
     }
     success(text, title) {
         const notification = {
