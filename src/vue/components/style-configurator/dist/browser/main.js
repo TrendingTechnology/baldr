@@ -58,7 +58,7 @@ class UiThemeSetter extends StringAttributeSetter {
         super('b-ui-theme', 'default');
     }
 }
-class StyleConfigurator {
+export class StyleConfigurator {
     constructor() {
         this.setterCollection = {
             darkMode: new DarkModeSetter(),
@@ -67,6 +67,9 @@ class StyleConfigurator {
             centerVertically: new CenterVerticallySetter()
         };
     }
+    /**
+     * Reset all styles to the default values.
+     */
     reset() {
         for (const setterName in this.setterCollection) {
             const name = setterName;

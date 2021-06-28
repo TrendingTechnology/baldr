@@ -1,23 +1,10 @@
-/* eslint-disable */
-
 import type { MasterTypes } from '@bldr/type-definitions';
 import _Vue from 'vue';
-declare module 'vue/types/vue' {
-    interface Vue {
-        /**
-         * Global attribute for DynamicSelect
-         */
-        $style: StyleConfigurator;
-    }
-    interface VueConstructor {
-        /**
-         * Global attribute for DynamicSelect
-         */
-        $style: StyleConfigurator;
-    }
-}
-declare class StyleConfigurator {
+export declare class StyleConfigurator {
     private readonly setterCollection;
+    /**
+     * Reset all styles to the default values.
+     */
     reset(): void;
     set(styleConfig: MasterTypes.StyleConfig): void;
     toggleDarkMode(): void;

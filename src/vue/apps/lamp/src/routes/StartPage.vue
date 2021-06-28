@@ -14,20 +14,23 @@
   </div>
 </template>
 
-<script>
-import OpenInterface from '@/components/OpenInterface'
-import RecentPresentations from '@/components/RecentPresentations'
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-import DropDownMenu from '@/components/DropDownMenu'
+import OpenInterface from '@/components/OpenInterface/index.vue'
+import RecentPresentations from '@/components/RecentPresentations.vue'
+import DropDownMenu from '@/components/DropDownMenu.vue'
 
-export default {
-  name: 'StartPage',
+@Component({
   components: {
     OpenInterface,
     RecentPresentations,
     DropDownMenu
-  },
-  mounted: function () {
+  }
+})
+export default class StartPage extends Vue {
+  mounted () {
     this.$style.reset()
   }
 }
@@ -58,10 +61,10 @@ export default {
     }
 
     .vc_drop_down_menu {
+      font-size: 0.8em;
+      left: 1vw;
       position: absolute;
       top: 1vw;
-      left: 1vw;
-      font-size: 0.8em;
     }
   }
 </style>

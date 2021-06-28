@@ -4,16 +4,6 @@ import type { MasterTypes } from '@bldr/type-definitions'
 
 import _Vue from 'vue'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-     $style: StyleConfigurator
-  }
-
-  interface VueConstructor {
-     $style: StyleConfigurator
-    }
-}
-
 class AttributeSetter<T> {
   protected attributeName: string
   protected attributeValue: T
@@ -94,7 +84,7 @@ type StyleConfigName =
   'darkMode' |
   'uiTheme'
 
-class StyleConfigurator {
+export class StyleConfigurator {
   private readonly setterCollection = {
     darkMode: new DarkModeSetter(),
     contentTheme: new ContentThemeSetter(),
@@ -102,6 +92,9 @@ class StyleConfigurator {
     centerVertically: new CenterVerticallySetter()
   }
 
+  /**
+   * Reset all styles to the default values.
+   */
   reset (): void {
     for (const setterName in this.setterCollection) {
       const name: StyleConfigName = setterName as StyleConfigName

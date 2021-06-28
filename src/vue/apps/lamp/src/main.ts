@@ -123,7 +123,7 @@ Vue.use(Notification as any, Vue)
 Vue.use(DynamicSelect as any)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.use(StyleConfigurator as any)
+Vue.use(StyleConfigurator)
 Vue.use(Websocket, config.wire.localUri, {
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
