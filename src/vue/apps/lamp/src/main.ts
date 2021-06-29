@@ -27,7 +27,6 @@
  * - `this.$router`
  * - `this.$shortcuts`
  * - `this.$store`
- * - `this.$style`
  *
  * ```js
  * function mounted () {
@@ -72,10 +71,6 @@
  * }
  * ```
  *
- * # Hooks (exported master methods)
- *
-
- *
  * # Store
  *
  * Each master slide can get its own Vuex store module. The module is name like
@@ -113,9 +108,12 @@ import StyleConfigurator from '@bldr/style-configurator'
 import Notification from '@bldr/notification'
 import config from '@bldr/config'
 
+import ComponentTest from '@bldr/component-test'
+
 // Vue components.
 import MainApp from '@/MainApp.vue'
 
+Vue.use(ComponentTest)
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification as any, Vue)
@@ -199,11 +197,6 @@ Vue.config.productionTip = false
  * $master
  */
 Vue.prototype.$masters = masters
-
-// https://stackoverflow.com/a/45032366/10193818
-Vue.prototype.$fullscreen = function () {
-  document.documentElement.requestFullscreen()
-}
 
 // Must be before new Vue()
 registerMasterComponents()

@@ -1,14 +1,16 @@
 import type { MasterTypes } from '@bldr/type-definitions';
 import _Vue from 'vue';
+/**
+ * @TODO Document the types here
+ * Type defintions are in src/vue/apps/lamp/src/types/style-configurator.d.ts
+ */
 export declare class StyleConfigurator {
     private readonly setterCollection;
-    /**
-     * Reset all styles to the default values.
-     */
     reset(): void;
     set(styleConfig: MasterTypes.StyleConfig): void;
     toggleDarkMode(): void;
     toggleCenterVertically(): void;
+    toggleFullscreen: () => void;
     setContentTheme(themeName: string): void;
     setUiTheme(themeName: string): void;
 }

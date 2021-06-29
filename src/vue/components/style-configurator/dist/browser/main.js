@@ -58,6 +58,10 @@ class UiThemeSetter extends StringAttributeSetter {
         super('b-ui-theme', 'default');
     }
 }
+/**
+ * @TODO Document the types here
+ * Type defintions are in src/vue/apps/lamp/src/types/style-configurator.d.ts
+ */
 export class StyleConfigurator {
     constructor() {
         this.setterCollection = {
@@ -66,10 +70,21 @@ export class StyleConfigurator {
             uiTheme: new UiThemeSetter(),
             centerVertically: new CenterVerticallySetter()
         };
+        this.toggleFullscreen = function () {
+            console.log(document.fullscreenElement);
+            if (document.fullscreenElement == null) {
+                try {
+                    document.documentElement.requestFullscreen();
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+            else {
+                document.exitFullscreen();
+            }
+        };
     }
-    /**
-     * Reset all styles to the default values.
-     */
     reset() {
         for (const setterName in this.setterCollection) {
             const name = setterName;
@@ -105,7 +120,6 @@ export class StyleConfigurator {
         this.setterCollection.uiTheme.set(themeName);
     }
 }
-// export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
     install(Vue, options) {
         Vue.prototype.$style = new StyleConfigurator();

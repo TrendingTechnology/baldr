@@ -3,25 +3,24 @@
     <app-info-simple
       class="valign-center"
       package-name="@bldr/lamp"
-      :version="lampVersion"
+      :version="version"
     />
   </div>
 </template>
 
-<script>
-/* globals lampVersion */
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
 import { AppInfoSimple } from '@bldr/components-collection'
 
-export default {
-  name: 'AboutPage',
+@Component({
   components: {
     AppInfoSimple
-  },
-  data () {
-    return {
-      lampVersion: lampVersion
-    }
   }
+})
+export default class AboutPage extends Vue  {
+  version = lampVersion
 }
 </script>
 

@@ -1,8 +1,8 @@
 {
-  "name": "@baldr/component-test",
+  "name": "@bldr/component-test",
   "version": "0.1.0",
   "description": "component test",
-  "main": "dist/main.js",
+  "main": "src/main.js",
   "typings": "types/index.d.ts",
   "devDependencies": {
     "typescript": "^3.5.2",

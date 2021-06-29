@@ -345,7 +345,7 @@ export default {
     vm.$style.reset()
   },
   enterFullscreen () {
-    vm.$fullscreen()
+    vm.$style.toggleFullscreen()
   },
   togglePlayer () {
     vm.$media.player.toggle()

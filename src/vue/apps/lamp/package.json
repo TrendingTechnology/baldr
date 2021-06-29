@@ -19,6 +19,7 @@
   "main": "background.js",
   "dependencies": {
     "@bldr/client-media-models": "*",
+    "@bldr/component-test": "*",
     "@bldr/components-collection": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",

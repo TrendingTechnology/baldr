@@ -84,6 +84,10 @@ type StyleConfigName =
   'darkMode' |
   'uiTheme'
 
+/**
+ * @TODO Document the types here
+ * Type defintions are in src/vue/apps/lamp/src/types/style-configurator.d.ts
+ */
 export class StyleConfigurator {
   private readonly setterCollection = {
     darkMode: new DarkModeSetter(),
@@ -92,9 +96,6 @@ export class StyleConfigurator {
     centerVertically: new CenterVerticallySetter()
   }
 
-  /**
-   * Reset all styles to the default values.
-   */
   reset (): void {
     for (const setterName in this.setterCollection) {
       const name: StyleConfigName = setterName as StyleConfigName
@@ -125,6 +126,15 @@ export class StyleConfigurator {
     this.setterCollection.centerVertically.toggle()
   }
 
+  toggleFullscreen = function () {
+    console.log(document.fullscreenElement)
+    if (document.fullscreenElement == null) {
+      document.documentElement.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  }
+
   setContentTheme (themeName: string): void {
     this.setterCollection.contentTheme.set(themeName)
   }
@@ -134,7 +144,6 @@ export class StyleConfigurator {
   }
 }
 
-// export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
   install (Vue: typeof _Vue, options?: any): void {
     Vue.prototype.$style = new StyleConfigurator()
