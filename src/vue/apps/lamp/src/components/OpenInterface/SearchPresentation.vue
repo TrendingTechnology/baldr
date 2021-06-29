@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { router } from '@/routes.js'
+import { router } from '@/routes'
 
 export default {
   name: 'SearchPresentation',

@@ -8,7 +8,7 @@
 // import VueFileToolbarMenu from 'vue-file-toolbar-menu'
 import BaldrMenu from '@bldr/menu-webapp'
 import actions from '@/actions.js'
-import router from '@/routes.js'
+import router from '@/routes'
 import { getWebappMenuDef } from '@bldr/menu-adapter'
 
 export default {

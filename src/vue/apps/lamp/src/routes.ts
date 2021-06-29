@@ -4,7 +4,7 @@
  * @module @bldr/lamp/routes
  */
 
-import Router from 'vue-router'
+import Router, { RouteConfig } from 'vue-router'
 import Vue from 'vue'
 import { installDocumentTitleUpdater } from '@/routing.js'
 
@@ -15,25 +15,17 @@ import AdHocEditor from '@/routes/AdHocEditor.vue'
 import CommonExample from '@/routes/CommonExample.vue'
 import DocumentationOverview from '@/routes/DocumentationOverview.vue'
 import MasterDocumentation from '@/routes/MasterDocumentation.vue'
-import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
-import OpenInterface from '@/components/OpenInterface'
+import OpenInterface from '@/components/OpenInterface/index.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
-import SlideView from '@/routes/SlideView'
+import SlideView from '@/routes/SlideView/index.vue'
 import SpeakerView from '@/routes/SpeakerView/index.vue'
-import StartPage from '@/routes/StartPage.vue'
+import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TopicsTree from '@/routes/TopicsTree/index.vue'
 import TexMarkdownConverter from '@/routes/TexMarkdownConverter.vue'
 
-// Failed to load chunks in the subfolder presentation
-// const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/Documentation.vue')
-// const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/MasterDocumentation.vue')
-
-// const SlideView = () => import(/* webpackChunkName: "slides" */ '@/routes/SlideView')
-// const MasterRenderer = () => import(/* webpackChunkName: "slides" */ '@/routes/SlideView/MasterRenderer.vue')
-
 Vue.use(Router)
 
-const routes = [
+const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'home',
@@ -149,15 +141,6 @@ const routes = [
     component: MasterDocumentation,
     meta: {
       title: 'Master Documentation'
-    }
-  },
-  {
-    path: '/media-ids',
-    name: 'media-ids',
-    component: MediaIdsParentDir,
-    meta: {
-      shortcut: 'i',
-      title: 'Medien-IDs im übergeordneten Ordner'
     }
   },
   {

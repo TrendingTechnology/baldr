@@ -12,7 +12,7 @@ import { mediaResolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
-import { router } from '@/routes.js'
+import { router } from '@/routes'
 import { routerViews } from '@/routing.js'
 import vm from '@/main'
 

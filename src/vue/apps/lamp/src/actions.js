@@ -7,7 +7,7 @@
 
 import store from './store/index.js'
 import vm from './main'
-import { router } from './routes.js'
+import { router } from './routes'
 
 /**
  * Toggle between the destination and the last route:

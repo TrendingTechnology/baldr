@@ -40,7 +40,7 @@
  * @typedef {string} view
  */
 
-import { router } from '@/routes.js'
+import { router } from '@/routes'
 import { shortenText } from '@bldr/core-browser'
 import store from '@/store/index.js'
 
