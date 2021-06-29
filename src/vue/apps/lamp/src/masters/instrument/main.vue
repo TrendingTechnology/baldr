@@ -12,18 +12,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
 import ExternalSites from '@/components/ExternalSites.vue'
 
-export default {
-  props: {
-    asset: {
-      type: Object
-    }
-  },
+@Component({
   components: {
     ExternalSites
   }
+})
+export default class InstrumentMasterMain extends Vue {
+  @Prop(Object)
+  readonly asset!: object
 }
 </script>
 

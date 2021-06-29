@@ -8,13 +8,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    asset: {
-      type: Object
-    }
-  }
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class InstrumentMasterPreview extends Vue {
+  @Prop(Object)
+  readonly asset!: object
 }
 </script>
 
