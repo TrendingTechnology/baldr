@@ -1,0 +1,11 @@
+{
+  "name": "@baldr/component-test",
+  "version": "0.1.0",
+  "description": "component test",
+  "main": "dist/main.js",
+  "typings": "types/index.d.ts",
+  "devDependencies": {
+    "typescript": "^3.5.2",
+    "vue": "^2.6.12"
+  }
+}
