@@ -85,10 +85,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-
-/* globals rawYamlExamples */
 
 const documentation = `
 
@@ -105,15 +105,14 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 * _.transparent-background_ (grauer Hintergrund der transparent ist)
 `
 
-export default {
-  name: 'DocumentationOverview',
-  computed: {
-    documentation () {
-      return convertMarkdownToHtml(documentation)
-    },
-    examples () {
-      return rawYamlExamples
-    }
+@Component
+export default class DocumentationOverview extends Vue {
+  get documentation () {
+    return convertMarkdownToHtml(documentation)
+  }
+
+  get examples () {
+    return rawYamlExamples
   }
 }
 </script>

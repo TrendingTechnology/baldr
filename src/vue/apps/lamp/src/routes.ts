@@ -12,10 +12,13 @@ import { installDocumentTitleUpdater } from '@/routing.js'
 import AboutPage from '@/routes/AboutPage.vue'
 import AdHocCamera from '@/routes/AdHocCamera.vue'
 import AdHocEditor from '@/routes/AdHocEditor.vue'
-import CommonExample from '@/routes/CommonExample.vue'
-import DocumentationOverview from '@/routes/DocumentationOverview.vue'
-import MasterDocumentation from '@/routes/MasterDocumentation.vue'
+
+import DocumentationOverview from '@/components/linked-by-routes/Documentation/index.vue'
+import CommonExample from '@/components/linked-by-routes/Documentation/CommonExample.vue'
+import MasterDocumentation from '@/components/linked-by-routes/Documentation/MasterDocumentation.vue'
+
 import OpenInterface from '@/components/OpenInterface/index.vue'
+
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
 import SlideView from '@/routes/SlideView/index.vue'
 import SpeakerView from '@/routes/SpeakerView/index.vue'

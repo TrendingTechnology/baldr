@@ -14,19 +14,20 @@
   </div>
 </template>
 
-<script>
-/* globals rawYamlExamples */
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-export default {
-  name: 'CommonExample',
-  computed: {
-    exampleName () {
-      return this.$route.params.exampleName
-    },
-    rawYaml () {
-      return rawYamlExamples.common[this.exampleName]
-    }
+@Component
+export default class CommonExample extends Vue {
+
+  get exampleName () {
+    return this.$route.params.exampleName
   }
+  get rawYaml () {
+    return rawYamlExamples.common[this.exampleName]
+  }
+
 }
 </script>
 
