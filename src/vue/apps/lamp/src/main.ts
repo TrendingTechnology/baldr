@@ -108,12 +108,9 @@ import StyleConfigurator from '@bldr/style-configurator'
 import Notification from '@bldr/notification'
 import config from '@bldr/config'
 
-import ComponentTest from '@bldr/component-test'
-
 // Vue components.
 import MainApp from '@/MainApp.vue'
 
-Vue.use(ComponentTest)
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification as any, Vue)

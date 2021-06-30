@@ -1,5 +1,5 @@
 <template>
-  <!-- We must a slide object. Else error messages when entering  -->
+  <!-- The slide object must exist, else error messages when entering -->
   <div v-if="slide" class="vc_slide_view" :style="style">
     <slide-main :slide="slide" :step-no="slide.stepNo"/>
     <cursor-arrows/>

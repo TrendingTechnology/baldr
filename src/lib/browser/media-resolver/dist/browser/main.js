@@ -1,2 +1,2 @@
-export { getAssets, getMultipartSelection, getSamples, resetMediaCache, resolve, translateToAssetRef, translateToSampleRef } from './internal';
+export { ClientMediaAsset, getAssets, getMultipartSelection, getSamples, resetMediaCache, resolve, translateToAssetRef, translateToSampleRef } from './internal';
 export { getUrisFromWrappedSpecs, getWrappedSampleList } from './wrapped-sample';

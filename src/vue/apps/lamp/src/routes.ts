@@ -9,7 +9,7 @@ import Vue from 'vue'
 import { installDocumentTitleUpdater } from '@/routing.js'
 
 // Components.
-import AboutPage from '@/routes/AboutPage.vue'
+import AboutPage from '@/components/linked-by-routes/AboutPage.vue'
 import AdHocCamera from '@/routes/AdHocCamera.vue'
 import AdHocEditor from '@/routes/AdHocEditor.vue'
 
@@ -24,7 +24,7 @@ import SlideView from '@/routes/SlideView/index.vue'
 import SpeakerView from '@/routes/SpeakerView/index.vue'
 import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TopicsTree from '@/routes/TopicsTree/index.vue'
-import TexMarkdownConverter from '@/routes/TexMarkdownConverter.vue'
+import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
 
 Vue.use(Router)
 

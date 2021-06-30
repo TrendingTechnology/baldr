@@ -1,4 +1,5 @@
 export {
+  ClientMediaAsset,
   getAssets,
   getMultipartSelection,
   getSamples,
