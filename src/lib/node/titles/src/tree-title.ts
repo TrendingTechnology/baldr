@@ -1,6 +1,8 @@
 import { FolderTitle } from './folder-title'
 import { DeepTitle } from './deep-title'
 
+import type { TitlesTypes } from '@bldr/type-definitions'
+
 /**
  * A list of sub trees.
  */
@@ -39,8 +41,8 @@ export interface TreeTitleList {
  * }
  * ```
  */
-export class TreeTitle {
-  sub: TreeTitleList
+export class TreeTitle implements TitlesTypes.TreeTitle {
+  sub: TitlesTypes.TreeTitleList
   folder: FolderTitle
   constructor (deepTitle: DeepTitle, folderName: string) {
     this.sub = {}

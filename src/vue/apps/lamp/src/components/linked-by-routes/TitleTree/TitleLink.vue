@@ -25,7 +25,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
-  name: 'PresentationLink',
+  name: 'TitleLink',
   props: {
     treeTitle: {
       type: Object

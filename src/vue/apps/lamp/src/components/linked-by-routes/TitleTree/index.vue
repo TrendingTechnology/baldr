@@ -12,8 +12,8 @@
       <top-level-jumpers :path="path"/>
       <section class="topics">
         <h1>Themen</h1>
-        <presentation-item v-if="subFolderTitleTree" :tree-title="subFolderTitleTree"/>
-        <presentation-item v-else :tree-title="folderTitleTree"/>
+        <folder-title v-if="subFolderTitleTree" :tree-title="subFolderTitleTree"/>
+        <folder-title v-else :tree-title="folderTitleTree"/>
       </section>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
 import LoadingIcon from '@/components/LoadingIcon.vue'
-import PresentationItem from './PresentationItem.vue'
+import FolderTitle from './FolderTitle.vue'
 import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
 import TopLevelJumpers from './TopLevelJumpers.vue'
 
@@ -40,10 +40,10 @@ async function enterRoute (vm, to) {
 }
 
 export default {
-  name: 'TopicsTree',
+  name: 'TitleTree',
   components: {
     LoadingIcon,
-    PresentationItem,
+    FolderTitle,
     TopLevelJumpers,
     TopicBreadCrumbs
   },

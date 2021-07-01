@@ -15,7 +15,7 @@ import path from 'path'
 import { deepCopy, getExtension } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import config from '@bldr/config'
-import type { MediaCategory, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
+import type { MediaCategory, AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle } from '@bldr/titles'
 import { categories } from './specs'
@@ -163,9 +163,9 @@ function sortAndDeriveProps (data: AssetType.YamlFormat, category: MediaCategory
   // eslint-disable-next-line
   const result: AssetType.YamlFormat = {} as AssetType.YamlFormat
 
-  let folderTitles: DeepTitleInterface | undefined
+  let folderTitles: DeepTitle = {} as DeepTitle
   if (filePath != null) {
-    folderTitles = new DeepTitle(filePath) as DeepTitleInterface
+    folderTitles = new DeepTitle(filePath)
   }
 
   // Loop over the propSpecs to get a sorted object

@@ -15,11 +15,11 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PresentationTypes = exports.MasterTypes = exports.MediaCategory = exports.AssetType = void 0;
+exports.PresentationTypes = exports.MasterTypes = exports.TitlesTypes = exports.MediaCategory = exports.AssetType = void 0;
 exports.AssetType = require("./asset");
 __exportStar(require("./cli"), exports);
 __exportStar(require("./config"), exports);
 exports.MediaCategory = require("./media-category");
-__exportStar(require("./titles"), exports);
+exports.TitlesTypes = require("./titles");
 exports.MasterTypes = require("./master");
 exports.PresentationTypes = require("./presentation");

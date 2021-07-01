@@ -4,7 +4,7 @@
  * @module @bldr/type-definitions/meta-spec
  */
 
-import { DeepTitleInterface } from './titles'
+import { DeepTitle } from './titles'
 import * as AssetType from './asset'
 
 /**
@@ -57,7 +57,7 @@ export type PropName = string
 interface DeriveFuncArg {
   data: AssetType.YamlFormat
   category: Category
-  folderTitles?: DeepTitleInterface
+  folderTitles?: DeepTitle
   filePath?: string
 }
 

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationTypes } from '@bldr/type-definitions'
+import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions'
 
 import { FolderTitle } from './folder-title'
 
@@ -9,7 +9,7 @@ import { FolderTitle } from './folder-title'
  * Hold metadata about a folder and its titles in a hierarchical folder
  * structure.
  */
-export class DeepTitle {
+export class DeepTitle implements TitlesTypes.DeepTitle {
   /**
    * An array of folder titles. The last element is the folder title of
    * the `filePath`.
