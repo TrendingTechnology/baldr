@@ -599,12 +599,24 @@ export class SampleCollection extends Cache<Sample> {
    */
   private gatherYamlFromRoot (assetFormat: AssetType.YamlFormat): AssetType.SampleYamlFormat | undefined {
     const yamlFormat: AssetType.SampleYamlFormat = {}
-    if (assetFormat.startTime != null) yamlFormat.startTime = assetFormat.startTime
-    if (assetFormat.duration != null) yamlFormat.duration = assetFormat.duration
-    if (assetFormat.endTime != null) yamlFormat.endTime = assetFormat.endTime
-    if (assetFormat.fadeIn != null) yamlFormat.startTime = assetFormat.fadeIn
-    if (assetFormat.fadeOut != null) yamlFormat.startTime = assetFormat.fadeOut
-    if (assetFormat.shortcut != null) yamlFormat.shortcut = assetFormat.shortcut
+    if (assetFormat.startTime != null) {
+      yamlFormat.startTime = assetFormat.startTime
+    }
+    if (assetFormat.duration != null) {
+      yamlFormat.duration = assetFormat.duration
+    }
+    if (assetFormat.endTime != null) {
+      yamlFormat.endTime = assetFormat.endTime
+    }
+    if (assetFormat.fadeIn != null) {
+      yamlFormat.startTime = assetFormat.fadeIn
+    }
+    if (assetFormat.fadeOut != null) {
+      yamlFormat.startTime = assetFormat.fadeOut
+    }
+    if (assetFormat.shortcut != null) {
+      yamlFormat.shortcut = assetFormat.shortcut
+    }
     if (Object.keys(yamlFormat).length > 0) {
       return yamlFormat
     }

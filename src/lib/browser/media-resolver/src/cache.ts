@@ -42,7 +42,7 @@ export class MimeTypeShortcutCounter {
   }
 }
 
-export class Cache <T> {
+export class Cache<T> {
   protected cache: { [ref: string]: T }
   constructor () {
     this.cache = {}
