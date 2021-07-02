@@ -22,7 +22,11 @@ export interface GenericError {
 }
 
 /**
- * Types for specific packages, for example @bldr/titles -> TitlesTypes
+ * Types from specific packages.
+ *
+ * Naming convention: Title case package name + `Types`
+ *
+ * for example @bldr/titles -> TitlesTypes
  */
 
 export * as TitlesTypes from './titles'
