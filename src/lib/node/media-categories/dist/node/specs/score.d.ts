@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “score”.
  */
-export declare const score: MediaCategory.Category;
+export declare const score: MediaCategoriesTypes.Category;

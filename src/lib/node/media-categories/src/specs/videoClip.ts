@@ -1,9 +1,9 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 /**
  * The meta data type specification “videoClip”.
  */
-export const videoClip: MediaCategory.Category = {
+export const videoClip: MediaCategoriesTypes.Category = {
   title: 'Videoclip',
   props: {
     composer: {

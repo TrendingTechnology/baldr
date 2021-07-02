@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “song”.
  */
-export declare const song: MediaCategory.Category;
+export declare const song: MediaCategoriesTypes.Category;

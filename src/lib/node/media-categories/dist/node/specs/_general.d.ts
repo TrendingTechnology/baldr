@@ -1,6 +1,6 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * General meta data type specification. Applied after all other meta data
  * types.
  */
-export declare const general: MediaCategory.Category;
+export declare const general: MediaCategoriesTypes.Category;

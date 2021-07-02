@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { MediaCategory } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 export const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',
@@ -51,9 +51,9 @@ export function checkForTwoLetterDir (filePath: string): boolean {
   return false
 }
 
-export function checkTypeAbbreviations (categoryCollection: MediaCategory.Collection): void {
+export function checkTypeAbbreviations (categoryCollection: MediaCategoriesTypes.Collection): void {
   for (const name in categoryCollection) {
-    const category = categoryCollection[name as MediaCategory.Name]
+    const category = categoryCollection[name as MediaCategoriesTypes.Name]
 
     if (category.abbreviation != null && !isValidTwoLetterAbbreviation(category.abbreviation)) {
       throw new Error(`Unkown two letter abbreviation ${category.abbreviation}`)

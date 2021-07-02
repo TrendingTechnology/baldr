@@ -3,7 +3,7 @@
  *
  * @module @bldr/type-definitions/config
  */
-import * as MediaCategory from './media-category';
+import * as MediaCategoriesTypes from './media-categories';
 interface ApiConfiguration {
     port: number;
 }
@@ -175,7 +175,7 @@ export interface Configuration {
      * Use the command line utility `baldr categories` to patch the media
      * categories configurations into the json files at `/etc/baldr.json`
      */
-    mediaCategories: MediaCategory.Collection;
+    mediaCategories: MediaCategoriesTypes.Collection;
     /**
      * Subfolders are abbreviated with uppercase two letter names:
      *

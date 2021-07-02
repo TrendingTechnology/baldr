@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “cloze”.
  */
-export declare const cloze: MediaCategory.Category;
+export declare const cloze: MediaCategoriesTypes.Category;

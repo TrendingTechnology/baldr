@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “videoClip”.
  */
-export declare const videoClip: MediaCategory.Category;
+export declare const videoClip: MediaCategoriesTypes.Category;

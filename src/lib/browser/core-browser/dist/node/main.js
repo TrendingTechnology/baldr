@@ -284,24 +284,5 @@ function formatDuration(duration, short = false) {
         length = 5;
     }
     return new Date(Number(duration) * 1000).toISOString().substr(from, length);
-    // durationNumber = Math.floor(durationNumber)
-    // if (durationNumber <= 0) {
-    //   return '00:00'
-    // }
-    // let seconds = durationNumber % 60
-    // let secondsOutput: string
-    // if (seconds < 10) {
-    //   secondsOutput = `0${seconds}`
-    // } else {
-    //   secondsOutput = `${seconds}`
-    // }
-    // let minutesOutput: string
-    // let minutes = durationNumber / 60
-    // if (minutes < 10) {
-    //   minutesOutput = `0${minutes}`
-    // } else {
-    //   minutesOutput = `${minutes}`
-    // }
-    // return `${minutesOutput}:${secondsOutput}`
 }
 exports.formatDuration = formatDuration;

@@ -1,6 +1,6 @@
 import path from 'path'
 
-import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
@@ -13,7 +13,7 @@ interface PersonFileFormat extends AssetType.YamlFormat {
   extension: string
 }
 
-interface PersonCategory extends MediaCategory.Category {
+interface PersonCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
   basePath: string
 }
@@ -21,7 +21,7 @@ interface PersonCategory extends MediaCategory.Category {
 /**
  * The meta data type specification “person”.
  */
-export const person: MediaCategory.Category = {
+export const person: MediaCategoriesTypes.Category = {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),

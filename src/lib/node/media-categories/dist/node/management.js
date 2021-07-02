@@ -160,7 +160,7 @@ function sortAndDeriveProps(data, category, filePath) {
     const origData = core_browser_1.deepCopy(data);
     // eslint-disable-next-line
     const result = {};
-    let folderTitles;
+    let folderTitles = {};
     if (filePath != null) {
         folderTitles = new titles_1.DeepTitle(filePath);
     }

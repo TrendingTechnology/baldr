@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “cover”.
  */
-export declare const cover: MediaCategory.Category;
+export declare const cover: MediaCategoriesTypes.Category;

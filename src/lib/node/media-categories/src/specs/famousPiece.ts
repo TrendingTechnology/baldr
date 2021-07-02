@@ -1,4 +1,4 @@
-import type { MediaCategory, StringIndexedObject } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
 
 import path from 'path'
@@ -14,7 +14,7 @@ function readPersonYaml (filePath: string): StringIndexedObject | undefined {
 /**
  * The meta data type specification “famousPiece”.
  */
-export const famousPiece: MediaCategory.Category = {
+export const famousPiece: MediaCategoriesTypes.Category = {
   title: 'Bekanntes Stück',
   detectCategoryByPath: new RegExp('^.*/Personen/\\w/.*/BS/.*(m4a|mp3)$'),
   abbreviation: 'BS',

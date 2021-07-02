@@ -1,11 +1,11 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { validateMediaId, validateUuid } from '../main'
 
 /**
  * The meta data type specification “recording”.
  */
-export const recording: MediaCategory.Category = {
+export const recording: MediaCategoriesTypes.Category = {
   title: 'Aufnahme',
   detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {

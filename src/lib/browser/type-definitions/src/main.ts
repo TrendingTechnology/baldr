@@ -7,7 +7,6 @@
 export * as AssetType from './asset'
 export * from './cli'
 export * from './config'
-export * as MediaCategory from './media-category'
 
 export * as MasterTypes from './master'
 export * as PresentationTypes from './presentation'
@@ -29,4 +28,5 @@ export interface GenericError {
  * for example @bldr/titles -> TitlesTypes
  */
 
+export * as MediaCategoriesTypes from './media-categories'
 export * as TitlesTypes from './titles'

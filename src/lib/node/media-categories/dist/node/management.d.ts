@@ -7,13 +7,13 @@
  *
  * @module @bldr/media-categories
  */
-import type { MediaCategory, AssetType } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the category name.
  *
  * @returns The category names for example `person,group,general`
  */
-export declare function detectCategoryByPath(filePath: string): MediaCategory.Names | undefined;
+export declare function detectCategoryByPath(filePath: string): MediaCategoriesTypes.Names | undefined;
 /**
  * Generate the file path of the first specifed media category.
  *

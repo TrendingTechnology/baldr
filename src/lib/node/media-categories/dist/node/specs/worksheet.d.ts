@@ -1,5 +1,5 @@
-import type { MediaCategory } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * The meta data type specification “worksheet”.
  */
-export declare const worksheet: MediaCategory.Category;
+export declare const worksheet: MediaCategoriesTypes.Category;

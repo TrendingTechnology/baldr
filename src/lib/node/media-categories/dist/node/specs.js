@@ -67,7 +67,7 @@ exports.categories = {
  * @returns A object that can be converted to JSON.
  */
 function stripCategories() {
-    // { [category: string]: MediaCategory.Category }
+    // { [category: string]: MediaCategoriesTypes.Category }
     const cats = core_browser_1.deepCopy(exports.categories);
     for (const name in cats) {
         delete cats[name].detectCategoryByPath;

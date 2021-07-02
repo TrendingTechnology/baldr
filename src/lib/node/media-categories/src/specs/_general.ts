@@ -1,4 +1,4 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { deasciify, referencify, genUuid } from '@bldr/core-browser'
 import { getTwoLetterAbbreviations, checkForTwoLetterDir } from '../two-letter-abbreviations'
 
@@ -8,7 +8,7 @@ import { generateIdPrefix, validateYoutubeId } from '../main'
  * General meta data type specification. Applied after all other meta data
  * types.
  */
-export const general: MediaCategory.Category = {
+export const general: MediaCategoriesTypes.Category = {
   title: 'Allgemeiner Metadaten-Type',
   props: {
     ref: {

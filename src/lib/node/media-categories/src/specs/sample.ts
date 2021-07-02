@@ -1,4 +1,4 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 const sampleSpecKeys = ['title', 'ref', 'startTime', 'duration', 'endTime', 'fadeIn', 'fadeOut', 'shortcut']
 
@@ -7,7 +7,7 @@ const sampleSpecKeys = ['title', 'ref', 'startTime', 'duration', 'endTime', 'fad
  *
  * @see @bldr/type-definitions/asset.SampleYamlFormat
  */
-export const sample: MediaCategory.Category = {
+export const sample: MediaCategoriesTypes.Category = {
   title: 'Audio/Video-Ausschnitt',
   props: {
     samples: {

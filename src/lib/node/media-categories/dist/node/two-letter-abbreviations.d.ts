@@ -1,4 +1,4 @@
-import { MediaCategory } from '@bldr/type-definitions';
+import { MediaCategoriesTypes } from '@bldr/type-definitions';
 export declare const abbreviations: {
     [key: string]: string;
 };
@@ -13,4 +13,4 @@ export declare function getTwoLetterAbbreviations(): string[];
  * @return True if the file path is in a valid two letter directory, else false.
  */
 export declare function checkForTwoLetterDir(filePath: string): boolean;
-export declare function checkTypeAbbreviations(categoryCollection: MediaCategory.Collection): void;
+export declare function checkTypeAbbreviations(categoryCollection: MediaCategoriesTypes.Collection): void;

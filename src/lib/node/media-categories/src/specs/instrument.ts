@@ -2,9 +2,9 @@ import path from 'path'
 
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
-import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 
-interface InstrumentCategory extends MediaCategory.Category {
+interface InstrumentCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
   basePath: string
 }
@@ -17,7 +17,7 @@ interface InstrumentFileFormat extends AssetType.YamlFormat {
 /**
  * The meta data type specification “instrument”.
  */
-export const instrument: MediaCategory.Category = {
+export const instrument: MediaCategoriesTypes.Category = {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),

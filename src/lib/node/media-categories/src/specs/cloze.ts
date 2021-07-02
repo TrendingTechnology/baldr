@@ -1,6 +1,6 @@
 import path from 'path'
 
-import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 
 interface ClozeFileFormat extends AssetType.YamlFormat {
   clozePageNo: number
@@ -10,7 +10,7 @@ interface ClozeFileFormat extends AssetType.YamlFormat {
 /**
  * The meta data type specification “cloze”.
  */
-export const cloze: MediaCategory.Category = {
+export const cloze: MediaCategoriesTypes.Category = {
   title: 'Lückentext',
   abbreviation: 'LT',
   detectCategoryByPath: function () {

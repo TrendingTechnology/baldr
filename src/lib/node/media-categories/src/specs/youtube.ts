@@ -1,4 +1,4 @@
-import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 
 import path from 'path'
 
@@ -8,14 +8,14 @@ interface YoutubeFileFormat extends AssetType.YamlFormat {
   youtubeId: string
 }
 
-interface YoutubeCategory extends MediaCategory.Category {
+interface YoutubeCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
 }
 
 /**
  * The meta data type specification “youtube”.
  */
-export const youtube: MediaCategory.Category = {
+export const youtube: MediaCategoriesTypes.Category = {
   title: 'YouTube-Video',
   abbreviation: 'YT',
   detectCategoryByPath: new RegExp('^.*/YT/.*.mp4$'),

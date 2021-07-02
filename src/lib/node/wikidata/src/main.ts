@@ -12,7 +12,7 @@ import * as wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
 import { fetchFile } from '@bldr/core-node'
-import { MediaCategory, AssetType } from '@bldr/type-definitions'
+import { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
@@ -357,7 +357,7 @@ const functions: {[key: string]: Function } = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Data, categoryCollection: MediaCategory.Collection): MediaCategory.Data {
+export function mergeData (data: MediaCategoriesTypes.Data, dataWiki: MediaCategoriesTypes.Data, categoryCollection: MediaCategoriesTypes.Collection): MediaCategoriesTypes.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -365,10 +365,10 @@ export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Dat
     return Object.assign({}, dataOrig, dataWiki)
   }
 
-  const typeData: MediaCategory.Data = {}
+  const typeData: MediaCategoriesTypes.Data = {}
 
   for (const typeName of dataOrig.categories.split(',')) {
-    const propSpecs = categoryCollection[typeName as MediaCategory.Name].props
+    const propSpecs = categoryCollection[typeName as MediaCategoriesTypes.Name].props
     for (const propName in dataWiki) {
       if (propSpecs?.[propName]?.wikidata != null) {
         const propSpec = propSpecs[propName].wikidata
@@ -395,7 +395,7 @@ export function mergeData (data: MediaCategory.Data, dataWiki: MediaCategory.Dat
  *
  * @param itemId - for example `Q123`
  */
-export async function query (itemId: string, typeNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<{ [key: string]: any }> {
+export async function query (itemId: string, typeNames: MediaCategoriesTypes.Names, categoryCollection: MediaCategoriesTypes.Collection): Promise<{ [key: string]: any }> {
   if (wikibase.isItemId(itemId) == null) {
     throw new Error(`No item ref: ${itemId}`)
   }
@@ -407,15 +407,15 @@ export async function query (itemId: string, typeNames: MediaCategory.Names, cat
   const data: AssetType.YamlFormat = {} as AssetType.YamlFormat
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
-    if (categoryCollection[typeName as MediaCategory.Name] == null) {
+    if (categoryCollection[typeName as MediaCategoriesTypes.Name] == null) {
       throw new Error(`Unkown type name: “${typeName}”`)
     }
 
-    const typeSpec = categoryCollection[typeName as MediaCategory.Name]
+    const typeSpec = categoryCollection[typeName as MediaCategoriesTypes.Name]
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata != null) {
-        const propSpec = typeSpec.props[propName].wikidata as MediaCategory.WikidataProp
+        const propSpec = typeSpec.props[propName].wikidata as MediaCategoriesTypes.WikidataProp
         let value
 
         // source

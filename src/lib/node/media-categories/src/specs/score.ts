@@ -1,11 +1,11 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { getPdfPageCount } from '@bldr/core-node'
 
 /**
  * The meta data type specification “score”.
  */
-export const score: MediaCategory.Category = {
+export const score: MediaCategoriesTypes.Category = {
   title: 'Partitur',
   abbreviation: 'PT',
   detectCategoryByPath: new RegExp('^.*/PT/.*\.(pdf|svg|png)$'),

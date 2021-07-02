@@ -1,4 +1,4 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import path from 'path'
 
@@ -7,7 +7,7 @@ import { getPdfPageCount } from '@bldr/core-node'
 /**
  * The meta data type specification “worksheet”.
  */
-export const worksheet: MediaCategory.Category = {
+export const worksheet: MediaCategoriesTypes.Category = {
   title: 'Arbeitsblatt',
   abbreviation: 'TX',
   detectCategoryByPath: function () {

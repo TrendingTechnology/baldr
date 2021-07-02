@@ -1,9 +1,9 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 /**
  * The meta data type specification “photo”.
  */
-export const photo: MediaCategory.Category = {
+export const photo: MediaCategoriesTypes.Category = {
   title: 'Foto',
   abbreviation: 'FT',
   detectCategoryByPath: function () {

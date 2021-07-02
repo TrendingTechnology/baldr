@@ -1,9 +1,9 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 /**
  * The meta data type specification “excerpt”.
  */
-export const excerpt: MediaCategory.Category = {
+export const excerpt: MediaCategoriesTypes.Category = {
   title: 'Ausschnitt',
   props: {
     excerptStartTime: {

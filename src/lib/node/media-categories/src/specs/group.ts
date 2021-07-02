@@ -1,12 +1,12 @@
 import path from 'path'
 
-import type { MediaCategory, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
 import { validateDate } from '../main'
 
-interface GroupCategory extends MediaCategory.Category {
+interface GroupCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
   basePath: string
 }
@@ -20,7 +20,7 @@ interface GroupFileFormat extends AssetType.YamlFormat {
 /**
  * The meta data type specification “group”.
  */
-export const group: MediaCategory.Category = {
+export const group: MediaCategoriesTypes.Category = {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),

@@ -15,14 +15,18 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TitlesTypes = exports.PresentationTypes = exports.MasterTypes = exports.MediaCategory = exports.AssetType = void 0;
+exports.TitlesTypes = exports.MediaCategoriesTypes = exports.PresentationTypes = exports.MasterTypes = exports.AssetType = void 0;
 exports.AssetType = require("./asset");
 __exportStar(require("./cli"), exports);
 __exportStar(require("./config"), exports);
-exports.MediaCategory = require("./media-category");
 exports.MasterTypes = require("./master");
 exports.PresentationTypes = require("./presentation");
 /**
- * Types for specific packages, for example @bldr/titles -> TitlesTypes
+ * Types from specific packages.
+ *
+ * Naming convention: Title case package name + `Types`
+ *
+ * for example @bldr/titles -> TitlesTypes
  */
+exports.MediaCategoriesTypes = require("./media-categories");
 exports.TitlesTypes = require("./titles");

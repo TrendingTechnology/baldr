@@ -14,7 +14,7 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { deepCopy } from '@bldr/core-browser'
 
 import { cloze } from './specs/cloze'
@@ -38,7 +38,7 @@ import { videoClip } from './specs/videoClip'
 import { worksheet } from './specs/worksheet'
 import { youtube } from './specs/youtube'
 
-export const categories: MediaCategory.Collection = {
+export const categories: MediaCategoriesTypes.Collection = {
   cloze,
   composition,
   cover,
@@ -69,7 +69,7 @@ export const categories: MediaCategory.Collection = {
  * @returns A object that can be converted to JSON.
  */
 export function stripCategories (): object {
-  // { [category: string]: MediaCategory.Category }
+  // { [category: string]: MediaCategoriesTypes.Category }
   const cats = deepCopy(categories) as any
   for (const name in cats) {
     delete cats[name].detectCategoryByPath

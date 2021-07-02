@@ -1,11 +1,11 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { getPdfPageCount } from '@bldr/core-node'
 
 /**
  * The meta data type specification “reference”.
  */
-export const reference: MediaCategory.Category = {
+export const reference: MediaCategoriesTypes.Category = {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectCategoryByPath: function () {

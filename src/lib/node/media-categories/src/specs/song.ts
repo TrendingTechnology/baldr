@@ -1,9 +1,9 @@
-import type { MediaCategory } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 /**
  * The meta data type specification “song”.
  */
-export const song: MediaCategory.Category = {
+export const song: MediaCategoriesTypes.Category = {
   title: 'Lied',
   props: {
     publicationDate: {

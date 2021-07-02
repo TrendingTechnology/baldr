@@ -73,12 +73,7 @@ export class StyleConfigurator {
         this.toggleFullscreen = function () {
             console.log(document.fullscreenElement);
             if (document.fullscreenElement == null) {
-                try {
-                    document.documentElement.requestFullscreen();
-                }
-                catch (error) {
-                    console.log(error);
-                }
+                document.documentElement.requestFullscreen();
             }
             else {
                 document.exitFullscreen();

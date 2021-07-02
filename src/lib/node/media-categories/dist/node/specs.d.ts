@@ -13,8 +13,8 @@
  *
  * @module @bldr/media-manager/meta-type-specs
  */
-import type { MediaCategory } from '@bldr/type-definitions';
-export declare const categories: MediaCategory.Collection;
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
+export declare const categories: MediaCategoriesTypes.Collection;
 /**
  * Remove all properties that can not represented in JSON. Remove absent
  * properties.

@@ -1,14 +1,14 @@
 import assert from 'assert'
 
 import { deepCopy, msleep } from '@bldr/core-browser'
-import { AssetType, MediaCategory, StringIndexedObject } from '@bldr/type-definitions'
+import type { AssetType, MediaCategoriesTypes, StringIndexedObject } from '@bldr/type-definitions'
 import wikidata from '@bldr/wikidata'
 
 import { categoriesManagement, categories } from '@bldr/media-categories'
 import { readAssetYaml } from '../main'
 import { writeYamlFile } from '@bldr/file-reader-writer'
 
-async function queryWikidata (metaData: AssetType.YamlFormat, categoryNames: MediaCategory.Names, categoryCollection: MediaCategory.Collection): Promise<AssetType.YamlFormat> {
+async function queryWikidata (metaData: AssetType.YamlFormat, categoryNames: MediaCategoriesTypes.Names, categoryCollection: MediaCategoriesTypes.Collection): Promise<AssetType.YamlFormat> {
   const dataWiki = await wikidata.query(metaData.wikidata, categoryNames, categoryCollection)
   console.log(dataWiki)
   metaData = wikidata.mergeData(metaData, dataWiki, categoryCollection) as AssetType.YamlFormat
