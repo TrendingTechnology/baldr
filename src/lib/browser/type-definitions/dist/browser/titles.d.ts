@@ -137,6 +137,37 @@ export interface FolderTitle {
      */
     level?: number;
 }
+/**
+ * A tree of folder titles.
+ *
+ * ```json
+ * {
+ *   "10": {
+ *     "sub": {
+ *       "10_Kontext": {
+ *         "sub": {
+ *           "20_Oper-Carmen": {
+ *             "sub": {
+ *               "30_Habanera": {
+ *                 "sub": {},
+ *                 "folder": {
+ *                   "title": "Personencharakterisierung in der Oper",
+ *                   "folderName": "30_Habanera",
+ *                   "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
+ *                   "hasPraesentation": true,
+ *                   "level": 4,
+ *                   "subtitle": "<em class=\"person\">Georges Bizet</em>:..."
+ *                 }
+ *               }
+ *             }
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ * ```
+ */
 export interface TreeTitle {
     sub: TreeTitleList;
     folder: FolderTitle;

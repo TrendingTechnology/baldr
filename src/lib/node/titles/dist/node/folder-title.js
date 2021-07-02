@@ -5,9 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FolderTitle = void 0;
 const config_1 = __importDefault(require("@bldr/config"));
-/**
- * Hold some meta data about a folder and its title.
- */
 class FolderTitle {
     /**
      * @param data - Some meta data about the folder.

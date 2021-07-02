@@ -7,7 +7,6 @@ export * as AssetType from './asset';
 export * from './cli';
 export * from './config';
 export * as MediaCategory from './media-category';
-export * as TitlesTypes from './titles';
 export * as MasterTypes from './master';
 export * as PresentationTypes from './presentation';
 export interface StringIndexedObject {
@@ -20,3 +19,7 @@ export interface GenericError {
     name: string;
     message: string;
 }
+/**
+ * Types for specific packages, for example @bldr/titles -> TitlesTypes
+ */
+export * as TitlesTypes from './titles';

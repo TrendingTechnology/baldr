@@ -1,8 +1,10 @@
+import { TitlesTypes } from '@bldr/type-definitions'
+
 import { DeepTitle } from './deep-title'
-import { TreeTitle, TreeTitleList } from './tree-title'
+import { TreeTitle } from './tree-title'
 
 export class TreeFactory {
-  rootList: TreeTitleList
+  rootList: TitlesTypes.TreeTitleList
 
   constructor () {
     this.rootList = {}
@@ -26,7 +28,7 @@ export class TreeFactory {
     return deepTitle
   }
 
-  getTree (): TreeTitleList {
+  getTree (): TitlesTypes.TreeTitleList {
     return this.rootList
   }
 }

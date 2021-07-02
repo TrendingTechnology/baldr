@@ -5,10 +5,6 @@ import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions'
 
 import { FolderTitle } from './folder-title'
 
-/**
- * Hold metadata about a folder and its titles in a hierarchical folder
- * structure.
- */
 export class DeepTitle implements TitlesTypes.DeepTitle {
   /**
    * An array of folder titles. The last element is the folder title of
@@ -31,9 +27,6 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     this.folderNames = this.titles.map(folderTitle => folderTitle.folderName)
   }
 
-  /**
-   * Get the first folder name and remove it from the array.
-   */
   shiftFolderName (): string | undefined {
     return this.folderNames.shift()
   }
@@ -158,91 +151,45 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     return this.titles[this.titles.length - 1]
   }
 
-  /**
-   * All titles concatenated with ` / ` (Include the first and the last title)
-   * without the subtitles.
-   *
-   * for example:
-   *
-   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-   * Johann Sebastian Bach: Musik als Bekenntnis /
-   * Johann Sebastian Bachs Reise nach Berlin 1747
-   */
   get allTitles (): string {
     return this.titlesArray.join(' / ')
   }
 
-  /**
-   * Not the first and last title as a array.
-   */
   get curriculumTitlesArray (): string[] {
     return this.titlesArray.slice(1, this.titles.length - 1)
   }
 
-  /**
-   * Not the title of the first and the last folder.
-   *
-   * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
-   */
   get curriculum (): string {
     return this.curriculumTitlesArray.join(' / ')
   }
 
-  /**
-   * The parent directory name with the numeric prefix: For example
-   * `Bachs-vergebliche-Reise`.
-   */
   get ref (): string {
     return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '')
   }
 
-  /**
-   * The title. It is the first line in the text file `title.txt` in the
-   * same folder as the constructor `filePath` file.
-   */
   get title (): string {
     return this.lastFolderTitleObject.title
   }
 
-  /**
-   * The subtitle. It is the second line in the text file `title.txt` in the
-   * same folder as the constructor `filePath` file.
-   */
   get subtitle (): string | undefined {
     if (this.lastFolderTitleObject.subtitle != null) {
       return this.lastFolderTitleObject.subtitle
     }
   }
 
-  /**
-   * Combine the title and the subtitle (`Title - Subtitle`).
-   */
   get titleAndSubtitle (): string {
     if (this.subtitle != null) return `${this.title} - ${this.subtitle}`
     return this.title
   }
 
-  /**
-   * The first folder level in the hierachical folder structure must be named
-   * with numbers.
-   */
   get grade (): number {
     return parseInt(this.titles[0].title.replace(/[^\d]+$/, ''))
   }
 
-  /**
-   * List all `FolderTitle()` objects.
-   */
   list (): FolderTitle[] {
     return this.titles
   }
 
-  /**
-   * Get the folder title object by the name of the current folder.
-   *
-   * @param folderName - A folder name. The name must in the titles
-   *   array to get an result.
-   */
   getFolderTitleByFolderName (folderName: string): FolderTitle | undefined {
     for (const folderTitle of this.titles) {
       if (folderTitle.folderName === folderName) {
@@ -251,9 +198,6 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     }
   }
 
-  /**
-   * Generate a object containing the meta informations of a presentation.
-   */
   generatePresetationMeta (): PresentationTypes.PresentationMeta {
     const result: PresentationTypes.PresentationMeta = {
       ref: this.ref,
