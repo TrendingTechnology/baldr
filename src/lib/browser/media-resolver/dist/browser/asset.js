@@ -2,14 +2,6 @@ import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal';
 export const imageShortcutCounter = new MimeTypeShortcutCounter('i');
-/**
- * Hold various data of a media file as class properties.
- *
- * If a media file has a property with the name `multiPartCount` set, it is a
- * multi part asset. A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
- * HTTP URL `http:/example/media/Score_no02.png`.
- */
 export class ClientMediaAsset {
     /**
      * @param yaml - A raw javascript object read from the Rest API
@@ -39,17 +31,9 @@ export class ClientMediaAsset {
         }
         assetCache.add(this.ref, this);
     }
-    /**
-     * The reference authority of the URI using the `ref` scheme. The returned
-     * string is prefixed with `ref:`.
-     */
     get ref() {
         return 'ref:' + this.yaml.ref;
     }
-    /**
-     * The UUID authority of the URI using the `uuid` scheme. The returned
-     * string is prefixed with `uuid:`.
-     */
     get uuid() {
         return 'uuid:' + this.yaml.uuid;
     }
@@ -65,21 +49,11 @@ export class ClientMediaAsset {
             return this.samples.complete.shortcut;
         }
     }
-    /**
-     * Each media asset can have a preview image. The suffix `_preview.jpg`
-     * is appended on the path. For example
-     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
-     */
     get previewHttpUrl() {
         if (this.yaml.previewImage) {
             return `${this.httpUrl}_preview.jpg`;
         }
     }
-    /**
-     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
-     * is appended on the HTTP URL. For example
-     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
-     */
     get waveformHttpUrl() {
         if (this.yaml.hasWaveform) {
             return `${this.httpUrl}_waveform.png`;
@@ -94,32 +68,18 @@ export class ClientMediaAsset {
         }
         return this.uri.raw;
     }
-    /**
-     * True if the media file is playable, for example an audio or a video file.
-     */
     get isPlayable() {
         return ['audio', 'video'].includes(this.mimeType);
     }
-    /**
-     * True if the media file is visible, for example an image or a video file.
-     */
     get isVisible() {
         return ['image', 'video'].includes(this.mimeType);
     }
-    /**
-     * The number of parts of a multipart media asset.
-     */
     get multiPartCount() {
         if (this.yaml.multiPartCount == null) {
             return 1;
         }
         return this.yaml.multiPartCount;
     }
-    /**
-     * Retrieve the HTTP URL of the multi part asset by the part number.
-     *
-     * @param The part number starts with 1.
-     */
     getMultiPartHttpUrlByNo(no) {
         if (this.multiPartCount === 1)
             return this.httpUrl;

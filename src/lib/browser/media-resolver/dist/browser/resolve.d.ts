@@ -1,4 +1,4 @@
-import { ClientMediaAsset } from './internal';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 declare type UrisSpec = string | string[] | Set<string>;
 /**
@@ -41,7 +41,7 @@ declare class Resolver {
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
      */
-    resolve(uris: UrisSpec, throwException?: boolean): Promise<ClientMediaAsset[]>;
+    resolve(uris: UrisSpec, throwException?: boolean): Promise<MediaResolverTypes.ClientMediaAsset[]>;
 }
 export declare const resolver: Resolver;
 /**
@@ -53,5 +53,5 @@ export declare const resolver: Resolver;
  * @param throwException - Throw an exception if the media URI
  *  cannot be resolved (default: `true`).
  */
-export declare function resolve(uris: UrisSpec, throwException?: boolean): Promise<ClientMediaAsset[]>;
+export declare function resolve(uris: UrisSpec, throwException?: boolean): Promise<MediaResolverTypes.ClientMediaAsset[]>;
 export {};

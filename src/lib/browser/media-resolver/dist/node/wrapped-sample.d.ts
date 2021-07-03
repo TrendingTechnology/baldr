@@ -4,8 +4,7 @@
  *
  * @module @bldr/wrapped-sample
  */
-import { ClientMediaAsset, Sample } from './internal';
-import { SampleCollection } from './sample';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
 interface SimpleSampleSpec {
     uri: string;
     title?: string;
@@ -72,8 +71,8 @@ export declare class WrappedSample {
      * constructor time.
      */
     get titleSafe(): string | undefined;
-    getSample(): Sample;
-    getAsset(): ClientMediaAsset;
+    getSample(): MediaResolverTypes.Sample;
+    getAsset(): MediaResolverTypes.ClientMediaAsset;
 }
 export declare class WrappedSampleList {
     private readonly samples;
@@ -84,7 +83,7 @@ export declare class WrappedSampleList {
      * of the first included asset are more than one, than return this sample
      * collection.
      */
-    getSamplesFromFirst(): SampleCollection | undefined;
+    getSamplesFromFirst(): MediaResolverTypes.SampleCollection | undefined;
 }
 export declare function getUrisFromWrappedSpecs(spec: WrappedSpecInput): Set<string>;
 export declare function getWrappedSampleList(spec: WrappedSpecInput): WrappedSampleList;

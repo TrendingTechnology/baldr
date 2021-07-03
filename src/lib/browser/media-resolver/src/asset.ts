@@ -1,4 +1,4 @@
-import type { AssetType } from '@bldr/type-definitions'
+import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions'
 
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
@@ -7,21 +7,8 @@ import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounte
 
 export const imageShortcutCounter = new MimeTypeShortcutCounter('i')
 
-/**
- * Hold various data of a media file as class properties.
- *
- * If a media file has a property with the name `multiPartCount` set, it is a
- * multi part asset. A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
- * HTTP URL `http:/example/media/Score_no02.png`.
- */
-export class ClientMediaAsset {
-  /**
-   * A raw javascript object read from the YAML files
-   * (`*.extension.yml`)
-   */
+export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   yaml: AssetType.RestApiRaw
-
   uri: MediaUri
 
   /**
@@ -30,22 +17,9 @@ export class ClientMediaAsset {
    */
   private shortcut_?: string
 
-  /**
-   * The HTMLMediaElement of the media file.
-   */
   htmlElement?: object
-
-  /**
-   * The media type, for example `image`, `audio` or `video`.
-   */
   mimeType: string
-
-  /**
-   * HTTP Uniform Resource Locator, for example
-   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
-   */
   httpUrl: string
-
   samples?: SampleCollection
 
   /**
@@ -83,18 +57,10 @@ export class ClientMediaAsset {
     assetCache.add(this.ref, this)
   }
 
-  /**
-   * The reference authority of the URI using the `ref` scheme. The returned
-   * string is prefixed with `ref:`.
-   */
   get ref (): string {
     return 'ref:' + this.yaml.ref
   }
 
-  /**
-   * The UUID authority of the URI using the `uuid` scheme. The returned
-   * string is prefixed with `uuid:`.
-   */
   get uuid (): string {
     return 'uuid:' + this.yaml.uuid
   }
@@ -112,22 +78,12 @@ export class ClientMediaAsset {
     }
   }
 
-  /**
-   * Each media asset can have a preview image. The suffix `_preview.jpg`
-   * is appended on the path. For example
-   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
-   */
   get previewHttpUrl (): string | undefined {
     if (this.yaml.previewImage) {
       return `${this.httpUrl}_preview.jpg`
     }
   }
 
-  /**
-   * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
-   * is appended on the HTTP URL. For example
-   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
-   */
   get waveformHttpUrl (): string | undefined {
     if (this.yaml.hasWaveform) {
       return `${this.httpUrl}_waveform.png`
@@ -144,23 +100,14 @@ export class ClientMediaAsset {
     return this.uri.raw
   }
 
-  /**
-   * True if the media file is playable, for example an audio or a video file.
-   */
   get isPlayable (): boolean {
     return ['audio', 'video'].includes(this.mimeType)
   }
 
-  /**
-   * True if the media file is visible, for example an image or a video file.
-   */
   get isVisible (): boolean {
     return ['image', 'video'].includes(this.mimeType)
   }
 
-  /**
-   * The number of parts of a multipart media asset.
-   */
   get multiPartCount (): number {
     if (this.yaml.multiPartCount == null) {
       return 1
@@ -168,11 +115,6 @@ export class ClientMediaAsset {
     return this.yaml.multiPartCount
   }
 
-  /**
-   * Retrieve the HTTP URL of the multi part asset by the part number.
-   *
-   * @param The part number starts with 1.
-   */
   getMultiPartHttpUrlByNo (no: number): string {
     if (this.multiPartCount === 1) return this.httpUrl
     if (no > this.multiPartCount) {
@@ -191,7 +133,7 @@ export class ClientMediaAsset {
  */
 export class MultiPartSelection {
   selectionSpec: string
-  asset: ClientMediaAsset
+  asset: MediaResolverTypes.ClientMediaAsset
   partNos: number[]
 
   /**
@@ -205,7 +147,7 @@ export class MultiPartSelection {
    * @param selectionSpec - Can be a URI, everthing after `#`, for
    * example `ref:Song-2#2-5` -> `2-5`
    */
-  constructor (asset: ClientMediaAsset, selectionSpec: string) {
+  constructor (asset: MediaResolverTypes.ClientMediaAsset, selectionSpec: string) {
     this.selectionSpec = selectionSpec.replace(/^.*#/, '')
 
     this.asset = asset

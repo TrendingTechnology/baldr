@@ -46,29 +46,6 @@ const defaultFadeOutSec = 1;
  * Number of milliseconds to wait before the media file is played.
  */
 const defaultPlayDelayMsec = 10;
-/**
- * A sample (snippet, sprite) of a media file which can be played. A sample
- * has typically a start time and a duration. If the start time is missing, the
- * media file gets played from the beginning. If the duration is missing, the
- * whole media file gets played.
- *
- * ```
- *                  currentTimeSec
- *                  |
- *  fadeIn          |        fadeOut
- *         /|-------+------|\           <- mediaElementCurrentVolume_
- *      /   |       |      |   \
- *   /      |       |      |     \
- * #|#######|#######|######|#####|#### <- mediaElement
- *  ^                            ^
- *  startTimeSec                 endTimeSec
- *                         ^
- *                         |
- *                         fadeOutStartTime
- *
- *  | <-      durationSec      ->|
- * ```
- */
 class Sample {
     constructor(asset, yaml) {
         /**
@@ -81,11 +58,6 @@ class Sample {
           * when the sample is paused.
           */
         this.htmlElementCurrentTimeSec = 0;
-        /**
-         * The start time in seconds. The sample is played from this start time
-         * using the `mediaElement` of the `asset`. It is the “zero” second
-         * for the sample.
-         */
         this.startTimeSec = 0;
         this.interval = new internal_1.Interval();
         this.timeOut = new internal_1.TimeOut();
@@ -121,17 +93,10 @@ class Sample {
         this.events = new internal_1.CustomEventsManager();
         this.playbackState = 'stopped';
     }
-    /**
-     * The reference of the sample. The reference is used to build the URI of the sample, for
-     * example `uri#reference`: `ref:Beethoven#complete`
-     */
     get ref() {
         const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
         return `${this.asset.ref}#${ref}`;
     }
-    /**
-     * The title of the sample. For example `komplett`, `Hook-Line`.
-     */
     get title() {
         if (this.yaml.title != null) {
             return this.yaml.title;
@@ -141,10 +106,6 @@ class Sample {
         }
         return 'komplett';
     }
-    /**
-     * If the sample is the complete media file get the title of the media file.
-     * For example `Glocken (Das große Tor von Kiew)`
-     */
     get titleSafe() {
         if (this.yaml.ref === 'complete') {
             return this.asset.titleSafe;
@@ -153,9 +114,6 @@ class Sample {
             return `${this.title} (${this.asset.titleSafe})`;
         }
     }
-    /**
-     * Combined value build from `this.asset.meta.artist` and `this.asset.meta.composer`.
-     */
     get artistSafe() {
         let artist = null;
         let composer = null;
@@ -175,10 +133,6 @@ class Sample {
             return composer;
         }
     }
-    /**
-     * Combined value build from `this.asset.yaml.creationDate` and
-     * `this.asset.yaml.year`.
-     */
     get yearSafe() {
         if (this.asset.yaml.creationDate != null) {
             return this.asset.yaml.creationDate;
@@ -193,15 +147,9 @@ class Sample {
     toSec(timeIntervaleString) {
         return core_browser_1.convertDurationToSeconds(timeIntervaleString);
     }
-    /**
-     * The current time of the sample. It starts from zero.
-     */
     get currentTimeSec() {
         return this.htmlElement.currentTime - this.startTimeSec;
     }
-    /**
-     * Time in seconds to fade in.
-     */
     get fadeInSec() {
         if (this.fadeInSec_ == null) {
             return defaultFadeInSec;
@@ -210,9 +158,6 @@ class Sample {
             return this.fadeInSec_;
         }
     }
-    /**
-     * Time in seconds to fade out.
-     */
     get fadeOutSec() {
         if (this.fadeOutSec_ == null) {
             return defaultFadeOutSec;
@@ -227,10 +172,6 @@ class Sample {
     get fadeOutStartTimeMsec() {
         return (this.durationRemainingSec - this.fadeOutSec) * 1000;
     }
-    /**
-     * The duration of the sample in seconds. If the duration is set on the
-     * sample, it is the same as `sample.durationSec_`.
-     */
     get durationSec() {
         if (this.durationSec_ == null) {
             // Samples without duration play until the end fo the media file.
@@ -238,16 +179,9 @@ class Sample {
         }
         return this.durationSec_;
     }
-    /**
-     * The remaining duration of the sample in seconds.
-     */
     get durationRemainingSec() {
         return this.durationSec - this.currentTimeSec;
     }
-    /**
-     * A number between 0 and 1. 0: the sample starts from the beginning. 1:
-     * the sample reaches the end.
-     */
     get progress() {
         // for example:
         // current time: 6s duration: 60s
@@ -267,14 +201,6 @@ class Sample {
             this.htmlElement.style.opacity = value.toFixed(2);
         }
     }
-    /**
-     * Fade in. Set the volume to 0 and reach after a time intervale, specified
-     * with `duration` the `targetVolume.`
-     *
-     * @param targetVolume - End volume value of the fade in process. A
-     *   number from 0 - 1.
-     * @param duration - in seconds
-     */
     fadeIn(targetVolume = 1, duration) {
         return __awaiter(this, void 0, void 0, function* () {
             let durationSafe;
@@ -313,24 +239,10 @@ class Sample {
             });
         });
     }
-    /**
-     * Start and play a sample from the beginning.
-     *
-     * @param targetVolume - End volume value of the fade in process. A
-     *   number from 0 - 1.
-     */
     start(targetVolume) {
         this.playbackState = 'started';
         this.play(targetVolume, this.startTimeSec);
     }
-    /**
-     * Play a sample from `startTimeSec`.
-     *
-     * @param targetVolume - End volume value of the fade in process. A
-     *   number from 0 - 1.
-     * @param startTimeSec - Position in the sample from where to play
-     *   the sample
-     */
     play(targetVolume, startTimeSec, fadeInSec) {
         if (fadeInSec == null)
             fadeInSec = this.fadeInSec;
@@ -362,9 +274,6 @@ class Sample {
             this.fadeOut(this.fadeOutSec).then(() => { }, () => { });
         }, this.fadeOutStartTimeMsec);
     }
-    /**
-     * @param duration - in seconds
-     */
     fadeOut(duration) {
         return __awaiter(this, void 0, void 0, function* () {
             let durationSafe;
@@ -408,14 +317,6 @@ class Sample {
             });
         });
     }
-    /**
-     * Stop the playback of a sample and reset the current play position to the
-     * beginning of the sample. If the sample is a video, show the poster
-     * (the preview image) again by triggering the `load()` method of the
-     * corresponding media element.
-     *
-     * @param fadeOutSec - Duration in seconds to fade out the sample.
-     */
     stop(fadeOutSec) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.htmlElement.paused)
@@ -429,12 +330,6 @@ class Sample {
             }
         });
     }
-    /**
-     * Pause the sample at the current position and set the video element to
-     * opacity 0. The properties `mediaElementCurrentTimeSec_` and
-     * `mediaElementCurrentVolume_` are set or
-     * updated.
-     */
     pause() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.fadeOut();
@@ -446,10 +341,6 @@ class Sample {
             this.htmlElementCurrentVolume = this.htmlElement.volume;
         });
     }
-    /**
-     * Toggle between `sample.pause()` and `sample.play()`. If a sample is loaded
-     * start this sample.
-     */
     toggle(targetVolume = 1) {
         if (this.htmlElement.paused) {
             this.play(targetVolume);
@@ -485,19 +376,9 @@ class Sample {
         this.htmlElement.currentTime = this.startTimeSec + newPlayPosition;
         this.scheduleFadeOut();
     }
-    /**
-     * Jump forwards.
-     *
-     * @param interval - Time interval in seconds.
-     */
     forward(interval = 10) {
         this.jump(interval, 'forward');
     }
-    /**
-     * Jump backwards.
-     *
-     * interval - Time interval in seconds.
-     */
     backward(interval = 10) {
         this.jump(interval, 'backward');
     }
@@ -524,18 +405,24 @@ class SampleCollection extends internal_1.Cache {
      */
     gatherYamlFromRoot(assetFormat) {
         const yamlFormat = {};
-        if (assetFormat.startTime != null)
+        if (assetFormat.startTime != null) {
             yamlFormat.startTime = assetFormat.startTime;
-        if (assetFormat.duration != null)
+        }
+        if (assetFormat.duration != null) {
             yamlFormat.duration = assetFormat.duration;
-        if (assetFormat.endTime != null)
+        }
+        if (assetFormat.endTime != null) {
             yamlFormat.endTime = assetFormat.endTime;
-        if (assetFormat.fadeIn != null)
+        }
+        if (assetFormat.fadeIn != null) {
             yamlFormat.startTime = assetFormat.fadeIn;
-        if (assetFormat.fadeOut != null)
+        }
+        if (assetFormat.fadeOut != null) {
             yamlFormat.startTime = assetFormat.fadeOut;
-        if (assetFormat.shortcut != null)
+        }
+        if (assetFormat.shortcut != null) {
             yamlFormat.shortcut = assetFormat.shortcut;
+        }
         if (Object.keys(yamlFormat).length > 0) {
             return yamlFormat;
         }

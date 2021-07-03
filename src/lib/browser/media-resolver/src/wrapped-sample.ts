@@ -5,10 +5,9 @@
  * @module @bldr/wrapped-sample
  */
 
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import { MediaUri } from '@bldr/client-media-models'
-
-import { ClientMediaAsset, Sample, sampleCache } from './internal'
-import { SampleCollection } from './sample'
+import { sampleCache } from './internal'
 
 interface SimpleSampleSpec {
   uri: string
@@ -125,7 +124,7 @@ export class WrappedSpecList {
 export class WrappedSample {
   private readonly spec: WrappedSpec
 
-  private readonly sample: Sample
+  private readonly sample: MediaResolverTypes.Sample
 
   constructor (spec: WrappedSpec) {
     this.spec = spec
@@ -152,11 +151,11 @@ export class WrappedSample {
     }
   }
 
-  getSample (): Sample {
+  getSample (): MediaResolverTypes.Sample {
     return this.sample
   }
 
-  getAsset (): ClientMediaAsset {
+  getAsset (): MediaResolverTypes.ClientMediaAsset {
     return this.getSample().asset
   }
 }
@@ -181,7 +180,7 @@ export class WrappedSampleList {
    * of the first included asset are more than one, than return this sample
    * collection.
    */
-  getSamplesFromFirst (): SampleCollection | undefined {
+  getSamplesFromFirst (): MediaResolverTypes.SampleCollection | undefined {
     if (this.samples.length === 1) {
       const sample = this.samples[0]
       const asset = sample.getAsset()

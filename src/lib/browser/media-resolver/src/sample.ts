@@ -1,8 +1,16 @@
-import type { AssetType } from '@bldr/type-definitions'
+import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions'
 
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
-import { ClientMediaAsset, createHtmlElement, CustomEventsManager, Interval, TimeOut, sampleCache, Cache, MimeTypeShortcutCounter } from './internal'
+import {
+  createHtmlElement,
+  CustomEventsManager,
+  Interval,
+  TimeOut,
+  sampleCache,
+  Cache,
+  MimeTypeShortcutCounter
+} from './internal'
 
 export class SampleShortcutManager {
   private readonly audio: MimeTypeShortcutCounter
@@ -30,11 +38,6 @@ export class SampleShortcutManager {
 
 export const sampleShortcutManager = new SampleShortcutManager()
 
-/**
- * The state of the current playback.
- */
-type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped'
-
 type JumpDirection = 'forward' | 'backward'
 
 /**
@@ -52,45 +55,9 @@ const defaultFadeOutSec: number = 1
  */
 const defaultPlayDelayMsec: number = 10
 
-/**
- * A sample (snippet, sprite) of a media file which can be played. A sample
- * has typically a start time and a duration. If the start time is missing, the
- * media file gets played from the beginning. If the duration is missing, the
- * whole media file gets played.
- *
- * ```
- *                  currentTimeSec
- *                  |
- *  fadeIn          |        fadeOut
- *         /|-------+------|\           <- mediaElementCurrentVolume_
- *      /   |       |      |   \
- *   /      |       |      |     \
- * #|#######|#######|######|#####|#### <- mediaElement
- *  ^                            ^
- *  startTimeSec                 endTimeSec
- *                         ^
- *                         |
- *                         fadeOutStartTime
- *
- *  | <-      durationSec      ->|
- * ```
- */
-export class Sample {
-  /**
-   * The parent media file object.
-   *
-   */
-  asset: ClientMediaAsset
-
-  /**
-   * Raw data coming from the YAML format.
-   */
+export class Sample implements MediaResolverTypes.Sample {
+  asset: MediaResolverTypes.ClientMediaAsset
   yaml: AssetType.SampleYamlFormat
-
-  /**
-   * The corresponding HTML media element, a object of the
-   * corresponding `<audio/>` or `<video/>` element.
-   */
   htmlElement: HTMLMediaElement
 
   /**
@@ -105,11 +72,6 @@ export class Sample {
     */
   private htmlElementCurrentTimeSec: number = 0
 
-  /**
-   * The start time in seconds. The sample is played from this start time
-   * using the `mediaElement` of the `asset`. It is the “zero” second
-   * for the sample.
-   */
   startTimeSec: number = 0
 
   /**
@@ -127,9 +89,6 @@ export class Sample {
    */
   private readonly fadeOutSec_?: number
 
-  /**
-   * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
-   */
   shortcut?: string
 
   private readonly interval = new Interval()
@@ -138,9 +97,9 @@ export class Sample {
 
   private readonly events = new CustomEventsManager()
 
-  playbackState: PlaybackState
+  playbackState: MediaResolverTypes.PlaybackState
 
-  constructor (asset: ClientMediaAsset, yaml: AssetType.SampleYamlFormat) {
+  constructor (asset: MediaResolverTypes.ClientMediaAsset, yaml: AssetType.SampleYamlFormat) {
     this.asset = asset
 
     this.yaml = yaml
@@ -181,18 +140,11 @@ export class Sample {
     this.playbackState = 'stopped'
   }
 
-  /**
-   * The reference of the sample. The reference is used to build the URI of the sample, for
-   * example `uri#reference`: `ref:Beethoven#complete`
-   */
   get ref (): string {
     const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
     return `${this.asset.ref}#${ref}`
   }
 
-  /**
-   * The title of the sample. For example `komplett`, `Hook-Line`.
-   */
   get title (): string {
     if (this.yaml.title != null) {
       return this.yaml.title
@@ -203,10 +155,6 @@ export class Sample {
     return 'komplett'
   }
 
-  /**
-   * If the sample is the complete media file get the title of the media file.
-   * For example `Glocken (Das große Tor von Kiew)`
-   */
   get titleSafe (): string {
     if (this.yaml.ref === 'complete') {
       return this.asset.titleSafe
@@ -215,9 +163,6 @@ export class Sample {
     }
   }
 
-  /**
-   * Combined value build from `this.asset.meta.artist` and `this.asset.meta.composer`.
-   */
   get artistSafe (): string | undefined {
     let artist: string | null = null
     let composer: string | null = null
@@ -236,10 +181,6 @@ export class Sample {
     }
   }
 
-  /**
-   * Combined value build from `this.asset.yaml.creationDate` and
-   * `this.asset.yaml.year`.
-   */
   get yearSafe (): string | undefined {
     if (this.asset.yaml.creationDate != null) {
       return this.asset.yaml.creationDate
@@ -255,16 +196,10 @@ export class Sample {
     return convertDurationToSeconds(timeIntervaleString)
   }
 
-  /**
-   * The current time of the sample. It starts from zero.
-   */
   get currentTimeSec (): number {
     return this.htmlElement.currentTime - this.startTimeSec
   }
 
-  /**
-   * Time in seconds to fade in.
-   */
   get fadeInSec (): number {
     if (this.fadeInSec_ == null) {
       return defaultFadeInSec
@@ -273,9 +208,6 @@ export class Sample {
     }
   }
 
-  /**
-   * Time in seconds to fade out.
-   */
   get fadeOutSec (): number {
     if (this.fadeOutSec_ == null) {
       return defaultFadeOutSec
@@ -291,10 +223,6 @@ export class Sample {
     return (this.durationRemainingSec - this.fadeOutSec) * 1000
   }
 
-  /**
-   * The duration of the sample in seconds. If the duration is set on the
-   * sample, it is the same as `sample.durationSec_`.
-   */
   get durationSec (): number {
     if (this.durationSec_ == null) {
       // Samples without duration play until the end fo the media file.
@@ -303,17 +231,10 @@ export class Sample {
     return this.durationSec_
   }
 
-  /**
-   * The remaining duration of the sample in seconds.
-   */
   get durationRemainingSec (): number {
     return this.durationSec - this.currentTimeSec
   }
 
-  /**
-   * A number between 0 and 1. 0: the sample starts from the beginning. 1:
-   * the sample reaches the end.
-   */
   get progress (): number {
     // for example:
     // current time: 6s duration: 60s
@@ -336,14 +257,6 @@ export class Sample {
     }
   }
 
-  /**
-   * Fade in. Set the volume to 0 and reach after a time intervale, specified
-   * with `duration` the `targetVolume.`
-   *
-   * @param targetVolume - End volume value of the fade in process. A
-   *   number from 0 - 1.
-   * @param duration - in seconds
-   */
   async fadeIn (targetVolume: number = 1, duration?: number): Promise<void> {
     let durationSafe: number
     if (duration == null) {
@@ -379,25 +292,11 @@ export class Sample {
     })
   }
 
-  /**
-   * Start and play a sample from the beginning.
-   *
-   * @param targetVolume - End volume value of the fade in process. A
-   *   number from 0 - 1.
-   */
   start (targetVolume: number): void {
     this.playbackState = 'started'
     this.play(targetVolume, this.startTimeSec)
   }
 
-  /**
-   * Play a sample from `startTimeSec`.
-   *
-   * @param targetVolume - End volume value of the fade in process. A
-   *   number from 0 - 1.
-   * @param startTimeSec - Position in the sample from where to play
-   *   the sample
-   */
   play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
     if (fadeInSec == null) fadeInSec = this.fadeInSec
     // The start() triggers play with this.startTimeSec. “complete” samples
@@ -438,9 +337,6 @@ export class Sample {
     )
   }
 
-  /**
-   * @param duration - in seconds
-   */
   async fadeOut (duration?: number): Promise<void> {
     let durationSafe: number
     if (duration == null) {
@@ -479,14 +375,6 @@ export class Sample {
     })
   }
 
-  /**
-   * Stop the playback of a sample and reset the current play position to the
-   * beginning of the sample. If the sample is a video, show the poster
-   * (the preview image) again by triggering the `load()` method of the
-   * corresponding media element.
-   *
-   * @param fadeOutSec - Duration in seconds to fade out the sample.
-   */
   async stop (fadeOutSec?: number): Promise<void> {
     if (this.htmlElement.paused) return
     await this.fadeOut(fadeOutSec)
@@ -498,12 +386,6 @@ export class Sample {
     }
   }
 
-  /**
-   * Pause the sample at the current position and set the video element to
-   * opacity 0. The properties `mediaElementCurrentTimeSec_` and
-   * `mediaElementCurrentVolume_` are set or
-   * updated.
-   */
   async pause (): Promise<void> {
     await this.fadeOut()
     this.timeOut.clear()
@@ -514,10 +396,6 @@ export class Sample {
     this.htmlElementCurrentVolume = this.htmlElement.volume
   }
 
-  /**
-   * Toggle between `sample.pause()` and `sample.play()`. If a sample is loaded
-   * start this sample.
-   */
   toggle (targetVolume: number = 1): void {
     if (this.htmlElement.paused) {
       this.play(targetVolume)
@@ -554,29 +432,19 @@ export class Sample {
     this.scheduleFadeOut()
   }
 
-  /**
-   * Jump forwards.
-   *
-   * @param interval - Time interval in seconds.
-   */
   forward (interval: number = 10): void {
     this.jump(interval, 'forward')
   }
 
-  /**
-   * Jump backwards.
-   *
-   * interval - Time interval in seconds.
-   */
   backward (interval: number = 10): void {
     this.jump(interval, 'backward')
   }
 }
 
 export class SampleCollection extends Cache<Sample> {
-  private readonly asset: ClientMediaAsset
+  private readonly asset: MediaResolverTypes.ClientMediaAsset
 
-  constructor (asset: ClientMediaAsset) {
+  constructor (asset: MediaResolverTypes.ClientMediaAsset) {
     super()
     this.asset = asset
     this.addFromAsset(asset)
@@ -586,7 +454,7 @@ export class SampleCollection extends Cache<Sample> {
     return this.get(this.asset.ref + '#complete')
   }
 
-  private addSample (asset: ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
+  private addSample (asset: MediaResolverTypes.ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
     if (this.get(sample.ref) == null) {
       sampleCache.add(sample.ref, sample)
@@ -622,7 +490,7 @@ export class SampleCollection extends Cache<Sample> {
     }
   }
 
-  private addFromAsset (asset: ClientMediaAsset): void {
+  private addFromAsset (asset: MediaResolverTypes.ClientMediaAsset): void {
     // search the “complete” sample from the property “samples”.
     let completeYamlFromSamples: AssetType.SampleYamlFormat | undefined
     if (asset.yaml.samples != null) {

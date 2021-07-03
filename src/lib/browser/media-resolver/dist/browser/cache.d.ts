@@ -1,4 +1,5 @@
-import { ClientMediaAsset, MultiPartSelection, Sample } from './internal';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
+import { MultiPartSelection } from './internal';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -15,7 +16,7 @@ export declare class MimeTypeShortcutCounter {
     get(): string | undefined;
     reset(): void;
 }
-export declare class Cache<T> {
+export declare class Cache<T> implements MediaResolverTypes.Cache<T> {
     protected cache: {
         [ref: string]: T;
     };
@@ -89,12 +90,12 @@ export declare function translateToAssetRef(uri: string): string | undefined;
  * @returns A sample URI in the `ref` scheme. A missing fragment is added with `#complete`.
  */
 export declare function translateToSampleRef(uri: string): string | undefined;
-export declare class AssetCache extends Cache<ClientMediaAsset> {
-    add(ref: string, asset: ClientMediaAsset): boolean;
-    get(uuidOrRef: string): ClientMediaAsset | undefined;
+export declare class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+    add(ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean;
+    get(uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined;
 }
 export declare const assetCache: AssetCache;
-export declare function getAssets(): ClientMediaAsset[];
+export declare function getAssets(): MediaResolverTypes.ClientMediaAsset[];
 /**
  * The media asset of the multipart selection must be present in the
  * AssetCache(), the media asset must be resolved first.
@@ -105,10 +106,10 @@ export declare class MultiPartSelectionCache extends Cache<MultiPartSelection> {
 }
 export declare const multiPartSelectionCache: MultiPartSelectionCache;
 export declare function getMultipartSelection(uri: string): MultiPartSelection | undefined;
-declare class SampleCache extends Cache<Sample> {
-    get(uuidOrRef: string): Sample | undefined;
+declare class SampleCache extends Cache<MediaResolverTypes.Sample> {
+    get(uuidOrRef: string): MediaResolverTypes.Sample | undefined;
 }
 export declare const sampleCache: SampleCache;
-export declare function getSamples(): Sample[];
+export declare function getSamples(): MediaResolverTypes.Sample[];
 export declare function resetMediaCache(): void;
 export {};

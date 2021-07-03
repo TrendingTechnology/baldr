@@ -1,10 +1,8 @@
 import { MediaUri } from '@bldr/client-media-models'
-
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import {
-  ClientMediaAsset,
   imageShortcutCounter,
   MultiPartSelection,
-  Sample,
   sampleShortcutManager
 } from './internal'
 
@@ -42,7 +40,7 @@ export class MimeTypeShortcutCounter {
   }
 }
 
-export class Cache<T> {
+export class Cache<T> implements MediaResolverTypes.Cache<T> {
   protected cache: { [ref: string]: T }
   constructor () {
     this.cache = {}
@@ -197,8 +195,8 @@ export function translateToSampleRef (uri: string): string | undefined {
   return mediaUriTranslator.getRef(uri)
 }
 
-export class AssetCache extends Cache<ClientMediaAsset> {
-  add (ref: string, asset: ClientMediaAsset): boolean {
+export class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
     if (mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
       super.add(ref, asset)
       return true
@@ -206,7 +204,7 @@ export class AssetCache extends Cache<ClientMediaAsset> {
     return false
   }
 
-  get (uuidOrRef: string): ClientMediaAsset | undefined {
+  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
     const ref = mediaUriTranslator.getRef(uuidOrRef)
     if (ref != null) {
       return super.get(ref)
@@ -216,7 +214,7 @@ export class AssetCache extends Cache<ClientMediaAsset> {
 
 export const assetCache = new AssetCache()
 
-export function getAssets (): ClientMediaAsset[] {
+export function getAssets (): MediaResolverTypes.ClientMediaAsset[] {
   return assetCache.getAll()
 }
 
@@ -258,8 +256,8 @@ export function getMultipartSelection (uri: string): MultiPartSelection | undefi
   return multiPartSelectionCache.get(uri)
 }
 
-class SampleCache extends Cache<Sample> {
-  get (uuidOrRef: string): Sample | undefined {
+class SampleCache extends Cache<MediaResolverTypes.Sample> {
+  get (uuidOrRef: string): MediaResolverTypes.Sample | undefined {
     const ref = mediaUriTranslator.getRef(uuidOrRef)
     if (ref != null) {
       return super.get(ref)
@@ -269,7 +267,7 @@ class SampleCache extends Cache<Sample> {
 
 export const sampleCache = new SampleCache()
 
-export function getSamples (): Sample[] {
+export function getSamples (): MediaResolverTypes.Sample[] {
   return sampleCache.getAll()
 }
 

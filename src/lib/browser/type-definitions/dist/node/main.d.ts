@@ -27,3 +27,5 @@ export interface GenericError {
  */
 export * as MediaCategoriesTypes from './media-categories';
 export * as TitlesTypes from './titles';
+export * as MediaResolverTypes from './media-resolver';
+export * as ClientMediaModelsTypes from './client-media-models';
