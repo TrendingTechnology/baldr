@@ -6,7 +6,6 @@
 export * as AssetType from './asset';
 export * from './cli';
 export * from './config';
-export * as MasterTypes from './master';
 export * as PresentationTypes from './presentation';
 export interface StringIndexedObject {
     [key: string]: any;
@@ -25,7 +24,8 @@ export interface GenericError {
  *
  * for example @bldr/titles -> TitlesTypes
  */
-export * as MediaCategoriesTypes from './media-categories';
-export * as TitlesTypes from './titles';
-export * as MediaResolverTypes from './media-resolver';
 export * as ClientMediaModelsTypes from './client-media-models';
+export * as LampTypes from './lamp';
+export * as MediaCategoriesTypes from './media-categories';
+export * as MediaResolverTypes from './media-resolver';
+export * as TitlesTypes from './titles';

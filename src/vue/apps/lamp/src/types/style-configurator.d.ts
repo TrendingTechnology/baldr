@@ -1,13 +1,13 @@
 // TODO Move this type defintions to the packages
 import { StyleConfigurator } from '@baldr/style-configurator'
-import { MasterTypes } from '@bldr/type-definitions'
+import { LampTypes } from '@bldr/type-definitions'
 
 interface Style {
   /**
    * Reset all styles to the default values.
    */
   reset: () => void
-  set(styleConfig: MasterTypes.StyleConfig): void
+  set(styleConfig: LampTypes.StyleConfig): void
   toggleDarkMode(): void
   toggleCenterVertically(): void
   setContentTheme(themeName: string): void

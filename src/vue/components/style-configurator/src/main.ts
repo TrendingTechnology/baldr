@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import type { MasterTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 
 import _Vue from 'vue'
 
@@ -107,7 +107,7 @@ export class StyleConfigurator {
     }
   }
 
-  set (styleConfig: MasterTypes.StyleConfig): void {
+  set (styleConfig: LampTypes.StyleConfig): void {
     for (const setterName in styleConfig) {
       const name: StyleConfigName = setterName as StyleConfigName
       if (this.setterCollection[name] != null) {

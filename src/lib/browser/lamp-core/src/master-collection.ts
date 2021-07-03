@@ -1,5 +1,5 @@
 import { Master } from './master'
-import { MasterTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { convertToString } from '@bldr/core-browser'
 
 /**
@@ -27,7 +27,7 @@ export class MasterCollection {
     this.masters[master.name] = master
   }
 
-  createMasterBySpec (masterSpec: MasterTypes.MasterSpec): void {
+  createMasterBySpec (masterSpec: LampTypes.MasterSpec): void {
     const master = new Master(masterSpec)
     this.add(master)
   }

@@ -3,7 +3,7 @@
  *
  * @module @bldr/type-definitions/presentation
  */
-import { Master, StringObject } from './master';
+import { Master, StringObject } from './lamp';
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.

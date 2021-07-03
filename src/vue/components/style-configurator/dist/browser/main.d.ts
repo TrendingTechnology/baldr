@@ -1,4 +1,4 @@
-import type { MasterTypes } from '@bldr/type-definitions';
+import type { LampTypes } from '@bldr/type-definitions';
 import _Vue from 'vue';
 /**
  * @TODO Document the types here
@@ -7,7 +7,7 @@ import _Vue from 'vue';
 export declare class StyleConfigurator {
     private readonly setterCollection;
     reset(): void;
-    set(styleConfig: MasterTypes.StyleConfig): void;
+    set(styleConfig: LampTypes.StyleConfig): void;
     toggleDarkMode(): void;
     toggleCenterVertically(): void;
     toggleFullscreen: () => void;

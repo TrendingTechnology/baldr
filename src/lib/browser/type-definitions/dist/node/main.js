@@ -15,11 +15,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClientMediaModelsTypes = exports.MediaResolverTypes = exports.TitlesTypes = exports.MediaCategoriesTypes = exports.PresentationTypes = exports.MasterTypes = exports.AssetType = void 0;
+exports.TitlesTypes = exports.MediaResolverTypes = exports.MediaCategoriesTypes = exports.LampTypes = exports.ClientMediaModelsTypes = exports.PresentationTypes = exports.AssetType = void 0;
 exports.AssetType = require("./asset");
 __exportStar(require("./cli"), exports);
 __exportStar(require("./config"), exports);
-exports.MasterTypes = require("./master");
 exports.PresentationTypes = require("./presentation");
 /**
  * Types from specific packages.
@@ -28,7 +27,8 @@ exports.PresentationTypes = require("./presentation");
  *
  * for example @bldr/titles -> TitlesTypes
  */
-exports.MediaCategoriesTypes = require("./media-categories");
-exports.TitlesTypes = require("./titles");
-exports.MediaResolverTypes = require("./media-resolver");
 exports.ClientMediaModelsTypes = require("./client-media-models");
+exports.LampTypes = require("./lamp");
+exports.MediaCategoriesTypes = require("./media-categories");
+exports.MediaResolverTypes = require("./media-resolver");
+exports.TitlesTypes = require("./titles");

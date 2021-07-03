@@ -1,4 +1,4 @@
-import { MasterTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from '@bldr/core-browser'
 
@@ -13,7 +13,7 @@ type ThisArg = object
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
  */
-class MasterIcon implements MasterTypes.MasterIconSpec {
+class MasterIcon implements LampTypes.MasterIconSpec {
   /**
    * For allowed icon names see the
    * {@link module:@bldr/icons Baldr icon font}.
@@ -36,7 +36,7 @@ class MasterIcon implements MasterTypes.MasterIconSpec {
    */
   showOnSlides: boolean
 
-  constructor ({ name, color, size, showOnSlides }: MasterTypes.MasterIconSpec) {
+  constructor ({ name, color, size, showOnSlides }: LampTypes.MasterIconSpec) {
     if (size && !['small', 'large'].includes(size)) {
       throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
     }
@@ -55,20 +55,20 @@ class MasterIcon implements MasterTypes.MasterIconSpec {
 /**
  * Each master slide has an instance of this class.
  */
-export class Master implements MasterTypes.Master {
+export class Master implements LampTypes.Master {
   icon: MasterIcon
   documentation?: string
 
   /**
      * The specification of the master slide provided by a master package.
      */
-  private readonly spec: MasterTypes.MasterSpec
+  private readonly spec: LampTypes.MasterSpec
 
   /**
    * @param spec - The specification of the master slide provided by a master
    * package.
    */
-  constructor (spec: MasterTypes.MasterSpec) {
+  constructor (spec: LampTypes.MasterSpec) {
     this.spec = spec
     this.icon = new MasterIcon(spec.icon)
   }
@@ -95,7 +95,7 @@ export class Master implements MasterTypes.Master {
   /**
    * Filter the master props for props which are supporting inline media.
    */
-  // extractInlineMediaUris (props: MasterTypes.StringObject): Set<string> {
+  // extractInlineMediaUris (props: LampTypes.StringObject): Set<string> {
   //   const uris = new Set<string>()
 
   //   function extractUrisInText (text: string) {
@@ -127,7 +127,7 @@ export class Master implements MasterTypes.Master {
    * Replace the inline media tags `[id:Beethoven]` in certain props with
    * HTML. This function must be called after the media resolution.
    */
-  // renderInlineMedia (props: MasterTypes.StringObject) {
+  // renderInlineMedia (props: LampTypes.StringObject) {
   //   /**
   //    * @param {String} text
   //    */
@@ -153,7 +153,7 @@ export class Master implements MasterTypes.Master {
   //   }
   // }
 
-  convertMarkdownToHtml (props: MasterTypes.StringObject): MasterTypes.StringObject {
+  convertMarkdownToHtml (props: LampTypes.StringObject): LampTypes.StringObject {
     if (!this.spec.propsDef) return props
     for (const propName in props) {
       const prop = this.spec.propsDef[propName]
@@ -164,7 +164,7 @@ export class Master implements MasterTypes.Master {
     return props
   }
 
-  detectUnkownProps (props: MasterTypes.StringObject): void {
+  detectUnkownProps (props: LampTypes.StringObject): void {
     for (const propName in props) {
       if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
         throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
@@ -172,7 +172,7 @@ export class Master implements MasterTypes.Master {
     }
   }
 
-  validateUris (props: MasterTypes.StringObject): MasterTypes.StringObject {
+  validateUris (props: LampTypes.StringObject): LampTypes.StringObject {
     if (!this.spec.propsDef) return props
     for (const propName in props) {
       const prop = this.spec.propsDef[propName]
@@ -217,11 +217,11 @@ export class Master implements MasterTypes.Master {
     }
   }
 
-  normalizeProps (propsRaw: any): MasterTypes.StringObject {
+  normalizeProps (propsRaw: any): LampTypes.StringObject {
     return this.callHook('normalizeProps', propsRaw)
   }
 
-  resolveMediaUris (props: MasterTypes.StringObject): Set<string> | undefined {
+  resolveMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
     let uris = this.callHook('resolveMediaUris', props)
 
     // To allow undefined return values of the hooks.
@@ -241,7 +241,7 @@ export class Master implements MasterTypes.Master {
     if (uris.size) return uris
   }
 
-  resolveOptionalMediaUris (props: MasterTypes.StringObject): Set<string> | undefined {
+  resolveOptionalMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
     let uris = this.callHook('resolveOptionalMediaUris', props)
 
     // To allow undefined return values of the hooks.
@@ -253,32 +253,32 @@ export class Master implements MasterTypes.Master {
     if (uris.size) return uris
   }
 
-  afterLoading (props: MasterTypes.StringObject, thisArg: ThisArg): void {
+  afterLoading (props: LampTypes.StringObject, thisArg: ThisArg): void {
     this.callHook('afterLoading', { props, master: this }, thisArg)
   }
 
-  async afterMediaResolution (props: MasterTypes.StringObject, thisArg: ThisArg): Promise<void> {
+  async afterMediaResolution (props: LampTypes.StringObject, thisArg: ThisArg): Promise<void> {
     await this.callHookAsync('afterMediaResolution', { props, master: this }, thisArg)
   }
 
-  collectPropsMain (props: MasterTypes.StringObject, thisArg: ThisArg): MasterTypes.StringObject {
+  collectPropsMain (props: LampTypes.StringObject, thisArg: ThisArg): LampTypes.StringObject {
     const propsMain = this.callHook('collectPropsMain', props, thisArg)
     if (propsMain) return propsMain
     return props
   }
 
-  collectPropsPreview (payload: MasterTypes.PropsAndSlide, thisArg: ThisArg): MasterTypes.StringObject {
+  collectPropsPreview (payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringObject {
     const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
     if (propsPreview) return propsPreview
     if (payload.propsMain) return payload.propsMain
     return payload.props
   }
 
-  calculateStepCount (payload: MasterTypes.PropsSlideAndMaster, thisArg: ThisArg): number {
+  calculateStepCount (payload: LampTypes.PropsSlideAndMaster, thisArg: ThisArg): number {
     return this.callHook('calculateStepCount', payload, thisArg)
   }
 
-  titleFromProps (payload: MasterTypes.PropsBundle): string {
+  titleFromProps (payload: LampTypes.PropsBundle): string {
     return this.callHook('titleFromProps', payload)
   }
 
@@ -286,27 +286,27 @@ export class Master implements MasterTypes.Master {
     return this.callHook('plainTextFromProps', props)
   }
 
-  leaveSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
+  leaveSlide (payload: LampTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
     this.callHook('leaveSlide', payload, thisArg)
   }
 
-  enterSlide (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
+  enterSlide (payload: LampTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
     this.callHook('enterSlide', payload, thisArg)
   }
 
-  afterSlideNoChangeOnComponent (payload: MasterTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
+  afterSlideNoChangeOnComponent (payload: LampTypes.OldAndNewPropsAndSlide, thisArg: ThisArg): void {
     this.callHook('afterSlideNoChangeOnComponent', payload, thisArg)
   }
 
-  leaveStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void {
+  leaveStep (payload: LampTypes.OldAndNewStepNo, thisArg: ThisArg): void {
     return this.callHook('leaveStep', payload, thisArg)
   }
 
-  enterStep (payload: MasterTypes.OldAndNewStepNo, thisArg: ThisArg): void {
+  enterStep (payload: LampTypes.OldAndNewStepNo, thisArg: ThisArg): void {
     return this.callHook('enterStep', payload, thisArg)
   }
 
-  afterStepNoChangeOnComponent (payload: MasterTypes.OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg): void {
+  afterStepNoChangeOnComponent (payload: LampTypes.OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg): void {
     this.callHook('afterStepNoChangeOnComponent', payload, thisArg)
   }
 }

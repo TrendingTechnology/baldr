@@ -1,4 +1,4 @@
-import { PresentationTypes, MasterTypes } from '@bldr/type-definitions'
+import { PresentationTypes, LampTypes } from '@bldr/type-definitions'
 import { RawDataObject } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import masterCollection from '@bldr/master-collection'
@@ -38,10 +38,10 @@ export class Slide implements PresentationTypes.Slide {
   level: number
   meta: PresentationTypes.SlideMeta
   slides: Slide[]
-  master: MasterTypes.Master
-  props: MasterTypes.StringObject
-  propsMain?: MasterTypes.StringObject
-  propsPreview?: MasterTypes.StringObject
+  master: LampTypes.Master
+  props: LampTypes.StringObject
+  propsMain?: LampTypes.StringObject
+  propsPreview?: LampTypes.StringObject
   mediaUris?: Set<string>
   optionalMediaUris?: Set<string>
   stepCount?: number
