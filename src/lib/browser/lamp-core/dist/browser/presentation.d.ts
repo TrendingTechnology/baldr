@@ -1,13 +1,13 @@
-import { PresentationTypes } from '@bldr/type-definitions';
+import type { LampTypes } from '@bldr/type-definitions';
 import { Slide } from './slide';
 /**
  * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
  * A presentation contains slides and meta data.
  */
-export declare class Presentation implements PresentationTypes.Presentation {
+export declare class Presentation implements LampTypes.Presentation {
     slides: Slide[];
     slidesTree: Slide[];
-    meta: PresentationTypes.PresentationMeta;
+    meta: LampTypes.PresentationMeta;
     /**
      * Parse the YAML file `Praesentation.baldr.yml`.
      *

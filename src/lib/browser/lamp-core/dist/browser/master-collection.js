@@ -83,3 +83,4 @@ export class MasterCollection {
         return this.get(intersection[0]);
     }
 }
+export const masterCollection = new MasterCollection();

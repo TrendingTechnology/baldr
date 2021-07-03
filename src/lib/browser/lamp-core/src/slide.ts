@@ -1,7 +1,9 @@
 import type { LampTypes } from '@bldr/type-definitions'
+
 import { RawDataObject } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import masterCollection from '@bldr/master-collection'
+
+import { masterCollection } from './master-collection'
 
 /**
  * Meta informations can be added to each slide. All properties are possibly

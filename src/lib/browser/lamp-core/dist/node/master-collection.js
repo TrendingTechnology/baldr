@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterCollection = void 0;
+exports.masterCollection = exports.MasterCollection = void 0;
 const master_1 = require("./master");
 const core_browser_1 = require("@bldr/core-browser");
 /**
@@ -87,3 +87,4 @@ class MasterCollection {
     }
 }
 exports.MasterCollection = MasterCollection;
+exports.masterCollection = new MasterCollection();

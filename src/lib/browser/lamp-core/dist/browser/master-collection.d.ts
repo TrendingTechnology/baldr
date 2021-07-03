@@ -54,3 +54,4 @@ export declare class MasterCollection {
      */
     findMaster(data: StringIndexedObject): Master;
 }
+export declare const masterCollection: MasterCollection;

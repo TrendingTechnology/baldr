@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Presentation = void 0;
-const yaml_1 = require("@bldr/yaml");
-const core_browser_1 = require("@bldr/core-browser");
-const slide_1 = require("./slide");
+import { convertFromYaml } from '@bldr/yaml';
+import { RawDataObject } from '@bldr/core-browser';
+import { Slide } from './slide';
 class Meta {
     constructor(data) {
-        const raw = new core_browser_1.RawDataObject(data);
-        this.id = raw.cut('id');
+        const raw = new RawDataObject(data);
+        this.ref = raw.cut('ref');
         this.title = raw.cut('title');
         this.subtitle = raw.cut('subtitle');
         this.grade = raw.cut('grade');
@@ -20,7 +17,7 @@ class Meta {
  * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
  * A presentation contains slides and meta data.
  */
-class Presentation {
+export class Presentation {
     /**
      * Parse the YAML file `Praesentation.baldr.yml`.
      *
@@ -28,7 +25,7 @@ class Presentation {
      *   `Praesentation.baldr.yml`
      */
     constructor(rawYamlString) {
-        const rawPresentationData = yaml_1.convertFromYaml(rawYamlString);
+        const rawPresentationData = convertFromYaml(rawYamlString);
         this.meta = new Meta(rawPresentationData.meta);
         this.slides = [];
         this.slidesTree = [];
@@ -51,7 +48,7 @@ class Presentation {
             if (slideRaw.state !== 'absent') {
                 const childSlides = slideRaw.slides;
                 delete slideRaw.slides;
-                const slide = new slide_1.Slide(slideRaw);
+                const slide = new Slide(slideRaw);
                 slidesFlat.push(slide);
                 slidesTree.push(slide);
                 slide.no = slidesFlat.length;
@@ -63,4 +60,3 @@ class Presentation {
         }
     }
 }
-exports.Presentation = Presentation;

@@ -14,7 +14,7 @@ class Meta implements LampTypes.PresentationMeta {
 
   constructor (data: LampTypes.PresentationMeta) {
     const raw = new RawDataObject(data)
-    this.id = raw.cut('id')
+    this.ref = raw.cut('ref')
     this.title = raw.cut('title')
     this.subtitle = raw.cut('subtitle')
     this.grade = raw.cut('grade')

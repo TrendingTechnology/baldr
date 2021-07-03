@@ -1,6 +1,9 @@
-import { RawDataObject } from '@bldr/core-browser';
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
-import masterCollection from '@bldr/master-collection';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Slide = void 0;
+const core_browser_1 = require("@bldr/core-browser");
+const markdown_to_html_1 = require("@bldr/markdown-to-html");
+const master_collection_1 = require("./master-collection");
 /**
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
@@ -16,22 +19,22 @@ class SlideMetaData {
     cutAndConvert(property) {
         const value = this.raw.cut(property);
         if (value) {
-            return convertMarkdownToHtml(value);
+            return markdown_to_html_1.convertMarkdownToHtml(value);
         }
     }
 }
 /**
  * A slide.
  */
-export class Slide {
+class Slide {
     constructor(rawData) {
-        const raw = new RawDataObject(rawData);
+        const raw = new core_browser_1.RawDataObject(rawData);
         this.meta = new SlideMetaData(raw);
         this.rawData = rawData;
         this.no = 0;
         this.level = 0;
         this.slides = [];
-        this.master = masterCollection.findMaster(rawData);
+        this.master = master_collection_1.masterCollection.findMaster(rawData);
         this.props = this.master.normalizeProps(raw.cut(this.master.name));
         this.master.detectUnkownProps(this.props);
         this.master.convertMarkdownToHtml(this.props);
@@ -40,3 +43,4 @@ export class Slide {
         this.optionalMediaUris = this.master.resolveOptionalMediaUris(this.props);
     }
 }
+exports.Slide = Slide;
