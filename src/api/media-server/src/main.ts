@@ -79,7 +79,7 @@ import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory, DeepTitle } from '@bldr/titles'
 
-import type { StringIndexedObject, PresentationTypes } from '@bldr/type-definitions'
+import type { StringIndexedObject, LampTypes } from '@bldr/type-definitions'
 import type { MediaType } from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 import { mimeTypeManager } from '@bldr/client-media-models'
@@ -318,7 +318,7 @@ class ServerMediaAsset extends ServerMediaFile {
  * properties are in `camelCase`.
  */
 class ServerPresentation extends ServerMediaFile {
-  meta?: PresentationTypes.PresentationMeta
+  meta?: LampTypes.PresentationMeta
 
   /**
    * The plain text version of `this.meta.title`.
@@ -356,7 +356,7 @@ class ServerPresentation extends ServerMediaFile {
 
     if (this.meta == null) {
       // eslint-disable-next-line
-      this.meta = {} as PresentationTypes.PresentationMeta
+      this.meta = {} as LampTypes.PresentationMeta
     }
 
     if (this.meta?.ref == null) {

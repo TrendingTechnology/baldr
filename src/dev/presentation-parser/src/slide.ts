@@ -1,4 +1,4 @@
-import type { PresentationTypes, LampTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 import { RawDataObject } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import masterCollection from '@bldr/master-collection'
@@ -7,7 +7,7 @@ import masterCollection from '@bldr/master-collection'
  * Meta informations can be added to each slide. All properties are possibly
  * undefined.
  */
-class SlideMetaData implements PresentationTypes.SlideMeta {
+class SlideMetaData implements LampTypes.SlideMeta {
   id?: string
   title?: string
   description?: string
@@ -32,11 +32,11 @@ class SlideMetaData implements PresentationTypes.SlideMeta {
 /**
  * A slide.
  */
-export class Slide implements PresentationTypes.Slide {
+export class Slide implements LampTypes.Slide {
   rawData: any
   no: number
   level: number
-  meta: PresentationTypes.SlideMeta
+  meta: LampTypes.SlideMeta
   slides: Slide[]
   master: LampTypes.Master
   props: LampTypes.StringObject

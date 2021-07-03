@@ -1,4 +1,4 @@
-import type { PresentationTypes, TitlesTypes } from '@bldr/type-definitions';
+import type { LampTypes, TitlesTypes } from '@bldr/type-definitions';
 import { FolderTitle } from './folder-title';
 export declare class DeepTitle implements TitlesTypes.DeepTitle {
     /**
@@ -67,5 +67,5 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
     get grade(): number;
     list(): FolderTitle[];
     getFolderTitleByFolderName(folderName: string): FolderTitle | undefined;
-    generatePresetationMeta(): PresentationTypes.PresentationMeta;
+    generatePresetationMeta(): LampTypes.PresentationMeta;
 }

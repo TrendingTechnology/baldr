@@ -1,10 +1,10 @@
-import type { PresentationTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 import { convertFromYaml } from '@bldr/yaml'
 import { RawDataObject } from '@bldr/core-browser'
 
 import { Slide } from './slide'
 
-class Meta implements PresentationTypes.PresentationMeta {
+class Meta implements LampTypes.PresentationMeta {
   ref: string
   title: string
   subtitle?: string
@@ -12,7 +12,7 @@ class Meta implements PresentationTypes.PresentationMeta {
   curriculum: string
   curriculumUrl?: string
 
-  constructor (data: PresentationTypes.PresentationMeta) {
+  constructor (data: LampTypes.PresentationMeta) {
     const raw = new RawDataObject(data)
     this.id = raw.cut('id')
     this.title = raw.cut('title')
@@ -28,10 +28,10 @@ class Meta implements PresentationTypes.PresentationMeta {
  * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
  * A presentation contains slides and meta data.
  */
-export class Presentation implements PresentationTypes.Presentation {
+export class Presentation implements LampTypes.Presentation {
   slides: Slide[]
   slidesTree: Slide[]
-  meta: PresentationTypes.PresentationMeta
+  meta: LampTypes.PresentationMeta
 
   /**
    * Parse the YAML file `Praesentation.baldr.yml`.

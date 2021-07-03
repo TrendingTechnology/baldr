@@ -3,7 +3,7 @@ import path from 'path'
 import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/core-node'
 import config from '@bldr/config'
-import type { PresentationTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 
 import assert from 'assert'
 
@@ -11,11 +11,11 @@ function readPresentationFile(filePath: string): string {
   return readFile(path.join(config.localRepo, filePath))
 }
 
-function parseExample(fileBaseName: string): PresentationTypes.Presentation {
+function parseExample(fileBaseName: string): LampTypes.Presentation {
   return parse(readPresentationFile(`src/vue/apps/lamp/examples/${fileBaseName}.baldr.yml`))
 }
 
-function parseMasterExample(masterName: string): PresentationTypes.Presentation {
+function parseMasterExample(masterName: string): LampTypes.Presentation {
   return parse(readPresentationFile(`src/masters/${masterName}/src/example.baldr.yml`))
 }
 

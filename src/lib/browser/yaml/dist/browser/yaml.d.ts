@@ -29,7 +29,7 @@ export declare function convertFromYamlRaw(yamlString: string): object | undefin
  * Load a YAML string and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function returns an
  * object with string properties to save Visual Studio Code type checks (Not
- * AssetType, PresentationTypes etc).
+ * AssetType etc).
  *
  * @param yamlString - A string in the YAML format.
  *

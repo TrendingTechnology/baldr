@@ -8,8 +8,6 @@ export * as AssetType from './asset'
 export * from './cli'
 export * from './config'
 
-export * as PresentationTypes from './presentation'
-
 export interface StringIndexedObject { [key: string]: any }
 
 export interface StringIndexedStringObject { [key: string]: string }

@@ -1,4 +1,4 @@
-import type { PresentationTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
@@ -52,7 +52,7 @@ function shortedMediaUris (rawYamlString: string, presentationId: string): strin
  */
 export function normalizePresentationFile (filePath: string): string {
   let textContent = readFile(filePath)
-  const presentation = readYamlFile(filePath) as PresentationTypes.FileFormat
+  const presentation = readYamlFile(filePath) as LampTypes.FileFormat
 
   // Generate meta.
   const title = new DeepTitle(filePath)
@@ -71,7 +71,7 @@ export function normalizePresentationFile (filePath: string): string {
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const metaSorted: PresentationTypes.PresentationMeta = {} as PresentationTypes.PresentationMeta
+  const metaSorted: LampTypes.PresentationMeta = {} as LampTypes.PresentationMeta
 
   metaSorted.ref = meta.ref
   if (meta.uuid != null) metaSorted.uuid = meta.uuid
