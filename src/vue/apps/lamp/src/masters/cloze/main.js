@@ -5,7 +5,7 @@
 /* globals DOMParser */
 
 import { MediaUri } from '@bldr/client-media-models'
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 import steps from '@/steps.js'
 import Vue from 'vue'

@@ -5,7 +5,12 @@
     "outDir": "./dist",
     "allowJs": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "lib": [
+      "DOM"
+    ]
   },
-  "include": ["./src/**/*"],
+  "include": [
+    "./src/**/*"
+  ],
 }

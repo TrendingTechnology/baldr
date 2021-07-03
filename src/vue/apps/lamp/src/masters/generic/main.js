@@ -4,7 +4,7 @@
 
 import { convertHtmlToPlainText, splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 import steps from '@/steps.js'
 

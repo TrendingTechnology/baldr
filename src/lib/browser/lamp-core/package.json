@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/master-toolkit",
+  "name": "@bldr/lamp-core",
   "version": "0.1.0",
-  "description": "Some auxiliuary functions to help by the construction of master slides.",
+  "description": "Core functionality for the presentation software without a dependency to Vue js.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

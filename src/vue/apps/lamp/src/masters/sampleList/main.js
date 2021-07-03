@@ -3,7 +3,7 @@
  */
 
 import { mediaResolver } from '@bldr/media-client'
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 export default validateMasterSpec({
   name: 'sampleList',

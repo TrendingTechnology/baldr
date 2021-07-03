@@ -7,7 +7,7 @@
  */
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 import { checkAvailability } from '@bldr/youtube-api'
 
 function youtubeIdToUri (youtubeId) {

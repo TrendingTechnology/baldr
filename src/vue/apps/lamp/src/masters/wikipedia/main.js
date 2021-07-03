@@ -4,7 +4,7 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 import axios from 'axios'
 import Vue from 'vue'

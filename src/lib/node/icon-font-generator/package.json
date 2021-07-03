@@ -21,11 +21,11 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/log": "*",
-    "@bldr/type-definitions": "*",
     "webfont": "11.1.1"
   },
   "devDependencies": {
-    "@types/node": "15.12.4"
+    "@types/node": "15.12.4",
+    "@bldr/type-definitions": "*"
   },
   "scripts": {
     "build:node": "tsc --module commonjs --outDir dist/node",

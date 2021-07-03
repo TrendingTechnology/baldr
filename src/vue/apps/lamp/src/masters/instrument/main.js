@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/instrument
  */
 
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 function convertInstrumentIdToMediaId (instrumentId) {
   return `ref:IN_${instrumentId}`

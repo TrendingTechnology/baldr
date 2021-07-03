@@ -8,7 +8,7 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 
-import { StringIndexedObject } from '@bldr/type-definitions'
+import type { StringIndexedObject } from '@bldr/type-definitions'
 
 // Project packages.
 import config from '@bldr/config'

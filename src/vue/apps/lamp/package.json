@@ -27,7 +27,7 @@
     "@bldr/icons": "*",
     "@bldr/markdown-to-html": "*",
     "@bldr/master-question": "*",
-    "@bldr/master-toolkit": "*",
+    "@bldr/lamp-core": "*",
     "@bldr/media-client": "*",
     "@bldr/menu-adapter": "*",
     "@bldr/menu-webapp": "*",

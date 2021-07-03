@@ -3,7 +3,7 @@
  *
  * @module @bldr/open-with
  */
-import { StringIndexedObject } from '@bldr/type-definitions';
+import type { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Open a file path with an executable.
  *

@@ -30,6 +30,6 @@
     "@bldr/core-browser": "*",
     "@bldr/markdown-to-html": "*",
     "jsdom": "16.4.0",
-    "@bldr/master-toolkit": "*"
+    "@bldr/lamp-core": "*"
   }
 }

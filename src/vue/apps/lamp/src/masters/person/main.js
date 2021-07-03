@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/person
  */
 
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 import * as tex from '@bldr/tex-templates'
 

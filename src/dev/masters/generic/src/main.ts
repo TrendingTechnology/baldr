@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/generic
  */
 
-import { validateMasterSpec, mapStepProps } from '@bldr/master-toolkit'
+import { validateMasterSpec, mapStepProps } from '@bldr/lamp-core'
 
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html'

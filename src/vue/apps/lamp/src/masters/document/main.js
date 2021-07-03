@@ -5,7 +5,7 @@
  * @module @bldr/lamp/masters/document
  */
 
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 export default validateMasterSpec({
   name: 'document',

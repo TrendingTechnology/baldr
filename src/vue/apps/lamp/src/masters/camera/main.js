@@ -96,7 +96,7 @@
  * @module @bldr/lamp/masters/camera
  */
 
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 export default validateMasterSpec({
   name: 'camera',
   title: 'Dokumentenkamera',

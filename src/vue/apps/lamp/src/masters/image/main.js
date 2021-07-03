@@ -3,7 +3,7 @@
  */
 
 import { splitHtmlIntoChunks, ObjectPropertyPicker } from '@bldr/core-browser'
-import { validateMasterSpec } from '@bldr/master-toolkit'
+import { validateMasterSpec } from '@bldr/lamp-core'
 
 const DESCRIPTION_TEASER_LENGTH = 200
 

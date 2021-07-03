@@ -44,7 +44,6 @@
     "@bldr/tex-markdown-converter": "*",
     "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
-    "@bldr/type-definitions": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*",
     "@bldr/youtube-api": "*",
@@ -57,6 +56,7 @@
     "glob": "7.1.7"
   },
   "devDependencies": {
+    "@bldr/type-definitions": "*",
     "@types/node": "14.14.33",
     "@types/color": "3.0.1"
   },

@@ -2,11 +2,15 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "lib": ["ES2020.String"],
+    "lib": [
+      "ES2020.String", "DOM"
+    ],
     "module": "CommonJS",
     "outDir": "./dist",
     "strict": true,
     "target": "ES6"
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*"
+  ]
 }
