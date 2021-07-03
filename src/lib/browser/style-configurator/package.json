@@ -16,11 +16,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@bldr/type-definitions": "*"
-  },
   "devDependencies": {
-    "vue": "2.6.11"
+    "@bldr/type-definitions": "*"
   },
   "scripts": {
     "build:browser": "tsc --module es2015 --outDir dist/browser",

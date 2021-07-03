@@ -104,7 +104,6 @@ import ModalDialog from '@bldr/modal-dialog'
 import DynamicSelect from '@bldr/dynamic-select'
 import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
-import StyleConfigurator from '@bldr/style-configurator'
 import Notification from '@bldr/notification'
 import config from '@bldr/config'
 
@@ -118,7 +117,6 @@ Vue.use(Notification as any, Vue)
 Vue.use(DynamicSelect as any)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.use(StyleConfigurator)
 Vue.use(Websocket, config.wire.localUri, {
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)

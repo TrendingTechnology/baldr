@@ -1,11 +1,7 @@
-/* eslint-disable */
-
 import type { LampTypes } from '@bldr/type-definitions'
 
-import _Vue from 'vue'
-
 class AttributeSetter<T> {
-  protected attributeName: string
+  public attributeName: string
   protected attributeValue: T
   protected defaultValue: T
 
@@ -84,16 +80,19 @@ type StyleConfigName =
   'darkMode' |
   'uiTheme'
 
-/**
- * @TODO Document the types here
- * Type defintions are in src/vue/apps/lamp/src/types/style-configurator.d.ts
- */
 export class StyleConfigurator {
   private readonly setterCollection = {
     darkMode: new DarkModeSetter(),
     contentTheme: new ContentThemeSetter(),
     uiTheme: new UiThemeSetter(),
     centerVertically: new CenterVerticallySetter()
+  }
+
+  constructor() {
+    const body  = document.querySelector('body')
+    if (body != null) {
+      body.setAttribute(this.setterCollection.darkMode.attributeName, 'false')
+    }
   }
 
   reset (): void {
@@ -127,7 +126,6 @@ export class StyleConfigurator {
   }
 
   toggleFullscreen = function () {
-    console.log(document.fullscreenElement)
     if (document.fullscreenElement == null) {
       document.documentElement.requestFullscreen()
     } else {
@@ -144,8 +142,4 @@ export class StyleConfigurator {
   }
 }
 
-export default {
-  install (Vue: typeof _Vue, options?: any): void {
-    Vue.prototype.$style = new StyleConfigurator()
-  }
-}
+export const styleConfigurator = new StyleConfigurator()

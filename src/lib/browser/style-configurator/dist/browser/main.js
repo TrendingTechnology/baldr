@@ -1,4 +1,3 @@
-/* eslint-disable */
 class AttributeSetter {
     constructor(attributeName, defaultValue) {
         this.attributeName = attributeName;
@@ -58,10 +57,6 @@ class UiThemeSetter extends StringAttributeSetter {
         super('b-ui-theme', 'default');
     }
 }
-/**
- * @TODO Document the types here
- * Type defintions are in src/vue/apps/lamp/src/types/style-configurator.d.ts
- */
 export class StyleConfigurator {
     constructor() {
         this.setterCollection = {
@@ -71,7 +66,6 @@ export class StyleConfigurator {
             centerVertically: new CenterVerticallySetter()
         };
         this.toggleFullscreen = function () {
-            console.log(document.fullscreenElement);
             if (document.fullscreenElement == null) {
                 document.documentElement.requestFullscreen();
             }
@@ -79,6 +73,10 @@ export class StyleConfigurator {
                 document.exitFullscreen();
             }
         };
+        const body = document.querySelector('body');
+        if (body != null) {
+            body.setAttribute(this.setterCollection.darkMode.attributeName, 'false');
+        }
     }
     reset() {
         for (const setterName in this.setterCollection) {
@@ -115,8 +113,4 @@ export class StyleConfigurator {
         this.setterCollection.uiTheme.set(themeName);
     }
 }
-export default {
-    install(Vue, options) {
-        Vue.prototype.$style = new StyleConfigurator();
-    }
-};
+export const styleConfigurator = new StyleConfigurator();

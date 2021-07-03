@@ -32,10 +32,12 @@
 </template>
 
 <script>
+import { registerShortcuts } from '@bldr/menu-adapter'
+import { styleConfigurator } from '@bldr/style-configurator'
+
+import { hideMouseAfterSec } from './lib.js'
 import { receiveSocketMessage } from '@/remote-control.js'
 import actions from './actions.js'
-import { registerShortcuts } from '@bldr/menu-adapter'
-import { hideMouseAfterSec } from './lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -75,7 +77,7 @@ export default {
 
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {
-        this.$style.set(to.meta.style)
+       styleConfigurator.set(to.meta.style)
       }
     })
 

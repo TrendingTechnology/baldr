@@ -5,6 +5,8 @@
  * @module @bldr/lamp/actions
  */
 
+import { styleConfigurator } from '@bldr/style-configurator'
+
 import store from './store/index.js'
 import vm from './main'
 import { router } from './routes'
@@ -339,13 +341,13 @@ export default {
     goToNextSlideOrStep(1)
   },
   toggleDarkMode () {
-    vm.$style.toggleDarkMode()
+    styleConfigurator.toggleDarkMode()
   },
   resetStyles () {
-    vm.$style.reset()
+    styleConfigurator.reset()
   },
   enterFullscreen () {
-    vm.$style.toggleFullscreen()
+    styleConfigurator.toggleFullscreen()
   },
   togglePlayer () {
     vm.$media.player.toggle()

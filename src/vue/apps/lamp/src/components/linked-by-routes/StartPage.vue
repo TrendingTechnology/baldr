@@ -17,6 +17,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
+import { styleConfigurator } from '@bldr/style-configurator'
+
 import OpenInterface from '@/components/OpenInterface/index.vue'
 import RecentPresentations from '@/components/RecentPresentations.vue'
 import DropDownMenu from '@/components/DropDownMenu.vue'
@@ -30,7 +32,7 @@ import DropDownMenu from '@/components/DropDownMenu.vue'
 })
 export default class StartPage extends Vue {
   mounted () {
-    this.$style.reset()
+    styleConfigurator.reset()
   }
 }
 </script>
