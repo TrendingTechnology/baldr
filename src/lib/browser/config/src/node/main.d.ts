@@ -3,7 +3,7 @@
  *
  * @module @bldr/config
  */
-import { Configuration } from '@bldr/type-definitions';
+import type { Configuration } from '@bldr/type-definitions';
 /**
  * Object to cache the configuration. To avoid reading the configuration
  * file multiple times.

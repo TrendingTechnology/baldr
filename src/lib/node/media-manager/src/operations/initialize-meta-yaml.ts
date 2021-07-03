@@ -1,4 +1,4 @@
-import { AssetType } from '@bldr/type-definitions'
+import type { AssetType } from '@bldr/type-definitions'
 
 import { renameMediaAsset } from './rename-asset'
 import { normalizeMediaAsset } from './normalize-asset'

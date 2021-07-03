@@ -5,7 +5,7 @@ declare type Option = [string, string];
  * For example:
  *
  * ```
- * import { CliCommandSpec } from '@bldr/type-definitions'
+ * import type { CliCommandSpec } from '@bldr/type-definitions'
  *
  * export = <CliCommandSpec> {
  *   command: 'open-media',

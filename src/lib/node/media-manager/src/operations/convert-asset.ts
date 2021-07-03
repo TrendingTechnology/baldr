@@ -8,7 +8,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
 import { referencify } from '@bldr/core-browser'
-import { AssetType } from '@bldr/type-definitions'
+import type { AssetType } from '@bldr/type-definitions'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
 /**

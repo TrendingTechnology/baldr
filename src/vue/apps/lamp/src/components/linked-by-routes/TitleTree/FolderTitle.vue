@@ -21,7 +21,7 @@
 import TitleLink from './TitleLink.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import { TitlesTypes } from '@bldr/type-definitions'
+import type { TitlesTypes } from '@bldr/type-definitions'
 
 @Component({
   components: {

@@ -1,4 +1,4 @@
-import { MediaCategoriesTypes } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 export declare const abbreviations: {
     [key: string]: string;
 };

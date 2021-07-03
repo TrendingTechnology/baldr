@@ -4,7 +4,7 @@
  * @module @bldr/core-browser/object-manipulation
  */
 
-import { StringIndexedObject } from '@bldr/type-definitions'
+import type { StringIndexedObject } from '@bldr/type-definitions'
 
 /**
  * Convert various data to a string. Meant for error messages. Objects

@@ -12,7 +12,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { Configuration } from '@bldr/type-definitions'
+import type { Configuration } from '@bldr/type-definitions'
 
 type RestEndPoint = 'local' | 'remote' | 'automatic'
 

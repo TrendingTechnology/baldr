@@ -1,4 +1,4 @@
-import { LampTypes } from '@bldr/type-definitions';
+import type { LampTypes } from '@bldr/type-definitions';
 /**
  * Validate the master specification. This function doesn’t change the
  * the input object. The input object is passed through unchanged. The

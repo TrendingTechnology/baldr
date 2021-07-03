@@ -1,5 +1,5 @@
 import { Master } from './master';
-import { LampTypes, StringIndexedObject } from '@bldr/type-definitions';
+import type { LampTypes, StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Container for all registered master slides.
  */

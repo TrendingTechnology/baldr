@@ -4,7 +4,7 @@ import fs from 'fs'
 // Project packages.
 import { operations, walk } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
-import { GenericError } from '@bldr/type-definitions'
+import type { GenericError } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 interface CmdObj {
   wikidata: boolean

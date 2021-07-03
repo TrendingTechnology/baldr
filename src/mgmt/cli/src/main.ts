@@ -9,7 +9,7 @@ import { Command } from 'commander'
 
 // Project packages.
 import { checkExecutables } from '@bldr/core-node'
-import { CliCommandSpec } from '@bldr/type-definitions'
+import type { CliCommandSpec } from '@bldr/type-definitions'
 
 import { setLogLevel } from '@bldr/log'
 

@@ -1,4 +1,4 @@
-import { PresentationTypes } from '@bldr/type-definitions'
+import type { PresentationTypes } from '@bldr/type-definitions'
 import { convertFromYaml } from '@bldr/yaml'
 import { RawDataObject } from '@bldr/core-browser'
 

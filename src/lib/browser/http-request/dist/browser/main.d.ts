@@ -8,7 +8,7 @@
  * @module @bldr/http-request
  */
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Configuration } from '@bldr/type-definitions';
+import type { Configuration } from '@bldr/type-definitions';
 declare type RestEndPoint = 'local' | 'remote' | 'automatic';
 /**
  * A wrapper around Axios.

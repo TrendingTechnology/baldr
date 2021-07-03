@@ -1,7 +1,7 @@
 /**
  * @module @bldr/wikidata
  */
-import { MediaCategoriesTypes } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * Download a file from wiki commonds.
  *

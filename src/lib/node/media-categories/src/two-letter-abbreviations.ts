@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { MediaCategoriesTypes } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 export const abbreviations: { [key: string]: string } = {
   AB: 'Arbeitsblatt',

@@ -1,4 +1,4 @@
-import { PresentationTypes, LampTypes } from '@bldr/type-definitions'
+import type { PresentationTypes, LampTypes } from '@bldr/type-definitions'
 import { RawDataObject } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import masterCollection from '@bldr/master-collection'

@@ -10,7 +10,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getExtension } from '@bldr/core-browser'
-import { AssetType } from '@bldr/type-definitions'
+import type { AssetType } from '@bldr/type-definitions'
 
 import { readYamlFile } from '@bldr/file-reader-writer'
 

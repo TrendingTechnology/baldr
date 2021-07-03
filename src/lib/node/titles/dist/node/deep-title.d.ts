@@ -1,4 +1,4 @@
-import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions';
+import type { PresentationTypes, TitlesTypes } from '@bldr/type-definitions';
 import { FolderTitle } from './folder-title';
 export declare class DeepTitle implements TitlesTypes.DeepTitle {
     /**

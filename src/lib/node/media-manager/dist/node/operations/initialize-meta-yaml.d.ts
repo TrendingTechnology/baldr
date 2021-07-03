@@ -1,4 +1,4 @@
-import { AssetType } from '@bldr/type-definitions';
+import type { AssetType } from '@bldr/type-definitions';
 /**
  * Rename, create metadata yaml and normalize the metadata file.
  */

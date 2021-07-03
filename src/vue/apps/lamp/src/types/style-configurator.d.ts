@@ -1,6 +1,6 @@
 // TODO Move this type defintions to the packages
 import { StyleConfigurator } from '@baldr/style-configurator'
-import { LampTypes } from '@bldr/type-definitions'
+import type { LampTypes } from '@bldr/type-definitions'
 
 interface Style {
   /**

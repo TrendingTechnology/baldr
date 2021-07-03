@@ -1,5 +1,5 @@
 import { Master } from './master'
-import { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
+import type { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { convertToString } from '@bldr/core-browser'
 
 /**

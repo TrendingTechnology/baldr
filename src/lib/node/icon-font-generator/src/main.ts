@@ -15,7 +15,7 @@ import webfont from 'webfont'
 import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
-import { IconFontMapping, IconDefintion } from '@bldr/type-definitions'
+import type { IconFontMapping, IconDefintion } from '@bldr/type-definitions'
 import { toTitleCase } from '@bldr/core-browser'
 
 const cmd = new CommandRunner()

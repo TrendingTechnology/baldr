@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions'
+import type { PresentationTypes, TitlesTypes } from '@bldr/type-definitions'
 
 import { FolderTitle } from './folder-title'
 

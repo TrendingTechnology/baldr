@@ -5,7 +5,7 @@
  *
  * @module @bldr/media-manager
  */
-import { AssetType } from '@bldr/type-definitions';
+import type { AssetType } from '@bldr/type-definitions';
 import { convertAsset } from './operations/convert-asset';
 import { generatePresentation } from './operations/generate-presentation';
 import { initializeMetaYaml } from './operations/initialize-meta-yaml';

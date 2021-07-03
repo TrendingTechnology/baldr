@@ -3,7 +3,7 @@ import path from 'path'
 import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/core-node'
 import config from '@bldr/config'
-import { PresentationTypes } from '@bldr/type-definitions'
+import type { PresentationTypes } from '@bldr/type-definitions'
 
 import assert from 'assert'
 
