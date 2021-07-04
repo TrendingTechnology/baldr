@@ -12,8 +12,7 @@
       />
       <span
         class="manual-title sans"
-        v-if="showTitlesNormalized || wrappedSample.isTitleSetManually"
-        v-html="wrappedSample.title"
+        v-html="wrappedSample.titleSafe"
       />
     </span>
   </div>

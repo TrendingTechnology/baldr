@@ -1,10 +1,16 @@
 <template>
-  <div class="vc_wave_form" v-if="asset.waveformHttpUrl">
+  <div
+    class="vc_wave_form"
+    v-if="asset.waveformHttpUrl"
+  >
     <img
       ref="waveformImg"
       :src="asset.waveformHttpUrl"
     />
-    <div ref="progressIndicatorOverlayDiv" class="progress-indicator-overlay"></div>
+    <div
+      ref="progressIndicatorOverlayDiv"
+      class="progress-indicator-overlay"
+    />
   </div>
 </template>
 
@@ -61,6 +67,7 @@ export default {
       filter: invert(100%);
       opacity: 0.4;
       height: 10vw;
+      width: 60vw;
       position: relative;
     }
 

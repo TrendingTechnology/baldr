@@ -1,8 +1,15 @@
 <template>
   <div class="vc_score_sample_master">
-    <h1 v-if="heading" v-html="heading"/>
+    <h1
+      v-if="heading"
+      v-html="heading"
+    />
     <img :src="asset.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
-    <play-button class="left-bottom-corner" v-if="audioSample" :sample="audioSample"/>
+    <play-button
+      class="left-bottom-corner"
+      v-if="audioSample"
+      :sample="audioSample"
+    />
     <external-sites :asset="asset"/>
   </div>
 </template>

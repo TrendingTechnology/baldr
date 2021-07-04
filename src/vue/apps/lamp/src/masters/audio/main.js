@@ -129,7 +129,9 @@ export default validateMasterSpec({
     },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {
-      if (!this.isPublic) return
+      if (!this.isPublic) {
+        return
+      }
       const slide = this.$get('slide')
       this.$media.player.load(slide.props.src)
       if (slide.props.autoplay) {
