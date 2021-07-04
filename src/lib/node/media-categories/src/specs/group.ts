@@ -1,6 +1,6 @@
 import path from 'path'
 
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
@@ -11,7 +11,7 @@ interface GroupCategory extends MediaCategoriesTypes.Category {
   basePath: string
 }
 
-interface GroupFileFormat extends AssetType.YamlFormat {
+interface GroupFileFormat extends MediaResolverTypes.YamlFormat {
   groupId: string
   name: string
   extension: string

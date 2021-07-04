@@ -1,4 +1,4 @@
-import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
@@ -8,7 +8,7 @@ import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounte
 export const imageShortcutCounter = new MimeTypeShortcutCounter('i')
 
 export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
-  yaml: AssetType.RestApiRaw
+  yaml: MediaResolverTypes.RestApiRaw
   uri: MediaUri
 
   /**
@@ -25,7 +25,7 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   /**
    * @param yaml - A raw javascript object read from the Rest API
    */
-  constructor (uri: string, httpUrl: string, yaml: AssetType.RestApiRaw) {
+  constructor (uri: string, httpUrl: string, yaml: MediaResolverTypes.RestApiRaw) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
     this.yaml = yaml

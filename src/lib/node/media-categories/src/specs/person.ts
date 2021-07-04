@@ -1,12 +1,12 @@
 import path from 'path'
 
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
 import { validateDate } from '../main'
 
-interface PersonFileFormat extends AssetType.YamlFormat {
+interface PersonFileFormat extends MediaResolverTypes.YamlFormat {
   firstname: string
   lastname: string
   personId: string

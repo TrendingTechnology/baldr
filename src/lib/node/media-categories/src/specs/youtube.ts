@@ -1,10 +1,10 @@
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 
 import path from 'path'
 
 import { validateYoutubeId } from '../main'
 
-interface YoutubeFileFormat extends AssetType.YamlFormat {
+interface YoutubeFileFormat extends MediaResolverTypes.YamlFormat {
   youtubeId: string
 }
 

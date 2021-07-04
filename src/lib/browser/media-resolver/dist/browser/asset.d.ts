@@ -1,9 +1,9 @@
-import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
 import { MediaUri } from '@bldr/client-media-models';
 import { SampleCollection, MimeTypeShortcutCounter } from './internal';
 export declare const imageShortcutCounter: MimeTypeShortcutCounter;
 export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
-    yaml: AssetType.RestApiRaw;
+    yaml: MediaResolverTypes.RestApiRaw;
     uri: MediaUri;
     /**
      * The keyboard shortcut to launch the media asset. At the moment only used by
@@ -17,7 +17,7 @@ export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaA
     /**
      * @param yaml - A raw javascript object read from the Rest API
      */
-    constructor(uri: string, httpUrl: string, yaml: AssetType.RestApiRaw);
+    constructor(uri: string, httpUrl: string, yaml: MediaResolverTypes.RestApiRaw);
     get ref(): string;
     get uuid(): string;
     set shortcut(value: string | undefined);

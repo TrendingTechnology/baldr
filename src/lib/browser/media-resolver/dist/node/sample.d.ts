@@ -1,4 +1,4 @@
-import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
 import { Cache } from './internal';
 export declare class SampleShortcutManager {
     private readonly audio;
@@ -10,7 +10,7 @@ export declare class SampleShortcutManager {
 export declare const sampleShortcutManager: SampleShortcutManager;
 export declare class Sample implements MediaResolverTypes.Sample {
     asset: MediaResolverTypes.ClientMediaAsset;
-    yaml: AssetType.SampleYamlFormat;
+    yaml: MediaResolverTypes.SampleYamlFormat;
     htmlElement: HTMLMediaElement;
     /**
      * The current volume of the parent media Element. This value gets stored
@@ -40,7 +40,7 @@ export declare class Sample implements MediaResolverTypes.Sample {
     private readonly timeOut;
     private readonly events;
     playbackState: MediaResolverTypes.PlaybackState;
-    constructor(asset: MediaResolverTypes.ClientMediaAsset, yaml: AssetType.SampleYamlFormat);
+    constructor(asset: MediaResolverTypes.ClientMediaAsset, yaml: MediaResolverTypes.SampleYamlFormat);
     get ref(): string;
     get title(): string;
     get titleSafe(): string;

@@ -7,7 +7,7 @@
  *
  * @module @bldr/media-categories
  */
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions';
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the category name.
  *
@@ -24,7 +24,7 @@ export declare function detectCategoryByPath(filePath: string): MediaCategoriesT
  *
  * @returns A absolute path
  */
-export declare function formatFilePath(data: AssetType.YamlFormat, oldPath?: string): string | undefined;
+export declare function formatFilePath(data: MediaResolverTypes.YamlFormat, oldPath?: string): string | undefined;
 /**
  * Merge category names to avoid duplicate metadata category names:
  */
@@ -32,7 +32,7 @@ export declare function mergeNames(...name: string[]): string;
 /**
  * @returns An array of unknown props.
  */
-export declare function searchUnknownProps(data: AssetType.YamlFormat): string[];
+export declare function searchUnknownProps(data: MediaResolverTypes.YamlFormat): string[];
 /**
  * Bundle three operations: Sort and derive, format, validate.
  *
@@ -40,4 +40,4 @@ export declare function searchUnknownProps(data: AssetType.YamlFormat): string[]
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export declare function process(data: AssetType.YamlFormat, filePath?: string): AssetType.YamlFormat;
+export declare function process(data: MediaResolverTypes.YamlFormat, filePath?: string): MediaResolverTypes.YamlFormat;

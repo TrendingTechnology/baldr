@@ -8,7 +8,7 @@ import chalk from 'chalk'
 // Project packages.
 import { writeYamlFile } from '@bldr/file-reader-writer'
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import config from '@bldr/config'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
 
@@ -31,7 +31,7 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   }
 
   rawData.categories = category
-  const data = categoriesManagement.process(rawData as AssetType.YamlFormat)
+  const data = categoriesManagement.process(rawData as MediaResolverTypes.YamlFormat)
   console.log(data)
 
   let downloadWikicommons = true

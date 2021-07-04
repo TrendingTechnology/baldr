@@ -15,7 +15,7 @@ import path from 'path'
 import { deepCopy, getExtension } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import config from '@bldr/config'
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 
 import { DeepTitle } from '@bldr/titles'
 import { categories } from './specs'
@@ -57,7 +57,7 @@ export function detectCategoryByPath (filePath: string): MediaCategoriesTypes.Na
  *
  * @returns A absolute path
  */
-export function formatFilePath (data: AssetType.YamlFormat, oldPath?: string): string | undefined {
+export function formatFilePath (data: MediaResolverTypes.YamlFormat, oldPath?: string): string | undefined {
   if (data.categories == null) throw new Error('Your data needs a property named “categories”.')
   // TODO: support multiple types
   // person,general -> person
@@ -122,8 +122,8 @@ function isValue (value: any): boolean {
  * @param category - The specification of one media category.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetType.YamlFormat, func: Function, category: MediaCategoriesTypes.Category, replaceValues: boolean = true): AssetType.YamlFormat | AssetType.YamlFormat {
-  function applyOneTypeSpec (props: MediaCategoriesTypes.PropCollection, propName: string, data: AssetType.YamlFormat, func: Function, replaceValues: boolean): void {
+function applySpecToProps (data: MediaResolverTypes.YamlFormat, func: Function, category: MediaCategoriesTypes.Category, replaceValues: boolean = true): MediaResolverTypes.YamlFormat | MediaResolverTypes.YamlFormat {
+  function applyOneTypeSpec (props: MediaCategoriesTypes.PropCollection, propName: string, data: MediaResolverTypes.YamlFormat, func: Function, replaceValues: boolean): void {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
     if (replaceValues && isValue(value)) {
@@ -158,10 +158,10 @@ function isPropertyDerived (propSpec: MediaCategoriesTypes.Prop): boolean {
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function sortAndDeriveProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes.Category, filePath?: string): AssetType.YamlFormat {
-  const origData = deepCopy(data) as AssetType.YamlFormat
+function sortAndDeriveProps (data: MediaResolverTypes.YamlFormat, category: MediaCategoriesTypes.Category, filePath?: string): MediaResolverTypes.YamlFormat {
+  const origData = deepCopy(data) as MediaResolverTypes.YamlFormat
   // eslint-disable-next-line
-  const result: AssetType.YamlFormat = {} as AssetType.YamlFormat
+  const result: MediaResolverTypes.YamlFormat = {} as MediaResolverTypes.YamlFormat
 
   let folderTitles: DeepTitle = {} as DeepTitle
   if (filePath != null) {
@@ -213,7 +213,7 @@ function sortAndDeriveProps (data: AssetType.YamlFormat, category: MediaCategori
  * @param data - An object containing some meta data.
  * @param category - The category name.
  */
-function formatProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes.Category, filePath?: string): AssetType.YamlFormat {
+function formatProps (data: MediaResolverTypes.YamlFormat, category: MediaCategoriesTypes.Category, filePath?: string): MediaResolverTypes.YamlFormat {
   function formatOneProp (spec: MediaCategoriesTypes.Prop, value: any): any {
     if (
       isValue(value) &&
@@ -231,7 +231,7 @@ function formatProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes
  * @param data - An object containing some meta data.
  * @param category - The specification of one media category.
  */
-function validateProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes.Category): void {
+function validateProps (data: MediaResolverTypes.YamlFormat, category: MediaCategoriesTypes.Category): void {
   function validateOneProp (spec: MediaCategoriesTypes.Prop, value: any, prop: MediaCategoriesTypes.PropName): void {
     // required
     if (spec.required != null && !isValue(value)) {
@@ -255,7 +255,7 @@ function validateProps (data: AssetType.YamlFormat, category: MediaCategoriesTyp
  * @param data - An object containing some meta data.
  * @param category - The specification of one media category.
  */
-function removeProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes.Category): AssetType.YamlFormat {
+function removeProps (data: MediaResolverTypes.YamlFormat, category: MediaCategoriesTypes.Category): MediaResolverTypes.YamlFormat {
   for (const propName in category.props) {
     if (data[propName] != null) {
       const value = data[propName]
@@ -288,7 +288,7 @@ function removeProps (data: AssetType.YamlFormat, category: MediaCategoriesTypes
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function processByType (data: AssetType.YamlFormat, name: MediaCategoriesTypes.Name, filePath?: string): AssetType.YamlFormat {
+function processByType (data: MediaResolverTypes.YamlFormat, name: MediaCategoriesTypes.Name, filePath?: string): MediaResolverTypes.YamlFormat {
   if (categories[name] == null) {
     throw new Error(`Unkown meta category name: “${name}”`)
   }
@@ -345,9 +345,9 @@ function generalizeCategoriesNames (categoriesNames?: string): string {
 /**
  * @returns An array of unknown props.
  */
-export function searchUnknownProps (data: AssetType.YamlFormat): string[] {
-  data = deepCopy(data) as AssetType.YamlFormat
-  data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
+export function searchUnknownProps (data: MediaResolverTypes.YamlFormat): string[] {
+  data = deepCopy(data) as MediaResolverTypes.YamlFormat
+  data = convertPropertiesSnakeToCamel(data) as MediaResolverTypes.YamlFormat
   data.categories = generalizeCategoriesNames(data.categories)
 
   for (const categoryName of data.categories.split(',')) {
@@ -369,14 +369,14 @@ export function searchUnknownProps (data: AssetType.YamlFormat): string[] {
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export function process (data: AssetType.YamlFormat, filePath?: string): AssetType.YamlFormat {
+export function process (data: MediaResolverTypes.YamlFormat, filePath?: string): MediaResolverTypes.YamlFormat {
   if (filePath != null) {
     filePath = path.resolve(filePath)
   }
 
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = convertPropertiesSnakeToCamel(data) as AssetType.YamlFormat
+  data = convertPropertiesSnakeToCamel(data) as MediaResolverTypes.YamlFormat
   data.categories = generalizeCategoriesNames(data.categories)
   for (const name of data.categories.split(',')) {
     data = processByType(data, name as MediaCategoriesTypes.Name, filePath)

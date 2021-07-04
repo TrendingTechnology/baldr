@@ -2,14 +2,14 @@ import path from 'path'
 
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 
 interface InstrumentCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
   basePath: string
 }
 
-interface InstrumentFileFormat extends AssetType.YamlFormat {
+interface InstrumentFileFormat extends MediaResolverTypes.YamlFormat {
   name: string
   extension: string
 }

@@ -4,8 +4,6 @@
  * @module @bldr/type-definitions
  */
 
-export * as AssetType from './asset'
-export * from './cli'
 export * from './config'
 
 export interface StringIndexedObject { [key: string]: any }
@@ -26,6 +24,7 @@ export interface GenericError {
  */
 
 export * as ClientMediaModelsTypes from './client-media-models'
+export * as CliTypes from './cli'
 export * as LampTypes from './lamp'
 export * as MediaCategoriesTypes from './media-categories'
 export * as MediaResolverTypes from './media-resolver'

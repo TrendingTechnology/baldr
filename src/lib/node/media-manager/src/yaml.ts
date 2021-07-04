@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import type { AssetType, StringIndexedObject } from '@bldr/type-definitions'
+import type { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify } from '@bldr/core-browser'
@@ -31,7 +31,7 @@ export function readYamlMetaData (filePath: string): StringIndexedObject {
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export function writeYamlMetaData (filePath: string, metaData?: AssetType.YamlFormat, force?: boolean): object | undefined {
+export function writeYamlMetaData (filePath: string, metaData?: MediaResolverTypes.YamlFormat, force?: boolean): object | undefined {
   if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
   if (
@@ -39,7 +39,7 @@ export function writeYamlMetaData (filePath: string, metaData?: AssetType.YamlFo
     !fs.existsSync(yamlFile)
   ) {
     // eslint-disable-next-line
-    if (metaData == null) metaData = {} as AssetType.YamlFormat
+    if (metaData == null) metaData = {} as MediaResolverTypes.YamlFormat
     const asset = new Asset(filePath)
     if (metaData.ref == null) {
       metaData.ref = asset.basename

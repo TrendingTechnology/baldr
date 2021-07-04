@@ -1,8 +1,8 @@
 import path from 'path'
 
-import type { MediaCategoriesTypes, AssetType } from '@bldr/type-definitions'
+import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 
-interface ClozeFileFormat extends AssetType.YamlFormat {
+interface ClozeFileFormat extends MediaResolverTypes.YamlFormat {
   clozePageNo: number
   clozePageCount: number
 }

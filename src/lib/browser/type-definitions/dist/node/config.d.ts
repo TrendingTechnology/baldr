@@ -112,13 +112,13 @@ export interface IconFontConfiguration {
      */
     iconMapping: IconFontMapping;
 }
-interface AssetType {
+interface MimeType {
     allowedExtensions: string[];
     targetExtension: string;
     color: string;
 }
-interface AssetTypes {
-    [key: string]: AssetType;
+interface MimeTypes {
+    [key: string]: MimeType;
 }
 interface MediaServerConfiguration {
     basePath: string;
@@ -126,7 +126,7 @@ interface MediaServerConfiguration {
     sshAliasRemote: string;
     editor: string;
     fileManager: string;
-    mimeTypes: AssetTypes;
+    mimeTypes: MimeTypes;
     /**
      * A URL segment that is inserted between the hostname and the relative path
      * of the media assets. For example `http://localhost/media/05/Mozart.jpg`.

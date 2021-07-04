@@ -129,14 +129,14 @@ export interface IconFontConfiguration {
   iconMapping: IconFontMapping
 }
 
-interface AssetType {
+interface MimeType {
   allowedExtensions: string[]
   targetExtension: string
   color: string
 }
 
-interface AssetTypes {
-  [key: string]: AssetType
+interface MimeTypes {
+  [key: string]: MimeType
 }
 
 interface MediaServerConfiguration {
@@ -145,7 +145,7 @@ interface MediaServerConfiguration {
   sshAliasRemote: string
   editor: string
   fileManager: string
-  mimeTypes: AssetTypes
+  mimeTypes: MimeTypes
 
   /**
    * A URL segment that is inserted between the hostname and the relative path

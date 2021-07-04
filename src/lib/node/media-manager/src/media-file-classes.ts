@@ -1,7 +1,7 @@
 // Node packages.
 import path from 'path'
 
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
@@ -42,7 +42,7 @@ class MediaFile {
  * A media asset.
  */
 export class Asset extends MediaFile {
-  private readonly metaData: AssetType.YamlFormat | undefined
+  private readonly metaData: MediaResolverTypes.YamlFormat | undefined
   /**
    * @param filePath - The file path of the media asset.
    */

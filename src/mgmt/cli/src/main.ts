@@ -9,7 +9,7 @@ import { Command } from 'commander'
 
 // Project packages.
 import { checkExecutables } from '@bldr/core-node'
-import type { CliCommandSpec } from '@bldr/type-definitions'
+import type { CliTypes } from '@bldr/type-definitions'
 
 import { setLogLevel } from '@bldr/log'
 
@@ -40,7 +40,7 @@ type ActionHandlerFunction = (...args: any[]) => void | Promise<void>
  * @param commandName - The name of the command.
  * @param def
  */
-function actionHandler (commandName: string, def: CliCommandSpec): ActionHandlerFunction {
+function actionHandler (commandName: string, def: CliTypes.CliCommandSpec): ActionHandlerFunction {
   return function (...args: any[]): void | Promise<void> {
     if (def.checkExecutable != null) {
       checkExecutables(def.checkExecutable)
@@ -71,7 +71,7 @@ function loadCommands (program: Program): void {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
     // eslint-disable-next-line
-    const def = require(path.join(commandsPath, commandName, 'def.js')) as CliCommandSpec
+    const def = require(path.join(commandsPath, commandName, 'def.js')) as CliTypes.CliCommandSpec
     const subProgramm = program.command(def.command)
     if (def.alias != null) {
       if (!aliases.includes(def.alias)) {
@@ -97,7 +97,7 @@ function actionHelp (): void {
   process.exit(1)
 }
 
-export function validateDefintion (spec: CliCommandSpec): CliCommandSpec {
+export function validateDefintion (spec: CliTypes.CliCommandSpec): CliTypes.CliCommandSpec {
   return spec
 }
 

@@ -8,7 +8,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
 import { referencify } from '@bldr/core-browser'
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
 /**
@@ -128,7 +128,7 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
           console.log(error)
         }
         if (metaData != null) {
-          writeYamlMetaData(outputFile, metaData as AssetType.YamlFormat)
+          writeYamlMetaData(outputFile, metaData as MediaResolverTypes.YamlFormat)
         }
       }
       converted.add(outputFile)

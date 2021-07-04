@@ -1,4 +1,4 @@
-import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
@@ -57,7 +57,7 @@ const defaultPlayDelayMsec: number = 10
 
 export class Sample implements MediaResolverTypes.Sample {
   asset: MediaResolverTypes.ClientMediaAsset
-  yaml: AssetType.SampleYamlFormat
+  yaml: MediaResolverTypes.SampleYamlFormat
   htmlElement: HTMLMediaElement
 
   /**
@@ -99,7 +99,7 @@ export class Sample implements MediaResolverTypes.Sample {
 
   playbackState: MediaResolverTypes.PlaybackState
 
-  constructor (asset: MediaResolverTypes.ClientMediaAsset, yaml: AssetType.SampleYamlFormat) {
+  constructor (asset: MediaResolverTypes.ClientMediaAsset, yaml: MediaResolverTypes.SampleYamlFormat) {
     this.asset = asset
 
     this.yaml = yaml
@@ -454,7 +454,7 @@ export class SampleCollection extends Cache<Sample> {
     return this.get(this.asset.ref + '#complete')
   }
 
-  private addSample (asset: MediaResolverTypes.ClientMediaAsset, yamlFormat: AssetType.SampleYamlFormat): void {
+  private addSample (asset: MediaResolverTypes.ClientMediaAsset, yamlFormat: MediaResolverTypes.SampleYamlFormat): void {
     const sample = new Sample(asset, yamlFormat)
     if (this.get(sample.ref) == null) {
       sampleCache.add(sample.ref, sample)
@@ -465,8 +465,8 @@ export class SampleCollection extends Cache<Sample> {
   /**
    * Gather informations to build the default sample “complete”.
    */
-  private gatherYamlFromRoot (assetFormat: AssetType.YamlFormat): AssetType.SampleYamlFormat | undefined {
-    const yamlFormat: AssetType.SampleYamlFormat = {}
+  private gatherYamlFromRoot (assetFormat: MediaResolverTypes.YamlFormat): MediaResolverTypes.SampleYamlFormat | undefined {
+    const yamlFormat: MediaResolverTypes.SampleYamlFormat = {}
     if (assetFormat.startTime != null) {
       yamlFormat.startTime = assetFormat.startTime
     }
@@ -492,7 +492,7 @@ export class SampleCollection extends Cache<Sample> {
 
   private addFromAsset (asset: MediaResolverTypes.ClientMediaAsset): void {
     // search the “complete” sample from the property “samples”.
-    let completeYamlFromSamples: AssetType.SampleYamlFormat | undefined
+    let completeYamlFromSamples: MediaResolverTypes.SampleYamlFormat | undefined
     if (asset.yaml.samples != null) {
       for (let i = 0; i < asset.yaml.samples.length; i++) {
         const sampleYaml = asset.yaml.samples[i]

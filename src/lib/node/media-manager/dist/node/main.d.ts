@@ -5,7 +5,7 @@
  *
  * @module @bldr/media-manager
  */
-import type { AssetType } from '@bldr/type-definitions';
+import type { MediaResolverTypes } from '@bldr/type-definitions';
 import { convertAsset } from './operations/convert-asset';
 import { generatePresentation } from './operations/generate-presentation';
 import { initializeMetaYaml } from './operations/initialize-meta-yaml';
@@ -46,4 +46,4 @@ export declare function moveAsset(oldPath: string, newPath: string, opts?: MoveA
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
-export declare function readAssetYaml(filePath: string): AssetType.YamlFormat | undefined;
+export declare function readAssetYaml(filePath: string): MediaResolverTypes.YamlFormat | undefined;

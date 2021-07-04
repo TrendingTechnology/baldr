@@ -10,7 +10,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getExtension } from '@bldr/core-browser'
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { readYamlFile } from '@bldr/file-reader-writer'
 
@@ -108,10 +108,10 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
-export function readAssetYaml (filePath: string): AssetType.YamlFormat | undefined {
+export function readAssetYaml (filePath: string): MediaResolverTypes.YamlFormat | undefined {
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
   if (fs.existsSync(filePath)) {
-    return readYamlFile(filePath) as AssetType.YamlFormat
+    return readYamlFile(filePath) as MediaResolverTypes.YamlFormat
   }
 }

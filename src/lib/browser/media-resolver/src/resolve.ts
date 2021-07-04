@@ -1,4 +1,4 @@
-import type { AssetType, MediaResolverTypes } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
@@ -21,7 +21,7 @@ class Resolver {
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
    */
-  private cache: { [uri: string]: AssetType.RestApiRaw }
+  private cache: { [uri: string]: MediaResolverTypes.RestApiRaw }
 
   constructor () {
     this.cache = {}
@@ -34,7 +34,7 @@ class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  private async queryMediaServer (uri: string, throwException: boolean = true): Promise<AssetType.RestApiRaw | undefined> {
+  private async queryMediaServer (uri: string, throwException: boolean = true): Promise<MediaResolverTypes.RestApiRaw | undefined> {
     const mediaUri = new MediaUri(uri)
     const field = mediaUri.scheme
     const search = mediaUri.authority
@@ -57,7 +57,7 @@ class Resolver {
         throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
       }
     } else {
-      const rawRestApiAsset: AssetType.RestApiRaw = response.data
+      const rawRestApiAsset: MediaResolverTypes.RestApiRaw = response.data
       this.cache[cacheKey] = rawRestApiAsset
       return rawRestApiAsset
     }

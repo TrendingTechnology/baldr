@@ -1,5 +1,5 @@
 // Project packages.
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { asciify, formatDuration } from '@bldr/core-browser'
@@ -107,7 +107,7 @@ function action (filePath: string): void {
     rawSamples.unshift(firstRawSample)
   }
 
-  const samples: AssetType.SampleYamlFormat[] = []
+  const samples: MediaResolverTypes.SampleYamlFormat[] = []
   // Text mark maybe have no description. We use a counter instead
   let counter = 1
   for (const rawSample of rawSamples) {
@@ -133,7 +133,7 @@ function action (filePath: string): void {
       title += ' (' + timeText.join('-') + ')'
     }
 
-    const sample: AssetType.SampleYamlFormat = {
+    const sample: MediaResolverTypes.SampleYamlFormat = {
       ref,
       title
     }

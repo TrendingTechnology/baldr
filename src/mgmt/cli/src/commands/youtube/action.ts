@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import type { AssetType } from '@bldr/type-definitions'
+import type { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { CommandRunner } from '@bldr/cli-utils'
 import { operations, locationIndicator } from '@bldr/media-manager'
@@ -37,7 +37,7 @@ async function action (youtubeId: string): Promise<void> {
     return
   }
 
-  const metaData = meta as AssetType.YamlFormat
+  const metaData = meta as MediaResolverTypes.YamlFormat
   console.log(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())
