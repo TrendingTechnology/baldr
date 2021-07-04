@@ -10,18 +10,17 @@ import { installDocumentTitleUpdater } from '@/routing.js'
 
 // Components.
 import AboutPage from '@/components/linked-by-routes/AboutPage.vue'
-import AdHocCamera from '@/routes/AdHocCamera.vue'
-import AdHocEditor from '@/routes/AdHocEditor.vue'
+import AdHocCamera from '@/components/linked-by-routes/AdHocCamera.vue'
+import AdHocEditor from '@/components/linked-by-routes/AdHocEditor.vue'
 
+// Documentation
 import DocumentationOverview from '@/components/linked-by-routes/Documentation/index.vue'
 import CommonExample from '@/components/linked-by-routes/Documentation/CommonExample.vue'
 import MasterDocumentation from '@/components/linked-by-routes/Documentation/MasterDocumentation.vue'
 
-import OpenInterface from '@/components/OpenInterface/index.vue'
-
-import SlidesPreview from '@/routes/SlidesPreview/index.vue'
-import SlideView from '@/routes/SlideView/index.vue'
-import SpeakerView from '@/routes/SpeakerView/index.vue'
+import SlidesPreview from '@/components/linked-by-routes/SlidesPreview/index.vue'
+import SlideView from '@/components/linked-by-routes/SlideView/index.vue'
+import SpeakerView from '@/components/linked-by-routes/SpeakerView/index.vue'
 import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TitleTree from '@/components/linked-by-routes/TitleTree/index.vue'
 import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
@@ -36,14 +35,6 @@ const routes: RouteConfig[] = [
     meta: {
       shortcut: 'h',
       title: 'Startseite'
-    }
-  },
-  {
-    path: '/open',
-    component: OpenInterface,
-    name: 'open',
-    meta: {
-      title: 'Präsentation/Medien-Dateien öffnen'
     }
   },
   {
