@@ -55,7 +55,9 @@ interface MoveAssetConfiguration {
 export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration = {}): string | undefined {
   function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration): void {
     if (copy != null && copy) {
-      if (!(dryRun != null && dryRun)) fs.copyFileSync(oldPath, newPath)
+      if (!(dryRun != null && dryRun)) {
+        fs.copyFileSync(oldPath, newPath)
+      }
     } else {
       if (!(dryRun != null && dryRun)) {
         //  Error: EXDEV: cross-device link not permitted,
@@ -80,7 +82,9 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
   }
 
   if (newPath != null && oldPath !== newPath) {
-    if (!(opts.dryRun != null && opts.dryRun)) fs.mkdirSync(path.dirname(newPath), { recursive: true })
+    if (!(opts.dryRun != null && opts.dryRun)) {
+      fs.mkdirSync(path.dirname(newPath), { recursive: true })
+    }
 
     const extension = getExtension(oldPath)
     if (extension === 'eps') {
@@ -91,8 +95,11 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
       moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts)
     }
 
-    // Beethoven.mp4 Beethoven.mp4.yml Beethoven.mp4_preview.jpg
-    for (const suffix of ['.yml', '_preview.jpg']) {
+    // Beethoven.mp4
+    // Beethoven.mp4.yml
+    // Beethoven.mp4_preview.jpg
+    // Beethoven.mp4_waveform.png
+    for (const suffix of ['.yml', '_preview.jpg', '_waveform.png']) {
       if (fs.existsSync(`${oldPath}${suffix}`)) {
         move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts)
       }

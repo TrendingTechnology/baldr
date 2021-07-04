@@ -39,19 +39,23 @@ const cli_utils_1 = require("@bldr/cli-utils");
 const media_manager_1 = require("@bldr/media-manager");
 const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
 const cmd = new cli_utils_1.CommandRunner({ verbose: true });
+const WAVEFORM_DEFAULT_HEIGHT = 500;
+const WAVEFORM_DEFAULT_WIDTH = 1000;
+// width = duration * factor
+const WAVEFORM_WIDTH_FACTOR = 20;
 function createAudioWaveForm(srcPath) {
     return __awaiter(this, void 0, void 0, function* () {
         const meta = yield audio_metadata_1.default(srcPath);
-        let width = '500';
+        let width = `${WAVEFORM_DEFAULT_WIDTH}`;
         if ((meta === null || meta === void 0 ? void 0 : meta.duration) != null) {
-            width = (meta.duration * 5).toFixed(0);
+            width = (meta.duration * WAVEFORM_WIDTH_FACTOR).toFixed(0);
         }
         const destPath = `${srcPath}_waveform.png`;
         cmd.execSync([
             'ffmpeg',
             // '-t', '60',
             '-i', srcPath,
-            '-filter_complex', `aformat=channel_layouts=mono,compand,showwavespic=size=${width}x500:colors=black`,
+            '-filter_complex', `aformat=channel_layouts=mono,compand,showwavespic=size=${width}x${WAVEFORM_DEFAULT_HEIGHT}:colors=black`,
             '-frames:v', '1',
             '-y',
             destPath

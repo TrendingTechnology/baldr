@@ -58,8 +58,9 @@ __exportStar(require("./yaml"), exports);
 function moveAsset(oldPath, newPath, opts = {}) {
     function move(oldPath, newPath, { copy, dryRun }) {
         if (copy != null && copy) {
-            if (!(dryRun != null && dryRun))
+            if (!(dryRun != null && dryRun)) {
                 fs_1.default.copyFileSync(oldPath, newPath);
+            }
         }
         else {
             if (!(dryRun != null && dryRun)) {
@@ -84,8 +85,9 @@ function moveAsset(oldPath, newPath, opts = {}) {
         }
     }
     if (newPath != null && oldPath !== newPath) {
-        if (!(opts.dryRun != null && opts.dryRun))
+        if (!(opts.dryRun != null && opts.dryRun)) {
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
+        }
         const extension = core_browser_1.getExtension(oldPath);
         if (extension === 'eps') {
             // Dippermouth-Blues.eps
@@ -94,8 +96,11 @@ function moveAsset(oldPath, newPath, opts = {}) {
             // Dippermouth-Blues-eps-converted-to.pdf
             moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts);
         }
-        // Beethoven.mp4 Beethoven.mp4.yml Beethoven.mp4_preview.jpg
-        for (const suffix of ['.yml', '_preview.jpg']) {
+        // Beethoven.mp4
+        // Beethoven.mp4.yml
+        // Beethoven.mp4_preview.jpg
+        // Beethoven.mp4_waveform.png
+        for (const suffix of ['.yml', '_preview.jpg', '_waveform.png']) {
             if (fs_1.default.existsSync(`${oldPath}${suffix}`)) {
                 move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts);
             }
