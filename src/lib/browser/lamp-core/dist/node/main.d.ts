@@ -1,4 +1,5 @@
 import type { LampTypes } from '@bldr/type-definitions';
+export { masterCollection } from './master-collection';
 /**
  * Validate the master specification. This function doesn’t change the
  * the input object. The input object is passed through unchanged. The
@@ -14,4 +15,3 @@ declare type StepProp = 'selector' | 'mode' | 'subset';
  * Map step support related props for the use as Vuejs props.
  */
 export declare function mapStepProps(selectors: StepProp[]): LampTypes.PropsDefintion;
-export {};

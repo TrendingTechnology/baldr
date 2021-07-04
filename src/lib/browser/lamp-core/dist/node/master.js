@@ -18,16 +18,13 @@ const core_browser_1 = require("@bldr/core-browser");
  */
 class MasterIcon {
     constructor({ name, color, size, showOnSlides }) {
-        if (size && !['small', 'large'].includes(size)) {
+        if (size != null && !['small', 'large'].includes(size)) {
             throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`);
         }
-        if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
-            throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`);
-        }
         this.name = name;
-        this.color = color || 'orange';
+        this.color = color != null ? color : 'orange';
         this.showOnSlides = showOnSlides !== false;
-        this.size = size || 'small';
+        this.size = size != null ? size : 'small';
     }
 }
 /**
@@ -52,7 +49,7 @@ class Master {
         const inlineMarkupProps = [];
         for (const propName in this.spec.propsDef) {
             const propDef = this.spec.propsDef[propName];
-            if (propDef.inlineMarkup) {
+            if (propDef.inlineMarkup != null && propDef.inlineMarkup) {
                 inlineMarkupProps.push(propName);
             }
         }
@@ -115,11 +112,12 @@ class Master {
     //   }
     // }
     convertMarkdownToHtml(props) {
-        if (!this.spec.propsDef)
+        if (this.spec.propsDef == null) {
             return props;
+        }
         for (const propName in props) {
             const prop = this.spec.propsDef[propName];
-            if ('markup' in prop && prop.markup) {
+            if (prop.markup != null && prop.markup) {
                 props[propName] = markdown_to_html_1.convertMarkdownToHtml(props[propName]);
             }
         }
@@ -127,17 +125,18 @@ class Master {
     }
     detectUnkownProps(props) {
         for (const propName in props) {
-            if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
+            if ((this.spec.propsDef != null) && !(propName in this.spec.propsDef)) {
                 throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`);
             }
         }
     }
     validateUris(props) {
-        if (!this.spec.propsDef)
+        if (this.spec.propsDef == null) {
             return props;
+        }
         for (const propName in props) {
             const prop = this.spec.propsDef[propName];
-            if ('assetUri' in prop && prop.assetUri) {
+            if (prop.assetUri != null) {
                 props[propName] = core_browser_1.validateUri(props[propName]);
             }
         }
@@ -152,7 +151,8 @@ class Master {
      *   with.
      */
     callHook(hookName, payload, thisArg) {
-        if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+        // eslint-disable-next-line
+        if ((this.spec.hooks != null) && this.spec.hooks[hookName] != null && typeof this.spec.hooks[hookName] === 'function') {
             if (thisArg != null) {
                 return this.spec.hooks[hookName].call(thisArg, payload);
             }
@@ -169,7 +169,8 @@ class Master {
      */
     callHookAsync(hookName, payload, thisArg) {
         return __awaiter(this, void 0, void 0, function* () {
-            if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+            // eslint-disable-next-line
+            if (this.spec.hooks != null && this.spec.hooks[hookName] != null && typeof this.spec.hooks[hookName] === 'function') {
                 if (thisArg != null) {
                     return this.spec.hooks[hookName].call(thisArg, payload);
                 }
@@ -180,36 +181,36 @@ class Master {
     normalizeProps(propsRaw) {
         return this.callHook('normalizeProps', propsRaw);
     }
-    resolveMediaUris(props) {
-        let uris = this.callHook('resolveMediaUris', props);
+    normalizeUris(uris) {
+        let normalizedUris;
         // To allow undefined return values of the hooks.
-        if (!uris) {
-            uris = new Set();
+        if (uris == null) {
+            normalizedUris = new Set();
         }
         else if (typeof uris === 'string') {
-            uris = new Set([uris]);
+            normalizedUris = new Set([uris]);
         }
         else if (Array.isArray(uris)) {
-            uris = new Set(uris);
+            normalizedUris = new Set(uris);
         }
+        else {
+            normalizedUris = null;
+        }
+        if (normalizedUris != null && normalizedUris.size > 0) {
+            return normalizedUris;
+        }
+    }
+    resolveMediaUris(props) {
+        const uris = this.callHook('resolveMediaUris', props);
         // const inlineUris = this.extractInlineMediaUris(props)
         // for (const uri of inlineUris) {
         //   uris.add(uri)
         // }
-        if (uris.size)
-            return uris;
+        return this.normalizeUris(uris);
     }
     resolveOptionalMediaUris(props) {
-        let uris = this.callHook('resolveOptionalMediaUris', props);
-        // To allow undefined return values of the hooks.
-        if (!uris) {
-            uris = new Set();
-        }
-        else if (typeof uris === 'string') {
-            uris = new Set([uris]);
-        }
-        if (uris.size)
-            return uris;
+        const uris = this.callHook('resolveOptionalMediaUris', props);
+        return this.normalizeUris(uris);
     }
     afterLoading(props, thisArg) {
         this.callHook('afterLoading', { props, master: this }, thisArg);
@@ -221,16 +222,19 @@ class Master {
     }
     collectPropsMain(props, thisArg) {
         const propsMain = this.callHook('collectPropsMain', props, thisArg);
-        if (propsMain)
+        if (propsMain != null) {
             return propsMain;
+        }
         return props;
     }
     collectPropsPreview(payload, thisArg) {
         const propsPreview = this.callHook('collectPropsPreview', payload, thisArg);
-        if (propsPreview)
+        if (propsPreview != null) {
             return propsPreview;
-        if (payload.propsMain)
+        }
+        if (payload.propsMain != null) {
             return payload.propsMain;
+        }
         return payload.props;
     }
     calculateStepCount(payload, thisArg) {

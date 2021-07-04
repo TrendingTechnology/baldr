@@ -1,5 +1,6 @@
-import { Master } from './master'
 import type { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
+
+import { Master } from './master'
 import { convertToString } from '@bldr/core-browser'
 
 /**
@@ -14,8 +15,6 @@ export class MasterCollection {
   constructor () {
     /**
      * A container object for all master objects.
-     *
-     * @type {Object}
      */
     this.masters = {}
   }
@@ -28,8 +27,7 @@ export class MasterCollection {
   }
 
   createMasterBySpec (masterSpec: LampTypes.MasterSpec): void {
-    const master = new Master(masterSpec)
-    this.add(master)
+    this.add(new Master(masterSpec))
   }
 
   /**
@@ -38,7 +36,7 @@ export class MasterCollection {
    * @param name - The name of the master slide.
    */
   get (name: string): Master {
-    if (!(name in this.masters)) {
+    if (this.masters[name] != null) {
       throw new Error(`Class Masters.get(): No master named “${name}”`)
     }
     return this.masters[name]
@@ -66,8 +64,7 @@ export class MasterCollection {
    * @param name - The name of the master slide.
    */
   exists (name: string): boolean {
-    if (name in this.masters) return true
-    return false
+    return this.masters[name] != null
   }
 
   /**

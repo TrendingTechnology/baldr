@@ -10,8 +10,6 @@ class MasterCollection {
     constructor() {
         /**
          * A container object for all master objects.
-         *
-         * @type {Object}
          */
         this.masters = {};
     }
@@ -22,8 +20,7 @@ class MasterCollection {
         this.masters[master.name] = master;
     }
     createMasterBySpec(masterSpec) {
-        const master = new master_1.Master(masterSpec);
-        this.add(master);
+        this.add(new master_1.Master(masterSpec));
     }
     /**
      * Get a master object by the master name.
@@ -31,7 +28,7 @@ class MasterCollection {
      * @param name - The name of the master slide.
      */
     get(name) {
-        if (!(name in this.masters)) {
+        if (this.masters[name] != null) {
             throw new Error(`Class Masters.get(): No master named “${name}”`);
         }
         return this.masters[name];
@@ -56,9 +53,7 @@ class MasterCollection {
      * @param name - The name of the master slide.
      */
     exists(name) {
-        if (name in this.masters)
-            return true;
-        return false;
+        return this.masters[name] != null;
     }
     /**
      * Find the name of the master by getting the intersection between all master

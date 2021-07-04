@@ -37,18 +37,14 @@ class MasterIcon implements LampTypes.MasterIconSpec {
   showOnSlides: boolean
 
   constructor ({ name, color, size, showOnSlides }: LampTypes.MasterIconSpec) {
-    if (size && !['small', 'large'].includes(size)) {
+    if (size != null && !['small', 'large'].includes(size)) {
       throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
     }
 
-    if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
-      throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`)
-    }
-
     this.name = name
-    this.color = color || 'orange'
+    this.color = color != null ? color : 'orange'
     this.showOnSlides = showOnSlides !== false
-    this.size = size || 'small'
+    this.size = size != null ? size : 'small'
   }
 }
 
@@ -60,8 +56,8 @@ export class Master implements LampTypes.Master {
   documentation?: string
 
   /**
-     * The specification of the master slide provided by a master package.
-     */
+   * The specification of the master slide provided by a master package.
+   */
   private readonly spec: LampTypes.MasterSpec
 
   /**
@@ -85,7 +81,7 @@ export class Master implements LampTypes.Master {
     const inlineMarkupProps = []
     for (const propName in this.spec.propsDef) {
       const propDef = this.spec.propsDef[propName]
-      if (propDef.inlineMarkup) {
+      if (propDef.inlineMarkup != null && propDef.inlineMarkup) {
         inlineMarkupProps.push(propName)
       }
     }
@@ -154,10 +150,12 @@ export class Master implements LampTypes.Master {
   // }
 
   convertMarkdownToHtml (props: LampTypes.StringObject): LampTypes.StringObject {
-    if (!this.spec.propsDef) return props
+    if (this.spec.propsDef == null) {
+      return props
+    }
     for (const propName in props) {
       const prop = this.spec.propsDef[propName]
-      if ('markup' in prop && prop.markup) {
+      if (prop.markup != null && prop.markup) {
         props[propName] = convertMarkdownToHtml(props[propName])
       }
     }
@@ -166,17 +164,19 @@ export class Master implements LampTypes.Master {
 
   detectUnkownProps (props: LampTypes.StringObject): void {
     for (const propName in props) {
-      if (this.spec.propsDef && !(propName in this.spec.propsDef)) {
+      if ((this.spec.propsDef != null) && !(propName in this.spec.propsDef)) {
         throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
       }
     }
   }
 
   validateUris (props: LampTypes.StringObject): LampTypes.StringObject {
-    if (!this.spec.propsDef) return props
+    if (this.spec.propsDef == null) {
+      return props
+    }
     for (const propName in props) {
       const prop = this.spec.propsDef[propName]
-      if ('assetUri' in prop && prop.assetUri) {
+      if (prop.assetUri != null) {
         props[propName] = validateUri(props[propName])
       }
     }
@@ -192,7 +192,8 @@ export class Master implements LampTypes.Master {
    *   with.
    */
   private callHook (hookName: string, payload: any, thisArg?: ThisArg): any {
-    if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+    // eslint-disable-next-line
+    if ((this.spec.hooks != null) && this.spec.hooks[hookName] != null && typeof this.spec.hooks[hookName] === 'function') {
       if (thisArg != null) {
         return this.spec.hooks[hookName].call(thisArg, payload)
       }
@@ -209,7 +210,8 @@ export class Master implements LampTypes.Master {
    *   with.
    */
   private async callHookAsync (hookName: string, payload: any, thisArg?: ThisArg): Promise<any> {
-    if ((this.spec.hooks != null) && this.spec.hooks[hookName] && typeof this.spec.hooks[hookName] === 'function') {
+    // eslint-disable-next-line
+    if (this.spec.hooks != null && this.spec.hooks[hookName] != null && typeof this.spec.hooks[hookName] === 'function') {
       if (thisArg != null) {
         return this.spec.hooks[hookName].call(thisArg, payload)
       }
@@ -221,36 +223,37 @@ export class Master implements LampTypes.Master {
     return this.callHook('normalizeProps', propsRaw)
   }
 
-  resolveMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
-    let uris = this.callHook('resolveMediaUris', props)
-
+  private normalizeUris (uris?: Set<string> | string | string[]): Set<string> | undefined {
+    let normalizedUris: Set<string> | null
     // To allow undefined return values of the hooks.
-    if (!uris) {
-      uris = new Set()
+    if (uris == null) {
+      normalizedUris = new Set()
     } else if (typeof uris === 'string') {
-      uris = new Set([uris])
+      normalizedUris = new Set([uris])
     } else if (Array.isArray(uris)) {
-      uris = new Set(uris)
+      normalizedUris = new Set(uris)
+    } else {
+      normalizedUris = null
     }
+    if (normalizedUris != null && normalizedUris.size > 0) {
+      return normalizedUris
+    }
+  }
+
+  resolveMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
+    const uris = this.callHook('resolveMediaUris', props)
 
     // const inlineUris = this.extractInlineMediaUris(props)
     // for (const uri of inlineUris) {
     //   uris.add(uri)
     // }
 
-    if (uris.size) return uris
+    return this.normalizeUris(uris)
   }
 
   resolveOptionalMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
-    let uris = this.callHook('resolveOptionalMediaUris', props)
-
-    // To allow undefined return values of the hooks.
-    if (!uris) {
-      uris = new Set()
-    } else if (typeof uris === 'string') {
-      uris = new Set([uris])
-    }
-    if (uris.size) return uris
+    const uris = this.callHook('resolveOptionalMediaUris', props)
+    return this.normalizeUris(uris)
   }
 
   afterLoading (props: LampTypes.StringObject, thisArg: ThisArg): void {
@@ -263,14 +266,20 @@ export class Master implements LampTypes.Master {
 
   collectPropsMain (props: LampTypes.StringObject, thisArg: ThisArg): LampTypes.StringObject {
     const propsMain = this.callHook('collectPropsMain', props, thisArg)
-    if (propsMain) return propsMain
+    if (propsMain != null) {
+      return propsMain
+    }
     return props
   }
 
   collectPropsPreview (payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringObject {
     const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
-    if (propsPreview) return propsPreview
-    if (payload.propsMain) return payload.propsMain
+    if (propsPreview != null) {
+      return propsPreview
+    }
+    if (payload.propsMain != null) {
+      return payload.propsMain
+    }
     return payload.props
   }
 

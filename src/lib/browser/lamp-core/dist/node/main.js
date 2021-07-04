@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mapStepProps = exports.validateMasterSpec = void 0;
+exports.mapStepProps = exports.validateMasterSpec = exports.masterCollection = void 0;
+var master_collection_1 = require("./master-collection");
+Object.defineProperty(exports, "masterCollection", { enumerable: true, get: function () { return master_collection_1.masterCollection; } });
 /**
  * Validate the master specification. This function doesn’t change the
  * the input object. The input object is passed through unchanged. The

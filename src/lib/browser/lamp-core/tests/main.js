@@ -1,6 +1,5 @@
 import path from 'path'
 
-import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/core-node'
 import config from '@bldr/config'
 

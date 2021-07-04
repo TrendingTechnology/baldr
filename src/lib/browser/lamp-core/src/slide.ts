@@ -25,7 +25,7 @@ class SlideMetaData implements LampTypes.SlideMeta {
 
   private cutAndConvert (property: string): any {
     const value = this.raw.cut(property)
-    if (value) {
+    if (value != null) {
       return convertMarkdownToHtml(value)
     }
   }

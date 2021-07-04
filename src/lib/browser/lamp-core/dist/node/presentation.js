@@ -56,7 +56,7 @@ class Presentation {
                 slidesTree.push(slide);
                 slide.no = slidesFlat.length;
                 slide.level = level;
-                if (childSlides && Array.isArray(childSlides)) {
+                if (childSlides != null && Array.isArray(childSlides)) {
                     Presentation.parseSlidesRecursive(childSlides, slidesFlat, slide.slides, level + 1);
                 }
             }

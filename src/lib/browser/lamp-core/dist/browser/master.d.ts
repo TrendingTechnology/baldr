@@ -37,8 +37,8 @@ export declare class Master implements LampTypes.Master {
     icon: MasterIcon;
     documentation?: string;
     /**
-       * The specification of the master slide provided by a master package.
-       */
+     * The specification of the master slide provided by a master package.
+     */
     private readonly spec;
     /**
      * @param spec - The specification of the master slide provided by a master
@@ -77,6 +77,7 @@ export declare class Master implements LampTypes.Master {
      */
     private callHookAsync;
     normalizeProps(propsRaw: any): LampTypes.StringObject;
+    private normalizeUris;
     resolveMediaUris(props: LampTypes.StringObject): Set<string> | undefined;
     resolveOptionalMediaUris(props: LampTypes.StringObject): Set<string> | undefined;
     afterLoading(props: LampTypes.StringObject, thisArg: ThisArg): void;

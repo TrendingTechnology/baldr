@@ -1,5 +1,7 @@
 import type { LampTypes } from '@bldr/type-definitions'
 
+export { masterCollection } from './master-collection'
+
 /**
  * Validate the master specification. This function doesn’t change the
  * the input object. The input object is passed through unchanged. The

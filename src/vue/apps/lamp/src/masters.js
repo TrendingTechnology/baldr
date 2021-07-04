@@ -14,6 +14,8 @@ import SlidePreviewPlayButton from './components/SlidesPreview/PlayButton.vue'
 import store from './store/index.js'
 import Vue from 'vue'
 
+import { masterCollection } from '@bldr/lamp-core'
+
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -840,6 +842,7 @@ function registerMasters () {
     checkExport(fileName, masterObj)
     const master = new Master(masterSpec)
     masters.add(master)
+    masterCollection.add(master)
   })
 
   const requireComponentMain = require.context('./masters', true, /.+main\.vue$/)
