@@ -4,7 +4,7 @@
     :class="['vc_master_icon', master.icon.size]"
     b-content-theme="default"
   >
-    <material-icon
+    <color-icon
       :name="master.icon.name"
       :color="master.icon.color"
     />

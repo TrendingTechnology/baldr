@@ -18,8 +18,8 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'trumpet',
-    color: 'gray'
+    name: 'instrument',
+    color: 'yellow'
   },
   styleConfig: {
     centerVertically: true,

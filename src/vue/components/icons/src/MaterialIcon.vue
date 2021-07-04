@@ -1,5 +1,6 @@
 <script>
 import icons from './icons.json'
+import { validateColorName } from './main.js'
 
 export default {
   name: 'MaterialIcon',
@@ -13,42 +14,7 @@ export default {
     color: {
       type: String,
       default: 'black',
-      validator: function (value) {
-        return [
-          'white',
-          'yellow',
-          'orange',
-          'red',
-          'brown',
-          'gray',
-          'green',
-          'blue',
-          'purple',
-          'black',
-          //
-          'white-light',
-          'yellow-light',
-          'orange-light',
-          'red-light',
-          'brown-light',
-          'gray-light',
-          'green-light',
-          'blue-light',
-          'purple-light',
-          'black-light',
-          //
-          'white-dark',
-          'yellow-dark',
-          'orange-dark',
-          'red-dark',
-          'brown-dark',
-          'gray-dark',
-          'green-dark',
-          'blue-dark',
-          'purple-dark',
-          'black-dark'
-        ].includes(value)
-      }
+      validator: validateColorName
     },
     href: {
       type: String

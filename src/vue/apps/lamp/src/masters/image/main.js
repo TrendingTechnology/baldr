@@ -96,7 +96,7 @@ export default validateMasterSpec({
         return asset.yaml.title
       }
     },
-    afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
+    afterSlideNoChangeOnComponent ({ }) {
       // overlay
       const slide = this.$get('slide')
 

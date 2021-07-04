@@ -274,7 +274,6 @@ interface MasterHooks {
      * ```js
      * export const default = {
      *   hooks: {
-     *     // Called when leaving a slide.
      *     leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
      *     }
      *   }
@@ -295,7 +294,6 @@ interface MasterHooks {
      * ```js
      * export const default = {
      *   hooks: {
-     *     // Called when entering a slide.
      *     enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
      *     }
      *   }
@@ -310,6 +308,16 @@ interface MasterHooks {
      *
      * - `this`: is the Vue instance of the current main master component.
      * - called from the master component mixin in the file `masters.js`.
+     *
+     * ```js
+     * export const default = {
+     *   hooks: {
+     *     afterSlideNoChangeOnComponent ({ oldSlide, oldProps, newSlide, newProps }) {
+     *       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
+     *     }
+     *   }
+     * }
+     * ```
      */
     afterSlideNoChangeOnComponent?: (payload: OldAndNewPropsAndSlide) => void;
     /**
@@ -324,7 +332,6 @@ interface MasterHooks {
      * ```js
      * export const default = {
      *   hooks: {
-     *     // Called when leaving a step.
      *     leaveStep ({ oldStepNo, newStepNo }) {
      *     }
      *   }
@@ -344,7 +351,6 @@ interface MasterHooks {
      * ```js
      * export const default = {
      *   hooks: {
-     *     // Called when entering a step.
      *     enterStep ({ oldStepNo, newStepNo }) {
      *       if (this.stepMode) {
      *         this.domSteps.displayByNo({
@@ -364,6 +370,22 @@ interface MasterHooks {
      *
      * - `this`: is the Vue instance of the current main master component.
      * - called from the master component mixin in the file `masters.js`.
+     *
+     * ```js
+     * export const default = {
+     *   hooks: {
+     *     afterStepNoChangeOnComponent ({ oldStepNo, newStepNo, slideNoChange }) {
+     *       const options = { stepNo: newStepNo }
+     *       if (slideNoChange) {
+     *         options.full = true
+     *       } else {
+     *         options.oldStepNo = oldStepNo
+     *       }
+     *       this.domSteps.displayByNo(options)
+     *     }
+     *   }
+     * }
+     * ```
      */
     afterStepNoChangeOnComponent?: (payload: OldAndNewStepNoAndSlideNoChange) => void;
     /**

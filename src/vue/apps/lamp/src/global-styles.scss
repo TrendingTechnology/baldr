@@ -121,7 +121,17 @@ body {
   width: 100%;
 }
 
-// Center vertically and horizontally
+/**
+ * Center vertically and horizontally
+ *
+ * <div class="
+ *   parent
+ *   slide-preview-valign-center
+ *   slide-preview-fullscreen
+ * ">
+ *   <div class="inner">{{ to }}</div>
+ * </div>
+ */
 .slide-preview-valign-center {
   display: flex;
   flex-direction: column;

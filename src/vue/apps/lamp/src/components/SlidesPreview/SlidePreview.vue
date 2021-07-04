@@ -5,7 +5,7 @@
     :class="{ 'current-slide': slideCurrent && slideCurrent.no === slide.no }"
     :b-dark-mode="slide.master.styleConfig.darkMode"
   >
-    <material-icon
+    <color-icon
       class="preview-master-icon"
       v-if="slide.master.icon.showOnSlides"
       :name="slide.master.icon.name"

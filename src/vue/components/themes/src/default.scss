@@ -272,6 +272,18 @@ $link-color: scale-color($gray, $lightness: -40%);
 
 [b-dark-mode="false"] {
   // all
+  .text-white {
+    color: $black !important;
+  }
+
+  .text-white-light {
+    color: scale-color($black, $lightness: 30%) !important;
+  }
+
+  .text-white-dark {
+    color: scale-color($black, $lightness: -30%) !important;
+  }
+
   [b-ui-theme="default"], [b-content-theme="default"] {
     background-color: $white;
     color: $black;
@@ -288,6 +300,19 @@ $link-color: scale-color($gray, $lightness: -40%);
 
  [b-dark-mode="true"] {
   // all
+
+  .text-black {
+    color: $white !important;
+  }
+
+  .text-black-light {
+    color: scale-color($white, $lightness: 30%) !important;
+  }
+
+  .text-black-dark {
+    color: scale-color($white, $lightness: -30%) !important;
+  }
+
   [b-ui-theme="default"], [b-content-theme="default"] {
     background-color: $black;
     color: $white;
