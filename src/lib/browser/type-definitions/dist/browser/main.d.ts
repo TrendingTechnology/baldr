@@ -7,7 +7,7 @@ export * from './config';
 export interface StringIndexedObject {
     [key: string]: any;
 }
-export interface StringIndexedStringObject {
+export interface StringIndexedStringIndexedData {
     [key: string]: string;
 }
 export interface GenericError {

@@ -8,7 +8,7 @@ export * from './config'
 
 export interface StringIndexedObject { [key: string]: any }
 
-export interface StringIndexedStringObject { [key: string]: string }
+export interface StringIndexedStringIndexedData { [key: string]: string }
 
 export interface GenericError {
   name: string

@@ -6,7 +6,7 @@
 
 import { convertSnakeToCamel, convertCamelToSnake } from './string-format'
 
-interface StringObject {
+interface StringIndexedData {
   [key: string]: any
 }
 
@@ -27,7 +27,7 @@ enum PropertyConvertDirection {
  */
 export function convertProperties (data: any, direction: PropertyConvertDirection = PropertyConvertDirection.SNAKE_TO_CAMEL): object {
   // To perserve the order of the props.
-  let newObject: StringObject | null = null
+  let newObject: StringIndexedData | null = null
 
   // Array
   if (Array.isArray(data)) {

@@ -5,23 +5,43 @@
     slide-preview-fullscreen
     sans
   ">
-    <div class="inner">{{ to }}</div>
+    <div class="inner">{{ fromFormatted }} - {{ toFormatted }}</div>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    to: {
-      type: Number,
-      required: true
-    }
+<script lang="ts">
+import type { Format } from './main'
+
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+import { formatCounterNumber } from './main'
+
+@Component
+export default class CounterMasterPreview extends Vue {
+  @Prop({
+    type: Number,
+    required: true
+  })
+  to!: number
+
+  @Prop({
+    type: String
+  })
+  format!: Format
+
+  @Prop({
+    type: String
+  })
+  toFormatted!: String
+
+  get fromFormatted (): string {
+    return formatCounterNumber(1, this.format)
   }
 }
 </script>
 
 <style lang="scss">
   .vc_counter_master_preview {
-    font-size: 10em;
+    font-size: 7em;
   }
 </style>

@@ -1,5 +1,8 @@
-export interface StringObject {
-    [key: string]: any;
+/**
+ * Some data indexed by strings
+ */
+export interface StringIndexedData {
+    [propName: string]: any;
 }
 /**
  * The
@@ -8,28 +11,28 @@ export interface StringObject {
  */
 declare type ThisArg = object;
 export interface PropsAndMaster {
-    props: StringObject;
+    props: StringIndexedData;
     master: Master;
 }
 export interface PropsAndSlide {
-    props: StringObject;
-    propsMain: StringObject;
+    props: StringIndexedData;
+    propsMain: StringIndexedData;
     slide: object;
 }
 export interface PropsSlideAndMaster extends PropsAndSlide {
-    propsPreview: StringObject;
+    propsPreview: StringIndexedData;
     master: object;
 }
 export interface PropsBundle {
-    props: StringObject;
-    propsMain: StringObject;
-    propsPreview: StringObject;
+    props: StringIndexedData;
+    propsMain: StringIndexedData;
+    propsPreview: StringIndexedData;
 }
 export interface OldAndNewPropsAndSlide {
     oldSlide: object;
-    oldProps: StringObject;
+    oldProps: StringIndexedData;
     newSlide: object;
-    newProps: StringObject;
+    newProps: StringIndexedData;
 }
 export interface OldAndNewStepNo {
     oldStepNo: number;
@@ -62,7 +65,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    normalizeProps?: (props: any) => StringObject;
+    normalizeProps?: (props: any) => StringIndexedData;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -83,7 +86,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    resolveMediaUris?: (props: StringObject) => string | string[] | Set<string>;
+    resolveMediaUris?: (props: StringIndexedData) => string | string[] | Set<string>;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master
@@ -102,7 +105,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    resolveOptionalMediaUris?: (props: StringObject) => string | string[];
+    resolveOptionalMediaUris?: (props: StringIndexedData) => string | string[];
     /**
      * This hook after is called after loading. To load resources in the
      * background. Goes in the background. Called during the parsing the YAML file
@@ -173,7 +176,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    collectPropsMain?: (payload: PropsAndSlide) => StringObject;
+    collectPropsMain?: (props: StringIndexedData) => StringIndexedData;
     /**
      * Collect the props (properties) for the preview Vue component. Called
      * during the parsing the YAML file (`Praesentation.baldr.yml`).
@@ -190,7 +193,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    collectPropsPreview?: (payload: PropsAndSlide) => StringObject;
+    collectPropsPreview?: (payload: PropsAndSlide) => StringIndexedData;
     /**
      * Calculate from the given props the step count. This hook method is called
      * after media resolution. Called during the parsing the YAML file
@@ -266,7 +269,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    plainTextFromProps?: (props: StringObject) => string;
+    plainTextFromProps?: (props: StringIndexedData) => string;
     /**
      * Called when leaving a slide. This hook is triggered by the Vue lifecycle
      * hook `beforeDestroy`.
@@ -565,22 +568,22 @@ export interface Master {
     /**
      * Convert in the props certain strings containing markup to HTML.
      */
-    convertMarkdownToHtml: (props: StringObject) => StringObject;
+    convertMarkdownToHtml: (props: StringIndexedData) => StringIndexedData;
     /**
      * Raise an error if there is an unkown prop - a not in the `props` section
      * defined prop.
      */
-    detectUnkownProps: (props: StringObject) => void;
+    detectUnkownProps: (props: StringIndexedData) => void;
     /**
      * Validate all media file URIs in the props of a certain slide.
      */
-    validateUris: (props: StringObject) => StringObject;
+    validateUris: (props: StringIndexedData) => StringIndexedData;
     /**
      * Normalize the properties so the result fits to props defintion of the
      * master slide.. Called during the parsing the YAML file
      * (`Praesentation.baldr.yml`)
      */
-    normalizeProps: (propsRaw: any) => StringObject;
+    normalizeProps: (propsRaw: any) => StringIndexedData;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -588,7 +591,7 @@ export interface Master {
      * (like [id:beethoven, ref:mozart]). Extract media URIs from
      * the text props.
      */
-    resolveMediaUris: (props: StringObject) => Set<string> | undefined;
+    resolveMediaUris: (props: StringIndexedData) => Set<string> | undefined;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master
@@ -596,7 +599,7 @@ export interface Master {
      * be resolved. Called during the parsing the YAML file
      * (`Praesentation.baldr.yml`).
      */
-    resolveOptionalMediaUris: (props: StringObject) => Set<string> | undefined;
+    resolveOptionalMediaUris: (props: StringIndexedData) => Set<string> | undefined;
     /**
      * This hook after is called after loading. To load resources in the
      * background. Goes in the background. Called during the parsing the YAML file
@@ -606,7 +609,7 @@ export interface Master {
      *
      * @param props - The properties of the slide.
      */
-    afterLoading: (props: StringObject, thisArg: ThisArg) => void;
+    afterLoading: (props: StringIndexedData, thisArg: ThisArg) => void;
     /**
      * This hook gets executed after the media resolution. Wait for this hook to
      * finish. Go not in the background. Called during the parsing the YAML file
@@ -616,7 +619,7 @@ export interface Master {
      *
      * @param props - The properties of the slide.
      */
-    afterMediaResolution: (props: StringObject, thisArg: ThisArg) => Promise<void>;
+    afterMediaResolution: (props: StringIndexedData, thisArg: ThisArg) => Promise<void>;
     /**
      * Collect the props (properties) for the main Vue component.
      *
@@ -624,7 +627,7 @@ export interface Master {
      *
      * @returns The props for the main component as a object.
      */
-    collectPropsMain: (props: StringObject, thisArg: ThisArg) => StringObject;
+    collectPropsMain: (props: StringIndexedData, thisArg: ThisArg) => StringIndexedData;
     /**
      * Collect the props (properties) for the preview Vue component. Called
      * during the parsing the YAML file (`Praesentation.baldr.yml`).
@@ -633,7 +636,7 @@ export interface Master {
      *
      * @returns The props for the preview component as a object.
      */
-    collectPropsPreview: (payload: PropsAndSlide, thisArg: ThisArg) => StringObject;
+    collectPropsPreview: (payload: PropsAndSlide, thisArg: ThisArg) => StringIndexedData;
     /**
      * Calculate from the given props the step count. This hook method is called
      * after media resolution. Called during the parsing the YAML file
@@ -753,15 +756,15 @@ export interface Slide {
      * The normalized slide data. This data gets passed through the master slide
      * and then to the props of the Vue components.
      */
-    props: StringObject;
+    props: StringIndexedData;
     /**
      * Props (properties) to send to the main Vue master component.
      */
-    propsMain?: StringObject;
+    propsMain?: StringIndexedData;
     /**
      * Props (properties) to send to the preview Vue master component.
      */
-    propsPreview?: StringObject;
+    propsPreview?: StringIndexedData;
     /**
      * A list of media URIs.
      */

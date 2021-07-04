@@ -796,11 +796,15 @@ const masterMixin = {
         slideNoChange: true
       }, this)
     }
-    if (this.isPublic) customStore.vueMasterInstanceCurrent = this
+    if (this.isPublic) {
+      customStore.vueMasterInstanceCurrent = this
+    }
     inlineMarkup.makeReactive()
   },
   beforeDestroy () {
-    if (this.isPublic) customStore.vueMasterInstanceCurrent = null
+    if (this.isPublic) {
+      customStore.vueMasterInstanceCurrent = null
+    }
   }
 }
 
@@ -832,7 +836,7 @@ function registerMasters () {
   }
 
   const masters = new Masters()
-  const requireMaster = require.context('./masters', true, /.+main\.js$/)
+  const requireMaster = require.context('./masters', true, /.+main\.(js|ts)$/)
   requireMaster.keys().forEach((fileName) => {
     // ./masterName/main.js
     const masterName = findMasterName(fileName)

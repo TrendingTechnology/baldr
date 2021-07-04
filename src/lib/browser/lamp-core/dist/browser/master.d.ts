@@ -55,9 +55,9 @@ export declare class Master implements LampTypes.Master {
      * Replace the inline media tags `[id:Beethoven]` in certain props with
      * HTML. This function must be called after the media resolution.
      */
-    convertMarkdownToHtml(props: LampTypes.StringObject): LampTypes.StringObject;
-    detectUnkownProps(props: LampTypes.StringObject): void;
-    validateUris(props: LampTypes.StringObject): LampTypes.StringObject;
+    convertMarkdownToHtml(props: LampTypes.StringIndexedData): LampTypes.StringIndexedData;
+    detectUnkownProps(props: LampTypes.StringIndexedData): void;
+    validateUris(props: LampTypes.StringIndexedData): LampTypes.StringIndexedData;
     /**
      * Call a master hook. Master hooks are definied in the `main.js`
      * files.
@@ -76,14 +76,14 @@ export declare class Master implements LampTypes.Master {
      *   with.
      */
     private callHookAsync;
-    normalizeProps(propsRaw: any): LampTypes.StringObject;
+    normalizeProps(propsRaw: any): LampTypes.StringIndexedData;
     private normalizeUris;
-    resolveMediaUris(props: LampTypes.StringObject): Set<string> | undefined;
-    resolveOptionalMediaUris(props: LampTypes.StringObject): Set<string> | undefined;
-    afterLoading(props: LampTypes.StringObject, thisArg: ThisArg): void;
-    afterMediaResolution(props: LampTypes.StringObject, thisArg: ThisArg): Promise<void>;
-    collectPropsMain(props: LampTypes.StringObject, thisArg: ThisArg): LampTypes.StringObject;
-    collectPropsPreview(payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringObject;
+    resolveMediaUris(props: LampTypes.StringIndexedData): Set<string> | undefined;
+    resolveOptionalMediaUris(props: LampTypes.StringIndexedData): Set<string> | undefined;
+    afterLoading(props: LampTypes.StringIndexedData, thisArg: ThisArg): void;
+    afterMediaResolution(props: LampTypes.StringIndexedData, thisArg: ThisArg): Promise<void>;
+    collectPropsMain(props: LampTypes.StringIndexedData, thisArg: ThisArg): LampTypes.StringIndexedData;
+    collectPropsPreview(payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringIndexedData;
     calculateStepCount(payload: LampTypes.PropsSlideAndMaster, thisArg: ThisArg): number;
     titleFromProps(payload: LampTypes.PropsBundle): string;
     plainTextFromProps(props: any): string;

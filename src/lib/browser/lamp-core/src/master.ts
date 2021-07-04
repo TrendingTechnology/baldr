@@ -91,7 +91,7 @@ export class Master implements LampTypes.Master {
   /**
    * Filter the master props for props which are supporting inline media.
    */
-  // extractInlineMediaUris (props: LampTypes.StringObject): Set<string> {
+  // extractInlineMediaUris (props: LampTypes.StringIndexedData): Set<string> {
   //   const uris = new Set<string>()
 
   //   function extractUrisInText (text: string) {
@@ -123,7 +123,7 @@ export class Master implements LampTypes.Master {
    * Replace the inline media tags `[id:Beethoven]` in certain props with
    * HTML. This function must be called after the media resolution.
    */
-  // renderInlineMedia (props: LampTypes.StringObject) {
+  // renderInlineMedia (props: LampTypes.StringIndexedData) {
   //   /**
   //    * @param {String} text
   //    */
@@ -149,7 +149,7 @@ export class Master implements LampTypes.Master {
   //   }
   // }
 
-  convertMarkdownToHtml (props: LampTypes.StringObject): LampTypes.StringObject {
+  convertMarkdownToHtml (props: LampTypes.StringIndexedData): LampTypes.StringIndexedData {
     if (this.spec.propsDef == null) {
       return props
     }
@@ -162,7 +162,7 @@ export class Master implements LampTypes.Master {
     return props
   }
 
-  detectUnkownProps (props: LampTypes.StringObject): void {
+  detectUnkownProps (props: LampTypes.StringIndexedData): void {
     for (const propName in props) {
       if ((this.spec.propsDef != null) && !(propName in this.spec.propsDef)) {
         throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
@@ -170,7 +170,7 @@ export class Master implements LampTypes.Master {
     }
   }
 
-  validateUris (props: LampTypes.StringObject): LampTypes.StringObject {
+  validateUris (props: LampTypes.StringIndexedData): LampTypes.StringIndexedData {
     if (this.spec.propsDef == null) {
       return props
     }
@@ -219,7 +219,7 @@ export class Master implements LampTypes.Master {
     }
   }
 
-  normalizeProps (propsRaw: any): LampTypes.StringObject {
+  normalizeProps (propsRaw: any): LampTypes.StringIndexedData {
     return this.callHook('normalizeProps', propsRaw)
   }
 
@@ -240,7 +240,7 @@ export class Master implements LampTypes.Master {
     }
   }
 
-  resolveMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
+  resolveMediaUris (props: LampTypes.StringIndexedData): Set<string> | undefined {
     const uris = this.callHook('resolveMediaUris', props)
 
     // const inlineUris = this.extractInlineMediaUris(props)
@@ -251,20 +251,20 @@ export class Master implements LampTypes.Master {
     return this.normalizeUris(uris)
   }
 
-  resolveOptionalMediaUris (props: LampTypes.StringObject): Set<string> | undefined {
+  resolveOptionalMediaUris (props: LampTypes.StringIndexedData): Set<string> | undefined {
     const uris = this.callHook('resolveOptionalMediaUris', props)
     return this.normalizeUris(uris)
   }
 
-  afterLoading (props: LampTypes.StringObject, thisArg: ThisArg): void {
+  afterLoading (props: LampTypes.StringIndexedData, thisArg: ThisArg): void {
     this.callHook('afterLoading', { props, master: this }, thisArg)
   }
 
-  async afterMediaResolution (props: LampTypes.StringObject, thisArg: ThisArg): Promise<void> {
+  async afterMediaResolution (props: LampTypes.StringIndexedData, thisArg: ThisArg): Promise<void> {
     await this.callHookAsync('afterMediaResolution', { props, master: this }, thisArg)
   }
 
-  collectPropsMain (props: LampTypes.StringObject, thisArg: ThisArg): LampTypes.StringObject {
+  collectPropsMain (props: LampTypes.StringIndexedData, thisArg: ThisArg): LampTypes.StringIndexedData {
     const propsMain = this.callHook('collectPropsMain', props, thisArg)
     if (propsMain != null) {
       return propsMain
@@ -272,7 +272,7 @@ export class Master implements LampTypes.Master {
     return props
   }
 
-  collectPropsPreview (payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringObject {
+  collectPropsPreview (payload: LampTypes.PropsAndSlide, thisArg: ThisArg): LampTypes.StringIndexedData {
     const propsPreview = this.callHook('collectPropsPreview', payload, thisArg)
     if (propsPreview != null) {
       return propsPreview

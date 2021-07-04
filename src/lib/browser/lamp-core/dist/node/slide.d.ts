@@ -9,9 +9,9 @@ export declare class Slide implements LampTypes.Slide {
     meta: LampTypes.SlideMeta;
     slides: Slide[];
     master: LampTypes.Master;
-    props: LampTypes.StringObject;
-    propsMain?: LampTypes.StringObject;
-    propsPreview?: LampTypes.StringObject;
+    props: LampTypes.StringIndexedData;
+    propsMain?: LampTypes.StringIndexedData;
+    propsPreview?: LampTypes.StringIndexedData;
     mediaUris?: Set<string>;
     optionalMediaUris?: Set<string>;
     stepCount?: number;

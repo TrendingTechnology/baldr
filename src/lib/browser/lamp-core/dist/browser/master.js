@@ -55,7 +55,7 @@ export class Master {
     /**
      * Filter the master props for props which are supporting inline media.
      */
-    // extractInlineMediaUris (props: LampTypes.StringObject): Set<string> {
+    // extractInlineMediaUris (props: LampTypes.StringIndexedData): Set<string> {
     //   const uris = new Set<string>()
     //   function extractUrisInText (text: string) {
     //     const matches = text.matchAll(new RegExp(inlineMarkup.regExp, 'g'))
@@ -84,7 +84,7 @@ export class Master {
      * Replace the inline media tags `[id:Beethoven]` in certain props with
      * HTML. This function must be called after the media resolution.
      */
-    // renderInlineMedia (props: LampTypes.StringObject) {
+    // renderInlineMedia (props: LampTypes.StringIndexedData) {
     //   /**
     //    * @param {String} text
     //    */

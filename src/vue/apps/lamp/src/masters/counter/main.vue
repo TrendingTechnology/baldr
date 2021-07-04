@@ -1,28 +1,39 @@
 <template>
   <div class="vc_counter_master sans">
     <div class="counter-current">
-      {{ current }}
+      {{ currentFormatted }}
     </div>
     <div class="counter-to">
-      / {{ to }}
+      / {{ toFormatted }}
     </div>
     </div>
 </template>
 
 <script>
+import { formatCounterNumber } from './main'
+
 export default {
   props: {
     to: {
       type: Number,
       required: true
+    },
+    toFormatted: {
+      type: String
+    },
+    format: {
+      type: String,
     }
   },
   computed: {
-    current () {
+    currentFormatted () {
+      let currentNumber
       if (this.navNos.stepNo != null) {
-        return this.navNos.stepNo
+        currentNumber = this.navNos.stepNo
+      } else {
+        currentNumber = 1
       }
-      return 1
+      return formatCounterNumber(currentNumber, this.format)
     }
   }
 }
