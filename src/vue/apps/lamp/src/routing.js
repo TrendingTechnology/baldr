@@ -40,9 +40,11 @@
  * @typedef {string} view
  */
 
-import { router } from '@/routes'
+import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/core-browser'
+
 import store from '@/store/index.js'
+import { router } from '@/routes'
 
 /* globals document gitHead compilationTime */
 
@@ -172,7 +174,7 @@ async function loadPresentationById (vm, presRef) {
     const masterMatch = presRef.match(/^EP_master_(.*)$/)
     if (masterMatch) {
       const masterName = masterMatch[1]
-      const master = vm.$masters.get(masterName)
+      const master = masterCollection.get(masterName)
       await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString: master.example })
       return
     }

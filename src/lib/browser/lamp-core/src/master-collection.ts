@@ -36,7 +36,7 @@ export class MasterCollection {
    * @param name - The name of the master slide.
    */
   get (name: string): Master {
-    if (this.masters[name] != null) {
+    if (this.masters[name] == null) {
       throw new Error(`Class Masters.get(): No master named “${name}”`)
     }
     return this.masters[name]

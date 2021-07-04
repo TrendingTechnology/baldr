@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { masterCollection } from '@bldr/lamp-core'
 import { getHtmlBody } from './main.js'
 
 export default {
@@ -43,12 +44,12 @@ export default {
       return `${this.language}:${title}${oldid}`
     },
     body () {
-      const master = this.$masters.get(this.masterName)
+      const master = masterCollection.get(this.masterName)
       return master.$get('bodyById', this.id)
     }
   },
   mounted: async function () {
-    const master = this.$masters.get(this.masterName)
+    const master = masterCollection.get(this.masterName)
     const body = master.$get('bodyById', this.id)
     if (!body) {
       const body = await getHtmlBody(this.title, this.language)

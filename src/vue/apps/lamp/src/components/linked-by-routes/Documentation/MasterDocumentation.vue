@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { masterCollection } from '@bldr/lamp-core'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 export default {
@@ -41,7 +42,7 @@ export default {
       return this.$route.params.master
     },
     master () {
-      return this.$masters.get(this.masterName)
+      return masterCollection.get(this.masterName)
     },
     props () {
       return this.master.propsDef

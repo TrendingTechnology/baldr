@@ -17,7 +17,6 @@
  * - `this.$fullscreen()`: Set presentation app to fullscreen.
  * - `this.$get(getterName)`: Shortcut for
  *   `this.$store.getters['lamp/getterName']`
- * - `this.$masters`
  * - `this.$media`
  * - `this.$modal`
  * - `this.$notify()`: An instance of the package `vue-notifications`.
@@ -187,11 +186,6 @@ Vue.config.productionTip = false
 /******************************************************************************/
 
 /******************************************************************************/
-
-/**
- * $master
- */
-Vue.prototype.$masters = masters
 
 // Must be before new Vue()
 registerMasterComponents()

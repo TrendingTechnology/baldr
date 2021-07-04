@@ -31,13 +31,13 @@
             v-for="(rawYaml, masterName) in examples.masters"
             :key="masterName"
           >
-            <td><material-icon :name="$masters.get(masterName).icon.name" :color="$masters.get(masterName).icon.color"/></td>
+            <td><material-icon :name="getMasterByName(masterName).icon.name" :color="getMasterByName(masterName).icon.color"/></td>
             <td>
               <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
                 {{ masterName }}
               </router-link>
             </td>
-            <td>{{ $masters.get(masterName).title }}</td>
+            <td>{{ getMasterByName(masterName).title }}</td>
             <td>
               <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_master_${masterName}` } }">
                 <material-icon name="presentation"/>
@@ -89,6 +89,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { masterCollection } from '@bldr/lamp-core'
 
 const documentation = `
 
@@ -113,6 +114,10 @@ export default class DocumentationOverview extends Vue {
 
   get examples () {
     return rawYamlExamples
+  }
+
+  getMasterByName (masterName: string)  {
+    return masterCollection.get(masterName)
   }
 }
 </script>
