@@ -1,9 +1,12 @@
 /**
  * @module @bldr/lamp/masters/quote
  */
-import { convertHtmlToPlainText } from '@bldr/core-browser'
 
+import type { LampTypes } from '@bldr/type-definitions'
+
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { validateMasterSpec } from '@bldr/lamp-core'
+
 export default validateMasterSpec({
   name: 'quote',
   title: 'Zitat',
@@ -48,7 +51,7 @@ export default validateMasterSpec({
     darkMode: true
   },
   hooks: {
-    normalizeProps (props) {
+    normalizeProps (props): LampTypes.StringIndexedData {
       if (typeof props === 'string') {
         props = {
           text: props
@@ -60,7 +63,7 @@ export default validateMasterSpec({
       props.text = props.text.replace(/(<.+>\s*)?$/, ' <span class="quotation-mark">«</span>$1')
       return props
     },
-    plainTextFromProps (props) {
+    plainTextFromProps (props): string {
       return convertHtmlToPlainText(Object.values(props).join(' | '))
     }
   }

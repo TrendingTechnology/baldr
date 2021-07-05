@@ -674,73 +674,6 @@ class Master {
 }
 
 /**
- * Container for all registered master slides.
- */
-class Masters {
-  constructor () {
-    /**
-     * A container object for all master objects.
-     *
-     * @type {Object}
-     */
-    this.masters_ = {}
-  }
-
-  /**
-   * Add a master to the masters container.
-   *
-   * @param {module:@bldr/lamp/masters~Master} master
-   */
-  add (master) {
-    this.masters_[master.name] = master
-  }
-
-  /**
-   * Get a master object by the master name.
-   *
-   * @param {string} name - The name of the master slide.
-   *
-   * @returns {module:@bldr/lamp/masters~Master}
-   */
-  get (name) {
-    if (!(name in this.masters_)) {
-      throw new Error(`Class Masters.get(): No master named “${name}”`)
-    }
-    return this.masters_[name]
-  }
-
-  /**
-   * Get all master objects as an object with the master name as properties.
-   *
-   * @returns {object}
-   */
-  get all () {
-    return this.masters_
-  }
-
-  /**
-   * Get all master names as an array.
-   *
-   * @returns {Array}
-   */
-  get allNames () {
-    return Object.keys(this.masters_)
-  }
-
-  /**
-   * Check if a master exist.
-   *
-   * @param {string} name - The name of the master slide.
-   *
-   * @returns {Boolean}
-   */
-  exists (name) {
-    if (name in this.masters_) return true
-    return false
-  }
-}
-
-/**
  * This object is mixed in into each master component.
  */
 const masterMixin = {
@@ -835,7 +768,6 @@ function registerMasters () {
     }
   }
 
-  const masters = new Masters()
   const requireMaster = require.context('./masters', true, /.+main\.(js|ts)$/)
   requireMaster.keys().forEach((fileName) => {
     // ./masterName/main.js
@@ -845,7 +777,6 @@ function registerMasters () {
     masterSpec.name = masterName
     checkExport(fileName, masterObj)
     const master = new Master(masterSpec)
-    masters.add(master)
     masterCollection.add(master)
   })
 
@@ -853,7 +784,7 @@ function registerMasters () {
   requireComponentMain.keys().forEach((fileName) => {
     // ./masterName/main.vue
     const masterName = findMasterName(fileName)
-    const master = masters.get(masterName)
+    const master = masterCollection.get(masterName)
     const componentMain = requireComponentMain(fileName)
     const dataMixin = {
       data () {
@@ -872,12 +803,12 @@ function registerMasters () {
   requireComponentPreview.keys().forEach((fileName) => {
     // ./masterName/preview.vue
     const masterName = findMasterName(fileName)
-    const master = masters.get(masterName)
+    const master = masterCollection.get(masterName)
     const componentPreview = requireComponentPreview(fileName)
     checkExport(fileName, componentPreview)
     master.componentPreview = componentPreview.default
   })
-  return masters
+  return masterCollection
 }
 
 /**

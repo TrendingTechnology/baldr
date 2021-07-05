@@ -2,11 +2,12 @@
  * @module @bldr/lamp/masters/person
  */
 
+import type { LampTypes } from '@bldr/type-definitions'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
 import * as tex from '@bldr/tex-templates'
 
-function convertPersonIdToMediaId (personId) {
+function convertPersonIdToMediaId (personId: string): string {
   return `ref:PR_${personId}`
 }
 
@@ -20,7 +21,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'clipboard-account',
+    name: 'person',
     color: 'orange'
   },
   styleConfig: {
@@ -28,7 +29,7 @@ export default validateMasterSpec({
     darkMode: true
   },
   hooks: {
-    normalizeProps (props) {
+    normalizeProps (props): LampTypes.StringIndexedData {
       if (typeof props === 'string') {
         return {
           personId: props
@@ -36,17 +37,17 @@ export default validateMasterSpec({
       }
       return props
     },
-    resolveMediaUris (props) {
+    resolveMediaUris (props): string {
       return convertPersonIdToMediaId(props.personId)
     },
-    collectPropsMain (props) {
+    collectPropsMain (props): LampTypes.StringIndexedData {
       const asset = this.$store.getters['media/assetByUri'](convertPersonIdToMediaId(props.personId))
       return { asset }
     },
-    titleFromProps ({ propsMain }) {
+    titleFromProps ({ propsMain }): string {
       return propsMain.asset.yaml.name
     },
-    generateTexMarkup ({ props, propsMain, propsPreview }) {
+    generateTexMarkup ({ props, propsMain, propsPreview }): string {
       const yaml = propsMain.asset.yaml
       return tex.environment('baldrPerson', yaml.shortBiography, {
         name: yaml.name

@@ -2,6 +2,8 @@
  * @module @bldr/lamp/masters/sampleList
  */
 
+import type { LampTypes } from '@bldr/type-definitions'
+
 import { mediaResolver } from '@bldr/media-client'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
@@ -34,7 +36,7 @@ export default validateMasterSpec({
     darkMode: true
   },
   hooks: {
-    normalizeProps (props) {
+    normalizeProps (props): LampTypes.StringIndexedData {
       if (typeof props === 'string' || Array.isArray(props)) {
         props = { samples: props }
       }
@@ -43,10 +45,10 @@ export default validateMasterSpec({
     resolveMediaUris (props) {
       return mediaResolver.getUrisFromWrappedSpecs(props.samples)
     },
-    collectPropsMain (props) {
+    collectPropsMain (props): LampTypes.StringIndexedData {
       return props
     },
-    titleFromProps ({ props }) {
+    titleFromProps ({ props }): string {
       if (props.heading) {
         return props.heading
       }
