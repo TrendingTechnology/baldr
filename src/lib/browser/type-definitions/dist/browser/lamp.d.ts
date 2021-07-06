@@ -871,6 +871,15 @@ export interface FileFormat {
  */
 export interface Presentation {
     /**
+     * The reference of a presentation.
+     *
+     * ```yml
+     * meta:
+     *   ref: My-Presentation
+     * ```
+     */
+    ref: string;
+    /**
      * The meta informations of a presentation file.
      */
     meta: PresentationMeta;

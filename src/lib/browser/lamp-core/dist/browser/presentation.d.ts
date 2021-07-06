@@ -1,9 +1,5 @@
 import type { LampTypes } from '@bldr/type-definitions';
 import { Slide } from './slide';
-/**
- * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
- * A presentation contains slides and meta data.
- */
 export declare class Presentation implements LampTypes.Presentation {
     slides: Slide[];
     slidesTree: Slide[];
@@ -28,4 +24,5 @@ export declare class Presentation implements LampTypes.Presentation {
      *   Main level, 2: First child level ...
      */
     static parseSlidesRecursive(slidesRaw: any[], slidesFlat: Slide[], slidesTree: Slide[], level?: number): void;
+    get ref(): string;
 }

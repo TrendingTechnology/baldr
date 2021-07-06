@@ -31,7 +31,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
 import type { TitlesTypes }  from '@bldr/type-definitions'
 import type { Route, NavigationGuardNext } from 'vue-router'
@@ -55,12 +57,6 @@ async function enterRoute (vm: TitleTree, to: Route): Promise<void> {
     }
   }
 }
-
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate'
-])
 
 @Component({
   components: {

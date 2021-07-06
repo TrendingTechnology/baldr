@@ -24,10 +24,6 @@ class Meta implements LampTypes.PresentationMeta {
   }
 }
 
-/**
- * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
- * A presentation contains slides and meta data.
- */
 export class Presentation implements LampTypes.Presentation {
   slides: Slide[]
   slidesTree: Slide[]
@@ -76,5 +72,9 @@ export class Presentation implements LampTypes.Presentation {
         }
       }
     }
+  }
+
+  get ref (): string {
+    return this.meta.ref
   }
 }

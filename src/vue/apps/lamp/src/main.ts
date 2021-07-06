@@ -91,6 +91,8 @@
 
 /* globals config */
 
+import './class-component'
+
 import Vue from 'vue'
 import { registerMasterComponents } from '@/masters.js'
 

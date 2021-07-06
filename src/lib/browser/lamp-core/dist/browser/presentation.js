@@ -13,10 +13,6 @@ class Meta {
         raw.throwExecptionIfNotEmpty();
     }
 }
-/**
- * A presentation is represented by the YAML file `Praesentation.baldr.yml`.
- * A presentation contains slides and meta data.
- */
 export class Presentation {
     /**
      * Parse the YAML file `Praesentation.baldr.yml`.
@@ -58,5 +54,8 @@ export class Presentation {
                 }
             }
         }
+    }
+    get ref() {
+        return this.meta.ref;
     }
 }

@@ -1,16 +1,16 @@
 <template>
   <span class="vc_title_link" :class="classAttributes">
     <span
-      v-if="treeTitle.folder.hasPresentation"
-      class="title link"
       :id="`PREF_${presRef}`"
-      @click="openPresentation(presRef)"
       :title="`ID: ${presRef}`"
+      @click="openPresentation(presRef)"
+      class="title link"
       v-html="treeTitle.folder.title"
+      v-if="treeTitle.folder.hasPresentation"
     />
     <router-link
-      class="title"
       :to="`/topics/${this.treeTitle.folder.relPath}`"
+      class="title"
       v-else
       v-html="treeTitle.folder.title"
     />
@@ -21,16 +21,18 @@
 </template>
 
 <script lang="ts">
-import type { TitlesTypes } from '@bldr/type-definitions'
+import type { TitlesTypes, LampTypes } from '@bldr/type-definitions'
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import store from '@/store/index.js'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 interface ClassAttributeCollection {
   [className: string]: boolean
 }
 
 @Component({
+  computed: mapGetters(['presentation']),
   components: {
     TitleLink
   }
@@ -38,6 +40,8 @@ interface ClassAttributeCollection {
 export default class TitleLink extends Vue {
   @Prop()
   treeTitle?: TitlesTypes.TreeTitle
+
+  presentation!: LampTypes.Presentation
 
   async openPresentation (presRef: string): Promise<void> {
     this.$router.push({
@@ -59,12 +63,10 @@ export default class TitleLink extends Vue {
     const result: ClassAttributeCollection = {}
     result[`level-${this.treeTitle.folder.level}`] = true
 
-    const presentation = store.getters['lamp/presentation']
-
     if (
       this.treeTitle.folder.hasPresentation &&
-      presentation != null &&
-      this.presRef === presentation.ref
+      this.presentation != null &&
+      this.presRef === this.presentation.ref
     ) {
       result.active = true
     }
