@@ -56,6 +56,12 @@ async function enterRoute (vm: TitleTree, to: Route): Promise<void> {
   }
 }
 
+Component.registerHooks([
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate'
+])
+
 @Component({
   components: {
     LoadingIcon,
@@ -65,7 +71,10 @@ async function enterRoute (vm: TitleTree, to: Route): Promise<void> {
   }
 })
 export default class TitleTree extends Vue {
+  @Prop()
   subFolderTitleTree?: TitlesTypes.TreeTitleList
+
+  @Prop()
   path?: string
 
   setSubFolderTitleTreeByIds (relPath?: string): void {

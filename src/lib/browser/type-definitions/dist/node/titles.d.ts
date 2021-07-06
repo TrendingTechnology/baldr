@@ -72,12 +72,6 @@ export interface DeepTitle {
      */
     generatePresetationMeta(): PresentationMeta;
 }
-/**
- * A list of sub trees.
- */
-export interface TreeTitleList {
-    [folderName: string]: TreeTitle;
-}
 export interface FolderTitleSpec {
     /**
      * The title. It is the first line in the file `titles.txt`.
@@ -136,6 +130,12 @@ export interface FolderTitle {
      * The level in a folder title tree, starting with 1. 1 ist the top level.
      */
     level?: number;
+}
+/**
+ * A list of sub trees.
+ */
+export interface TreeTitleList {
+    [folderName: string]: TreeTitle;
 }
 /**
  * A tree of folder titles.

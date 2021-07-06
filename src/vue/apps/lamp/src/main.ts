@@ -92,7 +92,7 @@
 /* globals config */
 
 import Vue from 'vue'
-import { registerMasterComponents, masters } from '@/masters.js'
+import { registerMasterComponents } from '@/masters.js'
 
 // Vue plugins.
 import { router } from '@/routes'
