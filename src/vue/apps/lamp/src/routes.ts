@@ -22,7 +22,7 @@ import SlidesPreview from '@/components/linked-by-routes/SlidesPreview/index.vue
 import SlideView from '@/components/linked-by-routes/SlideView/index.vue'
 import SpeakerView from '@/components/linked-by-routes/SpeakerView/index.vue'
 import StartPage from '@/components/linked-by-routes/StartPage.vue'
-import TitleTree from '@/components/linked-by-routes/TitleTree/index.vue'
+import TitlesTreePage from '@/components/linked-by-routes/TitlesTreePage/index.vue'
 import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
 
 Vue.use(Router)
@@ -86,11 +86,10 @@ const routes: RouteConfig[] = [
     ]
   },
   {
-    path: '/topics/:ids*',
-    component: TitleTree,
-    name: 'topics',
+    path: '/titles/:relPath*',
+    component: TitlesTreePage,
+    name: 'titles',
     meta: {
-      shortcut: 'p',
       title: 'Themen'
     }
   },

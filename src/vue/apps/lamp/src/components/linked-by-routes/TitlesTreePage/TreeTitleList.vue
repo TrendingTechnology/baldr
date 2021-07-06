@@ -15,16 +15,11 @@
 </template>
 
 <script lang="ts">
-import TreeTitle from './TreeTitle.vue'
-import { Vue, Component, Prop } from 'vue-property-decorator'
-
 import type { TitlesTypes } from '@bldr/type-definitions'
 
-@Component({
-  components: {
-    TreeTitle
-  }
-})
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
 export default class TreeTitleList extends Vue {
   @Prop()
   readonly list!: TitlesTypes.TreeTitleList

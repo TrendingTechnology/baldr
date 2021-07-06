@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import type { TitlesTypes }  from '@bldr/type-definitions'
+import type { TitlesTypes } from '@bldr/type-definitions'
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
@@ -54,7 +54,7 @@ export default class TopLevelJumpers extends Vue {
       if (topTitle) {
         topTitles.push({
           title: topTitle.title,
-          path: `/topics/${topTitle.relPath}`
+          path: `/titles/${topTitle.relPath}`
         })
       }
     }
@@ -67,12 +67,12 @@ export default class TopLevelJumpers extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_top_level_jumpers {
-    font-size: 0.7em;
+.vc_top_level_jumpers {
+  font-size: 0.7em;
 
-    .separator {
-      display: inline-block;
-      padding: 0 0.5em;
-    }
+  .separator {
+    display: inline-block;
+    padding: 0 0.5em;
   }
+}
 </style>

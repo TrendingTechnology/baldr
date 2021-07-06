@@ -14,6 +14,7 @@ import nav from './nav.js'
 import preview from './preview.js'
 import masters from './masters.js'
 import recent from './recent.js'
+import titles from './titles.js'
 
 Vue.use(Vuex)
 
@@ -38,7 +39,6 @@ const state = {
       timeoutId: null
     }
   },
-  folderTitleTree: null,
   presentation: null,
   slideNoOld: null,
   slideNo: null,
@@ -50,9 +50,6 @@ const state = {
 const getters = {
   cursorArrowsStates: state => {
     return state.cursorArrows
-  },
-  folderTitleTree: state => {
-    return state.folderTitleTree
   },
   isSpeakerView: state => {
     return state.isSpeakerView
@@ -187,25 +184,6 @@ const actions = {
       dispatch('setStepNoCurrent', { slide: getters.slide, stepNo })
     }
   },
-  async loadFolderTitleTree ({ commit, getters }) {
-    if (!getters.folderTitleTree) {
-      const response = await vue.$media.httpRequest.request({
-        url: 'get/folder-title-tree'
-      })
-      commit('setFolderTitleTree', response.data)
-    }
-  },
-  async updateFolderTitleTree ({ commit }) {
-    const response = await vue.$media.httpRequest.request({
-      url: 'get/folder-title-tree',
-      method: 'get',
-      headers: { 'Cache-Control': 'no-cache' },
-      params: {
-        timestamp: new Date().getTime()
-      }
-    })
-    commit('setFolderTitleTree', response.data)
-  },
   toggleMetaDataOverlay ({ commit, getters }) {
     commit('showMetaDataOverlay', !getters.showMetaDataOverlay)
   },
@@ -244,9 +222,6 @@ const actions = {
 }
 
 const mutations = {
-  setFolderTitleTree (state, tree) {
-    Vue.set(state, 'folderTitleTree', tree)
-  },
   setSlides (state, slides) {
     Vue.set(state, 'slides', slides)
   },
@@ -291,7 +266,8 @@ export default new Vuex.Store({
         nav,
         preview,
         masters,
-        recent
+        recent,
+        titles
       }
     }
   }

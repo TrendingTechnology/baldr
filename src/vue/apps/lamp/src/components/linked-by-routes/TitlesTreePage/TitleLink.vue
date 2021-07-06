@@ -9,7 +9,7 @@
       v-if="folder.hasPresentation"
     />
     <router-link
-      :to="`/topics/${this.folder.relPath}`"
+      :to="`/titles/${this.folder.relPath}`"
       class="title"
       v-else
       v-html="folder.title"
@@ -32,10 +32,7 @@ interface ClassAttributeCollection {
 }
 
 @Component({
-  computed: mapGetters(['presentation']),
-  components: {
-    TitleLink
-  }
+  computed: mapGetters(['presentation'])
 })
 export default class TitleLink extends Vue {
   @Prop()

@@ -10,18 +10,9 @@
 <script lang="ts">
 import type { TitlesTypes } from '@bldr/type-definitions'
 
-import TitleLink from './TitleLink.vue'
-import TreeTitleList from './TreeTitleList.vue'
-
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-
-@Component({
-  components: {
-    TitleLink,
-    TreeTitleList
-  }
-})
+@Component
 export default class TreeTitle extends Vue {
   @Prop()
   readonly title!: TitlesTypes.TreeTitle

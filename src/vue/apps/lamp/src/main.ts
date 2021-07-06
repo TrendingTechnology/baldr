@@ -110,6 +110,7 @@ import config from '@bldr/config'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
+import './global-components'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)

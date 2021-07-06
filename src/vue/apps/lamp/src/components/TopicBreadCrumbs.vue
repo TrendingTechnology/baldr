@@ -36,7 +36,7 @@ export default {
       }
       const segments = path.split('/')
       const links = []
-      links.push({ path: 'topics/Musik', text: 'Fach Musik' })
+      links.push({ path: 'titles/Musik', text: 'Fach Musik' })
       let titles = this.folderTitleTree
       for (let index = 0; index < segments.length; index++) {
         // 12
@@ -44,7 +44,7 @@ export default {
         const segment = segments[index]
         if (titles[segment]) {
           links.push({
-            path: ['topics', ...segments.slice(0, index + 1)].join('/'),
+            path: ['titles', ...segments.slice(0, index + 1)].join('/'),
             text: titles[segment].folder.title
           })
           titles = titles[segment].sub

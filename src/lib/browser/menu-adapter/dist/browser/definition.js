@@ -75,7 +75,7 @@ export const universalMenuDefinition = [
             {
                 label: 'Themen',
                 action: 'pushRouter',
-                arguments: 'topics',
+                arguments: 'titles',
                 keyboardShortcut: 't'
             },
             {
