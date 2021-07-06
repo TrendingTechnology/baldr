@@ -1,29 +1,24 @@
 <template>
   <div
     class="
-      vc_topics_tree
+      vc_title_tree_container
       main-app-fullscreen
     "
     b-content-theme="default"
   >
-    <loading-icon v-if="!folderTitleTree"/>
+    <loading-icon v-if="!list"/>
     <div v-else>
       <topic-bread-crumbs
-        v-if="path"
-        :path="path"
+        v-if="relPath"
+        :path="relPath"
       />
       <top-level-jumpers
-        :path="path"
+        :path="relPath"
       />
       <section class="topics">
         <h1>Themen</h1>
-        <folder-title
-          v-if="subFolderTitleTree"
-          :tree-title="subFolderTitleTree"
-        />
-        <folder-title
-          v-else
-          :tree-title="folderTitleTree"
+        <tree-title-list
+          :list="list"
         />
       </section>
     </div>
@@ -33,12 +28,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
 
 import type { TitlesTypes }  from '@bldr/type-definitions'
 import type { Route, NavigationGuardNext } from 'vue-router'
 import LoadingIcon from '@/components/LoadingIcon.vue'
-import FolderTitle from './FolderTitle.vue'
+import TreeTitleList from './TreeTitleList.vue'
 import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
 import TopLevelJumpers from './TopLevelJumpers.vue'
 
@@ -46,9 +40,8 @@ export function toRef (folderName: string): string {
   return folderName.substr(3)
 }
 
-async function enterRoute (vm: TitleTree, to: Route): Promise<void> {
+async function enterRoute (vm: TitleTreeContainer, to: Route): Promise<void> {
   await vm.$store.dispatch('lamp/loadFolderTitleTree')
-  vm.setSubFolderTitleTreeByIds(to.params.ids)
   const presentation = vm.$store.getters['lamp/presentation']
   if (presentation) {
     const elementLink = document.getElementById(`PREF_${presentation.ref}`)
@@ -61,70 +54,59 @@ async function enterRoute (vm: TitleTree, to: Route): Promise<void> {
 @Component({
   components: {
     LoadingIcon,
-    FolderTitle,
+    TreeTitleList,
     TopLevelJumpers,
     TopicBreadCrumbs
   }
 })
-export default class TitleTree extends Vue {
-  @Prop()
-  subFolderTitleTree?: TitlesTypes.TreeTitleList
+export default class TitleTreeContainer extends Vue {
 
-  @Prop()
-  path?: string
-
-  setSubFolderTitleTreeByIds (relPath?: string): void {
-    if (relPath == null) {
-      return
+  get relPath (): string | undefined {
+    if (this.$route.params.ids != null) {
+      return this.$route.params.ids
     }
-    if (relPath === 'Musik') {
-      this.subFolderTitleTree = undefined
-      return
-    }
-    const folderNames = relPath.split('/')
-    let tree = this.folderTitleTree
-    for (const folderName of folderNames) {
-      if (tree && tree.sub) {
-        tree = tree.sub[folderName]
-      }
-    }
-    this.subFolderTitleTree = tree.sub
   }
 
-  mounted () {
-    this.path = this.$route.params.ids
-  }
-
-  get folderTitleTree (): TitlesTypes.TreeTitle {
+  get rootList (): TitlesTypes.TreeTitleList {
     const sub = this.$store.getters['lamp/folderTitleTree'] as TitlesTypes.TreeTitleList
     return {
-      sub,
-      folder: {
-        title: 'Fach Musik',
-        level: 0,
-        hasPresentation: false,
-        relPath: '/',
-        folderName: 'musik'
+      '/': {
+        sub,
+        folder: {
+          title: 'Fach Musik',
+          level: 0,
+          hasPresentation: false,
+          relPath: '/',
+          folderName: 'musik'
+        }
       }
     }
   }
 
-  beforeRouteEnter (to: Route, from: Route, next: NavigationGuardNext<TitleTree>): any {
+  get list (): TitlesTypes.TreeTitleList | null {
+    if (this.relPath == null || this.relPath === 'Musik') {
+      return this.rootList
+    }
+    const folderNames = this.relPath.split('/')
+    let list = this.rootList
+    for (const folderName of folderNames) {
+      if (list != null && list.sub) {
+        list = list[folderName].sub
+      }
+    }
+    return list
+  }
+
+  beforeRouteEnter (to: Route, from: Route, next: NavigationGuardNext<TitleTreeContainer>): any {
     next(vm => {
       enterRoute(vm, to)
     })
-  }
-
-  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext<TitleTree>): any {
-    enterRoute(this, to)
-    this.path = to.params.ids
-    next()
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_topics_tree {
+  .vc_title_tree_container {
     .topics {
       padding: 0 5em;
     }

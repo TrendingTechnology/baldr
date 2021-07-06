@@ -5,17 +5,17 @@
       :title="`ID: ${presRef}`"
       @click="openPresentation(presRef)"
       class="title link"
-      v-html="treeTitle.folder.title"
-      v-if="treeTitle.folder.hasPresentation"
+      v-html="folder.title"
+      v-if="folder.hasPresentation"
     />
     <router-link
-      :to="`/topics/${this.treeTitle.folder.relPath}`"
+      :to="`/topics/${this.folder.relPath}`"
       class="title"
       v-else
-      v-html="treeTitle.folder.title"
+      v-html="folder.title"
     />
-    <span v-if="treeTitle.folder.subtitle"> -
-      <span class="subtitle" v-html="treeTitle.folder.subtitle"/>
+    <span v-if="folder.subtitle"> -
+      <span class="subtitle" v-html="folder.subtitle"/>
     </span>
   </span>
 </template>
@@ -39,7 +39,7 @@ interface ClassAttributeCollection {
 })
 export default class TitleLink extends Vue {
   @Prop()
-  treeTitle?: TitlesTypes.TreeTitle
+  folder?: TitlesTypes.FolderTitle
 
   presentation!: LampTypes.Presentation
 
@@ -51,20 +51,20 @@ export default class TitleLink extends Vue {
   }
 
   get presRef (): string | undefined {
-    if (this.treeTitle != null) {
-      return this.treeTitle.folder.folderName.substr(3)
+    if (this.folder != null) {
+      return this.folder.folderName.substr(3)
     }
   }
 
   get classAttributes (): ClassAttributeCollection | undefined {
-    if (this.treeTitle == null) {
+    if (this.folder == null) {
       return
     }
     const result: ClassAttributeCollection = {}
-    result[`level-${this.treeTitle.folder.level}`] = true
+    result[`level-${this.folder.level}`] = true
 
     if (
-      this.treeTitle.folder.hasPresentation &&
+      this.folder.hasPresentation &&
       this.presentation != null &&
       this.presRef === this.presentation.ref
     ) {
