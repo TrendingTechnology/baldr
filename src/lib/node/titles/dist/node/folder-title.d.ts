@@ -4,10 +4,10 @@ export declare class FolderTitle implements TitlesTypes.FolderTitle {
     subtitle?: string;
     folderName: string;
     relPath: string;
-    hasPraesentation: boolean;
+    hasPresentation: boolean;
     level?: number;
     /**
      * @param data - Some meta data about the folder.
      */
-    constructor({ title, subtitle, folderName, relPath, hasPraesentation, level }: TitlesTypes.FolderTitleSpec);
+    constructor({ title, subtitle, folderName, relPath, hasPresentation, level }: TitlesTypes.FolderTitleSpec);
 }

@@ -57,21 +57,21 @@ describe('Package “@bldr/titles”', function () {
         tree['06']
           .sub['40_Grundlagen']
           .sub['05_Intervalle-Feinbestimmung']
-          .sub['10_Bach-Thema-regium'].folder.hasPraesentation
+          .sub['10_Bach-Thema-regium'].folder.hasPresentation
       )
 
       assert.ok(
         tree['06']
           .sub['40_Grundlagen']
           .sub['05_Intervalle-Feinbestimmung']
-          .sub['20_Bach-Matthaus-Komm-suesses-Kreuz'].folder.hasPraesentation
+          .sub['20_Bach-Matthaus-Komm-suesses-Kreuz'].folder.hasPresentation
       )
 
       assert.ok(
         tree['06']
           .sub['40_Grundlagen']
           .sub['05_Intervalle-Feinbestimmung']
-          .sub['30_Intervalle-Bach-Inventionen'].folder.hasPraesentation
+          .sub['30_Intervalle-Bach-Inventionen'].folder.hasPresentation
       )
 
       assert.strictEqual(

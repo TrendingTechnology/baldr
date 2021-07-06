@@ -57,14 +57,14 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
       subtitle = titles[1]
     }
 
-    let hasPraesentation: boolean = false
+    let hasPresentation: boolean = false
     if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
-      hasPraesentation = true
+      hasPresentation = true
     }
 
     const relPath = path.dirname(filePath)
     const folderName = path.basename(relPath)
-    return new FolderTitle({ title, subtitle, hasPraesentation, relPath, folderName })
+    return new FolderTitle({ title, subtitle, hasPresentation, relPath, folderName })
   }
 
   /**

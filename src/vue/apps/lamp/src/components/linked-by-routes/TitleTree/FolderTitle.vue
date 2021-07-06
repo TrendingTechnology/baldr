@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_presentation_treeTitle">
+  <div class="vc_folder_title">
     <title-link
       :tree-title="treeTitle"
     />
@@ -55,7 +55,7 @@ export default class FolderTitle extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_presentation_treeTitle {
+  .vc_folder_title {
     ul li:before {
       content: '' !important;
     }

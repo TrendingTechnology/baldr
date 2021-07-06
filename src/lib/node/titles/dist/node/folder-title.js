@@ -9,7 +9,7 @@ class FolderTitle {
     /**
      * @param data - Some meta data about the folder.
      */
-    constructor({ title, subtitle, folderName, relPath, hasPraesentation, level }) {
+    constructor({ title, subtitle, folderName, relPath, hasPresentation, level }) {
         this.title = title;
         if (subtitle != null) {
             this.subtitle = subtitle;
@@ -18,7 +18,7 @@ class FolderTitle {
         relPath = relPath.replace(config_1.default.mediaServer.basePath, '');
         relPath = relPath.replace(/^\//, '');
         this.relPath = relPath;
-        this.hasPraesentation = hasPraesentation;
+        this.hasPresentation = hasPresentation;
         this.level = level;
     }
 }

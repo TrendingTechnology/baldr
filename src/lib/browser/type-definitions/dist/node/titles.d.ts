@@ -100,7 +100,7 @@ export interface FolderTitleSpec {
      * True if the folder contains a file with the file name
      * `Praesentation.baldr.yml`
      */
-    hasPraesentation: boolean;
+    hasPresentation: boolean;
     /**
      * The level in a folder title tree, starting with 1. 1 ist the top level.
      */
@@ -131,7 +131,7 @@ export interface FolderTitle {
      * True if the folder contains a file with the file name
      * `Praesentation.baldr.yml`
      */
-    hasPraesentation: boolean;
+    hasPresentation: boolean;
     /**
      * The level in a folder title tree, starting with 1. 1 ist the top level.
      */
@@ -154,7 +154,7 @@ export interface FolderTitle {
  *                   "title": "Personencharakterisierung in der Oper",
  *                   "folderName": "30_Habanera",
  *                   "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
- *                   "hasPraesentation": true,
+ *                   "hasPresentation": true,
  *                   "level": 4,
  *                   "subtitle": "<em class=\"person\">Georges Bizet</em>:..."
  *                 }

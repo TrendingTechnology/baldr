@@ -43,13 +43,13 @@ class DeepTitle {
         if (titles.length > 1 && titles[1] != null && titles[1] !== '') {
             subtitle = titles[1];
         }
-        let hasPraesentation = false;
+        let hasPresentation = false;
         if (fs_1.default.existsSync(path_1.default.join(path_1.default.dirname(filePath), 'Praesentation.baldr.yml'))) {
-            hasPraesentation = true;
+            hasPresentation = true;
         }
         const relPath = path_1.default.dirname(filePath);
         const folderName = path_1.default.basename(relPath);
-        return new folder_title_1.FolderTitle({ title, subtitle, hasPraesentation, relPath, folderName });
+        return new folder_title_1.FolderTitle({ title, subtitle, hasPresentation, relPath, folderName });
     }
     /**
      * Generate the path of the title.txt file `/var/data/baldr/media/05/title.txt`

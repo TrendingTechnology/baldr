@@ -1,7 +1,7 @@
 <template>
   <span class="vc_presentation_link" :class="classObject">
     <span
-      v-if="treeTitle.folder.hasPraesentation"
+      v-if="treeTitle.folder.hasPresentation"
       class="title link"
       :id="`PREF_${presRef}`"
       @click="openPresentation(presRef)"
@@ -45,7 +45,7 @@ export default {
       const result = {}
       result[`level-${this.treeTitle.folder.level}`] = true
       if (
-        this.treeTitle.folder.hasPraesentation &&
+        this.treeTitle.folder.hasPresentation &&
         this.presentation != null &&
         this.presRef === this.presentation.ref
       ) {
