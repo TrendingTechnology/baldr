@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ExternalSites from '@/components/ExternalSites.vue'
+import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
 export default {
   props: {

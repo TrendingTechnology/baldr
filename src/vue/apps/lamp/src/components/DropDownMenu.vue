@@ -7,9 +7,10 @@
 <script>
 // import VueFileToolbarMenu from 'vue-file-toolbar-menu'
 import BaldrMenu from '@bldr/menu-webapp'
+import { getWebappMenuDef } from '@bldr/menu-adapter'
+
 import actions from '@/actions.js'
 import router from '@/routes'
-import { getWebappMenuDef } from '@bldr/menu-adapter'
 
 export default {
   name: 'DropDownMenu',

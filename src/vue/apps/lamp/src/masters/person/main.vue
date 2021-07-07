@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import ExternalSites from '@/components/ExternalSites.vue'
+import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import { formatToLocalDate } from '@bldr/core-browser'
 
 export default {

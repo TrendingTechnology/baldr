@@ -32,7 +32,7 @@
 
 <script>
 import { formatToYear } from '@bldr/core-browser'
-import ExternalSites from '@/components/ExternalSites.vue'
+import ExternalSites from '@/components/reusable/ExternalSites.vue'
 export default {
   props: {
     asset: {
