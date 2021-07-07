@@ -61,7 +61,6 @@ export function toRef (folderName: string): string {
   }
 })
 export default class TitlesTreePage extends Vue {
-
   subTreeList!: TitlesTypes.TreeTitleList
 
   get relPath (): string | undefined {

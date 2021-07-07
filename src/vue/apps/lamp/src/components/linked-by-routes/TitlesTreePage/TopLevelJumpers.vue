@@ -1,8 +1,14 @@
 <template>
   <div class="vc_top_level_jumpers" v-if="topTitles">
     <span class="separator">→</span>
-    <span  v-for="topic in topTitles" :key="topic.path">
-      <router-link :to="topic.path" v-html="topic.title"/>
+    <span
+      v-for="title in topTitles"
+      :key="title.path"
+    >
+      <router-link
+        :to="title.path"
+        v-html="title.title"
+      />
       <span class="separator">~</span>
     </span>
   </div>
@@ -15,7 +21,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
+const { mapGetters } = createNamespacedHelpers('lamp/titles')
 
 interface TopTitle {
   title: string
@@ -23,19 +29,18 @@ interface TopTitle {
 }
 
 @Component({
-  computed: mapGetters(['folderTitleTree'])
+  computed: mapGetters(['rootTreeList'])
 })
 export default class TopLevelJumpers extends Vue {
   @Prop({
     type: String
   })
-
   path!: string
 
-  folderTitleTree!: TitlesTypes.TreeTitleList
+  rootTreeList!: TitlesTypes.TreeTitleList
 
   topTitles (): TopTitle[] | undefined {
-    let treeTitleList = this.folderTitleTree
+    let treeTitleList = this.rootTreeList
     let treeTitle: TitlesTypes.TreeTitle | undefined
     if (this.path && this.path !== 'Musik') {
       const segments = this.path.split('/')

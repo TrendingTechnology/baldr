@@ -36,7 +36,7 @@ interface ClassAttributeCollection {
 })
 export default class TitleLink extends Vue {
   @Prop()
-  folder?: TitlesTypes.FolderTitle
+  folder!: TitlesTypes.FolderTitle
 
   presentation!: LampTypes.Presentation
 
@@ -53,12 +53,19 @@ export default class TitleLink extends Vue {
     }
   }
 
+  get level (): number {
+    if (this.folder!.level != null) {
+      return this.folder.level + 1
+    }
+    return 0
+  }
+
   get classAttributes (): ClassAttributeCollection | undefined {
     if (this.folder == null) {
       return
     }
     const result: ClassAttributeCollection = {}
-    result[`level-${this.folder.level}`] = true
+    result[`level-${this.level}`] = true
 
     if (
       this.folder.hasPresentation &&
