@@ -3,10 +3,10 @@
     <span class="separator">→</span>
     <span
       v-for="title in topTitles"
-      :key="title.path"
+      :key="title.relPath"
     >
       <router-link
-        :to="title.path"
+        :to="title.relPath"
         v-html="title.title"
       />
       <span class="separator">~</span>
@@ -25,7 +25,7 @@ const { mapGetters } = createNamespacedHelpers('lamp/titles')
 
 interface TopTitle {
   title: string
-  path: string
+  relPath: string
 }
 
 @Component({
@@ -35,15 +35,15 @@ export default class TopLevelJumpers extends Vue {
   @Prop({
     type: String
   })
-  path!: string
+  relPath!: string
 
   rootTreeList!: TitlesTypes.TreeTitleList
 
-  topTitles (): TopTitle[] | undefined {
+  get topTitles (): TopTitle[] | undefined {
     let treeTitleList = this.rootTreeList
     let treeTitle: TitlesTypes.TreeTitle | undefined
-    if (this.path && this.path !== 'Musik') {
-      const segments = this.path.split('/')
+    if (this.relPath != null) {
+      const segments = this.relPath.split('/')
       for (const folderName of segments) {
         if (treeTitleList && treeTitleList[folderName]) {
           treeTitle = treeTitleList[folderName]
@@ -59,7 +59,7 @@ export default class TopLevelJumpers extends Vue {
       if (topTitle) {
         topTitles.push({
           title: topTitle.title,
-          path: `/titles/${topTitle.relPath}`
+          relPath: `/titles/${topTitle.relPath}`
         })
       }
     }

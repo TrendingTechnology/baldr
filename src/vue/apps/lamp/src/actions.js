@@ -223,7 +223,7 @@ export default {
   async update () {
     try {
       const result = await vm.$media.httpRequest.request('mgmt/update')
-      store.dispatch('lamp/updateFolderTitleTree')
+      store.dispatch('lamp/titles/loadRootTreeList')
       if (result.data.errors.length) {
         for (const errorMsg of result.data.errors) {
           vm.$showMessage.error(errorMsg)

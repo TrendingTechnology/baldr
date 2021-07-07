@@ -13,7 +13,7 @@
         :rel-path="relPath"
       />
       <top-level-jumpers
-        :path="relPath"
+        :rel-path="relPath"
       />
       <section class="titles" v-if="subTreeList">
         <h1>Themen</h1>

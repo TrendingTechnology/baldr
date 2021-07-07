@@ -57,21 +57,16 @@ export default class TitlesBreadCrumbs extends Vue {
   rootTreeList!: TitlesTypes.TreeTitleList
 
   get segments (): Segment[] {
-    // 12/20_Tradition/30_Volksmusik
     let relPath: string
     if (this.notLast) {
       relPath = this.relPath.replace(new RegExp('/[^/]+/?$'), '')
     } else {
       relPath = this.relPath
     }
-    relPath = `musik/${relPath}`
     const relPathSegments = relPath.split('/')
     const segments: Segment[] = []
-    //segments.push({ relPath: 'titles/musik', text: 'Fach Musik' })
     let treeList = this.rootTreeList
     for (let index = 0; index < relPathSegments.length; index++) {
-      // 12
-      // 20_Tradition
       const relPathSegment = relPathSegments[index]
       if (treeList[relPathSegment] != null) {
         segments.push({

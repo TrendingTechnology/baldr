@@ -27,26 +27,14 @@ const actions = {
         timestamp: new Date().getTime()
       }
     })
-    const root = {
-      'musik': {
-        sub: response.data,
-        folder: {
-          title: 'Fach Musik',
-          level: 0,
-          hasPresentation: false,
-          relPath: 'musik',
-          folderName: 'musik'
-        }
-      }
-    }
-    commit('setRootTreeList', root)
-    commit('setSubTreeList', root)
+    commit('setRootTreeList', response.data)
+    commit('setSubTreeList', response.data)
   },
   setSubTreeList({ commit, getters }, relPath) {
-    if (relPath == null || relPath === 'Musik') {
+    if (relPath == null) {
       return
     }
-    const folderNames = ['musik', ...relPath.split('/')]
+    const folderNames = relPath.split('/')
     let list = getters.rootTreeList
     for (const folderName of folderNames) {
       if (list != null && list[folderName] != null) {
