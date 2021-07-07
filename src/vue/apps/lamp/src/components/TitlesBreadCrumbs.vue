@@ -1,7 +1,7 @@
 <template>
   <ul
-    class="vc_topic_bread_crumbs"
-    v-if="folderTitleTree"
+    class="vc_titles_bread_crumbs"
+    v-if="rootTreeList"
   >
     <li>
       <span class="separator">/</span>
@@ -28,7 +28,8 @@ import type { TitlesTypes } from '@bldr/type-definitions'
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
+const mapLampGetters = createNamespacedHelpers('lamp').mapGetters
+const mapTitlesGetters = createNamespacedHelpers('lamp/titles').mapGetters
 
 interface Segment {
   relPath: string
@@ -36,9 +37,12 @@ interface Segment {
 }
 
 @Component({
-  computed: mapGetters(['presentation', 'titles/rootTreeList'])
+  computed: {
+    ...mapLampGetters(['presentation']),
+    ...mapTitlesGetters(['rootTreeList'])
+  }
 })
-export default class TopicBreadCrumbs extends Vue {
+export default class TitlesBreadCrumbs extends Vue {
   @Prop({
     type: String
   })
@@ -60,20 +64,21 @@ export default class TopicBreadCrumbs extends Vue {
     } else {
       relPath = this.relPath
     }
+    relPath = `musik/${relPath}`
     const relPathSegments = relPath.split('/')
     const segments: Segment[] = []
-    segments.push({ relPath: 'titles/Musik', text: 'Fach Musik' })
-    let titles = this.rootTreeList
+    //segments.push({ relPath: 'titles/musik', text: 'Fach Musik' })
+    let treeList = this.rootTreeList
     for (let index = 0; index < relPathSegments.length; index++) {
       // 12
       // 20_Tradition
       const relPathSegment = relPathSegments[index]
-      if (titles[relPathSegment]) {
+      if (treeList[relPathSegment] != null) {
         segments.push({
           relPath: ['titles', ...relPathSegments.slice(0, index + 1)].join('/'),
-          text: titles[relPathSegment].folder.title
+          text: treeList[relPathSegment].folder.title
         })
-        titles = titles[relPathSegment].sub
+        treeList = treeList[relPathSegment].sub
       }
     }
     return segments
@@ -88,7 +93,7 @@ export default class TopicBreadCrumbs extends Vue {
 </script>
 
 <style lang="scss">
-ul.vc_topic_bread_crumbs {
+ul.vc_titles_bread_crumbs {
   padding-left: 0 !important;
 
   li {

@@ -1,8 +1,8 @@
 <template>
   <section class="vc_presentation_title" v-if="presentation">
-    <topic-bread-crumb
+    <titles-bread-crumbs
       v-if="presentation.parentDir"
-      :path="presentation.parentDir"
+      :rel-path="presentation.parentDir"
       :not-last="true"
     />
     <h1 v-html="presentation.title"/>
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import TopicBreadCrumb from './TopicBreadCrumbs.vue'
+import TitlesBreadCrumbs from './TitlesBreadCrumbs.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'PresentationTitle',
   components: {
-    TopicBreadCrumb
+    TitlesBreadCrumbs
   },
   computed: {
     ...mapGetters(['presentation'])

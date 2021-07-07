@@ -28,13 +28,13 @@ const actions = {
       }
     })
     const root = {
-      '/': {
+      'musik': {
         sub: response.data,
         folder: {
           title: 'Fach Musik',
           level: 0,
           hasPresentation: false,
-          relPath: '/',
+          relPath: 'musik',
           folderName: 'musik'
         }
       }
@@ -46,7 +46,7 @@ const actions = {
     if (relPath == null || relPath === 'Musik') {
       return
     }
-    const folderNames = ['/', ...relPath.split('/')]
+    const folderNames = ['musik', ...relPath.split('/')]
     let list = getters.rootTreeList
     for (const folderName of folderNames) {
       if (list != null && list[folderName] != null) {

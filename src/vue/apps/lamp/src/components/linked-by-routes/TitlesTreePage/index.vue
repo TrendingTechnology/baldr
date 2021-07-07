@@ -8,9 +8,9 @@
   >
     <loading-icon v-if="!subTreeList"/>
     <div v-else>
-      <topic-bread-crumbs
+      <titles-bread-crumbs
         v-if="relPath"
-        :path="relPath"
+        :rel-path="relPath"
       />
       <top-level-jumpers
         :path="relPath"
@@ -33,7 +33,7 @@ import type { TitlesTypes }  from '@bldr/type-definitions'
 import type { Route, NavigationGuardNext } from 'vue-router'
 
 import LoadingIcon from '@/components/LoadingIcon.vue'
-import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
+import TitlesBreadCrumbs from '@/components/TitlesBreadCrumbs.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp/titles')
@@ -57,7 +57,7 @@ export function toRef (folderName: string): string {
   computed: mapGetters(['subTreeList']),
   components: {
     LoadingIcon,
-    TopicBreadCrumbs
+    TitlesBreadCrumbs
   }
 })
 export default class TitlesTreePage extends Vue {
@@ -74,7 +74,6 @@ export default class TitlesTreePage extends Vue {
   }
 
   beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext<TitlesTreePage>): any {
-    console.log(to)
     this.$store.dispatch('lamp/titles/setSubTreeList', to.params.relPath)
     next()
   }
@@ -91,7 +90,7 @@ export default class TitlesTreePage extends Vue {
     padding-left: 2em;
   }
 
-  .vc_topic_bread_crumbs {
+  .vc_titles_bread_crumbs {
     margin: 0.3em;
     font-size: 0.8em;
   }
