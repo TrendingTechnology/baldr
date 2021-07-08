@@ -19,9 +19,9 @@ import { Vue, Component } from 'vue-property-decorator'
 
 import { styleConfigurator } from '@bldr/style-configurator'
 
-import OpenInterface from '@/components/OpenInterface/index.vue'
-import RecentPresentations from '@/components/RecentPresentations.vue'
-import DropDownMenu from '@/components/DropDownMenu.vue'
+import OpenInterface from '@/components/reusable/OpenInterface/index.vue'
+import RecentPresentations from '@/components/reusable/RecentPresentations.vue'
+import DropDownMenu from '@/components/reusable/DropDownMenu.vue'
 
 @Component({
   components: {

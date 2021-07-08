@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import TitlesBreadCrumbs from './reusable/TitlesBreadCrumbs.vue'
+import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 

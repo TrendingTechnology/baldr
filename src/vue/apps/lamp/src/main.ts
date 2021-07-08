@@ -109,7 +109,7 @@ import Notification from '@bldr/notification'
 import config from '@bldr/config'
 
 // Vue components.
-import MainApp from '@/MainApp.vue'
+import MainApp from '@/components/linked-by-routes/MainApp.vue'
 import './global-components'
 
 Vue.use(shortcuts, router, store)

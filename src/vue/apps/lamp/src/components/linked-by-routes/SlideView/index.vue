@@ -9,8 +9,8 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import { routerGuards } from '@/routing.js'
-import CursorArrows from '@/components/CursorArrows.vue'
-import SlideMain from '@/components/SlideMain/index.vue'
+import CursorArrows from '@/components/reusable/CursorArrows.vue'
+import SlideMain from '@/components/reusable/SlideMain/index.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 

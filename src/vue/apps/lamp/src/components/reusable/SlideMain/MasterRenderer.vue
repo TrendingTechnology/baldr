@@ -1,5 +1,5 @@
 <script>
-import LoadingIcon from '@/components/LoadingIcon'
+import LoadingIcon from '@/components/reusable/LoadingIcon'
 
 export default {
   name: 'MasterRenderer',

@@ -35,9 +35,9 @@
 import { registerShortcuts } from '@bldr/menu-adapter'
 import { styleConfigurator } from '@bldr/style-configurator'
 
-import { hideMouseAfterSec } from './lib.js'
+import { hideMouseAfterSec } from '@/lib.js'
 import { receiveSocketMessage } from '@/remote-control.js'
-import actions from './actions.js'
+import actions from '@/actions.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -95,36 +95,35 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "./global-styles.scss";
+@import "@/global-styles.scss";
 
-  .vc_main_app {
-    .vue-notification {
-      background: #44A4FC;
-      border-left: 0.5em solid #187FE7;
-      color: #ffffff;
-      font-size: 12pt;
-      margin: 0 1em 1em;
-      padding: 1em;
+.vc_main_app {
+  .vue-notification {
+    background: #44A4FC;
+    border-left: 0.5em solid #187FE7;
+    color: #ffffff;
+    font-size: 12pt;
+    margin: 0 1em 1em;
+    padding: 1em;
 
-      .text {
-        font-size: 0.8em;
-      }
+    .text {
+      font-size: 0.8em;
+    }
 
-      &.warn {
-        background: scale-color($orange, $lightness: 40%);
-        border-left-color: $orange;
-      }
+    &.warn {
+      background: scale-color($orange, $lightness: 40%);
+      border-left-color: $orange;
+    }
 
-      &.error {
-        background: scale-color($red, $lightness: 40%);
-        border-left-color: $red;
-      }
+    &.error {
+      background: scale-color($red, $lightness: 40%);
+      border-left-color: $red;
+    }
 
-      &.success {
-        background: scale-color($green, $lightness: 40%);
-        border-left-color: $green;
-      }
+    &.success {
+      background: scale-color($green, $lightness: 40%);
+      border-left-color: $green;
     }
   }
-
+}
 </style>

@@ -34,10 +34,10 @@
 <script>
 import { routerGuards } from '@/routing.js'
 import DisplayController from './DisplayController.vue'
-import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
+import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
-import LoadingIcon from '@/components/LoadingIcon'
-import PresentationTitle from '@/components/PresentationTitle'
+import LoadingIcon from '@/components/reusable/LoadingIcon'
+import PresentationTitle from '@/components/reusable/PresentationTitle'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')

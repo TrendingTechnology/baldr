@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SlideMain from '@/components/SlideMain/index.vue'
+import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import { Slide } from '@/content-file.js'
 
 export default {

@@ -30,7 +30,7 @@ export default {
 
 <style lang="scss">
   // See styling:
-  // - components/SlideMain/MasterIcon.vue (Basic styling)
+  // - components/reusable/SlideMain/MasterIcon.vue (Basic styling)
   // - routes/SpeakerView/index.vue (Adjustments for the speaker view)
   // - routes/SlideView/index.vue (Adjustments for the main slide view)
   .vc_master_icon {

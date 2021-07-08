@@ -32,7 +32,7 @@ import Component from 'vue-class-component'
 import type { TitlesTypes }  from '@bldr/type-definitions'
 import type { Route, NavigationGuardNext } from 'vue-router'
 
-import LoadingIcon from '@/components/LoadingIcon.vue'
+import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
 
 import { createNamespacedHelpers } from 'vuex'

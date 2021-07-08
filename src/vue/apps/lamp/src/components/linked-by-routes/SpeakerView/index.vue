@@ -28,10 +28,10 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import { routerGuards, switchRouterView } from '@/routing.js'
-import CursorArrows from '@/components/CursorArrows.vue'
-import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
-import PresentationTitle from '@/components/PresentationTitle'
-import SlideMain from '@/components/SlideMain/index.vue'
+import CursorArrows from '@/components/reusable/CursorArrows.vue'
+import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
+import PresentationTitle from '@/components/reusable/PresentationTitle'
+import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import SlideSteps from './SlideSteps.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')

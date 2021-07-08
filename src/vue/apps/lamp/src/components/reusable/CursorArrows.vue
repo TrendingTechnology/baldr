@@ -41,7 +41,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import actions from '../actions.js'
+import actions from '@/actions.js'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 export default {
