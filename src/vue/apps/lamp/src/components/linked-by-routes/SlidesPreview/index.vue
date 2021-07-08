@@ -1,3 +1,8 @@
+<!--
+  routes:
+  - /presentation/:presRef
+  - /presentation/:presRef/preview
+-->
 <template>
   <div
     class="
@@ -36,8 +41,8 @@ import { routerGuards } from '@/routing.js'
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
-import LoadingIcon from '@/components/reusable/LoadingIcon'
-import PresentationTitle from '@/components/reusable/PresentationTitle'
+import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
+import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')

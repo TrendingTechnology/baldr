@@ -1,3 +1,8 @@
+<!--
+  routes:
+  - /presentation/:presRef/slide/:slideNo
+  - /presentation/:presRef/slide/:slideNo/step/:stepNo
+-->
 <template>
   <!-- The slide object must exist, else error messages when entering -->
   <div v-if="slide" class="vc_slide_view" :style="style">
