@@ -23,6 +23,7 @@ export interface GenericError {
  */
 export * as ClientMediaModelsTypes from './client-media-models';
 export * as CliTypes from './cli';
+export * as IconFontGeneratorTypes from './icon-font-generator';
 export * as LampTypes from './lamp';
 export * as MediaCategoriesTypes from './media-categories';
 export * as MediaResolverTypes from './media-resolver';

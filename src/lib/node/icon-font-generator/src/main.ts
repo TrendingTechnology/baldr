@@ -3,6 +3,8 @@
  */
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
+import type { IconFontGeneratorTypes } from '@bldr/type-definitions'
+
 // Node packages.
 import fs from 'fs'
 import path from 'path'
@@ -15,7 +17,6 @@ import webfont from 'webfont'
 import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
-import type { IconFontMapping, IconDefintion } from '@bldr/type-definitions'
 import { toTitleCase } from '@bldr/core-browser'
 
 const cmd = new CommandRunner()
@@ -33,34 +34,35 @@ function getIconPath (...args: string[]): string {
   return path.join(config.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments)
 }
 
-function downloadIcon (url: string, name: string, newName: string): void {
+function downloadIcon (url: string, oldName: string, newName: string): void {
   let destName: string
   if (newName != null && newName !== '') {
     destName = newName
   } else {
-    destName = name
+    destName = oldName
   }
   log.info('Download icon %s from %s', destName, url)
   cmd.execSync(['wget', '-O', path.join(tmpDir, `${destName}.svg`), url])
 }
 
-function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): void {
+function downloadIcons (iconMapping: IconFontGeneratorTypes.IconFontMapping, urlTemplate: string): void {
   cmd.startProgress()
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
-  for (const oldName in iconMapping) {
-    const url = urlTemplate.replace('{icon}', oldName)
-    let newName: string = oldName
-    const iconDef: false | string | IconDefintion = iconMapping[oldName]
+  for (const newName in iconMapping) {
+    let oldName: string = newName
+
+    const iconDef: false | string | IconFontGeneratorTypes.IconDefintion = iconMapping[newName]
     if (typeof iconDef === 'string') {
-      newName = iconDef
-    } else if (typeof iconDef === 'object' && iconDef.newName != null) {
-      newName = iconDef.newName
+      oldName = iconDef
+    } else if (typeof iconDef === 'object' && iconDef.oldName != null) {
+      oldName = iconDef.oldName
     }
+    const url = urlTemplate.replace('{icon}', oldName)
 
     downloadIcon(url, oldName, newName)
     count++
-    cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName))
+    cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', newName))
   }
   cmd.stopProgress()
 }
