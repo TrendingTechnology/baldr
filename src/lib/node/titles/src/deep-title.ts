@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import type { LampTypes, TitlesTypes } from '@bldr/type-definitions'
+import { LampTypes, TitlesTypes } from '@bldr/type-definitions'
 
 import { FolderTitle } from './folder-title'
 
@@ -58,13 +58,23 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     }
 
     let hasPresentation: boolean = false
-    if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
+    if (
+      fs.existsSync(
+        path.join(path.dirname(filePath), 'Praesentation.baldr.yml')
+      )
+    ) {
       hasPresentation = true
     }
 
     const relPath = path.dirname(filePath)
     const folderName = path.basename(relPath)
-    return new FolderTitle({ title, subtitle, hasPresentation, relPath, folderName })
+    return new FolderTitle({
+      title,
+      subtitle,
+      hasPresentation,
+      relPath,
+      folderName
+    })
   }
 
   /**
@@ -163,6 +173,17 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     return this.curriculumTitlesArray.join(' / ')
   }
 
+  get curriculumTitlesArrayFromGrade (): string[] {
+    return this.titlesArray.slice(
+      this.gradeIndexPosition + 1,
+      this.titles.length - 1
+    )
+  }
+
+  get curriculumFromGrade (): string {
+    return this.curriculumTitlesArrayFromGrade.join(' / ')
+  }
+
   get ref (): string {
     return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '')
   }
@@ -182,8 +203,26 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     return this.title
   }
 
+  /**
+   * Get the index number of the folder title object containing “X. Jahrgangsstufe”.
+   */
+  private get gradeIndexPosition (): number {
+    let i = 0
+    for (const folderTitle of this.titles) {
+      if (folderTitle.title.match(/^\d+\. *Jahrgangsstufe$/) != null) {
+        return i
+      }
+      i++
+    }
+    throw new Error(
+      `“X. Jahrgangsstufe” not found in the titles: ${this.allTitles}`
+    )
+  }
+
   get grade (): number {
-    return parseInt(this.titles[0].title.replace(/[^\d]+$/, ''))
+    return parseInt(
+      this.titles[this.gradeIndexPosition].title.replace(/[^\d]+$/, '')
+    )
   }
 
   list (): FolderTitle[] {
@@ -206,7 +245,9 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
       grade: this.grade,
       curriculum: this.curriculum
     }
-    if (result.subtitle == null || result.subtitle === '') delete result.subtitle
+    if (result.subtitle == null || result.subtitle === '') {
+      delete result.subtitle
+    }
     return result
   }
 }

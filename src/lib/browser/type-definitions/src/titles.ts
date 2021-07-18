@@ -8,11 +8,11 @@ import { PresentationMeta } from './lamp'
  * Hold metadata about a folder and its titles in a hierarchical folder
  * structure.
  */
- export interface DeepTitle {
+export interface DeepTitle {
   /**
    * Get the first folder name and remove it from the array.
    */
-  shiftFolderName:  () => string | undefined
+  shiftFolderName: () => string | undefined
 
   /**
    * All titles concatenated with ` / ` (Include the first and the last title)
@@ -27,16 +27,31 @@ import { PresentationMeta } from './lamp'
   allTitles: string
 
   /**
-   * Not the first and last title as a array.
+   * Not the first and last title as an array. See `curriculum`.
    */
   curriculumTitlesArray: string[]
 
   /**
-   * Not the title of the first and the last folder.
-   *
-   * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
+   * Not the title of the first and the last folder. This is a joined string
+   * version of `curriculumTitlesArray`, for example: `7. Jahrgangsstufe /
+   * Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als
+   * Bekenntnis`.u
    */
   curriculum: string
+
+  /**
+   * All folder titles from the grade on, but not last folder title as an array.
+   * See `curriculumFromGrade`.
+   */
+  curriculumTitlesArrayFromGrade: string[]
+
+  /**
+   * All folder titles from the grade on, but not last folder title. This is a
+   * joined string version of `curriculumTitlesArrayFromGrade`, for example:
+   * `Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als
+   * Bekenntnis`.
+   */
+  curriculumFromGrade: string
 
   /**
    * The parent directory name with the numeric prefix: For example
@@ -62,15 +77,15 @@ import { PresentationMeta } from './lamp'
   titleAndSubtitle: string
 
   /**
-   * The first folder level in the hierachical folder structure must be named
-   * with numbers.
+   * A folder in the hierachical folder structure must be named
+   * “X. Jahrgangsstufe”.
    */
   grade: number
 
   /**
    * List all `FolderTitle()` objects.
    */
-  list (): FolderTitle[]
+  list: () => FolderTitle[]
 
   /**
    * Get the folder title object by the name of the current folder.
@@ -78,12 +93,12 @@ import { PresentationMeta } from './lamp'
    * @param folderName - A folder name. The name must in the titles
    *   array to get an result.
    */
-  getFolderTitleByFolderName (folderName: string): FolderTitle | undefined
+  getFolderTitleByFolderName: (folderName: string) => FolderTitle | undefined
 
   /**
    * Generate a object containing the meta informations of a presentation.
    */
-  generatePresetationMeta (): PresentationMeta
+  generatePresetationMeta: () => PresentationMeta
 }
 
 export interface FolderTitleSpec {
@@ -123,7 +138,7 @@ export interface FolderTitleSpec {
 /**
  * Hold some meta data about a folder and its title.
  */
- export interface FolderTitle {
+export interface FolderTitle {
   /**
    * The title. It is the first line in the file `titles.txt`.
    */

@@ -4,7 +4,7 @@ import { MediaUri } from './client-media-models'
  * Following properties are moved into the sample “complete”: `startTime`,
  * `duration`, `endTime`, `fadeIn`, `fadeOut`, `shortcut`
  */
- export interface SampleYamlFormat {
+export interface SampleYamlFormat {
   /**
    * for example `Theme 1`
    */
@@ -174,17 +174,17 @@ export interface RestApiRaw extends YamlFormat {
 }
 
 export interface Cache<T> {
-  add (ref: string, mediaObject: T): boolean
+  add: (ref: string, mediaObject: T) => boolean
 
-  get (ref: string): T | undefined
+  get: (ref: string) => T | undefined
   /**
    * The size of the cache. Indicates how many media objects are in the cache.
    */
   size: number
 
-  getAll (): T[]
+  getAll: () => T[]
 
-  reset (): void
+  reset: () => void
 }
 
 /**
@@ -317,7 +317,7 @@ export interface Sample {
    *   number from 0 - 1.
    * @param duration - in seconds
    */
-  fadeIn (targetVolume: number, duration?: number): Promise<void>
+  fadeIn: (targetVolume: number, duration?: number) => Promise<void>
 
   /**
    * Start and play a sample from the beginning.
@@ -325,7 +325,7 @@ export interface Sample {
    * @param targetVolume - End volume value of the fade in process. A
    *   number from 0 - 1.
    */
-  start (targetVolume: number): void
+  start: (targetVolume: number) => void
 
   /**
    * Play a sample from `startTimeSec`.
@@ -335,12 +335,12 @@ export interface Sample {
    * @param startTimeSec - Position in the sample from where to play
    *   the sample
    */
-  play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void
+  play: (targetVolume: number, startTimeSec?: number, fadeInSec?: number) => void
 
   /**
    * @param duration - in seconds
    */
-  fadeOut (duration?: number): Promise<void>
+  fadeOut: (duration?: number) => Promise<void>
 
   /**
    * Stop the playback of a sample and reset the current play position to the
@@ -350,7 +350,7 @@ export interface Sample {
    *
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
-  stop (fadeOutSec?: number): Promise<void>
+  stop: (fadeOutSec?: number) => Promise<void>
 
   /**
    * Pause the sample at the current position and set the video element to
@@ -358,27 +358,27 @@ export interface Sample {
    * `mediaElementCurrentVolume_` are set or
    * updated.
    */
-  pause (): Promise<void>
+  pause: () => Promise<void>
 
   /**
    * Toggle between `sample.pause()` and `sample.play()`. If a sample is loaded
    * start this sample.
    */
-  toggle (targetVolume: number): void
+  toggle: (targetVolume: number) => void
 
   /**
    * Jump forwards.
    *
    * @param interval - Time interval in seconds.
    */
-  forward (interval: number): void
+  forward: (interval: number) => void
 
   /**
    * Jump backwards.
    *
    * interval - Time interval in seconds.
    */
-  backward (interval: number): void
+  backward: (interval: number) => void
 }
 
 export interface SampleCollection extends Cache<Sample> {
@@ -393,7 +393,7 @@ export interface SampleCollection extends Cache<Sample> {
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
- export interface ClientMediaAsset {
+export interface ClientMediaAsset {
   /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
@@ -470,5 +470,5 @@ export interface SampleCollection extends Cache<Sample> {
    *
    * @param The part number starts with 1.
    */
-  getMultiPartHttpUrlByNo (no: number): string
+  getMultiPartHttpUrlByNo: (no: number) => string
 }

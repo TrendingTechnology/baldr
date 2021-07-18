@@ -7,7 +7,7 @@
  * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
  * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
- export interface MediaUri {
+export interface MediaUri {
 
   /**
    * The full, raw and unmodifed URI (Uniform Resource Identifier) as specified,

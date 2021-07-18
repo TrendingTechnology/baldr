@@ -53,8 +53,8 @@ function makeTexMarkup(titles) {
         jahrgangsstufe: titles.grade.toString()
     };
     const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev'];
-    for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
-        setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index];
+    for (let index = 0; index < titles.curriculumTitlesArrayFromGrade.length; index++) {
+        setzeTitle[ebenen[index]] = titles.curriculumTitlesArrayFromGrade[index];
     }
     setzeTitle.titel = titles.title;
     if (titles.subtitle != null) {

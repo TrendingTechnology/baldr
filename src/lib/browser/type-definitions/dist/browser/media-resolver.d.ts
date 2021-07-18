@@ -147,14 +147,14 @@ export interface RestApiRaw extends YamlFormat {
     [property: string]: any;
 }
 export interface Cache<T> {
-    add(ref: string, mediaObject: T): boolean;
-    get(ref: string): T | undefined;
+    add: (ref: string, mediaObject: T) => boolean;
+    get: (ref: string) => T | undefined;
     /**
      * The size of the cache. Indicates how many media objects are in the cache.
      */
     size: number;
-    getAll(): T[];
-    reset(): void;
+    getAll: () => T[];
+    reset: () => void;
 }
 /**
  * The state of the current playback.
@@ -267,14 +267,14 @@ export interface Sample {
      *   number from 0 - 1.
      * @param duration - in seconds
      */
-    fadeIn(targetVolume: number, duration?: number): Promise<void>;
+    fadeIn: (targetVolume: number, duration?: number) => Promise<void>;
     /**
      * Start and play a sample from the beginning.
      *
      * @param targetVolume - End volume value of the fade in process. A
      *   number from 0 - 1.
      */
-    start(targetVolume: number): void;
+    start: (targetVolume: number) => void;
     /**
      * Play a sample from `startTimeSec`.
      *
@@ -283,11 +283,11 @@ export interface Sample {
      * @param startTimeSec - Position in the sample from where to play
      *   the sample
      */
-    play(targetVolume: number, startTimeSec?: number, fadeInSec?: number): void;
+    play: (targetVolume: number, startTimeSec?: number, fadeInSec?: number) => void;
     /**
      * @param duration - in seconds
      */
-    fadeOut(duration?: number): Promise<void>;
+    fadeOut: (duration?: number) => Promise<void>;
     /**
      * Stop the playback of a sample and reset the current play position to the
      * beginning of the sample. If the sample is a video, show the poster
@@ -296,31 +296,31 @@ export interface Sample {
      *
      * @param fadeOutSec - Duration in seconds to fade out the sample.
      */
-    stop(fadeOutSec?: number): Promise<void>;
+    stop: (fadeOutSec?: number) => Promise<void>;
     /**
      * Pause the sample at the current position and set the video element to
      * opacity 0. The properties `mediaElementCurrentTimeSec_` and
      * `mediaElementCurrentVolume_` are set or
      * updated.
      */
-    pause(): Promise<void>;
+    pause: () => Promise<void>;
     /**
      * Toggle between `sample.pause()` and `sample.play()`. If a sample is loaded
      * start this sample.
      */
-    toggle(targetVolume: number): void;
+    toggle: (targetVolume: number) => void;
     /**
      * Jump forwards.
      *
      * @param interval - Time interval in seconds.
      */
-    forward(interval: number): void;
+    forward: (interval: number) => void;
     /**
      * Jump backwards.
      *
      * interval - Time interval in seconds.
      */
-    backward(interval: number): void;
+    backward: (interval: number) => void;
 }
 export interface SampleCollection extends Cache<Sample> {
 }
@@ -394,5 +394,5 @@ export interface ClientMediaAsset {
      *
      * @param The part number starts with 1.
      */
-    getMultiPartHttpUrlByNo(no: number): string;
+    getMultiPartHttpUrlByNo: (no: number) => string;
 }

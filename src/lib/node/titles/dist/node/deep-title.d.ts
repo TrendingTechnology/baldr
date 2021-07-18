@@ -1,4 +1,4 @@
-import type { LampTypes, TitlesTypes } from '@bldr/type-definitions';
+import { LampTypes, TitlesTypes } from '@bldr/type-definitions';
 import { FolderTitle } from './folder-title';
 export declare class DeepTitle implements TitlesTypes.DeepTitle {
     /**
@@ -60,10 +60,16 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
     get allTitles(): string;
     get curriculumTitlesArray(): string[];
     get curriculum(): string;
+    get curriculumTitlesArrayFromGrade(): string[];
+    get curriculumFromGrade(): string;
     get ref(): string;
     get title(): string;
     get subtitle(): string | undefined;
     get titleAndSubtitle(): string;
+    /**
+     * Get the index number of the folder title object containing “X. Jahrgangsstufe”.
+     */
+    private get gradeIndexPosition();
     get grade(): number;
     list(): FolderTitle[];
     getFolderTitleByFolderName(folderName: string): FolderTitle | undefined;

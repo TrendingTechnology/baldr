@@ -49,7 +49,13 @@ class DeepTitle {
         }
         const relPath = path_1.default.dirname(filePath);
         const folderName = path_1.default.basename(relPath);
-        return new folder_title_1.FolderTitle({ title, subtitle, hasPresentation, relPath, folderName });
+        return new folder_title_1.FolderTitle({
+            title,
+            subtitle,
+            hasPresentation,
+            relPath,
+            folderName
+        });
     }
     /**
      * Generate the path of the title.txt file `/var/data/baldr/media/05/title.txt`
@@ -141,6 +147,12 @@ class DeepTitle {
     get curriculum() {
         return this.curriculumTitlesArray.join(' / ');
     }
+    get curriculumTitlesArrayFromGrade() {
+        return this.titlesArray.slice(this.gradeIndexPosition + 1, this.titles.length - 1);
+    }
+    get curriculumFromGrade() {
+        return this.curriculumTitlesArrayFromGrade.join(' / ');
+    }
     get ref() {
         return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '');
     }
@@ -157,8 +169,21 @@ class DeepTitle {
             return `${this.title} - ${this.subtitle}`;
         return this.title;
     }
+    /**
+     * Get the index number of the folder title object containing “X. Jahrgangsstufe”.
+     */
+    get gradeIndexPosition() {
+        let i = 0;
+        for (const folderTitle of this.titles) {
+            if (folderTitle.title.match(/^\d+\. *Jahrgangsstufe$/) != null) {
+                return i;
+            }
+            i++;
+        }
+        throw new Error(`“X. Jahrgangsstufe” not found in the titles: ${this.allTitles}`);
+    }
     get grade() {
-        return parseInt(this.titles[0].title.replace(/[^\d]+$/, ''));
+        return parseInt(this.titles[this.gradeIndexPosition].title.replace(/[^\d]+$/, ''));
     }
     list() {
         return this.titles;
@@ -178,8 +203,9 @@ class DeepTitle {
             grade: this.grade,
             curriculum: this.curriculum
         };
-        if (result.subtitle == null || result.subtitle === '')
+        if (result.subtitle == null || result.subtitle === '') {
             delete result.subtitle;
+        }
         return result;
     }
 }
