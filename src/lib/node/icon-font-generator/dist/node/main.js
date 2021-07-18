@@ -73,19 +73,19 @@ function downloadIcons(iconMapping, urlTemplate) {
     cmd.startProgress();
     const iconsCount = Object.keys(iconMapping).length;
     let count = 0;
-    for (const oldName in iconMapping) {
-        const url = urlTemplate.replace('{icon}', oldName);
-        let newName = oldName;
-        const iconDef = iconMapping[oldName];
+    for (const newName in iconMapping) {
+        let oldName = newName;
+        const iconDef = iconMapping[newName];
         if (typeof iconDef === 'string') {
-            newName = iconDef;
+            oldName = iconDef;
         }
-        else if (typeof iconDef === 'object' && iconDef.newName != null) {
-            newName = iconDef.newName;
+        else if (typeof iconDef === 'object' && iconDef.oldName != null) {
+            oldName = iconDef.oldName;
         }
+        const url = urlTemplate.replace('{icon}', oldName);
         downloadIcon(url, oldName, newName);
         count++;
-        cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', oldName));
+        cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', newName));
     }
     cmd.stopProgress();
 }

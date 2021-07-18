@@ -4,6 +4,7 @@
  * @module @bldr/type-definitions/config
  */
 import * as MediaCategoriesTypes from './media-categories';
+import { IconFontConfiguration } from './icon-font-generator';
 interface ApiConfiguration {
     port: number;
 }
@@ -54,63 +55,6 @@ interface HttpConfiguration {
      * `www-data` on Debian based systems.
      */
     webServerGroup: string;
-}
-/**
- * ```json
- * {
- *   "text-box-multiple-outline": {
- *     "newName": "multi-part",
- *     "description": "multipart assets"
- *   },
- *   "cloud-download": {
- *      "description": "Master slide youtube for download (cached) video file with an asset."
- *   }
- * }
- * ```
- */
-export interface IconDefintion {
-    newName?: string;
-    description?: string;
-}
-/**
- * ```json
- * {
- *   "file-tree": "tree",
- *   "trumpet": "",
- *   "text-box-multiple-outline": {
- *     "newName": "multi-part",
- *     "description": "multipart assets"
- *   },
- *   "cloud-download": {
- *      "description": "Master slide youtube for download (cached) video file with an asset."
- *   }
- * }
- * ```
- */
-export interface IconFontMapping {
-    [key: string]: false | string | IconDefintion;
-}
-export interface IconFontConfiguration {
-    /**
-     * `"https://raw.github...svg/{icon}.svg"`
-     */
-    urlTemplate: string;
-    /**
-     * ```json
-     * {
-     *   "file-tree": "tree",
-     *   "trumpet": "",
-     *   "text-box-multiple-outline": {
-     *     "newName": "multi-part",
-     *     "description": "multipart assets"
-     *   },
-     *   "cloud-download": {
-     *      "description": "Master slide youtube for download (cached) video file with an asset."
-     *   }
-     * }
-     * ```
-     */
-    iconMapping: IconFontMapping;
 }
 interface MimeType {
     allowedExtensions: string[];
