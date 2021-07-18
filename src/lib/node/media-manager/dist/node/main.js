@@ -32,6 +32,7 @@ const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
 const rename_asset_1 = require("./operations/rename-asset");
+const patch_tex_titles_1 = require("./operations/patch-tex-titles");
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
@@ -41,6 +42,7 @@ exports.operations = {
     initializeMetaYaml: initialize_meta_yaml_1.initializeMetaYaml,
     normalizeMediaAsset: normalize_asset_1.normalizeMediaAsset,
     normalizePresentationFile: normalize_presentation_1.normalizePresentationFile,
+    patchTexTitles: patch_tex_titles_1.patchTexTitles,
     renameMediaAsset: rename_asset_1.renameMediaAsset
 };
 __exportStar(require("./directory-tree-walk"), exports);

@@ -124,11 +124,11 @@ function action(filePath) {
             title = rawSample.title;
         }
         const ref = core_browser_1.asciify(title.toLowerCase());
-        let timeText = [];
-        if (rawSample.startTime) {
+        const timeText = [];
+        if (rawSample.startTime != null) {
             timeText.push(core_browser_1.formatDuration(rawSample.startTime, true));
         }
-        if (rawSample.endTime) {
+        if (rawSample.endTime != null) {
             timeText.push(core_browser_1.formatDuration(rawSample.endTime, true));
         }
         if (timeText.length > 0) {
@@ -138,10 +138,10 @@ function action(filePath) {
             ref,
             title
         };
-        if (rawSample.startTime) {
+        if (rawSample.startTime != null) {
             sample.startTime = rawSample.startTime;
         }
-        if (rawSample.endTime) {
+        if (rawSample.endTime != null) {
             sample.endTime = rawSample.endTime;
         }
         samples.push(sample);

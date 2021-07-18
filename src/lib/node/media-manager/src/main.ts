@@ -21,6 +21,7 @@ import { initializeMetaYaml } from './operations/initialize-meta-yaml'
 import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
 import { renameMediaAsset } from './operations/rename-asset'
+import { patchTexTitles } from './operations/patch-tex-titles'
 
 /**
  * A collection of function to manipulate the media assets and presentation files.
@@ -31,6 +32,7 @@ export const operations = {
   initializeMetaYaml,
   normalizeMediaAsset,
   normalizePresentationFile,
+  patchTexTitles,
   renameMediaAsset
 }
 

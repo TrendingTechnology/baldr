@@ -1,5 +1,5 @@
 // Project packages.
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { asciify, formatDuration } from '@bldr/core-browser'
@@ -120,12 +120,12 @@ function action (filePath: string): void {
 
     const ref = asciify(title.toLowerCase())
 
-    let timeText: string[] = []
-    if (rawSample.startTime) {
+    const timeText: string[] = []
+    if (rawSample.startTime != null) {
       timeText.push(formatDuration(rawSample.startTime, true))
     }
 
-    if (rawSample.endTime) {
+    if (rawSample.endTime != null) {
       timeText.push(formatDuration(rawSample.endTime, true))
     }
 
@@ -138,10 +138,10 @@ function action (filePath: string): void {
       title
     }
 
-    if (rawSample.startTime) {
+    if (rawSample.startTime != null) {
       sample.startTime = rawSample.startTime
     }
-    if (rawSample.endTime) {
+    if (rawSample.endTime != null) {
       sample.endTime = rawSample.endTime
     }
     samples.push(sample)

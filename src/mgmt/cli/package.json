@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "npm run build:node && npm run lint",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/**/*.ts'",
     "lint": "npm run lint:ts-standard && npm run lint:depcheck"
@@ -42,7 +42,6 @@
     "@bldr/open-with": "*",
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
-    "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*",
