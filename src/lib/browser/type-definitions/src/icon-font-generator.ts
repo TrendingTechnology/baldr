@@ -11,7 +11,7 @@
  * }
  * ```
  */
- export interface IconDefintion {
+export interface IconDefintion {
   oldName?: string
   description?: string
 }

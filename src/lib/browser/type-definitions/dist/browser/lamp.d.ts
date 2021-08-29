@@ -454,7 +454,7 @@ interface MasterProp {
  *
  * ```js
  * icon: {
- *   name: 'comment-quote',
+ *   name: 'quote',
  *   color: 'brown',
  *   size: 'large'
  *   showOnSlides: true

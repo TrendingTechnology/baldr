@@ -5,7 +5,7 @@
  */
 
 import * as MediaCategoriesTypes from './media-categories'
-import { IconFontConfiguration  } from './icon-font-generator'
+import { IconFontConfiguration } from './icon-font-generator'
 
 interface ApiConfiguration {
   port: number
