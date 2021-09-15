@@ -5,13 +5,22 @@ import path from 'path'
 
 // Project packages.
 import * as log from '@bldr/log'
-import { moveAsset, operations, locationIndicator, walk } from '@bldr/media-manager'
+import {
+  moveAsset,
+  operations,
+  locationIndicator,
+  walk
+} from '@bldr/media-manager'
 import { DeepTitle } from '@bldr/titles'
 import { convertToYaml } from '@bldr/yaml'
 import { getPdfPageCount } from '@bldr/core-node'
 import { readFile, writeFile } from '@bldr/file-reader-writer'
 
-async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number): Promise<void> {
+async function generateOneClozeSvg (
+  tmpPdfFile: string,
+  pageCount: number,
+  pageNo: number
+): Promise<void> {
   const cwd = path.dirname(tmpPdfFile)
   let counterSuffix = ''
   if (pageCount > 1) {
@@ -45,18 +54,24 @@ async function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageN
   writeFile(path.join(cwd, `${svgFileName}.yml`), convertToYaml(infoYaml))
 
   // Move to LT (Lückentext) subdir.
-  const newPath = locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
+  const newPath = locationIndicator.moveIntoSubdir(
+    path.resolve(svgFileName),
+    'LT'
+  )
+  log.info('Result svg: %s has no cloze texts.', newPath)
   moveAsset(svgFilePath, newPath)
   await operations.normalizeMediaAsset(newPath, { wikidata: false })
 }
 
+/**
+ * @param filePath - The file path of a TeX file.
+ */
 async function generateClozeSvg (filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
-  console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = readFile(filePath)
   if (!texFileContent.includes('cloze')) {
-    log.info('has no cloze texts.', filePath)
+    log.info('%s has no cloze texts.', filePath)
     return
   }
 
@@ -94,7 +109,8 @@ async function generateClozeSvg (filePath: string): Promise<void> {
   )
   writeFile(tmpTexFile, texFileContent)
   const result = childProcess.spawnSync(
-    'lualatex', ['--shell-escape', tmpTexFile],
+    'lualatex',
+    ['--shell-escape', tmpTexFile],
     { cwd, encoding: 'utf-8' }
   )
 
@@ -120,7 +136,7 @@ async function generateClozeSvg (filePath: string): Promise<void> {
 async function action (filePath: string): Promise<void> {
   await walk(
     generateClozeSvg,
-    { regex: new RegExp('.*\.tex$'), path: filePath } // eslint-disable-line
+    { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
   )
 }
 

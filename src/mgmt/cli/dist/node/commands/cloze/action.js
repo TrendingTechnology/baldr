@@ -68,8 +68,10 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
             cloze_page_count: pageCount
         };
         file_reader_writer_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), yaml_1.convertToYaml(infoYaml));
+        console.log(path_1.default.resolve(svgFileName));
         // Move to LT (Lückentext) subdir.
         const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
+        log.info('Result svg: %s has no cloze texts.', newPath);
         media_manager_1.moveAsset(svgFilePath, newPath);
         yield media_manager_1.operations.normalizeMediaAsset(newPath, { wikidata: false });
     });
@@ -77,11 +79,10 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
 function generateClozeSvg(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         filePath = path_1.default.resolve(filePath);
-        console.log(filePath);
         const cwd = path_1.default.dirname(filePath);
         let texFileContent = file_reader_writer_1.readFile(filePath);
         if (!texFileContent.includes('cloze')) {
-            log.info('has no cloze texts.', filePath);
+            log.info('%s has no cloze texts.', filePath);
             return;
         }
         const tmpTexFile = filePath.replace('.tex', '_Loesung.tex');
@@ -133,7 +134,7 @@ function generateClozeSvg(filePath) {
  */
 function action(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk(generateClozeSvg, { regex: new RegExp('.*\.tex$'), path: filePath } // eslint-disable-line
+        yield media_manager_1.walk(generateClozeSvg, { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
         );
     });
 }
