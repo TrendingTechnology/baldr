@@ -59,4 +59,10 @@ export declare function isAsset(filePath: string): boolean;
  * @param filePath - The path of the file to check.
  */
 export declare function isPresentation(filePath: string): boolean;
+/**
+ * Check if the given file is a TeX file.
+ *
+ * @param filePath - The path of the file to check.
+ */
+export declare function isTex(filePath: string): boolean;
 export {};

@@ -12,13 +12,17 @@ declare type WalkFunc = (path: string, payload?: object | any) => any;
  */
 interface WalkFuncBundle {
     /**
-     * This function is called on each presentation.
+     * This function is called on every presentation.
      */
     presentation?: WalkFunc;
     /**
-     * This function is called on each asset.
+     * This function is called on every asset.
      */
     asset?: WalkFunc;
+    /**
+     * This function is called on every TeX file.
+     */
+    tex?: WalkFunc;
     /**
      * This function is called on all media
      * types, at the moment on presentations and assets.

@@ -13,6 +13,7 @@ export interface StringIndexedStringIndexedData { [key: string]: string }
 export interface GenericError {
   name: string
   message: string
+  code: string
 }
 
 /**

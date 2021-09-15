@@ -10,7 +10,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getExtension } from '@bldr/core-browser'
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import type { MediaResolverTypes, GenericError } from '@bldr/type-definitions'
 
 import { readYamlFile } from '@bldr/file-reader-writer'
 
@@ -66,7 +66,8 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
         try {
           fs.renameSync(oldPath, newPath)
         } catch (error) {
-          if (error.code === 'EXDEV') {
+          const e = error as GenericError
+          if (e.code === 'EXDEV') {
             fs.copyFileSync(oldPath, newPath)
             fs.unlinkSync(oldPath)
           }

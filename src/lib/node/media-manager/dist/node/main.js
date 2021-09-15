@@ -71,7 +71,8 @@ function moveAsset(oldPath, newPath, opts = {}) {
                     fs_1.default.renameSync(oldPath, newPath);
                 }
                 catch (error) {
-                    if (error.code === 'EXDEV') {
+                    const e = error;
+                    if (e.code === 'EXDEV') {
                         fs_1.default.copyFileSync(oldPath, newPath);
                         fs_1.default.unlinkSync(oldPath);
                     }

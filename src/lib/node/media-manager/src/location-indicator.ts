@@ -83,7 +83,7 @@ class LocationIndicator {
         if (
           // 20_Swing -> true
           // Material -> false
-          (match[1].match(/\d\d_.*/g) != null) &&
+          match[1].match(/\d\d_.*/g) != null &&
           fs.statSync(currentPath).isDirectory()
         ) {
           isPrefixed = true
@@ -166,7 +166,7 @@ class LocationIndicator {
         break
       }
     }
-    if (relPath !== undefined) return relPath.replace(new RegExp(`^${path.sep}`), '')
+    if (relPath !== undefined) { return relPath.replace(new RegExp(`^${path.sep}`), '') }
   }
 
   /**
@@ -184,7 +184,7 @@ class LocationIndicator {
         break
       }
     }
-    if (basePath !== undefined) return basePath.replace(new RegExp(`${path.sep}$`), '')
+    if (basePath !== undefined) { return basePath.replace(new RegExp(`${path.sep}$`), '') }
   }
 
   /**
@@ -211,7 +211,7 @@ class LocationIndicator {
         break
       }
     }
-    if (mirroredBasePath !== undefined && relPath !== undefined) return path.join(mirroredBasePath, relPath)
+    if (mirroredBasePath !== undefined && relPath !== undefined) { return path.join(mirroredBasePath, relPath) }
   }
 }
 

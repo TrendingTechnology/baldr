@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isPresentation = exports.isAsset = exports.filePathToMimeType = exports.makeAsset = exports.Asset = void 0;
+exports.isTex = exports.isPresentation = exports.isAsset = exports.filePathToMimeType = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
@@ -95,13 +95,14 @@ exports.filePathToMimeType = filePathToMimeType;
 function isAsset(filePath) {
     if (filePath.includes('eps-converted-to.pdf') || // eps converted into pdf by TeX
         filePath.includes('_preview.jpg') || // Preview image
-        (filePath.match(/_no\d+\./) != null) // Multipart asset
+        filePath.match(/_no\d+\./) != null // Multipart asset
     ) {
         return false;
     }
     // see .gitignore of media folder
-    if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null)
+    if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) {
         return true;
+    }
     return client_media_models_1.mimeTypeManager.isAsset(filePath);
 }
 exports.isAsset = isAsset;
@@ -117,3 +118,15 @@ function isPresentation(filePath) {
     return false;
 }
 exports.isPresentation = isPresentation;
+/**
+ * Check if the given file is a TeX file.
+ *
+ * @param filePath - The path of the file to check.
+ */
+function isTex(filePath) {
+    if (filePath.match(/\.tex$/) != null) {
+        return true;
+    }
+    return false;
+}
+exports.isTex = isTex;

@@ -13,6 +13,7 @@ export interface StringIndexedStringIndexedData {
 export interface GenericError {
     name: string;
     message: string;
+    code: string;
 }
 /**
  * Types from specific packages.

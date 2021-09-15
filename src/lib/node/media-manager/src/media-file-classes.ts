@@ -1,7 +1,7 @@
 // Node packages.
 import path from 'path'
 
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
@@ -33,7 +33,9 @@ class MediaFile {
    * The basename (filename without extension) of the file.
    */
   get basename (): string {
-    if (this.extension != null) { return path.basename(this.absPath, `.${this.extension}`) }
+    if (this.extension != null) {
+      return path.basename(this.absPath, `.${this.extension}`)
+    }
     return this.absPath
   }
 }
@@ -87,7 +89,9 @@ export function makeAsset (filePath: string): Asset {
  */
 export function filePathToMimeType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
-  if (asset.extension != null) { return mimeTypeManager.extensionToType(asset.extension) }
+  if (asset.extension != null) {
+    return mimeTypeManager.extensionToType(asset.extension)
+  }
 }
 
 /**
@@ -99,12 +103,14 @@ export function isAsset (filePath: string): boolean {
   if (
     filePath.includes('eps-converted-to.pdf') || // eps converted into pdf by TeX
     filePath.includes('_preview.jpg') || // Preview image
-    (filePath.match(/_no\d+\./) != null) // Multipart asset
+    filePath.match(/_no\d+\./) != null // Multipart asset
   ) {
     return false
   }
   // see .gitignore of media folder
-  if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) return true
+  if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) {
+    return true
+  }
   return mimeTypeManager.isAsset(filePath)
 }
 
@@ -115,6 +121,18 @@ export function isAsset (filePath: string): boolean {
  */
 export function isPresentation (filePath: string): boolean {
   if (filePath.includes('Praesentation.baldr.yml')) {
+    return true
+  }
+  return false
+}
+
+/**
+ * Check if the given file is a TeX file.
+ *
+ * @param filePath - The path of the file to check.
+ */
+export function isTex (filePath: string): boolean {
+  if (filePath.match(/\.tex$/) != null) {
     return true
   }
   return false

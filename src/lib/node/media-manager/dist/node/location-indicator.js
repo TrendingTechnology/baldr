@@ -72,7 +72,7 @@ class LocationIndicator {
                 if (
                 // 20_Swing -> true
                 // Material -> false
-                (match[1].match(/\d\d_.*/g) != null) &&
+                match[1].match(/\d\d_.*/g) != null &&
                     fs_1.default.statSync(currentPath).isDirectory()) {
                     isPrefixed = true;
                 }
@@ -150,8 +150,9 @@ class LocationIndicator {
                 break;
             }
         }
-        if (relPath !== undefined)
+        if (relPath !== undefined) {
             return relPath.replace(new RegExp(`^${path_1.default.sep}`), '');
+        }
     }
     /**
      * Get the path relative to one of the base paths and `currentPath`.
@@ -168,8 +169,9 @@ class LocationIndicator {
                 break;
             }
         }
-        if (basePath !== undefined)
+        if (basePath !== undefined) {
             return basePath.replace(new RegExp(`${path_1.default.sep}$`), '');
+        }
     }
     /**
      * The mirrored path of the current give file path, for example:
@@ -195,8 +197,9 @@ class LocationIndicator {
                 break;
             }
         }
-        if (mirroredBasePath !== undefined && relPath !== undefined)
+        if (mirroredBasePath !== undefined && relPath !== undefined) {
             return path_1.default.join(mirroredBasePath, relPath);
+        }
     }
 }
 exports.locationIndicator = new LocationIndicator();
