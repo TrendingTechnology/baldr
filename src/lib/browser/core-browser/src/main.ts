@@ -294,7 +294,7 @@ export function genUuid (): string {
  *
  * @return `01:23`
  */
- export function formatDuration (duration: number | string, short: boolean = false): string {
+export function formatDuration (duration: number | string, short: boolean = false): string {
   duration = Number(duration)
   let from = 11
   let length = 8
