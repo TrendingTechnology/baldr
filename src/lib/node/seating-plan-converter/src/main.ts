@@ -12,6 +12,7 @@ import csv from 'csv-parser'
 import { CommandRunner } from '@bldr/cli-utils'
 import { writeFile } from '@bldr/file-reader-writer'
 import config from '@bldr/config'
+import { getFormatedSchoolYear } from '@bldr/core-browser'
 
 const documentTemplate = {
   grades: {},
@@ -36,7 +37,7 @@ const documentTemplate = {
   meta: {
     location: config.meta.school,
     teacher: config.meta.teacher,
-    year: '2019/20'
+    year: getFormatedSchoolYear()
   }
 }
 

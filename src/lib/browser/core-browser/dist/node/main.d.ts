@@ -121,3 +121,14 @@ export declare function genUuid(): string;
  * @return `01:23`
  */
 export declare function formatDuration(duration: number | string, short?: boolean): string;
+/**
+ * Get the current school year. The function returns year in which the school year begins.
+ *
+ * @returns The year in which the school year begins, for example `2021/22`: `2021`
+ */
+export declare function getCurrentSchoolYear(): number;
+/**
+ *
+ * @returns e. g. `2021/22`
+ */
+export declare function getFormatedSchoolYear(): string;

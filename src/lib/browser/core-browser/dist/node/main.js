@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
 const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -31,7 +31,9 @@ __exportStar(require("./string-format"), exports);
  */
 function getExtension(filePath) {
     if (filePath != null) {
-        const extension = String(filePath).split('.').pop();
+        const extension = String(filePath)
+            .split('.')
+            .pop();
         if (extension != null) {
             return extension.toLowerCase();
         }
@@ -267,7 +269,7 @@ exports.makeSet = makeSet;
  * @returns An UUID version 4
  */
 function genUuid() {
-    return uuid_1.v4();
+    return (0, uuid_1.v4)();
 }
 exports.genUuid = genUuid;
 /**
@@ -286,3 +288,29 @@ function formatDuration(duration, short = false) {
     return new Date(Number(duration) * 1000).toISOString().substr(from, length);
 }
 exports.formatDuration = formatDuration;
+/**
+ * Get the current school year. The function returns year in which the school year begins.
+ *
+ * @returns The year in which the school year begins, for example `2021/22`: `2021`
+ */
+function getCurrentSchoolYear() {
+    const date = new Date();
+    // getMonth: 0 = January
+    // 8 = September
+    if (date.getMonth() < 8) {
+        return date.getFullYear() - 1;
+    }
+    return date.getFullYear();
+}
+exports.getCurrentSchoolYear = getCurrentSchoolYear;
+/**
+ *
+ * @returns e. g. `2021/22`
+ */
+function getFormatedSchoolYear() {
+    const year = getCurrentSchoolYear();
+    const endYear = year + 1;
+    const endYearString = endYear.toString().substr(2);
+    return `${year.toString()}/${endYearString}`;
+}
+exports.getFormatedSchoolYear = getFormatedSchoolYear;

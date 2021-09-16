@@ -320,7 +320,7 @@ function asciify(input) {
         .replace(/ü/g, 'ue')
         .replace(/ß/g, 'ss')
         .replace(/!/g, '');
-    return transliteration_1.transliterate(output);
+    return (0, transliteration_1.transliterate)(output);
 }
 exports.asciify = asciify;
 /**

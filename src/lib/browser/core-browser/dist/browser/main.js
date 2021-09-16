@@ -18,7 +18,9 @@ export * from './string-format';
  */
 export function getExtension(filePath) {
     if (filePath != null) {
-        const extension = String(filePath).split('.').pop();
+        const extension = String(filePath)
+            .split('.')
+            .pop();
         if (extension != null) {
             return extension.toLowerCase();
         }
@@ -262,4 +264,28 @@ export function formatDuration(duration, short = false) {
         length = 5;
     }
     return new Date(Number(duration) * 1000).toISOString().substr(from, length);
+}
+/**
+ * Get the current school year. The function returns year in which the school year begins.
+ *
+ * @returns The year in which the school year begins, for example `2021/22`: `2021`
+ */
+export function getCurrentSchoolYear() {
+    const date = new Date();
+    // getMonth: 0 = January
+    // 8 = September
+    if (date.getMonth() < 8) {
+        return date.getFullYear() - 1;
+    }
+    return date.getFullYear();
+}
+/**
+ *
+ * @returns e. g. `2021/22`
+ */
+export function getFormatedSchoolYear() {
+    const year = getCurrentSchoolYear();
+    const endYear = year + 1;
+    const endYearString = endYear.toString().substr(2);
+    return `${year.toString()}/${endYearString}`;
 }

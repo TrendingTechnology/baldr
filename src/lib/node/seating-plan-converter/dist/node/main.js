@@ -24,6 +24,7 @@ const csv_parser_1 = __importDefault(require("csv-parser"));
 const cli_utils_1 = require("@bldr/cli-utils");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const config_1 = __importDefault(require("@bldr/config"));
+const core_browser_1 = require("@bldr/core-browser");
 const documentTemplate = {
     grades: {},
     jobs: {
@@ -47,7 +48,7 @@ const documentTemplate = {
     meta: {
         location: config_1.default.meta.school,
         teacher: config_1.default.meta.teacher,
-        year: '2019/20'
+        year: (0, core_browser_1.getFormatedSchoolYear)()
     }
 };
 function convertNotenmanagerMdbToJson(mdbFile) {

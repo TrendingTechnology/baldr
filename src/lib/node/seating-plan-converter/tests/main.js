@@ -10,5 +10,6 @@ describe('Package “@bldr/seating-plan-converter”', function () {
     const result = await convertNotenmanagerMdbToJson(config.seatingPlan.notenmanagerMdbPath)
     assert.ok(Object.keys(result.grades).length > 0)
     assert.ok(result.timeStampMsec > 1)
+    assert.strictEqual(result.meta.year.length, 7)
   })
 })

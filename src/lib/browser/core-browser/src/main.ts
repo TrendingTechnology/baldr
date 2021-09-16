@@ -21,7 +21,9 @@ export * from './string-format'
  */
 export function getExtension (filePath: string): string | undefined {
   if (filePath != null) {
-    const extension = String(filePath).split('.').pop()
+    const extension = String(filePath)
+      .split('.')
+      .pop()
     if (extension != null) {
       return extension.toLowerCase()
     }
@@ -80,7 +82,16 @@ interface SelectionSubsetOption {
  *
  * @param options
  */
-export function selectSubset (subsetSelector: string | undefined, { sort, elements, elementsCount, firstElementNo, shiftSelector }: SelectionSubsetOption): any[] {
+export function selectSubset (
+  subsetSelector: string | undefined,
+  {
+    sort,
+    elements,
+    elementsCount,
+    firstElementNo,
+    shiftSelector
+  }: SelectionSubsetOption
+): any[] {
   const subset = []
   if (shiftSelector == null) shiftSelector = 0
 
@@ -138,7 +149,7 @@ export function selectSubset (subsetSelector: string | undefined, { sort, elemen
     if (startEnd.length === 1) {
       const i = startEnd[0]
       subset.push(elements[i - 1 + shiftSelector])
-    // 1-3
+      // 1-3
     } else if (startEnd.length === 2) {
       const beginNo = startEnd[0] + shiftSelector
       const endNo = startEnd[1] + shiftSelector
@@ -168,7 +179,7 @@ export function selectSubset (subsetSelector: string | undefined, { sort, elemen
  * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
  */
 export function sortObjectsByProperty (property: string) {
-  return function (a: {[key: string]: any}, b: {[key: string]: any}) {
+  return function (a: { [key: string]: any }, b: { [key: string]: any }) {
     return a[property].localeCompare(b[property])
   }
 }
@@ -198,7 +209,10 @@ export function validateUri (uri: string): string {
  *
  * @returns An array of HTML chunks.
  */
-export function splitHtmlIntoChunks (htmlString: string, charactersOnSlide: number): string[] {
+export function splitHtmlIntoChunks (
+  htmlString: string,
+  charactersOnSlide: number
+): string[] {
   /**
    * Add text to the chunks array. Add only text with real letters not with
    * whitespaces.
@@ -294,7 +308,10 @@ export function genUuid (): string {
  *
  * @return `01:23`
  */
-export function formatDuration (duration: number | string, short: boolean = false): string {
+export function formatDuration (
+  duration: number | string,
+  short: boolean = false
+): string {
   duration = Number(duration)
   let from = 11
   let length = 8
@@ -303,4 +320,30 @@ export function formatDuration (duration: number | string, short: boolean = fals
     length = 5
   }
   return new Date(Number(duration) * 1000).toISOString().substr(from, length)
+}
+
+/**
+ * Get the current school year. The function returns year in which the school year begins.
+ *
+ * @returns The year in which the school year begins, for example `2021/22`: `2021`
+ */
+export function getCurrentSchoolYear (): number {
+  const date = new Date()
+  // getMonth: 0 = January
+  // 8 = September
+  if (date.getMonth() < 8) {
+    return date.getFullYear() - 1
+  }
+  return date.getFullYear()
+}
+
+/**
+ *
+ * @returns e. g. `2021/22`
+ */
+export function getFormatedSchoolYear (): string {
+  const year = getCurrentSchoolYear()
+  const endYear = year + 1
+  const endYearString = endYear.toString().substr(2)
+  return `${year.toString()}/${endYearString}`
 }
