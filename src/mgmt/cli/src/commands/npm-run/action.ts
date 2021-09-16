@@ -25,20 +25,19 @@ function findPackageJson (filePath: string): string | undefined {
 /**
  * @param filePath - A file inside a javascript / node package.
  */
-async function action (filePath: string): Promise<void> {
+async function action (scriptName: string, filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
   const packageJson = findPackageJson(path.resolve(filePath))
 
   if (packageJson == null) {
     log.info('No package.json found on %s.', filePath)
-
     throw Error('No package.json found.')
   }
   log.info('Found %s', packageJson)
 
   return await new Promise(function (resolve, reject) {
     const parentDir = path.dirname(packageJson)
-    const npm = childProcess.spawn('npm', ['run', 'build'], {
+    const npm = childProcess.spawn('npm', ['run', scriptName], {
       cwd: parentDir
     })
 
@@ -49,7 +48,7 @@ async function action (filePath: string): Promise<void> {
       if (code === 0) {
         resolve()
       } else {
-        reject(new Error('The build failed'))
+        reject(new Error(log.formatWithoutColor('The script % failed', scriptName)))
       }
     })
   })

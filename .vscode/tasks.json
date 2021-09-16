@@ -4,10 +4,30 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "baldr npm-build",
+      "label": "baldr npm-run build",
       "type": "shell",
       "command": "baldr",
-      "args": ["npm-build", "${file}"],
+      "args": ["npm-run", "build", "${file}"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "baldr npm-run lint",
+      "type": "shell",
+      "command": "baldr",
+      "args": ["npm-run", "lint", "${file}"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "baldr npm-run test",
+      "type": "shell",
+      "command": "baldr",
+      "args": ["npm-run", "test", "${file}"],
       "problemMatcher": [],
       "presentation": {
         "reveal": "always"

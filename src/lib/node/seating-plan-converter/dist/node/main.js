@@ -58,7 +58,7 @@ function convertNotenmanagerMdbToJson(mdbFile) {
             (0, file_reader_writer_1.writeFile)('tmp.csv', result.stdout);
         }
         const grades = {};
-        return new Promise(function (resolve, reject) {
+        return yield new Promise(function (resolve, reject) {
             fs_1.default.createReadStream('tmp.csv')
                 .pipe((0, csv_parser_1.default)())
                 .on('data', row => {
