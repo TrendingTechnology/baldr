@@ -64,7 +64,7 @@ async function action (appName: string): Promise<void> {
     }
     cmd.stopSpin()
   } catch (error) {
-    cmd.catch(error)
+    cmd.catch(error as Error)
   }
 }
 

@@ -68,7 +68,6 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
             cloze_page_count: pageCount
         };
         file_reader_writer_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), yaml_1.convertToYaml(infoYaml));
-        console.log(path_1.default.resolve(svgFileName));
         // Move to LT (Lückentext) subdir.
         const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
         log.info('Result svg: %s has no cloze texts.', newPath);
@@ -76,6 +75,9 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         yield media_manager_1.operations.normalizeMediaAsset(newPath, { wikidata: false });
     });
 }
+/**
+ * @param filePath - The file path of a TeX file.
+ */
 function generateClozeSvg(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         filePath = path_1.default.resolve(filePath);

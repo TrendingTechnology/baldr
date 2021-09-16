@@ -4,10 +4,10 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "baldr normalize",
+      "label": "baldr npm-build",
       "type": "shell",
       "command": "baldr",
-      "args": ["normalize", "${file}"],
+      "args": ["npm-build", "${file}"],
       "problemMatcher": [],
       "presentation": {
         "reveal": "always"

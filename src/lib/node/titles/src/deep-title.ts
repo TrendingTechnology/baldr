@@ -95,7 +95,7 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
    * @param filePath A file path from which to descend into the folder
    *   structure.
    *
-   * @returns An array with absolute file path. First the deepest title.txt
+   * @returns An array with absolute file paths. First the deepest title.txt
    *   file. Last the shallowest title.txt file.
    */
   private findTitleTxt (filePath: string): string[] {
