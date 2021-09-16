@@ -58,13 +58,13 @@ let tmpDir;
 function getIconPath(...args) {
     return path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments);
 }
-function downloadIcon(url, name, newName) {
+function downloadIcon(url, oldName, newName) {
     let destName;
     if (newName != null && newName !== '') {
         destName = newName;
     }
     else {
-        destName = name;
+        destName = oldName;
     }
     log.info('Download icon %s from %s', destName, url);
     cmd.execSync(['wget', '-O', path_1.default.join(tmpDir, `${destName}.svg`), url]);
