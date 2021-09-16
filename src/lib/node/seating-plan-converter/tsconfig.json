@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "COMMONJS",
+    "declaration": true,
+    "outDir": "./dist/node",
+    "strict": true,
+    "lib": ["ES2020", "DOM"],
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/*.ts"]
+}

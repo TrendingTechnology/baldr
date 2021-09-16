@@ -133,5 +133,27 @@ export interface Configuration {
     twoLetterAbbreviations: {
         [abbreviation: string]: string;
     };
+    /**
+     * Some configuration informations for the seating plan converter.
+     */
+    seatingPlan: {
+        /**
+         * Absolute file path of the Notenmanager’s mdb file.
+         */
+        notenmanagerMdbPath: string;
+    };
+    /**
+     * Some meta (background) informations about the Baldr instance.
+     */
+    meta: {
+        /**
+         * The complete name of the teacher, for example `OStR Max Mustermann`.
+         */
+        teacher: string;
+        /**
+         * The name of the school, for example `Altes-Gymnasium, Auerbauch`.
+         */
+        school: string;
+    };
 }
 export {};

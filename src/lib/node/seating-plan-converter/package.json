@@ -1,0 +1,40 @@
+{
+  "name": "@bldr/seating-plan-converter",
+  "version": "0.1.0",
+  "description": "Convert the MDB (Access) file from the Notenmananger to a suitable json file.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@bldr/cli-utils": "*",
+    "@bldr/config": "*",
+    "@bldr/file-reader-writer": "*",
+    "csv-parser": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "16.9.1",
+    "depcheck": "1.4.2",
+    "ts-standard": "10.0.0",
+    "typescript": "4.4.3"
+  },
+  "scripts": {
+    "build:node": "tsc",
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
+  }
+}
