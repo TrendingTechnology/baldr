@@ -1,33 +1,17 @@
 // Node packages.
 
-import fs from 'fs'
 import path from 'path'
 import childProcess from 'child_process'
-import * as log from '@bldr/log'
 
-function findPackageJson (filePath: string): string | undefined {
-  let parentDir: string
-  if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
-    parentDir = filePath
-  } else {
-    parentDir = path.dirname(filePath)
-  }
-  const segments = parentDir.split(path.sep)
-  for (let index = segments.length; index >= 0; index--) {
-    const pathSegments = segments.slice(0, index)
-    const packageJson = [...pathSegments, 'package.json'].join(path.sep)
-    if (fs.existsSync(packageJson)) {
-      return packageJson
-    }
-  }
-}
+import * as log from '@bldr/log'
+import { findParentFile } from '@bldr/core-node'
 
 /**
  * @param filePath - A file inside a javascript / node package.
  */
 async function action (scriptName: string, filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
-  const packageJson = findPackageJson(path.resolve(filePath))
+  const packageJson = findParentFile(path.resolve(filePath), 'package.json')
 
   if (packageJson == null) {
     log.info('No package.json found on %s.', filePath)

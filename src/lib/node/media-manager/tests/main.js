@@ -17,8 +17,8 @@ describe('Package “@bldr/media-manager”', function () {
       patchTexTitles(testFile)
 
       const content = readFile(testFile)
-
-      console.log(content)
+      assert.ok(content.includes('\\setzetitel{'))
+      assert.ok(content.includes('Fach = Musik,'))
     })
   })
 })

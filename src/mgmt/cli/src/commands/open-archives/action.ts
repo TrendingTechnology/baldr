@@ -1,7 +1,7 @@
 // Node packages.
 import path from 'path'
 
-// Project packages:
+// Project packages.
 import { locationIndicator } from '@bldr/media-manager'
 import { openArchivesInFileManager } from '@bldr/media-server'
 import * as log from '@bldr/log'

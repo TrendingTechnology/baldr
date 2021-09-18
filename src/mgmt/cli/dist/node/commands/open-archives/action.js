@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 // Node packages.
 const path_1 = __importDefault(require("path"));
-// Project packages:
+// Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const media_server_1 = require("@bldr/media-server");
 const log = __importStar(require("@bldr/log"));

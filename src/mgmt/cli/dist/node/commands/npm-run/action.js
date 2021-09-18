@@ -31,34 +31,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const child_process_1 = __importDefault(require("child_process"));
 const log = __importStar(require("@bldr/log"));
-function findPackageJson(filePath) {
-    let parentDir;
-    if (fs_1.default.existsSync(filePath) && fs_1.default.lstatSync(filePath).isDirectory()) {
-        parentDir = filePath;
-    }
-    else {
-        parentDir = path_1.default.dirname(filePath);
-    }
-    const segments = parentDir.split(path_1.default.sep);
-    for (let index = segments.length; index >= 0; index--) {
-        const pathSegments = segments.slice(0, index);
-        const packageJson = [...pathSegments, 'package.json'].join(path_1.default.sep);
-        if (fs_1.default.existsSync(packageJson)) {
-            return packageJson;
-        }
-    }
-}
+const core_node_1 = require("@bldr/core-node");
 /**
  * @param filePath - A file inside a javascript / node package.
  */
 function action(scriptName, filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         filePath = path_1.default.resolve(filePath);
-        const packageJson = findPackageJson(path_1.default.resolve(filePath));
+        const packageJson = core_node_1.findParentFile(path_1.default.resolve(filePath), 'package.json');
         if (packageJson == null) {
             log.info('No package.json found on %s.', filePath);
             throw Error('No package.json found.');

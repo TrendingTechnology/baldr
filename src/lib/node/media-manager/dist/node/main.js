@@ -91,7 +91,7 @@ function moveAsset(oldPath, newPath, opts = {}) {
         if (!(opts.dryRun != null && opts.dryRun)) {
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
         }
-        const extension = core_browser_1.getExtension(oldPath);
+        const extension = (0, core_browser_1.getExtension)(oldPath);
         if (extension === 'eps') {
             // Dippermouth-Blues.eps
             // Dippermouth-Blues.mscx
@@ -120,11 +120,11 @@ exports.moveAsset = moveAsset;
  *   extension `.yml`).
  */
 function readAssetYaml(filePath) {
-    const extension = core_browser_1.getExtension(filePath);
+    const extension = (0, core_browser_1.getExtension)(filePath);
     if (extension !== 'yml')
         filePath = `${filePath}.yml`;
     if (fs_1.default.existsSync(filePath)) {
-        return file_reader_writer_1.readYamlFile(filePath);
+        return (0, file_reader_writer_1.readYamlFile)(filePath);
     }
 }
 exports.readAssetYaml = readAssetYaml;

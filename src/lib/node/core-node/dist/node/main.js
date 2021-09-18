@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
+exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -49,7 +49,9 @@ function checkExecutables(executables) {
     if (!Array.isArray(executables))
         executables = [executables];
     for (const executable of executables) {
-        const process = child_process_1.default.spawnSync('which', [executable], { shell: true });
+        const process = child_process_1.default.spawnSync('which', [executable], {
+            shell: true
+        });
         if (process.status !== 0) {
             throw new Error(`Executable is not available: ${executable}`);
         }
@@ -68,7 +70,10 @@ function getPdfPageCount(filePath) {
     checkExecutables('pdfinfo');
     if (!fs_1.default.existsSync(filePath))
         throw new Error(`PDF file doesn’t exist: ${filePath}.`);
-    const proc = child_process_1.default.spawnSync('pdfinfo', [filePath], { encoding: 'utf-8', cwd: process.cwd() });
+    const proc = child_process_1.default.spawnSync('pdfinfo', [filePath], {
+        encoding: 'utf-8',
+        cwd: process.cwd()
+    });
     const match = proc.stdout.match(/Pages:\s+(\d+)/);
     if (match != null) {
         return parseInt(match[1]);
@@ -103,3 +108,28 @@ function untildify(filePath) {
     return filePath;
 }
 exports.untildify = untildify;
+/**
+ *
+ * @param filePath - A file path to search for a file in one of the parent folder struture.
+ * @param fileName - The name of the searched file.
+ *
+ * @returns The path of the found parent file or undefined if not found.
+ */
+function findParentFile(filePath, fileName) {
+    let parentDir;
+    if (fs_1.default.existsSync(filePath) && fs_1.default.lstatSync(filePath).isDirectory()) {
+        parentDir = filePath;
+    }
+    else {
+        parentDir = path_1.default.dirname(filePath);
+    }
+    const segments = parentDir.split(path_1.default.sep);
+    for (let index = segments.length; index >= 0; index--) {
+        const pathSegments = segments.slice(0, index);
+        const parentFile = [...pathSegments, fileName].join(path_1.default.sep);
+        if (fs_1.default.existsSync(parentFile)) {
+            return parentFile;
+        }
+    }
+}
+exports.findParentFile = findParentFile;

@@ -43,4 +43,12 @@ export declare function fetchFile(url: string, dest: string): Promise<void>;
  * @see {@link https://stackoverflow.com/a/36221905/10193818}
  */
 export declare function untildify(filePath: string): string;
+/**
+ *
+ * @param filePath - A file path to search for a file in one of the parent folder struture.
+ * @param fileName - The name of the searched file.
+ *
+ * @returns The path of the found parent file or undefined if not found.
+ */
+export declare function findParentFile(filePath: string, fileName: string): string | undefined;
 export {};

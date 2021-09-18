@@ -28,7 +28,7 @@ class LocationIndicator {
         ];
         this.paths = [];
         for (let i = 0; i < basePaths.length; i++) {
-            basePaths[i] = path_1.default.resolve(core_node_1.untildify(basePaths[i]));
+            basePaths[i] = path_1.default.resolve((0, core_node_1.untildify)(basePaths[i]));
             if (fs_1.default.existsSync(basePaths[i])) {
                 this.paths.push(basePaths[i]);
             }
@@ -54,34 +54,11 @@ class LocationIndicator {
     getPresParentDir(currentPath) {
         // /Duke-Ellington.jpg
         // /Material
-        const regexp = new RegExp(path_1.default.sep + '([^' + path_1.default.sep + ']+)$');
-        let match;
-        let isPrefixed = false;
-        do {
-            match = currentPath.match(regexp);
-            // [
-            //   '/54_Reggae',
-            //   '54_Reggae',
-            //   index: 55,
-            //   input: '/home/jf/schule-media/08/20_Mensch-Zeit/20_Popularmusik/54_Reggae',
-            //   groups: undefined
-            // ]
-            if (match != null && match.length > 1) {
-                // Return only directories not files like
-                // ...HB/Orchester/05_Promenade.mp3
-                if (
-                // 20_Swing -> true
-                // Material -> false
-                match[1].match(/\d\d_.*/g) != null &&
-                    fs_1.default.statSync(currentPath).isDirectory()) {
-                    isPrefixed = true;
-                }
-                if (!isPrefixed) {
-                    currentPath = currentPath.replace(regexp, '');
-                }
-            }
-        } while (!isPrefixed);
-        return currentPath;
+        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'title.txt');
+        if (parentFile != null) {
+            return path_1.default.dirname(parentFile);
+        }
+        return '';
     }
     /**
      * Move a file path into a directory relative to the current

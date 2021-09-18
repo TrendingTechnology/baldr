@@ -9,7 +9,7 @@ import fs from 'fs'
 // Project packages.
 import config from '@bldr/config'
 
-import { untildify } from '@bldr/core-node'
+import { untildify, findParentFile } from '@bldr/core-node'
 
 /**
  * Indicate where a file is located in the media folder structure.
@@ -65,36 +65,11 @@ class LocationIndicator {
   getPresParentDir (currentPath: string): string {
     // /Duke-Ellington.jpg
     // /Material
-    const regexp = new RegExp(path.sep + '([^' + path.sep + ']+)$')
-    let match
-    let isPrefixed: boolean = false
-    do {
-      match = currentPath.match(regexp)
-      // [
-      //   '/54_Reggae',
-      //   '54_Reggae',
-      //   index: 55,
-      //   input: '/home/jf/schule-media/08/20_Mensch-Zeit/20_Popularmusik/54_Reggae',
-      //   groups: undefined
-      // ]
-      if (match != null && match.length > 1) {
-        // Return only directories not files like
-        // ...HB/Orchester/05_Promenade.mp3
-        if (
-          // 20_Swing -> true
-          // Material -> false
-          match[1].match(/\d\d_.*/g) != null &&
-          fs.statSync(currentPath).isDirectory()
-        ) {
-          isPrefixed = true
-        }
-        if (!isPrefixed) {
-          currentPath = currentPath.replace(regexp, '')
-        }
-      }
-    } while (!isPrefixed)
-
-    return currentPath
+    const parentFile = findParentFile(currentPath, 'title.txt')
+    if (parentFile != null) {
+      return path.dirname(parentFile)
+    }
+    return ''
   }
 
   /**
@@ -166,7 +141,9 @@ class LocationIndicator {
         break
       }
     }
-    if (relPath !== undefined) { return relPath.replace(new RegExp(`^${path.sep}`), '') }
+    if (relPath !== undefined) {
+      return relPath.replace(new RegExp(`^${path.sep}`), '')
+    }
   }
 
   /**
@@ -184,7 +161,9 @@ class LocationIndicator {
         break
       }
     }
-    if (basePath !== undefined) { return basePath.replace(new RegExp(`${path.sep}$`), '') }
+    if (basePath !== undefined) {
+      return basePath.replace(new RegExp(`${path.sep}$`), '')
+    }
   }
 
   /**
@@ -211,7 +190,9 @@ class LocationIndicator {
         break
       }
     }
-    if (mirroredBasePath !== undefined && relPath !== undefined) { return path.join(mirroredBasePath, relPath) }
+    if (mirroredBasePath !== undefined && relPath !== undefined) {
+      return path.join(mirroredBasePath, relPath)
+    }
   }
 }
 

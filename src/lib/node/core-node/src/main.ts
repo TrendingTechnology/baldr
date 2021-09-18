@@ -9,7 +9,6 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 import os from 'os'
-import util from 'util'
 import path from 'path'
 import { URL } from 'url'
 
@@ -43,7 +42,9 @@ export function gitHead (): GitHead {
 export function checkExecutables (executables: string | string[]): void {
   if (!Array.isArray(executables)) executables = [executables]
   for (const executable of executables) {
-    const process = childProcess.spawnSync('which', [executable], { shell: true })
+    const process = childProcess.spawnSync('which', [executable], {
+      shell: true
+    })
     if (process.status !== 0) {
       throw new Error(`Executable is not available: ${executable}`)
     }
@@ -60,11 +61,11 @@ export function checkExecutables (executables: string | string[]): void {
  */
 export function getPdfPageCount (filePath: string): number {
   checkExecutables('pdfinfo')
-  if (!fs.existsSync(filePath)) throw new Error(`PDF file doesn’t exist: ${filePath}.`)
-  const proc = childProcess.spawnSync(
-    'pdfinfo', [filePath],
-    { encoding: 'utf-8', cwd: process.cwd() }
-  )
+  if (!fs.existsSync(filePath)) { throw new Error(`PDF file doesn’t exist: ${filePath}.`) }
+  const proc = childProcess.spawnSync('pdfinfo', [filePath], {
+    encoding: 'utf-8',
+    cwd: process.cwd()
+  })
   const match = proc.stdout.match(/Pages:\s+(\d+)/)
   if (match != null) {
     return parseInt(match[1])
@@ -95,4 +96,31 @@ export function untildify (filePath: string): string {
     return path.join(os.homedir(), filePath.slice(1))
   }
   return filePath
+}
+
+/**
+ *
+ * @param filePath - A file path to search for a file in one of the parent folder struture.
+ * @param fileName - The name of the searched file.
+ *
+ * @returns The path of the found parent file or undefined if not found.
+ */
+export function findParentFile (
+  filePath: string,
+  fileName: string
+): string | undefined {
+  let parentDir: string
+  if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
+    parentDir = filePath
+  } else {
+    parentDir = path.dirname(filePath)
+  }
+  const segments = parentDir.split(path.sep)
+  for (let index = segments.length; index >= 0; index--) {
+    const pathSegments = segments.slice(0, index)
+    const parentFile = [...pathSegments, fileName].join(path.sep)
+    if (fs.existsSync(parentFile)) {
+      return parentFile
+    }
+  }
 }
