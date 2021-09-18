@@ -1,5 +1,5 @@
 import { validateDefintion } from '../../main'
-exports = validateDefintion({
+export = validateDefintion({
   command: 'open-archives [path]',
   alias: 'oa',
   options: [['-c, --create-dirs', 'Create missings directories.']],

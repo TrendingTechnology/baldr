@@ -1,9 +1,6 @@
 // Node packages.
 import path from 'path'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages:
 import { locationIndicator } from '@bldr/media-manager'
 import { openArchivesInFileManager } from '@bldr/media-server'
@@ -22,7 +19,7 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePath: string, cmdObj: CmdObj) {
+function action (filePath: string, cmdObj: CmdObj): void {
   if (filePath != null) {
     filePath = process.cwd()
   }
@@ -42,4 +39,5 @@ function action (filePath: string, cmdObj: CmdObj) {
   }
   console.log(openArchivesInFileManager(filePath, cmdObj.createDirs))
 }
-module.exports = action
+
+export = action
