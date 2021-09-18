@@ -1,4 +1,4 @@
-import type { StringIndexedObject } from '@bldr/type-definitions';
+import { StringIndexedObject } from '@bldr/type-definitions';
 export declare type MediaType = 'assets' | 'presentations';
 /**
  * Throw an error if the media type is unkown. Provide a default value.
@@ -6,6 +6,18 @@ export declare type MediaType = 'assets' | 'presentations';
  * @param mediaType - At the moment `assets` and `presentation`
  */
 export declare function validateMediaType(mediaType: string): MediaType;
+/**
+ * Open the current path multiple times.
+ *
+ * 1. In the main media server directory
+ * 2. In a archive directory structure.
+ * 3. In a second archive directory structure ... and so on.
+ *
+ * @param currentPath
+ * @param create - Create the directory structure of
+ *   the given `currentPath` in a recursive manner.
+ */
+export declare function openArchivesInFileManager(currentPath: string, create: boolean): StringIndexedObject;
 /**
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).

@@ -115,7 +115,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.database = void 0;
+exports.database = exports.openArchivesInFileManager = void 0;
 // Node packages.
 var child_process_1 = __importDefault(require("child_process"));
 var fs_1 = __importDefault(require("fs"));
@@ -130,11 +130,13 @@ var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
 var file_reader_writer_1 = require("@bldr/file-reader-writer");
 var titles_1 = require("@bldr/titles");
+var operations_1 = require("./operations");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
 var client_media_models_1 = require("@bldr/client-media-models");
 // Submodules.
 var seating_plan_1 = require("./seating-plan");
-var operations_1 = require("./operations");
+var operations_2 = require("./operations");
+Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return operations_2.openArchivesInFileManager; } });
 /**
  * Base path of the media server file store.
  */
@@ -299,8 +301,7 @@ var ServerMediaAsset = /** @class */ (function (_super) {
     };
     ServerMediaAsset.prototype.startBuild = function () {
         _super.prototype.startBuild.call(this);
-        this
-            .detectMultiparts()
+        this.detectMultiparts()
             .detectPreview()
             .detectWaveform()
             .detectMimeType();
@@ -423,8 +424,9 @@ function gitPull() {
         cwd: basePath,
         encoding: 'utf-8'
     });
-    if (gitPull.status !== 0)
+    if (gitPull.status !== 0) {
         throw new Error('git pull exits with an non-zero status code.');
+    }
 }
 /**
  * Update the media server.
@@ -468,7 +470,7 @@ function update(full) {
                     return [4 /*yield*/, media_manager_1.walk({
                             everyFile: function (filePath) {
                                 // Delete temporary files.
-                                if ((filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null) ||
+                                if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null ||
                                     filePath.includes('Praesentation_tmp.baldr.yml') ||
                                     filePath.includes('title_tmp.txt')) {
                                     fs_1.default.unlinkSync(filePath);
@@ -526,7 +528,9 @@ function update(full) {
                     _a.sent();
                     file_reader_writer_1.writeJsonFile(path_1.default.join(config_1.default.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
-                    return [4 /*yield*/, exports.database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
+                    return [4 /*yield*/, exports.database.db
+                            .collection('updates')
+                            .updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
                 case 8:
                     _a.sent();
                     return [2 /*return*/, {
@@ -607,7 +611,10 @@ var helpMessages = {
 };
 function extractString(query, propertyName, defaultValue) {
     if (defaultValue === void 0) { defaultValue = null; }
-    if (query == null || typeof query !== 'object' || query[propertyName] == null || typeof query[propertyName] !== 'string') {
+    if (query == null ||
+        typeof query !== 'object' ||
+        query[propertyName] == null ||
+        typeof query[propertyName] !== 'string') {
         if (defaultValue != null) {
             return defaultValue;
         }
@@ -725,7 +732,10 @@ function registerMediaRestApi() {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, db.collection('folderTitleTree').find({ ref: 'root' }, { projection: { _id: 0 } }).next()];
+                    return [4 /*yield*/, db
+                            .collection('folderTitleTree')
+                            .find({ ref: 'root' }, { projection: { _id: 0 } })
+                            .next()];
                 case 1:
                     result = _a.sent();
                     res.json(result.tree);
@@ -784,14 +794,15 @@ function registerMediaRestApi() {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
                     query = req.query;
-                    if (query.ref == null)
+                    if (query.ref == null) {
                         throw new Error('You have to specify an ID (?ref=myfile).');
+                    }
                     if (query.with == null)
                         query.with = 'editor';
                     if (query.type == null)
                         query.type = 'presentations';
-                    archive = ('archive' in query);
-                    create = ('create' in query);
+                    archive = 'archive' in query;
+                    create = 'create' in query;
                     ref = extractString(query, 'ref');
                     type = operations_1.validateMediaType(extractString(query, 'type'));
                     if (!(query.with === 'editor')) return [3 /*break*/, 2];
@@ -889,7 +900,8 @@ function registerMediaRestApi() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, db.collection('updates')
+                    return [4 /*yield*/, db
+                            .collection('updates')
                             .find({}, { projection: { _id: 0 } })
                             .sort({ begin: -1 })
                             .limit(20)
@@ -967,5 +979,7 @@ var main = function () {
     });
 };
 if (require.main === module) {
-    main().then().catch(function (reason) { return console.log(reason); });
+    main()
+        .then()
+        .catch(function (reason) { return console.log(reason); });
 }

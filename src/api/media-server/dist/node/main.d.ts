@@ -60,6 +60,7 @@
  * @module @bldr/media-server
  */
 import { Database } from '@bldr/mongodb-connector';
+export { openArchivesInFileManager } from './operations';
 /**
  * @type {module:@bldr/media-server/database.Database}
  */

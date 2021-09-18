@@ -8,7 +8,7 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 
-import type { StringIndexedObject } from '@bldr/type-definitions'
+import { StringIndexedObject } from '@bldr/type-definitions'
 
 // Project packages.
 import config from '@bldr/config'
@@ -52,7 +52,10 @@ export function openWith (executable: string, filePath: string): void {
  * @param create - Create the directory structure of the given `currentPath` in
  *   a recursive manner.
  */
-export function openWithFileManager (currentPath: string, create: boolean): StringIndexedObject {
+export function openInFileManager (
+  currentPath: string,
+  create: boolean
+): StringIndexedObject {
   const result: StringIndexedObject = {}
   if (create && !fs.existsSync(currentPath)) {
     fs.mkdirSync(currentPath, { recursive: true })

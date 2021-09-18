@@ -7,7 +7,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { locationIndicator } from '@bldr/media-manager'
-import { openWithFileManager } from '@bldr/open-with'
+import { openInFileManager } from '@bldr/open-with'
 import config from '@bldr/config'
 
 interface CmdObj {
@@ -39,7 +39,7 @@ function action (cmdObj: CmdObj): void {
 
   console.log(`Go to: ${chalk.green(mirroredPath)}`)
   if (cmdObj.fileManager) {
-    openWithFileManager(mirroredPath, true)
+    openInFileManager(mirroredPath, true)
   } else {
     openShell(mirroredPath)
   }

@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openParentFolder = exports.openEditor = exports.validateMediaType = void 0;
+exports.openParentFolder = exports.openEditor = exports.openArchivesInFileManager = exports.validateMediaType = void 0;
 // Node packages.
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
@@ -80,7 +80,10 @@ function getAbsPathFromId(ref, mediaType) {
             switch (_a.label) {
                 case 0:
                     mediaType = validateMediaType(mediaType);
-                    return [4 /*yield*/, main_1.database.db.collection(mediaType).find({ ref: ref }).next()];
+                    return [4 /*yield*/, main_1.database.db
+                            .collection(mediaType)
+                            .find({ ref: ref })
+                            .next()];
                 case 1:
                     result = _a.sent();
                     if (result.path == null && typeof result.path !== 'string') {
@@ -106,21 +109,22 @@ function getAbsPathFromId(ref, mediaType) {
  * @param create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openWithFileManagerWithArchives(currentPath, create) {
+function openArchivesInFileManager(currentPath, create) {
     var result = {};
     var relPath = media_manager_1.locationIndicator.getRelPath(currentPath);
     for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
         var basePath = _a[_i];
         if (relPath != null) {
             var currentPath_1 = path_1.default.join(basePath, relPath);
-            result[currentPath_1] = open_with_1.openWithFileManager(currentPath_1, create);
+            result[currentPath_1] = open_with_1.openInFileManager(currentPath_1, create);
         }
         else {
-            result[basePath] = open_with_1.openWithFileManager(basePath, create);
+            result[basePath] = open_with_1.openInFileManager(basePath, create);
         }
     }
     return result;
 }
+exports.openArchivesInFileManager = openArchivesInFileManager;
 /**
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
@@ -177,10 +181,10 @@ function openParentFolder(ref, mediaType, archive, create) {
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
                     if (archive) {
-                        result = openWithFileManagerWithArchives(parentFolder, create);
+                        result = openArchivesInFileManager(parentFolder, create);
                     }
                     else {
-                        result = open_with_1.openWithFileManager(parentFolder, create);
+                        result = open_with_1.openInFileManager(parentFolder, create);
                     }
                     return [2 /*return*/, {
                             ref: ref,

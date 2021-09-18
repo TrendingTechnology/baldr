@@ -3,7 +3,7 @@
  *
  * @module @bldr/open-with
  */
-import type { StringIndexedObject } from '@bldr/type-definitions';
+import { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Open a file path with an executable.
  *
@@ -35,4 +35,4 @@ export declare function openWith(executable: string, filePath: string): void;
  * @param create - Create the directory structure of the given `currentPath` in
  *   a recursive manner.
  */
-export declare function openWithFileManager(currentPath: string, create: boolean): StringIndexedObject;
+export declare function openInFileManager(currentPath: string, create: boolean): StringIndexedObject;

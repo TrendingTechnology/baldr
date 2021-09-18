@@ -8,7 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openWithFileManager = exports.openWith = void 0;
+exports.openInFileManager = exports.openWith = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -53,7 +53,7 @@ exports.openWith = openWith;
  * @param create - Create the directory structure of the given `currentPath` in
  *   a recursive manner.
  */
-function openWithFileManager(currentPath, create) {
+function openInFileManager(currentPath, create) {
     const result = {};
     if (create && !fs_1.default.existsSync(currentPath)) {
         fs_1.default.mkdirSync(currentPath, { recursive: true });
@@ -66,4 +66,4 @@ function openWithFileManager(currentPath, create) {
     }
     return result;
 }
-exports.openWithFileManager = openWithFileManager;
+exports.openInFileManager = openInFileManager;

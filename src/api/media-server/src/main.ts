@@ -79,14 +79,15 @@ import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory, DeepTitle } from '@bldr/titles'
 
-import type { StringIndexedObject, LampTypes } from '@bldr/type-definitions'
-import type { MediaType } from './operations'
+import { StringIndexedObject, LampTypes } from '@bldr/type-definitions'
+import { MediaType, openParentFolder, openEditor, validateMediaType } from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
 // Submodules.
 import { registerSeatingPlan } from './seating-plan'
-import { openParentFolder, openEditor, validateMediaType } from './operations'
+
+export { openArchivesInFileManager } from './operations'
 
 /**
  * Base path of the media server file store.
@@ -136,7 +137,7 @@ class ServerMediaFile {
    */
   private basename_?: string
   id?: string
-  title?: string
+  title?: string;
   [key: string]: any
   constructor (filePath: string) {
     this.absPath_ = path.resolve(filePath)
@@ -161,7 +162,7 @@ class ServerMediaFile {
    * Delete the temporary properties of the object. Temporary properties end
    * with `_`.
    */
-   protected cleanTmpProperties (): ServerMediaFile {
+  protected cleanTmpProperties (): ServerMediaFile {
     for (const property in this) {
       if (property.match(/_$/) != null) {
         // eslint-disable-next-line
@@ -178,7 +179,7 @@ class ServerMediaFile {
    *
    * @param properties - Add an object to the class properties.
    */
-   protected importProperties (properties: StringIndexedObject): void {
+  protected importProperties (properties: StringIndexedObject): void {
     if (typeof properties === 'object') {
       properties = convertPropertiesSnakeToCamel(properties)
       for (const property in properties) {
@@ -213,7 +214,7 @@ class ServerMediaAsset extends ServerMediaFile {
    * The absolute path of the info file in the YAML format. On the absolute
    * media file path `.yml` is appended.
    */
-  private infoFile_: string
+  private readonly infoFile_: string
 
   /**
    * Indicates whether the media asset has a preview image (`_preview.jpg`).
@@ -270,7 +271,9 @@ class ServerMediaAsset extends ServerMediaFile {
       } else if (count < 1000) {
         suffix = `_no${count}`
       } else {
-        throw new Error(`${this.absPath_} multipart asset counts greater than 100 are not supported.`)
+        throw new Error(
+          `${this.absPath_} multipart asset counts greater than 100 are not supported.`
+        )
       }
       let basePath = this.absPath_
       let fileName
@@ -294,7 +297,7 @@ class ServerMediaAsset extends ServerMediaFile {
     return this
   }
 
-  private detectMimeType(): ServerMediaAsset {
+  private detectMimeType (): ServerMediaAsset {
     if (this.extension != null) {
       this.mimeType = mimeTypeManager.extensionToType(this.extension)
     }
@@ -304,8 +307,7 @@ class ServerMediaAsset extends ServerMediaFile {
   protected startBuild (): ServerMediaAsset {
     super.startBuild()
 
-    this
-      .detectMultiparts()
+    this.detectMultiparts()
       .detectPreview()
       .detectWaveform()
       .detectMimeType()
@@ -414,8 +416,15 @@ class ServerPresentation extends ServerMediaFile {
 
 type ServerMediaType = 'presentations' | 'assets'
 
-async function insertObjectIntoDb (filePath: string, mediaType: ServerMediaType): Promise<void> {
-  let object: ServerPresentation | ServerMediaAsset | ServerMediaFile | undefined
+async function insertObjectIntoDb (
+  filePath: string,
+  mediaType: ServerMediaType
+): Promise<void> {
+  let object:
+  | ServerPresentation
+  | ServerMediaAsset
+  | ServerMediaFile
+  | undefined
   try {
     if (mediaType === 'presentations') {
       object = new ServerPresentation(filePath)
@@ -442,14 +451,11 @@ async function insertObjectIntoDb (filePath: string, mediaType: ServerMediaType)
  * Run git pull on the `basePath`
  */
 function gitPull (): void {
-  const gitPull = childProcess.spawnSync(
-    'git', ['pull'],
-    {
-      cwd: basePath,
-      encoding: 'utf-8'
-    }
-  )
-  if (gitPull.status !== 0) throw new Error('git pull exits with an non-zero status code.')
+  const gitPull = childProcess.spawnSync('git', ['pull'], {
+    cwd: basePath,
+    encoding: 'utf-8'
+  })
+  if (gitPull.status !== 0) { throw new Error('git pull exits with an non-zero status code.') }
 }
 
 /**
@@ -475,38 +481,40 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
   await database.flushMediaFiles()
   const begin = new Date().getTime()
   await database.db.collection('updates').insertOne({ begin: begin, end: 0 })
-  await walk({
-    everyFile: (filePath) => {
-      // Delete temporary files.
-      if (
-        (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null) ||
-        filePath.includes('Praesentation_tmp.baldr.yml') ||
-        filePath.includes('title_tmp.txt')
-      ) {
-        fs.unlinkSync(filePath)
-      }
-    },
-    directory: (filePath) => {
-      // Delete empty directories.
-      if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-        const files = fs.readdirSync(filePath)
-        if (files.length === 0) {
-          fs.rmdirSync(filePath)
+  await walk(
+    {
+      everyFile: filePath => {
+        // Delete temporary files.
+        if (
+          filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null ||
+          filePath.includes('Praesentation_tmp.baldr.yml') ||
+          filePath.includes('title_tmp.txt')
+        ) {
+          fs.unlinkSync(filePath)
         }
+      },
+      directory: filePath => {
+        // Delete empty directories.
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+          const files = fs.readdirSync(filePath)
+          if (files.length === 0) {
+            fs.rmdirSync(filePath)
+          }
+        }
+      },
+      presentation: async filePath => {
+        await insertObjectIntoDb(filePath, 'presentations')
+        presentationCounter++
+      },
+      asset: async filePath => {
+        await insertObjectIntoDb(filePath, 'assets')
+        assetCounter++
       }
     },
-    presentation: async (filePath) => {
-      await insertObjectIntoDb(filePath, 'presentations')
-      presentationCounter++;
-    },
-    asset: async (filePath) => {
-      await insertObjectIntoDb(filePath, 'assets')
-      assetCounter++;
+    {
+      path: basePath
     }
-  },
-  {
-    path: basePath
-  })
+  )
 
   // .replaceOne and upsert: Problems with merged objects?
   await database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })
@@ -517,7 +525,9 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
   })
   writeJsonFile(path.join(config.mediaServer.basePath, 'title-tree.json'), tree)
   const end = new Date().getTime()
-  await database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
+  await database.db
+    .collection('updates')
+    .updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
     finished: true,
     begin,
@@ -543,10 +553,12 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
 const helpMessages: StringIndexedObject = {
   navigation: {
     get: {
-      'folder-title-tree': 'Get the folder title tree as a hierarchical json object.'
+      'folder-title-tree':
+        'Get the folder title tree as a hierarchical json object.'
     },
     mgmt: {
-      flush: 'Delete all media files (assets, presentations) from the database.',
+      flush:
+        'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
       open: {
         '#description': 'Open a media file specified by an ID.',
@@ -561,13 +573,18 @@ const helpMessages: StringIndexedObject = {
         ],
         '#parameters': {
           ref: 'The ID of the media file (required).',
-          type: '`presentations`, `assets`. The default value is `presentations.`',
-          with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
-          archive: 'True if present, false by default. Open the file or the folder in the corresponding archive folder structure.',
-          create: 'True if present, false by default. Create the possibly non existing directory structure in a recursive manner.'
+          type:
+            '`presentations`, `assets`. The default value is `presentations.`',
+          with:
+            '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
+          archive:
+            'True if present, false by default. Open the file or the folder in the corresponding archive folder structure.',
+          create:
+            'True if present, false by default. Create the possibly non existing directory structure in a recursive manner.'
         }
       },
-      're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
+      're-init':
+        'Re-Initialize the MongoDB database (Drop all collections and initialize).',
       update: 'Update the media server database (Flush and insert).'
     },
     query: {
@@ -581,25 +598,38 @@ const helpMessages: StringIndexedObject = {
       ],
       '#parameters': {
         type: '`assets` (default), `presentations` (what)',
-        method: '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
+        method:
+          '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
         field: '`ref` (default), `title`, etc ... (where).',
         search: 'Some text to search for (search for).',
         result: '`fullObjects` (default), `dynamicSelect`'
       }
     },
     stats: {
-      count: 'Count / sum of the media files (assets, presentations) in the database.',
+      count:
+        'Count / sum of the media files (assets, presentations) in the database.',
       updates: 'Journal of the update processes with timestamps.'
     }
   }
 }
 
-function extractString (query: any, propertyName: string, defaultValue: string | null = null): string {
-  if (query == null || typeof query !== 'object' || query[propertyName] == null || typeof query[propertyName] !== 'string') {
+function extractString (
+  query: any,
+  propertyName: string,
+  defaultValue: string | null = null
+): string {
+  if (
+    query == null ||
+    typeof query !== 'object' ||
+    query[propertyName] == null ||
+    typeof query[propertyName] !== 'string'
+  ) {
     if (defaultValue != null) {
       return defaultValue
     } else {
-      throw new Error(`No value for property ${propertyName} in the query object.`)
+      throw new Error(
+        `No value for property ${propertyName} in the query object.`
+      )
     }
   }
   return query[propertyName]
@@ -649,7 +679,9 @@ function registerMediaRestApi (): express.Express {
       const method = extractString(query, 'method', 'substringSearch')
 
       if (!methods.includes(method)) {
-        throw new Error(`Unkown method “${method}”! Allowed methods: ${methods.join(', ')}`)
+        throw new Error(
+          `Unkown method “${method}”! Allowed methods: ${methods.join(', ')}`
+        )
       }
 
       // field
@@ -669,7 +701,7 @@ function registerMediaRestApi (): express.Express {
         findObject[field] = query.search
         find = collection.find(findObject, { projection: { _id: 0 } })
         result = await find.next()
-      // substringSearch
+        // substringSearch
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
         let search: string = ''
@@ -704,7 +736,10 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
-      const result = await db.collection('folderTitleTree').find({ ref: 'root' }, { projection: { _id: 0 } }).next()
+      const result = await db
+        .collection('folderTitleTree')
+        .find({ ref: 'root' }, { projection: { _id: 0 } })
+        .next()
       res.json(result.tree)
     } catch (error) {
       next(error)
@@ -732,11 +767,11 @@ function registerMediaRestApi (): express.Express {
   app.get('/mgmt/open', async (req, res, next) => {
     try {
       const query = req.query
-      if (query.ref == null) throw new Error('You have to specify an ID (?ref=myfile).')
+      if (query.ref == null) { throw new Error('You have to specify an ID (?ref=myfile).') }
       if (query.with == null) query.with = 'editor'
       if (query.type == null) query.type = 'presentations'
-      const archive = ('archive' in query)
-      const create = ('create' in query)
+      const archive = 'archive' in query
+      const create = 'create' in query
 
       const ref = extractString(query, 'ref')
       const type = validateMediaType(extractString(query, 'type'))
@@ -783,11 +818,13 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/stats/updates', async (req, res, next) => {
     try {
-      res.json(await db.collection('updates')
-        .find({}, { projection: { _id: 0 } })
-        .sort({ begin: -1 })
-        .limit(20)
-        .toArray()
+      res.json(
+        await db
+          .collection('updates')
+          .find({}, { projection: { _id: 0 } })
+          .sort({ begin: -1 })
+          .limit(20)
+          .toArray()
       )
     } catch (error) {
       next(error)
@@ -844,5 +881,7 @@ const main = async function (): Promise<express.Express> {
 }
 
 if (require.main === module) {
-  main().then().catch((reason) => console.log(reason))
+  main()
+    .then()
+    .catch(reason => console.log(reason))
 }

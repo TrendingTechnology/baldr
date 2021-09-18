@@ -5,8 +5,8 @@ import path from 'path'
 // Project packages.
 import config from '@bldr/config'
 import { locationIndicator } from '@bldr/media-manager'
-import { openWith, openWithFileManager } from '@bldr/open-with'
-import type { StringIndexedObject } from '@bldr/type-definitions'
+import { openWith, openInFileManager } from '@bldr/open-with'
+import { StringIndexedObject } from '@bldr/type-definitions'
 
 import { database } from './main'
 
@@ -21,7 +21,11 @@ export function validateMediaType (mediaType: string): MediaType {
   const mediaTypes = ['assets', 'presentations']
   if (mediaType == null) return 'assets'
   if (!mediaTypes.includes(mediaType)) {
-    throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes.join(', ')}`)
+    throw new Error(
+      `Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes.join(
+        ', '
+      )}`
+    )
   } else {
     return mediaType as MediaType
   }
@@ -34,10 +38,20 @@ export function validateMediaType (mediaType: string): MediaType {
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-async function getAbsPathFromId (ref: string, mediaType: MediaType = 'presentations'): Promise<string> {
+async function getAbsPathFromId (
+  ref: string,
+  mediaType: MediaType = 'presentations'
+): Promise<string> {
   mediaType = validateMediaType(mediaType)
-  const result = await database.db.collection(mediaType).find({ ref: ref }).next()
-  if (result.path == null && typeof result.path !== 'string') { throw new Error(`Can not find media file with the type “${mediaType}” and the reference “${ref}”.`) }
+  const result = await database.db
+    .collection(mediaType)
+    .find({ ref: ref })
+    .next()
+  if (result.path == null && typeof result.path !== 'string') {
+    throw new Error(
+      `Can not find media file with the type “${mediaType}” and the reference “${ref}”.`
+    )
+  }
 
   let relPath: string = result.path
   if (mediaType === 'assets') {
@@ -57,15 +71,18 @@ async function getAbsPathFromId (ref: string, mediaType: MediaType = 'presentati
  * @param create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openWithFileManagerWithArchives (currentPath: string, create: boolean): StringIndexedObject {
+export function openArchivesInFileManager (
+  currentPath: string,
+  create: boolean
+): StringIndexedObject {
   const result: StringIndexedObject = {}
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
     if (relPath != null) {
       const currentPath = path.join(basePath, relPath)
-      result[currentPath] = openWithFileManager(currentPath, create)
+      result[currentPath] = openInFileManager(currentPath, create)
     } else {
-      result[basePath] = openWithFileManager(basePath, create)
+      result[basePath] = openInFileManager(basePath, create)
     }
   }
   return result
@@ -78,7 +95,10 @@ function openWithFileManagerWithArchives (currentPath: string, create: boolean):
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export async function openEditor (ref: string, mediaType: MediaType): Promise<StringIndexedObject> {
+export async function openEditor (
+  ref: string,
+  mediaType: MediaType
+): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(ref, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
@@ -108,15 +128,20 @@ export async function openEditor (ref: string, mediaType: MediaType): Promise<St
  * @param create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-export async function openParentFolder (ref: string, mediaType: MediaType, archive: boolean, create: boolean): Promise<StringIndexedObject> {
+export async function openParentFolder (
+  ref: string,
+  mediaType: MediaType,
+  archive: boolean,
+  create: boolean
+): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(ref, mediaType)
   const parentFolder = path.dirname(absPath)
 
   let result: StringIndexedObject
   if (archive) {
-    result = openWithFileManagerWithArchives(parentFolder, create)
+    result = openArchivesInFileManager(parentFolder, create)
   } else {
-    result = openWithFileManager(parentFolder, create)
+    result = openInFileManager(parentFolder, create)
   }
   return {
     ref,
