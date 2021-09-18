@@ -161,6 +161,10 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     return this.titles[this.titles.length - 1]
   }
 
+  /**
+   * For example: `Fach Musik / 5. Jahrgangsstufe / Lernbereich 4: Musik und
+   * ihre Grundlagen / Instrumente verschiedener Gruppen / Hör-Labyrinth`
+   */
   get allTitles (): string {
     return this.titlesArray.join(' / ')
   }
@@ -169,6 +173,10 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     return this.titlesArray.slice(1, this.titles.length - 1)
   }
 
+  /**
+   * For example: `5. Jahrgangsstufe / Lernbereich 4: Musik und ihre Grundlagen
+   * / Instrumente verschiedener Gruppen`
+   */
   get curriculum (): string {
     return this.curriculumTitlesArray.join(' / ')
   }
@@ -180,24 +188,48 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     )
   }
 
+  /**
+   * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
+   */
   get curriculumFromGrade (): string {
     return this.curriculumTitlesArrayFromGrade.join(' / ')
   }
 
+  /**
+   * The subject without the prefix `Fach `. For example `Musik` or `Informatik`.
+   * German: `Unterrichtsfach`.
+   */
+  get subject (): string {
+    return this.titles[0].title.replace('Fach ', '')
+  }
+
+  /**
+   * For example: `Hoer-Labyrinth`. An automatically generated reference string. The reference is identical
+   * to the last folder name without the prefix `\d\d_`.
+   */
   get ref (): string {
     return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '')
   }
 
+  /**
+   * The title of the last folder title object.
+   */
   get title (): string {
     return this.lastFolderTitleObject.title
   }
 
+  /**
+   * The subtitle of the last folder title object.
+   */
   get subtitle (): string | undefined {
     if (this.lastFolderTitleObject.subtitle != null) {
       return this.lastFolderTitleObject.subtitle
     }
   }
 
+  /**
+   * `Title - Subtitle`
+   */
   get titleAndSubtitle (): string {
     if (this.subtitle != null) return `${this.title} - ${this.subtitle}`
     return this.title

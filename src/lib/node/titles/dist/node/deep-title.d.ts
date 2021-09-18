@@ -57,14 +57,43 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
      * Get the last instance of the class FolderTitle
      */
     private get lastFolderTitleObject();
+    /**
+     * For example: `Fach Musik / 5. Jahrgangsstufe / Lernbereich 4: Musik und
+     * ihre Grundlagen / Instrumente verschiedener Gruppen / Hör-Labyrinth`
+     */
     get allTitles(): string;
     get curriculumTitlesArray(): string[];
+    /**
+     * For example: `5. Jahrgangsstufe / Lernbereich 4: Musik und ihre Grundlagen
+     * / Instrumente verschiedener Gruppen`
+     */
     get curriculum(): string;
     get curriculumTitlesArrayFromGrade(): string[];
+    /**
+     * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
+     */
     get curriculumFromGrade(): string;
+    /**
+     * The subject without the prefix `Fach `. For example `Musik` or `Informatik`.
+     * German: `Unterrichtsfach`.
+     */
+    get subject(): string;
+    /**
+     * For example: `Hoer-Labyrinth`. An automatically generated reference string. The reference is identical
+     * to the last folder name without the prefix `\d\d_`.
+     */
     get ref(): string;
+    /**
+     * The title of the last folder title object.
+     */
     get title(): string;
+    /**
+     * The subtitle of the last folder title object.
+     */
     get subtitle(): string | undefined;
+    /**
+     * `Title - Subtitle`
+     */
     get titleAndSubtitle(): string;
     /**
      * Get the index number of the folder title object containing “X. Jahrgangsstufe”.

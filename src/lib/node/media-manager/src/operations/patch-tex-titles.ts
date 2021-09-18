@@ -9,27 +9,32 @@ import * as tex from '@bldr/tex-templates'
  *
  * ```tex
  * \setzetitel{
- *   jahrgangsstufe = {6},
- *   ebenei = {Musik und ihre Grundlagen},
- *   ebeneii = {Systeme und Strukturen},
- *   ebeneiii = {die Tongeschlechter Dur und Moll},
- *   titel = {Dur- und Moll-Tonleiter},
- *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ *   Fach = Musik,
+ *   Jahrgangsstufe = 6,
+ *   Ebenen = {
+ *     { Musik und ihre Grundlagen },
+ *     { Systeme und Strukturen },
+ *     { die Tongeschlechter Dur und Moll },
+ *   },
+ *   Titel = { Dur- und Moll-Tonleiter },
+ *   Untertitel = { Das Lied \emph{„Kol dodi“} in Moll und Dur },
  * }
  * ```
  */
 function makeTexMarkup (titles: DeepTitle): string {
   const setzeTitle: { [key: string]: string } = {
-    jahrgangsstufe: titles.grade.toString()
+    Fach: titles.subject,
+    Jahrgangsstufe: titles.grade.toString()
   }
 
-  const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev']
-  for (let index = 0; index < titles.curriculumTitlesArrayFromGrade.length; index++) {
-    setzeTitle[ebenen[index]] = titles.curriculumTitlesArrayFromGrade[index]
+  const ebenen = []
+  for (const title of titles.curriculumTitlesArrayFromGrade) {
+    ebenen.push(`    { ${title} },`)
   }
-  setzeTitle.titel = titles.title
+  setzeTitle.Ebenen = '\n' + ebenen.join('\n') + '\n '
+  setzeTitle.Titel = titles.title
   if (titles.subtitle != null) {
-    setzeTitle.untertitel = titles.subtitle
+    setzeTitle.Untertitel = titles.subtitle
   }
 
   // Replace semantic markup
@@ -43,12 +48,15 @@ function makeTexMarkup (titles: DeepTitle): string {
 /**
  * ```tex
  * \setzetitel{
- *   jahrgangsstufe = {6},
- *   ebenei = {Musik und ihre Grundlagen},
- *   ebeneii = {Systeme und Strukturen},
- *   ebeneiii = {die Tongeschlechter Dur und Moll},
- *   titel = {Dur- und Moll-Tonleiter},
- *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ *   Fach = Musik,
+ *   Jahrgangsstufe = 6,
+ *   Ebenen = {
+ *     { Musik und ihre Grundlagen },
+ *     { Systeme und Strukturen },
+ *     { die Tongeschlechter Dur und Moll },
+ *   },
+ *   Titel = { Dur- und Moll-Tonleiter },
+ *   Untertitel = { Das Lied \emph{„Kol dodi“} in Moll und Dur },
  * }
  * ```
  *

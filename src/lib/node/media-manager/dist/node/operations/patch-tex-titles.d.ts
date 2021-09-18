@@ -1,12 +1,15 @@
 /**
  * ```tex
  * \setzetitel{
- *   jahrgangsstufe = {6},
- *   ebenei = {Musik und ihre Grundlagen},
- *   ebeneii = {Systeme und Strukturen},
- *   ebeneiii = {die Tongeschlechter Dur und Moll},
- *   titel = {Dur- und Moll-Tonleiter},
- *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ *   Fach = Musik,
+ *   Jahrgangsstufe = 6,
+ *   Ebenen = {
+ *     { Musik und ihre Grundlagen },
+ *     { Systeme und Strukturen },
+ *     { die Tongeschlechter Dur und Moll },
+ *   },
+ *   Titel = { Dur- und Moll-Tonleiter },
+ *   Untertitel = { Das Lied \emph{„Kol dodi“} in Moll und Dur },
  * }
  * ```
  *

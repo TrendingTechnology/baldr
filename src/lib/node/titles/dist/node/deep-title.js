@@ -138,32 +138,63 @@ class DeepTitle {
     get lastFolderTitleObject() {
         return this.titles[this.titles.length - 1];
     }
+    /**
+     * For example: `Fach Musik / 5. Jahrgangsstufe / Lernbereich 4: Musik und
+     * ihre Grundlagen / Instrumente verschiedener Gruppen / Hör-Labyrinth`
+     */
     get allTitles() {
         return this.titlesArray.join(' / ');
     }
     get curriculumTitlesArray() {
         return this.titlesArray.slice(1, this.titles.length - 1);
     }
+    /**
+     * For example: `5. Jahrgangsstufe / Lernbereich 4: Musik und ihre Grundlagen
+     * / Instrumente verschiedener Gruppen`
+     */
     get curriculum() {
         return this.curriculumTitlesArray.join(' / ');
     }
     get curriculumTitlesArrayFromGrade() {
         return this.titlesArray.slice(this.gradeIndexPosition + 1, this.titles.length - 1);
     }
+    /**
+     * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
+     */
     get curriculumFromGrade() {
         return this.curriculumTitlesArrayFromGrade.join(' / ');
     }
+    /**
+     * The subject without the prefix `Fach `. For example `Musik` or `Informatik`.
+     * German: `Unterrichtsfach`.
+     */
+    get subject() {
+        return this.titles[0].title.replace('Fach ', '');
+    }
+    /**
+     * For example: `Hoer-Labyrinth`. An automatically generated reference string. The reference is identical
+     * to the last folder name without the prefix `\d\d_`.
+     */
     get ref() {
         return this.lastFolderTitleObject.folderName.replace(/\d\d_/, '');
     }
+    /**
+     * The title of the last folder title object.
+     */
     get title() {
         return this.lastFolderTitleObject.title;
     }
+    /**
+     * The subtitle of the last folder title object.
+     */
     get subtitle() {
         if (this.lastFolderTitleObject.subtitle != null) {
             return this.lastFolderTitleObject.subtitle;
         }
     }
+    /**
+     * `Title - Subtitle`
+     */
     get titleAndSubtitle() {
         if (this.subtitle != null)
             return `${this.title} - ${this.subtitle}`;

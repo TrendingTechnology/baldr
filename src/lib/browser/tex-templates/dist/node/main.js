@@ -28,11 +28,17 @@ function cmd(name, content) {
     return `\\${name}{${content}}`;
 }
 exports.cmd = cmd;
+/**
+ * For example `  key = { One, two, three },` or `  key = One,`
+ */
 function keyValues(pairs) {
     const output = [];
     for (const key in pairs) {
-        const value = pairs[key];
-        output.push(`  ${key} = {${value}},`);
+        let value = pairs[key];
+        if (value.includes(',')) {
+            value = `{ ${value} }`;
+        }
+        output.push(`  ${key} = ${value},`);
     }
     return output.join('\n');
 }
@@ -42,8 +48,11 @@ function environment(name, content, pairs) {
     if (pairs != null) {
         pairsRendered = '[\n' + keyValues(pairs) + '\n]';
     }
-    return cmd('begin', name) + pairsRendered + '\n' +
-        wrapText(content) + '\n' +
-        cmd('end', name);
+    return (cmd('begin', name) +
+        pairsRendered +
+        '\n' +
+        wrapText(content) +
+        '\n' +
+        cmd('end', name));
 }
 exports.environment = environment;

@@ -15,6 +15,7 @@ describe('Package “@bldr/titles”', function () {
     it('07_Hoer-Labyrinth/TX/Arbeitsblatt.tex', function () {
       const deep = makeDeepTitel('05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/TX/Arbeitsblatt.tex')
       assert.strictEqual(deep.grade, 5)
+      assert.strictEqual(deep.subject, 'Musik')
       assert.strictEqual(deep.ref, 'Hoer-Labyrinth')
       assert.strictEqual(deep.title, 'Hör-Labyrinth')
       assert.strictEqual(deep.allTitles, 'Fach Musik / 5. Jahrgangsstufe / Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen / Hör-Labyrinth')
