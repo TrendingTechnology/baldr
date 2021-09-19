@@ -4,6 +4,7 @@ const assert = require('assert')
 const { getSnippet, checkAvailability } = require('../dist/node/main.js')
 
 describe('Package “@bldr/youtube-api”', function () {
+  this.timeout(10000)
   describe('Function “getSnippet()”', function () {
     it('jNQXAC9IVRw: Me at the zoo', async function () {
       const snippet = await getSnippet('jNQXAC9IVRw')

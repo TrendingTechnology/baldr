@@ -31,5 +31,8 @@
   },
   "dependencies": {
     "music-metadata": "7.8.6"
+  },
+  "devDependencies": {
+    "@bldr/config": "*"
   }
 }
