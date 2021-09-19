@@ -20,10 +20,10 @@ interface CmdObj {
  *  This parameter comes from `commander.Command.opts()`
  */
 function action (filePath: string, cmdObj: CmdObj): void {
-  if (filePath != null) {
+  if (filePath == null) {
     filePath = process.cwd()
   }
-  const regex = /^[a-zA-Z0-9-_/]+$/g
+  const regex = /^[a-zA-Z0-9-_./]+$/g
   if (!regex.test(filePath)) {
     log.info(
       'The current working directory “%s” contains illegal characters.',
@@ -32,14 +32,12 @@ function action (filePath: string, cmdObj: CmdObj): void {
     return
   }
   filePath = path.resolve(filePath)
-  console.log(filePath)
   const presParentDir = locationIndicator.getPresParentDir(filePath)
-  console.log(presParentDir)
   if (presParentDir != null && filePath !== presParentDir) {
     filePath = presParentDir
     log.info('Open parent folder instead')
   }
-  console.log(openArchivesInFileManager(filePath, cmdObj.createDirs))
+  openArchivesInFileManager(filePath, cmdObj.createDirs)
 }
 
 export = action

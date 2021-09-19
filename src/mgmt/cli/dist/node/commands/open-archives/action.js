@@ -37,22 +37,20 @@ const log = __importStar(require("@bldr/log"));
  *  This parameter comes from `commander.Command.opts()`
  */
 function action(filePath, cmdObj) {
-    if (filePath != null) {
+    if (filePath == null) {
         filePath = process.cwd();
     }
-    const regex = /^[a-zA-Z0-9-_/]+$/g;
+    const regex = /^[a-zA-Z0-9-_./]+$/g;
     if (!regex.test(filePath)) {
         log.info('The current working directory “%s” contains illegal characters.', filePath);
         return;
     }
     filePath = path_1.default.resolve(filePath);
-    console.log(filePath);
     const presParentDir = media_manager_1.locationIndicator.getPresParentDir(filePath);
-    console.log(presParentDir);
     if (presParentDir != null && filePath !== presParentDir) {
         filePath = presParentDir;
         log.info('Open parent folder instead');
     }
-    console.log(media_server_1.openArchivesInFileManager(filePath, cmdObj.createDirs));
+    media_server_1.openArchivesInFileManager(filePath, cmdObj.createDirs);
 }
 module.exports = action;
