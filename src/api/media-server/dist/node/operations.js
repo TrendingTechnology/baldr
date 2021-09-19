@@ -112,7 +112,7 @@ function getAbsPathFromId(ref, mediaType) {
 function openArchivesInFileManager(currentPath, create) {
     var result = {};
     var relPath = media_manager_1.locationIndicator.getRelPath(currentPath);
-    for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
+    for (var _i = 0, _a = media_manager_1.locationIndicator.basePaths; _i < _a.length; _i++) {
         var basePath = _a[_i];
         if (relPath != null) {
             var currentPath_1 = path_1.default.join(basePath, relPath);

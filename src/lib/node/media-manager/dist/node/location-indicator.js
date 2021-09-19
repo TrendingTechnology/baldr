@@ -14,7 +14,7 @@ const fs_1 = __importDefault(require("fs"));
 const config_1 = __importDefault(require("@bldr/config"));
 const core_node_1 = require("@bldr/core-node");
 /**
- * Indicate where a file is located in the media folder structure.
+ * Indicates in which folder structure a file is located.
  *
  * Merge the configurations entries of `config.mediaServer.basePath` and
  * `config.mediaServer.archivePaths`. Store only the accessible ones.
@@ -26,11 +26,11 @@ class LocationIndicator {
             config_1.default.mediaServer.basePath,
             ...config_1.default.mediaServer.archivePaths
         ];
-        this.paths = [];
+        this.basePaths = [];
         for (let i = 0; i < basePaths.length; i++) {
             basePaths[i] = path_1.default.resolve((0, core_node_1.untildify)(basePaths[i]));
             if (fs_1.default.existsSync(basePaths[i])) {
-                this.paths.push(basePaths[i]);
+                this.basePaths.push(basePaths[i]);
             }
         }
     }
@@ -54,11 +54,10 @@ class LocationIndicator {
     getPresParentDir(currentPath) {
         // /Duke-Ellington.jpg
         // /Material
-        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'title.txt');
+        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'Praesentation.baldr.yml');
         if (parentFile != null) {
             return path_1.default.dirname(parentFile);
         }
-        return '';
     }
     /**
      * Move a file path into a directory relative to the current
@@ -73,6 +72,9 @@ class LocationIndicator {
     moveIntoSubdir(currentPath, subDir) {
         const fileName = path_1.default.basename(currentPath);
         const presPath = this.getPresParentDir(currentPath);
+        if (presPath == null) {
+            throw new Error('The parent presentation folder couldn’t be detected!');
+        }
         return path_1.default.join(presPath, subDir, fileName);
     }
     /**
@@ -104,15 +106,6 @@ class LocationIndicator {
         return false;
     }
     /**
-     * @returns An array of directory paths in this order: First the main
-     *   base path of the media server, then one ore more archive
-     *   directory paths. The paths are checked for existence and resolved
-     *   (untildified).
-     */
-    get() {
-        return this.paths;
-    }
-    /**
      * Get the path relative to one of the base paths and `currentPath`.
      *
      * @param currentPath - The path of a file or a directory inside
@@ -121,7 +114,7 @@ class LocationIndicator {
     getRelPath(currentPath) {
         currentPath = path_1.default.resolve(currentPath);
         let relPath;
-        for (const basePath of this.paths) {
+        for (const basePath of this.basePaths) {
             if (currentPath.indexOf(basePath) === 0) {
                 relPath = currentPath.replace(basePath, '');
                 break;
@@ -140,7 +133,7 @@ class LocationIndicator {
     getBasePath(currentPath) {
         currentPath = path_1.default.resolve(currentPath);
         let basePath;
-        for (const bPath of this.paths) {
+        for (const bPath of this.basePaths) {
             if (currentPath.indexOf(bPath) === 0) {
                 basePath = bPath;
                 break;
@@ -168,7 +161,7 @@ class LocationIndicator {
         const basePath = this.getBasePath(currentPath);
         const relPath = this.getRelPath(currentPath);
         let mirroredBasePath;
-        for (const bPath of this.paths) {
+        for (const bPath of this.basePaths) {
             if (basePath !== bPath) {
                 mirroredBasePath = bPath;
                 break;

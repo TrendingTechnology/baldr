@@ -2,7 +2,7 @@
  * @module @bldr/media-manager/location-indicator
  */
 /**
- * Indicate where a file is located in the media folder structure.
+ * Indicates in which folder structure a file is located.
  *
  * Merge the configurations entries of `config.mediaServer.basePath` and
  * `config.mediaServer.archivePaths`. Store only the accessible ones.
@@ -16,7 +16,7 @@ declare class LocationIndicator {
      * Multiple base paths of media collections (the main base path and some
      * archive base paths)
      */
-    private readonly paths;
+    readonly basePaths: string[];
     constructor();
     /**
      * Check if the `currentPath` is inside a archive folder structure and
@@ -30,7 +30,7 @@ declare class LocationIndicator {
      * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
      * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
      */
-    getPresParentDir(currentPath: string): string;
+    getPresParentDir(currentPath: string): string | undefined;
     /**
      * Move a file path into a directory relative to the current
      * presentation directory.
@@ -58,13 +58,6 @@ declare class LocationIndicator {
      * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
      */
     isInDeactivatedDir(currentPath: string): boolean;
-    /**
-     * @returns An array of directory paths in this order: First the main
-     *   base path of the media server, then one ore more archive
-     *   directory paths. The paths are checked for existence and resolved
-     *   (untildified).
-     */
-    get(): string[];
     /**
      * Get the path relative to one of the base paths and `currentPath`.
      *

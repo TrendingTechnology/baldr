@@ -77,7 +77,7 @@ export function openArchivesInFileManager (
 ): StringIndexedObject {
   const result: StringIndexedObject = {}
   const relPath = locationIndicator.getRelPath(currentPath)
-  for (const basePath of locationIndicator.get()) {
+  for (const basePath of locationIndicator.basePaths) {
     if (relPath != null) {
       const currentPath = path.join(basePath, relPath)
       result[currentPath] = openInFileManager(currentPath, create)
