@@ -1,5 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models'
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 import {
   imageShortcutCounter,
   MultiPartSelection,
@@ -144,7 +144,10 @@ export class MediaUriTranslator {
    * @returns A fully qualified media URI using the reference `ref` scheme, for
    * example `ref:Alla-Turca#complete`
    */
-  getRef (uuidOrRef: string, withoutFragment: boolean = false): string | undefined {
+  getRef (
+    uuidOrRef: string,
+    withoutFragment: boolean = false
+  ): string | undefined {
     let prefix: string | undefined
     const splittedUri = MediaUri.splitByFragment(uuidOrRef)
     if (splittedUri.prefix.indexOf('uuid:') === 0) {
@@ -236,7 +239,9 @@ export class MultiPartSelectionCache extends Cache<MultiPartSelection> {
       const uriRef = new MediaUri(ref)
       const asset = assetCache.get(uriRef.uriWithoutFragment)
       if (asset == null) {
-        throw new Error(`A client media asset must be resolved first: ${uriRef.uriWithoutFragment}`)
+        throw new Error(
+          `A client media asset must be resolved first: ${uriRef.uriWithoutFragment}`
+        )
       }
       selection = new MultiPartSelection(asset, ref)
       this.add(ref, selection)
@@ -252,7 +257,9 @@ export class MultiPartSelectionCache extends Cache<MultiPartSelection> {
 
 export const multiPartSelectionCache = new MultiPartSelectionCache()
 
-export function getMultipartSelection (uri: string): MultiPartSelection | undefined {
+export function getMultipartSelection (
+  uri: string
+): MultiPartSelection | undefined {
   return multiPartSelectionCache.get(uri)
 }
 

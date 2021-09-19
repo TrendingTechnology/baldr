@@ -1,4 +1,4 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
@@ -7,7 +7,11 @@ import config from '@bldr/config'
 
 import { assetCache, ClientMediaAsset } from './internal'
 
-export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
+export const httpRequest = makeHttpRequestInstance(
+  config,
+  'automatic',
+  '/api/media'
+)
 
 type UrisSpec = string | string[] | Set<string>
 
@@ -34,7 +38,10 @@ class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  private async queryMediaServer (uri: string, throwException: boolean = true): Promise<MediaResolverTypes.RestApiRaw | undefined> {
+  private async queryMediaServer (
+    uri: string,
+    throwException: boolean = true
+  ): Promise<MediaResolverTypes.RestApiRaw | undefined> {
     const mediaUri = new MediaUri(uri)
     const field = mediaUri.scheme
     const search = mediaUri.authority
@@ -54,7 +61,9 @@ class Resolver {
     })
     if (response == null || response.status !== 200 || response.data == null) {
       if (throwException) {
-        throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
+        throw new Error(
+          `Media with the ${field} ”${search}” couldn’t be resolved.`
+        )
       }
     } else {
       const rawRestApiAsset: MediaResolverTypes.RestApiRaw = response.data
@@ -73,7 +82,10 @@ class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  private async resolveSingle (uri: string, throwException: boolean = true): Promise<MediaResolverTypes.ClientMediaAsset | undefined> {
+  private async resolveSingle (
+    uri: string,
+    throwException: boolean = true
+  ): Promise<MediaResolverTypes.ClientMediaAsset | undefined> {
     const cachedAsset = assetCache.get(uri)
     if (cachedAsset != null) return cachedAsset
     const raw = await this.queryMediaServer(uri, throwException)
@@ -92,7 +104,10 @@ class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  async resolve (uris: UrisSpec, throwException: boolean = true): Promise<MediaResolverTypes.ClientMediaAsset[]> {
+  async resolve (
+    uris: UrisSpec,
+    throwException: boolean = true
+  ): Promise<MediaResolverTypes.ClientMediaAsset[]> {
     const mediaUris = makeSet(uris)
     const urisWithoutFragments = new Set<string>()
     for (const uri of mediaUris) {
@@ -107,7 +122,9 @@ class Resolver {
         promises.push(this.resolveSingle(uri, throwException))
         urisWithoutFragments.delete(uri)
       }
-      for (const asset of await Promise.all<MediaResolverTypes.ClientMediaAsset | undefined>(promises)) {
+      for (const asset of await Promise.all<
+        MediaResolverTypes.ClientMediaAsset | undefined
+      >(promises)) {
         if (asset != null) {
           findMediaUris(asset.yaml, urisWithoutFragments)
           assets.push(asset)
@@ -132,6 +149,9 @@ export const resolver = new Resolver()
  * @param throwException - Throw an exception if the media URI
  *  cannot be resolved (default: `true`).
  */
-export async function resolve (uris: UrisSpec, throwException: boolean = true): Promise<MediaResolverTypes.ClientMediaAsset[]> {
+export async function resolve (
+  uris: UrisSpec,
+  throwException: boolean = true
+): Promise<MediaResolverTypes.ClientMediaAsset[]> {
   return await resolver.resolve(uris)
 }

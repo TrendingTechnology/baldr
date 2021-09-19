@@ -1,4 +1,4 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaResolverTypes } from '@bldr/type-definitions';
 export declare const httpRequest: import("@bldr/http-request").HttpRequest;
 declare type UrisSpec = string | string[] | Set<string>;
 /**

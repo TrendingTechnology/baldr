@@ -1,4 +1,4 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaResolverTypes } from '@bldr/type-definitions';
 import { MultiPartSelection } from './internal';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
