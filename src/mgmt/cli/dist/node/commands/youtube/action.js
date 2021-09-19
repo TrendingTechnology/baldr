@@ -54,7 +54,7 @@ function requestYoutubeApi(youtubeId) {
  */
 function action(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const meta = yield requestYoutubeApi(youtubeId);
+        const meta = (yield requestYoutubeApi(youtubeId));
         if (meta == null) {
             log.error('Metadata of the YouTube video “%s” could not be fetched.', youtubeId);
             return;
@@ -62,6 +62,9 @@ function action(youtubeId) {
         const metaData = meta;
         console.log(metaData);
         const parentDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
+        if (parentDir == null) {
+            throw new Error('You are not in a presentation folder!');
+        }
         const ytDir = path_1.default.join(parentDir, 'YT');
         if (!fs_1.default.existsSync(ytDir)) {
             fs_1.default.mkdirSync(ytDir);
@@ -73,8 +76,10 @@ function action(youtubeId) {
         cmd.log('Downloading the YouTube video.');
         yield cmd.exec([
             'youtube-dl',
-            '--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
-            '--output', youtubeId,
+            '--format',
+            'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
+            '--output',
+            youtubeId,
             '--write-thumbnail',
             youtubeId
         ], { cwd: ytDir });
@@ -91,8 +96,9 @@ function action(youtubeId) {
             fs_1.default.renameSync(srcPreviewJpg, destPreview);
         }
         else if (fs_1.default.existsSync(srcPreviewWebp)) {
-            yield cmd.exec(['magick',
-                'convert', srcPreviewWebp, destPreview], { cwd: ytDir });
+            yield cmd.exec(['magick', 'convert', srcPreviewWebp, destPreview], {
+                cwd: ytDir
+            });
             fs_1.default.unlinkSync(srcPreviewWebp);
         }
         cmd.stopSpin();

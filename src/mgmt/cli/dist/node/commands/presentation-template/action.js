@@ -54,6 +54,9 @@ function action(filePath, cmdObj) {
             }
         }
         filePath = media_manager_1.locationIndicator.getPresParentDir(filePath);
+        if (filePath == null) {
+            throw new Error('You are not in a presentation folder!');
+        }
         filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
         if (!fs_1.default.existsSync(filePath) || ((cmdObj === null || cmdObj === void 0 ? void 0 : cmdObj.force) != null && (cmdObj === null || cmdObj === void 0 ? void 0 : cmdObj.force))) {
             log.info('Presentation template created at: %s', filePath);

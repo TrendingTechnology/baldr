@@ -52,6 +52,9 @@ function relocate (oldPath: string, extension: string, cmdObj: CmdObj): void {
     twoLetterFolder = 'TX'
   }
   const parentDir = locationIndicator.getPresParentDir(oldPath)
+  if (parentDir == null) {
+    throw new Error(`${oldPath} is not a presentation folder ${oldPath}.`)
+  }
   const newPath = path.join(parentDir, twoLetterFolder, path.basename(oldPath))
   if (oldPath !== newPath) {
     if (extension === 'tex') {
@@ -101,6 +104,9 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: CmdObj): st
     // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz
     const presParentDir = locationIndicator.getPresParentDir(oldPath)
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
+    if (presParentDir == null) {
+      throw new Error(`${oldPath} is not a presentation folder ${oldPath}.`)
+    }
     const presParentDirMirrored = locationIndicator.getMirroredPath(presParentDir)
     if (presParentDirMirrored === undefined) return
 

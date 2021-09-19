@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 
 import { CommandRunner } from '@bldr/cli-utils'
 import { operations, locationIndicator } from '@bldr/media-manager'
@@ -16,7 +16,9 @@ interface VideoMeta {
   originalInfo: string
 }
 
-async function requestYoutubeApi (youtubeId: string): Promise<VideoMeta | undefined> {
+async function requestYoutubeApi (
+  youtubeId: string
+): Promise<VideoMeta | undefined> {
   const snippet = await getSnippet(youtubeId)
   if (snippet != null) {
     return {
@@ -31,9 +33,12 @@ async function requestYoutubeApi (youtubeId: string): Promise<VideoMeta | undefi
  *
  */
 async function action (youtubeId: string): Promise<void> {
-  const meta = await requestYoutubeApi(youtubeId) as unknown
+  const meta = (await requestYoutubeApi(youtubeId)) as unknown
   if (meta == null) {
-    log.error('Metadata of the YouTube video “%s” could not be fetched.', youtubeId)
+    log.error(
+      'Metadata of the YouTube video “%s” could not be fetched.',
+      youtubeId
+    )
     return
   }
 
@@ -41,6 +46,9 @@ async function action (youtubeId: string): Promise<void> {
   console.log(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())
+  if (parentDir == null) {
+    throw new Error('You are not in a presentation folder!')
+  }
   const ytDir = path.join(parentDir, 'YT')
   if (!fs.existsSync(ytDir)) {
     fs.mkdirSync(ytDir)
@@ -54,8 +62,10 @@ async function action (youtubeId: string): Promise<void> {
   await cmd.exec(
     [
       'youtube-dl',
-      '--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
-      '--output', youtubeId,
+      '--format',
+      'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
+      '--output',
+      youtubeId,
       '--write-thumbnail',
       youtubeId
     ],
@@ -77,11 +87,9 @@ async function action (youtubeId: string): Promise<void> {
   if (fs.existsSync(srcPreviewJpg)) {
     fs.renameSync(srcPreviewJpg, destPreview)
   } else if (fs.existsSync(srcPreviewWebp)) {
-    await cmd.exec(
-      ['magick',
-        'convert', srcPreviewWebp, destPreview],
-      { cwd: ytDir }
-    )
+    await cmd.exec(['magick', 'convert', srcPreviewWebp, destPreview], {
+      cwd: ytDir
+    })
     fs.unlinkSync(srcPreviewWebp)
   }
   cmd.stopSpin()

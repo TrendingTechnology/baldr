@@ -32,8 +32,10 @@ function action (filePath: string, cmdObj: CmdObj): void {
     return
   }
   filePath = path.resolve(filePath)
+  console.log(filePath)
   const presParentDir = locationIndicator.getPresParentDir(filePath)
-  if (filePath !== presParentDir) {
+  console.log(presParentDir)
+  if (presParentDir != null && filePath !== presParentDir) {
     filePath = presParentDir
     log.info('Open parent folder instead')
   }

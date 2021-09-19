@@ -54,6 +54,9 @@ function relocate(oldPath, extension, cmdObj) {
         twoLetterFolder = 'TX';
     }
     const parentDir = media_manager_1.locationIndicator.getPresParentDir(oldPath);
+    if (parentDir == null) {
+        throw new Error(`${oldPath} is not a presentation folder ${oldPath}.`);
+    }
     const newPath = path_1.default.join(parentDir, twoLetterFolder, path_1.default.basename(oldPath));
     if (oldPath !== newPath) {
         if (extension === 'tex') {
@@ -101,6 +104,9 @@ function moveTexImage(oldPathTex, baseName, cmdObj) {
         // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz
         const presParentDir = media_manager_1.locationIndicator.getPresParentDir(oldPath);
         // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
+        if (presParentDir == null) {
+            throw new Error(`${oldPath} is not a presentation folder ${oldPath}.`);
+        }
         const presParentDirMirrored = media_manager_1.locationIndicator.getMirroredPath(presParentDir);
         if (presParentDirMirrored === undefined)
             return;

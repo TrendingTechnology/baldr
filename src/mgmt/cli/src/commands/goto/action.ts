@@ -25,6 +25,9 @@ function action (cmdObj: CmdObj): void {
   // In the archive folder are no two letter folders like 'YT'.
   // We try to detect the parent folder where the presentation lies in.
   const presDir = locationIndicator.getPresParentDir(process.cwd())
+  if (presDir == null) {
+    throw new Error('You are not in a presentation folder!')
+  }
   let mirroredPath = locationIndicator.getMirroredPath(presDir)
   // If no mirrored path could be detected we show the base path of the
   // media server.

@@ -26,12 +26,19 @@ async function action (filePath?: string, cmdObj?: CmdObj): Promise<void> {
   }
   filePath = locationIndicator.getPresParentDir(filePath)
 
+  if (filePath == null) {
+    throw new Error('You are not in a presentation folder!')
+  }
+
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
   if (!fs.existsSync(filePath) || (cmdObj?.force != null && cmdObj?.force)) {
     log.info('Presentation template created at: %s', filePath)
   } else {
     filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml')
-    log.info('Presentation already exists, create tmp file: %s', log.colorize.red(filePath))
+    log.info(
+      'Presentation already exists, create tmp file: %s',
+      log.colorize.red(filePath)
+    )
   }
 
   await operations.generatePresentation(filePath)

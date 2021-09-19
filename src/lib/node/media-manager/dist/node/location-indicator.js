@@ -52,8 +52,6 @@ class LocationIndicator {
      * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
      */
     getPresParentDir(currentPath) {
-        // /Duke-Ellington.jpg
-        // /Material
         const parentFile = (0, core_node_1.findParentFile)(currentPath, 'Praesentation.baldr.yml');
         if (parentFile != null) {
             return path_1.default.dirname(parentFile);

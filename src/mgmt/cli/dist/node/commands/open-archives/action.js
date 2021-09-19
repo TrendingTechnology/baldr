@@ -46,8 +46,10 @@ function action(filePath, cmdObj) {
         return;
     }
     filePath = path_1.default.resolve(filePath);
+    console.log(filePath);
     const presParentDir = media_manager_1.locationIndicator.getPresParentDir(filePath);
-    if (filePath !== presParentDir) {
+    console.log(presParentDir);
+    if (presParentDir != null && filePath !== presParentDir) {
         filePath = presParentDir;
         log.info('Open parent folder instead');
     }
