@@ -21,7 +21,6 @@
     "code:vue": "code .vscode/vue.code-workspace"
   },
   "devDependencies": {
-    "lerna": "3.16.4",
     "@vue/cli-plugin-babel": "3.12.0",
     "@vue/cli-plugin-eslint": "3.12.0",
     "@vue/cli-service": "3.12.0",
@@ -57,6 +56,7 @@
     ]
   },
   "dependencies": {
+    "lerna": "4.0.0",
     "@bldr/api": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/modal-dialog": "*",
