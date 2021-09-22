@@ -61,14 +61,16 @@ exports.detectCategoryByPath = detectCategoryByPath;
  * @returns A absolute path
  */
 function formatFilePath(data, oldPath) {
-    if (data.categories == null)
+    if (data.categories == null) {
         throw new Error('Your data needs a property named “categories”.');
+    }
     // TODO: support multiple types
     // person,general -> person
     const categoryName = data.categories.replace(/,.*$/, '');
     const category = specs_1.categories[categoryName];
-    if (category == null)
+    if (category == null) {
         throw new Error(`Unkown media category “${categoryName}”.`);
+    }
     if (category.relPath == null || typeof category.relPath !== 'function') {
         return;
     }
@@ -157,9 +159,11 @@ function isPropertyDerived(propSpec) {
  *   `*.extension.yml` file.
  */
 function sortAndDeriveProps(data, category, filePath) {
+    // eslint-disable-next-line
     const origData = core_browser_1.deepCopy(data);
     // eslint-disable-next-line
     const result = {};
+    // eslint-disable-next-line
     let folderTitles = {};
     if (filePath != null) {
         folderTitles = new titles_1.DeepTitle(filePath);
@@ -170,7 +174,7 @@ function sortAndDeriveProps(data, category, filePath) {
         const propSpec = propSpecs[propName];
         const origValue = origData[propName];
         let derivedValue;
-        if (isPropertyDerived(propSpec) && (propSpec.derive != null)) {
+        if (isPropertyDerived(propSpec) && propSpec.derive != null) {
             derivedValue = propSpec.derive({ data, category, folderTitles, filePath });
         }
         // Use the derived value
@@ -204,7 +208,7 @@ function sortAndDeriveProps(data, category, filePath) {
 function formatProps(data, category, filePath) {
     function formatOneProp(spec, value) {
         if (isValue(value) &&
-            (spec.format != null) &&
+            spec.format != null &&
             typeof spec.format === 'function') {
             return spec.format(value, { data, category, filePath });
         }
@@ -223,10 +227,12 @@ function validateProps(data, category) {
             throw new Error(`Missing property ${prop}`);
         }
         // validate
-        if (spec.validate != null && typeof spec.validate === 'function' && isValue(value)) {
+        if (spec.validate != null &&
+            typeof spec.validate === 'function' &&
+            isValue(value)) {
             const result = spec.validate(value);
             if (!result) {
-                // eslint-disable-next-line
+                /* eslint-disable @typescript-eslint/restrict-template-expressions */
                 throw new Error(`Validation failed for property “${prop}” and value “${value}”`);
             }
         }
@@ -249,10 +255,10 @@ function removeProps(data, category) {
             !isValue(value) ||
                 // eslint-disable-next-line
                 (propSpec.state && propSpec.state === 'absent') ||
-                ((propSpec.removeByRegexp != null) &&
+                (propSpec.removeByRegexp != null &&
                     propSpec.removeByRegexp instanceof RegExp &&
                     typeof value === 'string' &&
-                    (value.match(propSpec.removeByRegexp) != null))) {
+                    value.match(propSpec.removeByRegexp) != null)) {
                 // eslint-disable-next-line
                 delete data[propName];
             }
@@ -273,7 +279,8 @@ function processByType(data, name, filePath) {
         throw new Error(`Unkown meta category name: “${name}”`);
     }
     const category = specs_1.categories[name];
-    if ((category.initialize != null) && typeof category.initialize === 'function') {
+    if (category.initialize != null &&
+        typeof category.initialize === 'function') {
         data = category.initialize({ data, category, filePath });
     }
     data = sortAndDeriveProps(data, category, filePath);
@@ -281,7 +288,7 @@ function processByType(data, name, filePath) {
     // We need filePath in format. Must be after formatProps
     data = removeProps(data, category);
     validateProps(data, category);
-    if ((category.finalize != null) && typeof category.finalize === 'function') {
+    if (category.finalize != null && typeof category.finalize === 'function') {
         data = category.finalize({ data, category, filePath });
     }
     return data;

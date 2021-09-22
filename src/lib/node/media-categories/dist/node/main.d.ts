@@ -1,3 +1,4 @@
+export { getTwoLetterRegExp } from './two-letter-abbreviations';
 export * as categoriesManagement from './management';
 export * from './specs';
 export declare const twoLetterAbbreviations: {

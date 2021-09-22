@@ -32,6 +32,10 @@ export function getTwoLetterAbbreviations (): string[] {
   return Object.keys(abbreviations)
 }
 
+export function getTwoLetterRegExp (): string {
+  return '(' + getTwoLetterAbbreviations().join('|') + ')'
+}
+
 /**
  * Check if the given file path is in a valid two letter directory.
  *

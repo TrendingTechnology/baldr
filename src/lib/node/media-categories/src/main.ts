@@ -4,6 +4,7 @@ import path from 'path'
 import { MediaUri } from '@bldr/client-media-models'
 
 import { abbreviations } from './two-letter-abbreviations'
+export { getTwoLetterRegExp } from './two-letter-abbreviations'
 
 export * as categoriesManagement from './management'
 export * from './specs'

@@ -1,6 +1,6 @@
 import type { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { deasciify, referencify, genUuid } from '@bldr/core-browser'
-import { getTwoLetterAbbreviations, checkForTwoLetterDir } from '../two-letter-abbreviations'
+import { getTwoLetterRegExp, checkForTwoLetterDir } from '../two-letter-abbreviations'
 
 import { generateIdPrefix, validateYoutubeId } from '../main'
 
@@ -36,7 +36,7 @@ export const general: MediaCategoriesTypes.Category = {
             // old prefix: Piazzolla-Adios-Nonino_NB
             // updated prefix: Piazzolla-Nonino_NB
             // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-            const twoLetterRegExp = '(' + getTwoLetterAbbreviations().join('|') + ')'
+            const twoLetterRegExp = getTwoLetterRegExp()
             if (raw.match(new RegExp(`.*_${twoLetterRegExp}_.*`)) != null) {
               raw = raw.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix)
             }

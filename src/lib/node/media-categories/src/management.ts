@@ -66,8 +66,9 @@ export function formatFilePath (
   data: MediaResolverTypes.YamlFormat,
   oldPath?: string
 ): string | undefined {
-  if (data.categories == null)
+  if (data.categories == null) {
     throw new Error('Your data needs a property named “categories”.')
+  }
   // TODO: support multiple types
   // person,general -> person
   const categoryName = data.categories.replace(
@@ -75,8 +76,9 @@ export function formatFilePath (
     ''
   ) as MediaCategoriesTypes.Name
   const category = categories[categoryName]
-  if (category == null)
+  if (category == null) {
     throw new Error(`Unkown media category “${categoryName}”.`)
+  }
 
   if (category.relPath == null || typeof category.relPath !== 'function') {
     return
@@ -190,10 +192,14 @@ function sortAndDeriveProps (
   category: MediaCategoriesTypes.Category,
   filePath?: string
 ): MediaResolverTypes.YamlFormat {
-  const origData = deepCopy(data) as MediaResolverTypes.YamlFormat
+  // eslint-disable-next-line
+  const origData: MediaResolverTypes.YamlFormat = deepCopy(
+    data
+  ) as MediaResolverTypes.YamlFormat
   // eslint-disable-next-line
   const result: MediaResolverTypes.YamlFormat = {} as MediaResolverTypes.YamlFormat
 
+  // eslint-disable-next-line
   let folderTitles: DeepTitle = {} as DeepTitle
   if (filePath != null) {
     folderTitles = new DeepTitle(filePath)
@@ -286,7 +292,7 @@ function validateProps (
     ) {
       const result = spec.validate(value)
       if (!result) {
-        // eslint-disable-next-line
+        /* eslint-disable @typescript-eslint/restrict-template-expressions */
         throw new Error(
           `Validation failed for property “${prop}” and value “${value}”`
         )

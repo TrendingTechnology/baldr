@@ -21,7 +21,7 @@ const media_categories_1 = require("@bldr/media-categories");
  * converted in the `camleCase` format.
  */
 function readYamlMetaData(filePath) {
-    return file_reader_writer_1.readYamlFile(`${filePath}.yml`);
+    return (0, file_reader_writer_1.readYamlFile)(`${filePath}.yml`);
 }
 exports.readYamlMetaData = readYamlMetaData;
 /**
@@ -36,7 +36,7 @@ exports.readYamlMetaData = readYamlMetaData;
 function writeYamlMetaData(filePath, metaData, force) {
     if (fs_1.default.lstatSync(filePath).isDirectory())
         return;
-    const yamlFile = `${core_browser_1.asciify(filePath)}.yml`;
+    const yamlFile = `${(0, core_browser_1.asciify)(filePath)}.yml`;
     if ((force != null && force) ||
         !fs_1.default.existsSync(yamlFile)) {
         // eslint-disable-next-line
@@ -47,11 +47,11 @@ function writeYamlMetaData(filePath, metaData, force) {
             metaData.ref = asset.basename;
         }
         if (metaData.title == null) {
-            metaData.title = core_browser_1.deasciify(asset.basename);
+            metaData.title = (0, core_browser_1.deasciify)(asset.basename);
         }
         metaData.filePath = filePath;
         metaData = media_categories_1.categoriesManagement.process(metaData);
-        file_reader_writer_1.writeYamlFile(yamlFile, metaData);
+        (0, file_reader_writer_1.writeYamlFile)(yamlFile, metaData);
         return {
             filePath,
             yamlFile,

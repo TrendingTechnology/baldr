@@ -34,7 +34,7 @@ exports.general = {
                         // old prefix: Piazzolla-Adios-Nonino_NB
                         // updated prefix: Piazzolla-Nonino_NB
                         // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-                        const twoLetterRegExp = '(' + two_letter_abbreviations_1.getTwoLetterAbbreviations().join('|') + ')';
+                        const twoLetterRegExp = two_letter_abbreviations_1.getTwoLetterRegExp();
                         if (raw.match(new RegExp(`.*_${twoLetterRegExp}_.*`)) != null) {
                             raw = raw.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix);
                         }

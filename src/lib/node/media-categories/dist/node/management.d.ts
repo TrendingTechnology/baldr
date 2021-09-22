@@ -7,7 +7,7 @@
  *
  * @module @bldr/media-categories
  */
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions';
 /**
  * Check a file path against a regular expression to get the category name.
  *
