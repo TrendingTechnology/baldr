@@ -55,21 +55,32 @@ function validateYamlOneFile(filePath) {
  */
 function action(filePaths, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (filePaths.length === 0) {
+            filePaths = [process.cwd()];
+        }
+        if (cmdObj.parentPresDir) {
+            const presParentDir = media_manager_1.locationIndicator.getPresParentDir(filePaths[0]);
+            if (presParentDir != null) {
+                log.info('Run the normalization task on the parent presentation folder: %s', presParentDir);
+                filePaths = [presParentDir];
+            }
+        }
         yield media_manager_1.walk({
-            asset(relPath) {
+            asset(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    if (!fs_1.default.existsSync(`${relPath}.yml`)) {
-                        yield media_manager_1.operations.initializeMetaYaml(relPath);
+                    if (!fs_1.default.existsSync(`${filePath}.yml`)) {
+                        yield media_manager_1.operations.initializeMetaYaml(filePath);
                     }
                     else {
-                        yield media_manager_1.operations.normalizeMediaAsset(relPath, cmdObj);
+                        yield media_manager_1.operations.normalizeMediaAsset(filePath, cmdObj);
                     }
+                    media_manager_1.operations.renameByRef(filePath);
                 });
             },
-            everyFile(relPath) {
-                media_manager_1.operations.fixTypography(relPath);
-                if (relPath.match(/\.yml$/i) != null) {
-                    validateYamlOneFile(relPath);
+            everyFile(filePath) {
+                media_manager_1.operations.fixTypography(filePath);
+                if (filePath.match(/\.yml$/i) != null) {
+                    validateYamlOneFile(filePath);
                 }
             },
             presentation(filePath) {

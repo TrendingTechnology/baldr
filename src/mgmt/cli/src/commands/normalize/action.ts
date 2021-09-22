@@ -2,13 +2,10 @@
 import fs from 'fs'
 
 // Project packages.
-import { operations, walk } from '@bldr/media-manager'
+import { operations, walk, locationIndicator } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
-import type { GenericError } from '@bldr/type-definitions'
+import { GenericError } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
-interface CmdObj {
-  wikidata: boolean
-}
 
 function validateYamlOneFile (filePath: string): void {
   try {
@@ -21,6 +18,11 @@ function validateYamlOneFile (filePath: string): void {
   }
 }
 
+interface CmdObj {
+  wikidata: boolean
+  parentPresDir: boolean
+}
+
 /**
  * Create the metadata YAML files.
  *
@@ -28,32 +30,49 @@ function validateYamlOneFile (filePath: string): void {
  *   commanders’ variadic parameter `[files...]`.
  */
 async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
-  await walk({
-    async asset (relPath) {
-      if (!fs.existsSync(`${relPath}.yml`)) {
-        await operations.initializeMetaYaml(relPath)
-      } else {
-        await operations.normalizeMediaAsset(relPath, cmdObj)
-      }
-    },
-    everyFile (relPath) {
-      operations.fixTypography(relPath)
-      if (relPath.match(/\.yml$/i) != null) {
-        validateYamlOneFile(relPath)
-      }
-    },
-    presentation (filePath) {
-      log.info('\nNormalize the presentation file “%s”', filePath)
-      log.info('\nNew content:\n')
-      log.info(operations.normalizePresentationFile(filePath))
-    },
-    tex (filePath) {
-      log.info('\nPatch the titles of the TeX file “%s”', filePath)
-      operations.patchTexTitles(filePath)
+  if (filePaths.length === 0) {
+    filePaths = [process.cwd()]
+  }
+  if (cmdObj.parentPresDir) {
+    const presParentDir = locationIndicator.getPresParentDir(filePaths[0])
+    if (presParentDir != null) {
+      log.info(
+        'Run the normalization task on the parent presentation folder: %s',
+        presParentDir
+      )
+      filePaths = [presParentDir]
     }
-  }, {
-    path: filePaths
-  })
+  }
+  await walk(
+    {
+      async asset (filePath) {
+        if (!fs.existsSync(`${filePath}.yml`)) {
+          await operations.initializeMetaYaml(filePath)
+        } else {
+          await operations.normalizeMediaAsset(filePath, cmdObj)
+        }
+        operations.renameByRef(filePath)
+      },
+      everyFile (filePath) {
+        operations.fixTypography(filePath)
+        if (filePath.match(/\.yml$/i) != null) {
+          validateYamlOneFile(filePath)
+        }
+      },
+      presentation (filePath) {
+        log.info('\nNormalize the presentation file “%s”', filePath)
+        log.info('\nNew content:\n')
+        log.info(operations.normalizePresentationFile(filePath))
+      },
+      tex (filePath) {
+        log.info('\nPatch the titles of the TeX file “%s”', filePath)
+        operations.patchTexTitles(filePath)
+      }
+    },
+    {
+      path: filePaths
+    }
+  )
 }
 
 export = action

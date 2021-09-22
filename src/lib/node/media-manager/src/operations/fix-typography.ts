@@ -6,8 +6,8 @@ import { readFile, writeFile } from '@bldr/file-reader-writer'
 export function fixTypography (filePath: string): void {
   let content = readFile(filePath)
   const before = content
-  content = content.replace(/“([^“”]*)”/g, '„$1“')
-  content = content.replace(/"([^"]*)"/g, '„$1“')
+  // content = content.replace(/“([^“”]*)”/g, '„$1“')
+  // content = content.replace(/"([^"]*)"/g, '„$1“')
 
   // Delete spaces at the end
   content = content.replace(/[ ]*\n/g, '\n')

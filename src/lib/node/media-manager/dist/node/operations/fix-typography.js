@@ -8,8 +8,8 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
 function fixTypography(filePath) {
     let content = (0, file_reader_writer_1.readFile)(filePath);
     const before = content;
-    content = content.replace(/“([^“”]*)”/g, '„$1“');
-    content = content.replace(/"([^"]*)"/g, '„$1“');
+    // content = content.replace(/“([^“”]*)”/g, '„$1“')
+    // content = content.replace(/"([^"]*)"/g, '„$1“')
     // Delete spaces at the end
     content = content.replace(/[ ]*\n/g, '\n');
     // Delete multiple empty lines
