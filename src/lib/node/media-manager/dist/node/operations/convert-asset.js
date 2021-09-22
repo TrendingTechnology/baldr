@@ -46,7 +46,7 @@ const converted = new Set();
  */
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const asset = (0, media_file_classes_1.makeAsset)(filePath);
+        const asset = media_file_classes_1.makeAsset(filePath);
         if (asset.extension == null) {
             return;
         }
@@ -59,7 +59,7 @@ function convertAsset(filePath, cmdObj = {}) {
             return;
         }
         const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
-        const outputFileName = `${(0, core_browser_1.referencify)(asset.basename)}.${outputExtension}`;
+        const outputFileName = `${core_browser_1.referencify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
             return;
@@ -144,13 +144,13 @@ function convertAsset(filePath, cmdObj = {}) {
                 if (mimeType === 'audio') {
                     let metaData;
                     try {
-                        metaData = (yield (0, audio_metadata_1.default)(filePath));
+                        metaData = (yield audio_metadata_1.default(filePath));
                     }
                     catch (error) {
                         console.log(error);
                     }
                     if (metaData != null) {
-                        (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
+                        yaml_1.writeYamlMetaData(outputFile, metaData);
                     }
                 }
                 converted.add(outputFile);

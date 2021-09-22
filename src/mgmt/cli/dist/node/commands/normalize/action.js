@@ -35,6 +35,7 @@ const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const yaml_1 = require("@bldr/yaml");
+const core_browser_1 = require("@bldr/core-browser");
 const log = __importStar(require("@bldr/log"));
 function validateYamlOneFile(filePath) {
     try {
@@ -78,7 +79,11 @@ function action(filePaths, cmdObj) {
                 });
             },
             everyFile(filePath) {
-                media_manager_1.operations.fixTypography(filePath);
+                var _a;
+                const extension = (_a = core_browser_1.getExtension(filePath)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+                if (extension != null && ['tex', 'yml', 'txt'].includes(extension)) {
+                    media_manager_1.operations.fixTypography(filePath);
+                }
                 if (filePath.match(/\.yml$/i) != null) {
                     validateYamlOneFile(filePath);
                 }

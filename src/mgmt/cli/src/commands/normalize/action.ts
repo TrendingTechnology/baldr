@@ -5,6 +5,7 @@ import fs from 'fs'
 import { operations, walk, locationIndicator } from '@bldr/media-manager'
 import { convertFromYamlRaw } from '@bldr/yaml'
 import { GenericError } from '@bldr/type-definitions'
+import { getExtension } from '@bldr/core-browser'
 import * as log from '@bldr/log'
 
 function validateYamlOneFile (filePath: string): void {
@@ -54,7 +55,10 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
         operations.renameByRef(filePath)
       },
       everyFile (filePath) {
-        operations.fixTypography(filePath)
+        const extension = getExtension(filePath)?.toLowerCase()
+        if (extension != null && ['tex', 'yml', 'txt'].includes(extension)) {
+          operations.fixTypography(filePath)
+        }
         if (filePath.match(/\.yml$/i) != null) {
           validateYamlOneFile(filePath)
         }

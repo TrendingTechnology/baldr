@@ -28,7 +28,7 @@ class LocationIndicator {
         ];
         this.basePaths = [];
         for (let i = 0; i < basePaths.length; i++) {
-            basePaths[i] = path_1.default.resolve((0, core_node_1.untildify)(basePaths[i]));
+            basePaths[i] = path_1.default.resolve(core_node_1.untildify(basePaths[i]));
             if (fs_1.default.existsSync(basePaths[i])) {
                 this.basePaths.push(basePaths[i]);
             }
@@ -52,7 +52,7 @@ class LocationIndicator {
      * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
      */
     getPresParentDir(currentPath) {
-        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'Praesentation.baldr.yml');
+        const parentFile = core_node_1.findParentFile(currentPath, 'Praesentation.baldr.yml');
         if (parentFile != null) {
             return path_1.default.dirname(parentFile);
         }

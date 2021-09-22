@@ -17,7 +17,7 @@ const media_categories_1 = require("@bldr/media-categories");
 function renameByRef(filePath) {
     let result;
     try {
-        result = (0, main_1.readYamlMetaData)(filePath);
+        result = main_1.readYamlMetaData(filePath);
     }
     catch (error) {
         return;
@@ -30,14 +30,14 @@ function renameByRef(filePath) {
         const oldBaseName = path_1.default.basename(oldPath, extension);
         let newPath = null;
         // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
-        ref = ref.replace(new RegExp('.*_' + (0, media_categories_1.getTwoLetterRegExp)() + '_'), '');
+        ref = ref.replace(new RegExp('.*_' + media_categories_1.getTwoLetterRegExp() + '_'), '');
         if (ref !== oldBaseName) {
             newPath = path_1.default.join(path_1.default.dirname(oldPath), `${ref}${extension}`);
         }
         else {
             return;
         }
-        (0, main_1.moveAsset)(oldPath, newPath);
+        main_1.moveAsset(oldPath, newPath);
     }
 }
 exports.renameByRef = renameByRef;

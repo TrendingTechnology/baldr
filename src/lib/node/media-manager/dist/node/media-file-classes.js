@@ -23,7 +23,7 @@ class MediaFile {
      * The file extension of the media file.
      */
     get extension() {
-        return (0, core_browser_1.getExtension)(this.absPath);
+        return core_browser_1.getExtension(this.absPath);
     }
     /**
      * The basename (filename without extension) of the file.
@@ -44,7 +44,7 @@ class Asset extends MediaFile {
      */
     constructor(filePath) {
         super(filePath);
-        const data = (0, main_1.readAssetYaml)(this.absPath);
+        const data = main_1.readAssetYaml(this.absPath);
         if (data != null) {
             this.metaData = data;
         }
