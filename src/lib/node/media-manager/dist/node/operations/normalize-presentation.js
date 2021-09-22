@@ -50,8 +50,8 @@ function shortedMediaUris(rawYamlString, presentationId) {
  */
 function normalizePresentationFile(filePath) {
     var _a, _b, _c;
-    let textContent = (0, file_reader_writer_1.readFile)(filePath);
-    const presentation = (0, file_reader_writer_1.readYamlFile)(filePath);
+    let textContent = file_reader_writer_1.readFile(filePath);
+    const presentation = file_reader_writer_1.readYamlFile(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
@@ -62,7 +62,7 @@ function normalizePresentationFile(filePath) {
         meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
     if (((_c = presentation === null || presentation === void 0 ? void 0 : presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) == null) {
-        meta.uuid = (0, core_browser_1.genUuid)();
+        meta.uuid = core_browser_1.genUuid();
     }
     else {
         meta.uuid = presentation.meta.uuid;
@@ -78,7 +78,7 @@ function normalizePresentationFile(filePath) {
     metaSorted.curriculum = meta.curriculum;
     if (meta.curriculumUrl != null)
         metaSorted.curriculumUrl = meta.curriculumUrl;
-    const metaString = (0, yaml_1.convertToYaml)({ meta: metaSorted });
+    const metaString = yaml_1.convertToYaml({ meta: metaSorted });
     textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.ref != null) {
@@ -86,7 +86,7 @@ function normalizePresentationFile(filePath) {
     }
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
-    (0, file_reader_writer_1.writeFile)(filePath, textContent);
+    file_reader_writer_1.writeFile(filePath, textContent);
     return textContent;
 }
 exports.normalizePresentationFile = normalizePresentationFile;

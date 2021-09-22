@@ -12,7 +12,7 @@ describe('Package “@bldr/media-manager”', function () {
     it('07_Hoer-Labyrinth/TX/Arbeitsblatt.tex', function () {
       const testFile = path.join(
         config.mediaServer.basePath,
-        'musik/05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'
+        'Musik/05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'
       )
       patchTexTitles(testFile)
 

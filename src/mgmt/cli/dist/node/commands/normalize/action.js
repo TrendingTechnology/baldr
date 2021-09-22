@@ -67,6 +67,7 @@ function action(filePaths, cmdObj) {
                 });
             },
             everyFile(relPath) {
+                media_manager_1.operations.fixTypography(relPath);
                 if (relPath.match(/\.yml$/i) != null) {
                     validateYamlOneFile(relPath);
                 }

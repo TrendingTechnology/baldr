@@ -10,29 +10,33 @@ import fs from 'fs'
 import path from 'path'
 
 import { getExtension } from '@bldr/core-browser'
-import type { MediaResolverTypes, GenericError } from '@bldr/type-definitions'
+import { MediaResolverTypes, GenericError } from '@bldr/type-definitions'
 
 import { readYamlFile } from '@bldr/file-reader-writer'
 
 // Operations
 import { convertAsset } from './operations/convert-asset'
+import { fixTypography } from './operations/fix-typography'
 import { generatePresentation } from './operations/generate-presentation'
 import { initializeMetaYaml } from './operations/initialize-meta-yaml'
 import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
-import { renameMediaAsset } from './operations/rename-asset'
 import { patchTexTitles } from './operations/patch-tex-titles'
+import { renameByRef } from './operations/rename-by-ref'
+import { renameMediaAsset } from './operations/rename-asset'
 
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
 export const operations = {
   convertAsset,
+  fixTypography,
   generatePresentation,
   initializeMetaYaml,
   normalizeMediaAsset,
   normalizePresentationFile,
   patchTexTitles,
+  renameByRef,
   renameMediaAsset
 }
 
@@ -54,8 +58,16 @@ interface MoveAssetConfiguration {
  * @param newPath - The new path of a media asset.
  * @param opts - Some options
  */
-export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration = {}): string | undefined {
-  function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration): void {
+export function moveAsset (
+  oldPath: string,
+  newPath: string,
+  opts: MoveAssetConfiguration = {}
+): string | undefined {
+  function move (
+    oldPath: string,
+    newPath: string,
+    { copy, dryRun }: MoveAssetConfiguration
+  ): void {
     if (copy != null && copy) {
       if (!(dryRun != null && dryRun)) {
         fs.copyFileSync(oldPath, newPath)
@@ -76,7 +88,13 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
     }
   }
 
-  function moveCorrespondingFile (oldPath: string, newPath: string, search: RegExp, replace: string, opts: MoveAssetConfiguration): void {
+  function moveCorrespondingFile (
+    oldPath: string,
+    newPath: string,
+    search: RegExp,
+    replace: string,
+    opts: MoveAssetConfiguration
+  ): void {
     oldPath = oldPath.replace(search, replace)
     if (fs.existsSync(oldPath)) {
       newPath = newPath.replace(search, replace)
@@ -95,7 +113,13 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
       // Dippermouth-Blues.mscx
       moveCorrespondingFile(oldPath, newPath, /\.eps$/, '.mscx', opts)
       // Dippermouth-Blues-eps-converted-to.pdf
-      moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts)
+      moveCorrespondingFile(
+        oldPath,
+        newPath,
+        /\.eps$/,
+        '-eps-converted-to.pdf',
+        opts
+      )
     }
 
     // Beethoven.mp4
@@ -118,7 +142,9 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
-export function readAssetYaml (filePath: string): MediaResolverTypes.YamlFormat | undefined {
+export function readAssetYaml (
+  filePath: string
+): MediaResolverTypes.YamlFormat | undefined {
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
   if (fs.existsSync(filePath)) {

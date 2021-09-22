@@ -29,7 +29,7 @@ function queryWikidata(metaData, categoryNames, categoryCollection) {
         // status: 429,
         // statusText: 'Scripted requests from your IP have been blocked, please
         // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
-        (0, core_browser_1.msleep)(3000);
+        core_browser_1.msleep(3000);
         return metaData;
     });
 }
@@ -40,7 +40,7 @@ function normalizeMediaAsset(filePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const yamlFile = `${filePath}.yml`;
-            const raw = (0, main_1.readAssetYaml)(filePath);
+            const raw = main_1.readAssetYaml(filePath);
             if (raw != null) {
                 raw.filePath = filePath;
             }
@@ -48,7 +48,7 @@ function normalizeMediaAsset(filePath, options) {
             if (metaData == null) {
                 return;
             }
-            const origData = (0, core_browser_1.deepCopy)(metaData);
+            const origData = core_browser_1.deepCopy(metaData);
             // Always: general
             const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
             if (categoryNames != null) {
@@ -67,7 +67,7 @@ function normalizeMediaAsset(filePath, options) {
                 assert_1.default.deepStrictEqual(comparable, result);
             }
             catch (error) {
-                (0, file_reader_writer_1.writeYamlFile)(yamlFile, result);
+                file_reader_writer_1.writeYamlFile(yamlFile, result);
             }
         }
         catch (error) {

@@ -16,10 +16,10 @@ describe('Package “@bldr/media-manager”', function () {
         assert.strictEqual(
           locationIndicator.getPresParentDir(
             getPath(
-              'musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
+              'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
             )
           ),
-          getPath('musik/10/10_Kontext/40_Jazz/10_Entstehung')
+          getPath('Musik/10/10_Kontext/40_Jazz/10_Entstehung')
         )
       })
 
@@ -36,7 +36,7 @@ describe('Package “@bldr/media-manager”', function () {
         locationIndicator.isInArchive(
           path.join(
             config.mediaServer.archivePaths[0],
-            'musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
+            'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
           )
         ),
         true

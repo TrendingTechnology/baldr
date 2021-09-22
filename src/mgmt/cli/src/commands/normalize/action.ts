@@ -37,6 +37,7 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
       }
     },
     everyFile (relPath) {
+      operations.fixTypography(relPath)
       if (relPath.match(/\.yml$/i) != null) {
         validateYamlOneFile(relPath)
       }

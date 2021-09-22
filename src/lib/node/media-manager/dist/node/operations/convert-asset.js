@@ -46,7 +46,7 @@ const converted = new Set();
  */
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const asset = (0, media_file_classes_1.makeAsset)(filePath);
+        const asset = media_file_classes_1.makeAsset(filePath);
         if (asset.extension == null) {
             return;
         }
@@ -59,7 +59,7 @@ function convertAsset(filePath, cmdObj = {}) {
             return;
         }
         const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
-        const outputFileName = `${(0, core_browser_1.referencify)(asset.basename)}.${outputExtension}`;
+        const outputFileName = `${core_browser_1.referencify(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
             return;
@@ -74,13 +74,18 @@ function convertAsset(filePath, cmdObj = {}) {
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
         if (mimeType === 'audio') {
             process = child_process_1.default.spawnSync('ffmpeg', [
-                '-i', filePath,
+                '-i',
+                filePath,
                 // '-c:a', 'aac', '-b:a', '128k',
                 // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
-                '-c:a', 'libfdk_aac', '-vbr', '2',
+                '-c:a',
+                'libfdk_aac',
+                '-vbr',
+                '2',
                 // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
                 '-vn',
-                '-map_metadata', '-1',
+                '-map_metadata',
+                '-1',
                 '-y',
                 outputFile
             ]);
@@ -95,17 +100,22 @@ function convertAsset(filePath, cmdObj = {}) {
             process = child_process_1.default.spawnSync('magick', [
                 'convert',
                 filePath,
-                '-resize', size,
-                '-quality', '60',
+                '-resize',
+                size,
+                '-quality',
+                '60',
                 outputFile
             ]);
             // videos
         }
         else if (mimeType === 'video') {
             process = child_process_1.default.spawnSync('ffmpeg', [
-                '-i', filePath,
-                '-vcodec', 'libx264',
-                '-profile:v', 'baseline',
+                '-i',
+                filePath,
+                '-vcodec',
+                'libx264',
+                '-profile:v',
+                'baseline',
                 '-y',
                 outputFile
             ]);
@@ -115,10 +125,17 @@ function convertAsset(filePath, cmdObj = {}) {
                 // A second attempt for mono audio: HEv2 only makes sense with stereo.
                 // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
                 process = child_process_1.default.spawnSync('ffmpeg', [
-                    '-i', filePath,
-                    '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+                    '-i',
+                    filePath,
+                    '-c:a',
+                    'libfdk_aac',
+                    '-profile:a',
+                    'aac_he',
+                    '-b:a',
+                    '64k',
                     '-vn',
-                    '-map_metadata', '-1',
+                    '-map_metadata',
+                    '-1',
                     '-y',
                     outputFile
                 ]);
@@ -127,13 +144,13 @@ function convertAsset(filePath, cmdObj = {}) {
                 if (mimeType === 'audio') {
                     let metaData;
                     try {
-                        metaData = (yield (0, audio_metadata_1.default)(filePath));
+                        metaData = (yield audio_metadata_1.default(filePath));
                     }
                     catch (error) {
                         console.log(error);
                     }
                     if (metaData != null) {
-                        (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
+                        yaml_1.writeYamlMetaData(outputFile, metaData);
                     }
                 }
                 converted.add(outputFile);

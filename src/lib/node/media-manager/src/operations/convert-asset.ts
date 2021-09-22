@@ -8,7 +8,7 @@ import collectAudioMetaData from '@bldr/audio-metadata'
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
 import { referencify } from '@bldr/core-browser'
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
 /**
@@ -34,7 +34,10 @@ const converted: Set<string> = new Set()
  *
  * @returns The output file path.
  */
-export async function convertAsset (filePath: string, cmdObj: { [key: string]: any } = {}): Promise<string| undefined> {
+export async function convertAsset (
+  filePath: string,
+  cmdObj: { [key: string]: any } = {}
+): Promise<string | undefined> {
   const asset = makeAsset(filePath)
 
   if (asset.extension == null) {
@@ -68,18 +71,23 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
 
   if (mimeType === 'audio') {
     process = childProcess.spawnSync('ffmpeg', [
-      '-i', filePath,
+      '-i',
+      filePath,
       // '-c:a', 'aac', '-b:a', '128k',
       // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
-      '-c:a', 'libfdk_aac', '-vbr', '2',
+      '-c:a',
+      'libfdk_aac',
+      '-vbr',
+      '2',
       // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
       '-vn', // Disable video recording
-      '-map_metadata', '-1', // remove metadata
+      '-map_metadata',
+      '-1', // remove metadata
       '-y', // Overwrite output files without asking
       outputFile
     ])
 
-  // image
+    // image
   } else if (mimeType === 'image') {
     let size = '2000x2000>'
     if (cmdObj.previewImage != null) {
@@ -89,17 +97,22 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
     process = childProcess.spawnSync('magick', [
       'convert',
       filePath,
-      '-resize', size, // http://www.imagemagick.org/Usage/resize/#shrink
-      '-quality', '60', // https://imagemagick.org/script/command-line-options.php#quality
+      '-resize',
+      size, // http://www.imagemagick.org/Usage/resize/#shrink
+      '-quality',
+      '60', // https://imagemagick.org/script/command-line-options.php#quality
       outputFile
     ])
 
-  // videos
+    // videos
   } else if (mimeType === 'video') {
     process = childProcess.spawnSync('ffmpeg', [
-      '-i', filePath,
-      '-vcodec', 'libx264',
-      '-profile:v', 'baseline',
+      '-i',
+      filePath,
+      '-vcodec',
+      'libx264',
+      '-profile:v',
+      'baseline',
       '-y', // Overwrite output files without asking
       outputFile
     ])
@@ -110,10 +123,17 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
       process = childProcess.spawnSync('ffmpeg', [
-        '-i', filePath,
-        '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+        '-i',
+        filePath,
+        '-c:a',
+        'libfdk_aac',
+        '-profile:a',
+        'aac_he',
+        '-b:a',
+        '64k',
         '-vn', // Disable video recording
-        '-map_metadata', '-1', // remove metadata
+        '-map_metadata',
+        '-1', // remove metadata
         '-y', // Overwrite output files without asking
         outputFile
       ])
@@ -123,12 +143,15 @@ export async function convertAsset (filePath: string, cmdObj: { [key: string]: a
       if (mimeType === 'audio') {
         let metaData
         try {
-          metaData = await collectAudioMetaData(filePath) as unknown
+          metaData = (await collectAudioMetaData(filePath)) as unknown
         } catch (error) {
           console.log(error)
         }
         if (metaData != null) {
-          writeYamlMetaData(outputFile, metaData as MediaResolverTypes.YamlFormat)
+          writeYamlMetaData(
+            outputFile,
+            metaData as MediaResolverTypes.YamlFormat
+          )
         }
       }
       converted.add(outputFile)

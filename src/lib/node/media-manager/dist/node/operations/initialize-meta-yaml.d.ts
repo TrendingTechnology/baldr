@@ -1,4 +1,4 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaResolverTypes } from '@bldr/type-definitions';
 /**
  * Rename, create metadata yaml and normalize the metadata file.
  */

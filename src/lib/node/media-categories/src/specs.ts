@@ -14,7 +14,7 @@
  * @module @bldr/media-manager/meta-type-specs
  */
 
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { deepCopy } from '@bldr/core-browser'
 
 import { cloze } from './specs/cloze'

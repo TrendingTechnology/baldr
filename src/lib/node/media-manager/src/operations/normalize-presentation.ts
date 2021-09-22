@@ -1,4 +1,4 @@
-import type { LampTypes } from '@bldr/type-definitions'
+import { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
@@ -39,8 +39,14 @@ function removeSingleQuotes (rawYamlString: string): string {
  * @returns A raw YAML string without single quotes around the media
  *   URIs.
  */
-function shortedMediaUris (rawYamlString: string, presentationId: string): string {
-  return rawYamlString.replace(new RegExp(`ref:${presentationId}_`, 'g'), 'ref:./')
+function shortedMediaUris (
+  rawYamlString: string,
+  presentationId: string
+): string {
+  return rawYamlString.replace(
+    new RegExp(`ref:${presentationId}_`, 'g'),
+    'ref:./'
+  )
 }
 
 /**
@@ -82,7 +88,10 @@ export function normalizePresentationFile (filePath: string): string {
   if (meta.curriculumUrl != null) metaSorted.curriculumUrl = meta.curriculumUrl
 
   const metaString = convertToYaml({ meta: metaSorted })
-  textContent = textContent.replace(/.*\nslides:/s, metaString + comment + '\nslides:')
+  textContent = textContent.replace(
+    /.*\nslides:/s,
+    metaString + comment + '\nslides:'
+  )
 
   // Shorten media URIs with `./`
   if (meta.ref != null) {

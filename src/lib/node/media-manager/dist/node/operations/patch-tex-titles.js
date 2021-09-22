@@ -58,7 +58,7 @@ function makeTexMarkup(titles) {
     }
     // Replace semantic markup
     for (const key in setzeTitle) {
-        setzeTitle[key] = (0, tex_markdown_converter_1.convertMdToTex)(setzeTitle[key]);
+        setzeTitle[key] = tex_markdown_converter_1.convertMdToTex(setzeTitle[key]);
     }
     return tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n';
 }
@@ -82,7 +82,7 @@ function makeTexMarkup(titles) {
 function patchTexTitles(filePath) {
     const titles = new titles_1.DeepTitle(filePath);
     const patchedTitles = makeTexMarkup(titles);
-    const texFileContent = (0, file_reader_writer_1.readFile)(filePath);
+    const texFileContent = file_reader_writer_1.readFile(filePath);
     let texFileContentPatched;
     if (texFileContent.includes('\\setzetitel{')) {
         // /s s (dotall) modifier, +? one or more (non-greedy)
@@ -93,7 +93,7 @@ function patchTexTitles(filePath) {
         texFileContentPatched = texFileContent.replace(/(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/, '$1\n\n' + patchedTitles);
     }
     if (texFileContent !== texFileContentPatched) {
-        (0, file_reader_writer_1.writeFile)(filePath, texFileContentPatched);
+        file_reader_writer_1.writeFile(filePath, texFileContentPatched);
         return true;
     }
     return false;

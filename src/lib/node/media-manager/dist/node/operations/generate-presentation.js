@@ -52,9 +52,9 @@ function generatePresentation(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const basePath = path_1.default.dirname(filePath);
         let slides = [];
-        yield (0, directory_tree_walk_1.walk)({
+        yield directory_tree_walk_1.walk({
             asset(relPath) {
-                const asset = (0, media_file_classes_1.makeAsset)(relPath);
+                const asset = media_file_classes_1.makeAsset(relPath);
                 if (asset.ref == null) {
                     return;
                 }
@@ -76,19 +76,23 @@ function generatePresentation(filePath) {
         }, { path: basePath });
         const notePath = path_1.default.join(basePath, 'Hefteintrag.tex');
         if (fs_1.default.existsSync(notePath)) {
-            const noteContent = (0, file_reader_writer_1.readFile)(notePath);
-            slides = slides.concat(slidify('note', (0, tex_markdown_converter_1.objectifyTexItemize)(noteContent), { source: 'Hefteintrag.tex' }));
+            const noteContent = file_reader_writer_1.readFile(notePath);
+            slides = slides.concat(slidify('note', tex_markdown_converter_1.objectifyTexItemize(noteContent), {
+                source: 'Hefteintrag.tex'
+            }));
         }
         const worksheetPath = path_1.default.join(basePath, 'Arbeitsblatt.tex');
         if (fs_1.default.existsSync(worksheetPath)) {
-            const worksheetContent = (0, file_reader_writer_1.readFile)(worksheetPath);
-            slides = slides.concat(slidify('quote', (0, tex_markdown_converter_1.objectifyTexZitat)(worksheetContent), { source: 'Arbeitsblatt.tex' }));
+            const worksheetContent = file_reader_writer_1.readFile(worksheetPath);
+            slides = slides.concat(slidify('quote', tex_markdown_converter_1.objectifyTexZitat(worksheetContent), {
+                source: 'Arbeitsblatt.tex'
+            }));
         }
-        const result = (0, yaml_1.convertToYaml)({
+        const result = yaml_1.convertToYaml({
             slides
         });
         console.log(result);
-        (0, file_reader_writer_1.writeFile)(filePath, result);
+        file_reader_writer_1.writeFile(filePath, result);
     });
 }
 exports.generatePresentation = generatePresentation;
