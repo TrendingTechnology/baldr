@@ -1,4 +1,7 @@
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  MediaResolverTypes
+} from '@bldr/type-definitions'
 
 import path from 'path'
 
@@ -40,7 +43,10 @@ export const youtube: MediaCategoriesTypes.Category = {
         let title: string
         if (data.heading != null && data.heading !== '') {
           title = data.heading
-        } else if (data.originalHeading != null && data.originalHeading !== '') {
+        } else if (
+          data.originalHeading != null &&
+          data.originalHeading !== ''
+        ) {
           title = data.originalHeading
         } else {
           title = data.youtubeId

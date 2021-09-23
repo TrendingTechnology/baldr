@@ -1,6 +1,9 @@
 import path from 'path'
 
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  MediaResolverTypes
+} from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
 import config from '@bldr/config'
 
@@ -24,10 +27,14 @@ interface PersonCategory extends MediaCategoriesTypes.Category {
 export const person: MediaCategoriesTypes.Category = {
   title: 'Person',
   abbreviation: 'PR',
-  basePath: path.join(config.mediaServer.basePath, 'Personen'),
+  basePath: path.join(config.mediaServer.basePath, 'Musik', 'Personen'),
   relPath: function ({ data }) {
     const personData = data as PersonFileFormat
-    return path.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`)
+    return path.join(
+      personData.personId.substr(0, 1).toLowerCase(),
+      personData.personId,
+      `main.${personData.extension}`
+    )
   },
   detectCategoryByPath: function (category) {
     const personCategory = category as PersonCategory
@@ -41,8 +48,10 @@ export const person: MediaCategoriesTypes.Category = {
     // Use the label by artist names.
     // for example „Joan Baez“ and not „Joan Chandos“
     if (
-      firstnameFromLabel != null && lastnameFromLabel != null &&
-      (data.firstname !== firstnameFromLabel || data.lastname !== lastnameFromLabel)
+      firstnameFromLabel != null &&
+      lastnameFromLabel != null &&
+      (data.firstname !== firstnameFromLabel ||
+        data.lastname !== lastnameFromLabel)
     ) {
       data.firstname = firstnameFromLabel
       data.lastname = lastnameFromLabel
@@ -64,7 +73,9 @@ export const person: MediaCategoriesTypes.Category = {
       description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
       derive: function ({ data, category }) {
         const personCategory = category as PersonCategory
-        return `${personCategory.abbreviation}_${referencify(data.lastname)}_${referencify(data.firstname)}`
+        return `${personCategory.abbreviation}_${referencify(
+          data.lastname
+        )}_${referencify(data.firstname)}`
       },
       overwriteByDerived: true
     },

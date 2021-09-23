@@ -1,6 +1,15 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
-const sampleSpecKeys = ['title', 'ref', 'startTime', 'duration', 'endTime', 'fadeIn', 'fadeOut', 'shortcut']
+const sampleSpecKeys = [
+  'title',
+  'ref',
+  'startTime',
+  'duration',
+  'endTime',
+  'fadeIn',
+  'fadeOut',
+  'shortcut'
+]
 
 /**
  * The meta data type specification “sample”.

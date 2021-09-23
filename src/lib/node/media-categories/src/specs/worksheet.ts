@@ -1,4 +1,4 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import path from 'path'
 
@@ -20,7 +20,9 @@ export const worksheet: MediaCategoriesTypes.Category = {
         if (folderTitles == null || filePath == null) {
           return 'Arbeitsblatt'
         }
-        const match = filePath.match(new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`))
+        const match = filePath.match(
+          new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`)
+        )
         let baseName: string = 'Arbeitsblatt'
         if (match != null) {
           baseName = match[1]

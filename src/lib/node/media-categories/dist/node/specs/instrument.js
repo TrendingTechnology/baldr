@@ -13,7 +13,7 @@ const config_1 = __importDefault(require("@bldr/config"));
 exports.instrument = {
     title: 'Instrument',
     abbreviation: 'IN',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Instrumente'),
+    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Instrumente'),
     relPath: function ({ data }) {
         const instrumentData = data;
         const id = data.id.replace(/^IN_/, '');

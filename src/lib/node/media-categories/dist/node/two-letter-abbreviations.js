@@ -22,6 +22,7 @@ exports.abbreviations = {
     PT: 'Partitur',
     QL: 'Quelle',
     SF: 'Schulfunk',
+    TB: 'Tabellenkalkulation',
     TX: 'TeX-Dateien',
     VD: 'Video-Datei',
     YT: 'YouTube-Video'

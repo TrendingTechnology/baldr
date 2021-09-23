@@ -20,7 +20,7 @@ interface InstrumentFileFormat extends MediaResolverTypes.YamlFormat {
 export const instrument: MediaCategoriesTypes.Category = {
   title: 'Instrument',
   abbreviation: 'IN',
-  basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
+  basePath: path.join(config.mediaServer.basePath, 'Musik', 'Instrumente'),
   relPath: function ({ data }) {
     const instrumentData = data as InstrumentFileFormat
     const id = data.id.replace(/^IN_/, '')

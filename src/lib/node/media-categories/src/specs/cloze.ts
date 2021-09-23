@@ -1,6 +1,9 @@
 import path from 'path'
 
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  MediaResolverTypes
+} from '@bldr/type-definitions'
 
 interface ClozeFileFormat extends MediaResolverTypes.YamlFormat {
   clozePageNo: number
@@ -52,7 +55,10 @@ export const cloze: MediaCategoriesTypes.Category = {
         let suffix = ''
         if (clozeData.clozePageNo != null && clozeData.clozePageCount != null) {
           suffix = ` (Seite ${clozeData.clozePageNo} von ${clozeData.clozePageCount})`
-        } else if (clozeData.clozePageNo != null && clozeData.clozePageCount == null) {
+        } else if (
+          clozeData.clozePageNo != null &&
+          clozeData.clozePageCount == null
+        ) {
           suffix = ` (Seite ${clozeData.clozePageNo})`
         }
         if (folderTitles != null) {

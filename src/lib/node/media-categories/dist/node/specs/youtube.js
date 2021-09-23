@@ -35,7 +35,8 @@ exports.youtube = {
                 if (data.heading != null && data.heading !== '') {
                     title = data.heading;
                 }
-                else if (data.originalHeading != null && data.originalHeading !== '') {
+                else if (data.originalHeading != null &&
+                    data.originalHeading !== '') {
                     title = data.originalHeading;
                 }
                 else {

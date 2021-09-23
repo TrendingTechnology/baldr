@@ -53,7 +53,8 @@ exports.cloze = {
                 if (clozeData.clozePageNo != null && clozeData.clozePageCount != null) {
                     suffix = ` (Seite ${clozeData.clozePageNo} von ${clozeData.clozePageCount})`;
                 }
-                else if (clozeData.clozePageNo != null && clozeData.clozePageCount == null) {
+                else if (clozeData.clozePageNo != null &&
+                    clozeData.clozePageCount == null) {
                     suffix = ` (Seite ${clozeData.clozePageNo})`;
                 }
                 if (folderTitles != null) {

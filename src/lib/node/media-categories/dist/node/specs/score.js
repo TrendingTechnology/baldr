@@ -8,7 +8,7 @@ const core_node_1 = require("@bldr/core-node");
 exports.score = {
     title: 'Partitur',
     abbreviation: 'PT',
-    detectCategoryByPath: new RegExp('^.*/PT/.*\.(pdf|svg|png)$'),
+    detectCategoryByPath: new RegExp('^.*/PT/.*.(pdf|svg|png)$'),
     props: {
         composer: {
             title: 'Komponist'

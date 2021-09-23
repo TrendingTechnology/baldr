@@ -1,4 +1,4 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { getPdfPageCount } from '@bldr/core-node'
 
@@ -7,7 +7,8 @@ import { getPdfPageCount } from '@bldr/core-node'
  */
 export const reference: MediaCategoriesTypes.Category = {
   title: 'Quelle',
-  description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
+  description:
+    'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectCategoryByPath: function () {
     return new RegExp('^.*/QL/.*.pdf$')
   },
@@ -46,7 +47,8 @@ export const reference: MediaCategoriesTypes.Category = {
     },
     pageNos: {
       title: 'Seitenzahlen',
-      description: 'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
+      description:
+        'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
     },
     forTeacher: {
       title: 'Lehrerband'

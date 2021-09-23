@@ -23,7 +23,7 @@ interface GroupFileFormat extends MediaResolverTypes.YamlFormat {
 export const group: MediaCategoriesTypes.Category = {
   title: 'Gruppe',
   abbreviation: 'GR',
-  basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
+  basePath: path.join(config.mediaServer.basePath, 'Musik', 'Gruppen'),
   relPath: function ({ data }) {
     const groupData = data as GroupFileFormat
     return path.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`)

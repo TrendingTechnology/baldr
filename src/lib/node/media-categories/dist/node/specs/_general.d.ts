@@ -1,4 +1,4 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions';
+import { MediaCategoriesTypes } from '@bldr/type-definitions';
 /**
  * General meta data type specification. Applied after all other meta data
  * types.

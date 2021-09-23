@@ -1,4 +1,7 @@
-import type { MediaCategoriesTypes, StringIndexedObject } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  StringIndexedObject
+} from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
 
 import path from 'path'
@@ -37,7 +40,8 @@ export const famousPiece: MediaCategoriesTypes.Category = {
     },
     famousPieceFrom: {
       title: 'Bekanntes Stück von',
-      description: 'Der/die Interpret/in Komponist/in eines bekannten Musikstücks.',
+      description:
+        'Der/die Interpret/in Komponist/in eines bekannten Musikstücks.',
       derive: function ({ filePath }) {
         if (filePath == null) return
         const personYaml = readPersonYaml(filePath)

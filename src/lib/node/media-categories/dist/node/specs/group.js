@@ -14,7 +14,7 @@ const main_1 = require("../main");
 exports.group = {
     title: 'Gruppe',
     abbreviation: 'GR',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Gruppen'),
+    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Gruppen'),
     relPath: function ({ data }) {
         const groupData = data;
         return path_1.default.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`);

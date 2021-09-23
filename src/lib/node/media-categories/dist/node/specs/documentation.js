@@ -8,7 +8,7 @@ exports.documentation = {
     title: 'Dokumentation',
     props: {
         transcription: {
-            title: 'Transkription',
+            title: 'Transkription'
         }
     }
 };

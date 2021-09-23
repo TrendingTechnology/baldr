@@ -1,7 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sample = void 0;
-const sampleSpecKeys = ['title', 'ref', 'startTime', 'duration', 'endTime', 'fadeIn', 'fadeOut', 'shortcut'];
+const sampleSpecKeys = [
+    'title',
+    'ref',
+    'startTime',
+    'duration',
+    'endTime',
+    'fadeIn',
+    'fadeOut',
+    'shortcut'
+];
 /**
  * The meta data type specification “sample”.
  *

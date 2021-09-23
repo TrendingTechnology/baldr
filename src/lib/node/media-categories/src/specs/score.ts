@@ -1,4 +1,4 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { getPdfPageCount } from '@bldr/core-node'
 
@@ -8,7 +8,7 @@ import { getPdfPageCount } from '@bldr/core-node'
 export const score: MediaCategoriesTypes.Category = {
   title: 'Partitur',
   abbreviation: 'PT',
-  detectCategoryByPath: new RegExp('^.*/PT/.*\.(pdf|svg|png)$'),
+  detectCategoryByPath: new RegExp('^.*/PT/.*.(pdf|svg|png)$'),
   props: {
     composer: {
       title: 'Komponist'

@@ -1,6 +1,9 @@
-import type { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { deasciify, referencify, genUuid } from '@bldr/core-browser'
-import { getTwoLetterRegExp, checkForTwoLetterDir } from '../two-letter-abbreviations'
+import {
+  getTwoLetterRegExp,
+  checkForTwoLetterDir
+} from '../two-letter-abbreviations'
 
 import { generateIdPrefix, validateYoutubeId } from '../main'
 
@@ -62,7 +65,7 @@ export const general: MediaCategoriesTypes.Category = {
       title: 'Metadaten-Kategorien',
       description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
-        return (String(value).match(/^[a-zA-Z,]+$/) != null)
+        return String(value).match(/^[a-zA-Z,]+$/) != null
       },
       format: function (value) {
         return value.replace(/,?general,?/, '')
@@ -95,7 +98,7 @@ export const general: MediaCategoriesTypes.Category = {
     wikidata: {
       title: 'Wikidata',
       validate: function (value) {
-        return (String(value).match(/^Q\d+$/) != null)
+        return String(value).match(/^Q\d+$/) != null
       }
     },
     wikipedia: {
@@ -149,7 +152,9 @@ export const general: MediaCategoriesTypes.Category = {
   },
   initialize: function ({ data, filePath }) {
     if (filePath != null && !checkForTwoLetterDir(filePath)) {
-      console.log(`File path ${filePath} is not in a valid two letter directory.`)
+      console.log(
+        `File path ${filePath} is not in a valid two letter directory.`
+      )
       process.exit()
     }
     return data

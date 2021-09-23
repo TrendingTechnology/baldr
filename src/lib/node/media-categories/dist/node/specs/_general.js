@@ -59,7 +59,7 @@ exports.general = {
             title: 'Metadaten-Kategorien',
             description: 'Zum Beispiel: “person” oder “composition,recording”',
             validate: function (value) {
-                return (String(value).match(/^[a-zA-Z,]+$/) != null);
+                return String(value).match(/^[a-zA-Z,]+$/) != null;
             },
             format: function (value) {
                 return value.replace(/,?general,?/, '');
@@ -92,7 +92,7 @@ exports.general = {
         wikidata: {
             title: 'Wikidata',
             validate: function (value) {
-                return (String(value).match(/^Q\d+$/) != null);
+                return String(value).match(/^Q\d+$/) != null;
             }
         },
         wikipedia: {
