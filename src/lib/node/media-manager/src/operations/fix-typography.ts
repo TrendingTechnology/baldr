@@ -1,14 +1,21 @@
 import { readFile, writeFile } from '@bldr/file-reader-writer'
 
 /**
- * Fix some typographic issues, for example quotes “…” -> „…“.
+ * Delete spaces at the end.
+ */
+export function removeSpacesAtLineEnd (input: string): string {
+  // return input.replace(/\s+$/mg, '')
+  return input.replace(/\s+\n/g, '\n')
+}
+
+/**
+ * Fix some typographic issues.
  */
 export function fixTypography (filePath: string): void {
   let content = readFile(filePath)
   const before = content
 
-  // Delete spaces at the end
-  content = content.replace(/[ ]*\n/g, '\n')
+  content = removeSpacesAtLineEnd(content)
   // Delete multiple empty lines
   content = content.replace(/\n\n\n+/g, '\n\n')
   // One newline at the end

@@ -43,7 +43,7 @@ interface NormalizeMediaAssetOption {
   wikidata?: boolean
 }
 
-function logDiff (oldMetaData: object, newMetaData: object) {
+function logDiff (oldMetaData: object, newMetaData: object): void {
   log.verbose(
     log.colorizeDiff(convertToYaml(oldMetaData), convertToYaml(newMetaData))
   )

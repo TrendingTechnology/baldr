@@ -5,6 +5,8 @@ import { readFile, writeFile } from '@bldr/file-reader-writer'
 import * as tex from '@bldr/tex-templates'
 import * as log from '@bldr/log'
 
+import { removeSpacesAtLineEnd } from './fix-typography'
+
 /**
  * @returns A TeX markup like this output:
  *
@@ -43,7 +45,9 @@ function makeTexMarkup (titles: DeepTitle): string {
     setzeTitle[key] = convertMdToTex(setzeTitle[key])
   }
 
-  return tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n'
+  const result =
+    tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n'
+  return removeSpacesAtLineEnd(result)
 }
 
 /**

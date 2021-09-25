@@ -26,6 +26,7 @@ const titles_1 = require("@bldr/titles");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const tex = __importStar(require("@bldr/tex-templates"));
 const log = __importStar(require("@bldr/log"));
+const fix_typography_1 = require("./fix-typography");
 /**
  * @returns A TeX markup like this output:
  *
@@ -61,7 +62,8 @@ function makeTexMarkup(titles) {
     for (const key in setzeTitle) {
         setzeTitle[key] = (0, tex_markdown_converter_1.convertMdToTex)(setzeTitle[key]);
     }
-    return tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n';
+    const result = tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n';
+    return (0, fix_typography_1.removeSpacesAtLineEnd)(result);
 }
 /**
  * ```tex

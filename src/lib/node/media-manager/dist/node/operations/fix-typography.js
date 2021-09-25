@@ -1,15 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fixTypography = void 0;
+exports.fixTypography = exports.removeSpacesAtLineEnd = void 0;
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 /**
- * Fix some typographic issues, for example quotes “…” -> „…“.
+ * Delete spaces at the end.
+ */
+function removeSpacesAtLineEnd(input) {
+    // return input.replace(/\s+$/mg, '')
+    return input.replace(/\s+\n/g, '\n');
+}
+exports.removeSpacesAtLineEnd = removeSpacesAtLineEnd;
+/**
+ * Fix some typographic issues.
  */
 function fixTypography(filePath) {
     let content = (0, file_reader_writer_1.readFile)(filePath);
     const before = content;
-    // Delete spaces at the end
-    content = content.replace(/[ ]*\n/g, '\n');
+    content = removeSpacesAtLineEnd(content);
     // Delete multiple empty lines
     content = content.replace(/\n\n\n+/g, '\n\n');
     // One newline at the end
