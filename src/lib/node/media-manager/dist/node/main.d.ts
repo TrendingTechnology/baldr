@@ -6,29 +6,7 @@
  * @module @bldr/media-manager
  */
 import { MediaResolverTypes } from '@bldr/type-definitions';
-import { convertAsset } from './operations/convert-asset';
-import { fixTypography } from './operations/fix-typography';
-import { generatePresentation } from './operations/generate-presentation';
-import { initializeMetaYaml } from './operations/initialize-meta-yaml';
-import { normalizeMediaAsset } from './operations/normalize-asset';
-import { normalizePresentationFile } from './operations/normalize-presentation';
-import { patchTexTitles } from './operations/patch-tex-titles';
-import { renameByRef } from './operations/rename-by-ref';
-import { renameMediaAsset } from './operations/rename-asset';
-/**
- * A collection of function to manipulate the media assets and presentation files.
- */
-export declare const operations: {
-    convertAsset: typeof convertAsset;
-    fixTypography: typeof fixTypography;
-    generatePresentation: typeof generatePresentation;
-    initializeMetaYaml: typeof initializeMetaYaml;
-    normalizeMediaAsset: typeof normalizeMediaAsset;
-    normalizePresentationFile: typeof normalizePresentationFile;
-    patchTexTitles: typeof patchTexTitles;
-    renameByRef: typeof renameByRef;
-    renameMediaAsset: typeof renameMediaAsset;
-};
+export * from './operations';
 export * from './directory-tree-walk';
 export * from './location-indicator';
 export * from './media-file-classes';

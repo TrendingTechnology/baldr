@@ -36,7 +36,8 @@
     "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
     "@bldr/wikidata": "*",
-    "@bldr/yaml": "*"
+    "@bldr/yaml": "*",
+    "@bldr/log": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*",
