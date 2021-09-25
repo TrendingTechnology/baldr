@@ -43,7 +43,6 @@
     "@bldr/seating-plan-converter": "*",
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
-    "@bldr/titles": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*",
     "@bldr/youtube-api": "*",

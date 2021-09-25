@@ -142,7 +142,6 @@ export async function generateCloze (
   log.debug('Resolved input path: %s', filePath)
 
   // Move to LT (Lückentext) subdir.
-  console.log(filePath)
   const parentDir = locationIndicator.getPresParentDir(filePath)
   if (parentDir == null) {
     throw new Error('Parent dir couldn’t be detected!')

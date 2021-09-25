@@ -130,7 +130,7 @@ export function collectAllOpts (program: any): any {
   Object.assign(result, program.opts())
   for (
     let parentCmd = program.parent;
-    parentCmd;
+    parentCmd != null;
     parentCmd = parentCmd.parent
   ) {
     Object.assign(result, parentCmd.opts())

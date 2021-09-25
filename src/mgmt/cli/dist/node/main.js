@@ -114,7 +114,7 @@ function actionHelp() {
 function collectAllOpts(program) {
     const result = {};
     Object.assign(result, program.opts());
-    for (let parentCmd = program.parent; parentCmd; parentCmd = parentCmd.parent) {
+    for (let parentCmd = program.parent; parentCmd != null; parentCmd = parentCmd.parent) {
         Object.assign(result, parentCmd.opts());
     }
     return result;
