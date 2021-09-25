@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.colorize = exports.formatWithoutColor = exports.format = exports.setLogLevel = exports.error = exports.warn = exports.info = exports.debug = exports.trace = void 0;
+exports.colorize = exports.formatWithoutColor = exports.format = exports.setLogLevel = exports.error = exports.warn = exports.info = exports.verbose = exports.debug = void 0;
 var log_1 = require("./log");
-Object.defineProperty(exports, "trace", { enumerable: true, get: function () { return log_1.trace; } });
 Object.defineProperty(exports, "debug", { enumerable: true, get: function () { return log_1.debug; } });
+Object.defineProperty(exports, "verbose", { enumerable: true, get: function () { return log_1.verbose; } });
 Object.defineProperty(exports, "info", { enumerable: true, get: function () { return log_1.info; } });
 Object.defineProperty(exports, "warn", { enumerable: true, get: function () { return log_1.warn; } });
 Object.defineProperty(exports, "error", { enumerable: true, get: function () { return log_1.error; } });

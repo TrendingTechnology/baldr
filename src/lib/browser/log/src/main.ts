@@ -1,6 +1,6 @@
 export {
-  trace,
   debug,
+  verbose,
   info,
   warn,
   error,

@@ -1,38 +1,17 @@
-import * as logging from 'loglevel'
-
 import { detectFormatTemplate } from './format'
 
+let logLevel = 0
+
 /**
- * Log with a format string on level 5.
+ * Log on level 1.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function trace (...msg: any[]): void {
-  if (logging.getLevel() <= logging.levels.TRACE) {
-    // We don’t want stack traces as provided by console.trace().
-    console.log(...detectFormatTemplate(...msg))
+export function error (...msg: any[]): void {
+  if (logLevel > 0) {
+    console.error(...detectFormatTemplate(...msg))
   }
-}
-
-/**
- * Log with a format string on level 4.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
- */
-export function debug (...msg: any[]): void {
-  logging.debug(...detectFormatTemplate(...msg))
-}
-
-/**
- * Log with a format string on level 3.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
- */
-export function info (...msg: any[]): void {
-  logging.info(...detectFormatTemplate(...msg))
 }
 
 /**
@@ -42,17 +21,45 @@ export function info (...msg: any[]): void {
  *   arguments or any arguments the function console.log() accepts.
  */
 export function warn (...msg: any[]): void {
-  logging.warn(...detectFormatTemplate(...msg))
+  if (logLevel > 1) {
+    console.warn(...detectFormatTemplate(...msg))
+  }
 }
 
 /**
- * Log on level 1.
+ * Log with a format string on level 3.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function error (...msg: any[]): void {
-  logging.error(...detectFormatTemplate(...msg))
+export function info (...msg: any[]): void {
+  if (logLevel > 2) {
+    console.info(...detectFormatTemplate(...msg))
+  }
+}
+
+/**
+ * Log on level 4.
+ *
+ * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
+ *   arguments or any arguments the function console.log() accepts.
+ */
+export function verbose (...msg: any[]): void {
+  if (logLevel > 3) {
+    console.debug(...detectFormatTemplate(...msg))
+  }
+}
+
+/**
+ * Log on level 5.
+ *
+ * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
+ *   arguments or any arguments the function console.log() accepts.
+ */
+export function debug (...msg: any[]): void {
+  if (logLevel > 4) {
+    console.log(...detectFormatTemplate(...msg))
+  }
 }
 
 /**
@@ -62,21 +69,14 @@ export function error (...msg: any[]): void {
  * - 1: error
  * - 2: warn
  * - 3: info
- * - 4: debug
- * - 5: trace
+ * - 4: verbose
+ * - 5: debug
  *
- * @param level - A number from 0 (silent) up to 5 (trace)
+ * @param level - A number from 0 (silent) up to 5 (debug)
  */
 export function setLogLevel (level: number): void {
   if (level < 0 || level > 5) {
-    throw new Error('Allowed values for the log level are: 0-5')
+    throw new Error('Allowed values for the log levels are: 0-5')
   }
-  // loglevel
-  // 5 -> TRACE:  0 (5 - 5)
-  // 4 -> DEBUG:  1 (5 - 4)
-  // 3 -> INFO:   2 (5 - 3)
-  // 2 -> WARN:   3 (5 - 2)
-  // 1 -> ERROR:  4 (5 - 1)
-  // 0 -> SILENT: 5 (5 - 0)
-  logging.setLevel(5 - level as logging.LogLevelNumbers)
+  logLevel = level
 }

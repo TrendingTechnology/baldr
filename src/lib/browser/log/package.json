@@ -33,8 +33,7 @@
   },
   "dependencies": {
     "fast-printf": "1.6.3",
-    "chalk": "4.1.0",
-    "loglevel": "1.7.1"
+    "chalk": "4.1.0"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
