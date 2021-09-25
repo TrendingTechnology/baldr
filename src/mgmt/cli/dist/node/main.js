@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateDefintion = void 0;
+exports.validateDefintion = exports.getGlobalOpts = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -30,8 +30,11 @@ const commandsPath = path_1.default.join(__dirname, 'commands');
  * duplicates.
  */
 const aliases = [];
+function increaseVerbosity(dummyValue, previous) {
+    return previous + 1;
+}
 const program = new commander_1.Command();
-program.option('-v, --verbose', 'Be more verbose');
+program.option('-v, --verbose', 'Be more verbose', increaseVerbosity, 2);
 program.on('command:*', function () {
     console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
     process.exit(1);
@@ -50,11 +53,7 @@ function actionHandler(commandName, def) {
         }
         // eslint-disable-next-line
         const action = require(path_1.default.join(commandsPath, commandName, 'action.js'));
-        args = [
-            ...arguments,
-            // To get the global --verbose options
-            program.opts()
-        ];
+        args = [...arguments, program.opts()];
         // To be able to export some functions other than
         // the action function from the subcommands.
         if (typeof action === 'function')
@@ -96,6 +95,15 @@ function actionHelp() {
     program.outputHelp();
     process.exit(1);
 }
+function getGlobalOpts(program) {
+    const result = {};
+    Object.assign(result, program.opts());
+    for (let parentCmd = program.parent; parentCmd; parentCmd = parentCmd.parent) {
+        Object.assign(result, parentCmd.opts());
+    }
+    return result;
+}
+exports.getGlobalOpts = getGlobalOpts;
 function validateDefintion(spec) {
     return spec;
 }
@@ -119,5 +127,7 @@ function main() {
     });
 }
 if (require.main === module) {
-    main().then().catch(reason => console.log(reason));
+    main()
+        .then()
+        .catch(reason => console.log(reason));
 }

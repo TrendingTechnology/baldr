@@ -9,7 +9,7 @@ import { Command } from 'commander'
 
 // Project packages.
 import { checkExecutables } from '@bldr/core-node'
-import type { CliTypes } from '@bldr/type-definitions'
+import { CliTypes } from '@bldr/type-definitions'
 
 import { setLogLevel } from '@bldr/log'
 
@@ -24,10 +24,17 @@ const commandsPath = path.join(__dirname, 'commands')
  */
 const aliases: string[] = []
 
+function increaseVerbosity (dummyValue: any, previous: number): number {
+  return previous + 1
+}
+
 const program = new Command()
-program.option('-v, --verbose', 'Be more verbose')
+program.option('-v, --verbose', 'Be more verbose', increaseVerbosity, 2)
 program.on('command:*', function () {
-  console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '))
+  console.error(
+    'Invalid command: %s\nSee --help for a list of available commands.',
+    program.args.join(' ')
+  )
   process.exit(1)
 })
 
@@ -40,7 +47,10 @@ type ActionHandlerFunction = (...args: any[]) => void | Promise<void>
  * @param commandName - The name of the command.
  * @param def
  */
-function actionHandler (commandName: string, def: CliTypes.CliCommandSpec): ActionHandlerFunction {
+function actionHandler (
+  commandName: string,
+  def: CliTypes.CliCommandSpec
+): ActionHandlerFunction {
   return function (...args: any[]): void | Promise<void> {
     if (def.checkExecutable != null) {
       checkExecutables(def.checkExecutable)
@@ -48,11 +58,7 @@ function actionHandler (commandName: string, def: CliTypes.CliCommandSpec): Acti
     // eslint-disable-next-line
     const action = require(path.join(commandsPath, commandName, 'action.js'))
 
-    args = [
-      ...arguments,
-      // To get the global --verbose options
-      program.opts()
-    ]
+    args = [...arguments, program.opts()]
     // To be able to export some functions other than
     // the action function from the subcommands.
     if (typeof action === 'function') return action(...args)
@@ -71,14 +77,20 @@ function loadCommands (program: Program): void {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
     // eslint-disable-next-line
-    const def = require(path.join(commandsPath, commandName, 'def.js')) as CliTypes.CliCommandSpec
+    const def = require(path.join(
+      commandsPath,
+      commandName,
+      'def.js'
+    )) as CliTypes.CliCommandSpec
     const subProgramm = program.command(def.command)
     if (def.alias != null) {
       if (!aliases.includes(def.alias)) {
         subProgramm.alias(def.alias)
         aliases.push(def.alias)
       } else {
-        throw new Error(`Duplicate alias “${def.alias}” used for the (sub)command “${def.command}”.`)
+        throw new Error(
+          `Duplicate alias “${def.alias}” used for the (sub)command “${def.command}”.`
+        )
       }
     }
     subProgramm.description(def.description)
@@ -97,7 +109,38 @@ function actionHelp (): void {
   process.exit(1)
 }
 
-export function validateDefintion (spec: CliTypes.CliCommandSpec): CliTypes.CliCommandSpec {
+/**
+ * Collect all options. This is a temporary hack function.
+ *
+ * https://github.com/tj/commander.js/pull/1478
+ * https://github.com/tj/commander.js/pull/1475
+ *
+ * ```js
+ * import { collectAllOpts } from '../../main'
+ *
+ * function action (cmdObj: CmdObj, program: any): void {
+ *   collectAllOpts(program)
+ * }
+ * ```
+ *
+ * @returns An object with all options
+ */
+export function collectAllOpts (program: any): any {
+  const result = {}
+  Object.assign(result, program.opts())
+  for (
+    let parentCmd = program.parent;
+    parentCmd;
+    parentCmd = parentCmd.parent
+  ) {
+    Object.assign(result, parentCmd.opts())
+  }
+  return result
+}
+
+export function validateDefintion (
+  spec: CliTypes.CliCommandSpec
+): CliTypes.CliCommandSpec {
   return spec
 }
 
@@ -120,5 +163,7 @@ async function main (): Promise<void> {
 }
 
 if (require.main === module) {
-  main().then().catch(reason => console.log(reason))
+  main()
+    .then()
+    .catch(reason => console.log(reason))
 }
