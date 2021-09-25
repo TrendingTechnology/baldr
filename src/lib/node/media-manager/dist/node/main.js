@@ -57,8 +57,12 @@ exports.setLogLevel = setLogLevel;
  */
 function moveAsset(oldPath, newPath, opts = {}) {
     function move(oldPath, newPath, { copy, dryRun }) {
+        if (oldPath === newPath) {
+            return;
+        }
         if (copy != null && copy) {
             if (!(dryRun != null && dryRun)) {
+                log.debug('Copy file from %s to %s', oldPath, newPath);
                 fs_1.default.copyFileSync(oldPath, newPath);
             }
         }
@@ -66,11 +70,13 @@ function moveAsset(oldPath, newPath, opts = {}) {
             if (!(dryRun != null && dryRun)) {
                 //  Error: EXDEV: cross-device link not permitted,
                 try {
+                    log.debug('Move file from %s to %s', oldPath, newPath);
                     fs_1.default.renameSync(oldPath, newPath);
                 }
                 catch (error) {
                     const e = error;
                     if (e.code === 'EXDEV') {
+                        log.debug('Move file by copying and deleting from %s to %s', oldPath, newPath);
                         fs_1.default.copyFileSync(oldPath, newPath);
                         fs_1.default.unlinkSync(oldPath);
                     }
@@ -119,8 +125,9 @@ exports.moveAsset = moveAsset;
  */
 function readAssetYaml(filePath) {
     const extension = (0, core_browser_1.getExtension)(filePath);
-    if (extension !== 'yml')
+    if (extension !== 'yml') {
         filePath = `${filePath}.yml`;
+    }
     if (fs_1.default.existsSync(filePath)) {
         return (0, file_reader_writer_1.readYamlFile)(filePath);
     }

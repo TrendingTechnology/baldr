@@ -25,6 +25,7 @@ const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const titles_1 = require("@bldr/titles");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const tex = __importStar(require("@bldr/tex-templates"));
+const log = __importStar(require("@bldr/log"));
 /**
  * @returns A TeX markup like this output:
  *
@@ -93,9 +94,12 @@ function patchTexTitles(filePath) {
         texFileContentPatched = texFileContent.replace(/(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/, '$1\n\n' + patchedTitles);
     }
     if (texFileContent !== texFileContentPatched) {
+        log.info('Patch titles in TeX file %s', filePath);
+        log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched));
         (0, file_reader_writer_1.writeFile)(filePath, texFileContentPatched);
         return true;
     }
+    log.verbose('Nothing to patch in TeX file %s', filePath);
     return false;
 }
 exports.patchTexTitles = patchTexTitles;

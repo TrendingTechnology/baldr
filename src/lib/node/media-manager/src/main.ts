@@ -47,18 +47,28 @@ export function moveAsset (
     newPath: string,
     { copy, dryRun }: MoveAssetConfiguration
   ): void {
+    if (oldPath === newPath) {
+      return
+    }
     if (copy != null && copy) {
       if (!(dryRun != null && dryRun)) {
+        log.debug('Copy file from %s to %s', oldPath, newPath)
         fs.copyFileSync(oldPath, newPath)
       }
     } else {
       if (!(dryRun != null && dryRun)) {
         //  Error: EXDEV: cross-device link not permitted,
         try {
+          log.debug('Move file from %s to %s', oldPath, newPath)
           fs.renameSync(oldPath, newPath)
         } catch (error) {
           const e = error as GenericError
           if (e.code === 'EXDEV') {
+            log.debug(
+              'Move file by copying and deleting from %s to %s',
+              oldPath,
+              newPath
+            )
             fs.copyFileSync(oldPath, newPath)
             fs.unlinkSync(oldPath)
           }
@@ -125,7 +135,9 @@ export function readAssetYaml (
   filePath: string
 ): MediaResolverTypes.YamlFormat | undefined {
   const extension = getExtension(filePath)
-  if (extension !== 'yml') filePath = `${filePath}.yml`
+  if (extension !== 'yml') {
+    filePath = `${filePath}.yml`
+  }
   if (fs.existsSync(filePath)) {
     return readYamlFile(filePath) as MediaResolverTypes.YamlFormat
   }

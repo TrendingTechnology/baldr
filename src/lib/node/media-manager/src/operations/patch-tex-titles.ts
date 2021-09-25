@@ -3,6 +3,7 @@ import { convertMdToTex } from '@bldr/tex-markdown-converter'
 import { DeepTitle } from '@bldr/titles'
 import { readFile, writeFile } from '@bldr/file-reader-writer'
 import * as tex from '@bldr/tex-templates'
+import * as log from '@bldr/log'
 
 /**
  * @returns A TeX markup like this output:
@@ -80,8 +81,11 @@ export function patchTexTitles (filePath: string): boolean {
   }
 
   if (texFileContent !== texFileContentPatched) {
+    log.info('Patch titles in TeX file %s', filePath)
+    log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched))
     writeFile(filePath, texFileContentPatched)
     return true
   }
+  log.verbose('Nothing to patch in TeX file %s', filePath)
   return false
 }

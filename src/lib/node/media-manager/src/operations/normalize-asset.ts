@@ -7,10 +7,12 @@ import {
   StringIndexedObject
 } from '@bldr/type-definitions'
 import wikidata from '@bldr/wikidata'
-
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { readAssetYaml } from '../main'
 import { writeYamlFile } from '@bldr/file-reader-writer'
+import * as log from '@bldr/log'
+import { convertToYaml } from '@bldr/yaml'
+
+import { readAssetYaml } from '../main'
 
 async function queryWikidata (
   metaData: MediaResolverTypes.YamlFormat,
@@ -39,6 +41,12 @@ async function queryWikidata (
 
 interface NormalizeMediaAssetOption {
   wikidata?: boolean
+}
+
+function logDiff (oldMetaData: object, newMetaData: object) {
+  log.verbose(
+    log.colorizeDiff(convertToYaml(oldMetaData), convertToYaml(newMetaData))
+  )
 }
 
 /**
@@ -78,18 +86,18 @@ export async function normalizeMediaAsset (
         )
       }
     }
-    const result = categoriesManagement.process(metaData, filePath)
-
+    const newMetaData = categoriesManagement.process(metaData, filePath)
+    const oldMetaData = origData as StringIndexedObject
+    delete oldMetaData.filePath
     try {
-      const comparable = origData as StringIndexedObject
-      delete comparable.filePath
-      assert.deepStrictEqual(comparable, result)
+      assert.deepStrictEqual(oldMetaData, newMetaData)
     } catch (error) {
-      writeYamlFile(yamlFile, result)
+      logDiff(oldMetaData, newMetaData)
+      writeYamlFile(yamlFile, newMetaData)
     }
   } catch (error) {
-    console.log(filePath)
-    console.log(error)
+    log.error(filePath)
+    log.error(error)
     process.exit()
   }
 }

@@ -1,9 +1,11 @@
 // Node packages.
 import path from 'path'
 
+import { getTwoLetterRegExp } from '@bldr/media-categories'
+import * as log from '@bldr/log'
+
 // Project packages.
 import { moveAsset, readYamlMetaData } from '../main'
-import { getTwoLetterRegExp } from '@bldr/media-categories'
 
 /**
  * Rename a media asset after the `ref` in the meta data file.
@@ -28,11 +30,11 @@ export function renameByRef (filePath: string): void {
     let newPath = null
     // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
     ref = ref.replace(new RegExp('.*_' + getTwoLetterRegExp() + '_'), '')
-    if (ref !== oldBaseName) {
-      newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
-    } else {
+    if (ref === oldBaseName) {
       return
     }
+    log.info('Rename by reference from %s to %s', oldBaseName, ref)
+    newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     moveAsset(oldPath, newPath)
   }
 }
