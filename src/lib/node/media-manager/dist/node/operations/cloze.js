@@ -44,37 +44,38 @@ const titles_1 = require("@bldr/titles");
 const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-function generateSvg(tmpPdfFile, pageCount, pageNo) {
+function initializeMetaYaml(pdfFile, dest, pageNo, pageCount) {
+    // Write info yaml
+    const titles = new titles_1.DeepTitle(pdfFile);
+    const infoYaml = {
+        ref: `${titles.ref}_LT_${pageNo}`,
+        title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
+        meta_types: 'cloze',
+        cloze_page_no: pageNo,
+        cloze_page_count: pageCount
+    };
+    const yamlContent = (0, yaml_1.convertToYaml)(infoYaml);
+    log.debug(yamlContent);
+    (0, file_reader_writer_1.writeFile)(dest, yamlContent);
+}
+function generateSvg(tmpPdfFile, destDir, pageCount, pageNo) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cwd = path_1.default.dirname(tmpPdfFile);
-        let counterSuffix = '';
-        if (pageCount > 1) {
-            counterSuffix = `_${pageNo}`;
-        }
-        log.info('Convert page %s', pageNo);
-        const svgFileName = `Lueckentext${counterSuffix}.svg`;
-        const svgFilePath = path_1.default.join(cwd, svgFileName);
+        log.info('Convert page %s from %s', pageNo.toString(), pageCount.toString());
+        const svgFileName = `${pageNo}.svg`;
+        const svgFilePath = path_1.default.join(destDir, svgFileName);
+        fs_1.default.mkdirSync(destDir, { recursive: true });
         // Convert into SVG
-        child_process_1.default.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo.toString()], { cwd });
+        child_process_1.default.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo.toString()], { cwd: destDir });
         // Remove width="" and height="" attributes
         let svgContent = (0, file_reader_writer_1.readFile)(svgFilePath);
         svgContent = svgContent.replace(/(width|height)=".+?" /g, '');
         (0, file_reader_writer_1.writeFile)(svgFilePath, svgContent);
-        // Write info yaml
-        const titles = new titles_1.DeepTitle(tmpPdfFile);
-        const infoYaml = {
-            ref: `${titles.ref}_LT${counterSuffix}`,
-            title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
-            meta_types: 'cloze',
-            cloze_page_no: pageNo,
-            cloze_page_count: pageCount
-        };
-        (0, file_reader_writer_1.writeFile)(path_1.default.join(cwd, `${svgFileName}.yml`), (0, yaml_1.convertToYaml)(infoYaml));
         // Move to LT (Lückentext) subdir.
-        const newPath = location_indicator_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
-        log.info('Result svg: %s has no cloze texts.', newPath);
-        (0, main_1.moveAsset)(svgFilePath, newPath);
-        yield main_1.operations.normalizeMediaAsset(newPath, { wikidata: false });
+        const destPath = path_1.default.join(destDir, svgFileName);
+        initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount);
+        log.info('Result svg: %s', destPath);
+        (0, main_1.moveAsset)(svgFilePath, destPath);
+        yield main_1.operations.normalizeMediaAsset(destPath, { wikidata: false });
     });
 }
 function patchTex(content) {
@@ -104,32 +105,51 @@ function patchTex(content) {
         return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`;
     });
 }
+function compileTex(tmpTexFile) {
+    const jobName = path_1.default.basename(tmpTexFile).replace('.tex', '');
+    const tmpDir = path_1.default.dirname(tmpTexFile);
+    const result = child_process_1.default.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd: tmpDir, encoding: 'utf-8' });
+    if (result.status !== 0) {
+        if (result.stdout != null) {
+            log.error(result.stdout);
+        }
+        if (result.stderr != null) {
+            log.error(result.stderr);
+        }
+        throw new Error('lualatex compilation failed.');
+    }
+    const tmpPdf = path_1.default.join(tmpDir, `${jobName}.pdf`);
+    log.debug('Compiled to temporary PDF: %s', tmpPdf);
+    return tmpPdf;
+}
 /**
  * @param filePath - The file path of a TeX file.
  */
-function generateCloze(filePath) {
+function generateCloze(filePath, logLevel) {
     return __awaiter(this, void 0, void 0, function* () {
-        const tmpDir = fs_1.default.mkdtempSync('baldr-cloze');
+        log.setLogLevel(5);
         filePath = path_1.default.resolve(filePath);
-        let texFileContent = (0, file_reader_writer_1.readFile)(filePath);
+        const texFileContent = (0, file_reader_writer_1.readFile)(filePath);
         if (!texFileContent.includes('cloze')) {
-            log.info('%s has no cloze texts.', filePath);
+            log.warn('%s has no cloze texts.', filePath);
             return;
         }
-        const tmpTexFile = path_1.default.join(tmpDir, path_1.default.basename(filePath));
-        log.info('Generate SVGs from the file %s.', filePath);
-        const jobName = path_1.default.basename(tmpTexFile).replace('.tex', '');
-        (0, file_reader_writer_1.writeFile)(tmpTexFile, patchTex(texFileContent));
-        const result = child_process_1.default.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd: tmpDir, encoding: 'utf-8' });
-        if (result.status !== 0) {
-            console.log(result.stdout);
-            console.log(result.stderr);
-            throw new Error('lualatex compilation failed.');
+        log.debug('Resolved input path: %s', filePath);
+        // Move to LT (Lückentext) subdir.
+        console.log(filePath);
+        const parentDir = location_indicator_1.locationIndicator.getPresParentDir(filePath);
+        if (parentDir == null) {
+            throw new Error('Parent dir couldn’t be detected!');
         }
-        const tmpPdfFile = path_1.default.join(tmpDir, `${jobName}.pdf`);
+        const destDir = path_1.default.join(parentDir, 'LT');
+        const tmpTexFile = filePath.replace('.tex', '_Loesung.tex');
+        log.debug('Create temporary file %s', tmpTexFile);
+        (0, file_reader_writer_1.writeFile)(tmpTexFile, patchTex(texFileContent));
+        log.info('Generate SVGs from the file %s.', tmpTexFile);
+        const tmpPdfFile = compileTex(tmpTexFile);
         const pageCount = (0, core_node_1.getPdfPageCount)(tmpPdfFile);
-        for (let index = 1; index <= pageCount; index++) {
-            yield generateSvg(tmpPdfFile, pageCount, index);
+        for (let pageNo = 1; pageNo <= pageCount; pageNo++) {
+            yield generateSvg(tmpPdfFile, destDir, pageCount, pageNo);
         }
         fs_1.default.unlinkSync(tmpTexFile);
         fs_1.default.unlinkSync(tmpPdfFile);

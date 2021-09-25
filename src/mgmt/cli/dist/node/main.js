@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateDefintion = exports.getGlobalOpts = void 0;
+exports.validateDefintion = exports.collectAllOpts = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -95,7 +95,23 @@ function actionHelp() {
     program.outputHelp();
     process.exit(1);
 }
-function getGlobalOpts(program) {
+/**
+ * Collect all options. This is a temporary hack function.
+ *
+ * https://github.com/tj/commander.js/pull/1478
+ * https://github.com/tj/commander.js/pull/1475
+ *
+ * ```js
+ * import { collectAllOpts } from '../../main'
+ *
+ * function action (cmdObj: CmdObj, program: any): void {
+ *   collectAllOpts(program)
+ * }
+ * ```
+ *
+ * @returns An object with all options
+ */
+function collectAllOpts(program) {
     const result = {};
     Object.assign(result, program.opts());
     for (let parentCmd = program.parent; parentCmd; parentCmd = parentCmd.parent) {
@@ -103,7 +119,7 @@ function getGlobalOpts(program) {
     }
     return result;
 }
-exports.getGlobalOpts = getGlobalOpts;
+exports.collectAllOpts = collectAllOpts;
 function validateDefintion(spec) {
     return spec;
 }

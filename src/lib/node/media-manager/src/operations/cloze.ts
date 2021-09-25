@@ -19,64 +19,52 @@ function initializeMetaYaml (
   dest: string,
   pageNo: number,
   pageCount: number
-) {
+): void {
   // Write info yaml
   const titles = new DeepTitle(pdfFile)
   const infoYaml = {
-    ref: `${titles.ref}_LT${pageNo}`,
+    ref: `${titles.ref}_LT_${pageNo}`,
     title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
     meta_types: 'cloze',
     cloze_page_no: pageNo,
     cloze_page_count: pageCount
   }
-  writeFile(path.join(dest, `${pageNo}.svg.yml`), convertToYaml(infoYaml))
+  const yamlContent = convertToYaml(infoYaml)
+  log.debug(yamlContent)
+  writeFile(dest, yamlContent)
 }
 
 async function generateSvg (
   tmpPdfFile: string,
+  destDir: string,
   pageCount: number,
   pageNo: number
 ): Promise<void> {
-  const cwd = path.dirname(tmpPdfFile)
-  let counterSuffix = ''
-  if (pageCount > 1) {
-    counterSuffix = `_${pageNo}`
-  }
-  log.info('Convert page %s', pageNo)
-  const svgFileName = `Lueckentext${counterSuffix}.svg`
-  const svgFilePath = path.join(cwd, svgFileName)
+  log.info('Convert page %s from %s', pageNo.toString(), pageCount.toString())
+  const svgFileName = `${pageNo}.svg`
+  const svgFilePath = path.join(destDir, svgFileName)
+
+  fs.mkdirSync(destDir, { recursive: true })
 
   // Convert into SVG
   childProcess.spawnSync(
     'pdf2svg',
     [tmpPdfFile, svgFileName, pageNo.toString()],
-    { cwd }
+    { cwd: destDir }
   )
 
   // Remove width="" and height="" attributes
   let svgContent = readFile(svgFilePath)
   svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
   writeFile(svgFilePath, svgContent)
-
-  // Write info yaml
-  const titles = new DeepTitle(tmpPdfFile)
-  const infoYaml = {
-    ref: `${titles.ref}_LT${counterSuffix}`,
-    title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
-    meta_types: 'cloze',
-    cloze_page_no: pageNo,
-    cloze_page_count: pageCount
-  }
-  writeFile(path.join(cwd, `${svgFileName}.yml`), convertToYaml(infoYaml))
-
   // Move to LT (Lückentext) subdir.
-  const newPath = locationIndicator.moveIntoSubdir(
-    path.resolve(svgFileName),
-    'LT'
-  )
-  log.info('Result svg: %s has no cloze texts.', newPath)
-  moveAsset(svgFilePath, newPath)
-  await operations.normalizeMediaAsset(newPath, { wikidata: false })
+  const destPath = path.join(destDir, svgFileName)
+
+  initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount)
+
+  log.info('Result svg: %s', destPath)
+  moveAsset(svgFilePath, destPath)
+  await operations.normalizeMediaAsset(destPath, { wikidata: false })
 }
 
 function patchTex (content: string): string {
@@ -121,35 +109,58 @@ function compileTex (tmpTexFile: string): string {
   )
 
   if (result.status !== 0) {
-    console.log(result.stdout)
-    console.log(result.stderr)
+    if (result.stdout != null) {
+      log.error(result.stdout)
+    }
+
+    if (result.stderr != null) {
+      log.error(result.stderr)
+    }
     throw new Error('lualatex compilation failed.')
   }
 
-  return path.join(tmpDir, `${jobName}.pdf`)
+  const tmpPdf = path.join(tmpDir, `${jobName}.pdf`)
+  log.debug('Compiled to temporary PDF: %s', tmpPdf)
+  return tmpPdf
 }
 
 /**
  * @param filePath - The file path of a TeX file.
  */
-export async function generateCloze (filePath: string): Promise<void> {
-  const tmpDir = fs.mkdtempSync('baldr-cloze')
+export async function generateCloze (
+  filePath: string,
+  logLevel: number
+): Promise<void> {
+  log.setLogLevel(5)
   filePath = path.resolve(filePath)
   const texFileContent = readFile(filePath)
   if (!texFileContent.includes('cloze')) {
-    log.info('%s has no cloze texts.', filePath)
+    log.warn('%s has no cloze texts.', filePath)
     return
   }
 
-  const tmpTexFile = path.join(tmpDir, path.basename(filePath))
+  log.debug('Resolved input path: %s', filePath)
 
-  log.info('Generate SVGs from the file %s.', filePath)
+  // Move to LT (Lückentext) subdir.
+  console.log(filePath)
+  const parentDir = locationIndicator.getPresParentDir(filePath)
+  if (parentDir == null) {
+    throw new Error('Parent dir couldn’t be detected!')
+  }
+  const destDir = path.join(parentDir, 'LT')
+
+  const tmpTexFile = filePath.replace('.tex', '_Loesung.tex')
+  log.debug('Create temporary file %s', tmpTexFile)
+
+  writeFile(tmpTexFile, patchTex(texFileContent))
+
+  log.info('Generate SVGs from the file %s.', tmpTexFile)
 
   const tmpPdfFile = compileTex(tmpTexFile)
   const pageCount = getPdfPageCount(tmpPdfFile)
 
   for (let pageNo = 1; pageNo <= pageCount; pageNo++) {
-    await generateSvg(tmpPdfFile, pageCount, pageNo)
+    await generateSvg(tmpPdfFile, destDir, pageCount, pageNo)
   }
   fs.unlinkSync(tmpTexFile)
   fs.unlinkSync(tmpPdfFile)

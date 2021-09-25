@@ -134,9 +134,9 @@ function generateClozeSvg(filePath) {
 /**
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
-function action(filePath) {
+function action(filePath, opts, program) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk(generateClozeSvg, { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
+        yield media_manager_1.walk(media_manager_1.operations.generateCloze, { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
         );
     });
 }
