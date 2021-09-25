@@ -5,4 +5,4 @@
  *
  * @param filePath - A path of a text file.
  */
-export declare function normalizePresentationFile(filePath: string): string;
+export declare function normalizePresentationFile(filePath: string): void;

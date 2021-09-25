@@ -33,7 +33,11 @@
   },
   "dependencies": {
     "fast-printf": "1.6.3",
-    "chalk": "4.1.0"
+    "chalk": "4.1.0",
+    "diff": "5.0.0"
+  },
+  "devDependencies": {
+    "@types/diff": "5.0.1"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -64,9 +64,7 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
         }
       },
       presentation (filePath) {
-        log.info('\nNormalize the presentation file “%s”', filePath)
-        log.info('\nNew content:\n')
-        log.info(operations.normalizePresentationFile(filePath))
+        operations.normalizePresentationFile(filePath)
       },
       tex (filePath) {
         log.info('\nPatch the titles of the TeX file “%s”', filePath)

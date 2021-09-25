@@ -25,4 +25,11 @@ describe('Package “@bldr/log”', function () {
     // Not working with lerna run
     // assert.deepStrictEqual(detectFormatTemplate('hello, %s', 'world'), ['hello, \u001b[33mworld\u001b[39m'])
   })
+
+  it('colorizeDiff()', function () {
+    const diff = log.colorizeDiff('line1\nline2\n', 'line 1\nline2\nline3')
+    assert.ok(diff.includes('-line1'))
+    assert.ok(diff.includes('+line 1'))
+    assert.ok(diff.includes('+line3'))
+  })
 })

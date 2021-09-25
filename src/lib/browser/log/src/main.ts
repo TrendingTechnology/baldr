@@ -8,5 +8,6 @@ export {
 } from './log'
 
 export { format, formatWithoutColor } from './format'
+export { colorizeDiff } from './diff'
 
 export * as colorize from './color'

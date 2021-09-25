@@ -3,6 +3,7 @@ import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
 import { convertToYaml } from '@bldr/yaml'
 import { DeepTitle } from '@bldr/titles'
+import * as log from '@bldr/log'
 
 const comment = `
 #-----------------------------------------------------------------------
@@ -56,8 +57,9 @@ function shortedMediaUris (
  *
  * @param filePath - A path of a text file.
  */
-export function normalizePresentationFile (filePath: string): string {
+export function normalizePresentationFile (filePath: string): void {
   let textContent = readFile(filePath)
+  const oldTextContent = textContent
   const presentation = readYamlFile(filePath) as LampTypes.FileFormat
 
   // Generate meta.
@@ -80,12 +82,16 @@ export function normalizePresentationFile (filePath: string): string {
   const metaSorted: LampTypes.PresentationMeta = {} as LampTypes.PresentationMeta
 
   metaSorted.ref = meta.ref
-  if (meta.uuid != null) metaSorted.uuid = meta.uuid
+  if (meta.uuid != null) {
+    metaSorted.uuid = meta.uuid
+  }
   metaSorted.title = meta.title
   metaSorted.subtitle = meta.subtitle
   metaSorted.grade = meta.grade
   metaSorted.curriculum = meta.curriculum
-  if (meta.curriculumUrl != null) metaSorted.curriculumUrl = meta.curriculumUrl
+  if (meta.curriculumUrl != null) {
+    metaSorted.curriculumUrl = meta.curriculumUrl
+  }
 
   const metaString = convertToYaml({ meta: metaSorted })
   textContent = textContent.replace(
@@ -98,8 +104,14 @@ export function normalizePresentationFile (filePath: string): string {
     textContent = shortedMediaUris(textContent, meta.ref)
   }
 
-  // Remove single quotes.
   textContent = removeSingleQuotes(textContent)
-  writeFile(filePath, textContent)
-  return textContent
+
+  // Remove single quotes.
+  if (oldTextContent !== textContent) {
+    log.info('Normalized presentation %s', filePath)
+    log.verbose(log.colorizeDiff(oldTextContent, textContent))
+    writeFile(filePath, textContent)
+  } else {
+    log.info('No changes after normalization of the presentation %s', filePath)
+  }
 }

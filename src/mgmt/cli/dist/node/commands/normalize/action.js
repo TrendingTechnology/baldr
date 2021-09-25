@@ -89,9 +89,7 @@ function action(filePaths, cmdObj) {
                 }
             },
             presentation(filePath) {
-                log.info('\nNormalize the presentation file “%s”', filePath);
-                log.info('\nNew content:\n');
-                log.info(media_manager_1.operations.normalizePresentationFile(filePath));
+                media_manager_1.operations.normalizePresentationFile(filePath);
             },
             tex(filePath) {
                 log.info('\nPatch the titles of the TeX file “%s”', filePath);
