@@ -125,9 +125,8 @@ function compileTex(tmpTexFile) {
 /**
  * @param filePath - The file path of a TeX file.
  */
-function generateCloze(filePath, logLevel) {
+function generateCloze(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.setLogLevel(5);
         filePath = path_1.default.resolve(filePath);
         const texFileContent = (0, file_reader_writer_1.readFile)(filePath);
         if (!texFileContent.includes('cloze')) {

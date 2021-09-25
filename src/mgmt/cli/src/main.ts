@@ -12,8 +12,7 @@ import { checkExecutables } from '@bldr/core-node'
 import { CliTypes } from '@bldr/type-definitions'
 
 import { setLogLevel } from '@bldr/log'
-
-setLogLevel(3)
+import * as mediaManager from '@bldr/media-manager'
 
 // Globals.
 const commandsPath = path.join(__dirname, 'commands')
@@ -25,7 +24,10 @@ const commandsPath = path.join(__dirname, 'commands')
 const aliases: string[] = []
 
 function increaseVerbosity (dummyValue: any, previous: number): number {
-  return previous + 1
+  const newVerbositiy = previous + 1
+  setLogLevel(newVerbositiy)
+  mediaManager.setLogLevel(newVerbositiy)
+  return newVerbositiy
 }
 
 const program = new Command()

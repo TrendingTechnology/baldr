@@ -4,17 +4,19 @@ import { detectFormatTemplate } from './format';
  * Log with a format string on level 5.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments like console.log() accepts.
+ *   arguments or any arguments the function console.log() accepts.
  */
 export function trace(...msg) {
-    logging.trace(...detectFormatTemplate(...msg));
+    if (logging.getLevel() <= logging.levels.TRACE) {
+        // We don’t want stack traces as provided by console.trace().
+        console.log(...detectFormatTemplate(...msg));
+    }
 }
 /**
  * Log with a format string on level 4.
  *
- *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments like console.log() accepts.
+ *   arguments or any arguments the function console.log() accepts.
  */
 export function debug(...msg) {
     logging.debug(...detectFormatTemplate(...msg));
@@ -23,7 +25,7 @@ export function debug(...msg) {
  * Log with a format string on level 3.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments like console.log() accepts.
+ *   arguments or any arguments the function console.log() accepts.
  */
 export function info(...msg) {
     logging.info(...detectFormatTemplate(...msg));
@@ -32,7 +34,7 @@ export function info(...msg) {
  * Log on level 2.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments like console.log() accepts.
+ *   arguments or any arguments the function console.log() accepts.
  */
 export function warn(...msg) {
     logging.warn(...detectFormatTemplate(...msg));
@@ -41,7 +43,7 @@ export function warn(...msg) {
  * Log on level 1.
  *
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments like console.log() accepts.
+ *   arguments or any arguments the function console.log() accepts.
  */
 export function error(...msg) {
     logging.error(...detectFormatTemplate(...msg));
@@ -59,6 +61,9 @@ export function error(...msg) {
  * @param level - A number from 0 (silent) up to 5 (trace)
  */
 export function setLogLevel(level) {
+    if (level < 0 || level > 5) {
+        throw new Error('Allowed values for the log level are: 0-5');
+    }
     // loglevel
     // 5 -> TRACE:  0 (5 - 5)
     // 4 -> DEBUG:  1 (5 - 4)

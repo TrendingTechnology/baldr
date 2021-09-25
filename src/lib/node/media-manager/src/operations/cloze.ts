@@ -127,11 +127,7 @@ function compileTex (tmpTexFile: string): string {
 /**
  * @param filePath - The file path of a TeX file.
  */
-export async function generateCloze (
-  filePath: string,
-  logLevel: number
-): Promise<void> {
-  log.setLogLevel(5)
+export async function generateCloze (filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
   const texFileContent = readFile(filePath)
   if (!texFileContent.includes('cloze')) {

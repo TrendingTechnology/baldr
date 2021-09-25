@@ -11,8 +11,8 @@ import path from 'path'
 
 import { getExtension } from '@bldr/core-browser'
 import { MediaResolverTypes, GenericError } from '@bldr/type-definitions'
-
 import { readYamlFile } from '@bldr/file-reader-writer'
+import * as log from '@bldr/log'
 
 export * from './operations'
 export * from './directory-tree-walk'
@@ -23,6 +23,10 @@ export * from './yaml'
 interface MoveAssetConfiguration {
   copy?: boolean
   dryRun?: boolean
+}
+
+export function setLogLevel (level: number): void {
+  log.setLogLevel(level)
 }
 
 /**

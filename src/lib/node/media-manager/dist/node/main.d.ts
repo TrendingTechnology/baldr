@@ -15,6 +15,7 @@ interface MoveAssetConfiguration {
     copy?: boolean;
     dryRun?: boolean;
 }
+export declare function setLogLevel(level: number): void;
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).
