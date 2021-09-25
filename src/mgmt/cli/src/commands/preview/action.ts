@@ -36,7 +36,7 @@ async function createAudioWaveForm (srcPath: string): Promise<void> {
     '-y', // Overwrite output files without asking
     destPath
   ])
-  log.info('Create waveform image %s from %s.', destPath, srcPath)
+  log.verbose('Create waveform image %s from %s.', destPath, srcPath)
 }
 
 async function downloadAudioCoverImage (srcPath: string, destPath: string): Promise<void> {
@@ -45,7 +45,7 @@ async function downloadAudioCoverImage (srcPath: string, destPath: string): Prom
 
   if (metaData.coverSource != null) {
     await fetchFile(metaData.coverSource, destPath)
-    log.info('Download preview image %s from %s.', destPath, metaData.coverSource)
+    log.verbose('Download preview image %s from %s.', destPath, metaData.coverSource)
   } else {
     log.error('No property “cover_source” found.')
   }
@@ -69,7 +69,7 @@ function extractFrameFromVideo (srcPath: string, destPath: string, second: numbe
     '-y', // Overwrite output files without asking
     destPath
   ])
-  log.info('Create preview image %s of a video file.', destPath)
+  log.verbose('Create preview image %s of a video file.', destPath)
 }
 
 function convertFirstPdfPageToJpg (srcPath: string, destPath: string): void {
@@ -81,11 +81,13 @@ function convertFirstPdfPageToJpg (srcPath: string, destPath: string): void {
     '-scale-to', '500',
     srcPath, destPath
   ])
-  log.info('Create preview image %s of a PDF file.', destPath)
+  log.verbose('Create preview image %s of a PDF file.', destPath)
 }
 
 async function createPreviewOneFile (srcPath: string, cmdObj: CmdObj): Promise<void> {
+  log.info('Create preview files for %s', srcPath)
   const mimeType = filePathToMimeType(srcPath)
+  log.debug('The MIME type of the file is %s', mimeType)
   const destPathPreview = `${srcPath}_preview.jpg`
   const destPathWavefrom = `${srcPath}_waveform.png`
 

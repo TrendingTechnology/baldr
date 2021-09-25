@@ -2,8 +2,6 @@ import { printf } from 'fast-printf'
 
 import * as color from './color'
 
-export const colorize = color
-
 // eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/
 
@@ -57,11 +55,20 @@ export function format (template: FormatString, ...args: any[]): string {
   return formatWithoutColor(template, ...args)
 }
 
-export function detectFormatTemplate (...msg: any[]): any[] {
-  const args = [...arguments]
-  const firstArg = arguments[0]
+export function colorizeFormat (template: FormatString, args: any[], colorFunction: Function): string {
+  args = args.map(value => {
+    if (typeof value !== 'string' || (typeof value === 'string' && value?.match(ansiRegexp) != null)) {
+      return value
+    }
+    return colorFunction(value)
+  })
+  return formatWithoutColor(template, ...args)
+}
+
+export function detectFormatTemplate (msg: any[], colorFunction: Function): any[] {
+  const firstArg = msg[0]
   if (typeof firstArg === 'number' || typeof firstArg === 'string') {
-    return [format(firstArg, ...args.slice(1))]
+    return [colorizeFormat(firstArg, msg.slice(1), colorFunction)]
   }
-  return args
+  return msg
 }

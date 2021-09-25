@@ -21,9 +21,16 @@ describe('Package “@bldr/log”', function () {
   })
 
   it('detectFormatTemplate()', function () {
-    assert.deepStrictEqual(detectFormatTemplate([1, 2, 3]), [[1, 2, 3]])
-    // Not working with lerna run
-    // assert.deepStrictEqual(detectFormatTemplate('hello, %s', 'world'), ['hello, \u001b[33mworld\u001b[39m'])
+    assert.deepStrictEqual(
+      detectFormatTemplate(['%s', 'test'], log.colorize.blue),
+      ['test']
+    )
+
+    const result = detectFormatTemplate(
+      ['hello, %s', 'world'],
+      log.colorize.blue
+    )
+    assert.ok(result[0].includes('world'))
   })
 
   it('colorizeDiff()', function () {

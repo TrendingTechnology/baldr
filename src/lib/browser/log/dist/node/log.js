@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLogLevel = exports.debug = exports.verbose = exports.info = exports.warn = exports.error = void 0;
 const format_1 = require("./format");
+const colorize = require("./color");
 let logLevel = 0;
 /**
  * Log on level 1.
@@ -11,7 +12,7 @@ let logLevel = 0;
  */
 function error(...msg) {
     if (logLevel > 0) {
-        console.error(...format_1.detectFormatTemplate(...msg));
+        console.error(...format_1.detectFormatTemplate(msg, colorize.red));
     }
 }
 exports.error = error;
@@ -23,7 +24,7 @@ exports.error = error;
  */
 function warn(...msg) {
     if (logLevel > 1) {
-        console.warn(...format_1.detectFormatTemplate(...msg));
+        console.warn(...format_1.detectFormatTemplate(msg, colorize.yellow));
     }
 }
 exports.warn = warn;
@@ -35,7 +36,7 @@ exports.warn = warn;
  */
 function info(...msg) {
     if (logLevel > 2) {
-        console.info(...format_1.detectFormatTemplate(...msg));
+        console.info(...format_1.detectFormatTemplate(msg, colorize.blue));
     }
 }
 exports.info = info;
@@ -47,7 +48,7 @@ exports.info = info;
  */
 function verbose(...msg) {
     if (logLevel > 3) {
-        console.debug(...format_1.detectFormatTemplate(...msg));
+        console.debug(...format_1.detectFormatTemplate(msg, colorize.magenta));
     }
 }
 exports.verbose = verbose;
@@ -59,7 +60,7 @@ exports.verbose = verbose;
  */
 function debug(...msg) {
     if (logLevel > 4) {
-        console.log(...format_1.detectFormatTemplate(...msg));
+        console.log(...format_1.detectFormatTemplate(msg, colorize.cyan));
     }
 }
 exports.debug = debug;
@@ -67,11 +68,11 @@ exports.debug = debug;
  * Set the log level.
  *
  * - 0: silent
- * - 1: error
- * - 2: warn
- * - 3: info
- * - 4: verbose
- * - 5: debug
+ * - 1: error (red)
+ * - 2: warn (yellow)
+ * - 3: info (blue)
+ * - 4: verbose (magenta)
+ * - 5: debug (cyan)
  *
  * @param level - A number from 0 (silent) up to 5 (debug)
  */

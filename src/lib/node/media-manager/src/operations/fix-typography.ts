@@ -4,8 +4,7 @@ import { readFile, writeFile } from '@bldr/file-reader-writer'
  * Delete spaces at the end.
  */
 export function removeSpacesAtLineEnd (input: string): string {
-  // return input.replace(/\s+$/mg, '')
-  return input.replace(/\s+\n/g, '\n')
+  return input.replace(/[ \t]+\n/g, '\n')
 }
 
 /**

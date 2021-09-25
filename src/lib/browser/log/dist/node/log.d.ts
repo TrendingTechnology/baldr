@@ -37,11 +37,11 @@ export declare function debug(...msg: any[]): void;
  * Set the log level.
  *
  * - 0: silent
- * - 1: error
- * - 2: warn
- * - 3: info
- * - 4: verbose
- * - 5: debug
+ * - 1: error (red)
+ * - 2: warn (yellow)
+ * - 3: info (blue)
+ * - 4: verbose (magenta)
+ * - 5: debug (cyan)
  *
  * @param level - A number from 0 (silent) up to 5 (debug)
  */

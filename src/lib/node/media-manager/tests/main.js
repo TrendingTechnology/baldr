@@ -27,6 +27,6 @@ describe('Package “@bldr/media-manager”', function () {
   })
 
   it('Function “removeSpacesAtLineEnd”', function () {
-    assert.strictEqual(removeSpacesAtLineEnd('1 \n2\t\n3  \n'), '1\n2\n3\n')
+    assert.strictEqual(removeSpacesAtLineEnd('1 \n2\t\n\n3  \n'), '1\n2\n\n3\n')
   })
 })

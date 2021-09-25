@@ -1,5 +1,3 @@
-import * as color from './color';
-export declare const colorize: typeof color;
 /**
  * A string in the “printf” format.
  *
@@ -34,5 +32,6 @@ export declare const colorize: typeof color;
 declare type FormatString = string | number;
 export declare function formatWithoutColor(template: FormatString, ...args: any[]): string;
 export declare function format(template: FormatString, ...args: any[]): string;
-export declare function detectFormatTemplate(...msg: any[]): any[];
+export declare function colorizeFormat(template: FormatString, args: any[], colorFunction: Function): string;
+export declare function detectFormatTemplate(msg: any[], colorFunction: Function): any[];
 export {};

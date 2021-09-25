@@ -6,8 +6,7 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
  * Delete spaces at the end.
  */
 function removeSpacesAtLineEnd(input) {
-    // return input.replace(/\s+$/mg, '')
-    return input.replace(/\s+\n/g, '\n');
+    return input.replace(/[ \t]+\n/g, '\n');
 }
 exports.removeSpacesAtLineEnd = removeSpacesAtLineEnd;
 /**

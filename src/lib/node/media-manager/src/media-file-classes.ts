@@ -103,6 +103,7 @@ export function isAsset (filePath: string): boolean {
   if (
     filePath.includes('eps-converted-to.pdf') || // eps converted into pdf by TeX
     filePath.includes('_preview.jpg') || // Preview image
+    filePath.includes('_waveform.png') || // Preview image
     filePath.match(/_no\d+\./) != null // Multipart asset
   ) {
     return false

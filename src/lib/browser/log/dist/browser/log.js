@@ -1,4 +1,5 @@
 import { detectFormatTemplate } from './format';
+import * as colorize from './color';
 let logLevel = 0;
 /**
  * Log on level 1.
@@ -8,7 +9,7 @@ let logLevel = 0;
  */
 export function error(...msg) {
     if (logLevel > 0) {
-        console.error(...detectFormatTemplate(...msg));
+        console.error(...detectFormatTemplate(msg, colorize.red));
     }
 }
 /**
@@ -19,7 +20,7 @@ export function error(...msg) {
  */
 export function warn(...msg) {
     if (logLevel > 1) {
-        console.warn(...detectFormatTemplate(...msg));
+        console.warn(...detectFormatTemplate(msg, colorize.yellow));
     }
 }
 /**
@@ -30,7 +31,7 @@ export function warn(...msg) {
  */
 export function info(...msg) {
     if (logLevel > 2) {
-        console.info(...detectFormatTemplate(...msg));
+        console.info(...detectFormatTemplate(msg, colorize.blue));
     }
 }
 /**
@@ -41,7 +42,7 @@ export function info(...msg) {
  */
 export function verbose(...msg) {
     if (logLevel > 3) {
-        console.debug(...detectFormatTemplate(...msg));
+        console.debug(...detectFormatTemplate(msg, colorize.magenta));
     }
 }
 /**
@@ -52,18 +53,18 @@ export function verbose(...msg) {
  */
 export function debug(...msg) {
     if (logLevel > 4) {
-        console.log(...detectFormatTemplate(...msg));
+        console.log(...detectFormatTemplate(msg, colorize.cyan));
     }
 }
 /**
  * Set the log level.
  *
  * - 0: silent
- * - 1: error
- * - 2: warn
- * - 3: info
- * - 4: verbose
- * - 5: debug
+ * - 1: error (red)
+ * - 2: warn (yellow)
+ * - 3: info (blue)
+ * - 4: verbose (magenta)
+ * - 5: debug (cyan)
  *
  * @param level - A number from 0 (silent) up to 5 (debug)
  */

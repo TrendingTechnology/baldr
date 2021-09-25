@@ -1,16 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.green = exports.yellow = exports.red = void 0;
-const chalk = require("chalk");
-function red(input) {
-    return chalk.red(input);
-}
-exports.red = red;
-function yellow(input) {
-    return chalk.yellow(input);
-}
-exports.yellow = yellow;
-function green(input) {
-    return chalk.green(input);
-}
-exports.green = green;
+exports.cyan = exports.magenta = exports.blue = exports.yellow = exports.green = exports.red = void 0;
+var chalk_1 = require("chalk");
+Object.defineProperty(exports, "red", { enumerable: true, get: function () { return chalk_1.red; } });
+Object.defineProperty(exports, "green", { enumerable: true, get: function () { return chalk_1.green; } });
+Object.defineProperty(exports, "yellow", { enumerable: true, get: function () { return chalk_1.yellow; } });
+Object.defineProperty(exports, "blue", { enumerable: true, get: function () { return chalk_1.blue; } });
+Object.defineProperty(exports, "magenta", { enumerable: true, get: function () { return chalk_1.magenta; } });
+Object.defineProperty(exports, "cyan", { enumerable: true, get: function () { return chalk_1.cyan; } });
