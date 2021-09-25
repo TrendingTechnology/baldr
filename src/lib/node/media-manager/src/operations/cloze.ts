@@ -68,34 +68,10 @@ async function generateSvg (
 }
 
 function patchTex (content: string): string {
-  // Show cloze texts by patching the TeX file and generate a PDF file.
-  // \documentclass[angabe,querformat]{schule-arbeitsblatt}
-  return content.replace(
-    /\\documentclass(\[(.*)\])?\{schule-arbeitsblatt\}/,
-    function (match: string, p1: string, p2: string) {
-      // match \documentclass[angabe,querformat]{schule-arbeitsblatt}
-      // p1: [angabe,querformat]
-      // p2: angabe,querformat
-      let args: string[] = []
-      let isSolutionSet = false
-      if (p2 != null) {
-        args = p2.split(',')
-        for (let index = 0; index < args.length; index++) {
-          if (args[index] === 'angabe') {
-            args[index] = 'loesung'
-            isSolutionSet = true
-          }
-        }
-        if (args.includes('loesung')) {
-          isSolutionSet = true
-        }
-      }
-      if (!isSolutionSet) {
-        args.push('loesung')
-      }
-      return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`
-    }
-  )
+  return content
+    .replace(/\\VerbergeLoesung/g, '')
+    .replace(/\\ZeigeLoesung/g, '')
+    .replace('\\begin{document}', '\\begin{document}\n\\ZeigeLoesung')
 }
 
 function compileTex (tmpTexFile: string): string {
