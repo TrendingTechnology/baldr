@@ -9,7 +9,7 @@ const { DefinePlugin } = require('webpack')
 const { gitHead } = require('@bldr/core-node')
 
 const config = require('@bldr/config')
-// Remove dirty hack
+// @TODO: Remove dirty hack
 delete config.default
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
@@ -53,6 +53,7 @@ module.exports = {
           target: 'deb',
           category: 'Education',
           executableName: 'baldr-seating-plan',
+          icon: './icon.svg'
         },
         extraMetadata: {
           name: 'baldr-seating-plan'

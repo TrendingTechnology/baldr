@@ -10,11 +10,13 @@ const { DefinePlugin } = require('webpack')
 const { gitHead } = require('@bldr/core-node')
 
 const config = require('@bldr/config')
+// @TODO: Remove dirty hack
+delete config.default
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 module.exports = {
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
     // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
     config.resolve.symlinks(false)
@@ -43,7 +45,9 @@ module.exports = {
         compilationTime: new Date().getTime(),
         config: JSON.stringify(config),
         gitHead: JSON.stringify(gitHead()),
-        songsJson: JSON.stringify(require(path.join(config.songbook.path, 'songs.json')))
+        songsJson: JSON.stringify(
+          require(path.join(config.songbook.path, 'songs.json'))
+        )
       })
     ]
   },
@@ -51,9 +55,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [
-        path.join(themePath, 'default.scss')
-      ]
+      patterns: [path.join(themePath, 'default.scss')]
     },
     electronBuilder: {
       builderOptions: {
@@ -64,6 +66,7 @@ module.exports = {
           target: 'deb',
           category: 'Education',
           executableName: 'baldr-songbook',
+          icon: './icon.svg'
         },
         extraMetadata: {
           name: 'baldr-songbook'

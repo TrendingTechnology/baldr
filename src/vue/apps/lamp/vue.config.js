@@ -14,7 +14,10 @@ const config = require('@bldr/config')
 delete config.default
 
 function stylePath (themeName) {
-  return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
+  return path.join(
+    path.dirname(require.resolve('@bldr/themes')),
+    `${themeName}.scss`
+  )
 }
 
 function readExamples () {
@@ -31,7 +34,10 @@ function readExamples () {
   // masters
   const mastersBasePath = path.join('src', 'masters')
   for (const masterName of fs.readdirSync(mastersBasePath)) {
-    const rawYaml = fs.readFileSync(path.join(mastersBasePath, masterName, 'examples.baldr.yml'), 'utf8')
+    const rawYaml = fs.readFileSync(
+      path.join(mastersBasePath, masterName, 'examples.baldr.yml'),
+      'utf8'
+    )
     examples.masters[masterName] = rawYaml
   }
 
@@ -41,7 +47,7 @@ function readExamples () {
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
 module.exports = {
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.symlinks(false)
   },
   configureWebpack: {
@@ -62,10 +68,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [
-        stylePath('default'),
-        stylePath('handwriting')
-      ]
+      patterns: [stylePath('default'), stylePath('handwriting')]
     },
     electronBuilder: {
       preload: 'src/preload.js',
