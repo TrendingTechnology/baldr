@@ -45,6 +45,9 @@ const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 function initializeMetaYaml(pdfFile, dest, pageNo, pageCount) {
+    if (fs_1.default.existsSync(dest)) {
+        return;
+    }
     // Write info yaml
     const titles = new titles_1.DeepTitle(pdfFile);
     const infoYaml = {

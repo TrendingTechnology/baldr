@@ -20,6 +20,9 @@ function initializeMetaYaml (
   pageNo: number,
   pageCount: number
 ): void {
+  if (fs.existsSync(dest)) {
+    return
+  }
   // Write info yaml
   const titles = new DeepTitle(pdfFile)
   const infoYaml = {
