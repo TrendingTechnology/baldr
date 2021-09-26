@@ -358,3 +358,16 @@ export interface CategoryPersonYamlFormat extends MediaResolverTypes.YamlFormat 
   mainImage: string
   famousPieces?: string[]
 }
+
+export interface CategoryReferenceYamlFormat extends MediaResolverTypes.YamlFormat {
+  referenceTitle?: string
+  referenceSubtitle?: string
+  author?: string
+  publisher?: string
+  releaseDate?: string
+  edition?: string
+  pageNos?: string
+  forTeacher?: boolean
+  isbn?: string
+  pageCount: number
+}

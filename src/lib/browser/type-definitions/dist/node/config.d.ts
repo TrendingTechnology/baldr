@@ -65,10 +65,25 @@ interface MimeTypes {
     [key: string]: MimeType;
 }
 interface MediaServerConfiguration {
+    /**
+     * `/data/school/Aktuell`
+     */
     basePath: string;
+    /**
+     * `['/data/school/Archiv/']`
+     */
     archivePaths: string[];
+    /**
+     * `serverway`
+     */
     sshAliasRemote: string;
+    /**
+     * `/usr/bin/code`
+     */
     editor: string;
+    /**
+     * `/usr/bin/nautilus`
+     */
     fileManager: string;
     mimeTypes: MimeTypes;
     /**

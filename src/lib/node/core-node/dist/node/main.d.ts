@@ -51,4 +51,12 @@ export declare function untildify(filePath: string): string;
  * @returns The path of the found parent file or undefined if not found.
  */
 export declare function findParentFile(filePath: string, fileName: string): string | undefined;
+/**
+ * Extract the base name without the extension from a file path.
+ *
+ * @param filePath A file path.
+ *
+ * @returns The base name without the extension.
+ */
+export declare function getBasename(filePath: string): string;
 export {};

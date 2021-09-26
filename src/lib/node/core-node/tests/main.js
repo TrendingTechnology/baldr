@@ -2,17 +2,25 @@
 const assert = require('assert')
 const path = require('path')
 
-const { findParentFile } = require('../dist/node/main.js')
+const { findParentFile, getBasename } = require('../dist/node/main.js')
 const config = require('@bldr/config')
 
 describe('Package “@bldr/core-node”', function () {
-  it('findParentFile', function () {
-    findParentFile
+  it('function  “findParentFile()”', function () {
     const testFile = path.join(
       config.mediaServer.basePath,
-      'musik/05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'
+      'Musik/05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'
     )
+    assert.strictEqual(
+      findParentFile(testFile, 'title.txt'),
+      '/data/school/Aktuell/Musik/05/40_Grundlagen/97_Instrumente/07_Hoer-Labyrinth/title.txt'
+    )
+  })
 
-    console.log(findParentFile(testFile, 'title.txt'))
+  it('function  “getBasename()”', function () {
+    assert.strictEqual(
+      getBasename('07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'),
+      'Arbeitsblatt'
+    )
   })
 })

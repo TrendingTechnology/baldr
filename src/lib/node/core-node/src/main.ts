@@ -61,7 +61,9 @@ export function checkExecutables (executables: string | string[]): void {
  */
 export function getPdfPageCount (filePath: string): number {
   checkExecutables('pdfinfo')
-  if (!fs.existsSync(filePath)) { throw new Error(`PDF file doesn’t exist: ${filePath}.`) }
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`PDF file doesn’t exist: ${filePath}.`)
+  }
   const proc = childProcess.spawnSync('pdfinfo', [filePath], {
     encoding: 'utf-8',
     cwd: process.cwd()
@@ -123,4 +125,15 @@ export function findParentFile (
       return parentFile
     }
   }
+}
+
+/**
+ * Extract the base name without the extension from a file path.
+ *
+ * @param filePath A file path.
+ *
+ * @returns The base name without the extension.
+ */
+export function getBasename (filePath: string): string {
+  return path.basename(filePath, path.extname(filePath))
 }

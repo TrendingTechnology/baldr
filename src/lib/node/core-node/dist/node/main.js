@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
+exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -134,3 +134,14 @@ function findParentFile(filePath, fileName) {
     }
 }
 exports.findParentFile = findParentFile;
+/**
+ * Extract the base name without the extension from a file path.
+ *
+ * @param filePath A file path.
+ *
+ * @returns The base name without the extension.
+ */
+function getBasename(filePath) {
+    return path_1.default.basename(filePath, path_1.default.extname(filePath));
+}
+exports.getBasename = getBasename;
