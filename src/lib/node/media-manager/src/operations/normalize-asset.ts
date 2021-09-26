@@ -24,7 +24,7 @@ async function queryWikidata (
     categoryNames,
     categoryCollection
   )
-  console.log(dataWiki)
+  log.verbose(dataWiki)
   metaData = wikidata.mergeData(
     metaData,
     dataWiki,

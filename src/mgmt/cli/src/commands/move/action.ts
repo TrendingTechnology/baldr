@@ -3,9 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import childProcess from 'child_process'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import { getExtension, referencify, asciify } from '@bldr/core-browser'
 import {
@@ -17,7 +14,8 @@ import {
 } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
 import { readFile, writeFile, writeYamlFile } from '@bldr/file-reader-writer'
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
+import * as log from '@bldr/log'
 
 interface CmdObj {
   regexp?: string
@@ -84,7 +82,11 @@ const resolvedTexImages: { [key: string]: string } = {}
  *
  * @returns for example: BD/John-Coltrane.jpg
  */
-function moveTexImage (oldPathTex: string, baseName: string, cmdObj: CmdObj): string | undefined {
+function moveTexImage (
+  oldPathTex: string,
+  baseName: string,
+  cmdObj: CmdObj
+): string | undefined {
   if (resolvedTexImages[baseName] != null) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
   const imageFolder = path.join(path.dirname(oldPathTex), 'Material')
@@ -107,7 +109,9 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: CmdObj): st
     if (presParentDir == null) {
       throw new Error(`${oldPath} is not a presentation folder ${oldPath}.`)
     }
-    const presParentDirMirrored = locationIndicator.getMirroredPath(presParentDir)
+    const presParentDirMirrored = locationIndicator.getMirroredPath(
+      presParentDir
+    )
     if (presParentDirMirrored === undefined) return
 
     let imgParentDir
@@ -139,7 +143,9 @@ function moveTex (oldPath: string, newPath: string, cmdObj: CmdObj): void {
   const content = readFile(oldPath)
   // \begin{grafikumlauf}{Inserat}
   // \grafik[0.8\linewidth]{Freight-Train-Blues}
-  const matches = content.matchAll(/(\\grafik|\\begin\{grafikumlauf\}).*?\{(.+?)\}/g)
+  const matches = content.matchAll(
+    /(\\grafik|\\begin\{grafikumlauf\}).*?\{(.+?)\}/g
+  )
   // [
   //   [
   //     '\grafik[0.8\linewidth]{Freight-Train-Blues}',
@@ -180,7 +186,9 @@ function moveTex (oldPath: string, newPath: string, cmdObj: CmdObj): void {
 
 function getMbrainzRecordingId (filePath: string): string | undefined {
   const process = childProcess.spawnSync(
-    '/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' }
+    '/usr/local/bin/musicbrainz-acoustid.py',
+    [filePath],
+    { encoding: 'utf-8' }
   )
 
   if (process.stdout != null) {
@@ -188,12 +196,16 @@ function getMbrainzRecordingId (filePath: string): string | undefined {
     // 0585ec4a-487d-4944-bf59-dd9ecc325c66\n
     // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
     const musicbrainzRecordingId = process.stdout.replace(/\n.*$/s, '')
-    console.log(chalk.red(musicbrainzRecordingId))
+    log.error(musicbrainzRecordingId)
     return musicbrainzRecordingId
   }
 }
 
-async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promise<void> {
+async function moveMp3 (
+  oldPath: string,
+  newPath: string,
+  cmdObj: CmdObj
+): Promise<void> {
   // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
   newPath = asciify(newPath)
@@ -219,7 +231,7 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: CmdObj): Promi
 
   // Try to get the MusicBrainz recording ID.
   const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
-  if (musicbrainzRecordingId != null) metaData.musicbrainzRecordingId = musicbrainzRecordingId
+  if (musicbrainzRecordingId != null) { metaData.musicbrainzRecordingId = musicbrainzRecordingId }
 
   metaData.source = oldPath
   // To get ID prefix
@@ -245,7 +257,8 @@ async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
   await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
   if (metaData == null) return
-  metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
+  metaData.reference_title =
+    'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
   metaData.author = 'Wieland Schmid'
   metaData.publisher = 'Helbling'
   metaData.release_data = 2009
@@ -260,7 +273,11 @@ async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
  * @param extension - The extension of the file.
  * @param cmdObj - See commander docs.
  */
-async function moveFromArchive (oldPath: string, extension: string, cmdObj: CmdObj): Promise<void> {
+async function moveFromArchive (
+  oldPath: string,
+  extension: string,
+  cmdObj: CmdObj
+): Promise<void> {
   if (oldPath.includes('Tonart.pdf')) {
     await moveReference(oldPath, cmdObj)
     return
@@ -268,7 +285,7 @@ async function moveFromArchive (oldPath: string, extension: string, cmdObj: CmdO
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
   const newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
-  console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
+  log.info('%s -> %s', oldPath, newPath)
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
   } else if (extension === 'mp3') {
@@ -315,11 +332,14 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
     opts.regex = new RegExp(cmdObj.regexp)
     await walk(move, opts)
   } else {
-    await walk({
-      async everyFile (relPath) {
-        await move(relPath, {})
-      }
-    }, opts)
+    await walk(
+      {
+        async everyFile (relPath) {
+          await move(relPath, {})
+        }
+      },
+      opts
+    )
   }
 }
 

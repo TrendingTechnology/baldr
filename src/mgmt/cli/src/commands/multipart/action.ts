@@ -2,12 +2,12 @@
 import fs from 'fs'
 
 // Third party packages.
-import chalk from 'chalk'
 import glob from 'glob'
 
 // Project packages.
 import { formatMultiPartAssetFileName, getExtension } from '@bldr/core-browser'
 import { writeYamlMetaData, operations } from '@bldr/media-manager'
+import * as log from '@bldr/log'
 
 interface CmdObj {
   dryRun: boolean
@@ -21,10 +21,14 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (globPattern: string, prefix: string, cmdObj: CmdObj): Promise<void> {
+async function action (
+  globPattern: string,
+  prefix: string,
+  cmdObj: CmdObj
+): Promise<void> {
   const files = glob.sync(globPattern)
   if (files.length < 1) {
-    console.log('Glob matches no files.')
+    log.info('Glob matches no files.')
     return
   }
   files.sort(undefined)
@@ -36,8 +40,11 @@ async function action (globPattern: string, prefix: string, cmdObj: CmdObj): Pro
   for (const oldFileName of files) {
     // Omit already existent info file by the renaming.
     if (oldFileName.match(/yml$/i) == null) {
-      const newFileName = formatMultiPartAssetFileName(`${prefix}.${extension}`, no)
-      console.log(`${chalk.yellow(oldFileName)} -> ${chalk.green(newFileName)}`)
+      const newFileName = formatMultiPartAssetFileName(
+        `${prefix}.${extension}`,
+        no
+      )
+      log.info('%s -> %s', oldFileName, newFileName)
       if (!cmdObj.dryRun) fs.renameSync(oldFileName, newFileName)
       no += 1
     }

@@ -2,13 +2,11 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import { locationIndicator } from '@bldr/media-manager'
 import { openInFileManager } from '@bldr/open-with'
 import config from '@bldr/config'
+import * as log from '@bldr/log'
 
 interface CmdObj {
   fileManager: boolean
@@ -36,11 +34,11 @@ function action (cmdObj: CmdObj): void {
   }
 
   if (!fs.existsSync(mirroredPath)) {
-    console.log(`The path “${chalk.red(mirroredPath)}” doesn’t exist.`)
+    log.error('The path “%s” doesn’t exist.', mirroredPath)
     process.exit(1)
   }
 
-  console.log(`Go to: ${chalk.green(mirroredPath)}`)
+  log.info('Go to: %s', mirroredPath)
   if (cmdObj.fileManager) {
     openInFileManager(mirroredPath, true)
   } else {

@@ -15,6 +15,7 @@ class MediaFile {
    * The absolute path of the file.
    */
   protected absPath: string
+
   /**
    * @param filePath - The file path of the media file.
    */

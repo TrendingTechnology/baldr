@@ -3,13 +3,14 @@ import childProcess from 'child_process'
 import path from 'path'
 
 // Project packages.
+import { MediaResolverTypes } from '@bldr/type-definitions'
+import { mimeTypeManager } from '@bldr/client-media-models'
+import { referencify } from '@bldr/core-browser'
+import * as log from '@bldr/log'
 import collectAudioMetaData from '@bldr/audio-metadata'
 
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
-import { referencify } from '@bldr/core-browser'
-import { MediaResolverTypes } from '@bldr/type-definitions'
-import { mimeTypeManager } from '@bldr/client-media-models'
 
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
@@ -47,7 +48,7 @@ export async function convertAsset (
   try {
     mimeType = mimeTypeManager.extensionToType(asset.extension)
   } catch (error) {
-    console.log(`Unsupported extension ${asset.extension}`)
+    log.error('Unsupported extension %s', asset.extension)
     return
   }
   const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
@@ -145,7 +146,7 @@ export async function convertAsset (
         try {
           metaData = (await collectAudioMetaData(filePath)) as unknown
         } catch (error) {
-          console.log(error)
+          log.error(error)
         }
         if (metaData != null) {
           writeYamlMetaData(
@@ -156,8 +157,8 @@ export async function convertAsset (
       }
       converted.add(outputFile)
     } else {
-      console.log(process.stdout.toString())
-      console.log(process.stderr.toString())
+      log.error(process.stdout.toString())
+      log.error(process.stderr.toString())
       throw new Error(`ConvertError: ${filePath} -> ${outputFile}`)
     }
   }

@@ -9,6 +9,7 @@ import {
 } from '@bldr/tex-markdown-converter'
 import { readFile, writeFile } from '@bldr/file-reader-writer'
 import { convertToYaml } from '@bldr/yaml'
+import * as log from '@bldr/log'
 
 import { makeAsset } from '../media-file-classes'
 import { walk } from '../directory-tree-walk'
@@ -97,6 +98,6 @@ export async function generatePresentation (filePath: string): Promise<void> {
   const result = convertToYaml({
     slides
   })
-  console.log(result)
+  log.verbose(result)
   writeFile(filePath, result)
 }

@@ -40,7 +40,7 @@ const path_1 = __importDefault(require("path"));
 const commander_1 = require("commander");
 // Project packages.
 const core_node_1 = require("@bldr/core-node");
-const log_1 = require("@bldr/log");
+const log = __importStar(require("@bldr/log"));
 const mediaManager = __importStar(require("@bldr/media-manager"));
 // Globals.
 const commandsPath = path_1.default.join(__dirname, 'commands');
@@ -51,7 +51,7 @@ const commandsPath = path_1.default.join(__dirname, 'commands');
 const aliases = [];
 function increaseVerbosity(dummyValue, previous) {
     const newVerbositiy = previous + 1;
-    log_1.setLogLevel(newVerbositiy);
+    log.setLogLevel(newVerbositiy);
     mediaManager.setLogLevel(newVerbositiy);
     return newVerbositiy;
 }
@@ -113,7 +113,7 @@ function loadCommands(program) {
     }
 }
 function actionHelp() {
-    console.log('Specify a subcommand.');
+    log.error('Specify a subcommand.');
     program.outputHelp();
     process.exit(1);
 }
@@ -153,7 +153,7 @@ function main() {
             yield program.parseAsync(process.argv);
         }
         catch (error) {
-            console.log(error);
+            log.error(error);
         }
         // [
         //  '/usr/local/bin/node',
@@ -167,5 +167,5 @@ function main() {
 if (require.main === module) {
     main()
         .then()
-        .catch(reason => console.log(reason));
+        .catch(reason => log.info(reason));
 }

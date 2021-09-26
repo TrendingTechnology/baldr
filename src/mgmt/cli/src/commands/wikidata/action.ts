@@ -2,15 +2,13 @@
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
-import { writeYamlFile } from '@bldr/file-reader-writer'
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import type { MediaResolverTypes } from '@bldr/type-definitions'
-import config from '@bldr/config'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
+import { writeYamlFile } from '@bldr/file-reader-writer'
+import config from '@bldr/config'
+import * as log from '@bldr/log'
 
 interface CmdObj {
   dryRun: boolean
@@ -21,7 +19,13 @@ interface CmdObj {
  *   `song`
  * @param itemId - For example `Q123`
  */
-async function action (category: string, itemId: string, arg1: string, arg2: string, cmdObj: CmdObj): Promise<void> {
+async function action (
+  category: string,
+  itemId: string,
+  arg1: string,
+  arg2: string,
+  cmdObj: CmdObj
+): Promise<void> {
   const rawData = await query(itemId, category, categories)
   if (arg1 != null) {
     if (category === 'person') {
@@ -31,8 +35,10 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
   }
 
   rawData.categories = category
-  const data = categoriesManagement.process(rawData as MediaResolverTypes.YamlFormat)
-  console.log(data)
+  const data = categoriesManagement.process(
+    rawData as MediaResolverTypes.YamlFormat
+  )
+  log.info(data)
 
   let downloadWikicommons = true
   if (rawData?.mainImage == null) {
@@ -46,26 +52,33 @@ async function action (category: string, itemId: string, arg1: string, arg2: str
     if (!cmdObj.dryRun && data.mainImage != null) {
       await fetchCommonsFile(data.mainImage, dest)
     } else {
-      console.log(`Dry run! Destination: ${chalk.green(dest)}`)
+      log.info('Dry run! Destination: %s', dest)
     }
   }
 
   if (!cmdObj.dryRun && !fs.existsSync(dest)) {
-    const src = path.join(config.localRepo, 'src', 'mgmt', 'cli', 'src', 'blank.jpg')
-    console.log(src)
+    const src = path.join(
+      config.localRepo,
+      'src',
+      'mgmt',
+      'cli',
+      'src',
+      'blank.jpg'
+    )
+    log.info(src)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
     fs.copyFileSync(src, dest)
-    console.log('No Wikicommons file. Use temporary blank file instead.')
+    log.info('No Wikicommons file. Use temporary blank file instead.')
   }
 
   const yamlFile = `${dest}.yml`
   if (!fs.existsSync(yamlFile)) {
     if (!cmdObj.dryRun) {
-      console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+      log.info('Write YAML file: %s', yamlFile)
       writeYamlFile(yamlFile, data)
     }
   } else {
-    console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
+    log.info('The YAML file already exists: %s', yamlFile)
   }
 }
 

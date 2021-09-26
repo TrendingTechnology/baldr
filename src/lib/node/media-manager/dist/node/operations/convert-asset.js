@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,12 +35,12 @@ exports.convertAsset = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const path_1 = __importDefault(require("path"));
-// Project packages.
+const client_media_models_1 = require("@bldr/client-media-models");
+const core_browser_1 = require("@bldr/core-browser");
+const log = __importStar(require("@bldr/log"));
 const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
 const media_file_classes_1 = require("../media-file-classes");
 const yaml_1 = require("../yaml");
-const core_browser_1 = require("@bldr/core-browser");
-const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
  * run of the script.
@@ -55,7 +74,7 @@ function convertAsset(filePath, cmdObj = {}) {
             mimeType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
         }
         catch (error) {
-            console.log(`Unsupported extension ${asset.extension}`);
+            log.error('Unsupported extension %s', asset.extension);
             return;
         }
         const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
@@ -147,7 +166,7 @@ function convertAsset(filePath, cmdObj = {}) {
                         metaData = (yield (0, audio_metadata_1.default)(filePath));
                     }
                     catch (error) {
-                        console.log(error);
+                        log.error(error);
                     }
                     if (metaData != null) {
                         (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
@@ -156,8 +175,8 @@ function convertAsset(filePath, cmdObj = {}) {
                 converted.add(outputFile);
             }
             else {
-                console.log(process.stdout.toString());
-                console.log(process.stderr.toString());
+                log.error(process.stdout.toString());
+                log.error(process.stderr.toString());
                 throw new Error(`ConvertError: ${filePath} -> ${outputFile}`);
             }
         }

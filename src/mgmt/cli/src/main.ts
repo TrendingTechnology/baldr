@@ -11,7 +11,7 @@ import { Command } from 'commander'
 import { checkExecutables } from '@bldr/core-node'
 import { CliTypes } from '@bldr/type-definitions'
 
-import { setLogLevel } from '@bldr/log'
+import * as log from '@bldr/log'
 import * as mediaManager from '@bldr/media-manager'
 
 // Globals.
@@ -25,7 +25,7 @@ const aliases: string[] = []
 
 function increaseVerbosity (dummyValue: any, previous: number): number {
   const newVerbositiy = previous + 1
-  setLogLevel(newVerbositiy)
+  log.setLogLevel(newVerbositiy)
   mediaManager.setLogLevel(newVerbositiy)
   return newVerbositiy
 }
@@ -106,7 +106,7 @@ function loadCommands (program: Program): void {
 }
 
 function actionHelp (): void {
-  console.log('Specify a subcommand.')
+  log.error('Specify a subcommand.')
   program.outputHelp()
   process.exit(1)
 }
@@ -152,7 +152,7 @@ async function main (): Promise<void> {
   try {
     await program.parseAsync(process.argv)
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
 
   // [
@@ -167,5 +167,5 @@ async function main (): Promise<void> {
 if (require.main === module) {
   main()
     .then()
-    .catch(reason => console.log(reason))
+    .catch(reason => log.info(reason))
 }

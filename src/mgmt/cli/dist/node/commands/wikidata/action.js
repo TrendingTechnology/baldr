@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,13 +33,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const media_categories_1 = require("@bldr/media-categories");
-const config_1 = __importDefault(require("@bldr/config"));
 const wikidata_1 = require("@bldr/wikidata");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const config_1 = __importDefault(require("@bldr/config"));
+const log = __importStar(require("@bldr/log"));
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
@@ -37,7 +55,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         }
         rawData.categories = category;
         const data = media_categories_1.categoriesManagement.process(rawData);
-        console.log(data);
+        log.info(data);
         let downloadWikicommons = true;
         if ((rawData === null || rawData === void 0 ? void 0 : rawData.mainImage) == null) {
             data.mainImage = 'blank.jpg';
@@ -51,25 +69,25 @@ function action(category, itemId, arg1, arg2, cmdObj) {
                 yield wikidata_1.fetchCommonsFile(data.mainImage, dest);
             }
             else {
-                console.log(`Dry run! Destination: ${chalk_1.default.green(dest)}`);
+                log.info('Dry run! Destination: %s', dest);
             }
         }
         if (!cmdObj.dryRun && !fs_1.default.existsSync(dest)) {
             const src = path_1.default.join(config_1.default.localRepo, 'src', 'mgmt', 'cli', 'src', 'blank.jpg');
-            console.log(src);
+            log.info(src);
             fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
             fs_1.default.copyFileSync(src, dest);
-            console.log('No Wikicommons file. Use temporary blank file instead.');
+            log.info('No Wikicommons file. Use temporary blank file instead.');
         }
         const yamlFile = `${dest}.yml`;
         if (!fs_1.default.existsSync(yamlFile)) {
             if (!cmdObj.dryRun) {
-                console.log(`Write YAML file: ${chalk_1.default.green(yamlFile)}`);
+                log.info('Write YAML file: %s', yamlFile);
                 file_reader_writer_1.writeYamlFile(yamlFile, data);
             }
         }
         else {
-            console.log(`The YAML file already exists: ${chalk_1.default.red(yamlFile)}`);
+            log.info('The YAML file already exists: %s', yamlFile);
         }
     });
 }

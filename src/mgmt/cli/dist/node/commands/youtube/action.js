@@ -33,9 +33,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+// Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const media_manager_1 = require("@bldr/media-manager");
 const youtube_api_1 = require("@bldr/youtube-api");
+const media_manager_1 = require("@bldr/media-manager");
 const log = __importStar(require("@bldr/log"));
 function requestYoutubeApi(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +61,7 @@ function action(youtubeId) {
             return;
         }
         const metaData = meta;
-        console.log(metaData);
+        log.verbose(metaData);
         const parentDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
         if (parentDir == null) {
             throw new Error('You are not in a presentation folder!');

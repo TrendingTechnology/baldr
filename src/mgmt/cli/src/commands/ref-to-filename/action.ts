@@ -4,6 +4,7 @@ import path from 'path'
 
 // Project packages.
 import { moveAsset, walk, readYamlMetaData } from '@bldr/media-manager'
+import * as log from '@bldr/log'
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -15,8 +16,8 @@ function renameFromIdOneFile (filePath: string): void {
   try {
     result = readYamlMetaData(filePath)
   } catch (error) {
-    console.log(filePath)
-    console.log(error)
+    log.error(filePath)
+    log.error(error)
     return
   }
 
@@ -30,7 +31,7 @@ function renameFromIdOneFile (filePath: string): void {
     let newPath = null
     // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
     ref = ref.replace(/.*_[A-Z]{2,}_/, '')
-    console.log(ref)
+    log.info(ref)
     if (ref !== oldBaseName) {
       newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     } else {

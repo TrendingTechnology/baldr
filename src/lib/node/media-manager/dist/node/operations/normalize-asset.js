@@ -43,7 +43,7 @@ const main_1 = require("../main");
 function queryWikidata(metaData, categoryNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
         const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, categoryCollection);
-        console.log(dataWiki);
+        log.verbose(dataWiki);
         metaData = wikidata_1.default.mergeData(metaData, dataWiki, categoryCollection);
         // To avoid blocking
         // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',

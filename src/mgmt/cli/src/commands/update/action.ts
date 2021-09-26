@@ -2,6 +2,7 @@
 import { CommandRunner } from '@bldr/cli-utils'
 
 import config from '@bldr/config'
+import * as log from '@bldr/log'
 
 import syncBuilds from '../build-sync/action.js'
 import buildVueApp from '../build/action.js'
@@ -78,8 +79,8 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     // For example:
     //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
     if (result.stdout === '') {
-      console.log(`Git repo is not clean: ${config.localRepo}`)
-      console.log(result.stdout)
+      log.info('Git repo is not clean: %s', config.localRepo)
+      log.verbose(result.stdout)
       process.exit(1)
     }
     cmd.log('Updating the local BALDR repository.')

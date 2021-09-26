@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,13 +35,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const child_process_1 = __importDefault(require("child_process"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const log = __importStar(require("@bldr/log"));
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
@@ -184,7 +202,7 @@ function getMbrainzRecordingId(filePath) {
         // 0585ec4a-487d-4944-bf59-dd9ecc325c66\n
         // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
         const musicbrainzRecordingId = process.stdout.replace(/\n.*$/s, '');
-        console.log(chalk_1.default.red(musicbrainzRecordingId));
+        log.error(musicbrainzRecordingId);
         return musicbrainzRecordingId;
     }
 }
@@ -242,7 +260,8 @@ function moveReference(oldPath, cmdObj) {
         const metaData = media_manager_1.readAssetYaml(newPath);
         if (metaData == null)
             return;
-        metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.';
+        metaData.reference_title =
+            'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.';
         metaData.author = 'Wieland Schmid';
         metaData.publisher = 'Helbling';
         metaData.release_data = 2009;
@@ -268,7 +287,7 @@ function moveFromArchive(oldPath, extension, cmdObj) {
         const newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
         if (newPath === undefined)
             return;
-        console.log(`${chalk_1.default.yellow(oldPath)} -> ${chalk_1.default.green(newPath)}`);
+        log.info('%s -> %s', oldPath, newPath);
         if (extension === 'tex') {
             moveTex(oldPath, newPath, cmdObj);
         }

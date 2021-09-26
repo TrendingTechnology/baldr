@@ -7,6 +7,7 @@ import chalk from 'chalk'
 
 // Project packages.
 import { walk } from '@bldr/media-manager'
+import * as log from '@bldr/log'
 
 function buildOneFile (filePath: string): void {
   const process = childProcess.spawnSync(
@@ -14,9 +15,9 @@ function buildOneFile (filePath: string): void {
     { cwd: path.dirname(filePath) }
   )
   if (process.status === 0) {
-    console.log(chalk.green('OK') + ' ' + filePath)
+    log.info(chalk.green('OK') + ' ' + filePath)
   } else {
-    console.log(chalk.red('ERROR') + ' ' + filePath)
+    log.info(chalk.red('ERROR') + ' ' + filePath)
   }
 }
 

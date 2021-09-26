@@ -3,11 +3,10 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import { MediaResolverTypes } from '@bldr/type-definitions'
-
 import { CommandRunner } from '@bldr/cli-utils'
-import { operations, locationIndicator } from '@bldr/media-manager'
 import { getSnippet } from '@bldr/youtube-api'
+import { MediaResolverTypes } from '@bldr/type-definitions'
+import { operations, locationIndicator } from '@bldr/media-manager'
 import * as log from '@bldr/log'
 
 interface VideoMeta {
@@ -43,7 +42,7 @@ async function action (youtubeId: string): Promise<void> {
   }
 
   const metaData = meta as MediaResolverTypes.YamlFormat
-  console.log(metaData)
+  log.verbose(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())
   if (parentDir == null) {

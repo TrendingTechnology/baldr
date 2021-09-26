@@ -1,6 +1,8 @@
 // Third party packages.
 import Color from 'color'
 
+import * as log from '@bldr/log'
+
 // See @bldr/themes/default-vars.scss
 const colors: { [key: string]: string } = {
   'white-light': '#fcfcfb',
@@ -82,7 +84,7 @@ function createGimpPalette (): void {
     const color = new Color(colors[colorName])
     lines.push(createGimpPaletteLine(color.rgb() as any, colorName))
   }
-  console.log(lines.join('\n'))
+  log.info(lines.join('\n'))
 }
 
 module.exports = createGimpPalette

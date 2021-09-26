@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,6 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
+const log = __importStar(require("@bldr/log"));
 const action_js_1 = __importDefault(require("../build-sync/action.js"));
 const action_js_2 = __importDefault(require("../build/action.js"));
 /**
@@ -77,8 +97,8 @@ function action(what, cmdObj) {
             // For example:
             //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
             if (result.stdout === '') {
-                console.log(`Git repo is not clean: ${config_1.default.localRepo}`);
-                console.log(result.stdout);
+                log.info('Git repo is not clean: %s', config_1.default.localRepo);
+                log.verbose(result.stdout);
                 process.exit(1);
             }
             cmd.log('Updating the local BALDR repository.');

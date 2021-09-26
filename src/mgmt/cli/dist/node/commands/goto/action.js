@@ -1,16 +1,34 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const open_with_1 = require("@bldr/open-with");
 const config_1 = __importDefault(require("@bldr/config"));
+const log = __importStar(require("@bldr/log"));
 function openShell(filePath) {
     child_process_1.default.spawn('zsh', ['-i'], {
         cwd: filePath,
@@ -31,10 +49,10 @@ function action(cmdObj) {
         mirroredPath = config_1.default.mediaServer.basePath;
     }
     if (!fs_1.default.existsSync(mirroredPath)) {
-        console.log(`The path “${chalk_1.default.red(mirroredPath)}” doesn’t exist.`);
+        log.error('The path “%s” doesn’t exist.', mirroredPath);
         process.exit(1);
     }
-    console.log(`Go to: ${chalk_1.default.green(mirroredPath)}`);
+    log.info('Go to: %s', mirroredPath);
     if (cmdObj.fileManager) {
         open_with_1.openInFileManager(mirroredPath, true);
     }

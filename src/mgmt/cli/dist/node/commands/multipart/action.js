@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,11 +34,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 // Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 const glob_1 = __importDefault(require("glob"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
 const media_manager_1 = require("@bldr/media-manager");
+const log = __importStar(require("@bldr/log"));
 /**
  * Rename multipart assets. Example “b mp "*.jpg" Systeme”
  *
@@ -32,7 +51,7 @@ function action(globPattern, prefix, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         const files = glob_1.default.sync(globPattern);
         if (files.length < 1) {
-            console.log('Glob matches no files.');
+            log.info('Glob matches no files.');
             return;
         }
         files.sort(undefined);
@@ -45,7 +64,7 @@ function action(globPattern, prefix, cmdObj) {
             // Omit already existent info file by the renaming.
             if (oldFileName.match(/yml$/i) == null) {
                 const newFileName = core_browser_1.formatMultiPartAssetFileName(`${prefix}.${extension}`, no);
-                console.log(`${chalk_1.default.yellow(oldFileName)} -> ${chalk_1.default.green(newFileName)}`);
+                log.info('%s -> %s', oldFileName, newFileName);
                 if (!cmdObj.dryRun)
                     fs_1.default.renameSync(oldFileName, newFileName);
                 no += 1;

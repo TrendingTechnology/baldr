@@ -8,6 +8,7 @@ import chalk from 'chalk'
 import { convertTexToMd } from '@bldr/tex-markdown-converter'
 import { locationIndicator, walk } from '@bldr/media-manager'
 import { readFile } from '@bldr/file-reader-writer'
+import * as log from '@bldr/log'
 
 /**
  * @param input - A file path or a text string to convert.
@@ -17,14 +18,14 @@ function convertTexToMarkdown (input: string): string {
   if (!fs.existsSync(input)) {
     content = input
   } else {
-    console.log(chalk.green(locationIndicator.getRelPath(input)))
+    log.info(chalk.green(locationIndicator.getRelPath(input)))
     content = readFile(input)
   }
-  console.log('\n' + chalk.yellow('Original:') + '\n')
-  console.log(content)
+  log.info('\n' + chalk.yellow('Original:') + '\n')
+  log.info(content)
   content = convertTexToMd(content)
-  console.log(chalk.green('Converted:'))
-  console.log(content)
+  log.info(chalk.green('Converted:'))
+  log.info(content)
   return content
 }
 
