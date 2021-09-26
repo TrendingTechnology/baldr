@@ -27,26 +27,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// Project packages.
-const media_manager_1 = require("@bldr/media-manager");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const log = __importStar(require("@bldr/log"));
-/**
- * Normalize the metadata files in the YAML format (sort, clean up).
- *
- * @param filePaths - An array of input files. This parameter comes from
- *   the commanders’ variadic parameter `[files...]`.
- */
-function action(filePaths) {
+const getAllFiles = function (dirPath, min = 20) {
+    const files = fs_1.default.readdirSync(dirPath);
+    if (files.length >= min) {
+        console.log('\n' + log.colorize.red(dirPath));
+        for (const file of files) {
+            console.log('  - ' + file);
+        }
+    }
+    for (const file of files) {
+        const filePath = path_1.default.join(dirPath, file);
+        if (fs_1.default.statSync(filePath).isDirectory()) {
+            getAllFiles(filePath, min);
+        }
+    }
+};
+function action(filePath, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk({
-            presentation(filePath) {
-                log.info('\nNormalize the presentation file “%s”', filePath);
-                log.info('\nNew content:\n');
-                log.info(media_manager_1.operations.normalizePresentationFile(filePath));
-            }
-        }, {
-            path: filePaths
-        });
+        let min = 20;
+        console.log(opts);
+        if (opts.min != null) {
+            min = parseInt(opts.min);
+        }
+        console.log(min);
+        getAllFiles(filePath != null ? filePath : process.cwd(), min);
     });
 }
 module.exports = action;

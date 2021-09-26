@@ -231,8 +231,9 @@ function moveMp3(oldPath, newPath, cmdObj) {
         metaData.metaType = 'composition';
         // Try to get the MusicBrainz recording ID.
         const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path);
-        if (musicbrainzRecordingId != null)
+        if (musicbrainzRecordingId != null) {
             metaData.musicbrainzRecordingId = musicbrainzRecordingId;
+        }
         metaData.source = oldPath;
         // To get ID prefix
         metaData.filePath = newPath;
