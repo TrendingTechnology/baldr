@@ -96,6 +96,7 @@ function normalizePresentationFile(filePath) {
     }
     metaSorted.title = meta.title;
     metaSorted.subtitle = meta.subtitle;
+    metaSorted.subject = meta.subject;
     metaSorted.grade = meta.grade;
     metaSorted.curriculum = meta.curriculum;
     if (meta.curriculumUrl != null) {

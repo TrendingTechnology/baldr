@@ -159,6 +159,8 @@ class DeepTitle {
         return this.titlesArray.slice(this.gradeIndexPosition + 1, this.titles.length - 1);
     }
     /**
+     * Lehrplan ab der Jahrgangsstufe, d.h. ohne `Fach Musik / 5. Jahrgangsstufe`
+     *
      * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
      */
     get curriculumFromGrade() {
@@ -213,9 +215,15 @@ class DeepTitle {
         }
         throw new Error(`“X. Jahrgangsstufe” not found in the titles: ${this.allTitles}`);
     }
+    /**
+     * German `Jahrgangsstufe`.
+     */
     get grade() {
         return parseInt(this.titles[this.gradeIndexPosition].title.replace(/[^\d]+$/, ''));
     }
+    /**
+     * List all folder titles.
+     */
     list() {
         return this.titles;
     }
@@ -226,13 +234,17 @@ class DeepTitle {
             }
         }
     }
+    /**
+     * Generate the presentation meta data.
+     */
     generatePresetationMeta() {
         const result = {
             ref: this.ref,
-            subtitle: this.subtitle,
             title: this.title,
+            subtitle: this.subtitle,
+            subject: this.subject,
             grade: this.grade,
-            curriculum: this.curriculum
+            curriculum: this.curriculumFromGrade
         };
         if (result.subtitle == null || result.subtitle === '') {
             delete result.subtitle;

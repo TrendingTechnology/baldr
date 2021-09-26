@@ -822,6 +822,7 @@ export interface Slide {
  *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
  *   title: A title
  *   sub_title: A subtitle
+ *   subject: Musik
  *   grade: The grade the presentation belongs to.
  *   curriculum: Relation to the curriculum.
  *   curriculum_url: http://curriculum.com
@@ -829,7 +830,8 @@ export interface Slide {
  */
 export interface PresentationMeta {
     /**
-     * A reference string to identify the presentation (for example: `Wiener-Klassik`)
+     * A reference string to identify the presentation (for example:
+     * `Wiener-Klassik`)
      */
     ref: string;
     /**
@@ -837,24 +839,33 @@ export interface PresentationMeta {
      */
     uuid?: string;
     /**
-     * The title of the presentation. (for example: `Das orchestrale Klangbild bei Beethoven`)
+     * The title of the presentation. (for example: `Das orchestrale Klangbild bei
+     * Beethoven`)
      */
     title: string;
     /**
-     * The subtitle of the presentation in the form: `<em class="person">Composer</em>: <em class="piece">Piece</em> (year)`.
-     * (for example: `<em class="person">Ludwig van Beethoven</em>: <em class="piece">Sinfonie Nr. 8 F-Dur op. 93</em> (1812)`)
+     * The subtitle of the presentation in the form: `<em
+     * class="person">Composer</em>: <em class="piece">Piece</em> (year)`. (for
+     * example: `<em class="person">Ludwig van Beethoven</em>: <em
+     * class="piece">Sinfonie Nr. 8 F-Dur op. 93</em> (1812)`)
      */
     subtitle?: string;
+    /**
+     * The school subject, for example `Musik` or `Informatik`.
+     */
+    subject: string;
     /**
      * The grade the presentation belongs to. (for example: `11`)
      */
     grade: number;
     /**
-     * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das Klangbild der Klassik`)
+     * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das
+     * Klangbild der Klassik`)
      */
     curriculum: string;
     /**
-     * URL of the curriculum web page. (for example: `https://www.lehrplanplus.bayern.de/fachlehrplan/gymnasium/5/musik`)
+     * URL of the curriculum web page. (for example:
+     * `https://www.lehrplanplus.bayern.de/fachlehrplan/gymnasium/5/musik`)
      */
     curriculumUrl?: string;
 }

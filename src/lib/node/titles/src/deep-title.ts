@@ -189,6 +189,8 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
   }
 
   /**
+   * Lehrplan ab der Jahrgangsstufe, d.h. ohne `Fach Musik / 5. Jahrgangsstufe`
+   *
    * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
    */
   get curriculumFromGrade (): string {
@@ -251,12 +253,18 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     )
   }
 
+  /**
+   * German `Jahrgangsstufe`.
+   */
   get grade (): number {
     return parseInt(
       this.titles[this.gradeIndexPosition].title.replace(/[^\d]+$/, '')
     )
   }
 
+  /**
+   * List all folder titles.
+   */
   list (): FolderTitle[] {
     return this.titles
   }
@@ -269,13 +277,17 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
     }
   }
 
+  /**
+   * Generate the presentation meta data.
+   */
   generatePresetationMeta (): LampTypes.PresentationMeta {
     const result: LampTypes.PresentationMeta = {
       ref: this.ref,
-      subtitle: this.subtitle,
       title: this.title,
+      subtitle: this.subtitle,
+      subject: this.subject,
       grade: this.grade,
-      curriculum: this.curriculum
+      curriculum: this.curriculumFromGrade
     }
     if (result.subtitle == null || result.subtitle === '') {
       delete result.subtitle

@@ -87,6 +87,7 @@ export function normalizePresentationFile (filePath: string): void {
   }
   metaSorted.title = meta.title
   metaSorted.subtitle = meta.subtitle
+  metaSorted.subject = meta.subject
   metaSorted.grade = meta.grade
   metaSorted.curriculum = meta.curriculum
   if (meta.curriculumUrl != null) {

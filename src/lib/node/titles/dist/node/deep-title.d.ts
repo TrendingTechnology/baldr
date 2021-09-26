@@ -70,6 +70,8 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
     get curriculum(): string;
     get curriculumTitlesArrayFromGrade(): string[];
     /**
+     * Lehrplan ab der Jahrgangsstufe, d.h. ohne `Fach Musik / 5. Jahrgangsstufe`
+     *
      * `Lernbereich 4: Musik und ihre Grundlagen / Instrumente verschiedener Gruppen`
      */
     get curriculumFromGrade(): string;
@@ -99,8 +101,17 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
      * Get the index number of the folder title object containing “X. Jahrgangsstufe”.
      */
     private get gradeIndexPosition();
+    /**
+     * German `Jahrgangsstufe`.
+     */
     get grade(): number;
+    /**
+     * List all folder titles.
+     */
     list(): FolderTitle[];
     getFolderTitleByFolderName(folderName: string): FolderTitle | undefined;
+    /**
+     * Generate the presentation meta data.
+     */
     generatePresetationMeta(): LampTypes.PresentationMeta;
 }
