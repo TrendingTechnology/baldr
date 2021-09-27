@@ -26,7 +26,7 @@ function action() {
         });
         yield cmd.exec([
             'inkscape',
-            path_1.default.join(config_1.default.mediaServer.basePath, 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
+            path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
         ], { detached: true });
     });
 }

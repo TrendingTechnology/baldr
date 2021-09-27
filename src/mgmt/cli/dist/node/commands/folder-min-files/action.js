@@ -51,11 +51,9 @@ const getAllFiles = function (dirPath, min = 20) {
 function action(filePath, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         let min = 20;
-        console.log(opts);
         if (opts.min != null) {
             min = parseInt(opts.min);
         }
-        console.log(min);
         getAllFiles(filePath != null ? filePath : process.cwd(), min);
     });
 }

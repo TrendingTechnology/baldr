@@ -12,10 +12,18 @@ async function action (): Promise<void> {
   const cmd = new CommandRunner({
     verbose: false
   })
-  await cmd.exec([
-    'inkscape',
-    path.join(config.mediaServer.basePath, 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
-  ], { detached: true })
+  await cmd.exec(
+    [
+      'inkscape',
+      path.join(
+        config.mediaServer.basePath,
+        'Musik',
+        'Inkscape-Vorlagen',
+        'Inkscape-Vorlage.svg'
+      )
+    ],
+    { detached: true }
+  )
 }
 
 export = action
