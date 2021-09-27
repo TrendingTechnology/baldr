@@ -14,6 +14,24 @@ const getters = {
   },
   rootTreeList: state => {
     return state.rootTreeList
+  },
+  relPath: state => {
+    return state.relPath
+  },
+  titleOfRelPath: (state, getters) => {
+    if (getters.relPath == null || getters.relPath === '/') {
+      return 'Alle Themen'
+    }
+    const folderNames = getters.relPath.split('/')
+    let list = getters.rootTreeList
+    let folder
+    for (const folderName of folderNames) {
+      if (list != null && list[folderName] != null) {
+        folder = list[folderName].folder
+        list = list[folderName].sub
+      }
+    }
+    return folder.title
   }
 }
 
@@ -30,8 +48,10 @@ const actions = {
     commit('setRootTreeList', response.data)
     commit('setSubTreeList', response.data)
   },
-  setSubTreeList({ commit, getters }, relPath) {
+  setSubTreeList ({ commit, getters }, relPath) {
     if (relPath == null) {
+      commit('setRelPath', '/')
+      commit('setSubTreeList', getters.rootTreeList)
       return
     }
     const folderNames = relPath.split('/')

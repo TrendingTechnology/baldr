@@ -3,6 +3,13 @@
     class="vc_titles_bread_crumbs"
     v-if="rootTreeList"
   >
+
+    <li>
+      <router-link
+        to="/titles"
+      >Alle Themen</router-link>
+    </li>
+
     <li>
       <span class="separator">/</span>
     </li>

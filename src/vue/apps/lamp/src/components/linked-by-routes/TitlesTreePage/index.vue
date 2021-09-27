@@ -1,25 +1,15 @@
 <template>
   <div
-    class="
-      vc_titles_tree_page
-      main-app-fullscreen
-    "
+    class="vc_titles_tree_page main-app-fullscreen"
     b-content-theme="default"
   >
-    <loading-icon v-if="!subTreeList"/>
+    <loading-icon v-if="!subTreeList" />
     <div v-else>
-      <titles-bread-crumbs
-        v-if="relPath"
-        :rel-path="relPath"
-      />
-      <top-level-jumpers
-        :rel-path="relPath"
-      />
+      <titles-bread-crumbs v-if="relPath" :rel-path="relPath" />
+      <top-level-jumpers :rel-path="relPath" />
       <section class="titles" v-if="subTreeList">
-        <h1>Themen</h1>
-        <tree-title-list
-          :list="subTreeList"
-        />
+        <h1 v-html="titleOfRelPath" />
+        <tree-title-list :list="subTreeList" />
       </section>
     </div>
   </div>
@@ -29,8 +19,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import type { TitlesTypes }  from '@bldr/type-definitions'
-import type { Route, NavigationGuardNext } from 'vue-router'
+import { TitlesTypes } from '@bldr/type-definitions'
+import { Route, NavigationGuardNext } from 'vue-router'
 
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
@@ -54,7 +44,7 @@ export function toRef (folderName: string): string {
 // }
 
 @Component({
-  computed: mapGetters(['subTreeList']),
+  computed: mapGetters(['subTreeList', 'titleOfRelPath']),
   components: {
     LoadingIcon,
     TitlesBreadCrumbs
@@ -63,17 +53,30 @@ export function toRef (folderName: string): string {
 export default class TitlesTreePage extends Vue {
   subTreeList!: TitlesTypes.TreeTitleList
 
+  titleOfRelPath!: string
+
   get relPath (): string | undefined {
     if (this.$route.params.relPath != null) {
       return this.$route.params.relPath
     }
   }
 
-  mounted () {
-    this.$store.dispatch('lamp/titles/loadRootTreeList')
+  beforeRouteEnter (
+    to: Route,
+    from: Route,
+    next: NavigationGuardNext<TitlesTreePage>
+  ) {
+    next(async vm => {
+      await vm.$store.dispatch('lamp/titles/loadRootTreeList')
+      vm.$store.dispatch('lamp/titles/setSubTreeList', to.params.relPath)
+    })
   }
 
-  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext<TitlesTreePage>): any {
+  beforeRouteUpdate (
+    to: Route,
+    from: Route,
+    next: NavigationGuardNext<TitlesTreePage>
+  ): any {
     this.$store.dispatch('lamp/titles/setSubTreeList', to.params.relPath)
     next()
   }
