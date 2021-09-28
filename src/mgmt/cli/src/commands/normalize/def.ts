@@ -12,7 +12,7 @@ export = validateDefintion({
   alias: 'n',
   description:
     'Combine multiple tasks to manipulate the metadata, ' +
-    'presentation and tex files. Create associated metadata files ' +
+    'presentation and TeX files. Create associated metadata files ' +
     'for new media files. Normalize the existing metadata files (sort, clean up). ' +
     'A keyboard shortcut is assigned to this task.'
 })

@@ -11,10 +11,15 @@ import * as log from '@bldr/log'
 function validateYamlOneFile (filePath: string): void {
   try {
     convertFromYamlRaw(fs.readFileSync(filePath, 'utf8'))
-    log.debug('%s: %s', log.colorize.green('ok'), filePath)
+    log.debug('Valid YAML file: %s', filePath)
   } catch (error) {
     const e = error as GenericError
-    log.error('%s: %s: %s', log.colorize.red('error'), e.name, e.message)
+    log.error(
+      'Invalid YAML file %s. Error: %s: %s',
+      filePath,
+      e.name,
+      e.message
+    )
     throw new Error(e.name)
   }
 }
@@ -25,7 +30,7 @@ interface CmdObj {
 }
 
 /**
- * Create the metadata YAML files.
+ * Execute different normalization tasks.
  *
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
@@ -43,6 +48,17 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
       )
       filePaths = [presParentDir]
     }
+  }
+
+  // `baldr normalize video.mp4.yml` only validates the YAML structure. We have
+  // to call `baldr normalize video.mp4` to get the full normalization of the
+  // metadata file video.mp4.yml.
+  if (
+    filePaths.length === 1 &&
+    filePaths[0].match(/\.yml$/) != null &&
+    filePaths[0].match(/\.baldr\.yml$/) == null
+  ) {
+    filePaths[0] = filePaths[0].replace(/\.yml$/, '')
   }
   await walk(
     {
