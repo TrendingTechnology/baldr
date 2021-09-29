@@ -55,7 +55,7 @@ interface UrlParameterCollection {
   [prop: string]: any
 }
 
-interface MasterProps {
+export interface MasterProps {
   language: string
   title: string
   oldid?: number

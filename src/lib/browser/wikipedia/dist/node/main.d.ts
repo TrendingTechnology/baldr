@@ -1,4 +1,4 @@
-interface MasterProps {
+export interface MasterProps {
     language: string;
     title: string;
     oldid?: number;
@@ -27,4 +27,3 @@ export declare function getHtmlBody(title: string, language: string, oldid?: num
  */
 export declare function formatId(language: string, title: string): string;
 export declare function formatUrl(props: MasterProps): string;
-export {};

@@ -12,7 +12,7 @@
 
 <script>
 import { masterCollection } from '@bldr/lamp-core'
-import { getHtmlBody } from './main'
+import { getHtmlBody } from '@bldr/wikipedia'
 
 export default {
   props: {
