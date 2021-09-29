@@ -11,27 +11,69 @@ import Vue from 'vue'
 
 const defaultLanguage = 'de'
 
-interface AxiosParams {
-  origin?: string
-  format?: string
+/**
+ *
+ */
+interface UrlParameterCollection {
+  /**
+   * `action=parse`
+   */
   action?: string
+
+  /**
+   * https://www.mediawiki.org/wiki/API:Cross-site_requests The
+   * MediaWiki API requires that the origin be supplied as a query
+   * string parameter, with the value being the site from which
+   * the request originates, which is matched against the Origin
+   * header required by the CORS protocol. Note that this
+   * parameter must be included in any pre-flight request, and so
+   * should be included in the query string portion of the request
+   * URI even for POST requests.
+   */
+  origin?: string
+
+  /**
+   * `json`
+   */
+  format?: string
+
+  /**
+   * Parse the content of this page. Cannot be used together with text and title.
+   */
+  page?: string
+
+  /**
+   * Parse the content of this revision. Overrides page and pageid.
+   */
+  oldid?: string
+
+  /**
+   * Which pieces of information to get.
+   */
+  prop?: string
+
+  /**
+   * Omit the limit report ("NewPP limit report") from the parser output.
+   */
+  disablelimitreport?: true
+
+  /**
+   * Omit edit section links from the parser output.
+   */
+  disableeditsection?: boolean
+
+  /**
+   * Omit table of contents in output.
+   */
+  disabletoc?: boolean
   [prop: string]: any
 }
 
 /**
  * @param language - A Wikipedia language code (for example `de`, `en`)
- * @param {Object} params
  */
-async function queryWiki (language: string, params: AxiosParams) {
+async function queryWiki (language: string, params: UrlParameterCollection) {
   if (!params.origin) {
-    // https://www.mediawiki.org/wiki/API:Cross-site_requests The
-    // MediaWiki API requires that the origin be supplied as a query
-    // string parameter, with the value being the site from which
-    // the request originates, which is matched against the Origin
-    // header required by the CORS protocol. Note that this
-    // parameter must be included in any pre-flight request, and so
-    // should be included in the query string portion of the request
-    // URI even for POST requests.
     params.origin = '*'
   }
   if (!params.format) {
@@ -88,7 +130,9 @@ export async function getFirstImage (title: string, language: string = 'de') {
   // }
   for (const pageId in response.query.pages) {
     const page = response.query.pages[pageId]
-    if (page.thumbnail) return page.thumbnail.source
+    if (page.thumbnail) {
+      return page.thumbnail.source
+    }
   }
 }
 
@@ -106,7 +150,7 @@ export async function getHtmlBody (
   language: string = 'de',
   oldid: string
 ) {
-  const params: AxiosParams = {
+  const params: UrlParameterCollection = {
     action: 'parse',
     page: title,
     prop: 'text',
@@ -132,9 +176,6 @@ export async function getHtmlBody (
 
 /**
  * Used for the Vuex store as a key.
- *
- * @param language
- * @param title
  */
 export function formatId (language: string, title: string) {
   return `${language}:${title}`
