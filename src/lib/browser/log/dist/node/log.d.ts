@@ -4,6 +4,13 @@
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
+export declare function always(...msg: any[]): void;
+/**
+ * Log on level 1.
+ *
+ * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
+ *   arguments or any arguments the function console.log() accepts.
+ */
 export declare function error(...msg: any[]): void;
 /**
  * Log on level 2.

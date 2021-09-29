@@ -14,7 +14,8 @@ function formatWithoutColor(template, ...args) {
 exports.formatWithoutColor = formatWithoutColor;
 function format(template, ...args) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
+        if (typeof value !== 'string' ||
+            (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return color.yellow(value);
@@ -24,7 +25,8 @@ function format(template, ...args) {
 exports.format = format;
 function colorizeFormat(template, args, colorFunction) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
+        if (typeof value !== 'string' ||
+            (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return colorFunction(value);

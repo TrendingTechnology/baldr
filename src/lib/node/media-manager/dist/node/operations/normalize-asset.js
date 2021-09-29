@@ -32,7 +32,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizeMediaAsset = void 0;
-const assert_1 = __importDefault(require("assert"));
 const core_browser_1 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const media_categories_1 = require("@bldr/media-categories");
@@ -54,8 +53,8 @@ function queryWikidata(metaData, categoryNames, categoryCollection) {
         return metaData;
     });
 }
-function logDiff(oldMetaData, newMetaData) {
-    log.verbose(log.colorizeDiff((0, yaml_1.convertToYaml)(oldMetaData), (0, yaml_1.convertToYaml)(newMetaData)));
+function logDiff(oldYamlMarkup, newYamlMarkup) {
+    log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup));
 }
 /**
  * @param filePath - The media asset file path.
@@ -87,11 +86,10 @@ function normalizeMediaAsset(filePath, options) {
             const newMetaData = media_categories_1.categoriesManagement.process(metaData, filePath);
             const oldMetaData = origData;
             delete oldMetaData.filePath;
-            try {
-                assert_1.default.deepStrictEqual(oldMetaData, newMetaData);
-            }
-            catch (error) {
-                logDiff(oldMetaData, newMetaData);
+            const oldYamlMarkup = (0, yaml_1.convertToYaml)(oldMetaData);
+            const newYamlMarkup = (0, yaml_1.convertToYaml)(newMetaData);
+            if (oldYamlMarkup !== newYamlMarkup) {
+                logDiff(oldYamlMarkup, newYamlMarkup);
                 (0, file_reader_writer_1.writeYamlFile)(yamlFile, newMetaData);
             }
         }

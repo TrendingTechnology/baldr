@@ -38,7 +38,10 @@ const ansiRegexp = /\u001b\[.*?m/
  */
 type FormatString = string | number
 
-export function formatWithoutColor (template: FormatString, ...args: any[]): string {
+export function formatWithoutColor (
+  template: FormatString,
+  ...args: any[]
+): string {
   if (typeof template === 'number') {
     template = template.toString()
   }
@@ -47,7 +50,10 @@ export function formatWithoutColor (template: FormatString, ...args: any[]): str
 
 export function format (template: FormatString, ...args: any[]): string {
   args = args.map(value => {
-    if (typeof value !== 'string' || (typeof value === 'string' && value?.match(ansiRegexp) != null)) {
+    if (
+      typeof value !== 'string' ||
+      (typeof value === 'string' && value?.match(ansiRegexp) != null)
+    ) {
       return value
     }
     return color.yellow(value)
@@ -55,9 +61,16 @@ export function format (template: FormatString, ...args: any[]): string {
   return formatWithoutColor(template, ...args)
 }
 
-export function colorizeFormat (template: FormatString, args: any[], colorFunction: Function): string {
+export function colorizeFormat (
+  template: FormatString,
+  args: any[],
+  colorFunction: Function
+): string {
   args = args.map(value => {
-    if (typeof value !== 'string' || (typeof value === 'string' && value?.match(ansiRegexp) != null)) {
+    if (
+      typeof value !== 'string' ||
+      (typeof value === 'string' && value?.match(ansiRegexp) != null)
+    ) {
       return value
     }
     return colorFunction(value)
@@ -65,7 +78,10 @@ export function colorizeFormat (template: FormatString, args: any[], colorFuncti
   return formatWithoutColor(template, ...args)
 }
 
-export function detectFormatTemplate (msg: any[], colorFunction: Function): any[] {
+export function detectFormatTemplate (
+  msg: any[],
+  colorFunction: Function
+): any[] {
   const firstArg = msg[0]
   if (typeof firstArg === 'number' || typeof firstArg === 'string') {
     return [colorizeFormat(firstArg, msg.slice(1), colorFunction)]

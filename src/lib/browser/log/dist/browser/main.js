@@ -1,4 +1,4 @@
-export { debug, verbose, info, warn, error, setLogLevel } from './log';
+export { always, debug, verbose, info, warn, error, setLogLevel } from './log';
 export { format, formatWithoutColor } from './format';
 export { colorizeDiff } from './diff';
 import * as colorize_1 from './color';

@@ -43,10 +43,8 @@ interface NormalizeMediaAssetOption {
   wikidata?: boolean
 }
 
-function logDiff (oldMetaData: object, newMetaData: object): void {
-  log.verbose(
-    log.colorizeDiff(convertToYaml(oldMetaData), convertToYaml(newMetaData))
-  )
+function logDiff (oldYamlMarkup: string, newYamlMarkup: string): void {
+  log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
 }
 
 /**
@@ -89,10 +87,11 @@ export async function normalizeMediaAsset (
     const newMetaData = categoriesManagement.process(metaData, filePath)
     const oldMetaData = origData as StringIndexedObject
     delete oldMetaData.filePath
-    try {
-      assert.deepStrictEqual(oldMetaData, newMetaData)
-    } catch (error) {
-      logDiff(oldMetaData, newMetaData)
+
+    const oldYamlMarkup = convertToYaml(oldMetaData)
+    const newYamlMarkup = convertToYaml(newMetaData)
+    if (oldYamlMarkup !== newYamlMarkup) {
+      logDiff(oldYamlMarkup, newYamlMarkup)
       writeYamlFile(yamlFile, newMetaData)
     }
   } catch (error) {

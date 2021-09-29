@@ -10,6 +10,16 @@ let logLevel = 0
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
+export function always (...msg: any[]): void {
+  console.log(...detectFormatTemplate(msg, colorize.green))
+}
+
+/**
+ * Log on level 1.
+ *
+ * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
+ *   arguments or any arguments the function console.log() accepts.
+ */
 export function error (...msg: any[]): void {
   if (logLevel > 0) {
     console.error(...detectFormatTemplate(msg, colorize.red))

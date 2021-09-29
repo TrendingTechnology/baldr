@@ -10,7 +10,8 @@ export function formatWithoutColor(template, ...args) {
 }
 export function format(template, ...args) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
+        if (typeof value !== 'string' ||
+            (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return color.yellow(value);
@@ -19,7 +20,8 @@ export function format(template, ...args) {
 }
 export function colorizeFormat(template, args, colorFunction) {
     args = args.map(value => {
-        if (typeof value !== 'string' || (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
+        if (typeof value !== 'string' ||
+            (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return colorFunction(value);

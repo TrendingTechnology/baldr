@@ -1,9 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.debug = exports.verbose = exports.info = exports.warn = exports.error = void 0;
+exports.setLogLevel = exports.debug = exports.verbose = exports.info = exports.warn = exports.error = exports.always = void 0;
 const format_1 = require("./format");
 const colorize = require("./color");
 let logLevel = 0;
+/**
+ * Log on level 1.
+ *
+ * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
+ *   arguments or any arguments the function console.log() accepts.
+ */
+function always(...msg) {
+    console.log(...format_1.detectFormatTemplate(msg, colorize.green));
+}
+exports.always = always;
 /**
  * Log on level 1.
  *
