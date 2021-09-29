@@ -96,7 +96,9 @@ interface MasterHooks {
    * }
    * ```
    */
-  resolveMediaUris?: (props: StringIndexedData) => string | string[] | Set<string>
+  resolveMediaUris?: (
+    props: StringIndexedData
+  ) => string | string[] | Set<string>
 
   /**
    * Check if the handed over media URIs can be resolved. Throw no errors, if
@@ -136,7 +138,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  afterLoading?: () => Promise<void>
+  afterLoading?: (payload: PropsAndMaster) => Promise<void>
 
   /**
    * This hook gets executed after the media resolution. All media assets are
@@ -415,7 +417,9 @@ interface MasterHooks {
    * }
    * ```
    */
-  afterStepNoChangeOnComponent?: (payload: OldAndNewStepNoAndSlideNoChange) => void
+  afterStepNoChangeOnComponent?: (
+    payload: OldAndNewStepNoAndSlideNoChange
+  ) => void
 
   /**
    * To allows access of the functions using the bracket notation with strings.
@@ -520,7 +524,6 @@ export interface MasterIconSpec {
 }
 
 export interface StyleConfig {
-
   centerVertically?: boolean
 
   /**
@@ -661,7 +664,9 @@ export interface Master {
    * be resolved. Called during the parsing the YAML file
    * (`Praesentation.baldr.yml`).
    */
-  resolveOptionalMediaUris: (props: StringIndexedData) => Set<string> | undefined
+  resolveOptionalMediaUris: (
+    props: StringIndexedData
+  ) => Set<string> | undefined
 
   /**
    * This hook after is called after loading. To load resources in the
@@ -683,7 +688,10 @@ export interface Master {
    *
    * @param props - The properties of the slide.
    */
-  afterMediaResolution: (props: StringIndexedData, thisArg: ThisArg) => Promise<void>
+  afterMediaResolution: (
+    props: StringIndexedData,
+    thisArg: ThisArg
+  ) => Promise<void>
 
   /**
    * Collect the props (properties) for the main Vue component.
@@ -692,7 +700,10 @@ export interface Master {
    *
    * @returns The props for the main component as a object.
    */
-  collectPropsMain: (props: StringIndexedData, thisArg: ThisArg) => StringIndexedData
+  collectPropsMain: (
+    props: StringIndexedData,
+    thisArg: ThisArg
+  ) => StringIndexedData
 
   /**
    * Collect the props (properties) for the preview Vue component. Called
@@ -702,7 +713,10 @@ export interface Master {
    *
    * @returns The props for the preview component as a object.
    */
-  collectPropsPreview: (payload: PropsAndSlide, thisArg: ThisArg) => StringIndexedData
+  collectPropsPreview: (
+    payload: PropsAndSlide,
+    thisArg: ThisArg
+  ) => StringIndexedData
 
   /**
    * Calculate from the given props the step count. This hook method is called
@@ -751,7 +765,10 @@ export interface Master {
    * - `this`: is the Vue instance of the current main master component.
    * - called from the master component mixin in the file `masters.js`.
    */
-  afterSlideNoChangeOnComponent: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void
+  afterSlideNoChangeOnComponent: (
+    payload: OldAndNewPropsAndSlide,
+    thisArg: ThisArg
+  ) => void
 
   /**
    * Called when leaving a step. This hook is only called on the public master
@@ -782,7 +799,12 @@ export interface Master {
    * - `this`: is the Vue instance of the current main master component.
    * - called from the master component mixin in the file `masters.js`.
    */
-  afterStepNoChangeOnComponent: (payload: OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg) => void
+  afterStepNoChangeOnComponent: (
+    payload: OldAndNewStepNoAndSlideNoChange,
+    thisArg: ThisArg
+  ) => void
+
+  $commit: (commitName: string, payload: any) => void
 }
 
 /**

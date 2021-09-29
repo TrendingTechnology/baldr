@@ -11,11 +11,18 @@ import Vue from 'vue'
 
 const defaultLanguage = 'de'
 
+interface AxiosParams {
+  origin?: string
+  format?: string
+  action?: string
+  [prop: string]: any
+}
+
 /**
- * @param {String} language - A Wikipedia language code (for example `de`, `en`)
+ * @param language - A Wikipedia language code (for example `de`, `en`)
  * @param {Object} params
  */
-async function queryWiki (language, params) {
+async function queryWiki (language: string, params: AxiosParams) {
   if (!params.origin) {
     // https://www.mediawiki.org/wiki/API:Cross-site_requests The
     // MediaWiki API requires that the origin be supplied as a query
@@ -27,7 +34,9 @@ async function queryWiki (language, params) {
     // URI even for POST requests.
     params.origin = '*'
   }
-  if (!params.format) params.format = 'json'
+  if (!params.format) {
+    params.format = 'json'
+  }
   const response = await axios.get(
     `https://${language}.wikipedia.org/w/api.php`,
     { params }
@@ -35,18 +44,18 @@ async function queryWiki (language, params) {
   if (response.status === 200) {
     return response.data
   }
-  throw new Error(response)
+  throw new Error(`Axios error: {response.status}`)
 }
 
 /**
- * @param {String} title - The title of a Wikipedia page (for example
+ * @param title - The title of a Wikipedia page (for example
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).
- * @param {String} language - A Wikipedia language code (for example `de`, `en`)
+ * @param language - A Wikipedia language code (for example `de`, `en`)
  *   {@link https://en.wikipedia.org/wiki/List_of_Wikipedias}.
  *
  * @see {@link https://www.mediawiki.org/wiki/Extension:PageImages}
  */
-export async function getFirstImage (title, language = 'de') {
+export async function getFirstImage (title: string, language: string = 'de') {
   const response = await queryWiki(language, {
     action: 'query',
     titles: title,
@@ -92,8 +101,12 @@ export async function getFirstImage (title, language = 'de') {
  * @see {@link https://www.mediawiki.org/wiki/API:Get_the_contents_of_a_page}
  * @see {@link https://www.mediawiki.org/wiki/API:Parsing_wikitext}
  */
-export async function getHtmlBody (title, language = 'de', oldid) {
-  const params = {
+export async function getHtmlBody (
+  title: string,
+  language: string = 'de',
+  oldid: string
+) {
+  const params: AxiosParams = {
     action: 'parse',
     page: title,
     prop: 'text',
@@ -110,52 +123,64 @@ export async function getHtmlBody (title, language = 'de', oldid) {
   if (response.parse) {
     const body = response.parse.text['*']
     // Fix links
-    return body.replace(/href="\/wiki\//g, `href="https://${language}.wikipedia.org/wiki/`)
+    return body.replace(
+      /href="\/wiki\//g,
+      `href="https://${language}.wikipedia.org/wiki/`
+    )
   }
 }
 
 /**
  * Used for the Vuex store as a key.
  *
- * @param {String} language
- * @param {String} title
+ * @param language
+ * @param title
  */
-export function formatId (language, title) {
+export function formatId (language: string, title: string) {
   return `${language}:${title}`
 }
 
-/**
- *
- * @param {Object} props
- *
- * @returns {String}
- */
-function formatUrl (props) {
+function formatUrl (props: any): string {
   let oldid = ''
-  if (props.oldid) oldid = `&oldid=${props.oldid}`
+  if (props.oldid) {
+    oldid = `&oldid=${props.oldid}`
+  }
   const title = props.title.replace(/ /g, '_')
   return `https://${props.language}.wikipedia.org/w/index.php?title=${title}&redirect=no${oldid}`
 }
 
-const state = {
+interface State {
+  thumbnailUrls: {
+    [id: string]: string
+  }
+  bodies: {
+    [id: string]: string
+  }
+}
+
+const state: State = {
   thumbnailUrls: {},
   bodies: {}
 }
 
 const getters = {
-  bodyById: state => id => {
-    if (state.bodies[id]) return state.bodies[id]
+  bodyById: (state: State) => (id: string) => {
+    if (state.bodies[id]) {
+      return state.bodies[id]
+    }
   },
-  thumbnailUrlById: state => id => {
-    if (state.thumbnailUrls[id]) return state.thumbnailUrls[id]
+  thumbnailUrlById: (state: State) => (id: string) => {
+    if (state.thumbnailUrls[id]) {
+      return state.thumbnailUrls[id]
+    }
   }
 }
 
 const mutations = {
-  addBody (state, { id, body }) {
+  addBody (state: State, { id, body }: any) {
     Vue.set(state.bodies, id, body)
   },
-  addThumbnailUrl (state, { id, thumbnailUrl }) {
+  addThumbnailUrl (state: State, { id, thumbnailUrl }: any) {
     Vue.set(state.thumbnailUrls, id, thumbnailUrl)
   }
 }
@@ -167,11 +192,13 @@ export default validateMasterSpec({
     title: {
       type: String,
       required: true,
-      description: 'Der Titel des Wikipedia-Artikels (z. B. „Ludwig_van_Beethoven“).'
+      description:
+        'Der Titel des Wikipedia-Artikels (z. B. „Ludwig_van_Beethoven“).'
     },
     language: {
       type: String,
-      description: 'Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“).',
+      description:
+        'Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“).',
       default: defaultLanguage
     },
     oldid: {
@@ -214,9 +241,13 @@ export default validateMasterSpec({
     async afterLoading ({ props, master }) {
       const id = formatId(props.language, props.title)
       const body = await getHtmlBody(props.title, props.language, props.oldid)
-      if (body) master.$commit('addBody', { id, body })
+      if (body) {
+        master.$commit('addBody', { id, body })
+      }
       const thumbnailUrl = await getFirstImage(props.title, props.language)
-      if (thumbnailUrl) master.$commit('addThumbnailUrl', { id, thumbnailUrl })
+      if (thumbnailUrl) {
+        master.$commit('addThumbnailUrl', { id, thumbnailUrl })
+      }
     },
     collectPropsMain (props) {
       return {

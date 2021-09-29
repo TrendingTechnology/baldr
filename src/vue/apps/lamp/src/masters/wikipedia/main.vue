@@ -1,16 +1,18 @@
 <template>
   <div class="vc_wikipedia_master main-app-padding">
-    <div class="title-header" >
-      <h1>Wikipedia-Artikel: <em>{{ titleWithoutUnderscores }}</em></h1>
+    <div class="title-header">
+      <h1>
+        Wikipedia-Artikel: <em>{{ titleWithoutUnderscores }}</em>
+      </h1>
       <a :href="httpUrl">{{ linkTitle }}</a>
     </div>
-    <div v-html="body"/>
+    <div v-html="body" />
   </div>
 </template>
 
 <script>
 import { masterCollection } from '@bldr/lamp-core'
-import { getHtmlBody } from './main.js'
+import { getHtmlBody } from './main'
 
 export default {
   props: {
@@ -59,21 +61,20 @@ export default {
 }
 </script>
 <style lang="scss">
-  // https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/CSS/Selektoren_unter_MediaWiki
-  // https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/MediaWiki#wmfCSS
-  .vc_wikipedia_master {
+// https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/CSS/Selektoren_unter_MediaWiki
+// https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/MediaWiki#wmfCSS
+.vc_wikipedia_master {
+  .title-header {
+    display: flex;
+    justify-content: space-between;
 
-    .title-header {
-      display: flex;
-      justify-content: space-between;
-
-      h1 {
-        margin-top: 0;
-      }
+    h1 {
+      margin-top: 0;
     }
+  }
 
-    // Belege fehlen
-    .noprint,
+  // Belege fehlen
+  .noprint,
     // Personendaten
     .metadata,
     // "Beethoven" redirects here. For other uses, see Beethoven (disambiguation).
@@ -88,35 +89,37 @@ export default {
     .navbox,
     // Hochgestellte Zahlen zu den Zitaten
     sup.reference {
-      display: none;
-    }
-
-    .tleft, .float-left {
-      clear: left; // To avoid stacked floats
-      float: left;
-    }
-
-    .tright, .infobox, .float-right {
-      clear: right; // To avoid stacked floats
-      float: right;
-    }
-
-    .tleft {
-      margin-right: 1em;
-    }
-
-    .tright {
-      margin-left: 1em;
-    }
-
-    .thumbcaption {
-      font-size: 0.7em;
-    }
-
-    // Overwrite default theme
-    tr {
-      border: none !important;
-    }
-
+    display: none;
   }
+
+  .tleft,
+  .float-left {
+    clear: left; // To avoid stacked floats
+    float: left;
+  }
+
+  .tright,
+  .infobox,
+  .float-right {
+    clear: right; // To avoid stacked floats
+    float: right;
+  }
+
+  .tleft {
+    margin-right: 1em;
+  }
+
+  .tright {
+    margin-left: 1em;
+  }
+
+  .thumbcaption {
+    font-size: 0.7em;
+  }
+
+  // Overwrite default theme
+  tr {
+    border: none !important;
+  }
+}
 </style>

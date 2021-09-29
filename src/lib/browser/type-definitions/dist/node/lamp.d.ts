@@ -124,7 +124,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    afterLoading?: () => Promise<void>;
+    afterLoading?: (payload: PropsAndMaster) => Promise<void>;
     /**
      * This hook gets executed after the media resolution. All media assets are
      * resolved and stored in the corresponding caches. This hook does not go into
@@ -708,6 +708,7 @@ export interface Master {
      * - called from the master component mixin in the file `masters.js`.
      */
     afterStepNoChangeOnComponent: (payload: OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg) => void;
+    $commit: (commitName: string, payload: any) => void;
 }
 /**
  * Meta informations can be added to each slide. All properties are possibly
