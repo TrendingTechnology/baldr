@@ -1,8 +1,8 @@
 <template>
   <div class="vc_title_tree_list">
-    <ul :class="`ul-level-${level}`" v-if="hasChilds">
+    <ul v-if="hasChilds">
       <li v-for="treeTitle in listSorted" :key="treeTitle.folder.relPath">
-        <tree-title :title="treeTitle" :level="level"/>
+        <tree-title :title="treeTitle" />
       </li>
     </ul>
   </div>
@@ -18,8 +18,18 @@ export default class TreeTitleList extends Vue {
   @Prop()
   readonly list!: TitlesTypes.TreeTitleList
 
-  @Prop()
-  readonly level!: number
+  get level (): number {
+    if (this.list == null) {
+      return 1
+    }
+    for (const key in this.list) {
+      const title = this.list[key]
+      if (title.folder.level != null) {
+        return title.folder.level
+      }
+    }
+    return 1
+  }
 
   get hasChilds (): boolean {
     return this.list != null && Object.keys(this.list).length > 0
@@ -45,16 +55,16 @@ export default class TreeTitleList extends Vue {
     content: '' !important;
   }
 
-  ul {
-    padding-left: 2em !important;
-  }
+  // ul {
+  //   padding-left: 2em !important;
+  // }
 
-  ul.ul-level-1 {
-    margin-bottom: 2em;
-  }
+  // > ul {
+  //   margin-bottom: 2em;
+  // }
 
-  .ul-level-1 > li {
-    margin-top: 1em;
-  }
+  // .ul-level-1 > li {
+  //   margin-top: 1em;
+  // }
 }
 </style>

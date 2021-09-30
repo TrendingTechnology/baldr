@@ -1,7 +1,7 @@
 <template>
   <div class="vc_tree_title">
     <title-link :folder="title.folder" />
-    <tree-title-list :list="title.sub" :level="level" />
+    <tree-title-list :list="title.sub" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default class TreeTitle extends Vue {
 
   get level (): number {
     if (this.title.folder.level != null) {
-      return this.title.folder.level + 1
+      return this.title.folder.level
     }
     return 0
   }

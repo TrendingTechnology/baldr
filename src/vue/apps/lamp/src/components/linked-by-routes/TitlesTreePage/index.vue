@@ -9,7 +9,7 @@
       <top-level-jumpers :rel-path="relPath" />
       <section class="titles" v-if="subTreeList">
         <h1 v-html="titleOfRelPath" />
-        <tree-title-list :list="subTreeList" level="1"/>
+        <tree-title-list :list="subTreeList" />
       </section>
     </div>
   </div>
@@ -96,6 +96,36 @@ export default class TitlesTreePage extends Vue {
   .vc_titles_bread_crumbs {
     margin: 0.3em;
     font-size: 0.8em;
+  }
+
+  ul {
+    li {
+      margin-top: 2em;
+      font-weight: bold;
+      font-family: $font-family-sans;
+      font-size: 1.1em;
+    }
+
+    ul {
+      li {
+        margin-top: 1em;
+        font-size: 0.9em;
+      }
+
+      ul {
+        li {
+          margin-top: 0.5em;
+          font-weight: normal;
+          font-family: $font-family-serif;
+        }
+
+        ul {
+          li {
+            margin-top: 0em;
+          }
+        }
+      }
+    }
   }
 }
 </style>
