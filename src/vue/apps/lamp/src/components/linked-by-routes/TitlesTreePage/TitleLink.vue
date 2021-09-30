@@ -5,9 +5,12 @@
       :title="`ID: ${presRef}`"
       @click="openPresentation(presRef)"
       class="title link"
-      v-html="folder.title"
       v-if="folder.hasPresentation"
-    />
+    >
+      <plain-icon name="presentation" />&nbsp;
+      <span v-html="folder.title"></span>
+    </span>
+
     <router-link
       :to="`/titles/${this.folder.relPath}`"
       class="title"
