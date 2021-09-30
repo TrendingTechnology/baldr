@@ -2,13 +2,7 @@ import { validateDefintion } from '../../main.js'
 
 export = validateDefintion({
   command: 'normalize [files...]',
-  options: [
-    ['-w, --wikidata', 'Call wikidata to enrich the metadata.'],
-    [
-      '--parent-pres-dir',
-      'Run the normalize command on all files in the parent presentation folder.'
-    ]
-  ],
+  options: [['-w, --wikidata', 'Call wikidata to enrich the metadata.']],
   alias: 'n',
   description:
     'Combine multiple tasks to manipulate the metadata, ' +

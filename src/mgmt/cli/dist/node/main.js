@@ -57,16 +57,30 @@ function increaseVerbosity(dummyValue, previous) {
 }
 const program = new commander_1.Command();
 program.option('-v, --verbose', 'Be more verbose', increaseVerbosity, 2);
+program.option('--parent-pres-dir', 'Run the normalize command on all files in the parent presentation folder.');
 program.on('command:*', function () {
     console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
     process.exit(1);
 });
+function convertPathArgToParentPresDir(args) {
+    const allOpts = collectAllOpts(program);
+    if (allOpts.parentPresDir != null &&
+        allOpts.parentPresDir === true &&
+        Array.isArray(args[0]) &&
+        typeof args[0][0] === 'string') {
+        const presParentDir = mediaManager.locationIndicator.getPresParentDir(args[0][0]);
+        if (presParentDir != null) {
+            log.info('--parent-pres-dir: Run the task on the parent presentation folder: %s', presParentDir);
+            args[0][0] = presParentDir;
+        }
+    }
+    return args;
+}
 /**
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
  *
  * @param commandName - The name of the command.
- * @param def
  */
 function actionHandler(commandName, def) {
     return function (...args) {
@@ -76,10 +90,12 @@ function actionHandler(commandName, def) {
         // eslint-disable-next-line
         const action = require(path_1.default.join(commandsPath, commandName, 'action.js'));
         args = [...arguments, program.opts()];
+        args = convertPathArgToParentPresDir(args);
         // To be able to export some functions other than
         // the action function from the subcommands.
-        if (typeof action === 'function')
+        if (typeof action === 'function') {
             return action(...args);
+        }
         return action.action(...args);
     };
 }

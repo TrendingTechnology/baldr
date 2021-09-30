@@ -32,6 +32,12 @@ function increaseVerbosity (dummyValue: any, previous: number): number {
 
 const program = new Command()
 program.option('-v, --verbose', 'Be more verbose', increaseVerbosity, 2)
+
+program.option(
+  '--parent-pres-dir',
+  'Run the normalize command on all files in the parent presentation folder.'
+)
+
 program.on('command:*', function () {
   console.error(
     'Invalid command: %s\nSee --help for a list of available commands.',
@@ -42,12 +48,33 @@ program.on('command:*', function () {
 
 type ActionHandlerFunction = (...args: any[]) => void | Promise<void>
 
+function convertPathArgToParentPresDir (args: any[]): any[] {
+  const allOpts = collectAllOpts(program)
+  if (
+    allOpts.parentPresDir != null &&
+    allOpts.parentPresDir === true &&
+    Array.isArray(args[0]) &&
+    typeof args[0][0] === 'string'
+  ) {
+    const presParentDir = mediaManager.locationIndicator.getPresParentDir(
+      args[0][0]
+    )
+    if (presParentDir != null) {
+      log.info(
+        '--parent-pres-dir: Run the task on the parent presentation folder: %s',
+        presParentDir
+      )
+      args[0][0] = presParentDir
+    }
+  }
+  return args
+}
+
 /**
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
  *
  * @param commandName - The name of the command.
- * @param def
  */
 function actionHandler (
   commandName: string,
@@ -61,9 +88,13 @@ function actionHandler (
     const action = require(path.join(commandsPath, commandName, 'action.js'))
 
     args = [...arguments, program.opts()]
+    args = convertPathArgToParentPresDir(args)
+
     // To be able to export some functions other than
     // the action function from the subcommands.
-    if (typeof action === 'function') return action(...args)
+    if (typeof action === 'function') {
+      return action(...args)
+    }
     return action.action(...args)
   }
 }
