@@ -23,7 +23,8 @@ function getPropertyFromReference(filePath, prop) {
     if (filePath != null) {
         const ref = core_node_2.getBasename(filePath);
         if (references[ref] == null) {
-            throw new Error(`References not found for ${ref} of ${filePath}`);
+            console.error(`References not found for ${ref} of ${filePath}`);
+            return;
         }
         const reference = references[ref];
         if (reference[prop] != null) {

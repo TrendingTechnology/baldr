@@ -55,8 +55,7 @@ function renameByRef(filePath) {
         // -> sPg1qlLjUVQ
         if (refs != null) {
             for (const pathRef of refs) {
-                ref = ref.replace(new RegExp(`^${pathRef}`), '');
-                ref = ref.replace(/^_/, '');
+                ref = ref.replace(new RegExp(`^${pathRef}_`), '');
             }
         }
         // Old approach:
