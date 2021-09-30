@@ -66,12 +66,29 @@ declare class LocationIndicator {
      */
     getRelPath(currentPath: string): string | undefined;
     /**
-     * Get the path relative to one of the base paths and `currentPath`.
+     * Get the base path. If the base path and the relative path are combined,
+     * the absolute path is created.
      *
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
      */
     getBasePath(currentPath: string): string | undefined;
+    /**
+     * Create for each path segment of the relative path a reference (ref) string.
+     *
+     * This path
+     *
+     * `/var/data/baldr/media/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau/TX`
+     *
+     * is converted into
+     *
+     * ```js
+     * ['12', 'Interpreten', 'Auffuehrungspraxis', 'Instrumentenbau', 'TX']
+     * ```
+     * @param currentPath - The path of a file or a directory inside
+     *   a media server folder structure or inside its archive folders.
+     */
+    getRefOfSegments(currentPath: string): string[] | undefined;
     /**
      * The mirrored path of the current give file path, for example:
      *

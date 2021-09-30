@@ -93,8 +93,9 @@ class LocationIndicator {
     isInDeactivatedDir(currentPath) {
         currentPath = path_1.default.dirname(currentPath);
         const relPath = this.getRelPath(currentPath);
-        if (relPath == null)
+        if (relPath == null) {
             return true;
+        }
         const segments = relPath.split(path_1.default.sep);
         for (const segment of segments) {
             if (segment.match(/^\d\d/) == null) {
@@ -123,7 +124,8 @@ class LocationIndicator {
         }
     }
     /**
-     * Get the path relative to one of the base paths and `currentPath`.
+     * Get the base path. If the base path and the relative path are combined,
+     * the absolute path is created.
      *
      * @param currentPath - The path of a file or a directory inside
      *   a media server folder structure or inside its archive folders.
@@ -140,6 +142,34 @@ class LocationIndicator {
         if (basePath !== undefined) {
             return basePath.replace(new RegExp(`${path_1.default.sep}$`), '');
         }
+    }
+    /**
+     * Create for each path segment of the relative path a reference (ref) string.
+     *
+     * This path
+     *
+     * `/var/data/baldr/media/12/10_Interpreten/20_Auffuehrungspraxis/20_Instrumentenbau/TX`
+     *
+     * is converted into
+     *
+     * ```js
+     * ['12', 'Interpreten', 'Auffuehrungspraxis', 'Instrumentenbau', 'TX']
+     * ```
+     * @param currentPath - The path of a file or a directory inside
+     *   a media server folder structure or inside its archive folders.
+     */
+    getRefOfSegments(currentPath) {
+        currentPath = path_1.default.resolve(currentPath);
+        const relPath = this.getRelPath(path_1.default.dirname(currentPath));
+        if (relPath == null) {
+            return;
+        }
+        const segments = relPath.split(path_1.default.sep);
+        const result = [];
+        for (const segment of segments) {
+            result.push(segment.replace(/\d{2,}_/, ''));
+        }
+        return result;
     }
     /**
      * The mirrored path of the current give file path, for example:

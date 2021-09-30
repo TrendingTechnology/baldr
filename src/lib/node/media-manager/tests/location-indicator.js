@@ -5,7 +5,10 @@ const path = require('path')
 const { locationIndicator } = require('../dist/node/location-indicator')
 const config = require('@bldr/config')
 
-function getPath (relPath) {
+const testRelPath =
+  'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
+
+function getAbsPath (relPath) {
   return path.join(config.mediaServer.basePath, relPath)
 }
 
@@ -14,33 +17,43 @@ describe('Package “@bldr/media-manager”', function () {
     describe('Method getPresParentDir()', function () {
       it('defined', function () {
         assert.strictEqual(
-          locationIndicator.getPresParentDir(
-            getPath(
-              'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
-            )
-          ),
-          getPath('Musik/10/10_Kontext/40_Jazz/10_Entstehung')
+          locationIndicator.getPresParentDir(getAbsPath(testRelPath)),
+          getAbsPath('Musik/10/10_Kontext/40_Jazz/10_Entstehung')
         )
       })
 
       it('undefined', function () {
         assert.strictEqual(
-          locationIndicator.getPresParentDir(getPath('xxxxxxxxxxxxxxxxxxxxx')),
+          locationIndicator.getPresParentDir(getAbsPath('xxxxxxxxxxxxxxxxxxxxx')),
           undefined
         )
       })
     })
 
-    it('Method isInArchive()', function () {
+    it('Method getRelPath()', function () {
+      assert.strictEqual(locationIndicator.getRelPath(getAbsPath(testRelPath)), testRelPath)
+    })
+
+    it('Method getBasePath()', function () {
       assert.strictEqual(
-        locationIndicator.isInArchive(
-          path.join(
-            config.mediaServer.archivePaths[0],
-            'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'
-          )
-        ),
-        true
+        locationIndicator.getBasePath(getAbsPath(testRelPath)),
+        config.mediaServer.basePath
       )
+    })
+
+    it('Method isInArchive()', function () {
+      assert.strictEqual(locationIndicator.isInArchive(path.join(config.mediaServer.archivePaths[0], testRelPath)), true)
+    })
+
+    it('Method getRefOfSegments()', function () {
+      assert.deepStrictEqual(locationIndicator.getRefOfSegments(getAbsPath(testRelPath)), [
+        'Musik',
+        '10',
+        'Kontext',
+        'Jazz',
+        'Entstehung',
+        'HB'
+      ])
     })
   })
 })

@@ -25,12 +25,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.renameByRef = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
-const media_categories_1 = require("@bldr/media-categories");
 const log = __importStar(require("@bldr/log"));
 // Project packages.
 const main_1 = require("../main");
+const location_indicator_1 = require("../location-indicator");
 /**
- * Rename a media asset after the `ref` in the meta data file.
+ * Rename a media asset after the `ref` (reference) property in the metadata file.
  *
  * @param filePath - The media asset file path.
  */
@@ -40,17 +40,31 @@ function renameByRef(filePath) {
         result = (0, main_1.readYamlMetaData)(filePath);
     }
     catch (error) {
+        log.error(error);
         return;
     }
     if (result.ref != null) {
         let ref = result.ref;
         const oldPath = filePath;
+        const refs = location_indicator_1.locationIndicator.getRefOfSegments(filePath);
+        // 10_Ausstellung-Ueberblick/NB/01_Gnom.svg.yml
+        // ref: Ausstellung-Ueberblick_NB_01_Gnom
+        // -> 01_Gnom
+        // 10_Ausstellung-Ueberblick/YT/sPg1qlLjUVQ.mp4.yml
+        // ref: YT_sPg1qlLjUVQ
+        // -> sPg1qlLjUVQ
+        if (refs != null) {
+            for (const pathRef of refs) {
+                ref = ref.replace(new RegExp(`^${pathRef}`), '');
+                ref = ref.replace(/^_/, '');
+            }
+        }
+        // Old approach:
+        // ref = ref.replace(new RegExp('.*_' + getTwoLetterRegExp() + '_'), '')
         // .mp4
         const extension = path_1.default.extname(oldPath);
         const oldBaseName = path_1.default.basename(oldPath, extension);
         let newPath = null;
-        // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
-        ref = ref.replace(new RegExp('.*_' + (0, media_categories_1.getTwoLetterRegExp)() + '_'), '');
         if (ref === oldBaseName) {
             return;
         }

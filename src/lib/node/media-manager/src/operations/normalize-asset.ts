@@ -1,5 +1,3 @@
-import assert from 'assert'
-
 import { deepCopy, msleep } from '@bldr/core-browser'
 import {
   MediaResolverTypes,
