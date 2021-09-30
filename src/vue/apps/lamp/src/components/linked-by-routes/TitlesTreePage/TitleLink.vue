@@ -14,14 +14,15 @@
       v-else
       v-html="folder.title"
     />
-    <span v-if="folder.subtitle"> -
-      <span class="subtitle" v-html="folder.subtitle"/>
+    <span v-if="folder.subtitle">
+      -
+      <span class="subtitle" v-html="folder.subtitle" />
     </span>
   </span>
 </template>
 
 <script lang="ts">
-import type { TitlesTypes, LampTypes } from '@bldr/type-definitions'
+import { TitlesTypes, LampTypes } from '@bldr/type-definitions'
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { createNamespacedHelpers } from 'vuex'

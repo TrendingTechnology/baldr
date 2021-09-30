@@ -9,7 +9,7 @@
       <top-level-jumpers :rel-path="relPath" />
       <section class="titles" v-if="subTreeList">
         <h1 v-html="titleOfRelPath" />
-        <tree-title-list :list="subTreeList" />
+        <tree-title-list :list="subTreeList" level="1"/>
       </section>
     </div>
   </div>

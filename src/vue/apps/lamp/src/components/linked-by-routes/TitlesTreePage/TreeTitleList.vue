@@ -1,21 +1,15 @@
 <template>
   <div class="vc_title_tree_list">
-    <ul
-      :class="`ul-level-${level}`"
-      v-if="hasChilds"
-    >
-      <li
-        v-for="treeTitle in listSorted"
-        :key="treeTitle.folder.relPath"
-      >
-        <tree-title :title="treeTitle"/>
+    <ul :class="`ul-level-${level}`" v-if="hasChilds">
+      <li v-for="treeTitle in listSorted" :key="treeTitle.folder.relPath">
+        <tree-title :title="treeTitle" :level="level"/>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import type { TitlesTypes } from '@bldr/type-definitions'
+import { TitlesTypes } from '@bldr/type-definitions'
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
@@ -28,10 +22,7 @@ export default class TreeTitleList extends Vue {
   readonly level!: number
 
   get hasChilds (): boolean {
-    return (
-      this.list != null &&
-      Object.keys(this.list).length > 0
-    )
+    return this.list != null && Object.keys(this.list).length > 0
   }
 
   get listSorted (): TitlesTypes.TreeTitle[] {

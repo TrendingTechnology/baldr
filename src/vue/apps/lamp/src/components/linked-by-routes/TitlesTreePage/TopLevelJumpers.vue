@@ -1,21 +1,15 @@
 <template>
   <div class="vc_top_level_jumpers" v-if="topTitles">
     <span class="separator">→</span>
-    <span
-      v-for="title in topTitles"
-      :key="title.relPath"
-    >
-      <router-link
-        :to="title.relPath"
-        v-html="title.title"
-      />
+    <span v-for="title in topTitles" :key="title.relPath">
+      <router-link :to="title.relPath" v-html="title.title" />
       <span class="separator">~</span>
     </span>
   </div>
 </template>
 
 <script lang="ts">
-import type { TitlesTypes } from '@bldr/type-definitions'
+import { TitlesTypes } from '@bldr/type-definitions'
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
@@ -29,7 +23,7 @@ interface TopTitle {
 }
 
 @Component({
-  computed: mapGetters(['rootTreeList'])
+  computed: mapGetters(['subTreeList'])
 })
 export default class TopLevelJumpers extends Vue {
   @Prop({
@@ -37,25 +31,12 @@ export default class TopLevelJumpers extends Vue {
   })
   relPath!: string
 
-  rootTreeList!: TitlesTypes.TreeTitleList
+  subTreeList!: TitlesTypes.TreeTitleList
 
   get topTitles (): TopTitle[] | undefined {
-    let treeTitleList = this.rootTreeList
-    let treeTitle: TitlesTypes.TreeTitle | undefined
-    if (this.relPath != null) {
-      const segments = this.relPath.split('/')
-      for (const folderName of segments) {
-        if (treeTitleList && treeTitleList[folderName]) {
-          treeTitle = treeTitleList[folderName]
-        }
-      }
-    }
-    if (treeTitle == null || Object.keys(treeTitle.sub).length === 0) {
-      return
-    }
     const topTitles = []
-    for (const folderName of Object.keys(treeTitle.sub).sort()) {
-      const topTitle = treeTitle.sub[folderName].folder
+    for (const folderName of Object.keys(this.subTreeList).sort()) {
+      const topTitle = this.subTreeList[folderName].folder
       if (topTitle) {
         topTitles.push({
           title: topTitle.title,

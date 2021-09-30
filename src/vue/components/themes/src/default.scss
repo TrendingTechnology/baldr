@@ -4,17 +4,18 @@
 
 @mixin important {
   font-family: 'Alegreya Sans';
-  font-weight: bolder
+  font-weight: bolder;
 }
 
 /**********************************************************************
  * all: ui + content
  *********************************************************************/
 
-$link-color: scale-color($gray, $lightness: -40%);
+//$link-color: scale-color($gray, $lightness: -40%);
+$link-color: scale-color($blue, $lightness: -30%);
 
-[b-ui-theme="default"], [b-content-theme="default"] {
-
+[b-ui-theme='default'],
+[b-content-theme='default'] {
   :fullscreen {
     background-color: $white;
   }
@@ -25,18 +26,23 @@ $link-color: scale-color($gray, $lightness: -40%);
   font-family: $font-family;
   //font-size: $font-size;
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: 'Alegreya Sans';
     font-weight: 700;
   }
 
   // @click activated link like elements
-  a, .link {
+  a,
+  .link {
     color: $link-color;
     cursor: pointer;
     text-decoration: none;
 
-    &:link, &:visited {
+    &:link,
+    &:visited {
       color: $link-color;
     }
 
@@ -61,7 +67,7 @@ $link-color: scale-color($gray, $lightness: -40%);
     padding: 0 0.1em;
   }
 
-  pre  {
+  pre {
     background-color: scale-color($gray, $lightness: 50%);
     padding: 0.3em;
     overflow-y: auto;
@@ -84,7 +90,9 @@ $link-color: scale-color($gray, $lightness: -40%);
     font-family: $font-family-small-caps;
   }
 
-  h1 .person, h2 .person, h3 .person,
+  h1 .person,
+  h2 .person,
+  h3 .person,
   .important.person {
     font-family: $font-family-sans-small-caps;
   }
@@ -125,7 +133,8 @@ $link-color: scale-color($gray, $lightness: -40%);
       @include important;
     }
 
-    td, th {
+    td,
+    th {
       padding: 0.1em 0.6em;
     }
 
@@ -153,13 +162,16 @@ $link-color: scale-color($gray, $lightness: -40%);
    * Forms
    */
 
-  input, button {
+  input,
+  button {
     display: inline-block;
     padding: 0.2em;
     margin: 0;
   }
 
-  input, button, ::placeholder {
+  input,
+  button,
+  ::placeholder {
     font-size: inherit;
     font-family: $font-family-sans;
   }
@@ -246,7 +258,7 @@ $link-color: scale-color($gray, $lightness: -40%);
  * content
  *********************************************************************/
 
-[b-content-theme="default"] {
+[b-content-theme='default'] {
   ul {
     list-style-type: none;
     padding-left: 1em;
@@ -257,7 +269,7 @@ $link-color: scale-color($gray, $lightness: -40%);
 
     & li:before {
       // https://stackoverflow.com/a/41856384
-      content: "-";
+      content: '-';
       position: absolute;
       /* change margin to move dash around */
       margin-left: -1em;
@@ -270,7 +282,7 @@ $link-color: scale-color($gray, $lightness: -40%);
  * dark mode = false
  *********************************************************************/
 
-[b-dark-mode="false"] {
+[b-dark-mode='false'] {
   // all
   .text-white {
     color: $black !important;
@@ -284,7 +296,8 @@ $link-color: scale-color($gray, $lightness: -40%);
     color: scale-color($black, $lightness: -30%) !important;
   }
 
-  [b-ui-theme="default"], [b-content-theme="default"] {
+  [b-ui-theme='default'],
+  [b-content-theme='default'] {
     background-color: $white;
     color: $black;
 
@@ -298,7 +311,7 @@ $link-color: scale-color($gray, $lightness: -40%);
  * dark mode = true
  *********************************************************************/
 
- [b-dark-mode="true"] {
+[b-dark-mode='true'] {
   // all
 
   .text-black {
@@ -313,7 +326,8 @@ $link-color: scale-color($gray, $lightness: -40%);
     color: scale-color($white, $lightness: -30%) !important;
   }
 
-  [b-ui-theme="default"], [b-content-theme="default"] {
+  [b-ui-theme='default'],
+  [b-content-theme='default'] {
     background-color: $black;
     color: $white;
 
@@ -321,10 +335,12 @@ $link-color: scale-color($gray, $lightness: -40%);
       background-color: $black;
     }
 
-    a, .link {
+    a,
+    .link {
       color: $white;
 
-      &:link, &:visited {
+      &:link,
+      &:visited {
         color: $white;
       }
     }
