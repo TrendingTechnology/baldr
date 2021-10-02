@@ -69,6 +69,11 @@ export const composition: MediaCategoriesTypes.Category = {
         fromClaim: 'P435',
         format: 'formatSingleValue'
       }
+    },
+    lyrics: {
+      title: 'Liedtext',
+      description:
+        'Der Liedtext sollte als YAML-Block-Stil „|“ gespeichert werden. Die einzelnen Zeilen sollen mit br-Tags getrennt werden.'
     }
   }
 }
