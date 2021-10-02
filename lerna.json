@@ -3,7 +3,7 @@
     "src/api/*",
     "src/lib/browser/*",
     "src/lib/node/*",
-    "src/mgmt/*",
+    "src/cli",
     "src/masters/*",
     "src/vue/apps/*",
     "src/vue/components/*"
