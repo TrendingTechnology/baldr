@@ -27,7 +27,7 @@ interface PersonCategory extends MediaCategoriesTypes.Category {
 export const person: MediaCategoriesTypes.Category = {
   title: 'Person',
   abbreviation: 'PR',
-  basePath: path.join(config.mediaServer.basePath, 'Musik', 'Personen'),
+  basePath: path.join(config.mediaServer.basePath, 'faecheruebergreifend', 'Personen'),
   relPath: function ({ data }) {
     const personData = data as PersonFileFormat
     return path.join(
