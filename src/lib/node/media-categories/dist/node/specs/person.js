@@ -14,7 +14,7 @@ const main_1 = require("../main");
 exports.person = {
     title: 'Person',
     abbreviation: 'PR',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Personen'),
+    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'faecheruebergreifend', 'Personen'),
     relPath: function ({ data }) {
         const personData = data;
         return path_1.default.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`);
