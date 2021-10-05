@@ -17,11 +17,6 @@ interface MongoDbConfiguration {
 interface DatabasesConfiguration {
     mongodb: MongoDbConfiguration;
 }
-interface DocConfiguration {
-    src: string;
-    dest: string;
-    configFile: string;
-}
 /**
  * The HTTP configuration for the media server and the REST API.
  */
@@ -118,7 +113,6 @@ export interface Configuration {
      */
     configurationFileLocations: string[];
     databases: DatabasesConfiguration;
-    doc: DocConfiguration;
     http: HttpConfiguration;
     iconFont: IconFontConfiguration;
     /**
