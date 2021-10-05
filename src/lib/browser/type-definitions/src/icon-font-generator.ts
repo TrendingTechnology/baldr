@@ -42,6 +42,18 @@ export interface IconFontConfiguration {
   urlTemplate: string
 
   /**
+   * Destination path of the generated files for distribution.
+   */
+  distPath: string
+
+  /**
+   * This property is filled in by the font generator.
+   */
+  unicodeAssigment: {
+    [iconName: string]: string
+  }
+
+  /**
    * ```json
    * {
    *   "file-tree": "tree",
