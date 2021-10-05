@@ -128,7 +128,9 @@ function writeBufferFileToDest(destFileName, content) {
  */
 function createCssFile(metadataCollection) {
     const output = [];
-    const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
+    const header = fs_1.default.readFileSync(getIconPath('style_header.css'), {
+        encoding: 'utf-8'
+    });
     output.push(header);
     for (const glyphData of metadataCollection) {
         const unicodeGlyph = glyphData.unicode[0];
@@ -147,8 +149,11 @@ function createTexFile(metadataCollection) {
     const output = [];
     for (const glyphData of metadataCollection) {
         const unicodeGlyph = glyphData.unicode[0];
-        const unicode = unicodeGlyph.charCodeAt(0).toString(16).toUpperCase();
-        const name = glyphData.name.replace(/(-[a-z])/g, (group) => group.toUpperCase().replace('-', ''));
+        const unicode = unicodeGlyph
+            .charCodeAt(0)
+            .toString(16)
+            .toUpperCase();
+        const name = glyphData.name.replace(/(-[a-z])/g, group => group.toUpperCase().replace('-', ''));
         const glyph = `\\def\\bIcon${core_browser_1.toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
         output.push(glyph);
     }

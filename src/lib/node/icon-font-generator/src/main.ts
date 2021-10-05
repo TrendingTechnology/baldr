@@ -3,7 +3,7 @@
  */
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
-import type { IconFontGeneratorTypes } from '@bldr/type-definitions'
+import { IconFontGeneratorTypes } from '@bldr/type-definitions'
 
 // Node packages.
 import fs from 'fs'
@@ -31,7 +31,15 @@ let tmpDir: string
  * @returns An absolute path.
  */
 function getIconPath (...args: string[]): string {
-  return path.join(config.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments)
+  return path.join(
+    config.localRepo,
+    'src',
+    'vue',
+    'components',
+    'icons',
+    'src',
+    ...arguments
+  )
 }
 
 function downloadIcon (url: string, oldName: string, newName: string): void {
@@ -45,14 +53,18 @@ function downloadIcon (url: string, oldName: string, newName: string): void {
   cmd.execSync(['wget', '-O', path.join(tmpDir, `${destName}.svg`), url])
 }
 
-function downloadIcons (iconMapping: IconFontGeneratorTypes.IconFontMapping, urlTemplate: string): void {
+function downloadIcons (
+  iconMapping: IconFontGeneratorTypes.IconFontMapping,
+  urlTemplate: string
+): void {
   cmd.startProgress()
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
   for (const newName in iconMapping) {
     let oldName: string = newName
 
-    const iconDef: false | string | IconFontGeneratorTypes.IconDefintion = iconMapping[newName]
+    const iconDef: false | string | IconFontGeneratorTypes.IconDefintion =
+      iconMapping[newName]
     if (typeof iconDef === 'string') {
       oldName = iconDef
     } else if (typeof iconDef === 'object' && iconDef.oldName != null) {
@@ -62,7 +74,10 @@ function downloadIcons (iconMapping: IconFontGeneratorTypes.IconFontMapping, url
 
     downloadIcon(url, oldName, newName)
     count++
-    cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', newName))
+    cmd.updateProgress(
+      count / iconsCount,
+      log.format('download icon “%s”', newName)
+    )
   }
   cmd.stopProgress()
 }
@@ -80,7 +95,12 @@ function copyIcons (srcFolder: string, destFolder: string): void {
       const src = path.join(srcFolder, icon)
       const dest = path.join(destFolder, icon)
       fs.copyFileSync(src, dest)
-      log.info('Copy the file “%s” from the source folder “%s” to the destination folder “%s”.', icon, src, dest)
+      log.info(
+        'Copy the file “%s” from the source folder “%s” to the destination folder “%s”.',
+        icon,
+        src,
+        dest
+      )
     }
   }
 }
@@ -100,7 +120,7 @@ function writeBufferFileToDest (destFileName: string, content?: Buffer): void {
   log.info('Create file: %s', destPath)
 }
 
-type Format = "eot" | "woff" | "woff2" | "svg" | "ttf";
+type Format = 'eot' | 'woff' | 'woff2' | 'svg' | 'ttf'
 
 interface WebFontConfig {
   files: string
@@ -128,13 +148,15 @@ interface GlyphMetadata {
  */
 function createCssFile (metadataCollection: GlyphMetadata[]) {
   const output = []
-  const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
+  const header = fs.readFileSync(getIconPath('style_header.css'), {
+    encoding: 'utf-8'
+  })
   output.push(header)
   for (const glyphData of metadataCollection) {
-      const unicodeGlyph: string = glyphData.unicode[0]
-      const unicode = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
-      const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`
-      output.push(glyph)
+    const unicodeGlyph: string = glyphData.unicode[0]
+    const unicode = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
+    const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`
+    output.push(glyph)
   }
   writeFileToDest('style.css', output.join('\n'))
 }
@@ -144,17 +166,21 @@ function createCssFile (metadataCollection: GlyphMetadata[]) {
  * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
  * ```
  */
- function createTexFile (metadataCollection: GlyphMetadata[]) {
+function createTexFile (metadataCollection: GlyphMetadata[]) {
   const output = []
   for (const glyphData of metadataCollection) {
-      const unicodeGlyph: string = glyphData.unicode[0]
-      const unicode = unicodeGlyph.charCodeAt(0).toString(16).toUpperCase()
-      const name =  glyphData.name.replace(
-        /(-[a-z])/g,
-        (group) => group.toUpperCase().replace('-', '')
-      )
-      const glyph = `\\def\\bIcon${toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`
-      output.push(glyph)
+    const unicodeGlyph: string = glyphData.unicode[0]
+    const unicode = unicodeGlyph
+      .charCodeAt(0)
+      .toString(16)
+      .toUpperCase()
+    const name = glyphData.name.replace(/(-[a-z])/g, group =>
+      group.toUpperCase().replace('-', '')
+    )
+    const glyph = `\\def\\bIcon${toTitleCase(
+      name
+    )}{{\\BaldrIconFont\\char"0${unicode}}}`
+    output.push(glyph)
   }
   writeFileToDest('baldr-icons-macros.tex', output.join('\n'))
 }
@@ -200,7 +226,10 @@ async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
 async function action (): Promise<void> {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
-  log.info('The SVG files of the icons are downloaded to this temporary directory: %s', tmpDir)
+  log.info(
+    'The SVG files of the icons are downloaded to this temporary directory: %s',
+    tmpDir
+  )
 
   downloadIcons(config.iconFont.iconMapping, config.iconFont.urlTemplate)
   copyIcons(getIconPath('icons'), tmpDir)
