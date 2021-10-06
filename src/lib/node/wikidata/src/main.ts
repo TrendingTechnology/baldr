@@ -12,7 +12,10 @@ import * as wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
 import { fetchFile } from '@bldr/core-node'
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  MediaResolverTypes
+} from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
@@ -59,33 +62,33 @@ interface SitelinkData {
 /**
  * ```js
  * let entity = {
-  *   ref: 'Q202698',
-  *   type: 'item',
-  *   modified: '2020-03-20T20:27:33Z',
-  *   labels: { de: 'Yesterday', en: 'Yesterday' },
-  *   descriptions: {
-  *     en: 'original song written and composed by Lennon-McCartney',
-  *     de: 'Lied von The Beatles'
-  *   },
-  *   aliases: {},
-  *   claims: {
-  *     P175: [ 'Q1299' ],
-  *     P31: [ 'Q207628', 'Q7366' ],
-  *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
-  *     P646: [ '/m/01227d' ]
-  *   },
-  *   sitelinks: {
-  *     arwiki: 'يسترداي',
-  *     cawiki: 'Yesterday',
-  *     cswiki: 'Yesterday (píseň)',
-  *     dawiki: 'Yesterday',
-  *     dewiki: 'Yesterday',
-  *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
-  *     enwiki: 'Yesterday (Beatles song)'
-  *   }
-  * }
-  * ```
-  */
+ *   ref: 'Q202698',
+ *   type: 'item',
+ *   modified: '2020-03-20T20:27:33Z',
+ *   labels: { de: 'Yesterday', en: 'Yesterday' },
+ *   descriptions: {
+ *     en: 'original song written and composed by Lennon-McCartney',
+ *     de: 'Lied von The Beatles'
+ *   },
+ *   aliases: {},
+ *   claims: {
+ *     P175: [ 'Q1299' ],
+ *     P31: [ 'Q207628', 'Q7366' ],
+ *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
+ *     P646: [ '/m/01227d' ]
+ *   },
+ *   sitelinks: {
+ *     arwiki: 'يسترداي',
+ *     cawiki: 'Yesterday',
+ *     cswiki: 'Yesterday (píseň)',
+ *     dawiki: 'Yesterday',
+ *     dewiki: 'Yesterday',
+ *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
+ *     enwiki: 'Yesterday (Beatles song)'
+ *   }
+ * }
+ * ```
+ */
 let entity: Entity
 
 /**
@@ -97,7 +100,11 @@ let entity: Entity
  *   more
  * @param throwError - If there are more than values in an array.
  */
-function unpackArray (values: string | string[], onlyOne?: boolean, throwError?: boolean): string | string[] {
+function unpackArray (
+  values: string | string[],
+  onlyOne?: boolean,
+  throwError?: boolean
+): string | string[] {
   if (values == null) return ''
   if (Array.isArray(values)) {
     if (values.length === 1) {
@@ -106,7 +113,12 @@ function unpackArray (values: string | string[], onlyOne?: boolean, throwError?:
       throw new Error(`Array has more than one item: ${values.toString()}`)
     }
   }
-  if (Array.isArray(values) && values.length > 1 && onlyOne != null && onlyOne) {
+  if (
+    Array.isArray(values) &&
+    values.length > 1 &&
+    onlyOne != null &&
+    onlyOne
+  ) {
     return values[0]
   }
   return values
@@ -124,7 +136,10 @@ function pickFirst (values: string | string[]): string {
 /**
  * @param props - for example `['labels']`
  */
-async function getEntities (itemIds: string[] | string, props?: string[]): Promise<Entity | EntityCollection> {
+async function getEntities (
+  itemIds: string[] | string,
+  props?: string[]
+): Promise<Entity | EntityCollection> {
   const url = wikibase.getEntities(itemIds, ['en', 'de'], props)
   const response = await fetch(url)
   const json = await response.json()
@@ -141,8 +156,10 @@ async function fetchResizeFile (url: string, dest: string): Promise<void> {
       const process = childProcess.spawnSync('magick', [
         'convert',
         dest,
-        '-resize', '2000x2000>', // http://www.imagemagick.org/Usage/resize/#shrink
-        '-quality', '60', // https://imagemagick.org/script/command-line-options.php#quality
+        '-resize',
+        '2000x2000>', // http://www.imagemagick.org/Usage/resize/#shrink
+        '-quality',
+        '60', // https://imagemagick.org/script/command-line-options.php#quality
         dest
       ])
       if (process.status !== 0) {
@@ -158,7 +175,10 @@ async function fetchResizeFile (url: string, dest: string): Promise<void> {
  * @param fileName - The file name from wiki commonds.
  * @param dest - A file path where to store the file locally.
  */
-export async function fetchCommonsFile (fileName: string, dest: string): Promise<void> {
+export async function fetchCommonsFile (
+  fileName: string,
+  dest: string
+): Promise<void> {
   // wikicommons:George-W-Bush.jpeg
   fileName = fileName.replace('wikicommons:', '')
   const url = wikibase.getImageUrl(fileName)
@@ -169,8 +189,14 @@ export async function fetchCommonsFile (fileName: string, dest: string): Promise
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
  */
-function getClaim (entity: Entity, claims: string | string[]): string | string[] | undefined {
-  function getSingleClaim (entity: Entity, claim: string): string | string[] | undefined {
+function getClaim (
+  entity: Entity,
+  claims: string | string[]
+): string | string[] | undefined {
+  function getSingleClaim (
+    entity: Entity,
+    claim: string
+  ): string | string[] | undefined {
     if (entity.claims[claim] != null) {
       const typeData = entity.claims[claim]
       return unpackArray(typeData)
@@ -190,22 +216,21 @@ function getClaim (entity: Entity, claims: string | string[]): string | string[]
 /**
  * A collection of functions
  */
-const functions: {[key: string]: Function } = {
-
+const functions: { [key: string]: Function } = {
   /*******************************************************************************
- * get from entity
- ******************************************************************************/
+   * get from entity
+   ******************************************************************************/
 
   /**
    * ```js
    * const entity = {
-    *   id: 'Q1299',
-    *   type: 'item',
-    *   modified: '2020-03-15T20:18:33Z',
-    *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
-    * }
-    * ```
-    */
+   *   id: 'Q1299',
+   *   type: 'item',
+   *   modified: '2020-03-15T20:18:33Z',
+   *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
+   * }
+   * ```
+   */
   getDescription: function (entity: Entity): string {
     const desc = entity.descriptions
     if (desc.de != null) {
@@ -262,7 +287,10 @@ const functions: {[key: string]: Function } = {
     }
     if (key == null) return ''
     // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
-    const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+    const siteLink = wikibase.getSitelinkUrl({
+      site: key,
+      title: sitelinks[key]
+    })
     if (siteLink == null) return ''
     // {
     //   lang: 'de',
@@ -276,15 +304,17 @@ const functions: {[key: string]: Function } = {
   },
 
   /*******************************************************************************
- * second query
- ******************************************************************************/
+   * second query
+   ******************************************************************************/
 
   /**
    * Query the wikidata API for the given items and return only the label.
    *
    * @param itemIds - for example `['Q123', 'Q234']`
    */
-  queryLabels: async function (itemIds: string | string[]): Promise<string | string[]> {
+  queryLabels: async function (
+    itemIds: string | string[]
+  ): Promise<string | string[]> {
     itemIds = unpackArray(itemIds)
     const entities = await getEntities(itemIds, ['labels'])
     if (entities.id != null) {
@@ -300,12 +330,12 @@ const functions: {[key: string]: Function } = {
   },
 
   /*******************************************************************************
- * format
- ******************************************************************************/
+   * format
+   ******************************************************************************/
 
   /**
-    * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-    */
+   * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
+   */
   formatDate: function (date: string | string[]): string {
     // Frederic Chopin has two birth dates.
     // throw no error
@@ -357,7 +387,11 @@ const functions: {[key: string]: Function } = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  */
-export function mergeData (data: MediaCategoriesTypes.Data, dataWiki: MediaCategoriesTypes.Data, categoryCollection: MediaCategoriesTypes.Collection): MediaCategoriesTypes.Data {
+export function mergeData (
+  data: MediaCategoriesTypes.Data,
+  dataWiki: MediaCategoriesTypes.Data,
+  categoryCollection: MediaCategoriesTypes.Collection
+): MediaCategoriesTypes.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -368,11 +402,17 @@ export function mergeData (data: MediaCategoriesTypes.Data, dataWiki: MediaCateg
   const typeData: MediaCategoriesTypes.Data = {}
 
   for (const typeName of dataOrig.categories.split(',')) {
-    const propSpecs = categoryCollection[typeName as MediaCategoriesTypes.Name].props
+    const propSpecs =
+      categoryCollection[typeName as MediaCategoriesTypes.Name].props
     for (const propName in dataWiki) {
       if (propSpecs?.[propName]?.wikidata != null) {
         const propSpec = propSpecs[propName].wikidata
-        if (propSpec != null && typeof propSpec !== 'boolean' && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
+        if (
+          propSpec != null &&
+          typeof propSpec !== 'boolean' &&
+          ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) ||
+            dataOrig[propName] == null)
+        ) {
           typeData[propName] = dataWiki[propName]
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete dataOrig[propName]
@@ -395,11 +435,15 @@ export function mergeData (data: MediaCategoriesTypes.Data, dataWiki: MediaCateg
  *
  * @param itemId - for example `Q123`
  */
-export async function query (itemId: string, typeNames: MediaCategoriesTypes.Names, categoryCollection: MediaCategoriesTypes.Collection): Promise<{ [key: string]: any }> {
+export async function query (
+  itemId: string,
+  typeNames: MediaCategoriesTypes.Names,
+  categoryCollection: MediaCategoriesTypes.Collection
+): Promise<{ [key: string]: any }> {
   if (wikibase.isItemId(itemId) == null) {
     throw new Error(`No item ref: ${itemId}`)
   }
-  entity = await getEntities(itemId) as Entity
+  entity = (await getEntities(itemId)) as Entity
 
   if (!typeNames.includes('general')) typeNames = `general,${typeNames}`
 
@@ -415,12 +459,17 @@ export async function query (itemId: string, typeNames: MediaCategoriesTypes.Nam
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata != null) {
-        const propSpec = typeSpec.props[propName].wikidata as MediaCategoriesTypes.WikidataProp
+        const propSpec = typeSpec.props[propName]
+          .wikidata as MediaCategoriesTypes.WikidataProp
         let value
 
         // source
         if (propSpec.fromClaim == null && propSpec.fromEntity == null) {
-          throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
+          throw new Error(
+            `Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(
+              propSpec
+            )}`
+          )
         }
         if (propSpec.fromClaim != null) {
           value = getClaim(entity, propSpec.fromClaim)
@@ -429,13 +478,16 @@ export async function query (itemId: string, typeNames: MediaCategoriesTypes.Nam
         if (value == null && propSpec.fromEntity != null) {
           const func = functions[propSpec.fromEntity]
           if (typeof func !== 'function') {
-            throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
+            throw new Error(
+              `Unkown from entity source “${propSpec.fromEntity}”`
+            )
           }
           value = func(entity)
         }
 
         // second query
-        if (value != null && propSpec.secondQuery != null) value = await functions[propSpec.secondQuery](value)
+        if (value != null && propSpec.secondQuery != null)
+          value = await functions[propSpec.secondQuery](value)
 
         // format
         if (value != null && propSpec.format != null) {
@@ -445,8 +497,14 @@ export async function query (itemId: string, typeNames: MediaCategoriesTypes.Nam
             const func = functions[propSpec.format]
             if (typeof func !== 'function') {
               let formatFunctions = Object.keys(functions)
-              formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/))
-              throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions.join()}`)
+              formatFunctions = formatFunctions.filter(value =>
+                value.match(/^format.*/)
+              )
+              throw new Error(
+                `Unkown format function “${
+                  propSpec.format
+                }”. Use one of: ${formatFunctions.join()}`
+              )
             }
             value = func(value)
           }

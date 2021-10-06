@@ -54,7 +54,7 @@ interface DeriveFuncArg {
 /**
  * Defintion of the function `derive()`.
  */
-declare type DeriveFunc = (arg: DeriveFuncArg) => any;
+declare type DeriveFunc = (arg: DeriveFuncArg) => any | Promise<any>;
 /**
  * Defintion of the function `format()`.
  */

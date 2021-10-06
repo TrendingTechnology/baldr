@@ -82,7 +82,7 @@ export async function normalizeMediaAsset (
         )
       }
     }
-    const newMetaData = categoriesManagement.process(metaData, filePath)
+    const newMetaData = await categoriesManagement.process(metaData, filePath)
     const oldMetaData = origData as StringIndexedObject
     delete oldMetaData.filePath
 

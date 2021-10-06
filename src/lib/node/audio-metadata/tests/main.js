@@ -11,7 +11,7 @@ describe('Package “@bldr/audio-metadata”', function () {
     const meta = await collectAudioMetaData(
       path.join(
         config.mediaServer.basePath,
-        'musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/Herbie-Hancock_Cantaloupe-Island.mp3'
+        'Musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/Herbie-Hancock_Cantaloupe-Island.mp3'
       )
     )
     assert.strictEqual(meta.title, 'Cantaloupe Island: Cantaloupe Island')

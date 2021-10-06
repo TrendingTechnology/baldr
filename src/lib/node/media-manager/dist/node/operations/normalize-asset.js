@@ -83,7 +83,7 @@ function normalizeMediaAsset(filePath, options) {
                     metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categories);
                 }
             }
-            const newMetaData = media_categories_1.categoriesManagement.process(metaData, filePath);
+            const newMetaData = yield media_categories_1.categoriesManagement.process(metaData, filePath);
             const oldMetaData = origData;
             delete oldMetaData.filePath;
             const oldYamlMarkup = (0, yaml_1.convertToYaml)(oldMetaData);

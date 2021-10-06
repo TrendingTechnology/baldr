@@ -54,7 +54,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             }
         }
         rawData.categories = category;
-        const data = media_categories_1.categoriesManagement.process(rawData);
+        const data = yield media_categories_1.categoriesManagement.process(rawData);
         log.info(data);
         let downloadWikicommons = true;
         if ((rawData === null || rawData === void 0 ? void 0 : rawData.mainImage) == null) {

@@ -25,6 +25,9 @@ export const recording: MediaCategoriesTypes.Category = {
       wikidata: {
         fromClaim: 'P4404',
         format: 'formatSingleValue'
+      },
+      derive: function({ }) {
+
       }
     },
     // see composition creationDate

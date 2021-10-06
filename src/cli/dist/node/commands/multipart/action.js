@@ -71,7 +71,7 @@ function action(globPattern, prefix, cmdObj) {
             }
         }
         if (fs_1.default.existsSync(firstNewFileName) && !cmdObj.dryRun) {
-            media_manager_1.writeYamlMetaData(firstNewFileName);
+            yield media_manager_1.writeYamlMetaData(firstNewFileName);
             yield media_manager_1.operations.normalizeMediaAsset(firstNewFileName, { wikidata: false });
         }
     });

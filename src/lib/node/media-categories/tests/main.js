@@ -4,8 +4,8 @@ const assert = require('assert')
 const { categoriesManagement, stripCategories } = require('../dist/node/main.js')
 
 describe('Package “@bldr/media-categories”', function () {
-  it('categoriesManagement.process()', function () {
-    const result = categoriesManagement.process({
+  it('categoriesManagement.process()', async function () {
+    const result = await categoriesManagement.process({
       ref: 'test',
       title: 'Test',
       extension: 'jpg'

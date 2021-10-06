@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -34,33 +43,34 @@ exports.readYamlMetaData = readYamlMetaData;
  * @param force - Always create the yaml file. Overwrite the old one.
  */
 function writeYamlMetaData(filePath, metaData, force) {
-    if (fs_1.default.lstatSync(filePath).isDirectory())
-        return;
-    const yamlFile = `${(0, core_browser_1.asciify)(filePath)}.yml`;
-    if ((force != null && force) ||
-        !fs_1.default.existsSync(yamlFile)) {
-        // eslint-disable-next-line
-        if (metaData == null)
-            metaData = {};
-        const asset = new media_file_classes_1.Asset(filePath);
-        if (metaData.ref == null) {
-            metaData.ref = asset.basename;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fs_1.default.lstatSync(filePath).isDirectory())
+            return;
+        const yamlFile = `${(0, core_browser_1.asciify)(filePath)}.yml`;
+        if ((force != null && force) || !fs_1.default.existsSync(yamlFile)) {
+            // eslint-disable-next-line
+            if (metaData == null)
+                metaData = {};
+            const asset = new media_file_classes_1.Asset(filePath);
+            if (metaData.ref == null) {
+                metaData.ref = asset.basename;
+            }
+            if (metaData.title == null) {
+                metaData.title = (0, core_browser_1.deasciify)(asset.basename);
+            }
+            metaData.filePath = filePath;
+            metaData = yield media_categories_1.categoriesManagement.process(metaData);
+            (0, file_reader_writer_1.writeYamlFile)(yamlFile, metaData);
+            return {
+                filePath,
+                yamlFile,
+                metaData
+            };
         }
-        if (metaData.title == null) {
-            metaData.title = (0, core_browser_1.deasciify)(asset.basename);
-        }
-        metaData.filePath = filePath;
-        metaData = media_categories_1.categoriesManagement.process(metaData);
-        (0, file_reader_writer_1.writeYamlFile)(yamlFile, metaData);
         return {
             filePath,
-            yamlFile,
-            metaData
+            msg: 'No action.'
         };
-    }
-    return {
-        filePath,
-        msg: 'No action.'
-    };
+    });
 }
 exports.writeYamlMetaData = writeYamlMetaData;

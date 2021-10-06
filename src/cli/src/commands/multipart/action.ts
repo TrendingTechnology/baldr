@@ -51,7 +51,7 @@ async function action (
   }
 
   if (fs.existsSync(firstNewFileName) && !cmdObj.dryRun) {
-    writeYamlMetaData(firstNewFileName)
+    await writeYamlMetaData(firstNewFileName)
     await operations.normalizeMediaAsset(firstNewFileName, { wikidata: false })
   }
 }

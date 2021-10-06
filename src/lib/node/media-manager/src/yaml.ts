@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import type { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify } from '@bldr/core-browser'
@@ -31,13 +31,14 @@ export function readYamlMetaData (filePath: string): StringIndexedObject {
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export function writeYamlMetaData (filePath: string, metaData?: MediaResolverTypes.YamlFormat, force?: boolean): object | undefined {
+export async function writeYamlMetaData (
+  filePath: string,
+  metaData?: MediaResolverTypes.YamlFormat,
+  force?: boolean
+): Promise<object | undefined> {
   if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
-  if (
-    (force != null && force) ||
-    !fs.existsSync(yamlFile)
-  ) {
+  if ((force != null && force) || !fs.existsSync(yamlFile)) {
     // eslint-disable-next-line
     if (metaData == null) metaData = {} as MediaResolverTypes.YamlFormat
     const asset = new Asset(filePath)
@@ -49,7 +50,7 @@ export function writeYamlMetaData (filePath: string, metaData?: MediaResolverTyp
     }
 
     metaData.filePath = filePath
-    metaData = categoriesManagement.process(metaData)
+    metaData = await categoriesManagement.process(metaData)
     writeYamlFile(yamlFile, metaData)
     return {
       filePath,

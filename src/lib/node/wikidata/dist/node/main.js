@@ -28,33 +28,33 @@ const wikibase = wikibaseSdk({
 /**
  * ```js
  * let entity = {
-  *   ref: 'Q202698',
-  *   type: 'item',
-  *   modified: '2020-03-20T20:27:33Z',
-  *   labels: { de: 'Yesterday', en: 'Yesterday' },
-  *   descriptions: {
-  *     en: 'original song written and composed by Lennon-McCartney',
-  *     de: 'Lied von The Beatles'
-  *   },
-  *   aliases: {},
-  *   claims: {
-  *     P175: [ 'Q1299' ],
-  *     P31: [ 'Q207628', 'Q7366' ],
-  *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
-  *     P646: [ '/m/01227d' ]
-  *   },
-  *   sitelinks: {
-  *     arwiki: 'يسترداي',
-  *     cawiki: 'Yesterday',
-  *     cswiki: 'Yesterday (píseň)',
-  *     dawiki: 'Yesterday',
-  *     dewiki: 'Yesterday',
-  *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
-  *     enwiki: 'Yesterday (Beatles song)'
-  *   }
-  * }
-  * ```
-  */
+ *   ref: 'Q202698',
+ *   type: 'item',
+ *   modified: '2020-03-20T20:27:33Z',
+ *   labels: { de: 'Yesterday', en: 'Yesterday' },
+ *   descriptions: {
+ *     en: 'original song written and composed by Lennon-McCartney',
+ *     de: 'Lied von The Beatles'
+ *   },
+ *   aliases: {},
+ *   claims: {
+ *     P175: [ 'Q1299' ],
+ *     P31: [ 'Q207628', 'Q7366' ],
+ *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
+ *     P646: [ '/m/01227d' ]
+ *   },
+ *   sitelinks: {
+ *     arwiki: 'يسترداي',
+ *     cawiki: 'Yesterday',
+ *     cswiki: 'Yesterday (píseň)',
+ *     dawiki: 'Yesterday',
+ *     dewiki: 'Yesterday',
+ *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
+ *     enwiki: 'Yesterday (Beatles song)'
+ *   }
+ * }
+ * ```
+ */
 let entity;
 /**
  * If the array has only one item, return only this item, else return
@@ -76,7 +76,10 @@ function unpackArray(values, onlyOne, throwError) {
             throw new Error(`Array has more than one item: ${values.toString()}`);
         }
     }
-    if (Array.isArray(values) && values.length > 1 && onlyOne != null && onlyOne) {
+    if (Array.isArray(values) &&
+        values.length > 1 &&
+        onlyOne != null &&
+        onlyOne) {
         return values[0];
     }
     return values;
@@ -112,8 +115,10 @@ function fetchResizeFile(url, dest) {
                 const process = childProcess.spawnSync('magick', [
                     'convert',
                     dest,
-                    '-resize', '2000x2000>',
-                    '-quality', '60',
+                    '-resize',
+                    '2000x2000>',
+                    '-quality',
+                    '60',
                     dest
                 ]);
                 if (process.status !== 0) {
@@ -165,18 +170,18 @@ function getClaim(entity, claims) {
  */
 const functions = {
     /*******************************************************************************
-   * get from entity
-   ******************************************************************************/
+     * get from entity
+     ******************************************************************************/
     /**
      * ```js
      * const entity = {
-      *   id: 'Q1299',
-      *   type: 'item',
-      *   modified: '2020-03-15T20:18:33Z',
-      *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
-      * }
-      * ```
-      */
+     *   id: 'Q1299',
+     *   type: 'item',
+     *   modified: '2020-03-15T20:18:33Z',
+     *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
+     * }
+     * ```
+     */
     getDescription: function (entity) {
         const desc = entity.descriptions;
         if (desc.de != null) {
@@ -237,7 +242,10 @@ const functions = {
         if (key == null)
             return '';
         // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
-        const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] });
+        const siteLink = wikibase.getSitelinkUrl({
+            site: key,
+            title: sitelinks[key]
+        });
         if (siteLink == null)
             return '';
         // {
@@ -251,8 +259,8 @@ const functions = {
         return `${linkData.lang}:${linkData.title}`;
     },
     /*******************************************************************************
-   * second query
-   ******************************************************************************/
+     * second query
+     ******************************************************************************/
     /**
      * Query the wikidata API for the given items and return only the label.
      *
@@ -275,11 +283,11 @@ const functions = {
         });
     },
     /*******************************************************************************
-   * format
-   ******************************************************************************/
+     * format
+     ******************************************************************************/
     /**
-      * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-      */
+     * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
+     */
     formatDate: function (date) {
         // Frederic Chopin has two birth dates.
         // throw no error
@@ -341,7 +349,10 @@ function mergeData(data, dataWiki, categoryCollection) {
         for (const propName in dataWiki) {
             if (((_a = propSpecs === null || propSpecs === void 0 ? void 0 : propSpecs[propName]) === null || _a === void 0 ? void 0 : _a.wikidata) != null) {
                 const propSpec = propSpecs[propName].wikidata;
-                if (propSpec != null && typeof propSpec !== 'boolean' && ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) || dataOrig[propName] == null)) {
+                if (propSpec != null &&
+                    typeof propSpec !== 'boolean' &&
+                    ((dataOrig[propName] != null && propSpec.alwaysUpdate != null) ||
+                        dataOrig[propName] == null)) {
                     typeData[propName] = dataWiki[propName];
                     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                     delete dataOrig[propName];
@@ -381,7 +392,8 @@ function query(itemId, typeNames, categoryCollection) {
             const typeSpec = categoryCollection[typeName];
             for (const propName in typeSpec.props) {
                 if (typeSpec.props[propName].wikidata != null) {
-                    const propSpec = typeSpec.props[propName].wikidata;
+                    const propSpec = typeSpec.props[propName]
+                        .wikidata;
                     let value;
                     // source
                     if (propSpec.fromClaim == null && propSpec.fromEntity == null) {
@@ -409,7 +421,7 @@ function query(itemId, typeNames, categoryCollection) {
                             const func = functions[propSpec.format];
                             if (typeof func !== 'function') {
                                 let formatFunctions = Object.keys(functions);
-                                formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/));
+                                formatFunctions = formatFunctions.filter(value => value.match(/^format.*/));
                                 throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions.join()}`);
                             }
                             value = func(value);

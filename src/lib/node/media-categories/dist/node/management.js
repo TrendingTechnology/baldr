@@ -8,6 +8,15 @@
  *
  * @module @bldr/media-categories
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -46,8 +55,9 @@ function detectCategoryByPath(filePath) {
         }
     }
     names.add('general');
-    if (names.size > 0)
+    if (names.size > 0) {
         return [...names].join(',');
+    }
 }
 exports.detectCategoryByPath = detectCategoryByPath;
 /**
@@ -159,47 +169,54 @@ function isPropertyDerived(propSpec) {
  *   `*.extension.yml` file.
  */
 function sortAndDeriveProps(data, category, filePath) {
-    // eslint-disable-next-line
-    const origData = core_browser_1.deepCopy(data);
-    // eslint-disable-next-line
-    const result = {};
-    // eslint-disable-next-line
-    let folderTitles = {};
-    if (filePath != null) {
-        folderTitles = new titles_1.DeepTitle(filePath);
-    }
-    // Loop over the propSpecs to get a sorted object
-    const propSpecs = category.props;
-    for (const propName in propSpecs) {
-        const propSpec = propSpecs[propName];
-        const origValue = origData[propName];
-        let derivedValue;
-        if (isPropertyDerived(propSpec) && propSpec.derive != null) {
-            derivedValue = propSpec.derive({ data, category, folderTitles, filePath });
-        }
-        // Use the derived value
-        const overwriteByDerived = propSpec.overwriteByDerived != null ? propSpec.overwriteByDerived : false;
-        if (isValue(derivedValue) &&
-            ((!overwriteByDerived && !isValue(origValue)) || overwriteByDerived)) {
-            result[propName] = derivedValue;
-            // Use orig value
-        }
-        else if (isValue(origValue)) {
-            result[propName] = origValue;
-        }
-        // Throw away the value of this property. We prefer the derived
-        // version.
+    return __awaiter(this, void 0, void 0, function* () {
         // eslint-disable-next-line
-        delete origData[propName];
-    }
-    // Add additional properties not in the propSpecs.
-    for (const propName in origData) {
-        const value = origData[propName];
-        if (isValue(value)) {
-            result[propName] = value;
+        const origData = core_browser_1.deepCopy(data);
+        // eslint-disable-next-line
+        const result = {};
+        // eslint-disable-next-line
+        let folderTitles = {};
+        if (filePath != null) {
+            folderTitles = new titles_1.DeepTitle(filePath);
         }
-    }
-    return result;
+        // Loop over the propSpecs to get a sorted object
+        const propSpecs = category.props;
+        for (const propName in propSpecs) {
+            const propSpec = propSpecs[propName];
+            const origValue = origData[propName];
+            let derivedValue;
+            if (isPropertyDerived(propSpec) && propSpec.derive != null) {
+                derivedValue = yield propSpec.derive({
+                    data,
+                    category,
+                    folderTitles,
+                    filePath
+                });
+            }
+            // Use the derived value
+            const overwriteByDerived = propSpec.overwriteByDerived != null ? propSpec.overwriteByDerived : false;
+            if (isValue(derivedValue) &&
+                ((!overwriteByDerived && !isValue(origValue)) || overwriteByDerived)) {
+                result[propName] = derivedValue;
+                // Use orig value
+            }
+            else if (isValue(origValue)) {
+                result[propName] = origValue;
+            }
+            // Throw away the value of this property. We prefer the derived
+            // version.
+            // eslint-disable-next-line
+            delete origData[propName];
+        }
+        // Add additional properties not in the propSpecs.
+        for (const propName in origData) {
+            const value = origData[propName];
+            if (isValue(value)) {
+                result[propName] = value;
+            }
+        }
+        return result;
+    });
 }
 /**
  * @param data - An object containing some meta data.
@@ -275,23 +292,25 @@ function removeProps(data, category) {
  *   `*.extension.yml` file.
  */
 function processByType(data, name, filePath) {
-    if (specs_1.categories[name] == null) {
-        throw new Error(`Unkown meta category name: “${name}”`);
-    }
-    const category = specs_1.categories[name];
-    if (category.initialize != null &&
-        typeof category.initialize === 'function') {
-        data = category.initialize({ data, category, filePath });
-    }
-    data = sortAndDeriveProps(data, category, filePath);
-    data = formatProps(data, category, filePath);
-    // We need filePath in format. Must be after formatProps
-    data = removeProps(data, category);
-    validateProps(data, category);
-    if (category.finalize != null && typeof category.finalize === 'function') {
-        data = category.finalize({ data, category, filePath });
-    }
-    return data;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (specs_1.categories[name] == null) {
+            throw new Error(`Unkown meta category name: “${name}”`);
+        }
+        const category = specs_1.categories[name];
+        if (category.initialize != null &&
+            typeof category.initialize === 'function') {
+            data = category.initialize({ data, category, filePath });
+        }
+        data = yield sortAndDeriveProps(data, category, filePath);
+        data = formatProps(data, category, filePath);
+        // We need filePath in format. Must be after formatProps
+        data = removeProps(data, category);
+        validateProps(data, category);
+        if (category.finalize != null && typeof category.finalize === 'function') {
+            data = category.finalize({ data, category, filePath });
+        }
+        return data;
+    });
 }
 /**
  * Merge category names to avoid duplicate metadata category names:
@@ -352,23 +371,25 @@ exports.searchUnknownProps = searchUnknownProps;
  *   `*.extension.yml` file.
  */
 function process(data, filePath) {
-    if (filePath != null) {
-        filePath = path_1.default.resolve(filePath);
-    }
-    // The media category specification is in camel case. The meta data is
-    // stored in the YAML format in snake case
-    data = yaml_1.convertPropertiesSnakeToCamel(data);
-    data.categories = generalizeCategoriesNames(data.categories);
-    for (const name of data.categories.split(',')) {
-        data = processByType(data, name, filePath);
-    }
-    const unknownProps = searchUnknownProps(data);
-    if (unknownProps.length > 0) {
-        throw new Error(`unknown properties: ${unknownProps.join(', ')}`);
-    }
-    // Do not convert back. This conversion should be the last step, before
-    // object is converted to YAML.
-    // convertProperties(data, 'camel-to-snake')
-    return data;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (filePath != null) {
+            filePath = path_1.default.resolve(filePath);
+        }
+        // The media category specification is in camel case. The meta data is
+        // stored in the YAML format in snake case
+        data = yaml_1.convertPropertiesSnakeToCamel(data);
+        data.categories = generalizeCategoriesNames(data.categories);
+        for (const name of data.categories.split(',')) {
+            data = yield processByType(data, name, filePath);
+        }
+        const unknownProps = searchUnknownProps(data);
+        if (unknownProps.length > 0) {
+            throw new Error(`unknown properties: ${unknownProps.join(', ')}`);
+        }
+        // Do not convert back. This conversion should be the last step, before
+        // object is converted to YAML.
+        // convertProperties(data, 'camel-to-snake')
+        return data;
+    });
 }
 exports.process = process;

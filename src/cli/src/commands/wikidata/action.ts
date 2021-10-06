@@ -35,7 +35,7 @@ async function action (
   }
 
   rawData.categories = category
-  const data = categoriesManagement.process(
+  const data = await categoriesManagement.process(
     rawData as MediaResolverTypes.YamlFormat
   )
   log.info(data)

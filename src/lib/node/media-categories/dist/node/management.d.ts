@@ -40,4 +40,4 @@ export declare function searchUnknownProps(data: MediaResolverTypes.YamlFormat):
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export declare function process(data: MediaResolverTypes.YamlFormat, filePath?: string): MediaResolverTypes.YamlFormat;
+export declare function process(data: MediaResolverTypes.YamlFormat, filePath?: string): Promise<MediaResolverTypes.YamlFormat>;

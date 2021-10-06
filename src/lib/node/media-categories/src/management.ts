@@ -49,7 +49,9 @@ export function detectCategoryByPath (
     }
   }
   names.add('general')
-  if (names.size > 0) return [...names].join(',')
+  if (names.size > 0) {
+    return [...names].join(',')
+  }
 }
 
 /**
@@ -187,11 +189,11 @@ function isPropertyDerived (propSpec: MediaCategoriesTypes.Prop): boolean {
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function sortAndDeriveProps (
+async function sortAndDeriveProps (
   data: MediaResolverTypes.YamlFormat,
   category: MediaCategoriesTypes.Category,
   filePath?: string
-): MediaResolverTypes.YamlFormat {
+): Promise<MediaResolverTypes.YamlFormat> {
   // eslint-disable-next-line
   const origData: MediaResolverTypes.YamlFormat = deepCopy(
     data
@@ -213,7 +215,12 @@ function sortAndDeriveProps (
 
     let derivedValue
     if (isPropertyDerived(propSpec) && propSpec.derive != null) {
-      derivedValue = propSpec.derive({ data, category, folderTitles, filePath })
+      derivedValue = await propSpec.derive({
+        data,
+        category,
+        folderTitles,
+        filePath
+      })
     }
 
     // Use the derived value
@@ -342,11 +349,11 @@ function removeProps (
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-function processByType (
+async function processByType (
   data: MediaResolverTypes.YamlFormat,
   name: MediaCategoriesTypes.Name,
   filePath?: string
-): MediaResolverTypes.YamlFormat {
+): Promise<MediaResolverTypes.YamlFormat> {
   if (categories[name] == null) {
     throw new Error(`Unkown meta category name: “${name}”`)
   }
@@ -358,7 +365,7 @@ function processByType (
   ) {
     data = category.initialize({ data, category, filePath })
   }
-  data = sortAndDeriveProps(data, category, filePath)
+  data = await sortAndDeriveProps(data, category, filePath)
   data = formatProps(data, category, filePath)
   // We need filePath in format. Must be after formatProps
   data = removeProps(data, category)
@@ -432,10 +439,10 @@ export function searchUnknownProps (
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.
  */
-export function process (
+export async function process (
   data: MediaResolverTypes.YamlFormat,
   filePath?: string
-): MediaResolverTypes.YamlFormat {
+): Promise<MediaResolverTypes.YamlFormat> {
   if (filePath != null) {
     filePath = path.resolve(filePath)
   }
@@ -445,7 +452,11 @@ export function process (
   data = convertPropertiesSnakeToCamel(data) as MediaResolverTypes.YamlFormat
   data.categories = generalizeCategoriesNames(data.categories)
   for (const name of data.categories.split(',')) {
-    data = processByType(data, name as MediaCategoriesTypes.Name, filePath)
+    data = await processByType(
+      data,
+      name as MediaCategoriesTypes.Name,
+      filePath
+    )
   }
   const unknownProps = searchUnknownProps(data)
   if (unknownProps.length > 0) {
