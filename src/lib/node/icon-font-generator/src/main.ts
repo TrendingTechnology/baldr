@@ -21,28 +21,20 @@ import { toTitleCase } from '@bldr/core-browser'
 
 const cmd = new CommandRunner()
 
-let tmpDir: string
-
 /**
- * Get the absolute path inside the `src/icons/src/` folder
+ * Download one icon.
  *
- * @param args Multiple path segents.
- *
- * @returns An absolute path.
+ * @param url - The URL to download a icon.
+ * @param destDir - The destination directory where the icon should be stored.
+ * @param oldName - The old original name of the Material Design icons project.
+ * @param newName - The new name of the icon.
  */
-function getIconPath (...args: string[]): string {
-  return path.join(
-    config.localRepo,
-    'src',
-    'vue',
-    'components',
-    'icons',
-    'src',
-    ...arguments
-  )
-}
-
-function downloadIcon (url: string, oldName: string, newName: string): void {
+function downloadIcon (
+  url: string,
+  destDir: string,
+  oldName: string,
+  newName?: string
+): void {
   let destName: string
   if (newName != null && newName !== '') {
     destName = newName
@@ -50,12 +42,20 @@ function downloadIcon (url: string, oldName: string, newName: string): void {
     destName = oldName
   }
   log.info('Download icon %s from %s', destName, url)
-  cmd.execSync(['wget', '-O', path.join(tmpDir, `${destName}.svg`), url])
+  cmd.execSync(['wget', '-O', path.join(destDir, `${destName}.svg`), url])
 }
 
+/**
+ * Download all icons.
+ *
+ * @param iconMapping
+ * @param urlTemplate
+ * @param destDir - The destination directory where the icon should be stored.
+ */
 function downloadIcons (
   iconMapping: IconFontGeneratorTypes.IconFontMapping,
-  urlTemplate: string
+  urlTemplate: string,
+  destDir: string
 ): void {
   cmd.startProgress()
   const iconsCount = Object.keys(iconMapping).length
@@ -72,7 +72,7 @@ function downloadIcons (
     }
     const url = urlTemplate.replace('{icon}', oldName)
 
-    downloadIcon(url, oldName, newName)
+    downloadIcon(url, destDir, oldName, newName)
     count++
     cmd.updateProgress(
       count / iconsCount,
@@ -85,8 +85,8 @@ function downloadIcons (
 /**
  * Copy svg icons for a source folder to a destination folder.
  *
- * @param srcFolder The source folder.
- * @param destFolder The destination folder.
+ * @param srcFolder - The source folder.
+ * @param destFolder - The destination folder.
  */
 function copyIcons (srcFolder: string, destFolder: string): void {
   const icons = fs.readdirSync(srcFolder)
@@ -105,29 +105,17 @@ function copyIcons (srcFolder: string, destFolder: string): void {
   }
 }
 
-function writeFileToDest (destFileName: string, content: string): void {
-  const destPath = getIconPath(destFileName)
+function writeFile (destPath: string, content: string): void {
   fs.writeFileSync(destPath, content)
-  log.info('Create file: %s', destPath)
+  log.verbose('Create file: %s', destPath)
 }
 
-function writeBufferFileToDest (destFileName: string, content?: Buffer): void {
+function writeBuffer (destPath: string, content?: Buffer): void {
   if (content == null) {
     return
   }
-  const destPath = getIconPath(destFileName)
   fs.writeFileSync(destPath, content)
-  log.info('Create file: %s', destPath)
-}
-
-type Format = 'eot' | 'woff' | 'woff2' | 'svg' | 'ttf'
-
-interface WebFontConfig {
-  files: string
-  fontName: string
-  formats: Format[]
-  fontHeight: number
-  descent: number
+  log.verbose('Create file: %s', destPath)
 }
 
 interface GlyphMetadata {
@@ -145,12 +133,21 @@ interface GlyphMetadata {
  *   content: "\ea01";
  * }
  * ```
+ *
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
  */
-function createCssFile (metadataCollection: GlyphMetadata[]) {
+function createCssFile (
+  metadataCollection: GlyphMetadata[],
+  destDir: string
+): void {
   const output = []
-  const header = fs.readFileSync(getIconPath('style_header.css'), {
-    encoding: 'utf-8'
-  })
+  const header = fs.readFileSync(
+    path.join(config.iconFont.distPath, 'style_header.css'),
+    {
+      encoding: 'utf-8'
+    }
+  )
   output.push(header)
   for (const glyphData of metadataCollection) {
     const unicodeGlyph: string = glyphData.unicode[0]
@@ -158,15 +155,21 @@ function createCssFile (metadataCollection: GlyphMetadata[]) {
     const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`
     output.push(glyph)
   }
-  writeFileToDest('style.css', output.join('\n'))
+  writeFile(path.join(destDir, 'style.css'), output.join('\n'))
 }
 
 /**
  * ```tex
  * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
  * ```
+ *
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
  */
-function createTexFile (metadataCollection: GlyphMetadata[]) {
+function createTexFile (
+  metadataCollection: GlyphMetadata[],
+  destDir: string
+): void {
   const output = []
   for (const glyphData of metadataCollection) {
     const unicodeGlyph: string = glyphData.unicode[0]
@@ -182,22 +185,41 @@ function createTexFile (metadataCollection: GlyphMetadata[]) {
     )}{{\\BaldrIconFont\\char"0${unicode}}}`
     output.push(glyph)
   }
-  writeFileToDest('baldr-icons-macros.tex', output.join('\n'))
+  writeFile(path.join(destDir, 'baldr-icons-macros.tex'), output.join('\n'))
 }
 
-function createJsonFile (metadataCollection: GlyphMetadata[]) {
+/**
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
+ */
+function createJsonFile (
+  metadataCollection: GlyphMetadata[],
+  destDir: string
+): void {
   const output = []
   for (const glyphData of metadataCollection) {
     output.push(glyphData.name)
   }
-  writeFileToDest('icons.json', JSON.stringify(output, null, '  '))
+  writeFile(
+    path.join(destDir, 'icons.json'),
+    JSON.stringify(output, null, '  ')
+  )
 }
 
-async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
+async function convertIntoFontFiles (
+  tmpDir: string,
+  destDir: string
+): Promise<void> {
   log.info(config)
 
   try {
-    const result = await webfont(config)
+    const result = await webfont({
+      files: `${tmpDir}/*.svg`,
+      fontName: 'baldr-icons',
+      formats: ['woff', 'woff2', 'ttf'],
+      fontHeight: 512,
+      descent: 64
+    })
     log.info(result)
 
     if (result.glyphsData == null) {
@@ -210,13 +232,13 @@ async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
       metadataCollection.push(metadata)
     }
 
-    createCssFile(metadataCollection)
-    createTexFile(metadataCollection)
-    createJsonFile(metadataCollection)
+    createCssFile(metadataCollection, destDir)
+    createTexFile(metadataCollection, destDir)
+    createJsonFile(metadataCollection, destDir)
 
-    writeBufferFileToDest('baldr-icons.ttf', result.ttf)
-    writeBufferFileToDest('baldr-icons.woff', result.woff)
-    writeBufferFileToDest('baldr-icons.woff2', result.woff2)
+    writeBuffer(path.join(destDir, 'baldr-icons.ttf'), result.ttf)
+    writeBuffer(path.join(destDir, 'baldr-icons.woff'), result.woff)
+    writeBuffer(path.join(destDir, 'baldr-icons.woff2'), result.woff2)
   } catch (error) {
     log.error(error)
     throw error
@@ -224,22 +246,20 @@ async function convertIntoFontFiles (config: WebFontConfig): Promise<void> {
 }
 
 async function action (): Promise<void> {
-  tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
   log.info(
     'The SVG files of the icons are downloaded to this temporary directory: %s',
     tmpDir
   )
 
-  downloadIcons(config.iconFont.iconMapping, config.iconFont.urlTemplate)
-  copyIcons(getIconPath('icons'), tmpDir)
-  await convertIntoFontFiles({
-    files: `${tmpDir}/*.svg`,
-    fontName: 'baldr-icons',
-    formats: ['woff', 'woff2', 'ttf'],
-    fontHeight: 512,
-    descent: 64
-  })
+  downloadIcons(
+    config.iconFont.iconMapping,
+    config.iconFont.urlTemplate,
+    tmpDir
+  )
+  copyIcons(path.join(config.iconFont.distPath, 'icons'), tmpDir)
+  await convertIntoFontFiles(tmpDir, config.iconFont.distPath)
 }
 
 export default action

@@ -47,18 +47,15 @@ const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
 const core_browser_1 = require("@bldr/core-browser");
 const cmd = new cli_utils_1.CommandRunner();
-let tmpDir;
 /**
- * Get the absolute path inside the `src/icons/src/` folder
+ * Download one icon.
  *
- * @param args Multiple path segents.
- *
- * @returns An absolute path.
+ * @param url - The URL to download a icon.
+ * @param destDir - The destination directory where the icon should be stored.
+ * @param oldName - The old original name of the Material Design icons project.
+ * @param newName - The new name of the icon.
  */
-function getIconPath(...args) {
-    return path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'components', 'icons', 'src', ...arguments);
-}
-function downloadIcon(url, oldName, newName) {
+function downloadIcon(url, destDir, oldName, newName) {
     let destName;
     if (newName != null && newName !== '') {
         destName = newName;
@@ -67,9 +64,16 @@ function downloadIcon(url, oldName, newName) {
         destName = oldName;
     }
     log.info('Download icon %s from %s', destName, url);
-    cmd.execSync(['wget', '-O', path_1.default.join(tmpDir, `${destName}.svg`), url]);
+    cmd.execSync(['wget', '-O', path_1.default.join(destDir, `${destName}.svg`), url]);
 }
-function downloadIcons(iconMapping, urlTemplate) {
+/**
+ * Download all icons.
+ *
+ * @param iconMapping
+ * @param urlTemplate
+ * @param destDir - The destination directory where the icon should be stored.
+ */
+function downloadIcons(iconMapping, urlTemplate, destDir) {
     cmd.startProgress();
     const iconsCount = Object.keys(iconMapping).length;
     let count = 0;
@@ -83,7 +87,7 @@ function downloadIcons(iconMapping, urlTemplate) {
             oldName = iconDef.oldName;
         }
         const url = urlTemplate.replace('{icon}', oldName);
-        downloadIcon(url, oldName, newName);
+        downloadIcon(url, destDir, oldName, newName);
         count++;
         cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', newName));
     }
@@ -92,8 +96,8 @@ function downloadIcons(iconMapping, urlTemplate) {
 /**
  * Copy svg icons for a source folder to a destination folder.
  *
- * @param srcFolder The source folder.
- * @param destFolder The destination folder.
+ * @param srcFolder - The source folder.
+ * @param destFolder - The destination folder.
  */
 function copyIcons(srcFolder, destFolder) {
     const icons = fs_1.default.readdirSync(srcFolder);
@@ -106,18 +110,16 @@ function copyIcons(srcFolder, destFolder) {
         }
     }
 }
-function writeFileToDest(destFileName, content) {
-    const destPath = getIconPath(destFileName);
+function writeFile(destPath, content) {
     fs_1.default.writeFileSync(destPath, content);
-    log.info('Create file: %s', destPath);
+    log.verbose('Create file: %s', destPath);
 }
-function writeBufferFileToDest(destFileName, content) {
+function writeBuffer(destPath, content) {
     if (content == null) {
         return;
     }
-    const destPath = getIconPath(destFileName);
     fs_1.default.writeFileSync(destPath, content);
-    log.info('Create file: %s', destPath);
+    log.verbose('Create file: %s', destPath);
 }
 /**
  * ```css
@@ -125,10 +127,13 @@ function writeBufferFileToDest(destFileName, content) {
  *   content: "\ea01";
  * }
  * ```
+ *
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
  */
-function createCssFile(metadataCollection) {
+function createCssFile(metadataCollection, destDir) {
     const output = [];
-    const header = fs_1.default.readFileSync(getIconPath('style_header.css'), {
+    const header = fs_1.default.readFileSync(path_1.default.join(config_1.default.iconFont.distPath, 'style_header.css'), {
         encoding: 'utf-8'
     });
     output.push(header);
@@ -138,14 +143,17 @@ function createCssFile(metadataCollection) {
         const glyph = `.baldr-icon_${glyphData.name}::before {\n  content: "${unicode}";\n}\n`;
         output.push(glyph);
     }
-    writeFileToDest('style.css', output.join('\n'));
+    writeFile(path_1.default.join(destDir, 'style.css'), output.join('\n'));
 }
 /**
  * ```tex
  * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
  * ```
+ *
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
  */
-function createTexFile(metadataCollection) {
+function createTexFile(metadataCollection, destDir) {
     const output = [];
     for (const glyphData of metadataCollection) {
         const unicodeGlyph = glyphData.unicode[0];
@@ -157,20 +165,30 @@ function createTexFile(metadataCollection) {
         const glyph = `\\def\\bIcon${core_browser_1.toTitleCase(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
         output.push(glyph);
     }
-    writeFileToDest('baldr-icons-macros.tex', output.join('\n'));
+    writeFile(path_1.default.join(destDir, 'baldr-icons-macros.tex'), output.join('\n'));
 }
-function createJsonFile(metadataCollection) {
+/**
+ * @param metadataCollection - An array of glyph metadata.
+ * @param destDir - A path to a destination directory.
+ */
+function createJsonFile(metadataCollection, destDir) {
     const output = [];
     for (const glyphData of metadataCollection) {
         output.push(glyphData.name);
     }
-    writeFileToDest('icons.json', JSON.stringify(output, null, '  '));
+    writeFile(path_1.default.join(destDir, 'icons.json'), JSON.stringify(output, null, '  '));
 }
-function convertIntoFontFiles(config) {
+function convertIntoFontFiles(tmpDir, destDir) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.info(config);
+        log.info(config_1.default);
         try {
-            const result = yield webfont_1.default(config);
+            const result = yield webfont_1.default({
+                files: `${tmpDir}/*.svg`,
+                fontName: 'baldr-icons',
+                formats: ['woff', 'woff2', 'ttf'],
+                fontHeight: 512,
+                descent: 64
+            });
             log.info(result);
             if (result.glyphsData == null) {
                 throw new Error('No glyphs data found.');
@@ -180,12 +198,12 @@ function convertIntoFontFiles(config) {
                 const metadata = glyphData.metadata;
                 metadataCollection.push(metadata);
             }
-            createCssFile(metadataCollection);
-            createTexFile(metadataCollection);
-            createJsonFile(metadataCollection);
-            writeBufferFileToDest('baldr-icons.ttf', result.ttf);
-            writeBufferFileToDest('baldr-icons.woff', result.woff);
-            writeBufferFileToDest('baldr-icons.woff2', result.woff2);
+            createCssFile(metadataCollection, destDir);
+            createTexFile(metadataCollection, destDir);
+            createJsonFile(metadataCollection, destDir);
+            writeBuffer(path_1.default.join(destDir, 'baldr-icons.ttf'), result.ttf);
+            writeBuffer(path_1.default.join(destDir, 'baldr-icons.woff'), result.woff);
+            writeBuffer(path_1.default.join(destDir, 'baldr-icons.woff2'), result.woff2);
         }
         catch (error) {
             log.error(error);
@@ -195,17 +213,11 @@ function convertIntoFontFiles(config) {
 }
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
-        tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+        const tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
         log.info('The SVG files of the icons are downloaded to this temporary directory: %s', tmpDir);
-        downloadIcons(config_1.default.iconFont.iconMapping, config_1.default.iconFont.urlTemplate);
-        copyIcons(getIconPath('icons'), tmpDir);
-        yield convertIntoFontFiles({
-            files: `${tmpDir}/*.svg`,
-            fontName: 'baldr-icons',
-            formats: ['woff', 'woff2', 'ttf'],
-            fontHeight: 512,
-            descent: 64
-        });
+        downloadIcons(config_1.default.iconFont.iconMapping, config_1.default.iconFont.urlTemplate, tmpDir);
+        copyIcons(path_1.default.join(config_1.default.iconFont.distPath, 'icons'), tmpDir);
+        yield convertIntoFontFiles(tmpDir, config_1.default.iconFont.distPath);
     });
 }
 exports.default = action;
