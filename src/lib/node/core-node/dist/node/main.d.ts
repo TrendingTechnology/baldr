@@ -59,4 +59,10 @@ export declare function findParentFile(filePath: string, fileName: string): stri
  * @returns The base name without the extension.
  */
 export declare function getBasename(filePath: string): string;
+/**
+ * Create a temporary directory.
+ *
+ * @returns The path of the created temporary directory.
+ */
+export declare function createTmpDir(): string;
 export {};

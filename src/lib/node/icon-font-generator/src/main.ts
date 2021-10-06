@@ -3,12 +3,11 @@
  */
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
-import { IconFontGeneratorTypes } from '@bldr/type-definitions'
+import { IconFontGeneratorTypes, Configuration } from '@bldr/type-definitions'
 
 // Node packages.
 import fs from 'fs'
 import path from 'path'
-import os from 'os'
 
 // Third party packages.
 import webfont from 'webfont'
@@ -18,8 +17,14 @@ import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
 import { toTitleCase } from '@bldr/core-browser'
+import { createTmpDir } from '@bldr/core-node'
 
 const cmd = new CommandRunner()
+
+/**
+ * For the tests. To see whats going on. The test runs very long.
+ */
+export const setLogLevel = log.setLogLevel
 
 /**
  * Download one icon.
@@ -127,6 +132,39 @@ interface GlyphMetadata {
   height: number
 }
 
+const cssStyleHeader = `
+@font-face {
+  font-family: "Baldr Icons";
+  src: url("./baldr-icons.woff2") format("woff2"), url("./baldr-icons.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.baldr-icon,
+.baldr-icon::before {
+  display: inline-block;
+  font: normal normal normal 24px/1 "Baldr Icons";
+  font-size: inherit;
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.baldr-icon-spin:before {
+  animation: baldr-icon-spin 4s infinite linear;
+}
+
+@keyframes baldr-icon-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+`
+
 /**
  * ```css
  * .baldr-icon_account-group::before {
@@ -142,13 +180,7 @@ function createCssFile (
   destDir: string
 ): void {
   const output = []
-  const header = fs.readFileSync(
-    path.join(config.iconFont.distPath, 'style_header.css'),
-    {
-      encoding: 'utf-8'
-    }
-  )
-  output.push(header)
+  output.push(cssStyleHeader)
   for (const glyphData of metadataCollection) {
     const unicodeGlyph: string = glyphData.unicode[0]
     const unicode = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
@@ -245,9 +277,10 @@ async function convertIntoFontFiles (
   }
 }
 
-async function action (): Promise<void> {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
-
+export async function createIconFont (
+  config: Configuration,
+  tmpDir: string
+): Promise<void> {
   log.info(
     'The SVG files of the icons are downloaded to this temporary directory: %s',
     tmpDir
@@ -258,8 +291,12 @@ async function action (): Promise<void> {
     config.iconFont.urlTemplate,
     tmpDir
   )
-  copyIcons(path.join(config.iconFont.distPath, 'icons'), tmpDir)
-  await convertIntoFontFiles(tmpDir, config.iconFont.distPath)
+  copyIcons(config.iconFont.additionalIconsPath, tmpDir)
+  await convertIntoFontFiles(tmpDir, config.iconFont.destPath)
+}
+
+async function action (): Promise<void> {
+  await createIconFont(config, createTmpDir())
 }
 
 export default action

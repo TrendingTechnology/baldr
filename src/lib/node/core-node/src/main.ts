@@ -137,3 +137,12 @@ export function findParentFile (
 export function getBasename (filePath: string): string {
   return path.basename(filePath, path.extname(filePath))
 }
+
+/**
+ * Create a temporary directory.
+ *
+ * @returns The path of the created temporary directory.
+ */
+export function createTmpDir (): string {
+  return fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
+}

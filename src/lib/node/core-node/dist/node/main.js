@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
+exports.createTmpDir = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -145,3 +145,12 @@ function getBasename(filePath) {
     return path_1.default.basename(filePath, path_1.default.extname(filePath));
 }
 exports.getBasename = getBasename;
+/**
+ * Create a temporary directory.
+ *
+ * @returns The path of the created temporary directory.
+ */
+function createTmpDir() {
+    return fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+}
+exports.createTmpDir = createTmpDir;
