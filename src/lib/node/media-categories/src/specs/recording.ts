@@ -1,6 +1,7 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { validateMediaId, validateUuid } from '../main'
+import { getAudioMetadataValue } from '../audio-metadata'
 
 /**
  * The meta data type specification “recording”.
@@ -26,8 +27,8 @@ export const recording: MediaCategoriesTypes.Category = {
         fromClaim: 'P4404',
         format: 'formatSingleValue'
       },
-      derive: function({ }) {
-
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('musicbrainz_recording_id', filePath)
       }
     },
     // see composition creationDate

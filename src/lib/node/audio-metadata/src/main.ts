@@ -1,11 +1,12 @@
 import * as musicMetadata from 'music-metadata'
 
-interface AudioMetadataContainer {
+export interface AudioMetadataContainer {
   title: string
   artist?: string
   composer?: string
   album?: string
   musicbrainz_recording_id?: string
+  musicbrainz_work_id?: string
   duration?: number
 }
 
@@ -64,7 +65,9 @@ interface AudioMetadataContainer {
  * }
  * ```
  */
-async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataContainer | undefined> {
+export async function collectAudioMetadata (
+  inputFile: string
+): Promise<AudioMetadataContainer | undefined> {
   const metaData = await musicMetadata.parseFile(inputFile)
   const output: AudioMetadataContainer = { title: '' }
 
@@ -89,6 +92,9 @@ async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataCo
     if (common.musicbrainz_recordingid != null) {
       output.musicbrainz_recording_id = common.musicbrainz_recordingid
     }
+    if (common.musicbrainz_workid != null) {
+      output.musicbrainz_work_id = common.musicbrainz_workid
+    }
     if (output.album != null && output.title != null) {
       output.title = `${output.album}: ${output.title}`
       delete output.album
@@ -96,5 +102,3 @@ async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataCo
     return output
   }
 }
-
-export = collectAudioMetaData

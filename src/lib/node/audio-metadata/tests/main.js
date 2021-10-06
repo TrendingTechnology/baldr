@@ -3,19 +3,39 @@
 const assert = require('assert')
 const path = require('path')
 
-const collectAudioMetaData = require('../dist/node/main.js')
+const { collectAudioMetadata } = require('../dist/node/main.js')
 const config = require('@bldr/config')
 
 describe('Package “@bldr/audio-metadata”', function () {
-  it('Methode “collectAudioMetaData()”', async function () {
-    const meta = await collectAudioMetaData(
-      path.join(
-        config.mediaServer.basePath,
-        'Musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/Herbie-Hancock_Cantaloupe-Island.mp3'
+  describe('Methode “collectAudioMetadata()”', function () {
+    it('HB/Herbie-Hancock_Cantaloupe-Island.mp3', async function () {
+      const meta = await collectAudioMetadata(
+        path.join(
+          config.mediaServer.basePath,
+          'Musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/Herbie-Hancock_Cantaloupe-Island.mp3'
+        )
       )
-    )
-    assert.strictEqual(meta.title, 'Cantaloupe Island: Cantaloupe Island')
-    assert.strictEqual(meta.duration, 330.13551020408164)
-    assert.strictEqual(meta.composer, 'Herbie Hancock')
+      assert.strictEqual(meta.title, 'Cantaloupe Island: Cantaloupe Island')
+      assert.strictEqual(meta.duration, 330.13551020408164)
+      assert.strictEqual(meta.composer, 'Herbie Hancock')
+    })
+
+    it('10_Haydn-Sonate-G-Dur/HB/Sonate-G-Dur-I-Allegro.mp3', async function () {
+      const meta = await collectAudioMetadata(
+        path.join(
+          config.mediaServer.basePath,
+          'Musik/09/20_Mensch-Zeit/10_Klassik/30_Sonatensatz/10_Haydn-Sonate-G-Dur/HB/Sonate-G-Dur-I-Allegro.mp3'
+        )
+      )
+      assert.strictEqual(
+        meta.musicbrainz_recording_id,
+        '75930cdb-daf4-4f01-af8c-a8f08f46d0cf'
+      )
+      assert.strictEqual(
+        meta.musicbrainz_work_id,
+        '5f5bef58-537c-4b64-92aa-958d6039ce6d'
+      )
+      assert.strictEqual(meta.artist, 'Joseph Haydn; Rudolf Buchbinder')
+    })
   })
 })

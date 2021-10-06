@@ -1,9 +1,10 @@
-interface AudioMetadataContainer {
+export interface AudioMetadataContainer {
     title: string;
     artist?: string;
     composer?: string;
     album?: string;
     musicbrainz_recording_id?: string;
+    musicbrainz_work_id?: string;
     duration?: number;
 }
 /**
@@ -61,5 +62,4 @@ interface AudioMetadataContainer {
  * }
  * ```
  */
-declare function collectAudioMetaData(inputFile: string): Promise<AudioMetadataContainer | undefined>;
-export = collectAudioMetaData;
+export declare function collectAudioMetadata(inputFile: string): Promise<AudioMetadataContainer | undefined>;

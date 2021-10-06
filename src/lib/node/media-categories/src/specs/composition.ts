@@ -1,6 +1,7 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { validateUuid } from '../main'
+import { getAudioMetadataValue } from '../audio-metadata'
 
 /**
  * The meta data type specification “composition”.
@@ -10,12 +11,15 @@ export const composition: MediaCategoriesTypes.Category = {
   detectCategoryByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
     title: {
-      title: 'Titel der Komponist',
+      title: 'Titel der Komponistion',
       // 'Tonart CD 4: Spur 29'
-      removeByRegexp: /^.*CD.*Spur.*$/i
+      removeByRegexp: /^.*CD.*Spur.*$/i,
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('title', filePath)
+      }
     },
     composer: {
-      title: 'KomponstIn',
+      title: 'Komponsition',
       // Helbling-Verlag
       removeByRegexp: /^.*Verlag.*$/i,
       wikidata: {
@@ -68,6 +72,9 @@ export const composition: MediaCategoriesTypes.Category = {
         // MusicBrainz-Werk-ID
         fromClaim: 'P435',
         format: 'formatSingleValue'
+      },
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('musicbrainz_work_id', filePath)
       }
     },
     lyrics: {

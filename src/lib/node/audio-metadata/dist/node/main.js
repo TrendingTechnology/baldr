@@ -27,6 +27,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.collectAudioMetadata = void 0;
 const musicMetadata = __importStar(require("music-metadata"));
 /**
  * Output from `music-metadata`:
@@ -83,7 +85,7 @@ const musicMetadata = __importStar(require("music-metadata"));
  * }
  * ```
  */
-function collectAudioMetaData(inputFile) {
+function collectAudioMetadata(inputFile) {
     return __awaiter(this, void 0, void 0, function* () {
         const metaData = yield musicMetadata.parseFile(inputFile);
         const output = { title: '' };
@@ -107,6 +109,9 @@ function collectAudioMetaData(inputFile) {
             if (common.musicbrainz_recordingid != null) {
                 output.musicbrainz_recording_id = common.musicbrainz_recordingid;
             }
+            if (common.musicbrainz_workid != null) {
+                output.musicbrainz_work_id = common.musicbrainz_workid;
+            }
             if (output.album != null && output.title != null) {
                 output.title = `${output.album}: ${output.title}`;
                 delete output.album;
@@ -115,4 +120,4 @@ function collectAudioMetaData(inputFile) {
         }
     });
 }
-module.exports = collectAudioMetaData;
+exports.collectAudioMetadata = collectAudioMetadata;

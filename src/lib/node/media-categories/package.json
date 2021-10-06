@@ -27,6 +27,7 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
+    "@bldr/audio-metadata": "*",
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
