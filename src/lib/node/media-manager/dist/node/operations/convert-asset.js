@@ -38,7 +38,7 @@ const path_1 = __importDefault(require("path"));
 const client_media_models_1 = require("@bldr/client-media-models");
 const core_browser_1 = require("@bldr/core-browser");
 const log = __importStar(require("@bldr/log"));
-const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
+const audio_metadata_1 = require("@bldr/audio-metadata");
 const media_file_classes_1 = require("../media-file-classes");
 const yaml_1 = require("../yaml");
 /**
@@ -163,7 +163,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 if (mimeType === 'audio') {
                     let metaData;
                     try {
-                        metaData = (yield (0, audio_metadata_1.default)(filePath));
+                        metaData = (yield (0, audio_metadata_1.collectAudioMetadata)(filePath));
                     }
                     catch (error) {
                         log.error(error);

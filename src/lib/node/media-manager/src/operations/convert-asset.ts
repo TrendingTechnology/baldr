@@ -7,7 +7,7 @@ import { MediaResolverTypes } from '@bldr/type-definitions'
 import { mimeTypeManager } from '@bldr/client-media-models'
 import { referencify } from '@bldr/core-browser'
 import * as log from '@bldr/log'
-import collectAudioMetaData from '@bldr/audio-metadata'
+import { collectAudioMetadata } from '@bldr/audio-metadata'
 
 import { makeAsset } from '../media-file-classes'
 import { writeYamlMetaData } from '../yaml'
@@ -144,7 +144,7 @@ export async function convertAsset (
       if (mimeType === 'audio') {
         let metaData
         try {
-          metaData = (await collectAudioMetaData(filePath)) as unknown
+          metaData = (await collectAudioMetadata(filePath)) as unknown
         } catch (error) {
           log.error(error)
         }

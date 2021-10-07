@@ -37,7 +37,7 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_node_1 = require("@bldr/core-node");
 const cli_utils_1 = require("@bldr/cli-utils");
 const media_manager_1 = require("@bldr/media-manager");
-const audio_metadata_1 = __importDefault(require("@bldr/audio-metadata"));
+const audio_metadata_1 = require("@bldr/audio-metadata");
 const cmd = new cli_utils_1.CommandRunner({ verbose: true });
 const WAVEFORM_DEFAULT_HEIGHT = 500;
 const WAVEFORM_DEFAULT_WIDTH = 1000;
@@ -45,7 +45,7 @@ const WAVEFORM_DEFAULT_WIDTH = 1000;
 const WAVEFORM_WIDTH_FACTOR = 20;
 function createAudioWaveForm(srcPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const meta = yield audio_metadata_1.default(srcPath);
+        const meta = yield audio_metadata_1.collectAudioMetadata(srcPath);
         let width = `${WAVEFORM_DEFAULT_WIDTH}`;
         if ((meta === null || meta === void 0 ? void 0 : meta.duration) != null) {
             width = (meta.duration * WAVEFORM_WIDTH_FACTOR).toFixed(0);
@@ -54,9 +54,12 @@ function createAudioWaveForm(srcPath) {
         cmd.execSync([
             'ffmpeg',
             // '-t', '60',
-            '-i', srcPath,
-            '-filter_complex', `aformat=channel_layouts=mono,compand,showwavespic=size=${width}x${WAVEFORM_DEFAULT_HEIGHT}:colors=black`,
-            '-frames:v', '1',
+            '-i',
+            srcPath,
+            '-filter_complex',
+            `aformat=channel_layouts=mono,compand,showwavespic=size=${width}x${WAVEFORM_DEFAULT_HEIGHT}:colors=black`,
+            '-frames:v',
+            '1',
             '-y',
             destPath
         ]);
@@ -87,11 +90,16 @@ function extractFrameFromVideo(srcPath, destPath, second = 10) {
     else {
         secondString = second;
     }
-    cmd.execSync(['ffmpeg',
-        '-i', srcPath,
-        '-ss', secondString,
-        '-vframes', '1',
-        '-qscale:v', '10',
+    cmd.execSync([
+        'ffmpeg',
+        '-i',
+        srcPath,
+        '-ss',
+        secondString,
+        '-vframes',
+        '1',
+        '-qscale:v',
+        '10',
         '-y',
         destPath
     ]);
@@ -101,10 +109,14 @@ function convertFirstPdfPageToJpg(srcPath, destPath) {
     destPath = destPath.replace('.jpg', '');
     cmd.execSync([
         'pdftocairo',
-        '-jpeg', '-jpegopt', 'quality=30,optimize=y',
+        '-jpeg',
+        '-jpegopt',
+        'quality=30,optimize=y',
         '-singlefile',
-        '-scale-to', '500',
-        srcPath, destPath
+        '-scale-to',
+        '500',
+        srcPath,
+        destPath
     ]);
     log.verbose('Create preview image %s of a PDF file.', destPath);
 }
@@ -115,7 +127,8 @@ function createPreviewOneFile(srcPath, cmdObj) {
         log.debug('The MIME type of the file is %s', mimeType);
         const destPathPreview = `${srcPath}_preview.jpg`;
         const destPathWavefrom = `${srcPath}_waveform.png`;
-        if (mimeType === 'audio' && (!fs_1.default.existsSync(destPathWavefrom) || (cmdObj === null || cmdObj === void 0 ? void 0 : cmdObj.force))) {
+        if (mimeType === 'audio' &&
+            (!fs_1.default.existsSync(destPathWavefrom) || (cmdObj === null || cmdObj === void 0 ? void 0 : cmdObj.force))) {
             yield createAudioWaveForm(srcPath);
         }
         if (fs_1.default.existsSync(destPathPreview) && !cmdObj.force) {
