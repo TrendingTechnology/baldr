@@ -24,7 +24,6 @@ describe('Package “@bldr/icon-font-generator”', function () {
     await createIconFont(config, tmpDir)
 
     assertExists('style.css')
-    assertExists('baldr-icons-macros.tex')
     assertExists('icons.json')
     assertExists('baldr-icons.ttf')
     assertExists('baldr-icons.woff')

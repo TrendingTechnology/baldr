@@ -45,7 +45,6 @@ const webfont_1 = __importDefault(require("webfont"));
 const cli_utils_1 = require("@bldr/cli-utils");
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const core_browser_1 = require("@bldr/core-browser");
 const log = __importStar(require("@bldr/log"));
 const config_1 = __importDefault(require("@bldr/config"));
 const cmd = new cli_utils_1.CommandRunner();
@@ -181,28 +180,6 @@ function createCssFile(metadataCollection, destDir) {
     writeFile(path_1.default.join(destDir, 'style.css'), output.join('\n'));
 }
 /**
- * ```tex
- * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
- * ```
- *
- * @param metadataCollection - An array of glyph metadata.
- * @param destDir - A path to a destination directory.
- */
-function createTexFile(metadataCollection, destDir) {
-    const output = [];
-    for (const glyphData of metadataCollection) {
-        const unicodeGlyph = glyphData.unicode[0];
-        const unicode = unicodeGlyph
-            .charCodeAt(0)
-            .toString(16)
-            .toUpperCase();
-        const name = glyphData.name.replace(/(-[a-z])/g, group => group.toUpperCase().replace('-', ''));
-        const glyph = `\\def\\bIcon${(0, core_browser_1.toTitleCase)(name)}{{\\BaldrIconFont\\char"0${unicode}}}`;
-        output.push(glyph);
-    }
-    writeFile(path_1.default.join(destDir, 'baldr-icons-macros.tex'), output.join('\n'));
-}
-/**
  * @param metadataCollection - An array of glyph metadata.
  * @param destDir - A path to a destination directory.
  */
@@ -234,7 +211,6 @@ function convertIntoFontFiles(tmpDir, destDir) {
                 metadataCollection.push(metadata);
             }
             createCssFile(metadataCollection, destDir);
-            createTexFile(metadataCollection, destDir);
             createJsonFile(metadataCollection, destDir);
             patchConfig(metadataCollection, destDir);
             writeBuffer(path_1.default.join(destDir, 'baldr-icons.ttf'), result.ttf);

@@ -19,7 +19,6 @@
   "dependencies": {
     "@bldr/cli-utils": "*",
     "@bldr/config": "*",
-    "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",

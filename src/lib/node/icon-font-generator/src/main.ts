@@ -16,7 +16,6 @@ import webfont from 'webfont'
 import { CommandRunner } from '@bldr/cli-utils'
 import { createTmpDir } from '@bldr/core-node'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
-import { toTitleCase } from '@bldr/core-browser'
 import * as log from '@bldr/log'
 import config from '@bldr/config'
 
@@ -215,36 +214,6 @@ function createCssFile (
 }
 
 /**
- * ```tex
- * \def\bIconTask{{\BaldrIconFont\char"0EA3A}}
- * ```
- *
- * @param metadataCollection - An array of glyph metadata.
- * @param destDir - A path to a destination directory.
- */
-function createTexFile (
-  metadataCollection: GlyphMetadata[],
-  destDir: string
-): void {
-  const output = []
-  for (const glyphData of metadataCollection) {
-    const unicodeGlyph: string = glyphData.unicode[0]
-    const unicode = unicodeGlyph
-      .charCodeAt(0)
-      .toString(16)
-      .toUpperCase()
-    const name = glyphData.name.replace(/(-[a-z])/g, group =>
-      group.toUpperCase().replace('-', '')
-    )
-    const glyph = `\\def\\bIcon${toTitleCase(
-      name
-    )}{{\\BaldrIconFont\\char"0${unicode}}}`
-    output.push(glyph)
-  }
-  writeFile(path.join(destDir, 'baldr-icons-macros.tex'), output.join('\n'))
-}
-
-/**
  * @param metadataCollection - An array of glyph metadata.
  * @param destDir - A path to a destination directory.
  */
@@ -289,7 +258,6 @@ async function convertIntoFontFiles (
     }
 
     createCssFile(metadataCollection, destDir)
-    createTexFile(metadataCollection, destDir)
     createJsonFile(metadataCollection, destDir)
     patchConfig(metadataCollection, destDir)
 
