@@ -258,7 +258,7 @@ function patchConfig(metadataCollection, destPath) {
     for (const glyphData of metadataCollection) {
         assigment[glyphData.name] = glyphData.unicode[0].charCodeAt(0);
     }
-    configJson.iconFont.unicodeAssigment = assigment;
+    configJson.iconFont.unicodeAssignment = assigment;
     for (const filePath of config_1.default.configurationFileLocations) {
         log.info('Patch configuration file %s', filePath);
         (0, file_reader_writer_1.writeJsonFile)(filePath, configJson);

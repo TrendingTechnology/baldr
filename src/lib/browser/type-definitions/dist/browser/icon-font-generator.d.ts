@@ -54,7 +54,7 @@ export interface IconFontConfiguration {
     /**
      * This property is filled in by the font generator.
      */
-    unicodeAssigment: {
+    unicodeAssignment: {
         /**
          * `account-group: 59905`
          */

@@ -315,7 +315,7 @@ function patchConfig (metadataCollection: GlyphMetadata[], destPath: string): vo
     assigment[glyphData.name] = glyphData.unicode[0].charCodeAt(0)
   }
 
-  configJson.iconFont.unicodeAssigment = assigment
+  configJson.iconFont.unicodeAssignment = assigment
 
   for (const filePath of config.configurationFileLocations) {
     log.info('Patch configuration file %s', filePath)
