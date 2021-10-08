@@ -260,7 +260,7 @@ function patchConfig(metadataCollection, destPath) {
     }
     configJson.iconFont.unicodeAssigment = assigment;
     for (const filePath of config_1.default.configurationFileLocations) {
-        log.info('Patch configuration file %s\n', filePath);
+        log.info('Patch configuration file %s', filePath);
         (0, file_reader_writer_1.writeJsonFile)(filePath, configJson);
     }
 }
