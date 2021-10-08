@@ -21,7 +21,7 @@ export interface IconDefintion {
  *   "file-tree": "tree",
  *   "trumpet": "",
  *   "text-box-multiple-outline": {
- *     "newName": "multi-part",
+ *     "oldName": "multi-part",
  *     "description": "multipart assets"
  *   },
  *   "cloud-download": {
@@ -55,7 +55,10 @@ export interface IconFontConfiguration {
      * This property is filled in by the font generator.
      */
     unicodeAssigment: {
-        [iconName: string]: string;
+        /**
+         * `account-group: 59905`
+         */
+        [newName: string]: number;
     };
     /**
      * ```json

@@ -13,11 +13,12 @@ import path from 'path'
 import webfont from 'webfont'
 
 // Project packages.
-import * as log from '@bldr/log'
 import { CommandRunner } from '@bldr/cli-utils'
-import config from '@bldr/config'
-import { toTitleCase } from '@bldr/core-browser'
 import { createTmpDir } from '@bldr/core-node'
+import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
+import { toTitleCase } from '@bldr/core-browser'
+import * as log from '@bldr/log'
+import config from '@bldr/config'
 
 const cmd = new CommandRunner()
 
@@ -124,11 +125,34 @@ function writeBuffer (destPath: string, content?: Buffer): void {
 }
 
 interface GlyphMetadata {
+  /**
+   * `/tmp/CiSTWO/musicbrainz-recording.svg`
+   */
   path: string
+
+  /**
+   * `musicbrainz-recording`
+   */
   name: string
-  unicode: string[]
+
+  /**
+   * `[ '', 'musicbrainz_recording' ]`
+   */
+  unicode: [unicodeCharacter: string, glyphName: string]
+
+  /**
+   * `false`
+   */
   renamed: boolean
+
+  /**
+   * `512`
+   */
   width: number
+
+  /**
+   * `512`
+   */
   height: number
 }
 
@@ -267,6 +291,7 @@ async function convertIntoFontFiles (
     createCssFile(metadataCollection, destDir)
     createTexFile(metadataCollection, destDir)
     createJsonFile(metadataCollection, destDir)
+    patchConfig(metadataCollection, destDir)
 
     writeBuffer(path.join(destDir, 'baldr-icons.ttf'), result.ttf)
     writeBuffer(path.join(destDir, 'baldr-icons.woff'), result.woff)
@@ -274,6 +299,27 @@ async function convertIntoFontFiles (
   } catch (error) {
     log.error(error)
     throw error
+  }
+}
+
+function patchConfig (metadataCollection: GlyphMetadata[], destPath: string): void {
+  // to get a fresh unpatched version
+  const configJson = readJsonFile(config.configurationFileLocations[1])
+
+  // Don’t update the configuration file when testing.
+  if (configJson.iconFont.destPath !== destPath) {
+    return
+  }
+  const assigment: { [glyphName: string]: number } = {}
+  for (const glyphData of metadataCollection) {
+    assigment[glyphData.name] = glyphData.unicode[0].charCodeAt(0)
+  }
+
+  configJson.iconFont.unicodeAssigment = assigment
+
+  for (const filePath of config.configurationFileLocations) {
+    log.info('Patch configuration file %s', filePath)
+    writeJsonFile(filePath, configJson)
   }
 }
 

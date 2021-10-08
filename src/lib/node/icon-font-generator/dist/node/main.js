@@ -42,11 +42,12 @@ const path_1 = __importDefault(require("path"));
 // Third party packages.
 const webfont_1 = __importDefault(require("webfont"));
 // Project packages.
-const log = __importStar(require("@bldr/log"));
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
-const core_browser_1 = require("@bldr/core-browser");
 const core_node_1 = require("@bldr/core-node");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const core_browser_1 = require("@bldr/core-browser");
+const log = __importStar(require("@bldr/log"));
+const config_1 = __importDefault(require("@bldr/config"));
 const cmd = new cli_utils_1.CommandRunner();
 /**
  * For the tests. To see whats going on. The test runs very long.
@@ -235,6 +236,7 @@ function convertIntoFontFiles(tmpDir, destDir) {
             createCssFile(metadataCollection, destDir);
             createTexFile(metadataCollection, destDir);
             createJsonFile(metadataCollection, destDir);
+            patchConfig(metadataCollection, destDir);
             writeBuffer(path_1.default.join(destDir, 'baldr-icons.ttf'), result.ttf);
             writeBuffer(path_1.default.join(destDir, 'baldr-icons.woff'), result.woff);
             writeBuffer(path_1.default.join(destDir, 'baldr-icons.woff2'), result.woff2);
@@ -244,6 +246,23 @@ function convertIntoFontFiles(tmpDir, destDir) {
             throw error;
         }
     });
+}
+function patchConfig(metadataCollection, destPath) {
+    // to get a fresh unpatched version
+    const configJson = (0, file_reader_writer_1.readJsonFile)(config_1.default.configurationFileLocations[1]);
+    // Don’t update the configuration file when testing.
+    if (configJson.iconFont.destPath !== destPath) {
+        return;
+    }
+    const assigment = {};
+    for (const glyphData of metadataCollection) {
+        assigment[glyphData.name] = glyphData.unicode[0].charCodeAt(0);
+    }
+    configJson.iconFont.unicodeAssigment = assigment;
+    for (const filePath of config_1.default.configurationFileLocations) {
+        log.info('Patch configuration file %s\n', filePath);
+        (0, file_reader_writer_1.writeJsonFile)(filePath, configJson);
+    }
 }
 function createIconFont(config, tmpDir) {
     return __awaiter(this, void 0, void 0, function* () {
