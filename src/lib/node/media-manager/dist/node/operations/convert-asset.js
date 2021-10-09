@@ -169,7 +169,7 @@ function convertAsset(filePath, cmdObj = {}) {
                         log.error(error);
                     }
                     if (metaData != null) {
-                        (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
+                        yield (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
                     }
                 }
                 converted.add(outputFile);

@@ -149,7 +149,7 @@ export async function convertAsset (
           log.error(error)
         }
         if (metaData != null) {
-          writeYamlMetaData(
+          await writeYamlMetaData(
             outputFile,
             metaData as MediaResolverTypes.YamlFormat
           )

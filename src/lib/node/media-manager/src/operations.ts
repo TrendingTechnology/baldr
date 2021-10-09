@@ -9,6 +9,7 @@ import { normalizePresentationFile } from './operations/normalize-presentation'
 import { patchTexTitles } from './operations/patch-tex-titles'
 import { renameByRef } from './operations/rename-by-ref'
 import { renameMediaAsset } from './operations/rename-asset'
+import { removeWidthHeightInSvg } from './operations/svg'
 
 /**
  * A collection of functions to manipulate the media assets and presentation files.
@@ -22,6 +23,7 @@ export const operations = {
   normalizeMediaAsset,
   normalizePresentationFile,
   patchTexTitles,
+  removeWidthHeightInSvg,
   renameByRef,
   renameMediaAsset
 }

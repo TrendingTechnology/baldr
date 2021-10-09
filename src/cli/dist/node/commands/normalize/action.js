@@ -95,6 +95,9 @@ function action(filePaths, cmdObj) {
                 if (filePath.match(/\.yml$/i) != null) {
                     validateYamlOneFile(filePath);
                 }
+                else if (filePath.match(/\.svg$/i) != null) {
+                    media_manager_1.operations.removeWidthHeightInSvg(filePath);
+                }
             },
             presentation(filePath) {
                 media_manager_1.operations.normalizePresentationFile(filePath);

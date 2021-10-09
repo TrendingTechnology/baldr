@@ -77,6 +77,8 @@ async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
         }
         if (filePath.match(/\.yml$/i) != null) {
           validateYamlOneFile(filePath)
+        } else if (filePath.match(/\.svg$/i) != null) {
+          operations.removeWidthHeightInSvg(filePath)
         }
       },
       presentation (filePath) {

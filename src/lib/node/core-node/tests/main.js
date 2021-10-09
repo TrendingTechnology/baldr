@@ -6,7 +6,8 @@ const fs = require('fs')
 const {
   findParentFile,
   getBasename,
-  createTmpDir
+  createTmpDir,
+  copyToTmp
 } = require('../dist/node/main.js')
 const config = require('@bldr/config')
 
@@ -25,16 +26,24 @@ describe('Package “@bldr/core-node”', function () {
     )
   })
 
-  it('function  “getBasename()”', function () {
+  it('Function “getBasename()”', function () {
     assert.strictEqual(
       getBasename('07_Hoer-Labyrinth/TX/Arbeitsblatt.tex'),
       'Arbeitsblatt'
     )
   })
 
-  it('function  “createTmpDir()”', function () {
+  it('Function “createTmpDir()”', function () {
     const dir = createTmpDir()
     const stat = fs.statSync(dir)
     assert.ok(stat.isDirectory())
+  })
+
+  it('Function “copyToTmp()”', function () {
+    const dest = copyToTmp(__dirname, '..', 'package.json')
+    console.log(dest)
+    const stat = fs.statSync(dest)
+    assert.ok(fs.existsSync(dest))
+    assert.ok(stat.isFile())
   })
 })

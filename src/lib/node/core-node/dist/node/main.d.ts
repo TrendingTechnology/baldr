@@ -65,4 +65,12 @@ export declare function getBasename(filePath: string): string;
  * @returns The path of the created temporary directory.
  */
 export declare function createTmpDir(): string;
+/**
+ * Copy a file to the temporary directory of the operation system.
+ *
+ * @param pathSegments - Path segments for `path.join()`.
+ *
+ * @returns The destination path in the temporary directory of the OS.
+ */
+export declare function copyToTmp(...pathSegments: string[]): string;
 export {};

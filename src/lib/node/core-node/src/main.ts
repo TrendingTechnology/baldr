@@ -144,5 +144,21 @@ export function getBasename (filePath: string): string {
  * @returns The path of the created temporary directory.
  */
 export function createTmpDir (): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
+  return fs.mkdtempSync(path.join(os.tmpdir(), path.sep, 'baldr-'))
+}
+
+/**
+ * Copy a file to the temporary directory of the operation system.
+ *
+ * @param pathSegments - Path segments for `path.join()`.
+ *
+ * @returns The destination path in the temporary directory of the OS.
+ */
+export function copyToTmp (...pathSegments: string[]): string {
+  const src = path.join(...pathSegments)
+  const tmpDir = createTmpDir()
+  const basename = path.basename(src)
+  const dest = path.join(tmpDir, basename)
+  fs.copyFileSync(src, dest)
+  return dest
 }

@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createTmpDir = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
+exports.copyToTmp = exports.createTmpDir = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -151,6 +151,22 @@ exports.getBasename = getBasename;
  * @returns The path of the created temporary directory.
  */
 function createTmpDir() {
-    return fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
+    return fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep, 'baldr-'));
 }
 exports.createTmpDir = createTmpDir;
+/**
+ * Copy a file to the temporary directory of the operation system.
+ *
+ * @param pathSegments - Path segments for `path.join()`.
+ *
+ * @returns The destination path in the temporary directory of the OS.
+ */
+function copyToTmp(...pathSegments) {
+    const src = path_1.default.join(...pathSegments);
+    const tmpDir = createTmpDir();
+    const basename = path_1.default.basename(src);
+    const dest = path_1.default.join(tmpDir, basename);
+    fs_1.default.copyFileSync(src, dest);
+    return dest;
+}
+exports.copyToTmp = copyToTmp;
