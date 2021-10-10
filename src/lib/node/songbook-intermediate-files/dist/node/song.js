@@ -406,14 +406,18 @@ class IntermediateSong extends ExtendedSong {
     generateIntermediateFiles(mode = 'all', force = false) {
         // slides
         if ((mode === 'all' || mode === 'slides') &&
-            (force || file_monitor_1.fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
+            (force ||
+                file_monitor_1.fileMonitor.isModified(this.mscxProjector) ||
+                this.slidesFiles.length === 0)) {
             this.generatePDF('projector');
             this.generateSlides();
         }
         log.info('Check if the MuseScore files of the Song “%s” have changed.', log.colorize.green(this.songId));
         // piano
         if ((mode === 'all' || mode === 'piano') &&
-            (force || file_monitor_1.fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
+            (force ||
+                file_monitor_1.fileMonitor.isModified(this.mscxPiano) ||
+                this.pianoFiles.length === 0)) {
             this.generatePiano();
         }
     }

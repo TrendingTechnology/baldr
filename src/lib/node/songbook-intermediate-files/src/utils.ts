@@ -17,9 +17,12 @@ export function parseSongIDList (listPath: string): string[] {
  */
 export function listFiles (folderPath: string, regExp: RegExp): string[] {
   if (fs.existsSync(folderPath)) {
-    return fs.readdirSync(folderPath).filter((file) => {
-      return file.match(regExp)
-    }).sort(undefined)
+    return fs
+      .readdirSync(folderPath)
+      .filter(file => {
+        return file.match(regExp)
+      })
+      .sort(undefined)
   }
   return []
 }

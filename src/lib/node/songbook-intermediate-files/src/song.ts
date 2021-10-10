@@ -162,7 +162,9 @@ class ExtendedSongMetaData implements SongMetaData {
       throw new Error(log.format('YAML file could not be found: %s', ymlFile))
     }
 
-    this.rawYaml = convertFromYamlRaw(fs.readFileSync(ymlFile, 'utf8')) as SongMetaData
+    this.rawYaml = convertFromYamlRaw(
+      fs.readFileSync(ymlFile, 'utf8')
+    ) as SongMetaData
 
     for (const key in this.rawYaml) {
       if (!this.allowedProperties.includes(key)) {
@@ -254,11 +256,20 @@ export class ExtendedSong implements Song {
     this.songId = path.basename(this.folder)
     this.metaData = new ExtendedSongMetaData(this.folder)
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
-    this.folderIntermediateFiles = new Folder(this.folder, constants.intermediateFolder)
+    this.folderIntermediateFiles = new Folder(
+      this.folder,
+      constants.intermediateFolder
+    )
     this.mscxProjector = this.detectFile('projector.mscx')
     this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx')
-    this.pianoFiles = listFiles(this.folderIntermediateFiles.get(), constants.pianoRegExp)
-    this.slidesFiles = listFiles(this.folderIntermediateFiles.get(), constants.slideRegExp)
+    this.pianoFiles = listFiles(
+      this.folderIntermediateFiles.get(),
+      constants.pianoRegExp
+    )
+    this.slidesFiles = listFiles(
+      this.folderIntermediateFiles.get(),
+      constants.slideRegExp
+    )
   }
 
   /**
@@ -336,11 +347,13 @@ export class IntermediateSong extends ExtendedSong {
    * @return TeX markup for one EPS image file of a piano score.
    */
   private formatPianoTeXEpsFile (index: number): string {
-    const subFolder = path.join(this.abc, this.songId, constants.intermediateFolder, this.pianoFiles[index])
-    return PianoScore.texCmd(
-      'image',
-      subFolder
+    const subFolder = path.join(
+      this.abc,
+      this.songId,
+      constants.intermediateFolder,
+      this.pianoFiles[index]
     )
+    return PianoScore.texCmd('image', subFolder)
   }
 
   /**
@@ -360,14 +373,20 @@ export class IntermediateSong extends ExtendedSong {
    */
   formatPianoTex (): string {
     if (this.pianoFiles.length === 0) {
-      throw new Error(log.format(
-        'The song “%s” has no EPS piano score files.',
-        this.metaData.title))
+      throw new Error(
+        log.format(
+          'The song “%s” has no EPS piano score files.',
+          this.metaData.title
+        )
+      )
     }
     if (this.pianoFiles.length > 4) {
-      throw new Error(log.format(
-        'The song “%s” has more than 4 EPS piano score files.',
-        this.metaData.title))
+      throw new Error(
+        log.format(
+          'The song “%s” has more than 4 EPS piano score files.',
+          this.metaData.title
+        )
+      )
     }
     const template = `\n\\tmpmetadata
 {%s} % title
@@ -395,11 +414,17 @@ export class IntermediateSong extends ExtendedSong {
    * @param source - Name of the *.mscx file without the extension.
    * @param destination - Name of the PDF without the extension.
    */
-  private generatePDF (source: string, destination: string = ''): string | undefined {
+  private generatePDF (
+    source: string,
+    destination: string = ''
+  ): string | undefined {
     if (destination === '') {
       destination = source
     }
-    const pdf = path.join(this.folderIntermediateFiles.get(), destination + '.pdf')
+    const pdf = path.join(
+      this.folderIntermediateFiles.get(),
+      destination + '.pdf'
+    )
     childProcess.spawnSync('mscore', [
       '--export-to',
       path.join(pdf),
@@ -419,7 +444,11 @@ export class IntermediateSong extends ExtendedSong {
    *
    * @returns An array of the renamed multipart files names.
    */
-  private renameMultipartFiles (folder: string, regExp: RegExp, newMultipartFilename: string): string[] {
+  private renameMultipartFiles (
+    folder: string,
+    regExp: RegExp,
+    newMultipartFilename: string
+  ): string[] {
     const intermediateFiles = listFiles(folder, regExp)
     let no = 1
     for (const oldName of intermediateFiles) {
@@ -431,7 +460,10 @@ export class IntermediateSong extends ExtendedSong {
   }
 
   public generateMetaDataForMediaServer (): void {
-    const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml')
+    const yamlFilePath = path.join(
+      this.folderIntermediateFiles.get(),
+      'Projektor.svg.yml'
+    )
     const oldMetaData = readYamlFile(yamlFilePath)
     let uuid: string
     if (oldMetaData?.uuid != null) {
@@ -442,7 +474,10 @@ export class IntermediateSong extends ExtendedSong {
     const newMetaData = this.metaDataCombined.toJSON()
     newMetaData.uuid = uuid
     const metaData = Object.assign({ ref: `LD_${this.songId}` }, newMetaData)
-    writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData)
+    writeYamlFile(
+      path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'),
+      metaData
+    )
   }
 
   /**
@@ -462,7 +497,11 @@ export class IntermediateSong extends ExtendedSong {
     ])
     fs.unlinkSync(src)
 
-    const result = this.renameMultipartFiles(subFolder, constants.slideRegExp, constants.firstSlideName)
+    const result = this.renameMultipartFiles(
+      subFolder,
+      constants.slideRegExp,
+      constants.firstSlideName
+    )
 
     log.info('  Generate SVG files: %s', result.toString())
     if (result.length === 0) {
@@ -484,10 +523,16 @@ export class IntermediateSong extends ExtendedSong {
     const pianoFile = path.join(subFolder, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
-    const result = this.renameMultipartFiles(subFolder, constants.pianoRegExp, constants.firstPianoName)
+    const result = this.renameMultipartFiles(
+      subFolder,
+      constants.pianoRegExp,
+      constants.firstPianoName
+    )
     log.info('  Generate EPS files: %s', result.toString())
     if (result.length === 0) {
-      throw new Error('The EPS files for the piano score couldn’t be generated.')
+      throw new Error(
+        'The EPS files for the piano score couldn’t be generated.'
+      )
     }
     this.pianoFiles = result
     return result
@@ -500,19 +545,33 @@ export class IntermediateSong extends ExtendedSong {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
+  generateIntermediateFiles (
+    mode: GenerationMode = 'all',
+    force: boolean = false
+  ): void {
     // slides
-    if ((mode === 'all' || mode === 'slides') &&
-        (force || fileMonitor.isModified(this.mscxProjector) || (this.slidesFiles.length === 0))) {
+    if (
+      (mode === 'all' || mode === 'slides') &&
+      (force ||
+        fileMonitor.isModified(this.mscxProjector) ||
+        this.slidesFiles.length === 0)
+    ) {
       this.generatePDF('projector')
       this.generateSlides()
     }
 
-    log.info('Check if the MuseScore files of the Song “%s” have changed.', log.colorize.green(this.songId))
+    log.info(
+      'Check if the MuseScore files of the Song “%s” have changed.',
+      log.colorize.green(this.songId)
+    )
 
     // piano
-    if ((mode === 'all' || mode === 'piano') &&
-        (force || fileMonitor.isModified(this.mscxPiano) || (this.pianoFiles.length === 0))) {
+    if (
+      (mode === 'all' || mode === 'piano') &&
+      (force ||
+        fileMonitor.isModified(this.mscxPiano) ||
+        this.pianoFiles.length === 0)
+    ) {
       this.generatePiano()
     }
   }
@@ -529,8 +588,14 @@ export class IntermediateSong extends ExtendedSong {
         fs.removeSync(filePath)
       }
     }
-    removeFile('Remove temporary PDF file “%s”.', path.join(this.folder, 'projector.pdf'))
-    removeFile('Remove old slides folder “%s”.', path.join(this.folder, 'slides'))
+    removeFile(
+      'Remove temporary PDF file “%s”.',
+      path.join(this.folder, 'projector.pdf')
+    )
+    removeFile(
+      'Remove old slides folder “%s”.',
+      path.join(this.folder, 'slides')
+    )
     removeFile('Remove old piano folder “%s”.', path.join(this.folder, 'piano'))
   }
 }

@@ -109,9 +109,7 @@ class FileMonitor {
   hashSHA1 (filename: string): string {
     return crypto
       .createHash('sha1')
-      .update(
-        fs.readFileSync(filename)
-      )
+      .update(fs.readFileSync(filename))
       .digest('hex')
   }
 
@@ -158,5 +156,6 @@ class FileMonitor {
   }
 }
 
-export const fileMonitor = new FileMonitor(path.join(config.songbook.path,
-  'filehashes.db'))
+export const fileMonitor = new FileMonitor(
+  path.join(config.songbook.path, 'filehashes.db')
+)

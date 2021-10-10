@@ -15,6 +15,7 @@ interface CmdObj {
   folder: string
   force: boolean
   groupAlphabetically: boolean
+  json: boolean
   list: string
   pageTurnOptimized: boolean
   piano: boolean
@@ -67,6 +68,8 @@ function action (cmdObj: CmdObj): void {
     library.updateSongByPath(cmdObj.folder, mode)
   } else if (cmdObj.songId != null) {
     library.updateSongBySongId(cmdObj.songId, mode)
+  } else if (cmdObj.json != null) {
+    library.generateLibraryJson()
   } else {
     library.update(mode, cmdObj.force)
 
