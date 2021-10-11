@@ -1,7 +1,7 @@
 <template>
   <div class="vc_main_app">
-    <router-view/>
-    <app-info package-name="@bldr/songbook" :version="version"/>
+    <router-view />
+    <app-info package-name="@bldr/songbook" :version="version" />
   </div>
 </template>
 
@@ -30,7 +30,9 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: 'f',
-        callback: () => { this.$fullscreen() },
+        callback: () => {
+          this.$fullscreen()
+        },
         description: 'Vollbild anzeigen'
       }
     ])
@@ -39,15 +41,15 @@ export default {
 </script>
 
 <style lang="scss">
-  body {
-    margin: 0;
-    font-size: 2vw;
-    background-color: $white;
-  }
+body {
+  margin: 0;
+  font-size: 2vw;
+  background-color: $white;
+}
 
-  #nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+#nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 </style>

@@ -31,11 +31,7 @@ export default {
     IconLink
   },
   computed: {
-    ...mapGetters([
-      'externalSites',
-      'slideNo',
-      'songCurrent'
-    ]),
+    ...mapGetters(['externalSites', 'slideNo', 'songCurrent']),
     metadata () {
       return this.songCurrent.metaDataCombined
     },
@@ -69,50 +65,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .vc_meta_data {
-    padding-top: 0.2vw;
-    position: absolute;
-    width: 100%;
+.vc_meta_data {
+  padding-top: 0.2vw;
+  position: absolute;
+  width: 100%;
 
-    .people {
-      display: flex;
-      font-size: 1.5vw;
-      padding: 3vw;
-    }
-
-    .people > div {
-      flex: 1;
-    }
-
-    .composer {
-      text-align: right;
-    }
-
-    .links {
-      position: absolute;
-      left: 5vw;
-      top: 1vw;
-    }
-
-    .links > div {
-      flex: 1;
-    }
-
-    .lyricist {
-      text-align: left;
-    }
-
-    h1, h2 {
-      margin: 1vw;
-    }
-
-    h1 {
-      font-size: 3vw;
-    }
-
-    h2 {
-      font-size: 2vw;
-      font-style: italic;
-    }
+  .people {
+    display: flex;
+    font-size: 1.5vw;
+    padding: 3vw;
   }
+
+  .people > div {
+    flex: 1;
+  }
+
+  .composer {
+    text-align: right;
+  }
+
+  .links {
+    position: absolute;
+    left: 5vw;
+    top: 1vw;
+  }
+
+  .links > div {
+    flex: 1;
+  }
+
+  .lyricist {
+    text-align: left;
+  }
+
+  h1,
+  h2 {
+    margin: 1vw;
+  }
+
+  h1 {
+    font-size: 3vw;
+  }
+
+  h2 {
+    font-size: 2vw;
+    font-style: italic;
+  }
+}
 </style>

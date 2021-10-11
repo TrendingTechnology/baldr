@@ -1,4 +1,3 @@
-
 <template>
   <div class="vc_song_view">
     <div class="top-icons">
@@ -11,14 +10,14 @@
       <material-icon
         @click.native="showTableOfContents"
         name="table-of-contents"
-       :size="materialIconSize"
-       title="Inhaltsverzeichnis (Tastenkürzel: i)"
+        :size="materialIconSize"
+        title="Inhaltsverzeichnis (Tastenkürzel: i)"
       />
       <material-icon
         @click.native="$fullscreen()"
         name="fullscreen"
-       :size="materialIconSize"
-       title="Vollbild (Tastenkürzel: f)"
+        :size="materialIconSize"
+        title="Vollbild (Tastenkürzel: f)"
       />
     </div>
 
@@ -31,9 +30,9 @@
       />
     </modal-dialog>
     <modal-dialog name="table-of-contents">
-      <table-of-contents/>
+      <table-of-contents />
     </modal-dialog>
-    <song-slide/>
+    <song-slide />
     <cursor-cross
       :left="setSlidePrevious"
       :right="setSlideNext"
@@ -103,7 +102,7 @@ export default {
     ]),
     selectSong () {
       this.$modal.hide('search')
-      this.setSong(this.selectedSong.id)
+      this.setSong(this.selectedSong.ref)
       this.$shortcuts.unpause()
     },
     setSong (songId) {
@@ -150,43 +149,57 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: 'left',
-        callback: () => { this.setSlidePrevious() },
+        callback: () => {
+          this.setSlidePrevious()
+        },
         // 'Previous slide'
         description: 'Vorhergehende Folie'
       },
       {
         keys: 'right',
-        callback: () => { this.setSlideNext() },
+        callback: () => {
+          this.setSlideNext()
+        },
         // 'Next slide'
         description: 'Nächste Folie'
       },
       {
         keys: 'alt+left',
-        callback: () => { this.browseAllSlidesPrevious() },
+        callback: () => {
+          this.browseAllSlidesPrevious()
+        },
         // 'Previous slide'
         description: 'Vorhergehende Folie (durch alle Lieder blättern)'
       },
       {
         keys: 'alt+right',
-        callback: () => { this.browseAllSlidesNext() },
+        callback: () => {
+          this.browseAllSlidesNext()
+        },
         // 'Next slide'
         description: 'Nächste Folie (durch alle Lieder blättern)'
       },
       {
         keys: 'up',
-        callback: () => { this.setSongPrevious() },
+        callback: () => {
+          this.setSongPrevious()
+        },
         // 'Previous song'
         description: 'Nächstes Lied'
       },
       {
         keys: 'down',
-        callback: () => { this.setSongNext() },
+        callback: () => {
+          this.setSongNext()
+        },
         // 'Next song'
         description: 'Vorhergehendes Lied'
       },
       {
         keys: 'z',
-        callback: () => { this.setSongRandom() },
+        callback: () => {
+          this.setSongRandom()
+        },
         description: 'Einen zufälliges Lied einblenden'
       },
       {
@@ -209,24 +222,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .vc_song_view {
-    .vc_cursor_cross {
-      bottom: 0;
-      position: fixed;
-      right: 0;
-    }
-
-    .random {
-      bottom: 0;
-      left: 0;
-      position: fixed;
-    }
-
-    .top-icons {
-      position: fixed;
-      right: 0;
-      top: 0;
-      z-index: 1;
-    }
+.vc_song_view {
+  .vc_cursor_cross {
+    bottom: 0;
+    position: fixed;
+    right: 0;
   }
+
+  .random {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+  }
+
+  .top-icons {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}
 </style>
