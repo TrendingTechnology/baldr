@@ -21,16 +21,16 @@ const getters = {
   externalSites: () => {
     return SongMetaDataCombined.externalSites()
   },
-  library: (state) => {
+  library: state => {
     return state.library
   },
-  slideNo: (state) => {
+  slideNo: state => {
     return state.slideNo
   },
-  songCurrent: (state) => {
+  songCurrent: state => {
     return state.songCurrent
   },
-  songs: (state) => {
+  songs: state => {
     return state.library.songs
   }
 }

@@ -69,6 +69,9 @@ function action(cmdObj) {
     else if (cmdObj.songId != null) {
         library.updateSongBySongId(cmdObj.songId, mode);
     }
+    else if (cmdObj.json != null) {
+        library.generateLibraryJson();
+    }
     else {
         library.update(mode, cmdObj.force);
         if (mode === 'piano' || mode === 'all') {

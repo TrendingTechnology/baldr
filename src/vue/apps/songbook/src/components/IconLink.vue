@@ -1,14 +1,6 @@
 <template>
-  <a
-    class="vc_icon_link"
-    :href="link"
-    v-if="link"
-  >
-    <material-icon
-      :name="icon"
-      :show-on-hover="showOnHover"
-      size="3vw"
-    />
+  <a class="vc_icon_link" :href="link" v-if="link">
+    <material-icon :name="icon" :show-on-hover="showOnHover" size="3vw" />
   </a>
 </template>
 

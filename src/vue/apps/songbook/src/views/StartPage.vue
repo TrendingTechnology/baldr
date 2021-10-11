@@ -11,10 +11,9 @@
     />
 
     <section class="row">
-
       <div class="block">
-        <router-link :to="{ name: 'toc'}">
-          <plain-icon name="table-of-contents"/>
+        <router-link :to="{ name: 'toc' }">
+          <plain-icon name="table-of-contents" />
           Inhaltsverzeichnis
         </router-link>
       </div>
@@ -22,9 +21,7 @@
       <div class="block">
         Anzahl der Lieder: {{ Object.keys(songs).length }}
       </div>
-
     </section>
-
   </div>
 </template>
 
@@ -41,31 +38,31 @@ export default {
   computed: mapGetters(['library', 'songs']),
   methods: {
     selectSong () {
-      this.$router.push(`song/${this.selectedSong.id}`)
+      this.$router.push(`song/${this.selectedSong.ref}`)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .vc_start_page {
-    h1 {
-      text-align: center;
-    }
-
-    .dynamic-select-wrapper {
-      margin: 1vw 10vw;
-    }
-
-    .row {
-      margin-top: 10vw;
-      font-size: 3vw;
-      display: flex;
-      justify-content: center;
-    }
-
-    .block {
-      width: 30vw;
-    }
+.vc_start_page {
+  h1 {
+    text-align: center;
   }
+
+  .dynamic-select-wrapper {
+    margin: 1vw 10vw;
+  }
+
+  .row {
+    margin-top: 10vw;
+    font-size: 3vw;
+    display: flex;
+    justify-content: center;
+  }
+
+  .block {
+    width: 30vw;
+  }
+}
 </style>

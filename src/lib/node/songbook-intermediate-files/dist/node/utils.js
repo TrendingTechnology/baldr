@@ -38,9 +38,12 @@ exports.parseSongIDList = parseSongIDList;
  */
 function listFiles(folderPath, regExp) {
     if (fs.existsSync(folderPath)) {
-        return fs.readdirSync(folderPath).filter((file) => {
+        return fs
+            .readdirSync(folderPath)
+            .filter(file => {
             return file.match(regExp);
-        }).sort(undefined);
+        })
+            .sort(undefined);
     }
     return [];
 }

@@ -220,7 +220,7 @@ export declare class IntermediateLibrary extends Library {
      */
     private generateIntermediateFiles;
     private generateMetaDataForMediaServer;
-    private generateLibraryJson;
+    generateLibraryJson(): void;
     compilePianoScore(groupAlphabetically: boolean, pageTurnOptimized: boolean): void;
     /**
      * Generate all intermediate media files for one song.

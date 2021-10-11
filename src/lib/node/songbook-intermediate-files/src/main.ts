@@ -54,8 +54,11 @@ function collectSongs (basePath: string): SongCollection<ExtendedSong> {
     const song = new ExtendedSong(path.join(basePath, songPath))
     if (song.songId in songs) {
       throw new Error(
-        log.format('A song with the same songId already exists: %s',
-          song.songId))
+        log.format(
+          'A song with the same songId already exists: %s',
+          song.songId
+        )
+      )
     }
     songs[song.songId] = song
   }
@@ -98,7 +101,9 @@ class Library extends CoreLibrary {
       if ({}.hasOwnProperty.call(this.songs, songId)) {
         songs[songId] = this.songs[songId]
       } else {
-        throw new Error(log.format('There is no song with song ID “%s”', songId))
+        throw new Error(
+          log.format('There is no song with song ID “%s”', songId)
+        )
       }
     }
     this.songs = songs
@@ -172,11 +177,20 @@ export class PianoScore {
   groupAlphabetically: boolean
   pageTurnOptimized: boolean
 
-  constructor (library: IntermediateLibrary, groupAlphabetically: boolean = true, pageTurnOptimized: boolean = true) {
+  constructor (
+    library: IntermediateLibrary,
+    groupAlphabetically: boolean = true,
+    pageTurnOptimized: boolean = true
+  ) {
     /**
      * A temporary file path where the content of the TeX file gets stored.
      */
-    this.texFile = new TextFile(path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-songbook-')), 'songbook.tex'))
+    this.texFile = new TextFile(
+      path.join(
+        fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-songbook-')),
+        'songbook.tex'
+      )
+    )
 
     this.library = library
 
@@ -210,7 +224,9 @@ export class PianoScore {
    * @returns A TeX safe string with escaped `\&`.
    */
   static sanitize (markup: string | undefined): string {
-    if (markup != null) { return markup.replace('&', '\\&') }
+    if (markup != null) {
+      return markup.replace('&', '\\&')
+    }
     return ''
   }
 
@@ -223,7 +239,11 @@ export class PianoScore {
    *
    * @returns An array of song objects, which fit in a given page number
    */
-  static selectSongs (countTree: PianoFilesCountTree, songs: IntermediateSong[], pageCount: number): IntermediateSong[] {
+  static selectSongs (
+    countTree: PianoFilesCountTree,
+    songs: IntermediateSong[],
+    pageCount: number
+  ): IntermediateSong[] {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
         const song = countTree.shift(i)
@@ -248,7 +268,10 @@ export class PianoScore {
    *
    * @return {string}
    */
-  static buildSongList (songs: IntermediateSong[], pageTurnOptimized = false): string {
+  static buildSongList (
+    songs: IntermediateSong[],
+    pageTurnOptimized = false
+  ): string {
     const doublePages = []
     if (pageTurnOptimized) {
       let firstPage = true
@@ -303,12 +326,22 @@ export class PianoScore {
     const songs = this.library.toArray()
     if (this.groupAlphabetically) {
       const abcTree = new AlphabeticalSongsTree(songs)
-      Object.keys(abcTree).forEach((abc) => {
+      Object.keys(abcTree).forEach(abc => {
         output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-        output.push(PianoScore.buildSongList(abcTree[abc] as IntermediateSong[], this.pageTurnOptimized))
+        output.push(
+          PianoScore.buildSongList(
+            abcTree[abc] as IntermediateSong[],
+            this.pageTurnOptimized
+          )
+        )
       })
     } else {
-      output.push(PianoScore.buildSongList(songs as IntermediateSong[], this.pageTurnOptimized))
+      output.push(
+        PianoScore.buildSongList(
+          songs as IntermediateSong[],
+          this.pageTurnOptimized
+        )
+      )
     }
     return output.join('')
   }
@@ -327,7 +360,8 @@ export class PianoScore {
     // not allowed in restricted mode.
     // --shell-escape
     const result = childProcess.spawnSync(
-      'lualatex', ['--shell-escape', texFile],
+      'lualatex',
+      ['--shell-escape', texFile],
       {
         cwd: cwd,
         encoding: 'utf-8'
@@ -382,11 +416,10 @@ export class PianoScore {
     } else {
       openCommand = 'xdg-open'
     }
-    const child = childProcess.spawn(
-      openCommand,
-      [pdfFile],
-      { detached: true, stdio: 'ignore' }
-    )
+    const child = childProcess.spawn(openCommand, [pdfFile], {
+      detached: true,
+      stdio: 'ignore'
+    })
     child.unref()
   }
 }
@@ -511,12 +544,14 @@ export class IntermediateLibrary extends Library {
   private collectSongs (): SongCollection<IntermediateSong> {
     const songs: SongCollection<IntermediateSong> = {}
     for (const songPath of this.detectSongs()) {
-      const song = new IntermediateSong(
-        path.join(this.basePath, songPath))
+      const song = new IntermediateSong(path.join(this.basePath, songPath))
       if (song.songId in songs) {
         throw new Error(
-          log.format('A song with the same songId already exists: %s',
-            song.songId))
+          log.format(
+            'A song with the same songId already exists: %s',
+            song.songId
+          )
+        )
       }
       songs[song.songId] = song
     }
@@ -529,11 +564,9 @@ export class IntermediateLibrary extends Library {
    * @param files - An array of files to delete.
    */
   private deleteFiles (files: string[]): void {
-    files.forEach(
-      (filePath) => {
-        fs.removeSync(path.join(this.basePath, filePath))
-      }
-    )
+    files.forEach(filePath => {
+      fs.removeSync(path.join(this.basePath, filePath))
+    })
   }
 
   /**
@@ -549,10 +582,7 @@ export class IntermediateLibrary extends Library {
       log.info('Delete temporary MuseScore file: %s', tmpMscx)
       fs.unlinkSync(tmpMscx)
     })
-    this.deleteFiles([
-      'songs.tex',
-      'filehashes.db'
-    ])
+    this.deleteFiles(['songs.tex', 'filehashes.db'])
   }
 
   /**
@@ -562,7 +592,10 @@ export class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param force - Force the regeneration of intermediate files.
    */
-  private generateIntermediateFiles (mode: GenerationMode = 'all', force: boolean = false): void {
+  private generateIntermediateFiles (
+    mode: GenerationMode = 'all',
+    force: boolean = false
+  ): void {
     for (const songId in this.songs) {
       const song = this.songs[songId]
       song.generateIntermediateFiles(mode, force)
@@ -576,16 +609,16 @@ export class IntermediateLibrary extends Library {
     }
   }
 
-  private generateLibraryJson (): void {
+  public generateLibraryJson (): void {
     const jsonPath = path.join(this.basePath, 'songs.json')
-    fs.writeFileSync(
-      jsonPath,
-      JSON.stringify(this, null, '  ')
-    )
+    fs.writeFileSync(jsonPath, JSON.stringify(this, null, '  '))
     log.info('Create JSON file: %s', jsonPath)
   }
 
-  compilePianoScore (groupAlphabetically: boolean, pageTurnOptimized: boolean): void {
+  compilePianoScore (
+    groupAlphabetically: boolean,
+    pageTurnOptimized: boolean
+  ): void {
     const pianoScore = new PianoScore(
       this,
       groupAlphabetically,
@@ -620,7 +653,9 @@ export class IntermediateLibrary extends Library {
     if ({}.hasOwnProperty.call(this.songs, songId)) {
       song = this.songs[songId]
     } else {
-      throw new Error(log.format('The song with the song ID “%s” is unkown.', songId))
+      throw new Error(
+        log.format('The song with the song ID “%s” is unkown.', songId)
+      )
     }
     song.generateIntermediateFiles(mode, true)
   }
@@ -634,8 +669,10 @@ export class IntermediateLibrary extends Library {
    */
   update (mode: GenerationMode = 'all', force: boolean = false): void {
     if (!['all', 'slides', 'piano'].includes(mode)) {
-      throw new Error('The parameter “mode” must be one of this strings: ' +
-        '“all”, “slides” or “piano”.')
+      throw new Error(
+        'The parameter “mode” must be one of this strings: ' +
+          '“all”, “slides” or “piano”.'
+      )
     }
     this.generateIntermediateFiles(mode, force)
     this.generateMetaDataForMediaServer()

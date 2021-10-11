@@ -1,8 +1,7 @@
-
 <template>
   <section class="vc_song_slide">
-    <meta-data/>
-    <img :src="imageSrc">
+    <meta-data />
+    <img :src="imageSrc" />
     <div class="slide-number"></div>
   </section>
 </template>
@@ -27,22 +26,25 @@ export default {
       return this.songCurrent.songId
     },
     imageSrc () {
-      return formatMultiPartAssetFileName(`./songs/${this.abc}/${this.songId}/NB/Projektor.svg`, this.slideNo)
+      return formatMultiPartAssetFileName(
+        `./songs/${this.abc}/${this.songId}/NB/Projektor.svg`,
+        this.slideNo
+      )
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .vc_song_slide {
-    text-align: center;
+.vc_song_slide {
+  text-align: center;
 
-    img {
-      height: auto;
-      max-height: 100vh;
-      max-width: 100%;
-      vertical-align: middle;
-      width: 100%;
-    }
+  img {
+    height: auto;
+    max-height: 100vh;
+    max-width: 100%;
+    vertical-align: middle;
+    width: 100%;
   }
+}
 </style>

@@ -279,7 +279,7 @@ class PianoScore {
         const songs = this.library.toArray();
         if (this.groupAlphabetically) {
             const abcTree = new songbook_core_1.AlphabeticalSongsTree(songs);
-            Object.keys(abcTree).forEach((abc) => {
+            Object.keys(abcTree).forEach(abc => {
                 output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()));
                 output.push(PianoScore.buildSongList(abcTree[abc], this.pageTurnOptimized));
             });
@@ -345,7 +345,10 @@ class PianoScore {
         else {
             openCommand = 'xdg-open';
         }
-        const child = childProcess.spawn(openCommand, [pdfFile], { detached: true, stdio: 'ignore' });
+        const child = childProcess.spawn(openCommand, [pdfFile], {
+            detached: true,
+            stdio: 'ignore'
+        });
         child.unref();
     }
 }
@@ -477,7 +480,7 @@ class IntermediateLibrary extends Library {
      * @param files - An array of files to delete.
      */
     deleteFiles(files) {
-        files.forEach((filePath) => {
+        files.forEach(filePath => {
             fs.removeSync(path.join(this.basePath, filePath));
         });
     }
@@ -493,10 +496,7 @@ class IntermediateLibrary extends Library {
             log.info('Delete temporary MuseScore file: %s', tmpMscx);
             fs.unlinkSync(tmpMscx);
         });
-        this.deleteFiles([
-            'songs.tex',
-            'filehashes.db'
-        ]);
+        this.deleteFiles(['songs.tex', 'filehashes.db']);
     }
     /**
      * Calls the method generateIntermediateFiles on each song
