@@ -118,7 +118,7 @@ function action (filePath: string): void {
       title = rawSample.title
     }
 
-    const ref = asciify(title.toLowerCase())
+    const ref = asciify(title)
 
     const timeText: string[] = []
     if (rawSample.startTime != null) {
@@ -150,7 +150,7 @@ function action (filePath: string): void {
 
   const dest = `${filePath}.yml`
   log.info('The content of the destination file “%s”:\n', dest)
-  log.info(writeYamlFile(dest, { samples }))
+  log.always(writeYamlFile(dest, { samples }))
 }
 
 export = action

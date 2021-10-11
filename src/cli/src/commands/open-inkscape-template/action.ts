@@ -17,7 +17,7 @@ async function action (): Promise<void> {
       'inkscape',
       path.join(
         config.mediaServer.basePath,
-        'Musik',
+        'faecheruebergreifend',
         'Inkscape-Vorlagen',
         'Inkscape-Vorlage.svg'
       )

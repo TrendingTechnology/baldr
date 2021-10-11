@@ -123,7 +123,7 @@ function action(filePath) {
         else {
             title = rawSample.title;
         }
-        const ref = core_browser_1.asciify(title.toLowerCase());
+        const ref = core_browser_1.asciify(title);
         const timeText = [];
         if (rawSample.startTime != null) {
             timeText.push(core_browser_1.formatDuration(rawSample.startTime, true));
@@ -149,6 +149,6 @@ function action(filePath) {
     }
     const dest = `${filePath}.yml`;
     log.info('The content of the destination file “%s”:\n', dest);
-    log.info(file_reader_writer_1.writeYamlFile(dest, { samples }));
+    log.always(file_reader_writer_1.writeYamlFile(dest, { samples }));
 }
 module.exports = action;
