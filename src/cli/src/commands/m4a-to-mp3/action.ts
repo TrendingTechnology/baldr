@@ -11,8 +11,8 @@ async function action (): Promise<void> {
       log.always('Delete %s', file)
     }
 
-    if (file.match(/\.m4a\./i) != null) {
-      const newFile = file.replace('.m4a', '.mp3')
+    if (file.match(/\.m4a/i) != null) {
+      const newFile = file.replace(/\.m4a/i, '.mp3')
       fs.renameSync(file, newFile)
       log.always('Rename from %s to %s', file, newFile)
     }
