@@ -103,7 +103,7 @@ export default {
     selectSong () {
       this.$modal.hide('search')
       this.setSong(this.selectedSong.ref)
-      this.$shortcuts.unpause()
+      //this.$shortcuts.unpause()
     },
     setSong (songId) {
       this.$router.push({ name: 'song', params: { songId: songId } })
@@ -118,12 +118,7 @@ export default {
       this.setSong(this.library.getRandomSong().songId)
     },
     showSearch () {
-      const visibility = this.$modal.toggle('search')
-      if (visibility) {
-        this.$shortcuts.pause()
-      } else {
-        this.$shortcuts.unpause()
-      }
+      this.$modal.toggle('search')
       this.$dynamicSelect.focus()
     },
     showTableOfContents () {
