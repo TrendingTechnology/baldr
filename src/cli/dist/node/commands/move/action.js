@@ -85,7 +85,7 @@ function relocate(oldPath, extension, cmdObj) {
                 file_reader_writer_1.writeFile(oldPath, newContent);
             }
         }
-        media_manager_1.moveAsset(oldPath, newPath, cmdObj);
+        media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
     }
 }
 /**
@@ -139,7 +139,7 @@ function moveTexImage(oldPathTex, baseName, cmdObj) {
         const newRelPath = path_1.default.join(imgParentDir, path_1.default.basename(oldPath));
         // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/BD/John-Coltrane.jpg
         const newPath = path_1.default.join(presParentDirMirrored, newRelPath);
-        media_manager_1.moveAsset(oldPath, newPath, cmdObj);
+        media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
         resolvedTexImages[baseName] = newRelPath;
         return newRelPath;
     }
@@ -185,7 +185,7 @@ function moveTex(oldPath, newPath, cmdObj) {
     }
     // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
     newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'TX');
-    media_manager_1.moveAsset(oldPath, newPath, cmdObj);
+    media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
     // Maybe --dry-run is specified
     if (fs_1.default.existsSync(newPath)) {
         let newContent = file_reader_writer_1.readFile(newPath);
@@ -220,7 +220,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         fileName = fileName.replace(/^a-/, '');
         const tmpMp3Path = path_1.default.join(path_1.default.dirname(newPath), fileName);
         // Move mp3 into media.
-        media_manager_1.moveAsset(oldPath, tmpMp3Path, { copy: true });
+        media_manager_1.operations.moveAsset(oldPath, tmpMp3Path, { copy: true });
         // Convert into m4a.
         const convertedPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
         if (convertedPath == null)
@@ -254,7 +254,7 @@ function moveReference(oldPath, cmdObj) {
         if (newPath === undefined)
             return;
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'QL');
-        media_manager_1.moveAsset(oldPath, newPath, cmdObj);
+        media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
         if (cmdObj.dryRun != null && cmdObj.dryRun)
             return;
         yield media_manager_1.operations.initializeMetaYaml(newPath);
@@ -296,7 +296,7 @@ function moveFromArchive(oldPath, extension, cmdObj) {
             yield moveMp3(oldPath, newPath, cmdObj);
         }
         else {
-            media_manager_1.moveAsset(oldPath, newPath, cmdObj);
+            media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
         }
     });
 }

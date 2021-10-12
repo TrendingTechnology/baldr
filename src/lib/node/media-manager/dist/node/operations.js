@@ -10,9 +10,8 @@ const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
 const patch_tex_titles_1 = require("./operations/patch-tex-titles");
-const rename_by_ref_1 = require("./operations/rename-by-ref");
-const rename_asset_1 = require("./operations/rename-asset");
 const svg_1 = require("./operations/svg");
+const asset_1 = require("./asset");
 /**
  * A collection of functions to manipulate the media assets and presentation files.
  */
@@ -22,10 +21,11 @@ exports.operations = {
     generateCloze: cloze_1.generateCloze,
     generatePresentation: generate_presentation_1.generatePresentation,
     initializeMetaYaml: initialize_meta_yaml_1.initializeMetaYaml,
+    moveAsset: asset_1.moveAsset,
     normalizeMediaAsset: normalize_asset_1.normalizeMediaAsset,
     normalizePresentationFile: normalize_presentation_1.normalizePresentationFile,
     patchTexTitles: patch_tex_titles_1.patchTexTitles,
     removeWidthHeightInSvg: svg_1.removeWidthHeightInSvg,
-    renameByRef: rename_by_ref_1.renameByRef,
-    renameMediaAsset: rename_asset_1.renameMediaAsset
+    renameByRef: asset_1.renameByRef,
+    renameMediaAsset: asset_1.renameMediaAsset
 };

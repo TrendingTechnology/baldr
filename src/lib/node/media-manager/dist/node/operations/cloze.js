@@ -77,7 +77,7 @@ function generateSvg(tmpPdfFile, destDir, pageCount, pageNo) {
         const destPath = path_1.default.join(destDir, svgFileName);
         initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount);
         log.info('Result svg: %s', destPath);
-        (0, main_1.moveAsset)(svgFilePath, destPath);
+        main_1.operations.moveAsset(svgFilePath, destPath);
         yield main_1.operations.normalizeMediaAsset(destPath, { wikidata: false });
     });
 }

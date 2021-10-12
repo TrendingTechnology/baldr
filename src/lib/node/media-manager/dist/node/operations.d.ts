@@ -6,9 +6,8 @@ import { initializeMetaYaml } from './operations/initialize-meta-yaml';
 import { normalizeMediaAsset } from './operations/normalize-asset';
 import { normalizePresentationFile } from './operations/normalize-presentation';
 import { patchTexTitles } from './operations/patch-tex-titles';
-import { renameByRef } from './operations/rename-by-ref';
-import { renameMediaAsset } from './operations/rename-asset';
 import { removeWidthHeightInSvg } from './operations/svg';
+import { renameMediaAsset, moveAsset, renameByRef } from './asset';
 /**
  * A collection of functions to manipulate the media assets and presentation files.
  */
@@ -18,6 +17,7 @@ export declare const operations: {
     generateCloze: typeof generateCloze;
     generatePresentation: typeof generatePresentation;
     initializeMetaYaml: typeof initializeMetaYaml;
+    moveAsset: typeof moveAsset;
     normalizeMediaAsset: typeof normalizeMediaAsset;
     normalizePresentationFile: typeof normalizePresentationFile;
     patchTexTitles: typeof patchTexTitles;

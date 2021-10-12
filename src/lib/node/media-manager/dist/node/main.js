@@ -32,9 +32,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readAssetYaml = exports.moveAsset = exports.setLogLevel = void 0;
+exports.readAssetYaml = exports.setLogLevel = void 0;
 const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
@@ -47,76 +46,6 @@ function setLogLevel(level) {
     log.setLogLevel(level);
 }
 exports.setLogLevel = setLogLevel;
-/**
- * Move (rename) or copy a media asset and it’s corresponding meta data file
- * (`*.yml`) and preview file (`_preview.jpg`).
- *
- * @param oldPath - The old path of a media asset.
- * @param newPath - The new path of a media asset.
- * @param opts - Some options
- */
-function moveAsset(oldPath, newPath, opts = {}) {
-    function move(oldPath, newPath, { copy, dryRun }) {
-        if (oldPath === newPath) {
-            return;
-        }
-        if (copy != null && copy) {
-            if (!(dryRun != null && dryRun)) {
-                log.debug('Copy file from %s to %s', oldPath, newPath);
-                fs_1.default.copyFileSync(oldPath, newPath);
-            }
-        }
-        else {
-            if (!(dryRun != null && dryRun)) {
-                //  Error: EXDEV: cross-device link not permitted,
-                try {
-                    log.debug('Move file from %s to %s', oldPath, newPath);
-                    fs_1.default.renameSync(oldPath, newPath);
-                }
-                catch (error) {
-                    const e = error;
-                    if (e.code === 'EXDEV') {
-                        log.debug('Move file by copying and deleting from %s to %s', oldPath, newPath);
-                        fs_1.default.copyFileSync(oldPath, newPath);
-                        fs_1.default.unlinkSync(oldPath);
-                    }
-                }
-            }
-        }
-    }
-    function moveCorrespondingFile(oldPath, newPath, search, replace, opts) {
-        oldPath = oldPath.replace(search, replace);
-        if (fs_1.default.existsSync(oldPath)) {
-            newPath = newPath.replace(search, replace);
-            move(oldPath, newPath, opts);
-        }
-    }
-    if (newPath != null && oldPath !== newPath) {
-        if (!(opts.dryRun != null && opts.dryRun)) {
-            fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
-        }
-        const extension = (0, core_browser_1.getExtension)(oldPath);
-        if (extension === 'eps') {
-            // Dippermouth-Blues.eps
-            // Dippermouth-Blues.mscx
-            moveCorrespondingFile(oldPath, newPath, /\.eps$/, '.mscx', opts);
-            // Dippermouth-Blues-eps-converted-to.pdf
-            moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts);
-        }
-        // Beethoven.mp4
-        // Beethoven.mp4.yml
-        // Beethoven.mp4_preview.jpg
-        // Beethoven.mp4_waveform.png
-        for (const suffix of ['.yml', '_preview.jpg', '_waveform.png']) {
-            if (fs_1.default.existsSync(`${oldPath}${suffix}`)) {
-                move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts);
-            }
-        }
-        move(oldPath, newPath, opts);
-        return newPath;
-    }
-}
-exports.moveAsset = moveAsset;
 /**
  * Read the corresponding YAML file of a media asset.
  *

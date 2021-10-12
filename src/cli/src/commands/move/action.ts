@@ -6,7 +6,6 @@ import childProcess from 'child_process'
 // Project packages.
 import { getExtension, referencify, asciify } from '@bldr/core-browser'
 import {
-  moveAsset,
   walk,
   readAssetYaml,
   operations,
@@ -63,7 +62,7 @@ function relocate (oldPath: string, extension: string, cmdObj: CmdObj): void {
         writeFile(oldPath, newContent)
       }
     }
-    moveAsset(oldPath, newPath, cmdObj)
+    operations.moveAsset(oldPath, newPath, cmdObj)
   }
 }
 
@@ -124,7 +123,7 @@ function moveTexImage (
     const newRelPath = path.join(imgParentDir, path.basename(oldPath))
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/BD/John-Coltrane.jpg
     const newPath = path.join(presParentDirMirrored, newRelPath)
-    moveAsset(oldPath, newPath, cmdObj)
+    operations.moveAsset(oldPath, newPath, cmdObj)
     resolvedTexImages[baseName] = newRelPath
     return newRelPath
   }
@@ -173,7 +172,7 @@ function moveTex (oldPath: string, newPath: string, cmdObj: CmdObj): void {
 
   // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
   newPath = locationIndicator.moveIntoSubdir(newPath, 'TX')
-  moveAsset(oldPath, newPath, cmdObj)
+  operations.moveAsset(oldPath, newPath, cmdObj)
   // Maybe --dry-run is specified
   if (fs.existsSync(newPath)) {
     let newContent = readFile(newPath)
@@ -219,7 +218,7 @@ async function moveMp3 (
   const tmpMp3Path = path.join(path.dirname(newPath), fileName)
 
   // Move mp3 into media.
-  moveAsset(oldPath, tmpMp3Path, { copy: true })
+  operations.moveAsset(oldPath, tmpMp3Path, { copy: true })
 
   // Convert into m4a.
   const convertedPath = await operations.convertAsset(tmpMp3Path)
@@ -252,7 +251,7 @@ async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
   let newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
-  moveAsset(oldPath, newPath, cmdObj)
+  operations.moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun != null && cmdObj.dryRun) return
   await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
@@ -291,7 +290,7 @@ async function moveFromArchive (
   } else if (extension === 'mp3') {
     await moveMp3(oldPath, newPath, cmdObj)
   } else {
-    moveAsset(oldPath, newPath, cmdObj)
+    operations.moveAsset(oldPath, newPath, cmdObj)
   }
 }
 

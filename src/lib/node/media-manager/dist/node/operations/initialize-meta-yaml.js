@@ -10,17 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeMetaYaml = void 0;
-const rename_asset_1 = require("./rename-asset");
-const normalize_asset_1 = require("./normalize-asset");
+const operations_1 = require("../operations");
 const yaml_1 = require("../yaml");
 /**
  * Rename, create metadata yaml and normalize the metadata file.
  */
 function initializeMetaYaml(filePath, metaData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newPath = (0, rename_asset_1.renameMediaAsset)(filePath);
-        (0, yaml_1.writeYamlMetaData)(newPath, metaData);
-        yield (0, normalize_asset_1.normalizeMediaAsset)(newPath, { wikidata: false });
+        const newPath = operations_1.operations.renameMediaAsset(filePath);
+        yield (0, yaml_1.writeYamlMetaData)(newPath, metaData);
+        yield operations_1.operations.normalizeMediaAsset(newPath, { wikidata: false });
     });
 }
 exports.initializeMetaYaml = initializeMetaYaml;

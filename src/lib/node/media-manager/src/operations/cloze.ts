@@ -5,7 +5,7 @@ import path from 'path'
 
 // Project packages.
 import * as log from '@bldr/log'
-import { moveAsset, operations } from '../main'
+import { operations } from '../main'
 
 import { locationIndicator } from '../location-indicator'
 
@@ -66,7 +66,7 @@ async function generateSvg (
   initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount)
 
   log.info('Result svg: %s', destPath)
-  moveAsset(svgFilePath, destPath)
+  operations.moveAsset(svgFilePath, destPath)
   await operations.normalizeMediaAsset(destPath, { wikidata: false })
 }
 

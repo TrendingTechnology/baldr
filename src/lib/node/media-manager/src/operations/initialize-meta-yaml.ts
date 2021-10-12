@@ -1,7 +1,6 @@
 import { MediaResolverTypes } from '@bldr/type-definitions'
 
-import { renameMediaAsset } from './rename-asset'
-import { normalizeMediaAsset } from './normalize-asset'
+import { operations } from '../operations'
 import { writeYamlMetaData } from '../yaml'
 
 /**
@@ -11,7 +10,7 @@ export async function initializeMetaYaml (
   filePath: string,
   metaData?: MediaResolverTypes.YamlFormat
 ): Promise<void> {
-  const newPath = renameMediaAsset(filePath)
-  writeYamlMetaData(newPath, metaData)
-  await normalizeMediaAsset(newPath, { wikidata: false })
+  const newPath = operations.renameMediaAsset(filePath)
+  await writeYamlMetaData(newPath, metaData)
+  await operations.normalizeMediaAsset(newPath, { wikidata: false })
 }
