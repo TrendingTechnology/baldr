@@ -29,6 +29,55 @@ export function setLogLevel (level: number): void {
   log.setLogLevel(level)
 }
 
+function move (
+  oldPath: string,
+  newPath: string,
+  { copy, dryRun }: MoveAssetConfiguration
+): void {
+  if (oldPath === newPath) {
+    return
+  }
+  if (copy != null && copy) {
+    if (!(dryRun != null && dryRun)) {
+      log.debug('Copy file from %s to %s', oldPath, newPath)
+      fs.copyFileSync(oldPath, newPath)
+    }
+  } else {
+    if (!(dryRun != null && dryRun)) {
+      //  Error: EXDEV: cross-device link not permitted,
+      try {
+        log.debug('Move file from %s to %s', oldPath, newPath)
+        fs.renameSync(oldPath, newPath)
+      } catch (error) {
+        const e = error as GenericError
+        if (e.code === 'EXDEV') {
+          log.debug(
+            'Move file by copying and deleting from %s to %s',
+            oldPath,
+            newPath
+          )
+          fs.copyFileSync(oldPath, newPath)
+          fs.unlinkSync(oldPath)
+        }
+      }
+    }
+  }
+}
+
+function moveCorrespondingFile (
+  oldPath: string,
+  newPath: string,
+  search: RegExp,
+  replace: string,
+  opts: MoveAssetConfiguration
+): void {
+  oldPath = oldPath.replace(search, replace)
+  if (fs.existsSync(oldPath)) {
+    newPath = newPath.replace(search, replace)
+    move(oldPath, newPath, opts)
+  }
+}
+
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).
@@ -42,55 +91,6 @@ export function moveAsset (
   newPath: string,
   opts: MoveAssetConfiguration = {}
 ): string | undefined {
-  function move (
-    oldPath: string,
-    newPath: string,
-    { copy, dryRun }: MoveAssetConfiguration
-  ): void {
-    if (oldPath === newPath) {
-      return
-    }
-    if (copy != null && copy) {
-      if (!(dryRun != null && dryRun)) {
-        log.debug('Copy file from %s to %s', oldPath, newPath)
-        fs.copyFileSync(oldPath, newPath)
-      }
-    } else {
-      if (!(dryRun != null && dryRun)) {
-        //  Error: EXDEV: cross-device link not permitted,
-        try {
-          log.debug('Move file from %s to %s', oldPath, newPath)
-          fs.renameSync(oldPath, newPath)
-        } catch (error) {
-          const e = error as GenericError
-          if (e.code === 'EXDEV') {
-            log.debug(
-              'Move file by copying and deleting from %s to %s',
-              oldPath,
-              newPath
-            )
-            fs.copyFileSync(oldPath, newPath)
-            fs.unlinkSync(oldPath)
-          }
-        }
-      }
-    }
-  }
-
-  function moveCorrespondingFile (
-    oldPath: string,
-    newPath: string,
-    search: RegExp,
-    replace: string,
-    opts: MoveAssetConfiguration
-  ): void {
-    oldPath = oldPath.replace(search, replace)
-    if (fs.existsSync(oldPath)) {
-      newPath = newPath.replace(search, replace)
-      move(oldPath, newPath, opts)
-    }
-  }
-
   if (newPath != null && oldPath !== newPath) {
     if (!(opts.dryRun != null && opts.dryRun)) {
       fs.mkdirSync(path.dirname(newPath), { recursive: true })
