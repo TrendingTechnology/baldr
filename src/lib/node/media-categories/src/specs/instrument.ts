@@ -14,6 +14,12 @@ interface InstrumentFileFormat extends MediaResolverTypes.YamlFormat {
   extension: string
 }
 
+function check(data: any): void {
+  if (data.name == null) {
+    throw new Error('A instrument needs a name.')
+  }
+}
+
 /**
  * The meta data type specification “instrument”.
  */
@@ -40,6 +46,7 @@ export const instrument: MediaCategoriesTypes.Category = {
     ref: {
       title: 'ID zur Referenzierung (Präfix „IN_“)',
       derive: function ({ data, category }) {
+        check(data)
         // IS: Instrument
         const instrumentCategory = category as InstrumentCategory
         const instrumentData = data as InstrumentFileFormat
@@ -50,6 +57,7 @@ export const instrument: MediaCategoriesTypes.Category = {
     title: {
       title: 'Titel des Instruments',
       derive: function ({ data }) {
+        check(data)
         const instrumentData = data as InstrumentFileFormat
         return `Foto des Instruments „${instrumentData.name}“`
       },

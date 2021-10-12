@@ -24,6 +24,9 @@ exports.youtube = {
             derive: function ({ data, category }) {
                 const youtubeCategory = category;
                 const youtubeData = data;
+                if (youtubeData.youtubeId == undefined) {
+                    throw new Error('A Youtube video needs a youtube_id.');
+                }
                 return `${youtubeCategory.abbreviation}_${youtubeData.youtubeId}`;
             },
             overwriteByDerived: true
@@ -32,6 +35,9 @@ exports.youtube = {
             title: 'Titel eines YouTube-Videos',
             derive: function ({ data }) {
                 let title;
+                if (data.youtubeId == undefined) {
+                    throw new Error('A Youtube video needs a youtube_id.');
+                }
                 if (data.heading != null && data.heading !== '') {
                     title = data.heading;
                 }

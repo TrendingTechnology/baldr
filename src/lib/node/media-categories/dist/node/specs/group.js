@@ -8,6 +8,11 @@ const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
 const main_1 = require("../main");
+function check(data) {
+    if (data.name == null) {
+        throw new Error('A group needs a name.');
+    }
+}
 /**
  * The meta data type specification “group”.
  */
@@ -50,6 +55,7 @@ exports.group = {
         title: {
             title: 'Titel der Gruppe',
             derive: function ({ data }) {
+                check(data);
                 const groupData = data;
                 return `Portrait-Bild der Gruppe „${groupData.name}“`;
             },

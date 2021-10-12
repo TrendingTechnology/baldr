@@ -21,6 +21,12 @@ interface PersonCategory extends MediaCategoriesTypes.Category {
   basePath: string
 }
 
+function check(data: any): void {
+  if (data.lastname == null && data.firstname == null) {
+    throw new Error('A person needs a first- and a lastname.')
+  }
+}
+
 /**
  * The meta data type specification “person”.
  */
@@ -64,6 +70,7 @@ export const person: MediaCategoriesTypes.Category = {
       title: 'Personen-ID',
       description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
       derive: function ({ data }) {
+        check(data)
         return `${referencify(data.lastname)}_${referencify(data.firstname)}`
       },
       overwriteByDerived: true
@@ -120,6 +127,7 @@ export const person: MediaCategoriesTypes.Category = {
     name: {
       title: 'Name (Vor- und Familienname)',
       derive: function ({ data }) {
+        check(data)
         const personData = data as PersonFileFormat
         return `${personData.firstname} ${personData.lastname}`
       },

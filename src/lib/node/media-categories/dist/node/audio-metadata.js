@@ -29,7 +29,7 @@ function getAudioMetadataValue(fieldName, filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         if (filePath != null) {
             const metadata = yield getAudioMetadata(filePath);
-            if (metadata != null && metadata[fieldName] != null) {
+            if ((metadata === null || metadata === void 0 ? void 0 : metadata[fieldName]) != null) {
                 return metadata[fieldName];
             }
         }

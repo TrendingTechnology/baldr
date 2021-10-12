@@ -8,6 +8,11 @@ const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
 const main_1 = require("../main");
+function check(data) {
+    if (data.lastname == null && data.firstname == null) {
+        throw new Error('A person needs a first- and a lastname.');
+    }
+}
 /**
  * The meta data type specification “person”.
  */
@@ -45,6 +50,7 @@ exports.person = {
             title: 'Personen-ID',
             description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
             derive: function ({ data }) {
+                check(data);
                 return `${core_browser_1.referencify(data.lastname)}_${core_browser_1.referencify(data.firstname)}`;
             },
             overwriteByDerived: true
@@ -99,6 +105,7 @@ exports.person = {
         name: {
             title: 'Name (Vor- und Familienname)',
             derive: function ({ data }) {
+                check(data);
                 const personData = data;
                 return `${personData.firstname} ${personData.lastname}`;
             },

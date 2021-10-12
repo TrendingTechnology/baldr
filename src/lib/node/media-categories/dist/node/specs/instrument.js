@@ -7,6 +7,11 @@ exports.instrument = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
+function check(data) {
+    if (data.name == null) {
+        throw new Error('A instrument needs a name.');
+    }
+}
 /**
  * The meta data type specification “instrument”.
  */
@@ -33,6 +38,7 @@ exports.instrument = {
         ref: {
             title: 'ID zur Referenzierung (Präfix „IN_“)',
             derive: function ({ data, category }) {
+                check(data);
                 // IS: Instrument
                 const instrumentCategory = category;
                 const instrumentData = data;
@@ -43,6 +49,7 @@ exports.instrument = {
         title: {
             title: 'Titel des Instruments',
             derive: function ({ data }) {
+                check(data);
                 const instrumentData = data;
                 return `Foto des Instruments „${instrumentData.name}“`;
             },

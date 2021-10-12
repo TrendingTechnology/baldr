@@ -17,6 +17,12 @@ interface GroupFileFormat extends MediaResolverTypes.YamlFormat {
   extension: string
 }
 
+function check(data: any): void {
+  if (data.name == null) {
+    throw new Error('A group needs a name.')
+  }
+}
+
 /**
  * The meta data type specification “group”.
  */
@@ -59,6 +65,7 @@ export const group: MediaCategoriesTypes.Category = {
     title: {
       title: 'Titel der Gruppe',
       derive: function ({ data }) {
+        check(data)
         const groupData = data as GroupFileFormat
         return `Portrait-Bild der Gruppe „${groupData.name}“`
       },

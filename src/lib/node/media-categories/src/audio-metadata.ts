@@ -28,7 +28,7 @@ export async function getAudioMetadataValue (
 ): Promise<string | number | undefined> {
   if (filePath != null) {
     const metadata = await getAudioMetadata(filePath)
-    if (metadata != null && metadata[fieldName] != null) {
+    if (metadata?.[fieldName] != null) {
       return metadata[fieldName]
     }
   }

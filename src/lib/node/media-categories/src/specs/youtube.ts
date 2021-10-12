@@ -33,6 +33,9 @@ export const youtube: MediaCategoriesTypes.Category = {
       derive: function ({ data, category }) {
         const youtubeCategory = category as YoutubeCategory
         const youtubeData = data as YoutubeFileFormat
+        if (youtubeData.youtubeId == undefined) {
+          throw new Error('A Youtube video needs a youtube_id.')
+        }
         return `${youtubeCategory.abbreviation}_${youtubeData.youtubeId}`
       },
       overwriteByDerived: true
@@ -41,6 +44,9 @@ export const youtube: MediaCategoriesTypes.Category = {
       title: 'Titel eines YouTube-Videos',
       derive: function ({ data }) {
         let title: string
+        if (data.youtubeId == undefined) {
+          throw new Error('A Youtube video needs a youtube_id.')
+        }
         if (data.heading != null && data.heading !== '') {
           title = data.heading
         } else if (
