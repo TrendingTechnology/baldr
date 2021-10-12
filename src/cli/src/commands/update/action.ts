@@ -4,9 +4,6 @@ import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
 import * as log from '@bldr/log'
 
-import syncBuilds from '../build-sync/action.js'
-import buildVueApp from '../build/action.js'
-
 type whatType = 'api' | 'config' | 'media' | 'vue'
 
 interface CmdObj {
@@ -63,15 +60,15 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
   }
 
   // config
-  if (opts.local && opts.config) {
-    cmd.log('Updating the configuration locally using ansible.')
-    await cmd.exec(['/usr/local/bin/ansible-playbook-localhost.sh', 'b/baldr'])
-  }
+  // if (opts.local && opts.config) {
+  //   cmd.log('Updating the configuration locally using ansible.')
+  //   await cmd.exec(['/usr/local/bin/ansible-playbook-localhost.sh', 'b/baldr'])
+  // }
 
-  if (opts.remote && opts.config) {
-    cmd.log('Updating the configuration remotely using ansible.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"/usr/local/bin/ansible-playbook-localhost.sh b/baldr"'])
-  }
+  // if (opts.remote && opts.config) {
+  //   cmd.log('Updating the configuration remotely using ansible.')
+  //   await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"/usr/local/bin/ansible-playbook-localhost.sh b/baldr"'])
+  // }
 
   // api
   if (opts.local && opts.api) {
@@ -79,8 +76,8 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     // For example:
     //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
     if (result.stdout === '') {
-      log.info('Git repo is not clean: %s', config.localRepo)
-      log.verbose(result.stdout)
+      log.error('Git repo is not clean: %s', config.localRepo)
+      log.warn(result.stdout)
       process.exit(1)
     }
     cmd.log('Updating the local BALDR repository.')
@@ -96,24 +93,24 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     await cmd.exec(['systemctl', 'restart', 'baldr_wire.service'])
   }
 
-  if (opts.remote && opts.api) {
-    cmd.log('Updating the remote BALDR repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; git pull"`])
+  // if (opts.remote && opts.api) {
+  //   cmd.log('Updating the remote BALDR repository.')
+  //   await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; git pull"`])
 
-    cmd.log('Installing missing node packages in the remote BALDR repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; npx lerna bootstrap"`])
+  //   cmd.log('Installing missing node packages in the remote BALDR repository.')
+  //   await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.localRepo}; npx lerna bootstrap"`])
 
-    cmd.log('Restarting the systemd service named “baldr_api.service” remotely.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"systemctl restart baldr_api.service"'])
-  }
+  //   cmd.log('Restarting the systemd service named “baldr_api.service” remotely.')
+  //   await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, '"systemctl restart baldr_api.service"'])
+  // }
 
   // vue
-  if (opts.vue) {
-    cmd.stopSpin()
-    await buildVueApp('lamp')
-    await syncBuilds()
-    cmd.startSpin()
-  }
+  // if (opts.vue) {
+  //   cmd.stopSpin()
+  //   await buildVueApp('lamp')
+  //   await syncBuilds()
+  //   cmd.startSpin()
+  // }
 
   // media
   if (opts.local && opts.media) {
@@ -133,19 +130,19 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     await cmd.exec(['curl', 'http://localhost/api/media/mgmt/update'])
   }
 
-  if (opts.remote && opts.media) {
-    cmd.log('Pull remote changes from the git server into the remote media repository.')
-    await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull"`])
+  // if (opts.remote && opts.media) {
+  //   cmd.log('Pull remote changes from the git server into the remote media repository.')
+  //   await cmd.exec(['ssh', config.mediaServer.sshAliasRemote, `"cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull"`])
 
-    cmd.log('Updating the remote MongoDB database.')
-    await cmd.exec(
-      [
-        'curl',
-        '-u', `${config.http.username}:${config.http.password}`,
-        `https://${config.http.domainRemote}/api/media/mgmt/update`
-      ]
-    )
-  }
+  //   cmd.log('Updating the remote MongoDB database.')
+  //   await cmd.exec(
+  //     [
+  //       'curl',
+  //       '-u', `${config.http.username}:${config.http.password}`,
+  //       `https://${config.http.domainRemote}/api/media/mgmt/update`
+  //     ]
+  //   )
+  // }
 
   cmd.stopSpin()
 }
