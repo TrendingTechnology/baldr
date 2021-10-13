@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@bldr/config": "*",
+    "@types/electron-devtools-installer": "2.0.3",
     "@vue/cli-plugin-typescript": "4.5.0",
     "@vue/cli-service": "4.5.9",
     "@vue/eslint-config-standard": "5.1.2",
