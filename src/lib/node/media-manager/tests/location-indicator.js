@@ -12,7 +12,7 @@ function getAbsPath (relPath) {
   return path.join(config.mediaServer.basePath, relPath)
 }
 
-describe('Package “@bldr/media-manager”', function () {
+describe('Package “@bldr/media-manager”: location-indicator', function () {
   describe('Class “LocationIndicator”', function () {
     describe('Method getPresParentDir()', function () {
       it('defined', function () {

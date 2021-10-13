@@ -5,7 +5,7 @@ import { MediaResolverTypes } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
-import { readAssetYaml } from './main'
+import { readAssetYaml } from './asset'
 
 /**
  * Base class for the asset and presentation class.

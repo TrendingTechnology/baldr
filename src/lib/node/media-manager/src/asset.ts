@@ -1,13 +1,27 @@
+// Node packages.
+import childProcess from 'child_process'
 import path from 'path'
 import fs from 'fs'
 
-import { getExtension, asciify } from '@bldr/core-browser'
-import { categoriesManagement } from '@bldr/media-categories'
-import { MediaResolverTypes, GenericError } from '@bldr/type-definitions'
-import { readYamlFile } from '@bldr/file-reader-writer'
-import { readYamlMetaData } from './main'
+// Project packages.
+import { mimeTypeManager } from '@bldr/client-media-models'
+import { referencify, getExtension, asciify, deepCopy, msleep } from '@bldr/core-browser'
+import { collectAudioMetadata } from '@bldr/audio-metadata'
+import { makeAsset } from './media-file-classes'
+import { categoriesManagement, categories } from '@bldr/media-categories'
 import { locationIndicator } from './location-indicator'
+import {
+  MediaResolverTypes,
+  GenericError,
+  MediaCategoriesTypes,
+  StringIndexedObject
+} from '@bldr/type-definitions'
+import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
+import { readYamlMetaData } from './main'
+import { writeYamlMetaData } from './yaml'
 import * as log from '@bldr/log'
+import wikidata from '@bldr/wikidata'
+import { convertToYaml } from '@bldr/yaml'
 
 interface MoveAssetConfiguration {
   copy?: boolean
@@ -68,7 +82,11 @@ function moveCorrespondingFiles (
     const oldCorrespondingPath = oldParentPath.replace(search, replace)
     if (fs.existsSync(oldCorrespondingPath)) {
       const newCorrespondingPath = newParentPath.replace(search, replace)
-      log.debug('Move corresponding file from %s to %s', oldCorrespondingPath, newCorrespondingPath)
+      log.debug(
+        'Move corresponding file from %s to %s',
+        oldCorrespondingPath,
+        newCorrespondingPath
+      )
       move(oldCorrespondingPath, newCorrespondingPath, opts)
     }
   }
@@ -222,4 +240,256 @@ export function renameByRef (filePath: string): void {
     newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     moveAsset(oldPath, newPath)
   }
+}
+
+async function queryWikidata (
+  metaData: MediaResolverTypes.YamlFormat,
+  categoryNames: MediaCategoriesTypes.Names,
+  categoryCollection: MediaCategoriesTypes.Collection
+): Promise<MediaResolverTypes.YamlFormat> {
+  const dataWiki = await wikidata.query(
+    metaData.wikidata,
+    categoryNames,
+    categoryCollection
+  )
+  log.verbose(dataWiki)
+  metaData = wikidata.mergeData(
+    metaData,
+    dataWiki,
+    categoryCollection
+  ) as MediaResolverTypes.YamlFormat
+  // To avoid blocking
+  // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
+  // status: 429,
+  // statusText: 'Scripted requests from your IP have been blocked, please
+  // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
+  msleep(3000)
+  return metaData
+}
+
+interface NormalizeMediaAssetOption {
+  wikidata?: boolean
+}
+
+function logDiff (oldYamlMarkup: string, newYamlMarkup: string): void {
+  log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
+}
+
+/**
+ * @param filePath - The media asset file path.
+ */
+export async function normalizeMediaAsset (
+  filePath: string,
+  options?: NormalizeMediaAssetOption
+): Promise<void> {
+  try {
+    const yamlFile = `${filePath}.yml`
+    const raw = readAssetYaml(filePath)
+    if (raw != null) {
+      raw.filePath = filePath
+    }
+    let metaData = raw as MediaResolverTypes.YamlFormat
+    if (metaData == null) {
+      return
+    }
+    const origData = deepCopy(metaData) as MediaResolverTypes.YamlFormat
+
+    // Always: general
+    const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
+    if (categoryNames != null) {
+      const categories = metaData.categories != null ? metaData.categories : ''
+      metaData.categories = categoriesManagement.mergeNames(
+        categories,
+        categoryNames
+      )
+    }
+    if (options?.wikidata != null) {
+      if (metaData.wikidata != null && metaData.categories != null) {
+        metaData = await queryWikidata(
+          metaData,
+          metaData.categories,
+          categories
+        )
+      }
+    }
+    const newMetaData = await categoriesManagement.process(metaData, filePath)
+    const oldMetaData = origData as StringIndexedObject
+    delete oldMetaData.filePath
+
+    const oldYamlMarkup = convertToYaml(oldMetaData)
+    const newYamlMarkup = convertToYaml(newMetaData)
+    if (oldYamlMarkup !== newYamlMarkup) {
+      logDiff(oldYamlMarkup, newYamlMarkup)
+      writeYamlFile(yamlFile, newMetaData)
+    }
+  } catch (error) {
+    log.error(filePath)
+    log.error(error)
+    process.exit()
+  }
+}
+
+/**
+ * Rename, create metadata yaml and normalize the metadata file.
+ */
+export async function initializeMetaYaml (
+  filePath: string,
+  metaData?: MediaResolverTypes.YamlFormat
+): Promise<void> {
+  const newPath = renameMediaAsset(filePath)
+  await writeYamlMetaData(newPath, metaData)
+  await normalizeMediaAsset(newPath, { wikidata: false })
+}
+
+/**
+ * A set of output file paths. To avoid duplicate rendering by a second
+ * run of the script.
+ *
+ * First run: `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *
+ * Second run:
+ * - not:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *   2. `01-Hintergrund.m4a` -> `01-Hintergrund.m4a` (bad)
+ * - but:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ */
+const converted: Set<string> = new Set()
+
+/**
+ * Convert a media asset file.
+ *
+ * @param filePath - The path of the input file.
+ * @param cmdObj - The command object from the commander.
+ *
+ * @returns The output file path.
+ */
+export async function convertAsset (
+  filePath: string,
+  cmdObj: { [key: string]: any } = {}
+): Promise<string | undefined> {
+  const asset = makeAsset(filePath)
+
+  if (asset.extension == null) {
+    return
+  }
+  let mimeType: string
+  try {
+    mimeType = mimeTypeManager.extensionToType(asset.extension)
+  } catch (error) {
+    log.error('Unsupported extension %s', asset.extension)
+    return
+  }
+  const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
+  const outputFileName = `${referencify(asset.basename)}.${outputExtension}`
+  let outputFile = path.join(path.dirname(filePath), outputFileName)
+  if (converted.has(outputFile)) return
+
+  let process: childProcess.SpawnSyncReturns<string> | undefined
+
+  // audio
+  // https://trac.ffmpeg.org/wiki/Encode/AAC
+
+  // ffmpeg aac encoder
+  // '-c:a', 'aac', '-b:a', '128k',
+
+  // aac_he
+  // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
+
+  // aac_he_v2
+  // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
+
+  if (mimeType === 'audio') {
+    process = childProcess.spawnSync('ffmpeg', [
+      '-i',
+      filePath,
+      // '-c:a', 'aac', '-b:a', '128k',
+      // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+      '-c:a',
+      'libfdk_aac',
+      '-vbr',
+      '2',
+      // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
+      '-vn', // Disable video recording
+      '-map_metadata',
+      '-1', // remove metadata
+      '-y', // Overwrite output files without asking
+      outputFile
+    ])
+
+    // image
+  } else if (mimeType === 'image') {
+    let size = '2000x2000>'
+    if (cmdObj.previewImage != null) {
+      outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg')
+      size = '1000x1000>'
+    }
+    process = childProcess.spawnSync('magick', [
+      'convert',
+      filePath,
+      '-resize',
+      size, // http://www.imagemagick.org/Usage/resize/#shrink
+      '-quality',
+      '60', // https://imagemagick.org/script/command-line-options.php#quality
+      outputFile
+    ])
+
+    // videos
+  } else if (mimeType === 'video') {
+    process = childProcess.spawnSync('ffmpeg', [
+      '-i',
+      filePath,
+      '-vcodec',
+      'libx264',
+      '-profile:v',
+      'baseline',
+      '-y', // Overwrite output files without asking
+      outputFile
+    ])
+  }
+
+  if (process != null) {
+    if (process.status !== 0 && mimeType === 'audio') {
+      // A second attempt for mono audio: HEv2 only makes sense with stereo.
+      // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
+      process = childProcess.spawnSync('ffmpeg', [
+        '-i',
+        filePath,
+        '-c:a',
+        'libfdk_aac',
+        '-profile:a',
+        'aac_he',
+        '-b:a',
+        '64k',
+        '-vn', // Disable video recording
+        '-map_metadata',
+        '-1', // remove metadata
+        '-y', // Overwrite output files without asking
+        outputFile
+      ])
+    }
+
+    if (process.status === 0) {
+      if (mimeType === 'audio') {
+        let metaData
+        try {
+          metaData = (await collectAudioMetadata(filePath)) as unknown
+        } catch (error) {
+          log.error(error)
+        }
+        if (metaData != null) {
+          await writeYamlMetaData(
+            outputFile,
+            metaData as MediaResolverTypes.YamlFormat
+          )
+        }
+      }
+      converted.add(outputFile)
+    } else {
+      log.error(process.stdout.toString())
+      log.error(process.stderr.toString())
+      throw new Error(`ConvertError: ${filePath} -> ${outputFile}`)
+    }
+  }
+  return outputFile
 }

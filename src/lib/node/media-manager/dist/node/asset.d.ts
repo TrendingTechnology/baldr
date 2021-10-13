@@ -35,4 +35,26 @@ export declare function renameMediaAsset(oldPath: string): string;
  * @param filePath - The media asset file path.
  */
 export declare function renameByRef(filePath: string): void;
+interface NormalizeMediaAssetOption {
+    wikidata?: boolean;
+}
+/**
+ * @param filePath - The media asset file path.
+ */
+export declare function normalizeMediaAsset(filePath: string, options?: NormalizeMediaAssetOption): Promise<void>;
+/**
+ * Rename, create metadata yaml and normalize the metadata file.
+ */
+export declare function initializeMetaYaml(filePath: string, metaData?: MediaResolverTypes.YamlFormat): Promise<void>;
+/**
+ * Convert a media asset file.
+ *
+ * @param filePath - The path of the input file.
+ * @param cmdObj - The command object from the commander.
+ *
+ * @returns The output file path.
+ */
+export declare function convertAsset(filePath: string, cmdObj?: {
+    [key: string]: any;
+}): Promise<string | undefined>;
 export {};

@@ -1,7 +1,20 @@
+// Node packages.
+import fs from 'fs'
+import path from 'path'
+
+// Project packages.
+import {
+  objectifyTexItemize,
+  objectifyTexZitat
+} from '@bldr/tex-markdown-converter'
+import { convertToYaml } from '@bldr/yaml'
+
+import { makeAsset } from './media-file-classes'
+import { walk } from './directory-tree-walk'
+
 import { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
-import { convertToYaml } from '@bldr/yaml'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
 
@@ -115,4 +128,92 @@ export function normalizePresentationFile (filePath: string): void {
   } else {
     log.info('No changes after normalization of the presentation %s', filePath)
   }
+}
+
+interface SlideData {
+  [key: string]: any
+}
+
+function slidify (
+  masterName: string,
+  data: SlideData[] | SlideData,
+  topLevelData: SlideData
+): SlideData[] {
+  function slidifySingle (masterName: string, data: SlideData): SlideData {
+    const slide: SlideData = {}
+    slide[masterName] = data
+    if (topLevelData != null) Object.assign(slide, topLevelData)
+    return slide
+  }
+
+  if (Array.isArray(data)) {
+    const result = []
+    for (const item of data) {
+      result.push(slidifySingle(masterName, item))
+    }
+    return result
+  } else {
+    return [slidifySingle(masterName, data)]
+  }
+}
+
+/**
+ * Create a Praesentation.baldr.yml file and insert all media assets in
+ * the presentation.
+ *
+ * @param filePath - The file path of the new created presentation
+ *   template.
+ */
+export async function generatePresentation (filePath: string): Promise<void> {
+  const basePath = path.dirname(filePath)
+  let slides: SlideData[] = []
+  await walk(
+    {
+      asset (relPath) {
+        const asset = makeAsset(relPath)
+        if (asset.ref == null) {
+          return
+        }
+        let masterName: string = 'generic'
+        if (asset.ref.includes('_LT')) {
+          masterName = 'cloze'
+        } else if (asset.ref.includes('NB')) {
+          masterName = 'score_sample'
+        } else if (asset.mediaCategory != null) {
+          masterName = asset.mediaCategory
+        }
+        const slideData: SlideData = {
+          [masterName]: `ref:${asset.ref}`
+        }
+        slides.push(slideData)
+      }
+    },
+    { path: basePath }
+  )
+
+  const notePath = path.join(basePath, 'Hefteintrag.tex')
+  if (fs.existsSync(notePath)) {
+    const noteContent = readFile(notePath)
+    slides = slides.concat(
+      slidify('note', objectifyTexItemize(noteContent), {
+        source: 'Hefteintrag.tex'
+      })
+    )
+  }
+
+  const worksheetPath = path.join(basePath, 'Arbeitsblatt.tex')
+  if (fs.existsSync(worksheetPath)) {
+    const worksheetContent = readFile(worksheetPath)
+    slides = slides.concat(
+      slidify('quote', objectifyTexZitat(worksheetContent), {
+        source: 'Arbeitsblatt.tex'
+      })
+    )
+  }
+
+  const result = convertToYaml({
+    slides
+  })
+  log.verbose(result)
+  writeFile(filePath, result)
 }

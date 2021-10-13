@@ -1,3 +1,4 @@
+export declare function removeWidthHeightInSvg(filePath: string): void;
 /**
  * Delete spaces at the end.
  */

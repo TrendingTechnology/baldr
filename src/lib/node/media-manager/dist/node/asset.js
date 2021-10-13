@@ -18,19 +18,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renameByRef = exports.renameMediaAsset = exports.readAssetYaml = exports.moveAsset = void 0;
+exports.convertAsset = exports.initializeMetaYaml = exports.normalizeMediaAsset = exports.renameByRef = exports.renameMediaAsset = exports.readAssetYaml = exports.moveAsset = void 0;
+// Node packages.
+const child_process_1 = __importDefault(require("child_process"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+// Project packages.
+const client_media_models_1 = require("@bldr/client-media-models");
 const core_browser_1 = require("@bldr/core-browser");
+const audio_metadata_1 = require("@bldr/audio-metadata");
+const media_file_classes_1 = require("./media-file-classes");
 const media_categories_1 = require("@bldr/media-categories");
+const core_browser_2 = require("@bldr/core-browser");
+const location_indicator_1 = require("./location-indicator");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const main_1 = require("./main");
-const location_indicator_1 = require("./location-indicator");
+const yaml_1 = require("./yaml");
 const log = __importStar(require("@bldr/log"));
+const core_browser_3 = require("@bldr/core-browser");
+const wikidata_1 = __importDefault(require("@bldr/wikidata"));
+const yaml_2 = require("@bldr/yaml");
 function move(oldPath, newPath, { copy, dryRun }) {
     if (oldPath === newPath) {
         return;
@@ -92,7 +112,7 @@ function moveAsset(oldPath, newPath, opts = {}) {
         if (!(opts.dryRun != null && opts.dryRun)) {
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
         }
-        const extension = (0, core_browser_1.getExtension)(oldPath);
+        const extension = (0, core_browser_2.getExtension)(oldPath);
         if (extension === 'eps' || extension === 'svg') {
             // Dippermouth-Blues.eps
             // Dippermouth-Blues.mscx
@@ -120,7 +140,7 @@ exports.moveAsset = moveAsset;
  *   extension `.yml`).
  */
 function readAssetYaml(filePath) {
-    const extension = (0, core_browser_1.getExtension)(filePath);
+    const extension = (0, core_browser_2.getExtension)(filePath);
     if (extension !== 'yml') {
         filePath = `${filePath}.yml`;
     }
@@ -140,13 +160,13 @@ function renameMediaAsset(oldPath) {
     const metaData = readAssetYaml(oldPath);
     let newPath;
     if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
-        metaData.extension = (0, core_browser_1.getExtension)(oldPath);
+        metaData.extension = (0, core_browser_2.getExtension)(oldPath);
         metaData.filePath = oldPath;
         const data = metaData;
         newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
     }
     if (newPath == null) {
-        newPath = (0, core_browser_1.asciify)(oldPath);
+        newPath = (0, core_browser_2.asciify)(oldPath);
     }
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes
@@ -202,3 +222,219 @@ function renameByRef(filePath) {
     }
 }
 exports.renameByRef = renameByRef;
+function queryWikidata(metaData, categoryNames, categoryCollection) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, categoryCollection);
+        log.verbose(dataWiki);
+        metaData = wikidata_1.default.mergeData(metaData, dataWiki, categoryCollection);
+        // To avoid blocking
+        // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
+        // status: 429,
+        // statusText: 'Scripted requests from your IP have been blocked, please
+        // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
+        (0, core_browser_3.msleep)(3000);
+        return metaData;
+    });
+}
+function logDiff(oldYamlMarkup, newYamlMarkup) {
+    log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup));
+}
+/**
+ * @param filePath - The media asset file path.
+ */
+function normalizeMediaAsset(filePath, options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const yamlFile = `${filePath}.yml`;
+            const raw = readAssetYaml(filePath);
+            if (raw != null) {
+                raw.filePath = filePath;
+            }
+            let metaData = raw;
+            if (metaData == null) {
+                return;
+            }
+            const origData = (0, core_browser_3.deepCopy)(metaData);
+            // Always: general
+            const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
+            if (categoryNames != null) {
+                const categories = metaData.categories != null ? metaData.categories : '';
+                metaData.categories = media_categories_1.categoriesManagement.mergeNames(categories, categoryNames);
+            }
+            if ((options === null || options === void 0 ? void 0 : options.wikidata) != null) {
+                if (metaData.wikidata != null && metaData.categories != null) {
+                    metaData = yield queryWikidata(metaData, metaData.categories, media_categories_1.categories);
+                }
+            }
+            const newMetaData = yield media_categories_1.categoriesManagement.process(metaData, filePath);
+            const oldMetaData = origData;
+            delete oldMetaData.filePath;
+            const oldYamlMarkup = (0, yaml_2.convertToYaml)(oldMetaData);
+            const newYamlMarkup = (0, yaml_2.convertToYaml)(newMetaData);
+            if (oldYamlMarkup !== newYamlMarkup) {
+                logDiff(oldYamlMarkup, newYamlMarkup);
+                (0, file_reader_writer_1.writeYamlFile)(yamlFile, newMetaData);
+            }
+        }
+        catch (error) {
+            log.error(filePath);
+            log.error(error);
+            process.exit();
+        }
+    });
+}
+exports.normalizeMediaAsset = normalizeMediaAsset;
+/**
+ * Rename, create metadata yaml and normalize the metadata file.
+ */
+function initializeMetaYaml(filePath, metaData) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const newPath = renameMediaAsset(filePath);
+        yield (0, yaml_1.writeYamlMetaData)(newPath, metaData);
+        yield normalizeMediaAsset(newPath, { wikidata: false });
+    });
+}
+exports.initializeMetaYaml = initializeMetaYaml;
+/**
+ * A set of output file paths. To avoid duplicate rendering by a second
+ * run of the script.
+ *
+ * First run: `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *
+ * Second run:
+ * - not:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *   2. `01-Hintergrund.m4a` -> `01-Hintergrund.m4a` (bad)
+ * - but:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ */
+const converted = new Set();
+/**
+ * Convert a media asset file.
+ *
+ * @param filePath - The path of the input file.
+ * @param cmdObj - The command object from the commander.
+ *
+ * @returns The output file path.
+ */
+function convertAsset(filePath, cmdObj = {}) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const asset = (0, media_file_classes_1.makeAsset)(filePath);
+        if (asset.extension == null) {
+            return;
+        }
+        let mimeType;
+        try {
+            mimeType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
+        }
+        catch (error) {
+            log.error('Unsupported extension %s', asset.extension);
+            return;
+        }
+        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
+        const outputFileName = `${(0, core_browser_1.referencify)(asset.basename)}.${outputExtension}`;
+        let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
+        if (converted.has(outputFile))
+            return;
+        let process;
+        // audio
+        // https://trac.ffmpeg.org/wiki/Encode/AAC
+        // ffmpeg aac encoder
+        // '-c:a', 'aac', '-b:a', '128k',
+        // aac_he
+        // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
+        // aac_he_v2
+        // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
+        if (mimeType === 'audio') {
+            process = child_process_1.default.spawnSync('ffmpeg', [
+                '-i',
+                filePath,
+                // '-c:a', 'aac', '-b:a', '128k',
+                // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+                '-c:a',
+                'libfdk_aac',
+                '-vbr',
+                '2',
+                // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
+                '-vn',
+                '-map_metadata',
+                '-1',
+                '-y',
+                outputFile
+            ]);
+            // image
+        }
+        else if (mimeType === 'image') {
+            let size = '2000x2000>';
+            if (cmdObj.previewImage != null) {
+                outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg');
+                size = '1000x1000>';
+            }
+            process = child_process_1.default.spawnSync('magick', [
+                'convert',
+                filePath,
+                '-resize',
+                size,
+                '-quality',
+                '60',
+                outputFile
+            ]);
+            // videos
+        }
+        else if (mimeType === 'video') {
+            process = child_process_1.default.spawnSync('ffmpeg', [
+                '-i',
+                filePath,
+                '-vcodec',
+                'libx264',
+                '-profile:v',
+                'baseline',
+                '-y',
+                outputFile
+            ]);
+        }
+        if (process != null) {
+            if (process.status !== 0 && mimeType === 'audio') {
+                // A second attempt for mono audio: HEv2 only makes sense with stereo.
+                // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
+                process = child_process_1.default.spawnSync('ffmpeg', [
+                    '-i',
+                    filePath,
+                    '-c:a',
+                    'libfdk_aac',
+                    '-profile:a',
+                    'aac_he',
+                    '-b:a',
+                    '64k',
+                    '-vn',
+                    '-map_metadata',
+                    '-1',
+                    '-y',
+                    outputFile
+                ]);
+            }
+            if (process.status === 0) {
+                if (mimeType === 'audio') {
+                    let metaData;
+                    try {
+                        metaData = (yield (0, audio_metadata_1.collectAudioMetadata)(filePath));
+                    }
+                    catch (error) {
+                        log.error(error);
+                    }
+                    if (metaData != null) {
+                        yield (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
+                    }
+                }
+                converted.add(outputFile);
+            }
+            else {
+                log.error(process.stdout.toString());
+                log.error(process.stderr.toString());
+                throw new Error(`ConvertError: ${filePath} -> ${outputFile}`);
+            }
+        }
+        return outputFile;
+    });
+}
+exports.convertAsset = convertAsset;

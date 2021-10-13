@@ -1,13 +1,7 @@
-import { convertAsset } from './operations/convert-asset';
-import { fixTypography } from './operations/fix-typography';
-import { generateCloze } from './operations/cloze';
-import { generatePresentation } from './operations/generate-presentation';
-import { initializeMetaYaml } from './operations/initialize-meta-yaml';
-import { normalizeMediaAsset } from './operations/normalize-asset';
-import { normalizePresentationFile } from './operations/normalize-presentation';
-import { patchTexTitles } from './operations/patch-tex-titles';
-import { removeWidthHeightInSvg } from './operations/svg';
-import { renameMediaAsset, moveAsset, renameByRef } from './asset';
+import { generateCloze, patchTexTitles } from './tex';
+import { normalizePresentationFile, generatePresentation } from './presentation';
+import { removeWidthHeightInSvg, fixTypography } from './txt';
+import { renameMediaAsset, moveAsset, renameByRef, normalizeMediaAsset, initializeMetaYaml, convertAsset } from './asset';
 /**
  * A collection of functions to manipulate the media assets and presentation files.
  */

@@ -8,7 +8,7 @@ exports.isTex = exports.isPresentation = exports.isAsset = exports.filePathToMim
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
-const main_1 = require("./main");
+const asset_1 = require("./asset");
 /**
  * Base class for the asset and presentation class.
  */
@@ -44,7 +44,7 @@ class Asset extends MediaFile {
      */
     constructor(filePath) {
         super(filePath);
-        const data = (0, main_1.readAssetYaml)(this.absPath);
+        const data = (0, asset_1.readAssetYaml)(this.absPath);
         if (data != null) {
             this.metaData = data;
         }

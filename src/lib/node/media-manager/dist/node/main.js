@@ -28,14 +28,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readAssetYaml = exports.setLogLevel = void 0;
-const fs_1 = __importDefault(require("fs"));
-const core_browser_1 = require("@bldr/core-browser");
-const file_reader_writer_1 = require("@bldr/file-reader-writer");
+exports.setLogLevel = void 0;
 const log = __importStar(require("@bldr/log"));
 __exportStar(require("./operations"), exports);
 __exportStar(require("./directory-tree-walk"), exports);
@@ -46,19 +40,3 @@ function setLogLevel(level) {
     log.setLogLevel(level);
 }
 exports.setLogLevel = setLogLevel;
-/**
- * Read the corresponding YAML file of a media asset.
- *
- * @param filePath - The path of the media asset (without the
- *   extension `.yml`).
- */
-function readAssetYaml(filePath) {
-    const extension = (0, core_browser_1.getExtension)(filePath);
-    if (extension !== 'yml') {
-        filePath = `${filePath}.yml`;
-    }
-    if (fs_1.default.existsSync(filePath)) {
-        return (0, file_reader_writer_1.readYamlFile)(filePath);
-    }
-}
-exports.readAssetYaml = readAssetYaml;

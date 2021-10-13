@@ -31,19 +31,101 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateCloze = void 0;
+exports.generateCloze = exports.patchTexTitles = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.
-const log = __importStar(require("@bldr/log"));
-const main_1 = require("../main");
-const location_indicator_1 = require("../location-indicator");
+const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const titles_1 = require("@bldr/titles");
+const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const tex = __importStar(require("@bldr/tex-templates"));
+const log = __importStar(require("@bldr/log"));
 const yaml_1 = require("@bldr/yaml");
 const core_node_1 = require("@bldr/core-node");
-const file_reader_writer_1 = require("@bldr/file-reader-writer");
+// Local imports.
+const main_1 = require("./main");
+const location_indicator_1 = require("./location-indicator");
+const txt_1 = require("./txt");
+/**
+ * @returns A TeX markup like this output:
+ *
+ * ```tex
+ * \setzetitel{
+ *   Fach = Musik,
+ *   Jahrgangsstufe = 6,
+ *   Ebenen = {
+ *     { Musik und ihre Grundlagen },
+ *     { Systeme und Strukturen },
+ *     { die Tongeschlechter Dur und Moll },
+ *   },
+ *   Titel = { Dur- und Moll-Tonleiter },
+ *   Untertitel = { Das Lied \emph{„Kol dodi“} in Moll und Dur },
+ * }
+ * ```
+ */
+function makeTexMarkup(titles) {
+    const setzeTitle = {
+        Fach: titles.subject,
+        Jahrgangsstufe: titles.grade.toString()
+    };
+    const ebenen = [];
+    for (const title of titles.curriculumTitlesArrayFromGrade) {
+        ebenen.push(`    { ${title} },`);
+    }
+    setzeTitle.Ebenen = '\n' + ebenen.join('\n') + '\n ';
+    setzeTitle.Titel = titles.title;
+    if (titles.subtitle != null) {
+        setzeTitle.Untertitel = titles.subtitle;
+    }
+    // Replace semantic markup
+    for (const key in setzeTitle) {
+        setzeTitle[key] = (0, tex_markdown_converter_1.convertMdToTex)(setzeTitle[key]);
+    }
+    const result = tex.cmd('setzetitel', '\n' + tex.keyValues(setzeTitle) + '\n') + '\n';
+    return (0, txt_1.removeSpacesAtLineEnd)(result);
+}
+/**
+ * ```tex
+ * \setzetitel{
+ *   Fach = Musik,
+ *   Jahrgangsstufe = 6,
+ *   Ebenen = {
+ *     { Musik und ihre Grundlagen },
+ *     { Systeme und Strukturen },
+ *     { die Tongeschlechter Dur und Moll },
+ *   },
+ *   Titel = { Dur- und Moll-Tonleiter },
+ *   Untertitel = { Das Lied \emph{„Kol dodi“} in Moll und Dur },
+ * }
+ * ```
+ *
+ * @param filePath - The path of a TeX file.
+ */
+function patchTexTitles(filePath) {
+    const titles = new titles_1.DeepTitle(filePath);
+    const patchedTitles = makeTexMarkup(titles);
+    const texFileContent = (0, file_reader_writer_1.readFile)(filePath);
+    let texFileContentPatched;
+    if (texFileContent.includes('\\setzetitel{')) {
+        // /s s (dotall) modifier, +? one or more (non-greedy)
+        const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
+        texFileContentPatched = texFileContent.replace(regexp, patchedTitles);
+    }
+    else {
+        texFileContentPatched = texFileContent.replace(/(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/, '$1\n\n' + patchedTitles);
+    }
+    if (texFileContent !== texFileContentPatched) {
+        log.info('Patch titles in TeX file %s', filePath);
+        log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched));
+        (0, file_reader_writer_1.writeFile)(filePath, texFileContentPatched);
+        return true;
+    }
+    log.verbose('Nothing to patch in TeX file %s', filePath);
+    return false;
+}
+exports.patchTexTitles = patchTexTitles;
 function initializeMetaYaml(pdfFile, dest, pageNo, pageCount) {
     if (fs_1.default.existsSync(dest)) {
         return;

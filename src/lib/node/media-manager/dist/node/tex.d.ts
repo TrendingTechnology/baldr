@@ -16,3 +16,7 @@
  * @param filePath - The path of a TeX file.
  */
 export declare function patchTexTitles(filePath: string): boolean;
+/**
+ * @param filePath - The file path of a TeX file.
+ */
+export declare function generateCloze(filePath: string): Promise<void>;

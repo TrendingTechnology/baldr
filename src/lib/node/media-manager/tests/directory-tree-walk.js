@@ -10,7 +10,7 @@ function getPath (relPath) {
   return path.join(config.mediaServer.basePath, relPath)
 }
 
-describe('Package “@bldr/media-manager”', function () {
+describe('Package “@bldr/media-manager”: directory-walk', function () {
   it('Function “walk()”', async function () {
     const results = {
       presentation: [],
