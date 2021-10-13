@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@bldr/config": "*",
+    "@vue/cli-plugin-typescript": "4.5.0",
     "@vue/cli-service": "4.5.9",
     "@vue/eslint-config-standard": "5.1.2",
     "copy-webpack-plugin": "6.3.1",
@@ -46,9 +47,31 @@
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-template-compiler": "2.6.12"
   },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/base",
+      "plugin:vue/essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {}
+  },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    "not dead"
   ],
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "publishConfig": {

@@ -27,7 +27,7 @@ Vue.use(DynamicSelect)
 Vue.config.productionTip = false
 
 Vue.prototype.$fullscreen = function () {
-  document.querySelector('.vc_main_app').requestFullscreen()
+  document.querySelector('.vc_main_app')?.requestFullscreen()
 }
 
 new Vue({
