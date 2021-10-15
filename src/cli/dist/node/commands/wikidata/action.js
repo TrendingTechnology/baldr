@@ -73,7 +73,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             }
         }
         if (!cmdObj.dryRun && !fs_1.default.existsSync(dest)) {
-            const src = path_1.default.join(config_1.default.localRepo, 'src', 'mgmt', 'cli', 'src', 'blank.jpg');
+            const src = path_1.default.join(config_1.default.localRepo, 'src', 'cli', 'src', 'blank.jpg');
             log.info(src);
             fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
             fs_1.default.copyFileSync(src, dest);
