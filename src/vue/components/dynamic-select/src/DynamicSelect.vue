@@ -1,14 +1,10 @@
 // https://github.com/silasmontgomery/vue-dynamic-select
 // https://raw.githubusercontent.com/silasmontgomery/vue-dynamic-select/master/src/DynamicSelect.vue
 <template>
-  <div
-    @focusin="hasFocus=true"
-    class="vc_dynamic_select"
-    tabindex="0"
-  >
+  <div @focusin="hasFocus = true" class="vc_dynamic_select" tabindex="0">
     <input
       :placeholder="placeholder"
-      @focus="hasFocus=true"
+      @focus="hasFocus = true"
       @keydown="removeOption"
       @keyup="moveToResults"
       autocomplete="off"
@@ -16,11 +12,7 @@
       ref="search"
       v-model="searchText"
     />
-    <div
-      class="result-list"
-      ref="resultList"
-      v-if="showResultList"
-    >
+    <div class="result-list" ref="resultList" v-if="showResultList">
       <div
         :key="result.id"
         @click="selectOption(result)"
@@ -72,7 +64,7 @@ export default {
     searchInput.addEventListener('focus', () => {
       searchInput.addEventListener('keydown', this.selectFirstItemOnReturn)
     })
-   searchInput.addEventListener('blur', () => {
+    searchInput.addEventListener('blur', () => {
       searchInput.removeEventListener('keydown', this.selectFirstItemOnReturn)
     })
   },
@@ -85,7 +77,7 @@ export default {
       // item isn't already selected (else return all items not selected)
       let list
       if (this.searchText) {
-        list = this.options.filter((option) => {
+        list = this.options.filter(option => {
           let optionText = String(option.name).toLowerCase()
           return optionText.includes(this.searchText.toLowerCase())
         })
@@ -143,10 +135,15 @@ export default {
     highlight: function (value) {
       // Highlights the part of each result that matches the search text
       if (this.searchText) {
-        let matchPos = String(value).toLowerCase().indexOf(this.searchText.toLowerCase())
+        let matchPos = String(value)
+          .toLowerCase()
+          .indexOf(this.searchText.toLowerCase())
         if (matchPos > -1) {
           let matchStr = String(value).substr(matchPos, this.searchText.length)
-          value = String(value).replace(matchStr, `<span style="font-weight: bold;">${matchStr}</span>`)
+          value = String(value).replace(
+            matchStr,
+            `<span style="font-weight: bold;">${matchStr}</span>`
+          )
         }
       }
       return value
@@ -181,7 +178,10 @@ export default {
     },
     removeOption: function (event) {
       // Remove selected option if user hits backspace on empty search field
-      if (event.key === 'Backspace' && (this.searchText == null || this.searchText === '')) {
+      if (
+        event.key === 'Backspace' &&
+        (this.searchText == null || this.searchText === '')
+      ) {
         this.selectedOption = null
         this.hasFocus = false
       }
@@ -213,47 +213,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $padding-left-right: 0.3em;
+$padding-left-right: 0.3em;
 
-  .vc_dynamic_select {
-    position: relative;
+.vc_dynamic_select {
+  position: relative;
 
-    .result-list {
-      background-color: scale-color($white, $lightness: -1%);
-      border: 1px solid $gray;
-      border-top: 0;
-      box-sizing: border-box;
-      cursor: pointer;
-      position: absolute;
-      width: 100%;
-      z-index: 10;
+  .result-list {
+    background-color: scale-color($white, $lightness: -1%);
+    border: 1px solid $gray;
+    border-top: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
 
-      .result {
-        color: $black;
-        padding: 0.2em $padding-left-right;
-        &:hover,
-        &:focus {
-          background-color: scale-color($yellow, $lightness: 70%);
-          outline: none;
-        }
-      }
-    }
-
-    .selected-option {
-      display: inline-block;
-    }
-
-    input.search {
-      border: 1px solid $gray;
-      box-sizing: border-box;
-      font-family: inherit;
-      font-size: inherit;
-      padding: 0.5em $padding-left-right;
-      width: 100%;
-
+    .result {
+      color: $black;
+      padding: 0.2em $padding-left-right;
+      &:hover,
       &:focus {
+        background-color: scale-color($yellow, $lightness: 70%);
         outline: none;
       }
     }
   }
+
+  .selected-option {
+    display: inline-block;
+  }
+
+  input.search {
+    border: 1px solid $gray;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.5em $padding-left-right;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
 </style>
