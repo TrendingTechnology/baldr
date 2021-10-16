@@ -63,3 +63,4 @@ export interface AudioMetadataContainer {
  * ```
  */
 export declare function collectAudioMetadata(inputFile: string): Promise<AudioMetadataContainer | undefined>;
+export declare function extractCoverImage(inputFile: string, destPath: string): Promise<void>;

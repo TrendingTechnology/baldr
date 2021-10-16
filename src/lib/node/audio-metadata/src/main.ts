@@ -1,3 +1,4 @@
+import fs from 'fs'
 import * as musicMetadata from 'music-metadata'
 
 export interface AudioMetadataContainer {
@@ -100,5 +101,15 @@ export async function collectAudioMetadata (
       delete output.album
     }
     return output
+  }
+}
+
+export async function extractCoverImage (
+  inputFile: string,
+  destPath: string
+): Promise<void> {
+  const metaData = await musicMetadata.parseFile(inputFile)
+  if (metaData.common.picture != null) {
+    fs.writeFileSync(destPath, metaData.common.picture[0].data)
   }
 }

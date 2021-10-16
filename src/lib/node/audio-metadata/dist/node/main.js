@@ -27,8 +27,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collectAudioMetadata = void 0;
+exports.extractCoverImage = exports.collectAudioMetadata = void 0;
+const fs_1 = __importDefault(require("fs"));
 const musicMetadata = __importStar(require("music-metadata"));
 /**
  * Output from `music-metadata`:
@@ -121,3 +125,12 @@ function collectAudioMetadata(inputFile) {
     });
 }
 exports.collectAudioMetadata = collectAudioMetadata;
+function extractCoverImage(inputFile, destPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const metaData = yield musicMetadata.parseFile(inputFile);
+        if (metaData.common.picture != null) {
+            fs_1.default.writeFileSync(destPath, metaData.common.picture[0].data);
+        }
+    });
+}
+exports.extractCoverImage = extractCoverImage;
