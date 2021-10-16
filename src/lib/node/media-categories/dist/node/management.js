@@ -50,8 +50,9 @@ function detectCategoryByPath(filePath) {
             else {
                 regexp = category.detectCategoryByPath;
             }
-            if (filePath.match(regexp) != null)
+            if (filePath.match(regexp) != null) {
                 names.add(name);
+            }
         }
     }
     names.add('general');
@@ -96,8 +97,9 @@ function formatFilePath(data, oldPath) {
         data.extension = extension;
         // b/Bush_George-Walker/main.jpeg
     }
-    if (data.extension === 'jpeg')
+    if (data.extension === 'jpeg') {
         data.extension = 'jpg';
+    }
     let oldRelPath = '';
     if (oldPath != null) {
         oldRelPath = path_1.default.resolve(oldPath);

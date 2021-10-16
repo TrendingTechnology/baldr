@@ -14,6 +14,8 @@ export * from './location-indicator'
 export * from './media-file-classes'
 export * from './yaml'
 
+export { readAssetYaml } from './asset'
+
 export function setLogLevel (level: number): void {
   log.setLogLevel(level)
 }

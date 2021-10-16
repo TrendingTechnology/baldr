@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.operations = void 0;
-// Operations
+/**
+ * Bundle all operations in an object
+ */
 const tex_1 = require("./tex");
 const presentation_1 = require("./presentation");
 const txt_1 = require("./txt");

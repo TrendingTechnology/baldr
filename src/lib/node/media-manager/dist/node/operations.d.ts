@@ -1,3 +1,6 @@
+/**
+ * Bundle all operations in an object
+ */
 import { generateCloze, patchTexTitles } from './tex';
 import { normalizePresentationFile, generatePresentation } from './presentation';
 import { removeWidthHeightInSvg, fixTypography } from './txt';

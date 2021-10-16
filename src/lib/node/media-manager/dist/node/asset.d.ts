@@ -39,6 +39,8 @@ interface NormalizeMediaAssetOption {
     wikidata?: boolean;
 }
 /**
+ * Normalize a media asset file.
+ *
  * @param filePath - The media asset file path.
  */
 export declare function normalizeMediaAsset(filePath: string, options?: NormalizeMediaAssetOption): Promise<void>;

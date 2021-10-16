@@ -79,6 +79,13 @@ function downloadAudioCoverImage(srcPath, destPath) {
         }
     });
 }
+function extractAudioCoverFromMetadata(srcPath, destPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!fs_1.default.existsSync(destPath)) {
+            yield audio_metadata_1.extractCoverImage(srcPath, destPath);
+        }
+    });
+}
 /**
  * Create a video preview image.
  */
@@ -142,6 +149,7 @@ function createPreviewOneFile(srcPath, cmdObj) {
         }
         else if (mimeType === 'audio') {
             yield downloadAudioCoverImage(srcPath, destPathPreview);
+            yield extractAudioCoverFromMetadata(srcPath, destPathPreview);
         }
     });
 }

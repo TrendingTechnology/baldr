@@ -42,13 +42,11 @@ const core_browser_1 = require("@bldr/core-browser");
 const audio_metadata_1 = require("@bldr/audio-metadata");
 const media_file_classes_1 = require("./media-file-classes");
 const media_categories_1 = require("@bldr/media-categories");
-const core_browser_2 = require("@bldr/core-browser");
 const location_indicator_1 = require("./location-indicator");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const main_1 = require("./main");
 const yaml_1 = require("./yaml");
 const log = __importStar(require("@bldr/log"));
-const core_browser_3 = require("@bldr/core-browser");
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const yaml_2 = require("@bldr/yaml");
 function move(oldPath, newPath, { copy, dryRun }) {
@@ -112,7 +110,7 @@ function moveAsset(oldPath, newPath, opts = {}) {
         if (!(opts.dryRun != null && opts.dryRun)) {
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
         }
-        const extension = (0, core_browser_2.getExtension)(oldPath);
+        const extension = (0, core_browser_1.getExtension)(oldPath);
         if (extension === 'eps' || extension === 'svg') {
             // Dippermouth-Blues.eps
             // Dippermouth-Blues.mscx
@@ -140,7 +138,7 @@ exports.moveAsset = moveAsset;
  *   extension `.yml`).
  */
 function readAssetYaml(filePath) {
-    const extension = (0, core_browser_2.getExtension)(filePath);
+    const extension = (0, core_browser_1.getExtension)(filePath);
     if (extension !== 'yml') {
         filePath = `${filePath}.yml`;
     }
@@ -160,13 +158,13 @@ function renameMediaAsset(oldPath) {
     const metaData = readAssetYaml(oldPath);
     let newPath;
     if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
-        metaData.extension = (0, core_browser_2.getExtension)(oldPath);
+        metaData.extension = (0, core_browser_1.getExtension)(oldPath);
         metaData.filePath = oldPath;
         const data = metaData;
         newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
     }
     if (newPath == null) {
-        newPath = (0, core_browser_2.asciify)(oldPath);
+        newPath = (0, core_browser_1.asciify)(oldPath);
     }
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes
@@ -232,7 +230,7 @@ function queryWikidata(metaData, categoryNames, categoryCollection) {
         // status: 429,
         // statusText: 'Scripted requests from your IP have been blocked, please
         // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
-        (0, core_browser_3.msleep)(3000);
+        (0, core_browser_1.msleep)(3000);
         return metaData;
     });
 }
@@ -240,6 +238,8 @@ function logDiff(oldYamlMarkup, newYamlMarkup) {
     log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup));
 }
 /**
+ * Normalize a media asset file.
+ *
  * @param filePath - The media asset file path.
  */
 function normalizeMediaAsset(filePath, options) {
@@ -254,7 +254,7 @@ function normalizeMediaAsset(filePath, options) {
             if (metaData == null) {
                 return;
             }
-            const origData = (0, core_browser_3.deepCopy)(metaData);
+            const origData = (0, core_browser_1.deepCopy)(metaData);
             // Always: general
             const categoryNames = media_categories_1.categoriesManagement.detectCategoryByPath(filePath);
             if (categoryNames != null) {

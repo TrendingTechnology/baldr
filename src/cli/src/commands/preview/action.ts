@@ -6,7 +6,7 @@ import { readYamlFile } from '@bldr/file-reader-writer'
 import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
 import { filePathToMimeType, walk } from '@bldr/media-manager'
-import { collectAudioMetadata } from '@bldr/audio-metadata'
+import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
 
 interface CmdObj {
   seconds: number
@@ -58,6 +58,15 @@ async function downloadAudioCoverImage (
     )
   } else {
     log.error('No property “cover_source” found.')
+  }
+}
+
+async function extractAudioCoverFromMetadata (
+  srcPath: string,
+  destPath: string
+): Promise<void> {
+  if (!fs.existsSync(destPath)) {
+    await extractCoverImage(srcPath, destPath)
   }
 }
 
@@ -134,6 +143,7 @@ async function createPreviewOneFile (
     convertFirstPdfPageToJpg(srcPath, destPathPreview)
   } else if (mimeType === 'audio') {
     await downloadAudioCoverImage(srcPath, destPathPreview)
+    await extractAudioCoverFromMetadata(srcPath, destPathPreview)
   }
 }
 

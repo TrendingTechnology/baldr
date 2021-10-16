@@ -276,6 +276,8 @@ function logDiff (oldYamlMarkup: string, newYamlMarkup: string): void {
 }
 
 /**
+ * Normalize a media asset file.
+ *
  * @param filePath - The media asset file path.
  */
 export async function normalizeMediaAsset (

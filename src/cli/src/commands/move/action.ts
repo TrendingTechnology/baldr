@@ -7,8 +7,8 @@ import childProcess from 'child_process'
 import { getExtension, referencify, asciify } from '@bldr/core-browser'
 import {
   walk,
-  readAssetYaml,
   operations,
+  readAssetYaml,
   locationIndicator
 } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
@@ -230,7 +230,9 @@ async function moveMp3 (
 
   // Try to get the MusicBrainz recording ID.
   const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
-  if (musicbrainzRecordingId != null) { metaData.musicbrainzRecordingId = musicbrainzRecordingId }
+  if (musicbrainzRecordingId != null) {
+    metaData.musicbrainzRecordingId = musicbrainzRecordingId
+  }
 
   metaData.source = oldPath
   // To get ID prefix
