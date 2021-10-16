@@ -42,14 +42,16 @@ import {
   }
 })
 export default class StartPage extends Vue {
-  selectedSong!: DynamicSelectSong
+  selectedSong: DynamicSelectSong | null = null
 
   library!: CoreLibrary
 
   songs!: SongCollection<Song>
 
   selectSong () {
-    this.$router.push(`song/${this.selectedSong.ref}`)
+    if (this.selectedSong != null) {
+      this.$router.push(`song/${this.selectedSong.ref}`)
+    }
   }
 }
 </script>

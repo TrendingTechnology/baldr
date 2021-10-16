@@ -12,7 +12,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import { Song } from '@bldr/songbook-core'
 
-import TocSong from './TonSong.vue'
+import TocSong from './TocSong.vue'
 @Component({
   components: {
     TocSong
