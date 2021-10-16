@@ -10,7 +10,7 @@ import {
   formatYoutubeUrl
 } from '@bldr/core-browser'
 
-import type { StringIndexedObject } from '@bldr/type-definitions'
+import { StringIndexedObject } from '@bldr/type-definitions'
 
 export const songConstants = {
   intermediateFolder: 'NB',
@@ -40,7 +40,6 @@ export const songConstants = {
  *     year: 1965
  */
 export interface SongMetaData {
-
   /**
    * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
    * lieber Mai, und mache”
@@ -158,7 +157,6 @@ export interface SongMetaData {
  *
  */
 export interface Song {
-
   /**
    * The directory containing the song files. For example
    * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
@@ -213,7 +211,10 @@ export class AlphabeticalSongsTree {
   }
 }
 
-interface DynamicSelectSong {
+/**
+ * A reduced song to fit to the dynamic select interface.
+ */
+export interface DynamicSelectSong {
   ref: string
   name: string
 }
@@ -261,12 +262,7 @@ export class SongMetaDataCombined {
    * its ...URL property.
    */
   static externalSites (): string[] {
-    return [
-      'musescore',
-      'wikidata',
-      'wikipedia',
-      'youtube'
-    ]
+    return ['musescore', 'wikidata', 'wikipedia', 'youtube']
   }
 
   /**
@@ -276,7 +272,10 @@ export class SongMetaDataCombined {
    * @params properties - Some object properties to collect strings from.
    * @params object - An object.
    */
-  private static collectProperties (properties: string[], object: StringIndexedObject): string[] {
+  private static collectProperties (
+    properties: string[],
+    object: StringIndexedObject
+  ): string[] {
     const parts = []
     for (const property of properties) {
       if (property in object && object[property] != null) {
@@ -391,7 +390,7 @@ export class SongMetaDataCombined {
   }
 }
 
-export interface SongCollection <T> {
+export interface SongCollection<T> {
   [songId: string]: T
 }
 

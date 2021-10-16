@@ -2,7 +2,7 @@
  * Core functionality for the BALDR songbook without node dependencies.
  * @module @bldr/songbook-core
  */
-import type { StringIndexedObject } from '@bldr/type-definitions';
+import { StringIndexedObject } from '@bldr/type-definitions';
 export declare const songConstants: {
     intermediateFolder: string;
     firstSlideName: string;
@@ -168,7 +168,10 @@ export declare class AlphabeticalSongsTree {
      */
     constructor(songs: Song[]);
 }
-interface DynamicSelectSong {
+/**
+ * A reduced song to fit to the dynamic select interface.
+ */
+export interface DynamicSelectSong {
     ref: string;
     name: string;
 }
@@ -294,4 +297,3 @@ export declare class CoreLibrary {
     getRandomSong(): Song;
     toJSON(): StringIndexedObject;
 }
-export {};

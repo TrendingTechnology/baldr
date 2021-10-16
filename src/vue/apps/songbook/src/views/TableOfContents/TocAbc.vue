@@ -7,18 +7,23 @@
   </div>
 </template>
 
-<script>
-import TocSong from './song'
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default {
-  name: 'TocAbc',
+import { Song } from '@bldr/songbook-core'
+
+import TocSong from './TonSong.vue'
+@Component({
   components: {
     TocSong
-  },
-  props: {
-    abc: String,
-    songs: Array
   }
+})
+export default class TocAbc extends Vue {
+  @Prop()
+  abc!: string
+
+  @Prop()
+  songs!: Song[]
 }
 </script>
 

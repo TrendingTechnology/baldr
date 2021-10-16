@@ -77,12 +77,7 @@ export class SongMetaDataCombined {
      * its ...URL property.
      */
     static externalSites() {
-        return [
-            'musescore',
-            'wikidata',
-            'wikipedia',
-            'youtube'
-        ];
+        return ['musescore', 'wikidata', 'wikipedia', 'youtube'];
     }
     /**
      * Extract the values of given properties of an object and collect it into

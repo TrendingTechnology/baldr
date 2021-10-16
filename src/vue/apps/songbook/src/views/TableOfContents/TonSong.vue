@@ -18,24 +18,31 @@
   </tr>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import IconLink from '@/components/IconLink'
+import { Song } from '@bldr/songbook-core'
 
-export default {
-  name: 'TocSong',
+import IconLink from '@/components/IconLink.vue'
+
+@Component({
   components: {
     IconLink
   },
   computed: {
-    ...mapGetters(['externalSites']),
-    meta () {
-      return this.song.metaDataCombined
-    }
-  },
-  props: {
-    song: Object
+    ...mapGetters(['externalSites'])
+  }
+})
+export default class TocSong extends Vue {
+  externalSites!: string[]
+
+  @Prop()
+  song!: Song
+
+  meta () {
+    console.log(this.song)
+    return this.song.metaDataCombined
   }
 }
 </script>

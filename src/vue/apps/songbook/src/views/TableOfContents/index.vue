@@ -10,16 +10,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
-import TocAbc from './abc'
+import { Vue, Component } from 'vue-property-decorator'
 
-export default {
-  name: 'TableOfContents',
+import { AlphabeticalSongsTree } from '@bldr/songbook-core'
+
+import TocAbc from './TocAbc.vue'
+
+@Component({
   components: {
     TocAbc
   },
-  computed: mapGetters(['alphabeticalSongsTree'])
+  computed: {
+    ...mapGetters(['alphabeticalSongsTree'])
+  }
+})
+export default class TableOfContents extends Vue {
+  alphabeticalSongsTree!: AlphabeticalSongsTree
 }
 </script>
 

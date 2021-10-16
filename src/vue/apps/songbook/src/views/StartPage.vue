@@ -25,21 +25,31 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
 
-export default {
-  name: 'StartPage',
-  data () {
-    return {
-      selectedSong: null
-    }
-  },
-  computed: mapGetters(['library', 'songs']),
-  methods: {
-    selectSong () {
-      this.$router.push(`song/${this.selectedSong.ref}`)
-    }
+import {
+  CoreLibrary,
+  SongCollection,
+  Song,
+  DynamicSelectSong
+} from '@bldr/songbook-core'
+
+@Component({
+  computed: {
+    ...mapGetters(['library', 'songs'])
+  }
+})
+export default class StartPage extends Vue {
+  selectedSong!: DynamicSelectSong
+
+  library!: CoreLibrary
+
+  songs!: SongCollection<Song>
+
+  selectSong () {
+    this.$router.push(`song/${this.selectedSong.ref}`)
   }
 }
 </script>
