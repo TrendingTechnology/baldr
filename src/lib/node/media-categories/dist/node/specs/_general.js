@@ -138,7 +138,7 @@ exports.general = {
             title: 'Dateipfad',
             state: 'absent'
         },
-        // tmp propert: needed for wiki commons files.
+        // tmp property: needed for wiki commons files.
         extension: {
             title: 'Dateiendung',
             state: 'absent'

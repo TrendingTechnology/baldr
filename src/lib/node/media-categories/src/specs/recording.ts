@@ -18,6 +18,9 @@ export const recording: MediaCategoriesTypes.Category = {
         fromClaim: 'P175',
         secondQuery: 'queryLabels',
         format: 'formatList'
+      },
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('artist', filePath)
       }
     },
     musicbrainzRecordingId: {

@@ -38,6 +38,11 @@ exports.composition = {
                 fromClaim: 'P86',
                 secondQuery: 'queryLabels',
                 format: 'formatList'
+            },
+            derive: function ({ filePath }) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    return audio_metadata_1.getAudioMetadataValue('composer', filePath);
+                });
             }
         },
         lyricist: {

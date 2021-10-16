@@ -27,6 +27,9 @@ export const composition: MediaCategoriesTypes.Category = {
         fromClaim: 'P86',
         secondQuery: 'queryLabels',
         format: 'formatList'
+      },
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('composer', filePath)
       }
     },
     lyricist: {
