@@ -1,0 +1,102 @@
+/**
+ * A simple modal dialog component implementation in Vue.
+ *
+ * @module @bldr/vue-component-modal-dialog
+ */
+import ModalDialog from './ModalDialog.vue'
+import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
+import { Vue } from 'vue/types/vue'
+/**
+ *
+ */
+class DialogsWatcher {
+  dialogs: { [name: string]: boolean }
+  constructor () {
+    this.dialogs = {}
+  }
+
+  /**
+   * @param name - The name of the modal dialog, corresponds to the
+   *   `prop` of the Vue component.
+   */
+  createDialog (name: string) {
+    if (this.dialogs[name] != null) {
+      throw new Error(`<modal-dialog/> with the name “${name}” already exists.`)
+    }
+    this.dialogs[name] = true
+  }
+
+  /**
+   * @param name - The name of the modal dialog, corresponds to the
+   *   `prop` of the Vue component.
+   */
+  destroyDialog (name: string) {
+    if (name in this.dialogs) {
+      delete this.dialogs[name]
+    }
+  }
+
+  /**
+   *
+   * @param name - The name of the modal dialog, corresponds to the
+   *   `prop` of the Vue component.
+   * @param isVisible
+   */
+  setVisiblity (name: string, isVisible: boolean) {
+    this.dialogs[name] = isVisible
+  }
+
+  /**
+   * Get the visibility of a modal dialog by its name.
+   *
+   * @param name - The name of the modal dialog, corresponds to the
+   *   `prop` of the Vue component.
+   */
+  getVisiblity (name: string): boolean {
+    return this.dialogs[name]
+  }
+
+  isOpen () {
+    for (const name in this.dialogs) {
+      if (this.dialogs[name]) return true
+    }
+    return false
+  }
+}
+
+export const dialogsWatcher = new DialogsWatcher()
+
+const plugin: ModalDialogPlugin = {
+  event: null,
+
+  install: (Vue) => {
+    this.event = Vue
+
+    Vue.prototype.$modal = {
+      hide (name: string) {
+        this.event.$emit('modalhide', name)
+      },
+      toggle (name: string) {
+        this.event.$emit('modaltoggle', name)
+        return dialogsWatcher.getVisiblity(name)
+      },
+      show (name: string) {
+        this.event.$emit('modalshow', name)
+      },
+      isOpen () {
+        return dialogsWatcher.isOpen()
+      }
+    }
+
+    Vue.component('modal-dialog', ModalDialog)
+  }
+}
+
+export default plugin
+
+export interface ModalDialogPlugin extends PluginObject<any> {
+
+  event: Vue
+
+  install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void,
+}

@@ -14,61 +14,63 @@
   </div>
 </template>
 
-<script>
-import ModalDialog from './main.js'
-import { dialogsWatcher } from './main.js'
+<script lang="ts">
+import Plugin, { dialogsWatcher } from './main.js'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 // Components
 import { MaterialIcon } from '@bldr/icons'
 
-export default {
-  name: 'ModalDialog',
+@Component({
   components: {
     MaterialIcon
-  },
-  props: {
-    name: {
-      type: String,
-      required: true
-    }
-  },
-  data () {
-    return {
-      isVisible: false
-    }
-  },
+  }
+})
+export default class ModalDialog extends Vue {
+  isVisible = false
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  name!: string
+
   mounted () {
-    ModalDialog.event.$on('modalhide', this.hide)
-    ModalDialog.event.$on('modalshow', this.show)
-    ModalDialog.event.$on('modaltoggle', this.toggle)
-  },
-  methods: {
-    hide (name) {
-      if (this.name === name) {
-        this.isVisible = false
-        dialogsWatcher.setVisiblity(name, this.isVisible)
-      }
-    },
-    show (name) {
-      if (this.name === name) {
-        this.isVisible = true
-        dialogsWatcher.setVisiblity(name, this.isVisible)
-      }
-    },
-    toggle (name) {
-      if (this.name === name) {
-        this.isVisible = !this.isVisible
-        dialogsWatcher.setVisiblity(name, this.isVisible)
-      }
+    Plugin.event.$on('modalhide', this.hide)
+    Plugin.event.$on('modalshow', this.show)
+    Plugin.event.$on('modaltoggle', this.toggle)
+  }
+
+  hide (name: string) {
+    if (this.name === name) {
+      this.isVisible = false
+      dialogsWatcher.setVisiblity(name, this.isVisible)
     }
-  },
-  created: function () {
+  }
+
+  show (name: string) {
+    if (this.name === name) {
+      this.isVisible = true
+      dialogsWatcher.setVisiblity(name, this.isVisible)
+    }
+  }
+
+  toggle (name: string) {
+    if (this.name === name) {
+      this.isVisible = !this.isVisible
+      dialogsWatcher.setVisiblity(name, this.isVisible)
+    }
+  }
+
+  created () {
     dialogsWatcher.createDialog(this.name)
-  },
-  beforeUpdate: function () {
+  }
+
+  beforeUpdate () {
     dialogsWatcher.destroyDialog(this.name)
-  },
-  destroyed: function () {
+  }
+
+  destroyed () {
     dialogsWatcher.destroyDialog(this.name)
   }
 }

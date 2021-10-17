@@ -21,7 +21,7 @@ Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 
 Vue.use(MaterialIcon)
-Vue.use(ModalDialog)
+Vue.use(ModalDialog as any)
 Vue.use(DynamicSelect as any)
 
 Vue.config.productionTip = false
