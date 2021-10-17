@@ -44,7 +44,6 @@
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/wikidata": "*",
-    "@bldr/yaml": "*",
     "@bldr/youtube-api": "*",
     "chalk": "4.1.0",
     "color": "3.1.3",

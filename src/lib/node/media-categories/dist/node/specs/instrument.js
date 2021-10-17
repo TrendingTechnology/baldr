@@ -21,7 +21,7 @@ exports.instrument = {
     basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Instrumente'),
     relPath: function ({ data }) {
         const instrumentData = data;
-        const id = data.id.replace(/^IN_/, '');
+        const id = data.instrumentId.replace(/^IN_/, '');
         return path_1.default.join(id.substr(0, 1).toLowerCase(), id, `main.${instrumentData.extension}`);
     },
     detectCategoryByPath: function (category) {

@@ -15,9 +15,9 @@ const media_manager_1 = require("@bldr/media-manager");
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-function action(filePaths, cmdObj) {
+function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.operations.normalize(filePaths, cmdObj.parentPresDir);
+        yield media_manager_1.operations.normalize(filePaths);
     });
 }
 module.exports = action;

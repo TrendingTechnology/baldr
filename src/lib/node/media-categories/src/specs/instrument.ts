@@ -29,7 +29,7 @@ export const instrument: MediaCategoriesTypes.Category = {
   basePath: path.join(config.mediaServer.basePath, 'Musik', 'Instrumente'),
   relPath: function ({ data }) {
     const instrumentData = data as InstrumentFileFormat
-    const id = data.id.replace(/^IN_/, '')
+    const id = data.instrumentId.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${instrumentData.extension}`)
   },
   detectCategoryByPath: function (category) {

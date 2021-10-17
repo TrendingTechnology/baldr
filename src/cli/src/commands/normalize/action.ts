@@ -11,8 +11,8 @@ interface CmdObj {
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
-  await operations.normalize(filePaths, cmdObj.parentPresDir)
+async function action (filePaths: string[]): Promise<void> {
+  await operations.normalize(filePaths)
 }
 
 export = action
