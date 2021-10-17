@@ -45,38 +45,7 @@ class LocationIndicator {
         return true;
     }
     /**
-     * Get the directory where a presentation file (Praesentation.baldr.yml) is
-     * located in (The first folder with a prefix like `10_`)
-     *
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
-     */
-    getPresParentDir(currentPath) {
-        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'Praesentation.baldr.yml');
-        if (parentFile != null) {
-            return path_1.default.dirname(parentFile);
-        }
-    }
-    /**
-     * Move a file path into a directory relative to the current
-     * presentation directory.
-     *
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
-     *
-     * @param currentPath - The current path.
-     * @param subDir - A relative path.
-     */
-    moveIntoSubdir(currentPath, subDir) {
-        const fileName = path_1.default.basename(currentPath);
-        const presPath = this.getPresParentDir(currentPath);
-        if (presPath == null) {
-            throw new Error('The parent presentation folder couldn’t be detected!');
-        }
-        return path_1.default.join(presPath, subDir, fileName);
-    }
-    /**
-     * A deactivaed directory is a directory which has no direct counter part in
+     * A deactivated directory is a directory which has no direct counter part in
      * the main media folder, which is not mirrored. It is a real archived folder
      * in the archive folder. Activated folders have a prefix like `10_`
      *
@@ -103,6 +72,63 @@ class LocationIndicator {
             }
         }
         return false;
+    }
+    /**
+     * Get the parent directory in which a presentation file
+     * (Praesentation.baldr.yml) is located. For example: Assuming this file
+     * exists: `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Presentation.baldr.yml`
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+     */
+    getPresParentDir(currentPath) {
+        const parentFile = (0, core_node_1.findParentFile)(currentPath, 'Praesentation.baldr.yml');
+        if (parentFile != null) {
+            return path_1.default.dirname(parentFile);
+        }
+    }
+    /**
+     * Get the first parent directory (the first folder with a prefix like `10_`)
+     * that has a two-digit numeric prefix.
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+     */
+    getTwoDigitPrefixedParentDir(currentPath) {
+        let parentDir;
+        if (fs_1.default.existsSync(currentPath) && fs_1.default.lstatSync(currentPath).isDirectory()) {
+            parentDir = currentPath;
+        }
+        else {
+            parentDir = path_1.default.dirname(currentPath);
+        }
+        const segments = parentDir.split(path_1.default.sep);
+        for (let index = segments.length - 1; index >= 0; index--) {
+            const segment = segments[index];
+            if (segment.match(/^\d\d_.+/) != null) {
+                // end not included
+                const pathSegments = segments.slice(0, index + 1);
+                return pathSegments.join(path_1.default.sep);
+            }
+        }
+    }
+    /**
+     * Move a file path into a directory relative to the current
+     * presentation directory.
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
+     *
+     * @param currentPath - The current path.
+     * @param subDir - A relative path.
+     */
+    moveIntoSubdir(currentPath, subDir) {
+        const fileName = path_1.default.basename(currentPath);
+        const presPath = this.getPresParentDir(currentPath);
+        if (presPath == null) {
+            throw new Error('The parent presentation folder couldn’t be detected!');
+        }
+        return path_1.default.join(presPath, subDir, fileName);
     }
     /**
      * Get the path relative to one of the base paths and `currentPath`.

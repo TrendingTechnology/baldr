@@ -56,40 +56,7 @@ class LocationIndicator {
   }
 
   /**
-   * Get the directory where a presentation file (Praesentation.baldr.yml) is
-   * located in (The first folder with a prefix like `10_`)
-   *
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
-   */
-  getPresParentDir (currentPath: string): string | undefined {
-    const parentFile = findParentFile(currentPath, 'Praesentation.baldr.yml')
-    if (parentFile != null) {
-      return path.dirname(parentFile)
-    }
-  }
-
-  /**
-   * Move a file path into a directory relative to the current
-   * presentation directory.
-   *
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
-   *
-   * @param currentPath - The current path.
-   * @param subDir - A relative path.
-   */
-  moveIntoSubdir (currentPath: string, subDir: string): string {
-    const fileName = path.basename(currentPath)
-    const presPath = this.getPresParentDir(currentPath)
-    if (presPath == null) {
-      throw new Error('The parent presentation folder couldn’t be detected!')
-    }
-    return path.join(presPath, subDir, fileName)
-  }
-
-  /**
-   * A deactivaed directory is a directory which has no direct counter part in
+   * A deactivated directory is a directory which has no direct counter part in
    * the main media folder, which is not mirrored. It is a real archived folder
    * in the archive folder. Activated folders have a prefix like `10_`
    *
@@ -116,6 +83,65 @@ class LocationIndicator {
       }
     }
     return false
+  }
+
+  /**
+   * Get the parent directory in which a presentation file
+   * (Praesentation.baldr.yml) is located. For example: Assuming this file
+   * exists: `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Presentation.baldr.yml`
+   *
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+   */
+  public getPresParentDir (currentPath: string): string | undefined {
+    const parentFile = findParentFile(currentPath, 'Praesentation.baldr.yml')
+    if (parentFile != null) {
+      return path.dirname(parentFile)
+    }
+  }
+
+  /**
+   * Get the first parent directory (the first folder with a prefix like `10_`)
+   * that has a two-digit numeric prefix.
+   *
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+   */
+  public getTwoDigitPrefixedParentDir (currentPath: string): string | undefined {
+    let parentDir: string
+    if (fs.existsSync(currentPath) && fs.lstatSync(currentPath).isDirectory()) {
+      parentDir = currentPath
+    } else {
+      parentDir = path.dirname(currentPath)
+    }
+    const segments = parentDir.split(path.sep)
+    for (let index = segments.length - 1; index >= 0; index--) {
+      const segment = segments[index]
+      if (segment.match(/^\d\d_.+/) != null) {
+        // end not included
+        const pathSegments = segments.slice(0, index + 1)
+        return pathSegments.join(path.sep)
+      }
+    }
+  }
+
+  /**
+   * Move a file path into a directory relative to the current
+   * presentation directory.
+   *
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
+   *
+   * @param currentPath - The current path.
+   * @param subDir - A relative path.
+   */
+  moveIntoSubdir (currentPath: string, subDir: string): string {
+    const fileName = path.basename(currentPath)
+    const presPath = this.getPresParentDir(currentPath)
+    if (presPath == null) {
+      throw new Error('The parent presentation folder couldn’t be detected!')
+    }
+    return path.join(presPath, subDir, fileName)
   }
 
   /**

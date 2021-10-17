@@ -110,8 +110,10 @@ function untildify(filePath) {
 }
 exports.untildify = untildify;
 /**
+ * Find a specific file by file name in a parent folder structure
  *
- * @param filePath - A file path to search for a file in one of the parent folder struture.
+ * @param filePath - A file path to search for a file in one of the parent
+ *   folder struture.
  * @param fileName - The name of the searched file.
  *
  * @returns The path of the found parent file or undefined if not found.

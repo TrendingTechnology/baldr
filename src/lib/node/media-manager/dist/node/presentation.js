@@ -31,19 +31,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generatePresentation = exports.normalizePresentationFile = void 0;
+exports.generateAutomaticPresentation = exports.normalizePresentationFile = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const yaml_1 = require("@bldr/yaml");
-const media_file_classes_1 = require("./media-file-classes");
-const directory_tree_walk_1 = require("./directory-tree-walk");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("@bldr/titles");
 const log = __importStar(require("@bldr/log"));
+const media_file_classes_1 = require("./media-file-classes");
+const directory_tree_walk_1 = require("./directory-tree-walk");
+const location_indicator_1 = require("./location-indicator");
 const comment = `
 #-----------------------------------------------------------------------
 #
@@ -159,7 +160,7 @@ function slidify(masterName, data, topLevelData) {
     }
 }
 /**
- * Create a Praesentation.baldr.yml file and insert all media assets in
+ * Create a presentation file and insert all media assets in
  * the presentation.
  *
  * @param filePath - The file path of the new created presentation
@@ -205,11 +206,49 @@ function generatePresentation(filePath) {
                 source: 'Arbeitsblatt.tex'
             }));
         }
+        log.verbose('Write automatically generated presentation file to path %s', filePath);
         const result = (0, yaml_1.convertToYaml)({
             slides
         });
-        log.verbose(result);
+        log.debug(result);
         (0, file_reader_writer_1.writeFile)(filePath, result);
     });
 }
-exports.generatePresentation = generatePresentation;
+/**
+ * Create a automatically generated presentation file.
+ */
+function generateAutomaticPresentation(filePath, force) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (filePath == null) {
+            filePath = process.cwd();
+        }
+        else {
+            const stat = fs_1.default.statSync(filePath);
+            if (!stat.isDirectory()) {
+                filePath = path_1.default.dirname(filePath);
+            }
+        }
+        filePath = location_indicator_1.locationIndicator.getTwoDigitPrefixedParentDir(filePath);
+        if (filePath == null) {
+            throw new Error('You are not in a presentation folder prefixed with two digits!');
+        }
+        filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
+        if (!fs_1.default.existsSync(filePath) || (force != null && force)) {
+            log.info('Presentation template created at: %s', filePath);
+        }
+        else {
+            const rawPresentation = (0, file_reader_writer_1.readYamlFile)(filePath);
+            console.log(rawPresentation);
+            if (rawPresentation.slides != null) {
+                filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml');
+                log.info('Presentation already exists, create tmp file: %s', log.colorize.red(filePath));
+            }
+            else {
+                log.info('Overwrite the presentation as it has no slides: %s', log.colorize.red(filePath));
+            }
+        }
+        yield generatePresentation(filePath);
+        normalizePresentationFile(filePath);
+    });
+}
+exports.generateAutomaticPresentation = generateAutomaticPresentation;

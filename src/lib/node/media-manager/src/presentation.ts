@@ -8,15 +8,15 @@ import {
   objectifyTexZitat
 } from '@bldr/tex-markdown-converter'
 import { convertToYaml } from '@bldr/yaml'
-
-import { makeAsset } from './media-file-classes'
-import { walk } from './directory-tree-walk'
-
 import { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { genUuid } from '@bldr/core-browser'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
+
+import { makeAsset } from './media-file-classes'
+import { walk } from './directory-tree-walk'
+import { locationIndicator } from './location-indicator'
 
 const comment = `
 #-----------------------------------------------------------------------
@@ -158,13 +158,13 @@ function slidify (
 }
 
 /**
- * Create a Praesentation.baldr.yml file and insert all media assets in
+ * Create a presentation file and insert all media assets in
  * the presentation.
  *
  * @param filePath - The file path of the new created presentation
  *   template.
  */
-export async function generatePresentation (filePath: string): Promise<void> {
+async function generatePresentation (filePath: string): Promise<void> {
   const basePath = path.dirname(filePath)
   let slides: SlideData[] = []
   await walk(
@@ -211,9 +211,55 @@ export async function generatePresentation (filePath: string): Promise<void> {
     )
   }
 
+  log.verbose('Write automatically generated presentation file to path %s', filePath)
   const result = convertToYaml({
     slides
   })
-  log.verbose(result)
+  log.debug(result)
   writeFile(filePath, result)
+}
+
+/**
+ * Create a automatically generated presentation file.
+ */
+export async function generateAutomaticPresentation (
+  filePath?: string,
+  force?: boolean
+): Promise<void> {
+  if (filePath == null) {
+    filePath = process.cwd()
+  } else {
+    const stat = fs.statSync(filePath)
+    if (!stat.isDirectory()) {
+      filePath = path.dirname(filePath)
+    }
+  }
+  filePath = locationIndicator.getTwoDigitPrefixedParentDir(filePath)
+
+  if (filePath == null) {
+    throw new Error('You are not in a presentation folder prefixed with two digits!')
+  }
+
+  filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
+  if (!fs.existsSync(filePath) || (force != null && force)) {
+    log.info('Presentation template created at: %s', filePath)
+  } else {
+    const rawPresentation = readYamlFile(filePath)
+    console.log(rawPresentation)
+    if (rawPresentation.slides != null) {
+      filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml')
+      log.info(
+        'Presentation already exists, create tmp file: %s',
+        log.colorize.red(filePath)
+      )
+    } else {
+      log.info(
+        'Overwrite the presentation as it has no slides: %s',
+        log.colorize.red(filePath)
+      )
+    }
+  }
+
+  await generatePresentation(filePath)
+  normalizePresentationFile(filePath)
 }

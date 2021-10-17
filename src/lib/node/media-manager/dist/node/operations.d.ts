@@ -1,10 +1,14 @@
-/**
- * Bundle all operations in an object
- */
 import { generateCloze, patchTexTitles } from './tex';
-import { normalizePresentationFile, generatePresentation } from './presentation';
+import { normalizePresentationFile, generateAutomaticPresentation } from './presentation';
 import { removeWidthHeightInSvg, fixTypography } from './txt';
 import { renameMediaAsset, moveAsset, renameByRef, normalizeMediaAsset, initializeMetaYaml, convertAsset } from './asset';
+/**
+ * Execute different normalization tasks.
+ *
+ * @param filePaths - An array of input files, comes from the
+ *   commanders’ variadic parameter `[files...]`.
+ */
+declare function normalize(filePaths: string[], parentPresDir?: boolean): Promise<void>;
 /**
  * A collection of functions to manipulate the media assets and presentation files.
  */
@@ -12,8 +16,9 @@ export declare const operations: {
     convertAsset: typeof convertAsset;
     fixTypography: typeof fixTypography;
     generateCloze: typeof generateCloze;
-    generatePresentation: typeof generatePresentation;
+    generateAutomaticPresentation: typeof generateAutomaticPresentation;
     initializeMetaYaml: typeof initializeMetaYaml;
+    normalize: typeof normalize;
     moveAsset: typeof moveAsset;
     normalizeMediaAsset: typeof normalizeMediaAsset;
     normalizePresentationFile: typeof normalizePresentationFile;
@@ -22,3 +27,4 @@ export declare const operations: {
     renameByRef: typeof renameByRef;
     renameMediaAsset: typeof renameMediaAsset;
 };
+export {};

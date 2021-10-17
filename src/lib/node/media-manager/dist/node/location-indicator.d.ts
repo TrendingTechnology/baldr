@@ -24,26 +24,7 @@ declare class LocationIndicator {
      */
     isInArchive(currentPath: string): boolean;
     /**
-     * Get the directory where a presentation file (Praesentation.baldr.yml) is
-     * located in (The first folder with a prefix like `10_`)
-     *
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
-     */
-    getPresParentDir(currentPath: string): string | undefined;
-    /**
-     * Move a file path into a directory relative to the current
-     * presentation directory.
-     *
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
-     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
-     *
-     * @param currentPath - The current path.
-     * @param subDir - A relative path.
-     */
-    moveIntoSubdir(currentPath: string, subDir: string): string;
-    /**
-     * A deactivaed directory is a directory which has no direct counter part in
+     * A deactivated directory is a directory which has no direct counter part in
      * the main media folder, which is not mirrored. It is a real archived folder
      * in the archive folder. Activated folders have a prefix like `10_`
      *
@@ -58,6 +39,34 @@ declare class LocationIndicator {
      * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
      */
     isInDeactivatedDir(currentPath: string): boolean;
+    /**
+     * Get the parent directory in which a presentation file
+     * (Praesentation.baldr.yml) is located. For example: Assuming this file
+     * exists: `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Presentation.baldr.yml`
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+     */
+    getPresParentDir(currentPath: string): string | undefined;
+    /**
+     * Get the first parent directory (the first folder with a prefix like `10_`)
+     * that has a two-digit numeric prefix.
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+     */
+    getTwoDigitPrefixedParentDir(currentPath: string): string | undefined;
+    /**
+     * Move a file path into a directory relative to the current
+     * presentation directory.
+     *
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
+     * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
+     *
+     * @param currentPath - The current path.
+     * @param subDir - A relative path.
+     */
+    moveIntoSubdir(currentPath: string, subDir: string): string;
     /**
      * Get the path relative to one of the base paths and `currentPath`.
      *
