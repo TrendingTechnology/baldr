@@ -1,46 +1,21 @@
 <template>
   <div class="vc_audio_master main-app-padding big">
+    <p class="description" v-if="description" v-html="description" />
 
-    <p
-      class="description"
-      v-if="description"
-      v-html="description"
-    />
+    <img :src="previewHttpUrl" class="preview" v-if="previewHttpUrl" />
 
-    <img
-      :src="previewHttpUrl"
-      class="preview"
-      v-if="previewHttpUrl"
-    />
+    <p class="composer person" v-if="composer" v-html="composer" />
 
-    <p
-      class="composer person"
-      v-if="composer"
-      v-html="composer"
-    />
+    <p class="title piece" v-if="partOf" v-html="partOf" />
 
-    <p
-      class="title piece"
-      v-if="partOf"
-      v-html="partOf"
-    />
+    <p class="title piece" v-if="title" v-html="title" />
 
-    <p
-      class="title piece"
-      v-if="title"
-      v-html="title"
-    />
+    <p class="artist person" v-if="artist" v-html="artist" />
 
-    <p
-      class="artist person"
-      v-if="artist"
-      v-html="artist"
-    />
+    <wave-form :sample="sample" />
 
-    <wave-form :sample="sample"/>
-
-    <play-button class="left-bottom-corner" :sample="sample"/>
-    <external-sites :asset="mediaAsset"/>
+    <play-button class="left-bottom-corner" :sample="sample" />
+    <external-sites :asset="mediaAsset" />
   </div>
 </template>
 
@@ -82,40 +57,39 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_audio_master {
-    text-align: center;
+.vc_audio_master {
+  text-align: center;
 
-    p {
-      margin: 0;
-    }
-
-    .composer {
-      font-size: 1.2em;
-    }
-
-    .title {
-      font-size: 1.1em;
-    }
-
-    .artist {
-      margin-top: 4em;
-      font-size: 0.7em;
-    }
-
-    img.preview {
-      height: 10em;
-      width: 10em;
-      object-fit: cover;
-    }
-
-    .vc_wave_form {
-      text-align: center;
-      margin: 0 auto;
-    }
-
-    .description {
-      font-size: 0.6em;
-      padding-bottom: 2em;
-    }
+  p {
+    margin: 0;
   }
+
+  .composer {
+    font-size: 1.2em;
+  }
+
+  .title {
+    font-size: 1.1em;
+  }
+
+  .artist {
+    font-size: 0.7em;
+  }
+
+  img.preview {
+    height: 10em;
+    width: 10em;
+    object-fit: cover;
+  }
+
+  .vc_wave_form {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .description {
+    font-size: 0.6em;
+    padding-bottom: 2em;
+  }
+}
 </style>
