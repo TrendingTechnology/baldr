@@ -36,7 +36,6 @@ exports.operations = void 0;
  * Bundle all operations in an object
  */
 const fs_1 = __importDefault(require("fs"));
-const location_indicator_1 = require("./location-indicator");
 const yaml_1 = require("@bldr/yaml");
 const core_browser_1 = require("@bldr/core-browser");
 const log = __importStar(require("@bldr/log"));
@@ -62,18 +61,22 @@ function validateYamlOneFile(filePath) {
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-function normalize(filePaths, parentPresDir) {
+function normalize(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
         if (filePaths.length === 0) {
             filePaths = [process.cwd()];
         }
-        if (parentPresDir != null && parentPresDir) {
-            const presParentDir = location_indicator_1.locationIndicator.getPresParentDir(filePaths[0]);
-            if (presParentDir != null) {
-                log.info('Run the normalization task on the parent presentation folder: %s', presParentDir);
-                filePaths = [presParentDir];
-            }
-        }
+        // let presParentDir
+        // if (parentPresDir != null && parentPresDir) {
+        //   presParentDir = locationIndicator.getPresParentDir(filePaths[0])
+        //   if (presParentDir != null) {
+        //     log.info(
+        //       'Run the normalization task on the parent presentation folder: %s',
+        //       presParentDir
+        //     )
+        //     filePaths = [presParentDir]
+        //   }
+        // }
         // `baldr normalize video.mp4.yml` only validates the YAML structure. We have
         // to call `baldr normalize video.mp4` to get the full normalization of the
         // metadata file video.mp4.yml.
@@ -117,6 +120,8 @@ function normalize(filePaths, parentPresDir) {
         }, {
             path: filePaths
         });
+        log.verbose('Generate presentation automatically on path %s:', filePaths[0]);
+        exports.operations.generateAutomaticPresentation(filePaths[0]);
     });
 }
 /**

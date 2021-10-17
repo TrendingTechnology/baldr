@@ -47,23 +47,21 @@ function validateYamlOneFile (filePath: string): void {
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-async function normalize (
-  filePaths: string[],
-  parentPresDir?: boolean
-): Promise<void> {
+async function normalize (filePaths: string[]): Promise<void> {
   if (filePaths.length === 0) {
     filePaths = [process.cwd()]
   }
-  if (parentPresDir != null && parentPresDir) {
-    const presParentDir = locationIndicator.getPresParentDir(filePaths[0])
-    if (presParentDir != null) {
-      log.info(
-        'Run the normalization task on the parent presentation folder: %s',
-        presParentDir
-      )
-      filePaths = [presParentDir]
-    }
-  }
+  // let presParentDir
+  // if (parentPresDir != null && parentPresDir) {
+  //   presParentDir = locationIndicator.getPresParentDir(filePaths[0])
+  //   if (presParentDir != null) {
+  //     log.info(
+  //       'Run the normalization task on the parent presentation folder: %s',
+  //       presParentDir
+  //     )
+  //     filePaths = [presParentDir]
+  //   }
+  // }
 
   // `baldr normalize video.mp4.yml` only validates the YAML structure. We have
   // to call `baldr normalize video.mp4` to get the full normalization of the
@@ -108,6 +106,8 @@ async function normalize (
       path: filePaths
     }
   )
+  log.verbose('Generate presentation automatically on path %s:', filePaths[0])
+  operations.generateAutomaticPresentation(filePaths[0])
 }
 
 /**
