@@ -20,46 +20,50 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { Song } from '@bldr/songbook-core'
+import store from '@/store'
 
-import IconLink from '@/components/IconLink'
+import IconLink from '@/components/IconLink.vue'
 
-export default {
-  name: 'MetaData',
+@Component({
   components: {
     IconLink
   },
   computed: {
-    ...mapGetters(['externalSites', 'slideNo', 'songCurrent']),
-    metadata () {
-      return this.songCurrent.metaDataCombined
-    },
-    title () {
-      return this.metadata.title
-    },
-    subtitle () {
-      return this.metadata.subtitle
-    },
-    lyricist () {
-      return this.metadata.lyricist
-    },
-    composer () {
-      return this.metadata.composer
-    },
-    audio () {
-      const uri = this.songCurrent.metaData.audio
-      if (uri) {
-        const mediaFile = this.mediaFileByUri(uri)
-        if (mediaFile) return mediaFile.httpUrl
-      }
-      return false
+    ...mapGetters(['externalSites', 'slideNo', 'songCurrent'])
+  }
+})
+export default class MetaData extends Vue {
+  songCurrent!: Song
+  get metadata () {
+    return this.songCurrent.metaDataCombined
+  }
+  get title () {
+    return this.metadata.title
+  }
+  get subtitle () {
+    return this.metadata.subtitle
+  }
+  get lyricist () {
+    return this.metadata.lyricist
+  }
+  get composer () {
+    return this.metadata.composer
+  }
+  get audio () {
+    const uri = this.songCurrent.metaData.audio
+    if (uri) {
+      const mediaFile = this.mediaFileByUri(uri)
+      if (mediaFile) return mediaFile.httpUrl
     }
-  },
-  methods: {
-    mediaFileByUri (uri) {
-      return this.$store.getters['media/assetByUri'](uri)
-    }
+    return false
+  }
+
+  mediaFileByUri (uri: string) {
+    return store.getters['media/assetByUri'](uri)
   }
 }
 </script>
