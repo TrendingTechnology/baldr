@@ -246,7 +246,7 @@ export async function generateAutomaticPresentation (
   } else {
     const rawPresentation = readYamlFile(filePath)
     console.log(rawPresentation)
-    if (rawPresentation.slides != null) {
+    if (rawPresentation?.slides != null) {
       filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml')
       log.info(
         'Presentation already exists, create tmp file: %s',
