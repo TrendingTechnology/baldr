@@ -1,9 +1,9 @@
 import Vue, { PluginFunction, VueConstructor } from 'vue'
 
-declare class DynamicSelect {
-  focus(): void
-  static install: PluginFunction<never>;
-}
+// declare class DynamicSelect {
+//   focus (): void
+//   static install: PluginFunction<never>
+// }
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,7 +23,7 @@ declare module 'vue/types/vue' {
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
-      $dynamicSelect?: DynamicSelect;
+    $dynamicSelect?: DynamicSelect
   }
 }
 
