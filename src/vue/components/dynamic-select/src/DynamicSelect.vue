@@ -32,11 +32,11 @@ import { Vue, Component, Prop, Watch, Ref } from 'vue-property-decorator'
 const resultListMaxCount = 20
 
 interface Option {
-  id: string
+  ref: string
   name: string
 }
 
-@Component
+@Component()
 export default class DynamicSelect extends Vue {
   hasFocus = false
   searchText = null
@@ -111,12 +111,12 @@ export default class DynamicSelect extends Vue {
     }
   }
 
-  @Watch('searchText')
+  @Watch('searchText', { immediate: true, deep: true })
   onSearchTextChanged () {
     this.searchDebounced(this.searchText)
   }
 
-  @Watch('selectedOption')
+  @Watch('selectedOption', { immediate: true, deep: true })
   onSelectedOptionChanged () {
     // Provide selected item to parent
     this.$emit('input', this.selectedOption)
@@ -141,7 +141,7 @@ export default class DynamicSelect extends Vue {
   }
 
   searchDebounced (searchText: string) {
-    return this.debounced(500, (searchText: string) => {
+    return this.debounced(500, () => {
       this.search(searchText)
     })
   }
@@ -167,7 +167,7 @@ export default class DynamicSelect extends Vue {
     // Move down to first result if user presses down arrow (from search field)
     if (event.key === 'ArrowDown') {
       if (this.$refs.result.length > 0) {
-        this.$refs.resultList.children.item(0).focus()
+        this.resultListElement.children.item(0).focus()
       }
     }
   }
@@ -175,8 +175,8 @@ export default class DynamicSelect extends Vue {
   @Ref('result')
   resultElement: Element
 
-  @Ref()
-  resultList: NodeList
+  @Ref('resultList')
+  resultListElement: Element
 
   @Ref('search')
   searchElement: Element
@@ -192,7 +192,7 @@ export default class DynamicSelect extends Vue {
       } else if (event.key === 'ArrowUp') {
         this.selectedResult--
       }
-      let next = this.$refs.resultList.children.item(this.selectedResult)
+      let next = this.resultListElement.children.item(this.selectedResult)
       if (next) {
         next.focus()
       } else {
@@ -213,12 +213,12 @@ export default class DynamicSelect extends Vue {
     }
   }
 
-  selectOption (option) {
+  selectOption (option: Option): void {
     this.selectedOption = option
     this.hasFocus = false
   }
 
-  focus () {
+  focus (): void {
     this.hasFocus = true
   }
 
@@ -235,7 +235,7 @@ export default class DynamicSelect extends Vue {
    */
   selectFirstItemOnReturn (event) {
     if (event.key === 'Enter') {
-      this.$refs.resultList.children[0].focus()
+      this.resultListElement.children[0].focus()
     }
   }
 }
