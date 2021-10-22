@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_about_page valign-wrapper main-app-fullscreen main-app-padding" b-ui-theme="default">
+  <div
+    class="vc_about_page valign-wrapper main-app-fullscreen main-app-padding"
+    b-ui-theme="default"
+  >
     <app-info-simple
       class="valign-center"
       package-name="@bldr/lamp"
@@ -17,16 +20,16 @@ import { AppInfoSimple } from '@bldr/components-collection'
     AppInfoSimple
   }
 })
-export default class AboutPage extends Vue  {
+export default class AboutPage extends Vue {
   version = lampVersion
 }
 </script>
 
 <style lang="scss">
-  .vc_about_page {
-    th {
-      text-align: left;
-      padding-right: 1em;
-    }
+.vc_about_page {
+  th {
+    text-align: left;
+    padding-right: 1em;
   }
+}
 </style>

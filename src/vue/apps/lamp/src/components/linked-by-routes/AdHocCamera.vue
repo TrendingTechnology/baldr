@@ -1,6 +1,6 @@
 <template>
   <div class="vc_ad_hoc_camera main-app-fullscreen" b-ui-theme="default">
-    <slide-main :slide="slide" :is-public="false"/>
+    <slide-main :slide="slide" :is-public="false" />
   </div>
 </template>
 
@@ -22,9 +22,9 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_ad_hoc_camera {
-    .vc_master_renderer {
-      height: 100vh;
-    }
+.vc_ad_hoc_camera {
+  .vc_master_renderer {
+    height: 100vh;
   }
+}
 </style>

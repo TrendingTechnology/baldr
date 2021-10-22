@@ -1,6 +1,6 @@
 <template>
   <div class="vc_ad_hoc_editor main-app-fullscreen" b-ui-theme="default">
-    <slide-main :slide="slide" :is-public="false"/>
+    <slide-main :slide="slide" :is-public="false" />
   </div>
 </template>
 
@@ -22,11 +22,10 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_ad_hoc_editor {
-
-    .vc_master_renderer {
-      height: 100vh;
-      font-size: 3.5em;
-    }
+.vc_ad_hoc_editor {
+  .vc_master_renderer {
+    height: 100vh;
+    font-size: 3.5em;
   }
+}
 </style>

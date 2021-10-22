@@ -9,13 +9,7 @@
   >
     <h2>TeX-Markdown-Konvertierung</h2>
 
-    <textarea
-      v-model="input"
-      name="input"
-      id="input"
-      cols="80"
-      rows="20"
-    />
+    <textarea v-model="input" name="input" id="input" cols="80" rows="20" />
 
     <button @click="changeDirection">{{ buttonLabel }}</button>
 
@@ -62,13 +56,13 @@ export default class TexMarkdownConverter extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_tex_markdown_converter {
-    textarea {
-      display: block;
-      width: 100%;
-    }
-    button {
-      margin-top: 1em !important;
-    }
+.vc_tex_markdown_converter {
+  textarea {
+    display: block;
+    width: 100%;
   }
+  button {
+    margin-top: 1em !important;
+  }
+}
 </style>

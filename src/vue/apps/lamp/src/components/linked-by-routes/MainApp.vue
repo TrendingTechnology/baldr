@@ -1,33 +1,27 @@
 <template>
-  <div
-    class="vc_main_app"
-  >
-
+  <div class="vc_main_app">
     <!-- vue-notifications -->
-    <notifications
-      group="default"
-      position="top right"
-    >
+    <notifications group="default" position="top right">
       <template slot="body" slot-scope="props">
         <div
           b-ui-theme="default"
           :class="['vue-notification', props.item.type]"
           @click="props.close"
         >
-          <div class="title">{{props.item.title}}</div>
-          <div class="text" v-html="props.item.text"/>
+          <div class="title">{{ props.item.title }}</div>
+          <div class="text" v-html="props.item.text" />
         </div>
       </template>
     </notifications>
 
     <!-- Main area managed by the Vue router. -->
     <main>
-      <router-view/>
+      <router-view />
     </main>
 
     <!-- A fullscreen overlay to display videos or images in fullscreen -->
-    <media-canvas/>
-    <media-player/>
+    <media-canvas />
+    <media-player />
   </div>
 </template>
 
@@ -70,14 +64,14 @@ export default {
         }
       })
     }
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', event => {
       this.$showMessage.error(event.error)
     })
     registerShortcuts(this.$router, this.$shortcuts, actions)
 
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {
-       styleConfigurator.set(to.meta.style)
+        styleConfigurator.set(to.meta.style)
       }
     })
 
@@ -95,12 +89,12 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/global-styles.scss";
+@import '@/global-styles.scss';
 
 .vc_main_app {
   .vue-notification {
-    background: #44A4FC;
-    border-left: 0.5em solid #187FE7;
+    background: #44a4fc;
+    border-left: 0.5em solid #187fe7;
     color: #ffffff;
     font-size: 12pt;
     margin: 0 1em 1em;
