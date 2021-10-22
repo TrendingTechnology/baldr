@@ -1,16 +1,12 @@
 <script lang="ts">
-import { CreateElement, VNode } from 'vue'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 
-import icons from './icons.json'
 import { validateColorName } from './main.js'
 
+import PlainIcon from './PlainIcon.vue'
+
 @Component
-export default class ColorIcon extends Vue {
-  @Prop({
-    type: String
-  })
-  name: string
+export default class ColorIcon extends PlainIcon {
 
   @Prop({
     type: String,
@@ -19,7 +15,7 @@ export default class ColorIcon extends Vue {
   })
   color: string
 
-  get classes () {
+  get classes (): string[] {
     let classes = [
       'baldr-icon',
       'vc_color_icon',
@@ -27,22 +23,6 @@ export default class ColorIcon extends Vue {
       `text-${this.color}`
     ]
     return classes
-  }
-
-  get warningText () {
-    if (!icons.includes(this.name)) {
-      const message = `No icon named “${this.name}” found!`
-      console.warn(message)
-      return message
-    }
-  }
-
-  render (createElement: CreateElement): VNode {
-    let elementName = 'div'
-    const attributes = {
-      class: this.classes
-    }
-    return createElement(elementName, attributes, this.warningText)
   }
 }
 </script>
