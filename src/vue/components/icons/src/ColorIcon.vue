@@ -2,12 +2,10 @@
 import { Component, Prop } from 'vue-property-decorator'
 
 import { validateColorName } from './main.js'
-
 import PlainIcon from './PlainIcon.vue'
 
 @Component
 export default class ColorIcon extends PlainIcon {
-
   @Prop({
     type: String,
     default: 'black',

@@ -1,26 +1,15 @@
 <script lang="ts">
-import icons from './icons.json'
-import { validateColorName } from './main.js'
 import { CreateElement, VNode, VNodeData } from 'vue'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
+
+import ColorIcon from './ColorIcon.vue'
 
 @Component
-export default class MaterialIcon extends Vue {
-  @Prop({
-    type: String
-  })
-  name: string
+export default class MaterialIcon extends ColorIcon {
   @Prop({
     type: String
   })
   size: string
-
-  @Prop({
-    type: String,
-    default: 'black',
-    validator: validateColorName
-  })
-  color: string
 
   @Prop({
     type: String
@@ -35,6 +24,7 @@ export default class MaterialIcon extends Vue {
     }
   })
   display: string
+
   // Umriss
   @Prop({
     type: String,
@@ -57,14 +47,6 @@ export default class MaterialIcon extends Vue {
     }
     classes.push(`baldr-icon_display_${this.display}`)
     return classes
-  }
-
-  get warningText () {
-    if (!icons.includes(this.name)) {
-      const message = `No icon named “${this.name}” found!`
-      console.warn(message)
-      return message
-    }
   }
 
   get styleObject (): object {
