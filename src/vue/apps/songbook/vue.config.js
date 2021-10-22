@@ -22,6 +22,7 @@ module.exports = {
     config.resolve.symlinks(false)
   },
   configureWebpack: {
+    devtool: 'source-map',
     resolve: {
       alias: {
         $HOME: os.homedir()

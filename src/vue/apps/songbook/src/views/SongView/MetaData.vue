@@ -41,18 +41,23 @@ export default class MetaData extends Vue {
   get metadata () {
     return this.songCurrent.metaDataCombined
   }
+
   get title () {
     return this.metadata.title
   }
+
   get subtitle () {
     return this.metadata.subtitle
   }
+
   get lyricist () {
     return this.metadata.lyricist
   }
+
   get composer () {
     return this.metadata.composer
   }
+
   get audio () {
     const uri = this.songCurrent.metaData.audio
     if (uri) {
