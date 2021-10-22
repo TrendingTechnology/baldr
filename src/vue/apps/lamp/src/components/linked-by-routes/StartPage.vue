@@ -7,10 +7,12 @@
 
     <div class="top-icon">
       <div class="logo"><material-icon color="red" name="baldr" />Baldr</div>
-      <div class="subtitle">Präsentations-Software für den Schuleinsatz</div>
+      <div @click="tmp" cclass="subtitle">Präsentations-Software für den Schuleinsatz</div>
     </div>
 
     <open-interface />
+
+    <vanish-icon name="baldr"/>
 
     <recent-presentations />
   </div>
@@ -18,6 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { state } from '@bldr/icons'
 
 import { styleConfigurator } from '@bldr/style-configurator'
 
@@ -35,6 +38,10 @@ import DropDownMenu from '@/components/reusable/DropDownMenu.vue'
 export default class StartPage extends Vue {
   mounted () {
     styleConfigurator.reset()
+  }
+
+  tmp() {
+    state.isMouseActive = !state.isMouseActive
   }
 }
 </script>
