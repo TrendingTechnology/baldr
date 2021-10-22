@@ -31,7 +31,8 @@
     "sass": "1.29.0",
     "sass-loader": "10.1.0",
     "vue-template-compiler": "2.6.12",
-    "webfont": "9.0.0"
+    "webfont": "9.0.0",
+    "vue-property-decorator": "9.1.2"
   },
   "browserslist": [
     "> 1%",
