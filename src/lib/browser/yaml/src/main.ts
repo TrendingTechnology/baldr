@@ -5,8 +5,5 @@
  */
 
 export * from './yaml'
-export {
-  convertCamelToSnake,
-  convertSnakeToCamel
-} from './string-format'
+export { convertCamelToSnake, convertSnakeToCamel } from './string-format'
 export * from './object-manipulation'

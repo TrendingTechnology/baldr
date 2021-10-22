@@ -1,4 +1,4 @@
-import type { ClientMediaModelsTypes } from '@bldr/type-definitions'
+import { ClientMediaModelsTypes } from '@bldr/type-definitions'
 
 /**
  * Example `ref:Alla-Turca#complete`
@@ -8,6 +8,7 @@ interface UriSplittedByFragment {
    * Prefix before `#`, for example `ref:Alla-Turca`
    */
   prefix: string
+
   /**
    * The fragment, suffix after `#`, for example `complete`
    */
@@ -22,20 +23,27 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
   /**
    * `#Sample1` or `#1,2,3` or `#-4`
    */
-  private static readonly regExpFragment: string = MediaUri.regExpAuthority + ','
+  private static readonly regExpFragment: string =
+  MediaUri.regExpAuthority + ','
 
   public static regExp: RegExp = new RegExp(
     '(?<uri>' +
-      '(?<scheme>' + MediaUri.schemes.join('|') + ')' +
+      '(?<scheme>' +
+      MediaUri.schemes.join('|') +
+      ')' +
       ':' +
       '(' +
-        '(?<authority>[' + MediaUri.regExpAuthority + ']+)' +
-        '(' +
-          '#' +
-          '(?<fragment>[' + MediaUri.regExpFragment + ']+)' +
-        ')?' +
+      '(?<authority>[' +
+      MediaUri.regExpAuthority +
+      ']+)' +
+      '(' +
+      '#' +
+      '(?<fragment>[' +
+      MediaUri.regExpFragment +
+      ']+)' +
+      ')?' +
       ')' +
-    ')'
+      ')'
   )
 
   public raw: string
@@ -136,7 +144,9 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
  *
  * @returns An array of media URIs objects.
  */
-export function makeMediaUris (uris: string | string[] | Set<string>): MediaUri[] {
+export function makeMediaUris (
+  uris: string | string[] | Set<string>
+): MediaUri[] {
   let urisNormalized: Set<string>
   if (typeof uris === 'string') {
     urisNormalized = new Set([uris])
@@ -164,7 +174,7 @@ export function findMediaUris (data: any, uris: Set<string>): void {
     for (let i = 0; i < data.length; i++) {
       findMediaUris(data[i], uris)
     }
-  // Object
+    // Object
   } else if (typeof data === 'object') {
     for (const prop in data) {
       findMediaUris(data[prop], uris)

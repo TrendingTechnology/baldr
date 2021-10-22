@@ -1,7 +1,2 @@
-import { LampTypes } from '@bldr/type-definitions';
-declare class Presentation {
-    meta: LampTypes.PresentationMeta;
-    constructor(yamlString: string);
-}
+import { Presentation } from './presentation';
 export declare function parse(yamlString: string): Presentation;
-export {};

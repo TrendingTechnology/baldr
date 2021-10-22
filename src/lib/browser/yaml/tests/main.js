@@ -16,10 +16,13 @@ function assertFrom (actual, expected) {
 describe('Package “@bldr/yaml”', function () {
   describe('Function “convertToYaml()”', function () {
     it('{ propertyOne: 1 }', function () {
-      assert.strictEqual(convertToYaml({ propertyOne: 1 }), '---\nproperty_one: 1\n')
+      assert.strictEqual(
+        convertToYaml({ propertyOne: 1 }),
+        '---\nproperty_one: 1\n'
+      )
     })
 
-    it('{ aProperty: \'A value\' }', async function () {
+    it("{ aProperty: 'A value' }", async function () {
       assertTo({ aProperty: 'A value' }, '---\na_property: A value\n')
     })
 
@@ -42,10 +45,9 @@ describe('Package “@bldr/yaml”', function () {
     })
 
     it('nested', async function () {
-      assertFrom(
-        '---\na_prop:\n  b_prop:\n    c_prop: A value\n',
-        { aProp: { bProp: { cProp: 'A value' } } }
-      )
+      assertFrom('---\na_prop:\n  b_prop:\n    c_prop: A value\n', {
+        aProp: { bProp: { cProp: 'A value' } }
+      })
     })
   })
 })

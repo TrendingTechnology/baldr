@@ -13,9 +13,11 @@
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 export function convertCamelToSnake(text) {
-    return text.replace(/[\w]([A-Z])/g, function (m) {
+    return text
+        .replace(/[\w]([A-Z])/g, function (m) {
         return m[0] + '_' + m[1];
-    }).toLowerCase();
+    })
+        .toLowerCase();
 }
 /**
  * Convert a string that is in the `snake_case` or `kebab-case` format into
@@ -28,7 +30,8 @@ export function convertCamelToSnake(text) {
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 export function convertSnakeToCamel(text) {
-    return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
+    return text.replace(/([-_][a-z])/g, group => group
+        .toUpperCase()
         .replace('-', '')
         .replace('_', ''));
 }

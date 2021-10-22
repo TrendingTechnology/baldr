@@ -16,9 +16,11 @@ exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 function convertCamelToSnake(text) {
-    return text.replace(/[\w]([A-Z])/g, function (m) {
+    return text
+        .replace(/[\w]([A-Z])/g, function (m) {
         return m[0] + '_' + m[1];
-    }).toLowerCase();
+    })
+        .toLowerCase();
 }
 exports.convertCamelToSnake = convertCamelToSnake;
 /**
@@ -32,7 +34,8 @@ exports.convertCamelToSnake = convertCamelToSnake;
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 function convertSnakeToCamel(text) {
-    return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
+    return text.replace(/([-_][a-z])/g, group => group
+        .toUpperCase()
         .replace('-', '')
         .replace('_', ''));
 }

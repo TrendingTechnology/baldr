@@ -36,10 +36,12 @@
     "@bldr/type-definitions": "*"
   },
   "devDependencies": {
-    "typescript": "4.2.3",
-    "ts-standard": "10.0.0",
+    "@bldr/config": "*",
+    "@bldr/file-reader-writer": "*",
+    "mocha": "9.1.3",
     "standard": "16.0.4",
-    "mocha": "9.1.3"
+    "ts-standard": "10.0.0",
+    "typescript": "4.2.3"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

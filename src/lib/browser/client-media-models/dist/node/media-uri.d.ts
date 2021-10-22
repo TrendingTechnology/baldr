@@ -1,4 +1,4 @@
-import type { ClientMediaModelsTypes } from '@bldr/type-definitions';
+import { ClientMediaModelsTypes } from '@bldr/type-definitions';
 /**
  * Example `ref:Alla-Turca#complete`
  */

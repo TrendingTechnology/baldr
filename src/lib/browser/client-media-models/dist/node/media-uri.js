@@ -93,13 +93,19 @@ MediaUri.regExpAuthority = 'a-zA-Z0-9-_';
  */
 MediaUri.regExpFragment = MediaUri.regExpAuthority + ',';
 MediaUri.regExp = new RegExp('(?<uri>' +
-    '(?<scheme>' + MediaUri.schemes.join('|') + ')' +
+    '(?<scheme>' +
+    MediaUri.schemes.join('|') +
+    ')' +
     ':' +
     '(' +
-    '(?<authority>[' + MediaUri.regExpAuthority + ']+)' +
+    '(?<authority>[' +
+    MediaUri.regExpAuthority +
+    ']+)' +
     '(' +
     '#' +
-    '(?<fragment>[' + MediaUri.regExpFragment + ']+)' +
+    '(?<fragment>[' +
+    MediaUri.regExpFragment +
+    ']+)' +
     ')?' +
     ')' +
     ')');

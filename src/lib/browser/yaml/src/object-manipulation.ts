@@ -25,7 +25,10 @@ enum PropertyConvertDirection {
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-export function convertProperties (data: any, direction: PropertyConvertDirection = PropertyConvertDirection.SNAKE_TO_CAMEL): object {
+export function convertProperties (
+  data: any,
+  direction: PropertyConvertDirection = PropertyConvertDirection.SNAKE_TO_CAMEL
+): object {
   // To perserve the order of the props.
   let newObject: StringIndexedData | null = null
 
@@ -37,7 +40,7 @@ export function convertProperties (data: any, direction: PropertyConvertDirectio
         data[i] = convertProperties(item, direction)
       }
     }
-  // Object
+    // Object
   } else if (typeof data === 'object') {
     newObject = {}
     for (const oldProp in data) {

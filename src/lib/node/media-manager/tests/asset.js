@@ -18,5 +18,4 @@ describe('Package “@bldr/media-manager”: asset', function () {
     operations.renameByRef(testPath)
     assert.ok(fs.existsSync(testPath))
   })
-
 })

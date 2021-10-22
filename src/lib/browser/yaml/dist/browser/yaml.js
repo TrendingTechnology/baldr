@@ -30,10 +30,7 @@ export function convertToYamlRaw(data) {
  */
 export function convertToYaml(data) {
     data = convertPropertiesCamelToSnake(data);
-    const yamlMarkup = [
-        '---',
-        convertToYamlRaw(data)
-    ];
+    const yamlMarkup = ['---', convertToYamlRaw(data)];
     return yamlMarkup.join('\n');
 }
 /**

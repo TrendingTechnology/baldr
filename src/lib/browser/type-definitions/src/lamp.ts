@@ -940,7 +940,7 @@ export interface Slide {
  *   ref: An unique reference string
  *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
  *   title: A title
- *   sub_title: A subtitle
+ *   subtitle: A subtitle
  *   subject: Musik
  *   grade: The grade the presentation belongs to.
  *   curriculum: Relation to the curriculum.
@@ -957,7 +957,7 @@ export interface PresentationMeta {
   /**
    * A Universally Unique Identifier to identify the presentation.
    */
-  uuid?: string
+  uuid: string
 
   /**
    * The title of the presentation. (for example: `Das orchestrale Klangbild bei
