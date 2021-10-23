@@ -126,7 +126,7 @@ export class Resolver {
         urisWithoutFragments.delete(uri)
       }
       for (const asset of await Promise.all<
-        MediaResolverTypes.ClientMediaAsset | undefined
+      MediaResolverTypes.ClientMediaAsset | undefined
       >(promises)) {
         if (asset != null) {
           findMediaUris(asset.yaml, urisWithoutFragments)

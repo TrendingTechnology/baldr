@@ -173,6 +173,7 @@ export class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
     super()
     this.mediaUriTranslator = translator
   }
+
   add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
     if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
       super.add(ref, asset)
