@@ -1,4 +1,4 @@
-import type { RawMenuItem } from './menu-item'
+import { RawMenuItem } from './menu-item'
 
 export const universalMenuDefinition: RawMenuItem[] = [
   {
@@ -16,7 +16,8 @@ export const universalMenuDefinition: RawMenuItem[] = [
           },
           {
             label: 'Mediendatei (Editor)',
-            description: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
+            description:
+              'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
             action: 'executeCallback',
             arguments: 'openMedia',
             keyboardShortcut: 'Ctrl + a'
@@ -30,14 +31,17 @@ export const universalMenuDefinition: RawMenuItem[] = [
           },
           {
             label: 'Übergeordneter Ordner und Archivorder',
-            description: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
+            description:
+              'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
             action: 'executeCallback',
             arguments: 'openParentArchive',
             keyboardShortcut: 'Ctrl + Shift + Alt + e'
           },
           {
-            label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
-            description: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
+            label:
+              'Präsentation (Editor), übergeordneter Ordner und Archivorder',
+            description:
+              'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
             action: 'executeCallback',
             arguments: 'openEditorParentArchive',
             keyboardShortcut: 'Ctrl + Alt + r'
@@ -105,14 +109,24 @@ export const universalMenuDefinition: RawMenuItem[] = [
             action: 'executeCallback',
             arguments: 'goToPreviousSlide',
             keyboardShortcut: 'Ctrl + Left',
-            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+            activeOnRoutes: [
+              'slide',
+              'slide-step-no',
+              'speaker-view',
+              'speaker-view-step-no'
+            ]
           },
           {
             label: 'zur nächsten Folie',
             action: 'executeCallback',
             arguments: 'goToNextSlide',
             keyboardShortcut: 'Ctrl + Right',
-            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+            activeOnRoutes: [
+              'slide',
+              'slide-step-no',
+              'speaker-view',
+              'speaker-view-step-no'
+            ]
           },
           {
             label: 'zum vorhergehenden Schritt',
@@ -133,14 +147,24 @@ export const universalMenuDefinition: RawMenuItem[] = [
             action: 'executeCallback',
             arguments: 'goToPreviousSlideOrStep',
             keyboardShortcut: 'Left',
-            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+            activeOnRoutes: [
+              'slide',
+              'slide-step-no',
+              'speaker-view',
+              'speaker-view-step-no'
+            ]
           },
           {
             label: 'zur/m nächsten Folie oder Schritt',
             action: 'executeCallback',
             arguments: 'goToNextSlideOrStep',
             keyboardShortcut: 'Right',
-            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+            activeOnRoutes: [
+              'slide',
+              'slide-step-no',
+              'speaker-view',
+              'speaker-view-step-no'
+            ]
           }
         ]
       }
@@ -229,7 +253,8 @@ export const universalMenuDefinition: RawMenuItem[] = [
     submenu: [
       {
         label: 'Schriftgröße zurücksetzen',
-        description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
+        description:
+          'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
         action: 'executeCallback',
         arguments: 'resetSlideScaleFactor',
         keyboardShortcut: 'Ctrl + 1'
@@ -263,7 +288,8 @@ export const universalMenuDefinition: RawMenuItem[] = [
       },
       {
         label: 'Referentenansicht',
-        description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.',
+        description:
+          'Zwischen Präsentations- und Referentenansicht hin- und herschalten.',
         action: 'executeCallback',
         arguments: 'toggleSpeakerView',
         keyboardShortcut: 'Ctrl + l'

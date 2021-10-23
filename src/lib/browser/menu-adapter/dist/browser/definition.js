@@ -103,14 +103,24 @@ export const universalMenuDefinition = [
                         action: 'executeCallback',
                         arguments: 'goToPreviousSlide',
                         keyboardShortcut: 'Ctrl + Left',
-                        activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+                        activeOnRoutes: [
+                            'slide',
+                            'slide-step-no',
+                            'speaker-view',
+                            'speaker-view-step-no'
+                        ]
                     },
                     {
                         label: 'zur nächsten Folie',
                         action: 'executeCallback',
                         arguments: 'goToNextSlide',
                         keyboardShortcut: 'Ctrl + Right',
-                        activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+                        activeOnRoutes: [
+                            'slide',
+                            'slide-step-no',
+                            'speaker-view',
+                            'speaker-view-step-no'
+                        ]
                     },
                     {
                         label: 'zum vorhergehenden Schritt',
@@ -131,14 +141,24 @@ export const universalMenuDefinition = [
                         action: 'executeCallback',
                         arguments: 'goToPreviousSlideOrStep',
                         keyboardShortcut: 'Left',
-                        activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+                        activeOnRoutes: [
+                            'slide',
+                            'slide-step-no',
+                            'speaker-view',
+                            'speaker-view-step-no'
+                        ]
                     },
                     {
                         label: 'zur/m nächsten Folie oder Schritt',
                         action: 'executeCallback',
                         arguments: 'goToNextSlideOrStep',
                         keyboardShortcut: 'Right',
-                        activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+                        activeOnRoutes: [
+                            'slide',
+                            'slide-step-no',
+                            'speaker-view',
+                            'speaker-view-step-no'
+                        ]
                     }
                 ]
             }

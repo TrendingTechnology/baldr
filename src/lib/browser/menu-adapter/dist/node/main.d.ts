@@ -8,8 +8,8 @@
  *
  * @module @bldr/menu-adapter
  */
-import type { Shell, BrowserWindow } from 'electron';
-import type VueRouter from 'vue-router';
+import { Shell, BrowserWindow } from 'electron';
+import VueRouter from 'vue-router';
 import { ElectronMenuItem, WebappMenuItem } from './menu-item';
 export declare function getEletronMenuDef(shell: Shell, window: BrowserWindow): ElectronMenuItem[];
 export declare function getWebappMenuDef(router: VueRouter, actions: any): WebappMenuItem[];

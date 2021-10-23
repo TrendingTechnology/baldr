@@ -1,4 +1,4 @@
-import type { RawMenuItem, UniversalInnerMenuItem } from './menu-item'
+import { RawMenuItem, UniversalInnerMenuItem } from './menu-item'
 
 /**
  * @param input - An array of raw menu items.
@@ -8,7 +8,12 @@ import type { RawMenuItem, UniversalInnerMenuItem } from './menu-item'
  *
  * @returns A recursive array of processed menu items.
  */
-function traverseMenuItemList (input: RawMenuItem[], output: any[], func: (input: RawMenuItem, payload?: any) => any, payload?: any): any[] {
+function traverseMenuItemList (
+  input: RawMenuItem[],
+  output: any[],
+  func: (input: RawMenuItem, payload?: any) => any,
+  payload?: any
+): any[] {
   for (const rawMenuItem of input) {
     let result
     if ('submenu' in rawMenuItem && rawMenuItem.submenu != null) {
@@ -34,7 +39,11 @@ function traverseMenuItemList (input: RawMenuItem[], output: any[], func: (input
  *
  * @returns A recursive array of processed menu items.
  */
-export function traverseMenu (input: RawMenuItem[], func: (input: RawMenuItem, payload?: any) => any, payload?: any): any[] {
+export function traverseMenu (
+  input: RawMenuItem[],
+  func: (input: RawMenuItem, payload?: any) => any,
+  payload?: any
+): any[] {
   const newMenu: any[] = []
   traverseMenuItemList(input, newMenu, func, payload)
   return newMenu

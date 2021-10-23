@@ -1,5 +1,5 @@
-import type { MenuItemConstructorOptions } from 'electron';
-import type VueRouter from 'vue-router';
+import { MenuItemConstructorOptions } from 'electron';
+import VueRouter from 'vue-router';
 export declare type ElectronMenuItem = MenuItemConstructorOptions;
 /**
  * Sourround `+` with spaces: `Ctrl + f`

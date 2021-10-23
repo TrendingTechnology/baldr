@@ -11,6 +11,13 @@
  * @module @bldr/lamp/preload
  */
 
-import { ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 
-window.ipcRenderer = ipcRenderer
+// https://stackoverflow.com/a/59814127/10193818
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+contextBridge.exposeInMainWorld('api', {
+  ipcRendererOn: (channel, func) => {
+    ipcRenderer.on(channel, (event, ...args) => func(...args))
+  }
+})

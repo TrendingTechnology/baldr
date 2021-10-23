@@ -1,5 +1,5 @@
-import type { Shell, BrowserWindow, MenuItemConstructorOptions } from 'electron'
-import type VueRouter from 'vue-router'
+import { Shell, BrowserWindow, MenuItemConstructorOptions } from 'electron'
+import VueRouter from 'vue-router'
 
 export type ElectronMenuItem = MenuItemConstructorOptions
 
@@ -47,7 +47,10 @@ export interface UniversalInnerMenuItem extends UniversalMenuItem {
   submenu?: RawMenuItem[]
 }
 
-export type RawMenuItem = ElectronMenuItem | UniversalLeafMenuItem | UniversalInnerMenuItem
+export type RawMenuItem =
+  | ElectronMenuItem
+  | UniversalLeafMenuItem
+  | UniversalInnerMenuItem
 
 export interface WebappMenuItem {
   label: string
@@ -64,12 +67,17 @@ interface WebappPayload {
   actions: ActionCollection
 }
 
-export function convertMenuItemWebapp (raw: RawMenuItem, payload: any): WebappMenuItem | undefined {
+export function convertMenuItemWebapp (
+  raw: RawMenuItem,
+  payload: any
+): WebappMenuItem | undefined {
   const p = payload as WebappPayload
   const router = p.router
   const actions = p.actions
 
-  if ('role' in raw) return
+  if ('role' in raw) {
+    return
+  }
 
   const universal: UniversalMenuItem = raw as UniversalMenuItem
   // label
@@ -79,13 +87,14 @@ export function convertMenuItemWebapp (raw: RawMenuItem, payload: any): WebappMe
   const label = universal.label
   // click
   if (!('action' in universal)) {
-    throw new Error(`Raw menu entry needs a key named action: ${universal.label}`)
+    throw new Error(
+      `Raw menu entry needs a key named action: ${universal.label}`
+    )
   }
 
   const universalLeaf: UniversalLeafMenuItem = universal as UniversalLeafMenuItem
   let click
   if (universalLeaf.action === 'openExternalUrl') {
-
   } else if (universalLeaf.action === 'pushRouter') {
     click = async () => {
       await router.push({ name: universalLeaf.arguments })
@@ -116,12 +125,17 @@ interface ElectronPayload {
   window: BrowserWindow
 }
 
-export function convertMenuItemElectron (raw: RawMenuItem, payload: any): ElectronMenuItem {
+export function convertMenuItemElectron (
+  raw: RawMenuItem,
+  payload: any
+): ElectronMenuItem {
   const p = payload as ElectronPayload
   const shell = p.shell
   const window = p.window
 
-  if ('role' in raw) return raw
+  if ('role' in raw) {
+    return raw
+  }
   // label
   const result: ElectronMenuItem = {}
 
@@ -133,7 +147,9 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
   result.label = raw.label
   // click
   if (!('action' in universal)) {
-    throw new Error(`Raw menu entry needs a key named action: ${universal.label}`)
+    throw new Error(
+      `Raw menu entry needs a key named action: ${universal.label}`
+    )
   }
 
   const universalLeaf: UniversalLeafMenuItem = universal as UniversalLeafMenuItem
@@ -156,8 +172,14 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
       // Sometimes some images are not updated.
       // We have to delete the http cache.
       // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
-      window.webContents.session.clearCache().then(() => {}, () => {})
-      window.webContents.session.clearStorageData().then(() => {}, () => {})
+      window.webContents.session.clearCache().then(
+        () => {},
+        () => {}
+      )
+      window.webContents.session.clearStorageData().then(
+        () => {},
+        () => {}
+      )
     }
   } else {
     throw new Error(`Unkown action for raw menu entry: ${universalLeaf.label}`)
@@ -180,7 +202,10 @@ export function convertMenuItemElectron (raw: RawMenuItem, payload: any): Electr
  * @param forClient - For which client the shortcuts have to
  *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
  */
-export function normalizeKeyboardShortcuts (keys: RawKeyboardShortcutSpecification, forClient: 'mousetrap' | 'electron' = 'mousetrap'): string {
+export function normalizeKeyboardShortcuts (
+  keys: RawKeyboardShortcutSpecification,
+  forClient: 'mousetrap' | 'electron' = 'mousetrap'
+): string {
   if (forClient === 'mousetrap') {
     // See https://craig.is/killing/mice
     keys = keys.replace('Ctrl', 'ctrl')
@@ -204,16 +229,23 @@ interface RegisterShortcutsPayload {
   actions: ActionCollection
 }
 
-export function registerShortcut (raw: RawMenuItem, payload: RegisterShortcutsPayload): void {
+export function registerShortcut (
+  raw: RawMenuItem,
+  payload: RegisterShortcutsPayload
+): void {
   const p = payload
   const router = p.router
   const actions = p.actions
   const shortcuts = p.shortcuts
 
   let action
-  if (!('keyboardShortcut' in raw) && !('action' in raw)) return
+  if (!('keyboardShortcut' in raw) && !('action' in raw)) {
+    return
+  }
   const universal: UniversalLeafMenuItem = raw as UniversalLeafMenuItem
-  if (universal.keyboardShortcut == null) return
+  if (universal.keyboardShortcut == null) {
+    return
+  }
   if (universal.action === 'executeCallback') {
     action = actions[raw.arguments]
   } else if (universal.action === 'pushRouter') {
@@ -230,5 +262,10 @@ export function registerShortcut (raw: RawMenuItem, payload: RegisterShortcutsPa
   } else {
     throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
   }
-  shortcuts.add(normalizeKeyboardShortcuts(universal.keyboardShortcut), action, raw.label, raw.activeOnRoutes)
+  shortcuts.add(
+    normalizeKeyboardShortcuts(universal.keyboardShortcut),
+    action,
+    raw.label,
+    raw.activeOnRoutes
+  )
 }

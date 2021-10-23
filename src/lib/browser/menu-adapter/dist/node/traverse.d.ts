@@ -1,4 +1,4 @@
-import type { RawMenuItem } from './menu-item';
+import { RawMenuItem } from './menu-item';
 /**
  * @param input - An array of raw menu items.
  * @param func - A function which is called with the argument

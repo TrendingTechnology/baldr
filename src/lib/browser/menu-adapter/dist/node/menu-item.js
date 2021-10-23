@@ -14,8 +14,9 @@ function convertMenuItemWebapp(raw, payload) {
     const p = payload;
     const router = p.router;
     const actions = p.actions;
-    if ('role' in raw)
+    if ('role' in raw) {
         return;
+    }
     const universal = raw;
     // label
     if (universal.label == null) {
@@ -62,8 +63,9 @@ function convertMenuItemElectron(raw, payload) {
     const p = payload;
     const shell = p.shell;
     const window = p.window;
-    if ('role' in raw)
+    if ('role' in raw) {
         return raw;
+    }
     // label
     const result = {};
     const universal = raw;
@@ -147,11 +149,13 @@ function registerShortcut(raw, payload) {
     const actions = p.actions;
     const shortcuts = p.shortcuts;
     let action;
-    if (!('keyboardShortcut' in raw) && !('action' in raw))
+    if (!('keyboardShortcut' in raw) && !('action' in raw)) {
         return;
+    }
     const universal = raw;
-    if (universal.keyboardShortcut == null)
+    if (universal.keyboardShortcut == null) {
         return;
+    }
     if (universal.action === 'executeCallback') {
         action = actions[raw.arguments];
     }

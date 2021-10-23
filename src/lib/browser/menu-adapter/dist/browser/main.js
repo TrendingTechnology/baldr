@@ -12,11 +12,21 @@ import { traverseMenu } from './traverse';
 import { convertMenuItemElectron, convertMenuItemWebapp, registerShortcut } from './menu-item';
 import { universalMenuDefinition } from './definition';
 export function getEletronMenuDef(shell, window) {
-    return traverseMenu(universalMenuDefinition, convertMenuItemElectron, { shell, window });
+    return traverseMenu(universalMenuDefinition, convertMenuItemElectron, {
+        shell,
+        window
+    });
 }
 export function getWebappMenuDef(router, actions) {
-    return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, { router, actions });
+    return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, {
+        router,
+        actions
+    });
 }
 export function registerShortcuts(router, shortcuts, actions) {
-    traverseMenu(universalMenuDefinition, registerShortcut, { router, shortcuts, actions });
+    traverseMenu(universalMenuDefinition, registerShortcut, {
+        router,
+        shortcuts,
+        actions
+    });
 }
