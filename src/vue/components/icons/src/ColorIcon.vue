@@ -14,12 +14,9 @@ export default class ColorIcon extends PlainIcon {
   color: string
 
   get classes (): string[] {
-    let classes = [
-      'baldr-icon',
-      'vc_color_icon',
-      `baldr-icon_${this.name}`,
-      `text-${this.color}`
-    ]
+    const classes = this.getBaseClasses()
+    classes.push('vc_color_icon')
+    classes.push(`text-${this.color}`)
     return classes
   }
 }

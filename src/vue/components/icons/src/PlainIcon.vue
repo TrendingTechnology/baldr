@@ -12,9 +12,15 @@ export default class PlainIcon extends Vue {
   name: string
 
   get classes (): string[] {
-    let classes = ['baldr-icon']
-    classes.push(`baldr-icon_${this.name}`)
-    return classes
+    return this.getBaseClasses()
+  }
+
+  getCssIconClassName () {
+    return `baldr-icon_${this.name}`
+  }
+
+  getBaseClasses (): string[] {
+    return ['baldr-icon', this.getCssIconClassName()]
   }
 
   get warningText (): string | undefined {

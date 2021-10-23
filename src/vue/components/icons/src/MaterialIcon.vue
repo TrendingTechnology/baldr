@@ -23,7 +23,7 @@ export default class MaterialIcon extends ColorIcon {
       return ['disabled', 'normal', 'show-on-hover'].includes(value)
     }
   })
-  display: string
+  display: 'disabled' | 'normal' | 'show-on-hover'
 
   // Umriss
   @Prop({
@@ -33,12 +33,11 @@ export default class MaterialIcon extends ColorIcon {
       return ['circle', 'icon', 'square'].includes(value)
     }
   })
-  outline: string
+  outline: 'circle' | 'icon' | 'square'
 
   get classes () {
-    let classes = ['baldr-icon', 'vc_material_icon']
+    let classes = this.getBaseClasses()
     classes.push(`baldr-icon_outline_${this.outline}`)
-    classes.push(`baldr-icon_${this.name}`)
     if (this.outline !== 'icon') {
       classes.push(`${this.color}`)
       classes.push(`text-white`)

@@ -7,7 +7,7 @@
 
     <div class="top-icon">
       <div class="logo"><material-icon color="red" name="baldr" />Baldr</div>
-      <div @click="tmp" cclass="subtitle">Präsentations-Software für den Schuleinsatz</div>
+      <div class="subtitle">Präsentations-Software für den Schuleinsatz</div>
     </div>
 
     <open-interface />
@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { state } from '@bldr/icons'
 
 import { styleConfigurator } from '@bldr/style-configurator'
 
@@ -40,9 +39,6 @@ export default class StartPage extends Vue {
     styleConfigurator.reset()
   }
 
-  tmp() {
-    state.isMouseActive = !state.isMouseActive
-  }
 }
 </script>
 

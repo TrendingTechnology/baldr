@@ -18,7 +18,7 @@ export const ColorIcon = color
 export const VanishIcon = vanish
 
 export const state = {
-  isMouseActive: true
+  showIcons: true
 }
 
 export function validateIconName (iconName) {
@@ -70,23 +70,21 @@ export function validateColorName (colorName) {
  *
  * @param {Number} seconds
  */
-function hideMouseAfterSec (seconds = 5) {
+export function registerMouseMoveTimeout (seconds = 5) {
   let isMouseTimerSet = null
 
-  console.log(document)
-  document.onmousemove = function () {
-    console.log(lol)
+  document.addEventListener('mousemove', () => {
     if (isMouseTimerSet) {
       window.clearTimeout(isMouseTimerSet)
     }
     if (!state.isMouseActive) {
-      state.isMouseActive = true
+      state.showIcons = true
     }
     isMouseTimerSet = window.setTimeout(() => {
       isMouseTimerSet = null
-      state.isMouseActive = false
+      state.showIcons = false
     }, seconds * 1000)
-  }
+  })
 }
 
 const Plugin = {
@@ -95,7 +93,7 @@ const Plugin = {
     Vue.component('plain-icon', PlainIcon)
     Vue.component('color-icon', ColorIcon)
     Vue.component('vanish-icon', VanishIcon)
-    hideMouseAfterSec()
+    registerMouseMoveTimeout(1)
   }
 }
 
