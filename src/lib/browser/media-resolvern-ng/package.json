@@ -1,0 +1,42 @@
+{
+  "name": "@bldr/media-resolver-ng",
+  "version": "0.1.0",
+  "description": "Resolve media assets using the REST api from the media server to objects of the package @bldr/client-media-models.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "npm run build:browser && npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && npm run lint && mocha 'tests/*'"
+  },
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@bldr/client-media-models": "*",
+    "@bldr/config": "*",
+    "@bldr/core-browser": "*",
+    "@bldr/http-request": "*",
+    "@bldr/type-definitions": "*"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+}

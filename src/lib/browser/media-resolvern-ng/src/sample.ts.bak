@@ -1,0 +1,146 @@
+import type { MediaResolverTypes } from '@bldr/type-definitions'
+
+import { convertDurationToSeconds } from '@bldr/core-browser'
+
+export class SampleShortcutManager {
+  private readonly audio: MimeTypeShortcutCounter
+  private readonly video: MimeTypeShortcutCounter
+
+  constructor () {
+    this.audio = new MimeTypeShortcutCounter('a')
+    this.video = new MimeTypeShortcutCounter('v')
+  }
+
+  addShortcut (sample: Sample): void {
+    if (sample.shortcut != null) return
+    if (sample.asset.mimeType === 'audio') {
+      sample.shortcut = this.audio.get()
+    } else if (sample.asset.mimeType === 'video') {
+      sample.shortcut = this.video.get()
+    }
+  }
+
+  reset (): void {
+    this.audio.reset()
+    this.video.reset()
+  }
+}
+
+export const sampleShortcutManager = new SampleShortcutManager()
+
+/**
+ * Number of milliseconds to wait before the media file is played.
+ */
+const defaultPlayDelayMsec: number = 10
+
+export class Sample implements MediaResolverTypes.Sample {
+  asset: MediaResolverTypes.ClientMediaAsset
+  yaml: MediaResolverTypes.SampleYamlFormat
+
+  startTimeSec: number = 0
+
+  /**
+   * Use the getter functions `sample.durationSec`.
+   */
+  private readonly durationSec_?: number
+
+  /**
+   * Use the getter function `sample.fadeInSec`
+   */
+  private readonly fadeInSec_?: number
+
+  /**
+   * Use the getter function `sample.fadeOutSec`
+   */
+  private readonly fadeOutSec_?: number
+
+  shortcut?: string
+
+  playbackState: MediaResolverTypes.PlaybackState
+
+  constructor (asset: MediaResolverTypes.ClientMediaAsset, yaml: MediaResolverTypes.SampleYamlFormat) {
+    this.asset = asset
+
+    this.yaml = yaml
+
+    if (this.yaml.ref == null) {
+      this.yaml.ref = 'complete'
+    }
+
+    if (this.yaml.startTime != null) {
+      this.startTimeSec = this.toSec(this.yaml.startTime)
+    }
+
+    if (this.yaml.duration != null && this.yaml.endTime != null) {
+      throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.')
+    }
+
+    if (this.yaml.duration != null) {
+      this.durationSec_ = this.toSec(this.yaml.duration)
+    } else if (this.yaml.endTime != null) {
+      this.durationSec_ = this.toSec(this.yaml.endTime) - this.startTimeSec
+    }
+
+    if (this.yaml.fadeIn != null) {
+      this.fadeInSec_ = this.toSec(this.yaml.fadeIn)
+    }
+
+    if (this.yaml.fadeOut != null) {
+      this.fadeOutSec_ = this.toSec(this.yaml.fadeOut)
+    }
+
+    this.shortcut = this.yaml.shortcut
+    sampleShortcutManager.addShortcut(this)
+    this.playbackState = 'stopped'
+  }
+
+  get ref (): string {
+    const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
+    return `${this.asset.ref}#${ref}`
+  }
+
+  get title (): string {
+    if (this.yaml.title != null) {
+      return this.yaml.title
+    }
+    if (this.yaml.ref != null && this.yaml.ref !== 'complete') {
+      return this.yaml.ref
+    }
+    return 'komplett'
+  }
+
+  get titleSafe (): string {
+    if (this.yaml.ref === 'complete') {
+      return this.asset.titleSafe
+    } else {
+      return `${this.title} (${this.asset.titleSafe})`
+    }
+  }
+
+  get artistSafe (): string | undefined {
+    let artist: string | null = null
+    let composer: string | null = null
+    if (this.asset.yaml.artist != null) {
+      artist = `<em class="person">${this.asset.yaml.artist}</em>`
+    }
+    if (this.asset.yaml.composer != null) {
+      composer = `<em class="person">${this.asset.yaml.composer}</em>`
+    }
+    if (artist != null && composer != null) {
+      return `${composer} (${artist})`
+    } else if (artist != null && composer == null) {
+      return artist
+    } else if (artist == null && composer != null) {
+      return composer
+    }
+  }
+
+  get yearSafe (): string | undefined {
+    if (this.asset.yaml.creationDate != null) {
+      return this.asset.yaml.creationDate
+    } else if (this.asset.yaml.year != null) {
+      return this.asset.yaml.year
+    }
+  }
+
+}
