@@ -4,20 +4,25 @@
   </a>
 </template>
 
-<script>
-export default {
-  name: 'IconLink',
-  props: {
-    link: {
-      type: String
-    },
-    icon: {
-      type: String
-    },
-    showOnHover: {
-      default: false,
-      type: Boolean
-    }
-  }
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class IconLink extends Vue {
+  @Prop({
+    type: String
+  })
+  link!: string
+
+  @Prop({
+    type: String
+  })
+  icon!: string
+
+  @Prop({
+    default: false,
+    type: Boolean
+  })
+  showOnHover!: boolean
 }
 </script>

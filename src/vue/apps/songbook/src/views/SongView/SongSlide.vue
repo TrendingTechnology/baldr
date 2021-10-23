@@ -6,31 +6,41 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+
 import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { Song } from '@bldr/songbook-core'
 
-import MetaData from './MetaData'
+import MetaData from './MetaData.vue'
 
-export default {
-  name: 'SongSlide',
+@Component({
   components: {
     MetaData
   },
   computed: {
-    ...mapGetters(['songCurrent', 'slideNo']),
-    abc () {
-      return this.songCurrent.abc
-    },
-    songId () {
-      return this.songCurrent.songId
-    },
-    imageSrc () {
-      return formatMultiPartAssetFileName(
-        `./songs/${this.abc}/${this.songId}/NB/Projektor.svg`,
-        this.slideNo
-      )
-    }
+    ...mapGetters(['songCurrent', 'slideNo'])
+  }
+})
+export default class SongSlide extends Vue {
+  songCurrent!: Song
+
+  slideNo!: number
+
+  get abc () {
+    return this.songCurrent.abc
+  }
+
+  get songId () {
+    return this.songCurrent.songId
+  }
+
+  get imageSrc () {
+    return formatMultiPartAssetFileName(
+      `./songs/${this.abc}/${this.songId}/NB/Projektor.svg`,
+      this.slideNo
+    )
   }
 }
 </script>

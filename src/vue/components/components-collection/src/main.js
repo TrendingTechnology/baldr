@@ -7,8 +7,6 @@
 
 import SFCAppInfo from './components/AppInfo.vue'
 import SFCAppInfoSimple from './components/AppInfoSimple.vue'
-import SFCCursorCross from './components/CursorCross.vue'
 
 export const AppInfoSimple = SFCAppInfoSimple
 export const AppInfo = SFCAppInfo
-export const CursorCross = SFCCursorCross
