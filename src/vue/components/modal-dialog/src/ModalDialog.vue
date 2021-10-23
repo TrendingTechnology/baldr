@@ -27,7 +27,12 @@ import { MaterialIcon } from '@bldr/icons'
   }
 })
 export default class ModalDialog extends Vue {
-  isVisible = false
+  data () {
+    return {
+      isVisible: false
+    }
+  }
+  isVisible: boolean
 
   @Prop({
     type: String,
