@@ -11,8 +11,8 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
 import config from '@bldr/config';
-import { ClientMediaAsset } from './asset';
-import { AssetCache, MediaUriTranslator } from './cache';
+import { ClientMediaAsset, AssetCache } from './asset';
+import { MediaUriTranslator } from './cache';
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples

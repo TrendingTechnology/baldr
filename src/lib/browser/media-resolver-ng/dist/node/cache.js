@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AssetCache = exports.MediaUriTranslator = void 0;
+exports.MediaUriTranslator = exports.Cache = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -63,6 +63,7 @@ class Cache {
         }
     }
 }
+exports.Cache = Cache;
 /**
  * Media assets have two URI schemes: `uuid:` and `ref:`. Internally we use only
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
@@ -143,26 +144,6 @@ class MediaUriTranslator {
     }
 }
 exports.MediaUriTranslator = MediaUriTranslator;
-class AssetCache extends Cache {
-    constructor(translator) {
-        super();
-        this.mediaUriTranslator = translator;
-    }
-    add(ref, asset) {
-        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
-            super.add(ref, asset);
-            return true;
-        }
-        return false;
-    }
-    get(uuidOrRef) {
-        const ref = this.mediaUriTranslator.getRef(uuidOrRef);
-        if (ref != null) {
-            return super.get(ref);
-        }
-    }
-}
-exports.AssetCache = AssetCache;
 // class SampleCache extends Cache<MediaResolverTypes.Sample> {
 //   get (uuidOrRef: string): MediaResolverTypes.Sample | undefined {
 //     const ref = mediaUriTranslator.getRef(uuidOrRef)

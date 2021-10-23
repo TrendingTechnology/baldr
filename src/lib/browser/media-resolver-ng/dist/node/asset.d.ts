@@ -1,5 +1,6 @@
 import { MediaResolverTypes } from '@bldr/type-definitions';
 import { MediaUri } from '@bldr/client-media-models';
+import { Cache, MediaUriTranslator } from './cache';
 export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
     /**
      * @inheritdoc
@@ -104,4 +105,10 @@ export declare class MultiPartSelection {
      * router then creates no step url (not /slide/1/step/1) but (/slide/1)
      */
     getMultiPartHttpUrlByNo(no?: number): string;
+}
+export declare class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+    mediaUriTranslator: MediaUriTranslator;
+    constructor(translator: MediaUriTranslator);
+    add(ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean;
+    get(uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined;
 }

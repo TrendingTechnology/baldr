@@ -23,7 +23,7 @@ class MimeTypeShortcutCounter {
         this.count = 0;
     }
 }
-class Cache {
+export class Cache {
     constructor() {
         this.cache = {};
     }
@@ -136,25 +136,6 @@ export class MediaUriTranslator {
         for (const uuid in this.uuids) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.uuids[uuid];
-        }
-    }
-}
-export class AssetCache extends Cache {
-    constructor(translator) {
-        super();
-        this.mediaUriTranslator = translator;
-    }
-    add(ref, asset) {
-        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
-            super.add(ref, asset);
-            return true;
-        }
-        return false;
-    }
-    get(uuidOrRef) {
-        const ref = this.mediaUriTranslator.getRef(uuidOrRef);
-        if (ref != null) {
-            return super.get(ref);
         }
     }
 }

@@ -7,6 +7,8 @@ import {
 } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
+import { Cache, MediaUriTranslator } from './cache'
+
 export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   /**
    * @inheritdoc
@@ -227,5 +229,28 @@ export class MultiPartSelection {
    */
   getMultiPartHttpUrlByNo (no = 1): string {
     return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
+  }
+}
+
+export class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+  mediaUriTranslator: MediaUriTranslator
+  constructor (translator: MediaUriTranslator) {
+    super()
+    this.mediaUriTranslator = translator
+  }
+
+  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
+    if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
+      super.add(ref, asset)
+      return true
+    }
+    return false
+  }
+
+  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
+    const ref = this.mediaUriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
   }
 }

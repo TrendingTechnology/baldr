@@ -1,5 +1,6 @@
 import { MediaResolverTypes } from '@bldr/type-definitions';
-import { AssetCache, MediaUriTranslator } from './cache';
+import { AssetCache } from './asset';
+import { MediaUriTranslator } from './cache';
 declare type UrisSpec = string | string[] | Set<string>;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

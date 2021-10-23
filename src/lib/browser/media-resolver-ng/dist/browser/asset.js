@@ -1,5 +1,6 @@
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
+import { Cache } from './cache';
 export class ClientMediaAsset {
     /**
      * @param yaml - A raw javascript object read from the Rest API
@@ -158,5 +159,24 @@ export class MultiPartSelection {
      */
     getMultiPartHttpUrlByNo(no = 1) {
         return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1]);
+    }
+}
+export class AssetCache extends Cache {
+    constructor(translator) {
+        super();
+        this.mediaUriTranslator = translator;
+    }
+    add(ref, asset) {
+        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
+            super.add(ref, asset);
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrRef) {
+        const ref = this.mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
     }
 }

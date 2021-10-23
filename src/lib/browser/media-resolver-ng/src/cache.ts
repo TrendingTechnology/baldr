@@ -35,7 +35,7 @@ class MimeTypeShortcutCounter {
   }
 }
 
-class Cache<T> implements MediaResolverTypes.Cache<T> {
+export class Cache<T> implements MediaResolverTypes.Cache<T> {
   protected cache: { [ref: string]: T }
   constructor () {
     this.cache = {}
@@ -163,29 +163,6 @@ export class MediaUriTranslator {
     for (const uuid in this.uuids) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.uuids[uuid]
-    }
-  }
-}
-
-export class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
-  mediaUriTranslator: MediaUriTranslator
-  constructor (translator: MediaUriTranslator) {
-    super()
-    this.mediaUriTranslator = translator
-  }
-
-  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
-    if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
-      super.add(ref, asset)
-      return true
-    }
-    return false
-  }
-
-  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
-    const ref = this.mediaUriTranslator.getRef(uuidOrRef)
-    if (ref != null) {
-      return super.get(ref)
     }
   }
 }

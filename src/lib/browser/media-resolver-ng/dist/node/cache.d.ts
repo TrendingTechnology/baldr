@@ -1,5 +1,5 @@
 import { MediaResolverTypes } from '@bldr/type-definitions';
-declare class Cache<T> implements MediaResolverTypes.Cache<T> {
+export declare class Cache<T> implements MediaResolverTypes.Cache<T> {
     protected cache: {
         [ref: string]: T;
     };
@@ -57,10 +57,3 @@ export declare class MediaUriTranslator {
     getRef(uuidOrRef: string, withoutFragment?: boolean): string | undefined;
     reset(): void;
 }
-export declare class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
-    mediaUriTranslator: MediaUriTranslator;
-    constructor(translator: MediaUriTranslator);
-    add(ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean;
-    get(uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined;
-}
-export {};

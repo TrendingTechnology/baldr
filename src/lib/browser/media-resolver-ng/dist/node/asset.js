@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MultiPartSelection = exports.ClientMediaAsset = void 0;
+exports.AssetCache = exports.MultiPartSelection = exports.ClientMediaAsset = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
+const cache_1 = require("./cache");
 class ClientMediaAsset {
     /**
      * @param yaml - A raw javascript object read from the Rest API
@@ -165,3 +166,23 @@ class MultiPartSelection {
     }
 }
 exports.MultiPartSelection = MultiPartSelection;
+class AssetCache extends cache_1.Cache {
+    constructor(translator) {
+        super();
+        this.mediaUriTranslator = translator;
+    }
+    add(ref, asset) {
+        if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
+            super.add(ref, asset);
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrRef) {
+        const ref = this.mediaUriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+exports.AssetCache = AssetCache;

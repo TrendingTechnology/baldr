@@ -26,7 +26,7 @@ class Resolver {
         this.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
         this.cache = {};
         this.uriTranslator = new cache_1.MediaUriTranslator();
-        this.assetCache = new cache_1.AssetCache(this.uriTranslator);
+        this.assetCache = new asset_1.AssetCache(this.uriTranslator);
     }
     /**
      * Query the media server to get meta informations and the location of the file.
