@@ -18,7 +18,7 @@ export const ColorIcon = color
 export const VanishIcon = vanish
 
 export const state = {
-  showIcons: true
+  vanishIcons: false
 }
 
 export function validateIconName (iconName) {
@@ -77,12 +77,12 @@ export function registerMouseMoveTimeout (seconds = 5) {
     if (isMouseTimerSet) {
       window.clearTimeout(isMouseTimerSet)
     }
-    if (!state.isMouseActive) {
-      state.showIcons = true
+    if (state.vanishIcons) {
+      state.vanishIcons = false
     }
     isMouseTimerSet = window.setTimeout(() => {
       isMouseTimerSet = null
-      state.showIcons = false
+      state.vanishIcons = true
     }, seconds * 1000)
   })
 }

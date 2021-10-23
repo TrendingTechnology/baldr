@@ -1,11 +1,14 @@
 <script lang="ts">
 import { CreateElement, VNode } from 'vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { state } from './main.js'
 
 import icons from './icons.json'
 
 @Component
 export default class PlainIcon extends Vue {
+  state = state
+
   @Prop({
     type: String
   })

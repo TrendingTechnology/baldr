@@ -2,18 +2,21 @@
   <div class="vc_song_view">
     <div class="top-icons">
       <material-icon
+        vanish
         @click.native="showSearch"
         name="magnify"
         :size="materialIconSize"
         title="Suche nach einem Lied (Tastenkürzel: s)"
       />
       <material-icon
+        vanish
         @click.native="showTableOfContents"
         name="table-of-contents"
         :size="materialIconSize"
         title="Inhaltsverzeichnis (Tastenkürzel: i)"
       />
       <material-icon
+        vanish
         @click.native="$fullscreen()"
         name="fullscreen"
         :size="materialIconSize"
@@ -45,6 +48,7 @@
       down-title="Nächstes Lied (Tastenkürzel: Cursor unten)"
     />
     <material-icon
+      vanish
       @click.native="setSongRandom"
       class="random"
       name="dice-multiple"
@@ -57,8 +61,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross } from '@bldr/components-collection'
-
+import CursorCross from './CursorCross.vue'
 import SongSlide from './SongSlide'
 import TableOfContents from '@/views/TableOfContents'
 

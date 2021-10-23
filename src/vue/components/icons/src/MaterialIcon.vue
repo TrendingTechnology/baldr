@@ -35,6 +35,9 @@ export default class MaterialIcon extends ColorIcon {
   })
   outline: 'circle' | 'icon' | 'square'
 
+  @Prop({ type: Boolean })
+  vanish: boolean
+
   get classes () {
     let classes = this.getBaseClasses()
     classes.push(`baldr-icon_outline_${this.outline}`)
@@ -44,6 +47,15 @@ export default class MaterialIcon extends ColorIcon {
     } else {
       classes.push(`text-${this.color}`)
     }
+
+    if (this.vanish) {
+      if (this.state.vanishIcons) {
+        classes.push('vanish-icon')
+      } else {
+        classes.push('not-vanish-icon')
+      }
+    }
+
     classes.push(`baldr-icon_display_${this.display}`)
     return classes
   }
@@ -88,6 +100,16 @@ $outline-padding: 0.25em;
 .baldr-icon {
   display: inline-block;
   cursor: pointer;
+
+  &.not-vanish-icon {
+    opacity: 1;
+    transition: 1s;
+  }
+
+  &.vanish-icon {
+    opacity: 0;
+    transition: 1s;
+  }
 
   &.baldr-icon_outline_circle {
     border-radius: 50%;

@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import { MaterialIcon } from '@bldr/icons'
-
 export default {
   name: 'CursorCross',
   props: {
@@ -71,10 +69,7 @@ export default {
     upTitle: {
       type: String,
       default: null
-    },
-  },
-  components: {
-    MaterialIcon
+    }
   }
 }
 </script>

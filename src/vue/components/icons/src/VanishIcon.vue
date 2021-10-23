@@ -1,21 +1,18 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator'
 
-import { state } from './main.js'
 import PlainIcon from './PlainIcon.vue'
 
 @Component
 export default class VanishIcon extends PlainIcon {
-  state = state
-
   get classes (): string[] {
     const classes = this.getBaseClasses()
     classes.push('vc_vanish_icon')
 
-    if (this.state.showIcons) {
-      classes.push('show-icon')
+    if (this.state.vanishIcons) {
+      classes.push('vanish-icon')
     } else {
-      classes.push('hide-icon')
+      classes.push('not-vanish-icon')
     }
     return classes
   }
@@ -24,14 +21,14 @@ export default class VanishIcon extends PlainIcon {
 
 <style lang="scss">
 .vc_vanish_icon {
-  &.show-icon {
+  &.not-vanish-icon {
     opacity: 1;
-    transition: 2s;
+    transition: 1s;
   }
 
-  &.hide-icon {
+  &.vanish-icon {
     opacity: 0;
-    transition: 2s;
+    transition: 1s;
   }
 }
 </style>
