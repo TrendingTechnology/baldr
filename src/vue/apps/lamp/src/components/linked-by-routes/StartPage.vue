@@ -12,8 +12,6 @@
 
     <open-interface />
 
-    <vanish-icon name="baldr"/>
-
     <recent-presentations />
   </div>
 </template>

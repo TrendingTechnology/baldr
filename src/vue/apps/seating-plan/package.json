@@ -46,11 +46,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/electron-devtools-installer": "2.0.3",
+    "@types/electron-devtools-installer": "2.2.0",
     "@vue/cli-plugin-typescript": "4.5.9",
     "@vue/cli-service": "4.5.9",
-    "electron-devtools-installer": "3.1.0",
-    "electron": "11.0.0",
+    "electron-devtools-installer": "3.2.0",
+    "electron": "15.3.0",
     "node-sass": "5.0.0",
     "resize-observer-polyfill": "1.5.1",
     "sass-loader": "10.1.0",

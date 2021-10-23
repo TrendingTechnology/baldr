@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@bldr/core-node": "*",
+    "@types/electron-devtools-installer": "2.2.0",
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
     "@vue/cli-plugin-typescript": "4.5.0",
@@ -63,7 +64,7 @@
     "@vue/eslint-config-typescript": "7.0.0",
     "babel-eslint": "10.1.0",
     "electron-devtools-installer": "3.2.0",
-    "electron": "11.0.1",
+    "electron": "15.3.0",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
