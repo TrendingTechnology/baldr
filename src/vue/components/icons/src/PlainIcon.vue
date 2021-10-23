@@ -7,7 +7,10 @@ import icons from './icons.json'
 
 @Component
 export default class PlainIcon extends Vue {
-  state = state
+  data () {
+    return { state }
+  }
+  state!: any
 
   @Prop({
     type: String
