@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sample = void 0;
+exports.SampleData = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
@@ -10,7 +10,7 @@ const defaultFadeInSec = 0.3;
   * We never stop. Instead we fade out very short and smoothly.
   */
 const defaultFadeOutSec = 1;
-class Sample {
+class SampleData {
     constructor(asset, yaml) {
         this.startTimeSec = 0;
         this.asset = asset;
@@ -103,4 +103,4 @@ class Sample {
         }
     }
 }
-exports.Sample = Sample;
+exports.SampleData = SampleData;

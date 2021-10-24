@@ -1,4 +1,3 @@
-import { MediaResolverTypes } from '@bldr/type-definitions'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
@@ -6,10 +5,11 @@ import config from '@bldr/config'
 
 import { ClientMediaAsset } from './asset'
 import { UriTranslator, Cache } from './cache'
+import { Sample, Asset, RestApiRaw } from './types'
 
 type UrisSpec = string | string[] | Set<string>
 
-class SampleCache extends Cache<MediaResolverTypes.Sample> {
+class SampleCache extends Cache<Sample> {
   uriTranslator: UriTranslator
 
   constructor (translator: UriTranslator) {
@@ -17,7 +17,7 @@ class SampleCache extends Cache<MediaResolverTypes.Sample> {
     this.uriTranslator = translator
   }
 
-  get (uuidOrRef: string): MediaResolverTypes.Sample | undefined {
+  get (uuidOrRef: string): Sample | undefined {
     const ref = this.uriTranslator.getRef(uuidOrRef)
     if (ref != null) {
       return super.get(ref)
@@ -25,7 +25,7 @@ class SampleCache extends Cache<MediaResolverTypes.Sample> {
   }
 }
 
-class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+class AssetCache extends Cache<Asset> {
   uriTranslator: UriTranslator
 
   constructor (translator: UriTranslator) {
@@ -33,7 +33,7 @@ class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
     this.uriTranslator = translator
   }
 
-  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
+  add (ref: string, asset: Asset): boolean {
     if (this.uriTranslator.addPair(asset.ref, asset.uuid)) {
       super.add(ref, asset)
       return true
@@ -41,7 +41,7 @@ class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
     return false
   }
 
-  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
+  get (uuidOrRef: string): Asset | undefined {
     const ref = this.uriTranslator.getRef(uuidOrRef)
     if (ref != null) {
       return super.get(ref)
@@ -64,7 +64,7 @@ export class Resolver {
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
    */
-  private cache: { [uri: string]: MediaResolverTypes.RestApiRaw }
+  private cache: { [uri: string]: RestApiRaw }
 
   constructor () {
     this.cache = {}
@@ -83,7 +83,7 @@ export class Resolver {
   private async queryMediaServer (
     uri: string,
     throwException: boolean = true
-  ): Promise<MediaResolverTypes.RestApiRaw | undefined> {
+  ): Promise<RestApiRaw | undefined> {
     const mediaUri = new MediaUri(uri)
     const field = mediaUri.scheme
     const search = mediaUri.authority
@@ -108,7 +108,7 @@ export class Resolver {
         )
       }
     } else {
-      const rawRestApiAsset: MediaResolverTypes.RestApiRaw = response.data
+      const rawRestApiAsset: RestApiRaw = response.data
       this.cache[cacheKey] = rawRestApiAsset
       return rawRestApiAsset
     }
@@ -127,7 +127,7 @@ export class Resolver {
   private async resolveSingle (
     uri: string,
     throwException: boolean = true
-  ): Promise<MediaResolverTypes.ClientMediaAsset | undefined> {
+  ): Promise<Asset | undefined> {
     const cachedAsset = this.assetCache.get(uri)
     if (cachedAsset != null) {
       return cachedAsset
@@ -151,14 +151,14 @@ export class Resolver {
   async resolve (
     uris: UrisSpec,
     throwException: boolean = true
-  ): Promise<MediaResolverTypes.ClientMediaAsset[]> {
+  ): Promise<Asset[]> {
     const mediaUris = makeSet(uris)
     const urisWithoutFragments = new Set<string>()
     for (const uri of mediaUris) {
       urisWithoutFragments.add(MediaUri.removeFragment(uri))
     }
 
-    const assets: MediaResolverTypes.ClientMediaAsset[] = []
+    const assets: Asset[] = []
     // Resolve the main media URIs
     while (urisWithoutFragments.size > 0) {
       const promises = []
@@ -167,7 +167,7 @@ export class Resolver {
         urisWithoutFragments.delete(uri)
       }
       for (const asset of await Promise.all<
-      MediaResolverTypes.ClientMediaAsset | undefined
+      Asset | undefined
       >(promises)) {
         if (asset != null) {
           findMediaUris(asset.yaml, urisWithoutFragments)

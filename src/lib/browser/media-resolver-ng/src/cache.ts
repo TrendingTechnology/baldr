@@ -1,5 +1,5 @@
+import * as Types from './types'
 import { MediaUri } from '@bldr/client-media-models'
-import { MediaResolverTypes } from '@bldr/type-definitions'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -35,7 +35,7 @@ class MimeTypeShortcutCounter {
   }
 }
 
-export class Cache<T> implements MediaResolverTypes.Cache<T> {
+export class Cache<T> implements Types.Cache<T> {
   protected cache: { [ref: string]: T }
   constructor () {
     this.cache = {}

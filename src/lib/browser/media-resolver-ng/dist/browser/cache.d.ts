@@ -1,5 +1,5 @@
-import { MediaResolverTypes } from '@bldr/type-definitions';
-export declare class Cache<T> implements MediaResolverTypes.Cache<T> {
+import * as Types from './types';
+export declare class Cache<T> implements Types.Cache<T> {
     protected cache: {
         [ref: string]: T;
     };
@@ -23,7 +23,6 @@ export declare class UriTranslator {
     private uuids;
     constructor();
     /**
-     *
      * @param ref - The authority in the reference (`ref`) scheme. The prefixed
      *   scheme can be omitted.
      * @param uuid - The authority in the Universally Unique Identifier (`uuid`)

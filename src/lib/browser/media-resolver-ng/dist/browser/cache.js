@@ -70,7 +70,6 @@ export class UriTranslator {
         this.uuids = {};
     }
     /**
-     *
      * @param ref - The authority in the reference (`ref`) scheme. The prefixed
      *   scheme can be omitted.
      * @param uuid - The authority in the Universally Unique Identifier (`uuid`)

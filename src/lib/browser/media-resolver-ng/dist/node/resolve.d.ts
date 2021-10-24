@@ -1,16 +1,16 @@
-import { MediaResolverTypes } from '@bldr/type-definitions';
 import { UriTranslator, Cache } from './cache';
+import { Sample, Asset } from './types';
 declare type UrisSpec = string | string[] | Set<string>;
-declare class SampleCache extends Cache<MediaResolverTypes.Sample> {
+declare class SampleCache extends Cache<Sample> {
     uriTranslator: UriTranslator;
     constructor(translator: UriTranslator);
-    get(uuidOrRef: string): MediaResolverTypes.Sample | undefined;
+    get(uuidOrRef: string): Sample | undefined;
 }
-declare class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+declare class AssetCache extends Cache<Asset> {
     uriTranslator: UriTranslator;
     constructor(translator: UriTranslator);
-    add(ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean;
-    get(uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined;
+    add(ref: string, asset: Asset): boolean;
+    get(uuidOrRef: string): Asset | undefined;
 }
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -56,6 +56,6 @@ export declare class Resolver {
      * @param throwException - Throw an exception if the media URI
      *  cannot be resolved (default: `true`).
      */
-    resolve(uris: UrisSpec, throwException?: boolean): Promise<MediaResolverTypes.ClientMediaAsset[]>;
+    resolve(uris: UrisSpec, throwException?: boolean): Promise<Asset[]>;
 }
 export {};

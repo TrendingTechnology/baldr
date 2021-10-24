@@ -7,7 +7,7 @@ const defaultFadeInSec = 0.3;
   * We never stop. Instead we fade out very short and smoothly.
   */
 const defaultFadeOutSec = 1;
-export class Sample {
+export class SampleData {
     constructor(asset, yaml) {
         this.startTimeSec = 0;
         this.asset = asset;

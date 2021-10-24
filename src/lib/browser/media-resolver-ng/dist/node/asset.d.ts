@@ -1,7 +1,6 @@
-import { MediaResolverTypes } from '@bldr/type-definitions';
+import { Sample, Asset, RestApiRaw } from './types';
 import { MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
-import { Sample } from './sample';
 /**
  * A multipart asset can be restricted in different ways. This class holds the
  * data of the restriction (for example all parts, only a single part, a
@@ -11,7 +10,7 @@ import { Sample } from './sample';
  */
 export declare class MultiPartSelection {
     selectionSpec: string;
-    asset: MediaResolverTypes.ClientMediaAsset;
+    asset: ClientMediaAsset;
     partNos: number[];
     /**
      * The URI of the media asset suffixed with the selection specification.
@@ -23,7 +22,7 @@ export declare class MultiPartSelection {
      * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
      */
-    constructor(asset: MediaResolverTypes.ClientMediaAsset, selectionSpec: string);
+    constructor(asset: ClientMediaAsset, selectionSpec: string);
     /**
      * The URI using the `ref` authority.
      */
@@ -47,7 +46,7 @@ export declare class MultiPartSelection {
 }
 export declare class SampleCollection extends Cache<Sample> {
     private readonly asset;
-    constructor(asset: MediaResolverTypes.ClientMediaAsset);
+    constructor(asset: Asset);
     get complete(): Sample | undefined;
     private addSample;
     /**
@@ -56,17 +55,18 @@ export declare class SampleCollection extends Cache<Sample> {
     private gatherYamlFromRoot;
     private addFromAsset;
 }
-export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
+export declare class ClientMediaAsset implements Asset {
     /**
      * @inheritdoc
      */
-    yaml: MediaResolverTypes.RestApiRaw;
+    yaml: RestApiRaw;
     uri: MediaUri;
     /**
      * The keyboard shortcut to launch the media asset. At the moment only used by
      * images.
      */
     private shortcut_?;
+    samples?: SampleCollection;
     /**
      * @inheritdoc
      */
@@ -78,7 +78,7 @@ export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaA
     /**
      * @param yaml - A raw javascript object read from the Rest API
      */
-    constructor(uri: string, httpUrl: string, yaml: MediaResolverTypes.RestApiRaw);
+    constructor(uri: string, httpUrl: string, yaml: RestApiRaw);
     /**
      * @inheritdoc
      */

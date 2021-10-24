@@ -1,7 +1,7 @@
 import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
-import { Sample } from './sample';
+import { SampleData } from './sample';
 /**
  * A multipart asset can be restricted in different ways. This class holds the
  * data of the restriction (for example all parts, only a single part, a
@@ -72,7 +72,7 @@ export class SampleCollection extends Cache {
         return this.get(this.asset.ref + '#complete');
     }
     addSample(asset, yamlFormat) {
-        const sample = new Sample(asset, yamlFormat);
+        const sample = new SampleData(asset, yamlFormat);
         if (this.get(sample.ref) == null) {
             this.add(sample.ref, sample);
         }
@@ -163,6 +163,9 @@ export class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension);
+        if (this.isPlayable) {
+            this.samples = new SampleCollection(this);
+        }
     }
     /**
      * @inheritdoc

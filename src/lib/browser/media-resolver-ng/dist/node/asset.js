@@ -76,7 +76,7 @@ class SampleCollection extends cache_1.Cache {
         return this.get(this.asset.ref + '#complete');
     }
     addSample(asset, yamlFormat) {
-        const sample = new sample_1.Sample(asset, yamlFormat);
+        const sample = new sample_1.SampleData(asset, yamlFormat);
         if (this.get(sample.ref) == null) {
             this.add(sample.ref, sample);
         }
@@ -168,6 +168,9 @@ class ClientMediaAsset {
             throw Error('The client media assets needs a extension');
         }
         this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.yaml.extension);
+        if (this.isPlayable) {
+            this.samples = new SampleCollection(this);
+        }
     }
     /**
      * @inheritdoc

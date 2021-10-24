@@ -1,4 +1,4 @@
-import { MediaResolverTypes } from '@bldr/type-definitions'
+import { Sample, SampleYamlFormat, Asset, YamlFormat, RestApiRaw } from './types'
 
 import {
   getExtension,
@@ -8,7 +8,7 @@ import {
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
 import { Cache } from './cache'
-import { Sample } from './sample'
+import { SampleData } from './sample'
 
 /**
  * A multipart asset can be restricted in different ways. This class holds the
@@ -19,7 +19,7 @@ import { Sample } from './sample'
  */
 export class MultiPartSelection {
   selectionSpec: string
-  asset: MediaResolverTypes.ClientMediaAsset
+  asset: ClientMediaAsset
   partNos: number[]
 
   /**
@@ -34,7 +34,7 @@ export class MultiPartSelection {
    * example `ref:Song-2#2-5` -> `2-5`
    */
   constructor (
-    asset: MediaResolverTypes.ClientMediaAsset,
+    asset: ClientMediaAsset,
     selectionSpec: string
   ) {
     this.selectionSpec = selectionSpec.replace(/^.*#/, '')
@@ -91,9 +91,9 @@ export class MultiPartSelection {
 }
 
 export class SampleCollection extends Cache<Sample> {
-  private readonly asset: MediaResolverTypes.ClientMediaAsset
+  private readonly asset: Asset
 
-  constructor (asset: MediaResolverTypes.ClientMediaAsset) {
+  constructor (asset: Asset) {
     super()
     this.asset = asset
     this.addFromAsset(asset)
@@ -104,10 +104,10 @@ export class SampleCollection extends Cache<Sample> {
   }
 
   private addSample (
-    asset: MediaResolverTypes.ClientMediaAsset,
-    yamlFormat: MediaResolverTypes.SampleYamlFormat
+    asset: Asset,
+    yamlFormat: SampleYamlFormat
   ): void {
-    const sample = new Sample(asset, yamlFormat)
+    const sample = new SampleData(asset, yamlFormat)
     if (this.get(sample.ref) == null) {
       this.add(sample.ref, sample)
     }
@@ -117,9 +117,9 @@ export class SampleCollection extends Cache<Sample> {
    * Gather informations to build the default sample “complete”.
    */
   private gatherYamlFromRoot (
-    assetFormat: MediaResolverTypes.YamlFormat
-  ): MediaResolverTypes.SampleYamlFormat | undefined {
-    const yamlFormat: MediaResolverTypes.SampleYamlFormat = {}
+    assetFormat: YamlFormat
+  ): SampleYamlFormat | undefined {
+    const yamlFormat: SampleYamlFormat = {}
     if (assetFormat.startTime != null) {
       yamlFormat.startTime = assetFormat.startTime
     }
@@ -143,9 +143,9 @@ export class SampleCollection extends Cache<Sample> {
     }
   }
 
-  private addFromAsset (asset: MediaResolverTypes.ClientMediaAsset): void {
+  private addFromAsset (asset: Asset): void {
     // search the “complete” sample from the property “samples”.
-    let completeYamlFromSamples: MediaResolverTypes.SampleYamlFormat | undefined
+    let completeYamlFromSamples: SampleYamlFormat | undefined
     if (asset.yaml.samples != null) {
       for (let i = 0; i < asset.yaml.samples.length; i++) {
         const sampleYaml = asset.yaml.samples[i]
@@ -186,11 +186,11 @@ export class SampleCollection extends Cache<Sample> {
   }
 }
 
-export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
+export class ClientMediaAsset implements Asset {
   /**
    * @inheritdoc
    */
-  yaml: MediaResolverTypes.RestApiRaw
+  yaml: RestApiRaw
   uri: MediaUri
 
   /**
@@ -198,6 +198,8 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
    * images.
    */
   private shortcut_?: string
+
+  samples?: SampleCollection
 
   /**
    * @inheritdoc
@@ -215,7 +217,7 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   constructor (
     uri: string,
     httpUrl: string,
-    yaml: MediaResolverTypes.RestApiRaw
+    yaml: RestApiRaw
   ) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
@@ -234,6 +236,10 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
     }
 
     this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension)
+
+    if (this.isPlayable) {
+      this.samples = new SampleCollection(this as Asset)
+    }
   }
 
   /**
