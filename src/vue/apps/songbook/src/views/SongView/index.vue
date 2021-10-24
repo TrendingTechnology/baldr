@@ -60,12 +60,14 @@
 
 <script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Route, NavigationGuardNext } from 'vue-router'
 import { Vue, Component } from 'vue-property-decorator'
+
 import { CoreLibrary, Song } from '@bldr/songbook-core'
 
 import CursorCross from './CursorCross.vue'
 import SongSlide from './SongSlide.vue'
-import TableOfContents from '@/views/TableOfContents.vue'
+import TableOfContents from '@/views/TableOfContents/index.vue'
 
 @Component({
   components: {
@@ -84,49 +86,61 @@ import TableOfContents from '@/views/TableOfContents.vue'
   ])
 })
 export default class SongView extends Vue {
-  library: CoreLibrary
+  library!: CoreLibrary
 
-  songCurrent: Song
+  songCurrent!: Song
 
-  selectedSong: any
+  slideNo!: number
 
-  materialIconSize: string
+  selectedSong!: any
+
+  materialIconSize!: string
+
+  browseAllSlidesNext!: () => {}
+
+  browseAllSlidesPrevious!: () => {}
+
+  setSlideNext!: () => {}
+
+  setSlidePrevious!: () => {}
+
   data () {
     return {
       selectedSong: null,
       materialIconSize: '3vw'
     }
   }
-  get abc () {
+
+  get abc (): string {
     return this.songCurrent.abc
   }
 
-  get songId () {
+  get songId (): string {
     return this.songCurrent.songId
   }
 
-  get slideNo () {
+  get slideNoZero () {
     if (this.slideNo <= 9) {
       return `0${this.slideNo}`
     }
-    return this.slideNo
+    return `${this.slideNo}`
   }
 
-  get imageSrc () {
+  get imageSrc (): string {
     return `/songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
   }
 
-  selectSong () {
+  selectSong (): void {
     this.$modal.hide('search')
     this.setSong(this.selectedSong.ref)
     //this.$shortcuts.unpause()
   }
 
-  setSong (songId) {
+  setSong (songId: string): void {
     this.$router.push({ name: 'song', params: { songId: songId } })
   }
 
-  setSongNext () {
+  setSongNext (): void {
     this.setSong(this.library.getNextSong().songId)
   }
 
@@ -156,7 +170,7 @@ export default class SongView extends Vue {
     this.$store.dispatch('setSongCurrent', this.$route.params.songId)
   }
 
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
     this.$store.dispatch('setSongCurrent', to.params.songId)
     this.resolveAudio()
     this.$modal.hide('table-of-contents')

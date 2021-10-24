@@ -34,7 +34,7 @@ interface ShortcutSpecification {
   /**
    * A list of route names. Activate this shortcut only on this routes.
    */
-  routeNames: string[]
+  routeNames?: string[]
 }
 
 /**
@@ -94,15 +94,14 @@ interface ShortcutsManager {
    */
   fromRoutes(): void
 
-  /**
-   *
-   */
   pause(): void
 
-  /**
-   *
-   */
   unpause(): void
+}
+
+interface MediaResolver {
+  resolve(uri: string)
+
 }
 
 declare module 'vue/types/vue' {
@@ -115,6 +114,8 @@ declare module 'vue/types/vue' {
     $fullscreen: () => void
 
     $shortcuts: ShortcutsManager
+
+    $media: MediaResolver
   }
 }
 
