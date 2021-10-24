@@ -19,14 +19,14 @@ export declare class Cache<T> implements MediaResolverTypes.Cache<T> {
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
  * URIs.
  */
-export declare class MediaUriTranslator {
+export declare class UriTranslator {
     private uuids;
     constructor();
     /**
      *
-     * @param ref The authority in the reference (`ref`) scheme. The prefixed
+     * @param ref - The authority in the reference (`ref`) scheme. The prefixed
      *   scheme can be omitted.
-     * @param uuid The authority in the Universally Unique Identifier (`uuid`)
+     * @param uuid - The authority in the Universally Unique Identifier (`uuid`)
      *   scheme. The prefixed scheme can be omitted.
      *
      * @returns True, if the uri authority pair was successfully added, false

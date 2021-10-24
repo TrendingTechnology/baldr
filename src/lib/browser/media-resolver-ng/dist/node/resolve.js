@@ -16,6 +16,37 @@ const client_media_models_1 = require("@bldr/client-media-models");
 const config_1 = require("@bldr/config");
 const asset_1 = require("./asset");
 const cache_1 = require("./cache");
+class SampleCache extends cache_1.Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+class AssetCache extends cache_1.Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    add(ref, asset) {
+        if (this.uriTranslator.addPair(asset.ref, asset.uuid)) {
+            super.add(ref, asset);
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -25,8 +56,9 @@ class Resolver {
     constructor() {
         this.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
         this.cache = {};
-        this.uriTranslator = new cache_1.MediaUriTranslator();
-        this.assetCache = new asset_1.AssetCache(this.uriTranslator);
+        this.uriTranslator = new cache_1.UriTranslator();
+        this.sampleCache = new SampleCache(this.uriTranslator);
+        this.assetCache = new AssetCache(this.uriTranslator);
     }
     /**
      * Query the media server to get meta informations and the location of the file.

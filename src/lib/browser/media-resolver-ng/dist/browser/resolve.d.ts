@@ -1,7 +1,17 @@
 import { MediaResolverTypes } from '@bldr/type-definitions';
-import { AssetCache } from './asset';
-import { MediaUriTranslator } from './cache';
+import { UriTranslator, Cache } from './cache';
 declare type UrisSpec = string | string[] | Set<string>;
+declare class SampleCache extends Cache<MediaResolverTypes.Sample> {
+    uriTranslator: UriTranslator;
+    constructor(translator: UriTranslator);
+    get(uuidOrRef: string): MediaResolverTypes.Sample | undefined;
+}
+declare class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+    uriTranslator: UriTranslator;
+    constructor(translator: UriTranslator);
+    add(ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean;
+    get(uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined;
+}
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -9,8 +19,9 @@ declare type UrisSpec = string | string[] | Set<string>;
  */
 export declare class Resolver {
     httpRequest: import("@bldr/http-request").HttpRequest;
+    sampleCache: SampleCache;
     assetCache: AssetCache;
-    uriTranslator: MediaUriTranslator;
+    uriTranslator: UriTranslator;
     /**
      * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.

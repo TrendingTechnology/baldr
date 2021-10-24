@@ -7,7 +7,184 @@ import {
 } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
-import { Cache, MediaUriTranslator } from './cache'
+import { Cache } from './cache'
+import { Sample } from './sample'
+
+/**
+ * A multipart asset can be restricted in different ways. This class holds the
+ * data of the restriction (for example all parts, only a single part, a
+ * subset of parts). A multi part asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+export class MultiPartSelection {
+  selectionSpec: string
+  asset: MediaResolverTypes.ClientMediaAsset
+  partNos: number[]
+
+  /**
+   * The URI of the media asset suffixed with the selection specification.
+   * `ref:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
+   * means all parts.
+   */
+  uri: string
+
+  /**
+   * @param selectionSpec - Can be a URI, everthing after `#`, for
+   * example `ref:Song-2#2-5` -> `2-5`
+   */
+  constructor (
+    asset: MediaResolverTypes.ClientMediaAsset,
+    selectionSpec: string
+  ) {
+    this.selectionSpec = selectionSpec.replace(/^.*#/, '')
+
+    this.asset = asset
+
+    if (this.selectionSpec == null) {
+      this.uri = this.asset.uri.raw
+    } else {
+      this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`
+    }
+
+    this.partNos = selectSubset(this.selectionSpec, {
+      elementsCount: this.asset.multiPartCount,
+      firstElementNo: 1
+    })
+  }
+
+  /**
+   * The URI using the `ref` authority.
+   */
+  get ref (): string {
+    if (this.selectionSpec == null) {
+      return this.asset.yaml.ref
+    } else {
+      return `${this.asset.yaml.ref}#${this.selectionSpec}`
+    }
+  }
+
+  /**
+   * The number of parts of a multipart media asset.
+   */
+  get multiPartCount (): number {
+    return this.partNos.length
+  }
+
+  /**
+   * Used for the preview to fake that this class is a normal asset.
+   */
+  get httpUrl (): string {
+    return this.getMultiPartHttpUrlByNo(1)
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param The part number starts with 1. We set a default value,
+   * because no is sometimes undefined when only one part is selected. The
+   * router then creates no step url (not /slide/1/step/1) but (/slide/1)
+   */
+  getMultiPartHttpUrlByNo (no = 1): string {
+    return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
+  }
+}
+
+export class SampleCollection extends Cache<Sample> {
+  private readonly asset: MediaResolverTypes.ClientMediaAsset
+
+  constructor (asset: MediaResolverTypes.ClientMediaAsset) {
+    super()
+    this.asset = asset
+    this.addFromAsset(asset)
+  }
+
+  get complete (): Sample | undefined {
+    return this.get(this.asset.ref + '#complete')
+  }
+
+  private addSample (
+    asset: MediaResolverTypes.ClientMediaAsset,
+    yamlFormat: MediaResolverTypes.SampleYamlFormat
+  ): void {
+    const sample = new Sample(asset, yamlFormat)
+    if (this.get(sample.ref) == null) {
+      this.add(sample.ref, sample)
+    }
+  }
+
+  /**
+   * Gather informations to build the default sample “complete”.
+   */
+  private gatherYamlFromRoot (
+    assetFormat: MediaResolverTypes.YamlFormat
+  ): MediaResolverTypes.SampleYamlFormat | undefined {
+    const yamlFormat: MediaResolverTypes.SampleYamlFormat = {}
+    if (assetFormat.startTime != null) {
+      yamlFormat.startTime = assetFormat.startTime
+    }
+    if (assetFormat.duration != null) {
+      yamlFormat.duration = assetFormat.duration
+    }
+    if (assetFormat.endTime != null) {
+      yamlFormat.endTime = assetFormat.endTime
+    }
+    if (assetFormat.fadeIn != null) {
+      yamlFormat.startTime = assetFormat.fadeIn
+    }
+    if (assetFormat.fadeOut != null) {
+      yamlFormat.startTime = assetFormat.fadeOut
+    }
+    if (assetFormat.shortcut != null) {
+      yamlFormat.shortcut = assetFormat.shortcut
+    }
+    if (Object.keys(yamlFormat).length > 0) {
+      return yamlFormat
+    }
+  }
+
+  private addFromAsset (asset: MediaResolverTypes.ClientMediaAsset): void {
+    // search the “complete” sample from the property “samples”.
+    let completeYamlFromSamples: MediaResolverTypes.SampleYamlFormat | undefined
+    if (asset.yaml.samples != null) {
+      for (let i = 0; i < asset.yaml.samples.length; i++) {
+        const sampleYaml = asset.yaml.samples[i]
+        if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
+          completeYamlFromSamples = sampleYaml
+          asset.yaml.samples.splice(i, 1)
+          break
+        }
+      }
+    }
+
+    // First add default sample “complete”
+    const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml)
+
+    if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
+      throw new Error('Duplicate definition of the default complete sample')
+    } else if (completeYamlFromSamples != null) {
+      this.addSample(asset, completeYamlFromSamples)
+    } else if (completeYamlFromRoot != null) {
+      this.addSample(asset, completeYamlFromRoot)
+    } else {
+      this.addSample(asset, {})
+    }
+
+    let counter = 0
+
+    // Add samples from the YAML property “samples”
+    if (asset.yaml.samples != null) {
+      for (const sampleSpec of asset.yaml.samples) {
+        if (sampleSpec.ref == null && sampleSpec.title == null) {
+          counter++
+          sampleSpec.ref = `sample${counter}`
+          sampleSpec.title = `Ausschnitt ${counter}`
+        }
+        this.addSample(asset, sampleSpec)
+      }
+    }
+  }
+}
 
 export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   /**
@@ -149,108 +326,5 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
       )
     }
     return formatMultiPartAssetFileName(this.httpUrl, no)
-  }
-}
-
-/**
- * A multipart asset can be restricted in different ways. This class holds the
- * data of the restriction (for example all parts, only a single part, a
- * subset of parts). A multi part asset can be restricted to one part only by a
- * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
- * HTTP URL `http:/example/media/Score_no02.png`.
- */
-export class MultiPartSelection {
-  selectionSpec: string
-  asset: MediaResolverTypes.ClientMediaAsset
-  partNos: number[]
-
-  /**
-   * The URI of the media asset suffixed with the selection specification.
-   * `ref:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
-   * means all parts.
-   */
-  uri: string
-
-  /**
-   * @param selectionSpec - Can be a URI, everthing after `#`, for
-   * example `ref:Song-2#2-5` -> `2-5`
-   */
-  constructor (
-    asset: MediaResolverTypes.ClientMediaAsset,
-    selectionSpec: string
-  ) {
-    this.selectionSpec = selectionSpec.replace(/^.*#/, '')
-
-    this.asset = asset
-
-    if (this.selectionSpec == null) {
-      this.uri = this.asset.uri.raw
-    } else {
-      this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`
-    }
-
-    this.partNos = selectSubset(this.selectionSpec, {
-      elementsCount: this.asset.multiPartCount,
-      firstElementNo: 1
-    })
-  }
-
-  /**
-   * The URI using the `ref` authority.
-   */
-  get ref (): string {
-    if (this.selectionSpec == null) {
-      return this.asset.yaml.ref
-    } else {
-      return `${this.asset.yaml.ref}#${this.selectionSpec}`
-    }
-  }
-
-  /**
-   * The number of parts of a multipart media asset.
-   */
-  get multiPartCount (): number {
-    return this.partNos.length
-  }
-
-  /**
-   * Used for the preview to fake that this class is a normal asset.
-   */
-  get httpUrl (): string {
-    return this.getMultiPartHttpUrlByNo(1)
-  }
-
-  /**
-   * Retrieve the HTTP URL of the multi part asset by the part number.
-   *
-   * @param The part number starts with 1. We set a default value,
-   * because no is sometimes undefined when only one part is selected. The
-   * router then creates no step url (not /slide/1/step/1) but (/slide/1)
-   */
-  getMultiPartHttpUrlByNo (no = 1): string {
-    return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
-  }
-}
-
-export class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
-  mediaUriTranslator: MediaUriTranslator
-  constructor (translator: MediaUriTranslator) {
-    super()
-    this.mediaUriTranslator = translator
-  }
-
-  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
-    if (this.mediaUriTranslator.addPair(asset.ref, asset.uuid)) {
-      super.add(ref, asset)
-      return true
-    }
-    return false
-  }
-
-  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
-    const ref = this.mediaUriTranslator.getRef(uuidOrRef)
-    if (ref != null) {
-      return super.get(ref)
-    }
   }
 }

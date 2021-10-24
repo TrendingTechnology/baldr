@@ -11,8 +11,39 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
 import config from '@bldr/config';
-import { ClientMediaAsset, AssetCache } from './asset';
-import { MediaUriTranslator } from './cache';
+import { ClientMediaAsset } from './asset';
+import { UriTranslator, Cache } from './cache';
+class SampleCache extends Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+class AssetCache extends Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    add(ref, asset) {
+        if (this.uriTranslator.addPair(asset.ref, asset.uuid)) {
+            super.add(ref, asset);
+            return true;
+        }
+        return false;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -22,7 +53,8 @@ export class Resolver {
     constructor() {
         this.httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
         this.cache = {};
-        this.uriTranslator = new MediaUriTranslator();
+        this.uriTranslator = new UriTranslator();
+        this.sampleCache = new SampleCache(this.uriTranslator);
         this.assetCache = new AssetCache(this.uriTranslator);
     }
     /**

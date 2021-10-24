@@ -1,5 +1,4 @@
 import { MediaResolverTypes } from '@bldr/type-definitions'
-
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
 /**

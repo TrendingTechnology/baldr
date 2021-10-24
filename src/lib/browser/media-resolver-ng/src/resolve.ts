@@ -1,14 +1,53 @@
 import { MediaResolverTypes } from '@bldr/type-definitions'
-
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 import config from '@bldr/config'
 
-import { ClientMediaAsset, AssetCache } from './asset'
-import { MediaUriTranslator } from './cache'
+import { ClientMediaAsset } from './asset'
+import { UriTranslator, Cache } from './cache'
 
 type UrisSpec = string | string[] | Set<string>
+
+class SampleCache extends Cache<MediaResolverTypes.Sample> {
+  uriTranslator: UriTranslator
+
+  constructor (translator: UriTranslator) {
+    super()
+    this.uriTranslator = translator
+  }
+
+  get (uuidOrRef: string): MediaResolverTypes.Sample | undefined {
+    const ref = this.uriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
+  }
+}
+
+class AssetCache extends Cache<MediaResolverTypes.ClientMediaAsset> {
+  uriTranslator: UriTranslator
+
+  constructor (translator: UriTranslator) {
+    super()
+    this.uriTranslator = translator
+  }
+
+  add (ref: string, asset: MediaResolverTypes.ClientMediaAsset): boolean {
+    if (this.uriTranslator.addPair(asset.ref, asset.uuid)) {
+      super.add(ref, asset)
+      return true
+    }
+    return false
+  }
+
+  get (uuidOrRef: string): MediaResolverTypes.ClientMediaAsset | undefined {
+    const ref = this.uriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
+  }
+}
 
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -17,8 +56,9 @@ type UrisSpec = string | string[] | Set<string>
  */
 export class Resolver {
   httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
+  sampleCache: SampleCache
   assetCache: AssetCache
-  uriTranslator: MediaUriTranslator
+  uriTranslator: UriTranslator
 
   /**
    * Assets with linked assets have to be cached. For example: many
@@ -28,7 +68,8 @@ export class Resolver {
 
   constructor () {
     this.cache = {}
-    this.uriTranslator = new MediaUriTranslator()
+    this.uriTranslator = new UriTranslator()
+    this.sampleCache = new SampleCache(this.uriTranslator)
     this.assetCache = new AssetCache(this.uriTranslator)
   }
 

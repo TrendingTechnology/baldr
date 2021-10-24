@@ -65,15 +65,15 @@ export class Cache {
  * the `ref` scheme. This cache enables the translation from `uuid` to `ref`
  * URIs.
  */
-export class MediaUriTranslator {
+export class UriTranslator {
     constructor() {
         this.uuids = {};
     }
     /**
      *
-     * @param ref The authority in the reference (`ref`) scheme. The prefixed
+     * @param ref - The authority in the reference (`ref`) scheme. The prefixed
      *   scheme can be omitted.
-     * @param uuid The authority in the Universally Unique Identifier (`uuid`)
+     * @param uuid - The authority in the Universally Unique Identifier (`uuid`)
      *   scheme. The prefixed scheme can be omitted.
      *
      * @returns True, if the uri authority pair was successfully added, false
@@ -139,93 +139,3 @@ export class MediaUriTranslator {
         }
     }
 }
-// class SampleCache extends Cache<MediaResolverTypes.Sample> {
-//   get (uuidOrRef: string): MediaResolverTypes.Sample | undefined {
-//     const ref = mediaUriTranslator.getRef(uuidOrRef)
-//     if (ref != null) {
-//       return super.get(ref)
-//     }
-//   }
-// }
-// export class SampleCollection extends Cache<Sample> {
-//   private readonly asset: MediaResolverTypes.ClientMediaAsset
-//   constructor (asset: MediaResolverTypes.ClientMediaAsset) {
-//     super()
-//     this.asset = asset
-//     this.addFromAsset(asset)
-//   }
-//   get complete (): Sample | undefined {
-//     return this.get(this.asset.ref + '#complete')
-//   }
-//   private addSample (asset: MediaResolverTypes.ClientMediaAsset, yamlFormat: MediaResolverTypes.SampleYamlFormat): void {
-//     const sample = new Sample(asset, yamlFormat)
-//     if (this.get(sample.ref) == null) {
-//       sampleCache.add(sample.ref, sample)
-//       this.add(sample.ref, sample)
-//     }
-//   }
-//   /**
-//    * Gather informations to build the default sample “complete”.
-//    */
-//   private gatherYamlFromRoot (assetFormat: MediaResolverTypes.YamlFormat): MediaResolverTypes.SampleYamlFormat | undefined {
-//     const yamlFormat: MediaResolverTypes.SampleYamlFormat = {}
-//     if (assetFormat.startTime != null) {
-//       yamlFormat.startTime = assetFormat.startTime
-//     }
-//     if (assetFormat.duration != null) {
-//       yamlFormat.duration = assetFormat.duration
-//     }
-//     if (assetFormat.endTime != null) {
-//       yamlFormat.endTime = assetFormat.endTime
-//     }
-//     if (assetFormat.fadeIn != null) {
-//       yamlFormat.startTime = assetFormat.fadeIn
-//     }
-//     if (assetFormat.fadeOut != null) {
-//       yamlFormat.startTime = assetFormat.fadeOut
-//     }
-//     if (assetFormat.shortcut != null) {
-//       yamlFormat.shortcut = assetFormat.shortcut
-//     }
-//     if (Object.keys(yamlFormat).length > 0) {
-//       return yamlFormat
-//     }
-//   }
-//   private addFromAsset (asset: MediaResolverTypes.ClientMediaAsset): void {
-//     // search the “complete” sample from the property “samples”.
-//     let completeYamlFromSamples: MediaResolverTypes.SampleYamlFormat | undefined
-//     if (asset.yaml.samples != null) {
-//       for (let i = 0; i < asset.yaml.samples.length; i++) {
-//         const sampleYaml = asset.yaml.samples[i]
-//         if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
-//           completeYamlFromSamples = sampleYaml
-//           asset.yaml.samples.splice(i, 1)
-//           break
-//         }
-//       }
-//     }
-//     // First add default sample “complete”
-//     const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml)
-//     if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
-//       throw new Error('Duplicate definition of the default complete sample')
-//     } else if (completeYamlFromSamples != null) {
-//       this.addSample(asset, completeYamlFromSamples)
-//     } else if (completeYamlFromRoot != null) {
-//       this.addSample(asset, completeYamlFromRoot)
-//     } else {
-//       this.addSample(asset, {})
-//     }
-//     let counter = 0
-//     // Add samples from the YAML property “samples”
-//     if (asset.yaml.samples != null) {
-//       for (const sampleSpec of asset.yaml.samples) {
-//         if (sampleSpec.ref == null && sampleSpec.title == null) {
-//           counter++
-//           sampleSpec.ref = `sample${counter}`
-//           sampleSpec.title = `Ausschnitt ${counter}`
-//         }
-//         this.addSample(asset, sampleSpec)
-//       }
-//     }
-//   }
-// }
