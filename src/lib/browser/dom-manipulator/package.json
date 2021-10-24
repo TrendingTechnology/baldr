@@ -1,0 +1,43 @@
+{
+  "name": "@bldr/dom-manipulator",
+  "version": "0.1.0",
+  "description": "Select elements in SVGs and HTML.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "npm run build:browser && npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "google-chrome --disable-web-security --user-data-dir=/tmp tests/index.html"
+  },
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/mocha": "9.0.0",
+    "chai": "4.3.4",
+    "depcheck": "1.4.2",
+    "mocha": "9.1.3",
+    "ts-standard": "10.0.0",
+    "typescript": "4.4.4"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+}
