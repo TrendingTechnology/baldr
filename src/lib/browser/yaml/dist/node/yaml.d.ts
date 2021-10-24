@@ -24,7 +24,7 @@ export declare function convertToYaml(data: any): string;
  *
  * @returns Wraps strings and numbers into an object.
  */
-export declare function convertFromYamlRaw(yamlString: string): object | undefined;
+export declare function convertFromYamlRaw(yamlString: string): object | null | undefined;
 /**
  * Load a YAML string and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function returns an

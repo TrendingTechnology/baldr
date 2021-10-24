@@ -47,12 +47,12 @@ exports.convertToYaml = convertToYaml;
  */
 function convertFromYamlRaw(yamlString) {
     const result = js_yaml_1.load(yamlString);
-    if (result == null)
+    if (result == null) {
         return;
-    if (typeof result !== 'object') {
-        return { result };
     }
-    return result;
+    if (typeof result === 'object') {
+        return result;
+    }
 }
 exports.convertFromYamlRaw = convertFromYamlRaw;
 /**

@@ -42,12 +42,12 @@ export function convertToYaml(data) {
  */
 export function convertFromYamlRaw(yamlString) {
     const result = load(yamlString);
-    if (result == null)
+    if (result == null) {
         return;
-    if (typeof result !== 'object') {
-        return { result };
     }
-    return result;
+    if (typeof result === 'object') {
+        return result;
+    }
 }
 /**
  * Load a YAML string and convert into a Javascript object. The string

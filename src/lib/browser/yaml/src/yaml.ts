@@ -48,13 +48,14 @@ export function convertToYaml (data: any): string {
  *
  * @returns Wraps strings and numbers into an object.
  */
-export function convertFromYamlRaw (yamlString: string): object | undefined {
+export function convertFromYamlRaw (yamlString: string): object | null | undefined {
   const result = load(yamlString)
-  if (result == null) return
-  if (typeof result !== 'object') {
-    return { result }
+  if (result == null) {
+    return
   }
-  return result
+  if (typeof result === 'object') {
+    return result
+  }
 }
 
 /**

@@ -35,7 +35,7 @@
     "js-yaml": "4.1.0"
   },
   "devDependencies": {
-    "@types/js-yaml": "4.0.0"
+    "@types/js-yaml": "4.0.4"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
