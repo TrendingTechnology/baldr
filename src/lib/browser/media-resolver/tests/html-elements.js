@@ -12,7 +12,11 @@ describe('Package “@bldr/media-resolver”: File “html-element.ts”', funct
     })
 
     it('video', function () {
-      const video = createHtmlElement('video', 'http://example.com/video.mp4', 'http://example.com/image.jpg')
+      const video = createHtmlElement(
+        'video',
+        'http://example.com/video.mp4',
+        'http://example.com/image.jpg'
+      )
       assert.strictEqual(video.src, 'http://example.com/video.mp4')
       assert.strictEqual(video.poster, 'http://example.com/image.jpg')
     })

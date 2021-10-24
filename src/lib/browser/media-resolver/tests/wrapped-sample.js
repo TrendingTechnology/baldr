@@ -2,7 +2,10 @@
 
 const assert = require('assert')
 
-const { WrappedSpecList, WrappedSampleList } = require('../dist/node/wrapped-sample')
+const {
+  WrappedSpecList,
+  WrappedSampleList
+} = require('../dist/node/wrapped-sample')
 const { resolveSingleByUuid } = require('./_helper.js')
 const { resetMediaCache } = require('../dist/node/cache.js')
 
@@ -47,8 +50,13 @@ describe('Package “@bldr/media-resolver”: File “wrapped-sample.ts”', fun
     })
 
     it('Single uuid URI as a string with a custom title in the middle of the string', function () {
-      const spec = createSampleSpecsGetFirst('prefix uuid:c64047d2-983d-4009-a35f-02c95534cb53 suffix')
-      assert.strictEqual(spec.uri, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete')
+      const spec = createSampleSpecsGetFirst(
+        'prefix uuid:c64047d2-983d-4009-a35f-02c95534cb53 suffix'
+      )
+      assert.strictEqual(
+        spec.uri,
+        'uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete'
+      )
       assert.strictEqual(spec.customTitle, 'prefix suffix')
     })
 
@@ -57,7 +65,10 @@ describe('Package “@bldr/media-resolver”: File “wrapped-sample.ts”', fun
         uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
         title: 'Original'
       })
-      assert.strictEqual(spec.uri, 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro')
+      assert.strictEqual(
+        spec.uri,
+        'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro'
+      )
       assert.strictEqual(spec.customTitle, 'Original')
     })
 
@@ -79,9 +90,15 @@ describe('Package “@bldr/media-resolver”: File “wrapped-sample.ts”', fun
         }
       ]
       const specs = createSampleSpecs(input)
-      assert.strictEqual(specs[0].uri, 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro')
+      assert.strictEqual(
+        specs[0].uri,
+        'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro'
+      )
       assert.strictEqual(specs[0].customTitle, 'Original')
-      assert.strictEqual(specs[1].uri, 'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro')
+      assert.strictEqual(
+        specs[1].uri,
+        'ref:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro'
+      )
       assert.strictEqual(specs[1].customTitle, 'Bollywood')
     })
 
@@ -98,11 +115,19 @@ describe('Package “@bldr/media-resolver”: File “wrapped-sample.ts”', fun
     // ref: Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall
     await resolveSingleByUuid('1eb60211-f3d5-45a1-a426-44926f14a32a')
 
-    const list = new WrappedSampleList('ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall')
+    const list = new WrappedSampleList(
+      'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall'
+    )
     const samplesCollection = list.getSamplesFromFirst()
     assert.ok(samplesCollection != null)
     const samples = samplesCollection.getAll()
-    assert.strictEqual(samples[0].ref, 'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#complete')
-    assert.strictEqual(samples[1].ref, 'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#1_strophe')
+    assert.strictEqual(
+      samples[0].ref,
+      'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#complete'
+    )
+    assert.strictEqual(
+      samples[1].ref,
+      'ref:Dylan-Hard-Rain_HB_A-Hard-Rain-s-a-Gonna-Fall#1_strophe'
+    )
   })
 })

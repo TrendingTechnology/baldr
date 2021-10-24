@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UriTranslator = exports.Cache = void 0;
+exports.UriTranslator = exports.Cache = exports.MimeTypeShortcutCounter = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
@@ -26,6 +26,7 @@ class MimeTypeShortcutCounter {
         this.count = 0;
     }
 }
+exports.MimeTypeShortcutCounter = MimeTypeShortcutCounter;
 class Cache {
     constructor() {
         this.cache = {};

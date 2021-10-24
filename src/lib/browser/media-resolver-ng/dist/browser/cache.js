@@ -2,7 +2,7 @@ import { MediaUri } from '@bldr/client-media-models';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
-class MimeTypeShortcutCounter {
+export class MimeTypeShortcutCounter {
     constructor(triggerKey) {
         this.triggerKey = triggerKey;
         this.count = 0;

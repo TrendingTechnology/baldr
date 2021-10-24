@@ -13,6 +13,18 @@ declare class AssetCache extends Cache<Asset> {
     get(uuidOrRef: string): Asset | undefined;
 }
 /**
+ * Manager to set shortcuts on  three MIME types (audio, video, image).
+ */
+declare class ShortcutManager {
+    private readonly audio;
+    private readonly video;
+    private readonly image;
+    constructor();
+    setOnSample(sample: Sample): void;
+    setOnAsset(asset: Asset): void;
+    reset(): void;
+}
+/**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
@@ -22,6 +34,7 @@ export declare class Resolver {
     sampleCache: SampleCache;
     assetCache: AssetCache;
     uriTranslator: UriTranslator;
+    shortcutManager: ShortcutManager;
     /**
      * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.
@@ -36,6 +49,18 @@ export declare class Resolver {
      *  cannot be resolved (default: `true`).
      */
     private queryMediaServer;
+    /**
+     * Create a new media asset. The samples are created in the constructor of
+     * the media asset.
+     *
+     * @param uri - A media URI (Uniform Resource Identifier) with an optional
+     *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
+     *   suffix is removed.
+     * @param raw - The raw object from the REST API and YAML metadata file.
+     *
+     * @returns The newly created media asset.
+     */
+    private createAsset;
     /**
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
@@ -68,6 +93,10 @@ export declare class Resolver {
      */
     getAsset(uri: string): Promise<Asset | undefined>;
     /**
+     * @returns All previously resolved media assets.
+     */
+    exportAssets(): Asset[];
+    /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.
      *
@@ -78,6 +107,10 @@ export declare class Resolver {
      * @returns A sample or undefined.
      */
     getSample(uri: string): Promise<Sample | undefined>;
+    /**
+     * @returns All previously resolved samples.
+     */
+    exportSamples(): Sample[];
     /**
      * @param uri - A asset URI in various formats.
      *

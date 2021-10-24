@@ -4,7 +4,7 @@ import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 import config from '@bldr/config'
 
 import { ClientMediaAsset } from './asset'
-import { UriTranslator, Cache } from './cache'
+import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache'
 import { Sample, Asset, RestApiRaw } from './types'
 
 type UrisSpec = string | string[] | Set<string>
@@ -50,6 +50,47 @@ class AssetCache extends Cache<Asset> {
 }
 
 /**
+ * Manager to set shortcuts on  three MIME types (audio, video, image).
+ */
+class ShortcutManager {
+  private readonly audio: MimeTypeShortcutCounter
+  private readonly video: MimeTypeShortcutCounter
+  private readonly image: MimeTypeShortcutCounter
+
+  constructor () {
+    this.audio = new MimeTypeShortcutCounter('a')
+    this.video = new MimeTypeShortcutCounter('v')
+    this.image = new MimeTypeShortcutCounter('i')
+  }
+
+  setOnSample (sample: Sample): void {
+    if (sample.shortcut != null) {
+      return
+    }
+    if (sample.asset.mimeType === 'audio') {
+      sample.shortcut = this.audio.get()
+    } else if (sample.asset.mimeType === 'video') {
+      sample.shortcut = this.video.get()
+    }
+  }
+
+  setOnAsset (asset: Asset): void {
+    if (asset.shortcut != null) {
+      return
+    }
+    if (asset.mimeType === 'image') {
+      asset.shortcut = this.audio.get()
+    }
+  }
+
+  reset (): void {
+    this.audio.reset()
+    this.video.reset()
+    this.image.reset()
+  }
+}
+
+/**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
@@ -59,6 +100,7 @@ export class Resolver {
   sampleCache: SampleCache
   assetCache: AssetCache
   uriTranslator: UriTranslator
+  shortcutManager: ShortcutManager
 
   /**
    * Assets with linked assets have to be cached. For example: many
@@ -71,6 +113,7 @@ export class Resolver {
     this.uriTranslator = new UriTranslator()
     this.sampleCache = new SampleCache(this.uriTranslator)
     this.assetCache = new AssetCache(this.uriTranslator)
+    this.shortcutManager = new ShortcutManager()
   }
 
   /**
@@ -115,6 +158,32 @@ export class Resolver {
   }
 
   /**
+   * Create a new media asset. The samples are created in the constructor of
+   * the media asset.
+   *
+   * @param uri - A media URI (Uniform Resource Identifier) with an optional
+   *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
+   *   suffix is removed.
+   * @param raw - The raw object from the REST API and YAML metadata file.
+   *
+   * @returns The newly created media asset.
+   */
+  private createAsset (uri: string, raw: RestApiRaw): Asset {
+    const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
+    const asset = new ClientMediaAsset(uri, httpUrl, raw)
+    this.assetCache.add(asset.ref, asset)
+    this.shortcutManager.setOnAsset(asset)
+    if (asset.samples != null) {
+      for (const sample of asset.samples) {
+        if (this.sampleCache.add(sample.ref, sample)) {
+          this.shortcutManager.setOnSample(sample)
+        }
+      }
+    }
+    return asset
+  }
+
+  /**
    * Resolve (get the HTTP URL and some meta informations) of a remote media
    * file by its URI.
    *
@@ -134,15 +203,7 @@ export class Resolver {
     }
     const raw = await this.queryMediaServer(uri, throwException)
     if (raw != null) {
-      const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-      const asset = new ClientMediaAsset(uri, httpUrl, raw)
-      this.assetCache.add(asset.ref, asset)
-      if (asset.samples != null) {
-        for (const sample of asset.samples) {
-          this.sampleCache.add(sample.ref, sample)
-        }
-      }
-      return asset
+      return this.createAsset(uri, raw)
     }
   }
 
@@ -208,6 +269,13 @@ export class Resolver {
   }
 
   /**
+   * @returns All previously resolved media assets.
+   */
+  public exportAssets (): Asset[] {
+    return this.assetCache.getAll()
+  }
+
+  /**
    * Return a sample. If the sample has not yet been resolved, it will be
    * resolved.
    *
@@ -229,6 +297,13 @@ export class Resolver {
 
     await this.resolve(uri)
     return this.sampleCache.get(uri)
+  }
+
+  /**
+   * @returns All previously resolved samples.
+   */
+  public exportSamples (): Sample[] {
+    return this.sampleCache.getAll()
   }
 
   /**

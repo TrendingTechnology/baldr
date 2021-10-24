@@ -4,7 +4,7 @@ import { MediaUri } from '@bldr/client-media-models'
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
-class MimeTypeShortcutCounter {
+export class MimeTypeShortcutCounter {
   /**
    * `a` for audio files and `v` for video files.
    */
