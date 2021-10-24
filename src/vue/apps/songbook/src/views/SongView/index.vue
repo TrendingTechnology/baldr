@@ -58,91 +58,112 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from 'vuex'
+import { Vue, Component } from 'vue-property-decorator'
+import { CoreLibrary, Song } from '@bldr/songbook-core'
 
 import CursorCross from './CursorCross.vue'
-import SongSlide from './SongSlide'
-import TableOfContents from '@/views/TableOfContents'
+import SongSlide from './SongSlide.vue'
+import TableOfContents from '@/views/TableOfContents.vue'
 
-export default {
-  name: 'SongView',
+@Component({
   components: {
     CursorCross,
     SongSlide,
     TableOfContents
   },
+  computed: {
+    ...mapGetters(['songCurrent', 'slideNo', 'library'])
+  },
+  methods: mapActions([
+    'browseAllSlidesNext',
+    'browseAllSlidesPrevious',
+    'setSlideNext',
+    'setSlidePrevious'
+  ])
+})
+export default class SongView extends Vue {
+  library: CoreLibrary
+
+  songCurrent: Song
+
+  selectedSong: any
+
+  materialIconSize: string
   data () {
     return {
       selectedSong: null,
       materialIconSize: '3vw'
     }
-  },
-  computed: {
-    ...mapGetters(['songCurrent', 'slideNo', 'library']),
-    abc () {
-      return this.songCurrent.abc
-    },
-    songId () {
-      return this.songCurrent.songId
-    },
-    slideNo () {
-      if (this.slideNo <= 9) {
-        return `0${this.slideNo}`
-      }
-      return this.slideNo
-    },
-    imageSrc () {
-      return `/songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
+  }
+  get abc () {
+    return this.songCurrent.abc
+  }
+
+  get songId () {
+    return this.songCurrent.songId
+  }
+
+  get slideNo () {
+    if (this.slideNo <= 9) {
+      return `0${this.slideNo}`
     }
-  },
-  methods: {
-    ...mapActions([
-      'browseAllSlidesNext',
-      'browseAllSlidesPrevious',
-      'setSlideNext',
-      'setSlidePrevious'
-    ]),
-    selectSong () {
-      this.$modal.hide('search')
-      this.setSong(this.selectedSong.ref)
-      //this.$shortcuts.unpause()
-    },
-    setSong (songId) {
-      this.$router.push({ name: 'song', params: { songId: songId } })
-    },
-    setSongNext () {
-      this.setSong(this.library.getNextSong().songId)
-    },
-    setSongPrevious () {
-      this.setSong(this.library.getPreviousSong().songId)
-    },
-    setSongRandom () {
-      this.setSong(this.library.getRandomSong().songId)
-    },
-    showSearch () {
-      this.$modal.toggle('search')
-      this.$dynamicSelect.focus()
-    },
-    showTableOfContents () {
-      this.$modal.show('table-of-contents')
-    },
-    resolveAudio () {
-      if (this.songCurrent.metaData.audio) {
-        this.$media.resolve(this.songCurrent.metaData.audio)
-      }
+    return this.slideNo
+  }
+
+  get imageSrc () {
+    return `/songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
+  }
+
+  selectSong () {
+    this.$modal.hide('search')
+    this.setSong(this.selectedSong.ref)
+    //this.$shortcuts.unpause()
+  }
+
+  setSong (songId) {
+    this.$router.push({ name: 'song', params: { songId: songId } })
+  }
+
+  setSongNext () {
+    this.setSong(this.library.getNextSong().songId)
+  }
+
+  setSongPrevious () {
+    this.setSong(this.library.getPreviousSong().songId)
+  }
+
+  setSongRandom () {
+    this.setSong(this.library.getRandomSong().songId)
+  }
+
+  showSearch () {
+    this.$modal.toggle('search')
+    this.$dynamicSelect.focus()
+  }
+
+  showTableOfContents () {
+    this.$modal.show('table-of-contents')
+  }
+  resolveAudio () {
+    if (this.songCurrent.metaData.audio) {
+      this.$media.resolve(this.songCurrent.metaData.audio)
     }
-  },
-  created: function () {
+  }
+
+  created () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songId)
-  },
+  }
+
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('setSongCurrent', to.params.songId)
     this.resolveAudio()
     this.$modal.hide('table-of-contents')
     next()
-  },
-  mounted: function () {
+  }
+
+  mounted () {
     this.resolveAudio()
     this.$shortcuts.addMultiple([
       {
