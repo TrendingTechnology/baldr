@@ -40,7 +40,7 @@ export declare class Resolver {
      * Resolve (get the HTTP URL and some meta informations) of a remote media
      * file by its URI.
      *
-     * @param uri A media URI (Uniform Resource Identifier) with an optional
+     * @param uri - A media URI (Uniform Resource Identifier) with an optional
      *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
      *   suffix is removed.
      * @param throwException - Throw an exception if the media URI
@@ -57,5 +57,32 @@ export declare class Resolver {
      *  cannot be resolved (default: `true`).
      */
     resolve(uris: UrisSpec, throwException?: boolean): Promise<Asset[]>;
+    /**
+     * Return a media asset. If the asset has not yet been resolved, it will be
+     * resolved.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     */
+    getAsset(uri: string): Promise<Asset | undefined>;
+    /**
+     * Return a sample. If the sample has not yet been resolved, it will be
+     * resolved.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     *   sample fragment. If the fragment is ommited, the “complete” sample is
+     *   returned
+     *
+     * @returns A sample or undefined.
+     */
+    getSample(uri: string): Promise<Sample | undefined>;
+    /**
+     * @param uri - A asset URI in various formats.
+     *
+     * @returns A asset URI (without the fragment) in the `ref` scheme.
+     */
+    translateToAssetRef(uri: string): string | undefined;
 }
 export {};

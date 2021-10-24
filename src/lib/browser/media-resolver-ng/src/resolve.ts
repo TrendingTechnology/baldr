@@ -118,7 +118,7 @@ export class Resolver {
    * Resolve (get the HTTP URL and some meta informations) of a remote media
    * file by its URI.
    *
-   * @param uri A media URI (Uniform Resource Identifier) with an optional
+   * @param uri - A media URI (Uniform Resource Identifier) with an optional
    *   fragment suffix, for example `ref:Yesterday#complete`. The fragment
    *   suffix is removed.
    * @param throwException - Throw an exception if the media URI
@@ -135,7 +135,14 @@ export class Resolver {
     const raw = await this.queryMediaServer(uri, throwException)
     if (raw != null) {
       const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-      return new ClientMediaAsset(uri, httpUrl, raw)
+      const asset = new ClientMediaAsset(uri, httpUrl, raw)
+      this.assetCache.add(asset.ref, asset)
+      if (asset.samples != null) {
+        for (const sample of asset.samples) {
+          this.sampleCache.add(sample.ref, sample)
+        }
+      }
+      return asset
     }
   }
 
@@ -166,9 +173,7 @@ export class Resolver {
         promises.push(this.resolveSingle(uri, throwException))
         urisWithoutFragments.delete(uri)
       }
-      for (const asset of await Promise.all<
-      Asset | undefined
-      >(promises)) {
+      for (const asset of await Promise.all<Asset | undefined>(promises)) {
         if (asset != null) {
           findMediaUris(asset.yaml, urisWithoutFragments)
           assets.push(asset)
@@ -179,5 +184,59 @@ export class Resolver {
       }
     }
     return assets
+  }
+
+  /**
+   * Return a media asset. If the asset has not yet been resolved, it will be
+   * resolved.
+   *
+   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+   * sample fragment.
+   *
+   * @returns A media asset or undefined.
+   */
+  public async getAsset (uri: string): Promise<Asset | undefined> {
+    const asset = this.assetCache.get(uri)
+    if (asset != null) {
+      return asset
+    }
+
+    const assets = await this.resolve(uri)
+    if (assets.length === 1) {
+      return assets[0]
+    }
+  }
+
+  /**
+   * Return a sample. If the sample has not yet been resolved, it will be
+   * resolved.
+   *
+   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+   *   sample fragment. If the fragment is ommited, the “complete” sample is
+   *   returned
+   *
+   * @returns A sample or undefined.
+   */
+  public async getSample (uri: string): Promise<Sample | undefined> {
+    const mediaUri = new MediaUri(uri)
+    if (mediaUri.fragment == null) {
+      uri = uri + '#complete'
+    }
+    const sample = this.sampleCache.get(uri)
+    if (sample != null) {
+      return sample
+    }
+
+    await this.resolve(uri)
+    return this.sampleCache.get(uri)
+  }
+
+  /**
+   * @param uri - A asset URI in various formats.
+   *
+   * @returns A asset URI (without the fragment) in the `ref` scheme.
+   */
+  translateToAssetRef (uri: string): string | undefined {
+    return this.uriTranslator.getRef(uri, true)
   }
 }

@@ -1,4 +1,4 @@
-import { getExtension, formatMultiPartAssetFileName, } from '@bldr/core-browser';
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/core-browser';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
 import { SampleData } from './sample';

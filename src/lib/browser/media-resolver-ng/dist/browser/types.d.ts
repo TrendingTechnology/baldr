@@ -186,19 +186,12 @@ export declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout'
 export interface Sample {
     /**
      * The parent media file object.
-     *
      */
     asset: Asset;
     /**
      * Raw data coming from the YAML format.
      */
     yaml: SampleYamlFormat;
-    /**
-     * The start time in seconds. The sample is played from this start time
-     * using the `mediaElement` of the `asset`. It is the “zero” second
-     * for the sample.
-     */
-    startTimeSec: number;
     /**
      * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
      */
@@ -226,6 +219,16 @@ export interface Sample {
      * `this.asset.yaml.year`.
      */
     yearSafe?: string;
+    /**
+     * The start time in seconds. The sample is played from this start time
+     * using the `mediaElement` of the `asset`. It is the “zero” second
+     * for the sample.
+     */
+    startTimeSec: number;
+    /**
+     * The duration of the sample in seconds.
+     */
+    durationSec?: number;
     /**
      * Time in seconds to fade in.
      */

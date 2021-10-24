@@ -4,11 +4,14 @@ import { convertDurationToSeconds } from '@bldr/core-browser';
  */
 const defaultFadeInSec = 0.3;
 /**
-  * We never stop. Instead we fade out very short and smoothly.
-  */
+ * We never stop. Instead we fade out very short and smoothly.
+ */
 const defaultFadeOutSec = 1;
 export class SampleData {
     constructor(asset, yaml) {
+        /**
+         * @inheritdoc
+         */
         this.startTimeSec = 0;
         this.asset = asset;
         this.yaml = yaml;
@@ -16,29 +19,42 @@ export class SampleData {
             this.yaml.ref = 'complete';
         }
         if (this.yaml.startTime != null) {
-            this.startTimeSec = this.toSec(this.yaml.startTime);
+            this.startTimeSec = this.convertToSeconds(this.yaml.startTime);
         }
         if (this.yaml.duration != null && this.yaml.endTime != null) {
             throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.');
         }
+        if (this.yaml.duration != null) {
+            this.durationSec = this.convertToSeconds(this.yaml.duration);
+        }
+        else if (this.yaml.endTime != null) {
+            this.durationSec =
+                this.convertToSeconds(this.yaml.endTime) - this.startTimeSec;
+        }
         if (this.yaml.fadeIn != null) {
-            this.fadeInSec_ = this.toSec(this.yaml.fadeIn);
+            this.fadeInSec_ = this.convertToSeconds(this.yaml.fadeIn);
         }
         if (this.yaml.fadeOut != null) {
-            this.fadeOutSec_ = this.toSec(this.yaml.fadeOut);
+            this.fadeOutSec_ = this.convertToSeconds(this.yaml.fadeOut);
         }
         this.shortcut = this.yaml.shortcut;
     }
     /**
      * Convert strings to numbers, so we can use them as seconds.
      */
-    toSec(timeIntervaleString) {
+    convertToSeconds(timeIntervaleString) {
         return convertDurationToSeconds(timeIntervaleString);
     }
+    /**
+     * @inheritdoc
+     */
     get ref() {
         const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
         return `${this.asset.ref}#${ref}`;
     }
+    /**
+     * @inheritdoc
+     */
     get title() {
         if (this.yaml.title != null) {
             return this.yaml.title;
@@ -48,6 +64,9 @@ export class SampleData {
         }
         return 'komplett';
     }
+    /**
+     * @inheritdoc
+     */
     get titleSafe() {
         if (this.yaml.ref === 'complete') {
             return this.asset.titleSafe;
@@ -56,6 +75,9 @@ export class SampleData {
             return `${this.title} (${this.asset.titleSafe})`;
         }
     }
+    /**
+     * @inheritdoc
+     */
     get artistSafe() {
         let artist = null;
         let composer = null;
@@ -75,6 +97,9 @@ export class SampleData {
             return composer;
         }
     }
+    /**
+     * @inheritdoc
+     */
     get yearSafe() {
         if (this.asset.yaml.creationDate != null) {
             return this.asset.yaml.creationDate;
@@ -83,6 +108,9 @@ export class SampleData {
             return this.asset.yaml.year;
         }
     }
+    /**
+     * @inheritdoc
+     */
     get fadeInSec() {
         if (this.fadeInSec_ == null) {
             return defaultFadeInSec;
@@ -91,6 +119,9 @@ export class SampleData {
             return this.fadeInSec_;
         }
     }
+    /**
+     * @inheritdoc
+     */
     get fadeOutSec() {
         if (this.fadeOutSec_ == null) {
             return defaultFadeOutSec;

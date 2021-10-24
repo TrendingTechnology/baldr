@@ -7,14 +7,24 @@ import { convertDurationToSeconds } from '@bldr/core-browser'
 const defaultFadeInSec: number = 0.3
 
 /**
-  * We never stop. Instead we fade out very short and smoothly.
-  */
+ * We never stop. Instead we fade out very short and smoothly.
+ */
 const defaultFadeOutSec: number = 1
 
 export class SampleData implements Sample {
+  /**
+   * @inheritdoc
+   */
   asset: Asset
+
+  /**
+   * @inheritdoc
+   */
   yaml: SampleYamlFormat
 
+  /**
+   * @inheritdoc
+   */
   startTimeSec: number = 0
 
   /**
@@ -27,12 +37,17 @@ export class SampleData implements Sample {
    */
   private readonly fadeOutSec_?: number
 
+  /**
+   * @inheritdoc
+   */
   shortcut?: string
 
-  constructor (
-    asset: Asset,
-    yaml: SampleYamlFormat
-  ) {
+  /**
+   * @inheritdoc
+   */
+  durationSec?: number
+
+  constructor (asset: Asset, yaml: SampleYamlFormat) {
     this.asset = asset
 
     this.yaml = yaml
@@ -42,7 +57,7 @@ export class SampleData implements Sample {
     }
 
     if (this.yaml.startTime != null) {
-      this.startTimeSec = this.toSec(this.yaml.startTime)
+      this.startTimeSec = this.convertToSeconds(this.yaml.startTime)
     }
 
     if (this.yaml.duration != null && this.yaml.endTime != null) {
@@ -51,12 +66,19 @@ export class SampleData implements Sample {
       )
     }
 
+    if (this.yaml.duration != null) {
+      this.durationSec = this.convertToSeconds(this.yaml.duration)
+    } else if (this.yaml.endTime != null) {
+      this.durationSec =
+        this.convertToSeconds(this.yaml.endTime) - this.startTimeSec
+    }
+
     if (this.yaml.fadeIn != null) {
-      this.fadeInSec_ = this.toSec(this.yaml.fadeIn)
+      this.fadeInSec_ = this.convertToSeconds(this.yaml.fadeIn)
     }
 
     if (this.yaml.fadeOut != null) {
-      this.fadeOutSec_ = this.toSec(this.yaml.fadeOut)
+      this.fadeOutSec_ = this.convertToSeconds(this.yaml.fadeOut)
     }
 
     this.shortcut = this.yaml.shortcut
@@ -65,16 +87,22 @@ export class SampleData implements Sample {
   /**
    * Convert strings to numbers, so we can use them as seconds.
    */
-  private toSec (timeIntervaleString: string | number): number {
+  private convertToSeconds (timeIntervaleString: string | number): number {
     return convertDurationToSeconds(timeIntervaleString)
   }
 
-  get ref (): string {
+  /**
+   * @inheritdoc
+   */
+  public get ref (): string {
     const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
     return `${this.asset.ref}#${ref}`
   }
 
-  get title (): string {
+  /**
+   * @inheritdoc
+   */
+  public get title (): string {
     if (this.yaml.title != null) {
       return this.yaml.title
     }
@@ -84,7 +112,10 @@ export class SampleData implements Sample {
     return 'komplett'
   }
 
-  get titleSafe (): string {
+  /**
+   * @inheritdoc
+   */
+  public get titleSafe (): string {
     if (this.yaml.ref === 'complete') {
       return this.asset.titleSafe
     } else {
@@ -92,7 +123,10 @@ export class SampleData implements Sample {
     }
   }
 
-  get artistSafe (): string | undefined {
+  /**
+   * @inheritdoc
+   */
+  public get artistSafe (): string | undefined {
     let artist: string | null = null
     let composer: string | null = null
     if (this.asset.yaml.artist != null) {
@@ -110,7 +144,10 @@ export class SampleData implements Sample {
     }
   }
 
-  get yearSafe (): string | undefined {
+  /**
+   * @inheritdoc
+   */
+  public get yearSafe (): string | undefined {
     if (this.asset.yaml.creationDate != null) {
       return this.asset.yaml.creationDate
     } else if (this.asset.yaml.year != null) {
@@ -118,7 +155,10 @@ export class SampleData implements Sample {
     }
   }
 
-  get fadeInSec (): number {
+  /**
+   * @inheritdoc
+   */
+  public get fadeInSec (): number {
     if (this.fadeInSec_ == null) {
       return defaultFadeInSec
     } else {
@@ -126,6 +166,9 @@ export class SampleData implements Sample {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
   get fadeOutSec (): number {
     if (this.fadeOutSec_ == null) {
       return defaultFadeOutSec

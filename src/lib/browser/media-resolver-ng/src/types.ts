@@ -190,7 +190,12 @@ export interface Cache<T> {
 /**
  * The state of the current playback.
  */
-export type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped'
+export type PlaybackState =
+  | 'started'
+  | 'fadein'
+  | 'playing'
+  | 'fadeout'
+  | 'stopped'
 
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -218,7 +223,6 @@ export type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stop
 export interface Sample {
   /**
    * The parent media file object.
-   *
    */
   asset: Asset
 
@@ -226,13 +230,6 @@ export interface Sample {
    * Raw data coming from the YAML format.
    */
   yaml: SampleYamlFormat
-
-  /**
-   * The start time in seconds. The sample is played from this start time
-   * using the `mediaElement` of the `asset`. It is the “zero” second
-   * for the sample.
-   */
-  startTimeSec: number
 
   /**
    * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
@@ -268,6 +265,18 @@ export interface Sample {
   yearSafe?: string
 
   /**
+   * The start time in seconds. The sample is played from this start time
+   * using the `mediaElement` of the `asset`. It is the “zero” second
+   * for the sample.
+   */
+  startTimeSec: number
+
+  /**
+   * The duration of the sample in seconds.
+   */
+  durationSec?: number
+
+  /**
    * Time in seconds to fade in.
    */
   fadeInSec: number
@@ -278,9 +287,7 @@ export interface Sample {
   fadeOutSec: number
 }
 
-export interface SampleCollection extends Cache<Sample> {
-
-}
+export interface SampleCollection extends Cache<Sample> {}
 
 /**
  * Hold various data of a media file as class properties.
