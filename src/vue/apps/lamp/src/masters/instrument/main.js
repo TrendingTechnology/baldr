@@ -14,7 +14,8 @@ export default validateMasterSpec({
   propsDef: {
     instrumentId: {
       type: String,
-      description: 'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
+      description:
+        'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
     }
   },
   icon: {
@@ -38,7 +39,9 @@ export default validateMasterSpec({
       return convertInstrumentIdToMediaId(props.instrumentId)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](convertInstrumentIdToMediaId(props.instrumentId))
+      const asset = this.$store.getters['media/assetByUri'](
+        convertInstrumentIdToMediaId(props.instrumentId)
+      )
       const propsMain = { asset }
       return propsMain
     },

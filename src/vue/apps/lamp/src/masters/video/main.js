@@ -54,11 +54,6 @@ export default validateMasterSpec({
       }
       return result
     },
-    collectPropsPreview ({ propsMain }) {
-      return {
-        previewHttpUrl: propsMain.previewHttpUrl
-      }
-    },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {
       if (!this.isPublic) return

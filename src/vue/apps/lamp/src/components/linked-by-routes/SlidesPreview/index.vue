@@ -13,7 +13,7 @@
     :style="{ fontSize: size + 'vw' }"
   >
     <div v-if="presentation">
-      <display-controller/>
+      <!-- <display-controller/> -->
       <presentation-title/>
       <div v-if="slides">
         <span v-if="layoutCurrent.id === 'grid'">
