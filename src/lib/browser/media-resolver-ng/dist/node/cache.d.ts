@@ -4,7 +4,25 @@ export declare class Cache<T> implements Types.Cache<T> {
         [ref: string]: T;
     };
     constructor();
+    /**
+     * Add a media object to the cache.
+     *
+     * @param ref - A URI in the `ref` scheme. The URI must begin with the prefix
+     *   `ref:`
+     * @param mediaObject - The media object (a asset or a sample) to be stored.
+     *
+     * @returns True if the media object is stored, false if the object is already
+     * stored.
+     */
     add(ref: string, mediaObject: T): boolean;
+    /**
+     * Retrieve a media object.
+     *
+     * @param ref - A URI in the `ref` scheme. The URI must begin with the prefix
+     *   `ref:`
+     *
+     * @returns The stored media object or undefined.
+     */
     get(ref: string): T | undefined;
     /**
      * The size of the cache. Indicates how many media objects are in the cache.

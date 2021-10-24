@@ -41,7 +41,20 @@ export class Cache<T> implements Types.Cache<T> {
     this.cache = {}
   }
 
+  /**
+   * Add a media object to the cache.
+   *
+   * @param ref - A URI in the `ref` scheme. The URI must begin with the prefix
+   *   `ref:`
+   * @param mediaObject - The media object (a asset or a sample) to be stored.
+   *
+   * @returns True if the media object is stored, false if the object is already
+   * stored.
+   */
   add (ref: string, mediaObject: T): boolean {
+    if (!ref.startsWith('ref:')) {
+      throw new Error(`Missing prefix ref: ${ref}`)
+    }
     if (this.cache[ref] == null) {
       this.cache[ref] = mediaObject
       return true
@@ -49,6 +62,14 @@ export class Cache<T> implements Types.Cache<T> {
     return false
   }
 
+  /**
+   * Retrieve a media object.
+   *
+   * @param ref - A URI in the `ref` scheme. The URI must begin with the prefix
+   *   `ref:`
+   *
+   * @returns The stored media object or undefined.
+   */
   get (ref: string): T | undefined {
     if (this.cache[ref] != null) {
       return this.cache[ref]

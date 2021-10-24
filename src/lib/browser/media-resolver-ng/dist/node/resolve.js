@@ -191,7 +191,7 @@ class Resolver {
      * resolved.
      *
      * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-     *   sample fragment. If the fragment is ommited, the “complete” sample is
+     *   sample fragment. If the fragment is omitted, the “complete” sample is
      *   returned
      *
      * @returns A sample or undefined.
