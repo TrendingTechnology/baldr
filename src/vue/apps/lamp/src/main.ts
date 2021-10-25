@@ -106,7 +106,6 @@ import DynamicSelect from '@bldr/dynamic-select'
 import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 import Notification from '@bldr/notification'
-import config from '@bldr/config'
 
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
