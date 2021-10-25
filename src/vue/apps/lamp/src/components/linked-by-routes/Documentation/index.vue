@@ -7,7 +7,6 @@
     "
     b-ui-theme="default"
   >
-
     <!-- Documentation -->
     <h1>Dokumentation</h1>
 
@@ -31,16 +30,31 @@
             v-for="(rawYaml, masterName) in examples.masters"
             :key="masterName"
           >
-            <td><material-icon :name="getMasterByName(masterName).icon.name" :color="getMasterByName(masterName).icon.color"/></td>
             <td>
-              <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
+              <material-icon
+                :name="getMasterByName(masterName).icon.name"
+                :color="getMasterByName(masterName).icon.color"
+              />
+            </td>
+            <td>
+              <router-link
+                :to="{
+                  name: 'documentation-master',
+                  params: { master: masterName }
+                }"
+              >
                 {{ masterName }}
               </router-link>
             </td>
             <td>{{ getMasterByName(masterName).title }}</td>
             <td>
-              <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_master_${masterName}` } }">
-                <material-icon name="presentation"/>
+              <router-link
+                :to="{
+                  name: 'slides-preview',
+                  params: { presRef: `EP_master_${masterName}` }
+                }"
+              >
+                <material-icon name="presentation" />
               </router-link>
             </td>
           </tr>
@@ -66,13 +80,20 @@
             :key="exampleName"
           >
             <td>
-              <router-link :to="{ name: 'common-example', params: { exampleName } }">
+              <router-link
+                :to="{ name: 'common-example', params: { exampleName } }"
+              >
                 {{ exampleName }}
               </router-link>
             </td>
             <td>
-              <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_common_${exampleName}` } }">
-                <material-icon name="presentation"/>
+              <router-link
+                :to="{
+                  name: 'slides-preview',
+                  params: { presRef: `EP_common_${exampleName}` }
+                }"
+              >
+                <material-icon name="presentation" />
               </router-link>
             </td>
           </tr>
@@ -80,8 +101,7 @@
       </table>
     </section>
 
-    <section v-html="documentation">
-    </section>
+    <section v-html="documentation"></section>
   </div>
 </template>
 
@@ -116,30 +136,30 @@ export default class DocumentationOverview extends Vue {
     return rawYamlExamples
   }
 
-  getMasterByName (masterName: string)  {
+  getMasterByName (masterName: string) {
     return masterCollection.get(masterName)
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_documentation_overview {
-    font-size: 2vw;
-    width: 100vw;
-    height: 100vh;
+.vc_documentation_overview {
+  font-size: 2vw;
+  width: 100vw;
+  height: 100vh;
 
-    a {
-      cursor: pointer;
-    }
+  a {
+    cursor: pointer;
+  }
 
-    table {
-      width: 100%;
+  table {
+    width: 100%;
 
-      tbody {
-        tr:hover {
-          background-color: scale-color($gray, $lightness: 70%);
-        }
+    tbody {
+      tr:hover {
+        background-color: scale-color($gray, $lightness: 70%);
       }
     }
   }
+}
 </style>

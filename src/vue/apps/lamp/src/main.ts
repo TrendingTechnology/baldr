@@ -197,7 +197,9 @@ store.subscribe((mutation, state) => {
   if (mutation.type === 'media/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {
-      Vue.prototype.$showMessage.success(`hinzugefügt: <a href="${asset.routerLink}">${asset.filename}</a>.`)
+      Vue.prototype.$showMessage.success(
+        `hinzugefügt: <a href="${asset.routerLink}">${asset.filename}</a>.`
+      )
     }
   }
 })
