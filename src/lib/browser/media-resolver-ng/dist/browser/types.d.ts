@@ -157,10 +157,6 @@ export interface Cache<T> {
     reset: () => void;
 }
 /**
- * The state of the current playback.
- */
-export declare type PlaybackState = 'started' | 'fadein' | 'playing' | 'fadeout' | 'stopped';
-/**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
