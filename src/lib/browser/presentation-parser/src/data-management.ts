@@ -31,29 +31,6 @@ export class DataCutter {
   }
 
   /**
-   * Assert if the raw data object is empty.
-   */
-  public isEmpty (): boolean {
-    if (Object.keys(this.raw).length === 0) {
-      return true
-    }
-    return false
-  }
-
-  /**
-   * Throw an exception if the stored raw data is not empty yet.
-   *
-   * @throws {Error} If the stored raw data is not empty yet.
-   */
-  public checkEmpty (): void {
-    if (!this.isEmpty()) {
-      throw Error(
-        `Unknown properties in raw object: ${convertToString(this.raw)}`
-      )
-    }
-  }
-
-  /**
    * @throws {Error} If the value under the stored property name is not a string.
    */
   private checkString (propertyName: string): void {
@@ -111,5 +88,28 @@ export class DataCutter {
   public cutNotNull (propertyName: string): any {
     this.checkNull(propertyName)
     return this.cut(propertyName)
+  }
+
+  /**
+   * Assert if the raw data object is empty.
+   */
+  public isEmpty (): boolean {
+    if (Object.keys(this.raw).length === 0) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Throw an exception if the stored raw data is not empty yet.
+   *
+   * @throws {Error} If the stored raw data is not empty yet.
+   */
+  public checkEmpty (): void {
+    if (!this.isEmpty()) {
+      throw Error(
+        `Unknown properties in raw object: ${convertToString(this.raw)}`
+      )
+    }
   }
 }

@@ -8,6 +8,6 @@
     "lib": ["ES6", "ES2017", "DOM"],
     "moduleResolution": "node"
   },
-  "include": ["src/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

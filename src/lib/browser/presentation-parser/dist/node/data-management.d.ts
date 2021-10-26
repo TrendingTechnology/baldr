@@ -17,16 +17,6 @@ export declare class DataCutter {
      */
     private cut;
     /**
-     * Assert if the raw data object is empty.
-     */
-    isEmpty(): boolean;
-    /**
-     * Throw an exception if the stored raw data is not empty yet.
-     *
-     * @throws {Error} If the stored raw data is not empty yet.
-     */
-    checkEmpty(): void;
-    /**
      * @throws {Error} If the value under the stored property name is not a string.
      */
     private checkString;
@@ -42,4 +32,14 @@ export declare class DataCutter {
     cutStringNotNull(propertyName: string): string;
     cutNumberNotNull(propertyName: string): number;
     cutNotNull(propertyName: string): any;
+    /**
+     * Assert if the raw data object is empty.
+     */
+    isEmpty(): boolean;
+    /**
+     * Throw an exception if the stored raw data is not empty yet.
+     *
+     * @throws {Error} If the stored raw data is not empty yet.
+     */
+    checkEmpty(): void;
 }

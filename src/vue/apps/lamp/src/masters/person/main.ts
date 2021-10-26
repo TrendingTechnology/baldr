@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/person
  */
 
-import type { LampTypes } from '@bldr/type-definitions'
+import { LampTypes } from '@bldr/type-definitions'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
 import * as tex from '@bldr/tex-templates'
@@ -41,7 +41,9 @@ export default validateMasterSpec({
       return convertPersonIdToMediaId(props.personId)
     },
     collectPropsMain (props): LampTypes.StringIndexedData {
-      const asset = this.$store.getters['media/assetByUri'](convertPersonIdToMediaId(props.personId))
+      const asset = this.$store.getters['media/assetByUri'](
+        convertPersonIdToMediaId(props.personId)
+      )
       return { asset }
     },
     titleFromProps ({ propsMain }): string {
