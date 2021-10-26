@@ -84,8 +84,8 @@ describe('Package “@bldr/media-resolver”', function () {
     })
 
     it('sampleCache ref: Bolero_HB_Bolero', async function () {
-      // ref: Bolero_HB_Bolero
       const resolver = new Resolver()
+      // ref: Bolero_HB_Bolero
       await resolver.resolve('uuid:538204e4-6171-42d3-924c-b3f80a954a1a')
       const samples = resolver.exportSamples()
       assert.strictEqual(samples.length, 10)
@@ -101,6 +101,17 @@ describe('Package “@bldr/media-resolver”', function () {
   })
 
   describe('Class “Resolver()”', function () {
+    it('Method “reset()”', async function () {
+      const resolver = new Resolver()
+      // ref: Bolero_HB_Bolero
+      await resolver.resolve('uuid:538204e4-6171-42d3-924c-b3f80a954a1a')
+      assert.strictEqual(resolver.exportAssets().length, 1)
+      assert.strictEqual(resolver.exportSamples().length, 10)
+      resolver.reset()
+      assert.strictEqual(resolver.exportAssets().length, 0)
+      assert.strictEqual(resolver.exportSamples().length, 0)
+    })
+
     describe('Method “getAsset()”', function () {
       it('ref:', async function () {
         const asset = await resolver.getAsset(

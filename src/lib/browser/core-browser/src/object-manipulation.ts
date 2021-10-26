@@ -4,7 +4,7 @@
  * @module @bldr/core-browser/object-manipulation
  */
 
-import type { StringIndexedObject } from '@bldr/type-definitions'
+import { StringIndexedObject } from '@bldr/type-definitions'
 
 /**
  * Convert various data to a string. Meant for error messages. Objects
@@ -39,12 +39,14 @@ export function deepCopy (data: object): object {
 /**
  * A container class to store a deep copy of an object. This class can be
  * used to detect unexpected properties in an object indexed by strings.
+ *
+ * @TODO replace with src/lib/browser/presentation-parser/src/data-management.ts DataCutter
  */
 export class RawDataObject {
   /**
    * The raw data object.
    */
-  raw: {[key: string]: any}
+  raw: { [key: string]: any }
   constructor (rawData: object) {
     this.raw = deepCopy(rawData)
   }
@@ -70,7 +72,9 @@ export class RawDataObject {
    * Assert if the raw data object is empty.
    */
   isEmpty (): boolean {
-    if (Object.keys(this.raw).length === 0) return true
+    if (Object.keys(this.raw).length === 0) {
+      return true
+    }
     return false
   }
 
@@ -79,7 +83,9 @@ export class RawDataObject {
    */
   throwExecptionIfNotEmpty (): void {
     if (!this.isEmpty()) {
-      throw Error(`Unknown properties in raw object: ${convertToString(this.raw)}`)
+      throw Error(
+        `Unknown properties in raw object: ${convertToString(this.raw)}`
+      )
     }
   }
 }

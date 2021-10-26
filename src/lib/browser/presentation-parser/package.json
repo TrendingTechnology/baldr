@@ -32,8 +32,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/yaml": "*",
-    "@bldr/type-definitions": "*"
+    "@bldr/core-browser": "*",
+    "@bldr/type-definitions": "*",
+    "@bldr/yaml": "*"
   },
   "devDependencies": {
     "@bldr/config": "*",

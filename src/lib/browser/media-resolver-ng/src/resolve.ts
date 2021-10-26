@@ -96,11 +96,16 @@ class ShortcutManager {
  * for playable media files.
  */
 export class Resolver {
-  httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media')
-  sampleCache: SampleCache
-  assetCache: AssetCache
-  uriTranslator: UriTranslator
-  shortcutManager: ShortcutManager
+  private readonly httpRequest = makeHttpRequestInstance(
+    config,
+    'automatic',
+    '/api/media'
+  )
+
+  private readonly sampleCache: SampleCache
+  private readonly assetCache: AssetCache
+  private readonly uriTranslator: UriTranslator
+  private readonly shortcutManager: ShortcutManager
 
   /**
    * Assets with linked assets have to be cached. For example: many
@@ -313,5 +318,15 @@ export class Resolver {
    */
   translateToAssetRef (uri: string): string | undefined {
     return this.uriTranslator.getRef(uri, true)
+  }
+
+  /**
+   * Reset all delegated caches.
+   */
+  reset (): void {
+    this.sampleCache.reset()
+    this.assetCache.reset()
+    this.uriTranslator.reset()
+    this.shortcutManager.reset()
   }
 }

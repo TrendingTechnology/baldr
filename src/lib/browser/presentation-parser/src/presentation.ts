@@ -1,6 +1,8 @@
 import { convertFromYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
 
+import { DataCutter } from './data-management'
+
 /**
  * @inheritdoc
  */
@@ -46,47 +48,16 @@ class Meta implements LampTypes.PresentationMeta {
   curriculumUrl?: string
 
   constructor (raw: any) {
-    this.ref = this.getStringProperty(raw, 'ref')
-    this.uuid = this.getStringProperty(raw, 'uuid')
-    this.title = this.getStringProperty(raw, 'title')
-    this.subject = this.getStringProperty(raw, 'subject')
-    this.curriculum = this.getStringProperty(raw, 'curriculum')
-
-    this.checkNull(raw, 'grade')
-    this.checkNumber(raw, 'grade')
-    this.grade = raw.grade
-
-    if (raw.curriculumUrl !== null && typeof raw.curriculumUrl === 'string') {
-      this.curriculumUrl = raw.curriculumUrl
-    }
-
-    if (raw.subtitle !== null && typeof raw.subtitle === 'string') {
-      this.subtitle = raw.subtitle
-    }
-  }
-
-  private checkString (raw: any, propertyName: string) {
-    if (typeof raw[propertyName] !== 'string') {
-      throw new Error(`meta.${propertyName} is not a string.`)
-    }
-  }
-
-  private checkNumber (raw: any, propertyName: string) {
-    if (typeof raw[propertyName] !== 'number') {
-      throw new Error(`meta.${propertyName} is not a number.`)
-    }
-  }
-
-  private checkNull (raw: any, propertyName: string): void {
-    if (raw[propertyName] == null) {
-      throw new Error(`meta.${propertyName} must not be zero.`)
-    }
-  }
-
-  private getStringProperty (raw: any, propertyName: string): string {
-    this.checkNull(raw, propertyName)
-    this.checkString(raw, propertyName)
-    return raw[propertyName]
+    const data = new DataCutter(raw)
+    this.ref = data.cutStringNotNull('ref')
+    this.uuid = data.cutStringNotNull('uuid')
+    this.title = data.cutStringNotNull('title')
+    this.subtitle = data.cutString('subtitle')
+    this.subject = data.cutStringNotNull('subject')
+    this.grade = data.cutNumberNotNull('grade')
+    this.curriculum = data.cutStringNotNull('curriculum')
+    this.curriculumUrl = data.cutString('curriculumUrl')
+    data.checkEmpty()
   }
 }
 
@@ -94,10 +65,7 @@ export class Presentation {
   meta: LampTypes.PresentationMeta
   constructor (yamlString: string) {
     const raw = convertFromYaml(yamlString)
-    if (raw.meta == null) {
-      throw new Error('No meta informations found.')
-    }
-
-    this.meta = new Meta(raw.meta)
+    const data = new DataCutter(raw)
+    this.meta = new Meta(data.cutNotNull('meta'))
   }
 }

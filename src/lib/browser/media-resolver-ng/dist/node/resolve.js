@@ -282,5 +282,14 @@ class Resolver {
     translateToAssetRef(uri) {
         return this.uriTranslator.getRef(uri, true);
     }
+    /**
+     * Reset all delegated caches.
+     */
+    reset() {
+        this.sampleCache.reset();
+        this.assetCache.reset();
+        this.uriTranslator.reset();
+        this.shortcutManager.reset();
+    }
 }
 exports.Resolver = Resolver;

@@ -1,40 +1,16 @@
-import { UriTranslator, Cache } from './cache';
 import { Sample, Asset } from './types';
 declare type UrisSpec = string | string[] | Set<string>;
-declare class SampleCache extends Cache<Sample> {
-    uriTranslator: UriTranslator;
-    constructor(translator: UriTranslator);
-    get(uuidOrRef: string): Sample | undefined;
-}
-declare class AssetCache extends Cache<Asset> {
-    uriTranslator: UriTranslator;
-    constructor(translator: UriTranslator);
-    add(ref: string, asset: Asset): boolean;
-    get(uuidOrRef: string): Asset | undefined;
-}
-/**
- * Manager to set shortcuts on  three MIME types (audio, video, image).
- */
-declare class ShortcutManager {
-    private readonly audio;
-    private readonly video;
-    private readonly image;
-    constructor();
-    setOnSample(sample: Sample): void;
-    setOnAsset(asset: Asset): void;
-    reset(): void;
-}
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
  * for playable media files.
  */
 export declare class Resolver {
-    httpRequest: import("@bldr/http-request").HttpRequest;
-    sampleCache: SampleCache;
-    assetCache: AssetCache;
-    uriTranslator: UriTranslator;
-    shortcutManager: ShortcutManager;
+    private readonly httpRequest;
+    private readonly sampleCache;
+    private readonly assetCache;
+    private readonly uriTranslator;
+    private readonly shortcutManager;
     /**
      * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.
@@ -117,5 +93,9 @@ export declare class Resolver {
      * @returns A asset URI (without the fragment) in the `ref` scheme.
      */
     translateToAssetRef(uri: string): string | undefined;
+    /**
+     * Reset all delegated caches.
+     */
+    reset(): void;
 }
 export {};
