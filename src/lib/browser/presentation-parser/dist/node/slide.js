@@ -30,6 +30,7 @@ class Slide {
     detectMaster(data) {
         const masterNames = Object.keys(_master_1.masterCollection);
         const intersection = masterNames.filter(masterName => data.keys.includes(masterName));
+        console.log(data);
         if (intersection.length === 0) {
             throw new Error(`No master slide found: ${core_browser_1.convertToString(data.raw)}`);
         }

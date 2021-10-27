@@ -1,5 +1,6 @@
 import { convertFromYaml } from '@bldr/yaml';
 import { DataCutter } from './data-management';
+import { SlideCollection } from './slide-collection';
 /**
  * @inheritdoc
  */
@@ -22,5 +23,7 @@ export class Presentation {
         const raw = convertFromYaml(yamlString);
         const data = new DataCutter(raw);
         this.meta = new Meta(data.cutNotNull('meta'));
+        this.slides = new SlideCollection(data.cutNotNull('slides'));
+        data.checkEmpty();
     }
 }

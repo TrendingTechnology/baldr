@@ -17,7 +17,7 @@ const person_1 = require("./person");
 const question_1 = require("./question");
 const quote_1 = require("./quote");
 const sample_list_1 = require("./sample-list");
-const score_1 = require("./score");
+const score_sample_1 = require("./score-sample");
 const section_1 = require("./section");
 const song_1 = require("./song");
 const task_1 = require("./task");
@@ -44,7 +44,7 @@ exports.masterCollection = {
     question: new question_1.QuestionMaster(),
     quote: new quote_1.QuoteMaster(),
     sampleList: new sample_list_1.SampleListMaster(),
-    score: new score_1.ScoreMaster(),
+    scoreSample: new score_sample_1.ScoreSampleMaster(),
     section: new section_1.SectionMaster(),
     song: new song_1.SongMaster(),
     task: new task_1.TaskMaster(),

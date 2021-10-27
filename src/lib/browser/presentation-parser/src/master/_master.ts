@@ -14,7 +14,7 @@ import { PersonMaster } from './person'
 import { QuestionMaster } from './question'
 import { QuoteMaster } from './quote'
 import { SampleListMaster } from './sample-list'
-import { ScoreMaster } from './score'
+import { ScoreSampleMaster } from './score-sample'
 import { SectionMaster } from './section'
 import { SongMaster } from './song'
 import { TaskMaster } from './task'
@@ -51,7 +51,7 @@ export const masterCollection: { [masterName: string]: Master } = {
   question: new QuestionMaster(),
   quote: new QuoteMaster(),
   sampleList: new SampleListMaster(),
-  score: new ScoreMaster(),
+  scoreSample: new ScoreSampleMaster(),
   section: new SectionMaster(),
   song: new SongMaster(),
   task: new TaskMaster(),

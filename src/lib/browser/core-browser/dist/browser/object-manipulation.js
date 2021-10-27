@@ -13,11 +13,11 @@ export function convertToString(data) {
     if (data === null) {
         return 'null';
     }
-    else if (data != null) {
-        return typeof data;
-    }
     else if (typeof data === 'string') {
         return data;
+    }
+    else if (typeof data === 'number') {
+        return data.toString();
     }
     else if (Array.isArray(data)) {
         return data.toString();
@@ -38,6 +38,8 @@ export function deepCopy(data) {
 /**
  * A container class to store a deep copy of an object. This class can be
  * used to detect unexpected properties in an object indexed by strings.
+ *
+ * @TODO replace with src/lib/browser/presentation-parser/src/data-management.ts DataCutter
  */
 export class RawDataObject {
     constructor(rawData) {
@@ -63,8 +65,9 @@ export class RawDataObject {
      * Assert if the raw data object is empty.
      */
     isEmpty() {
-        if (Object.keys(this.raw).length === 0)
+        if (Object.keys(this.raw).length === 0) {
             return true;
+        }
         return false;
     }
     /**

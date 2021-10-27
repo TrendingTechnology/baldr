@@ -22,8 +22,8 @@ class DataCutter {
      */
     cut(propertyName) {
         if ({}.hasOwnProperty.call(this.raw, propertyName)) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             const result = this.raw[propertyName];
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.raw[propertyName];
             return result;
         }

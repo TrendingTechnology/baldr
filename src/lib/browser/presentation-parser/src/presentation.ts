@@ -2,6 +2,7 @@ import { convertFromYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
 
 import { DataCutter } from './data-management'
+import { SlideCollection } from './slide-collection'
 
 /**
  * @inheritdoc
@@ -63,10 +64,13 @@ class Meta implements LampTypes.PresentationMeta {
 
 export class Presentation {
   meta: LampTypes.PresentationMeta
+  slides: SlideCollection
 
   constructor (yamlString: string) {
     const raw = convertFromYaml(yamlString)
     const data = new DataCutter(raw)
     this.meta = new Meta(data.cutNotNull('meta'))
+    this.slides = new SlideCollection(data.cutNotNull('slides'))
+    data.checkEmpty()
   }
 }

@@ -3,7 +3,7 @@
  *
  * @module @bldr/core-browser/object-manipulation
  */
-import type { StringIndexedObject } from '@bldr/type-definitions';
+import { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Convert various data to a string. Meant for error messages. Objects
  * are converted to a string using `JSON.stringify`
@@ -21,6 +21,8 @@ export declare function deepCopy(data: object): object;
 /**
  * A container class to store a deep copy of an object. This class can be
  * used to detect unexpected properties in an object indexed by strings.
+ *
+ * @TODO replace with src/lib/browser/presentation-parser/src/data-management.ts DataCutter
  */
 export declare class RawDataObject {
     /**

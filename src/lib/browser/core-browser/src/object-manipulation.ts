@@ -15,10 +15,10 @@ import { StringIndexedObject } from '@bldr/type-definitions'
 export function convertToString (data: any): string {
   if (data === null) {
     return 'null'
-  } else if (data != null) {
-    return typeof data
   } else if (typeof data === 'string') {
     return data
+  } else if (typeof data === 'number') {
+    return data.toString()
   } else if (Array.isArray(data)) {
     return data.toString()
   } else {

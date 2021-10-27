@@ -40,6 +40,7 @@
     "@bldr/media-manager": "*",
     "@bldr/media-server": "*",
     "@bldr/open-with": "*",
+    "@bldr/presentation-parser": "*",
     "@bldr/seating-plan-converter": "*",
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
