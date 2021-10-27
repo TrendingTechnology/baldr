@@ -10,6 +10,9 @@ class DataCutter {
     constructor(rawData) {
         this.raw = core_browser_1.deepCopy(rawData);
     }
+    get keys() {
+        return Object.keys(this.raw);
+    }
     /**
      * Cut a property from the raw object, that means delete the property.
      *

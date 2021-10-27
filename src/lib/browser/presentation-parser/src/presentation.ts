@@ -63,6 +63,7 @@ class Meta implements LampTypes.PresentationMeta {
 
 export class Presentation {
   meta: LampTypes.PresentationMeta
+
   constructor (yamlString: string) {
     const raw = convertFromYaml(yamlString)
     const data = new DataCutter(raw)

@@ -1,4 +1,5 @@
 import { DataCutter } from './data-management';
+import { Master } from './master/_master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -25,6 +26,20 @@ export declare class SlideMetaData {
     constructor(data: DataCutter);
 }
 export declare class Slide {
+    /**
+     * The slide number
+     */
+    no: number;
+    /**
+     * The level in the hierarchial slide tree.
+     */
+    level: number;
+    /**
+     * An array of child slide objects.
+     */
+    slides?: Slide[];
     metaData: SlideMetaData;
-    constructor(raw: any);
+    master: Master;
+    constructor(raw: any, no: number, level: number);
+    private detectMaster;
 }

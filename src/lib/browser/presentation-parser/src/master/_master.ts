@@ -34,7 +34,7 @@ export abstract class Master {
   abstract displayName: string
 }
 
-export const masterCollection = {
+export const masterCollection: { [masterName: string]: Master } = {
   audio: new AudioMaster(),
   camera: new CameraMaster(),
   cloze: new ClozeMaster(),

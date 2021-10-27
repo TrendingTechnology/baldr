@@ -8,6 +8,7 @@ export declare class DataCutter {
      */
     raw: any;
     constructor(rawData: object);
+    get keys(): string[];
     /**
      * Cut a property from the raw object, that means delete the property.
      *

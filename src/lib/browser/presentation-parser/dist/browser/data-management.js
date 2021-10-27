@@ -7,6 +7,9 @@ export class DataCutter {
     constructor(rawData) {
         this.raw = deepCopy(rawData);
     }
+    get keys() {
+        return Object.keys(this.raw);
+    }
     /**
      * Cut a property from the raw object, that means delete the property.
      *

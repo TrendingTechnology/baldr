@@ -1,15 +1,6 @@
 import { DataCutter } from './data-management';
-/**
- * Get the intersection between all master names and the slide keys.
- *
- * This method can be used to check that a slide object uses only
- * one master slide.
- *
- * @return The intersection as an array
- */
-function intersect(array1, array2) {
-    return array1.filter(n => array2.includes(n));
-}
+import { convertToString } from '@bldr/core-browser';
+import { masterCollection } from './master/_master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -25,8 +16,22 @@ export class SlideMetaData {
     }
 }
 export class Slide {
-    constructor(raw) {
+    constructor(raw, no, level) {
+        this.no = no;
+        this.level = level;
         const data = new DataCutter(raw);
         this.metaData = new SlideMetaData(data);
+        this.master = this.detectMaster(data);
+    }
+    detectMaster(data) {
+        const masterNames = Object.keys(masterCollection);
+        const intersection = masterNames.filter(masterName => data.keys.includes(masterName));
+        if (intersection.length === 0) {
+            throw new Error(`No master slide found: ${convertToString(data.raw)}`);
+        }
+        if (intersection.length > 1) {
+            throw new Error(`Each slide must have only one master slide: ${convertToString(data.raw)}`);
+        }
+        return masterCollection[intersection[0]];
     }
 }

@@ -8,10 +8,14 @@ export class DataCutter {
   /**
    * The raw data object.
    */
-  raw: any
+  public raw: any
 
   constructor (rawData: object) {
     this.raw = deepCopy(rawData)
+  }
+
+  public get keys (): string[] {
+    return Object.keys(this.raw)
   }
 
   /**
@@ -23,8 +27,8 @@ export class DataCutter {
    */
   private cut (propertyName: string): any {
     if ({}.hasOwnProperty.call(this.raw, propertyName)) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       const result = this.raw[propertyName]
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.raw[propertyName]
       return result
     }
