@@ -23,7 +23,7 @@ function parsePresentation (relPath) {
 }
 
 describe('Package “@bldr/presentation-parser”', function () {
-  it('Function parse()', function () {
+  it('presentation.meta', function () {
     const presentation = parsePresentation(
       '12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen'
     )
@@ -47,5 +47,22 @@ describe('Package “@bldr/presentation-parser”', function () {
       'Interpreten und Interpretationen / Konzertierende Musiker'
     )
     assert.strictEqual(presentation.meta.grade, 12)
+  })
+
+  it('presentation.slides', function () {
+    const presentation = parsePresentation('12/20_Tradition/10_Umgang-Tradition/10_Futurismus')
+    const slides = presentation.slides
+    assert.strictEqual(slides.flat[0].no, 1)
+    assert.strictEqual(slides.flat[0].level, 1)
+
+    assert.strictEqual(slides.flat[0].master.name, 'document')
+
+    // section: Luigi Russolo
+    const slide = slides.tree[4]
+    assert.strictEqual(slide.no, 5)
+
+    assert.strictEqual(slide.slides[0].master.name, 'task')
+    assert.strictEqual(slide.slides[0].level, 2)
+    assert.strictEqual(slide.slides[1].master.name, 'scoreSample')
   })
 })
