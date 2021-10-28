@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlideCollection = void 0;
 const slide_1 = require("./slide");
 /**
- * A container class to store all slide object of a presentation.
+ * A container class to store all slide objects of a presentation.
  */
 class SlideCollection {
     /**

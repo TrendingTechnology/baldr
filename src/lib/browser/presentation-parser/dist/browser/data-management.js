@@ -11,21 +11,6 @@ export class DataCutter {
         return Object.keys(this.raw);
     }
     /**
-     * Cut a property from the raw object, that means delete the property.
-     *
-     * @param propertyName - The property of the object.
-     *
-     * @returns The data stored in the property
-     */
-    cut(propertyName) {
-        if ({}.hasOwnProperty.call(this.raw, propertyName)) {
-            const result = this.raw[propertyName];
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.raw[propertyName];
-            return result;
-        }
-    }
-    /**
      * @throws {Error} If the value under the stored property name is not a string.
      */
     checkString(propertyName) {
@@ -49,26 +34,41 @@ export class DataCutter {
             throw new Error(`The property “${propertyName}” must not be null.`);
         }
     }
+    /**
+     * Cut a property from the raw object, that means delete the property.
+     *
+     * @param propertyName - The property of the object.
+     *
+     * @returns The data stored in the property
+     */
+    cutAny(propertyName) {
+        if (this.raw[propertyName] == null) {
+            const result = this.raw[propertyName];
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete this.raw[propertyName];
+            return result;
+        }
+    }
     cutString(propertyName) {
         if (this.raw[propertyName] == null) {
             return;
         }
         this.checkString(propertyName);
-        return this.cut(propertyName);
+        return this.cutAny(propertyName);
     }
     cutStringNotNull(propertyName) {
         this.checkNull(propertyName);
         this.checkString(propertyName);
-        return this.cut(propertyName);
+        return this.cutAny(propertyName);
     }
     cutNumberNotNull(propertyName) {
         this.checkNull(propertyName);
         this.checkNumber(propertyName);
-        return this.cut(propertyName);
+        return this.cutAny(propertyName);
     }
     cutNotNull(propertyName) {
         this.checkNull(propertyName);
-        return this.cut(propertyName);
+        return this.cutAny(propertyName);
     }
     /**
      * Assert if the raw data object is empty.

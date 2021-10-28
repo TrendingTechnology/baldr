@@ -1,6 +1,6 @@
 import { DataCutter } from './data-management';
 import { convertToString } from '@bldr/core-browser';
-import { masterCollection } from './master/_master';
+import { masterCollection } from './master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -22,6 +22,9 @@ export class Slide {
         const data = new DataCutter(raw);
         this.metaData = new SlideMetaData(data);
         this.master = this.detectMaster(data);
+        if (this.master.normalizeFields != null) {
+            this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
+        }
     }
     detectMaster(data) {
         const masterNames = Object.keys(masterCollection);

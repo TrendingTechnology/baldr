@@ -10,14 +10,6 @@ export declare class DataCutter {
     constructor(rawData: object);
     get keys(): string[];
     /**
-     * Cut a property from the raw object, that means delete the property.
-     *
-     * @param propertyName - The property of the object.
-     *
-     * @returns The data stored in the property
-     */
-    private cut;
-    /**
      * @throws {Error} If the value under the stored property name is not a string.
      */
     private checkString;
@@ -29,6 +21,14 @@ export declare class DataCutter {
      * @throws {Error} If the value under the stored property name is null.
      */
     private checkNull;
+    /**
+     * Cut a property from the raw object, that means delete the property.
+     *
+     * @param propertyName - The property of the object.
+     *
+     * @returns The data stored in the property
+     */
+    cutAny(propertyName: string): any;
     cutString(propertyName: string): string | undefined;
     cutStringNotNull(propertyName: string): string;
     cutNumberNotNull(propertyName: string): number;

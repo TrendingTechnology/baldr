@@ -1,6 +1,6 @@
 import { Slide } from './slide';
 /**
- * A container class to store all slide object of a presentation.
+ * A container class to store all slide objects of a presentation.
  */
 export declare class SlideCollection {
     /**

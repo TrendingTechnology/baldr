@@ -19,22 +19,6 @@ export class DataCutter {
   }
 
   /**
-   * Cut a property from the raw object, that means delete the property.
-   *
-   * @param propertyName - The property of the object.
-   *
-   * @returns The data stored in the property
-   */
-  private cut (propertyName: string): any {
-    if ({}.hasOwnProperty.call(this.raw, propertyName)) {
-      const result = this.raw[propertyName]
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this.raw[propertyName]
-      return result
-    }
-  }
-
-  /**
    * @throws {Error} If the value under the stored property name is not a string.
    */
   private checkString (propertyName: string): void {
@@ -69,29 +53,45 @@ export class DataCutter {
     }
   }
 
+  /**
+   * Cut a property from the raw object, that means delete the property.
+   *
+   * @param propertyName - The property of the object.
+   *
+   * @returns The data stored in the property
+   */
+  public cutAny (propertyName: string): any {
+    if (this.raw[propertyName] == null) {
+      const result = this.raw[propertyName]
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.raw[propertyName]
+      return result
+    }
+  }
+
   public cutString (propertyName: string): string | undefined {
     if (this.raw[propertyName] == null) {
       return
     }
     this.checkString(propertyName)
-    return this.cut(propertyName)
+    return this.cutAny(propertyName)
   }
 
   public cutStringNotNull (propertyName: string): string {
     this.checkNull(propertyName)
     this.checkString(propertyName)
-    return this.cut(propertyName)
+    return this.cutAny(propertyName)
   }
 
   public cutNumberNotNull (propertyName: string): number {
     this.checkNull(propertyName)
     this.checkNumber(propertyName)
-    return this.cut(propertyName)
+    return this.cutAny(propertyName)
   }
 
   public cutNotNull (propertyName: string): any {
     this.checkNull(propertyName)
-    return this.cut(propertyName)
+    return this.cutAny(propertyName)
   }
 
   /**
