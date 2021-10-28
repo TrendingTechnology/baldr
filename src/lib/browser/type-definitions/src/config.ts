@@ -85,6 +85,11 @@ interface MediaServerConfiguration {
   archivePaths: string[]
 
   /**
+   * Decrypted EncFS mount point of the exams collection.
+   */
+  examPath: string
+
+  /**
    * `serverway`
    */
   sshAliasRemote: string
