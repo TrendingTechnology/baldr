@@ -190,5 +190,11 @@ export interface Configuration {
      * The name of the school, for example `Altes-Gymnasium, Auerbauch`.
      */
     school: string
+
+    /**
+     * Public website for the computer science lessons. For example:
+     * `https://josef-friedrich.github.io/informatik/`
+     */
+    computerScienceWebsite: string
   }
 }
