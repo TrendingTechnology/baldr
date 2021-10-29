@@ -1,5 +1,5 @@
 import { DataCutter } from './data-management';
-import { Master, FieldData } from './masters/_types';
+import { Master, FieldData } from './master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -43,7 +43,7 @@ export declare class Slide {
     /**
      * In this attribute we save the normalized field data of a slide.
      */
-    fields?: FieldData;
+    fields: FieldData;
     /**
      * Props (properties) to send to the main Vue master component.
      */
@@ -52,6 +52,15 @@ export declare class Slide {
      * Props (properties) to send to the preview Vue master component.
      */
     propsPreview?: any;
+    /**
+     * A list of media URIs.
+     */
+    mandatoryMediaUris?: Set<string>;
+    /**
+     * Media URIs that do not have to exist.
+     */
+    optionalMediaUris?: Set<string>;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
+    private collectMediaUris;
 }

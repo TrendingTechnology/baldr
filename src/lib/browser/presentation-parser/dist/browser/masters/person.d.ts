@@ -1,4 +1,4 @@
-import { Master } from './_types';
+import { Master } from '../master';
 interface FieldData {
     personId: string;
 }
@@ -12,6 +12,8 @@ export declare class PersonMaster extends Master {
             description: string;
         };
     };
-    normalizeFields(props: RawFieldData): FieldData;
+    normalizeFields(fields: RawFieldData): FieldData;
+    collectMandatoryMediaUris(fields: FieldData): string;
+    private convertPersonIdToMediaUri;
 }
 export {};

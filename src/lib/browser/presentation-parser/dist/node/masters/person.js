@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonMaster = void 0;
-const _types_1 = require("./_types");
-class PersonMaster extends _types_1.Master {
+const master_1 = require("../master");
+class PersonMaster extends master_1.Master {
     constructor() {
         super(...arguments);
         this.name = 'person';
@@ -14,13 +14,19 @@ class PersonMaster extends _types_1.Master {
             }
         };
     }
-    normalizeFields(props) {
-        if (typeof props === 'string') {
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
             return {
-                personId: props
+                personId: fields
             };
         }
-        return props;
+        return fields;
+    }
+    collectMandatoryMediaUris(fields) {
+        return this.convertPersonIdToMediaUri(fields.personId);
+    }
+    convertPersonIdToMediaUri(personId) {
+        return `ref:PR_${personId}`;
     }
 }
 exports.PersonMaster = PersonMaster;

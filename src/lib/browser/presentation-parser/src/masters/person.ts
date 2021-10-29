@@ -1,4 +1,4 @@
-import { Master } from './_types'
+import { Master } from '../master'
 
 interface FieldData {
   personId: string
@@ -17,12 +17,20 @@ export class PersonMaster extends Master {
     }
   }
 
-  normalizeFields (props: RawFieldData) {
-    if (typeof props === 'string') {
+  normalizeFields (fields: RawFieldData) {
+    if (typeof fields === 'string') {
       return {
-        personId: props
+        personId: fields
       }
     }
-    return props
+    return fields
+  }
+
+  collectMandatoryMediaUris (fields: FieldData): string {
+    return this.convertPersonIdToMediaUri(fields.personId)
+  }
+
+  private convertPersonIdToMediaUri (personId: string): string {
+    return `ref:PR_${personId}`
   }
 }

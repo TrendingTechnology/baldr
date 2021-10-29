@@ -22,7 +22,7 @@ import { VideoMaster } from './masters/video'
 import { WikipediaMaster } from './masters/wikipedia'
 import { YoutubeMaster } from './masters/youtube'
 
-import { Master } from './masters/_types'
+import { Master } from './master'
 
 export const masterCollection: { [masterName: string]: Master } = {
   audio: new AudioMaster(),

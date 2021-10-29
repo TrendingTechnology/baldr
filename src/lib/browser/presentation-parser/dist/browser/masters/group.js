@@ -1,4 +1,4 @@
-import { Master } from './_types';
+import { Master } from '../master';
 export class GroupMaster extends Master {
     constructor() {
         super(...arguments);

@@ -1,48 +1,66 @@
-import { AudioMaster } from './masters/audio';
-import { CameraMaster } from './masters/camera';
-import { ClozeMaster } from './masters/cloze';
-import { CounterMaster } from './masters/counter';
-import { DocumentMaster } from './masters/document';
-import { EditorMaster } from './masters/editor';
-import { GenericMaster } from './masters/generic';
-import { GroupMaster } from './masters/group';
-import { ImageMaster } from './masters/image';
-import { InstrumentMaster } from './masters/instrument';
-import { InteractiveGraphicMaster } from './masters/interactive-graphic';
-import { NoteMaster } from './masters/note';
-import { PersonMaster } from './masters/person';
-import { QuestionMaster } from './masters/question';
-import { QuoteMaster } from './masters/quote';
-import { SampleListMaster } from './masters/sample-list';
-import { ScoreSampleMaster } from './masters/score-sample';
-import { SectionMaster } from './masters/section';
-import { SongMaster } from './masters/song';
-import { TaskMaster } from './masters/task';
-import { VideoMaster } from './masters/video';
-import { WikipediaMaster } from './masters/wikipedia';
-import { YoutubeMaster } from './masters/youtube';
-export const masterCollection = {
-    audio: new AudioMaster(),
-    camera: new CameraMaster(),
-    cloze: new ClozeMaster(),
-    counter: new CounterMaster(),
-    document: new DocumentMaster(),
-    editor: new EditorMaster(),
-    generic: new GenericMaster(),
-    group: new GroupMaster(),
-    image: new ImageMaster(),
-    instrument: new InstrumentMaster(),
-    interactiveGraphic: new InteractiveGraphicMaster(),
-    note: new NoteMaster(),
-    person: new PersonMaster(),
-    question: new QuestionMaster(),
-    quote: new QuoteMaster(),
-    sampleList: new SampleListMaster(),
-    scoreSample: new ScoreSampleMaster(),
-    section: new SectionMaster(),
-    song: new SongMaster(),
-    task: new TaskMaster(),
-    video: new VideoMaster(),
-    wikipedia: new WikipediaMaster(),
-    youtube: new YoutubeMaster()
-};
+export class Master {
+    /**
+     * The result must correspond to the fields definition.
+     *
+     * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
+     *
+     * ```js
+     * normalizeFields (fields) {
+     *   if (typeof fields === 'string') {
+     *     return {
+     *       markup: fields
+     *     }
+     *   }
+     * }
+     * ```
+     */
+    normalizeFields(fields) {
+        return fields;
+    }
+    /**
+     * Retrieve the media URIs which have to be resolved.
+     *
+     * Call the master funtion `resolveMediaUris` and collect the media URIs.
+     * (like [id:beethoven, ref:mozart]). Extract media URIs from
+     * the text props.
+     *
+     * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+     *
+     * ```js
+     * // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
+     * collectMediaUris (fields) {
+     *   return fields.src
+     * }
+     * ```
+     */
+    collectMandatoryMediaUris(fields) {
+        return;
+    }
+    /**
+     * Check if the handed over media URIs can be resolved. Throw no errors, if
+     * the media assets are not present. This hook is used in the YouTube master
+     * slide. This master slide uses the online version, if no offline video could
+     * be resolved.
+     */
+    collectOptionalMediaUris(fields) {
+        return;
+    }
+    static convertToSet(uris) {
+        if (uris == null) {
+            return;
+        }
+        if (typeof uris === 'string') {
+            return new Set([uris]);
+        }
+        else if (Array.isArray(uris)) {
+            return new Set(uris);
+        }
+        return uris;
+    }
+    collectMediaUris(fields) {
+        return {
+            mandatory: Master.convertToSet(this.collectMandatoryMediaUris(fields)),
+            optional: Master.convertToSet(this.collectOptionalMediaUris(fields))
+        };
+    }
+}

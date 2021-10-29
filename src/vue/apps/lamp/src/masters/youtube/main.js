@@ -76,10 +76,14 @@ export default validateMasterSpec({
       return youtubeIdToUri(props.id)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
-      checkAvailability(props.id).then((result) => {
+      const asset = this.$store.getters['media/assetByUri'](
+        youtubeIdToUri(props.id)
+      )
+      checkAvailability(props.id).then(result => {
         if (!result) {
-          this.$showMessage.error(`The YouTube video “${props.id}” is no longer available online.`)
+          this.$showMessage.error(
+            `The YouTube video “${props.id}” is no longer available online.`
+          )
         }
       })
       const propsMain = Object.assign({}, props)
@@ -87,7 +91,10 @@ export default validateMasterSpec({
       if (asset != null) {
         if (props.heading == null && asset.yaml.heading != null) {
           propsMain.heading = convertMarkdownToHtml(asset.yaml.heading)
-        } else if (props.heading == null && asset.yaml.originalHeading != null) {
+        } else if (
+          props.heading == null &&
+          asset.yaml.originalHeading != null
+        ) {
           propsMain.heading = convertMarkdownToHtml(asset.yaml.originalHeading)
         }
         if (props.info == null && asset.yaml.info != null) {

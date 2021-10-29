@@ -1,4 +1,4 @@
-import { Master } from './_types';
+import { Master } from '../master';
 export class PersonMaster extends Master {
     constructor() {
         super(...arguments);
@@ -11,12 +11,18 @@ export class PersonMaster extends Master {
             }
         };
     }
-    normalizeFields(props) {
-        if (typeof props === 'string') {
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
             return {
-                personId: props
+                personId: fields
             };
         }
-        return props;
+        return fields;
+    }
+    collectMandatoryMediaUris(fields) {
+        return this.convertPersonIdToMediaUri(fields.personId);
+    }
+    convertPersonIdToMediaUri(personId) {
+        return `ref:PR_${personId}`;
     }
 }
