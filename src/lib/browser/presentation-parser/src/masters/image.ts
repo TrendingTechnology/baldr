@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class ImageMaster implements Master {
+export class ImageMaster extends Master {
   name = 'image'
   displayName = 'Bild'
 }

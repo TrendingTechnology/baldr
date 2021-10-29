@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class QuoteMaster implements Master {
+import { Master } from './_types';
+export declare class QuoteMaster extends Master {
     name: string;
     displayName: string;
 }

@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
 interface FieldData {
   personId: string

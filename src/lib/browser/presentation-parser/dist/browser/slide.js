@@ -1,6 +1,6 @@
 import { DataCutter } from './data-management';
 import { convertToString } from '@bldr/core-browser';
-import { masterCollection } from './master';
+import { masterCollection } from './master-collection';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */

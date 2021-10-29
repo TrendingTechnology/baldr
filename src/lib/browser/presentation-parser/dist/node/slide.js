@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Slide = exports.SlideMetaData = void 0;
 const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
-const master_1 = require("./master");
+const master_collection_1 = require("./master-collection");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -31,7 +31,7 @@ class Slide {
         }
     }
     detectMaster(data) {
-        const masterNames = Object.keys(master_1.masterCollection);
+        const masterNames = Object.keys(master_collection_1.masterCollection);
         const intersection = masterNames.filter(masterName => data.keys.includes(masterName));
         if (intersection.length === 0) {
             throw new Error(`No master slide found: ${core_browser_1.convertToString(data.raw)}`);
@@ -39,7 +39,7 @@ class Slide {
         if (intersection.length > 1) {
             throw new Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data.raw)}`);
         }
-        return master_1.masterCollection[intersection[0]];
+        return master_collection_1.masterCollection[intersection[0]];
     }
 }
 exports.Slide = Slide;

@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class AudioMaster implements Master {
+export class AudioMaster extends Master {
   name = 'audio'
   displayName = 'Hörbeispiel'
 }

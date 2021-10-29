@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class GenericMaster implements Master {
+import { Master } from './_types';
+export declare class GenericMaster extends Master {
     name: string;
     displayName: string;
 }

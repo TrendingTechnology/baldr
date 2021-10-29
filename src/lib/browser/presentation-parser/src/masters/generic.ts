@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class GenericMaster implements Master {
+export class GenericMaster extends Master {
   name = 'generic'
   displayName = 'Folie'
 }

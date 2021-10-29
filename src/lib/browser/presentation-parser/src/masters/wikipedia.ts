@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class WikipediaMaster implements Master {
+export class WikipediaMaster extends Master {
   name = 'wikipedia'
   displayName = 'Wikipedia'
 }

@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class VideoMaster implements Master {
+import { Master } from './_types';
+export declare class VideoMaster extends Master {
     name: string;
     displayName: string;
 }

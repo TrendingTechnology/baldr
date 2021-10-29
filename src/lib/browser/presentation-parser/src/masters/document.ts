@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class DocumentMaster implements Master {
+export class DocumentMaster extends Master {
   name = 'document'
   displayName = 'Dokument'
 }

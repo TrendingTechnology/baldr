@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class YoutubeMaster implements Master {
+export class YoutubeMaster extends Master {
   name = 'youtube'
   displayName = 'YouTube'
 }

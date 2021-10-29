@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class CounterMaster implements Master {
+import { Master } from './_types';
+export declare class CounterMaster extends Master {
     name: string;
     displayName: string;
 }

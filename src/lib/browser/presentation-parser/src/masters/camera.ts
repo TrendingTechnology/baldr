@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class CameraMaster implements Master {
+export class CameraMaster extends Master {
   name = 'camera'
   displayName = 'Dokumentenkamera'
 }

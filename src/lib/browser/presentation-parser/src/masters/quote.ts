@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class QuoteMaster implements Master {
+export class QuoteMaster extends Master {
   name = 'quote'
   displayName = 'Zitat'
 }

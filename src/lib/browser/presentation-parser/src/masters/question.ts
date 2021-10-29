@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class QuestionMaster implements Master {
+export class QuestionMaster extends Master {
   name = 'question'
   displayName = 'Frage'
 }

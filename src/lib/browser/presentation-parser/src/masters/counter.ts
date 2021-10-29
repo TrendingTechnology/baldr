@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class CounterMaster implements Master {
+export class CounterMaster extends Master {
   name = 'counter'
   displayName = 'Zähler'
 }

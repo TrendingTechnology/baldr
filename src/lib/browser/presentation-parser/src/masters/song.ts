@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class SongMaster implements Master {
+export class SongMaster extends Master {
   name = 'song'
   displayName = 'Lied'
 }

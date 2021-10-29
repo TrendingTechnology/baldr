@@ -61,7 +61,7 @@ export class DataCutter {
    * @returns The data stored in the property
    */
   public cutAny (propertyName: string): any {
-    if (this.raw[propertyName] == null) {
+    if (this.raw[propertyName] != null) {
       const result = this.raw[propertyName]
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.raw[propertyName]

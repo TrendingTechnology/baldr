@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class ClozeMaster implements Master {
+import { Master } from './_types';
+export declare class ClozeMaster extends Master {
     name: string;
     displayName: string;
 }

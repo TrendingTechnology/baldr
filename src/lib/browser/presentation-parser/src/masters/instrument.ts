@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class InstrumentMaster implements Master {
+export class InstrumentMaster extends Master {
   name = 'instrument'
   displayName = 'Instrument'
 }

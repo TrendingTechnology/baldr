@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class SectionMaster implements Master {
+export class SectionMaster extends Master {
   name = 'section'
   displayName = 'Abschnitt'
 }

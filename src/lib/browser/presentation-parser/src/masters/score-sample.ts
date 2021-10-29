@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class ScoreSampleMaster implements Master {
+export class ScoreSampleMaster extends Master {
   name = 'scoreSample'
   displayName = 'Notenbeispiel'
 }

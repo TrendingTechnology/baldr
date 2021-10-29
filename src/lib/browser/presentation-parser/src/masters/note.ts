@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class NoteMaster implements Master {
+export class NoteMaster extends Master {
   name = 'note'
   displayName = 'Hefteintrag'
 }

@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class ImageMaster implements Master {
+import { Master } from './_types';
+export declare class ImageMaster extends Master {
     name: string;
     displayName: string;
 }

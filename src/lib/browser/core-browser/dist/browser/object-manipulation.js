@@ -33,6 +33,9 @@ export function convertToString(data) {
  * @param data
  */
 export function deepCopy(data) {
+    if (data == null) {
+        throw new Error('No deep copy can be made of a nullish value.');
+    }
     return JSON.parse(JSON.stringify(data));
 }
 /**

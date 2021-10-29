@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class SampleListMaster implements Master {
+import { Master } from './_types';
+export declare class SampleListMaster extends Master {
     name: string;
     displayName: string;
 }

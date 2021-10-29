@@ -1,5 +1,5 @@
 import { DataCutter } from './data-management';
-import { Master, FieldData } from './master';
+import { Master, FieldData } from './masters/_types';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */

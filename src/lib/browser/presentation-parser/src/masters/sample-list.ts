@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class SampleListMaster implements Master {
+export class SampleListMaster extends Master {
   name = 'sampleList'
   displayName = 'Audio-Ausschnitte'
 }

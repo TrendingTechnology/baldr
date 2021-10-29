@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master } from './_types'
 
-export class TaskMaster implements Master {
+export class TaskMaster extends Master {
   name = 'task'
   displayName = 'Arbeitsauftrag'
 }
