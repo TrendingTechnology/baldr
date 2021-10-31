@@ -12,7 +12,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import type { Configuration } from '@bldr/type-definitions'
+import { Configuration } from '@bldr/type-definitions'
 
 type RestEndPoint = 'local' | 'remote' | 'automatic'
 
@@ -53,8 +53,8 @@ export class HttpRequest {
   /**
    * Make an configured instance of the `HttpRequest()` class.
    *
-   * @param config: The parsed configuration file `/etc/baldr.json`.
-   * @param restEndPoint: Possible values are `local`, `remote` and `automatic`.
+   * @param config - The parsed configuration file `/etc/baldr.json`.
+   * @param restEndPoint - Possible values are `local`, `remote` and `automatic`.
    *   The value `automatic` needs the global object `location`.
    * @param urlFillIn - A URL segment that is inserted between the base
    *   URL and the last part of  the URL. For example
@@ -65,14 +65,24 @@ export class HttpRequest {
    *
    *   results in the URL `http://localhost/api/media/query`.
    */
-  constructor (config: Configuration, restEndPoint: RestEndPoint, urlFillIn?: string) {
+  constructor (
+    config: Configuration,
+    restEndPoint: RestEndPoint,
+    urlFillIn?: string
+  ) {
     this.urlFillIn = urlFillIn
 
     let isRemote: boolean = false
 
     // Electron (build version): location.hostname: '.'
     // Electron (build version): location.protocol: 'app'
-    if (restEndPoint === 'remote' || (restEndPoint === 'automatic' && (location != null && location.hostname !== 'localhost' && location.hostname !== '.'))) {
+    if (
+      restEndPoint === 'remote' ||
+      (restEndPoint === 'automatic' &&
+        location != null &&
+          location.hostname !== 'localhost' &&
+          location.hostname !== '.')
+    ) {
       isRemote = true
     }
 
@@ -144,7 +154,9 @@ export class HttpRequest {
    * }
    * </code></pre>
    */
-  async request (requestConfig: string | AxiosRequestConfig): Promise<AxiosResponse<any>> {
+  async request (
+    requestConfig: string | AxiosRequestConfig
+  ): Promise<AxiosResponse<any>> {
     if (typeof requestConfig === 'string') {
       requestConfig = { method: 'get', url: requestConfig }
     }
@@ -175,14 +187,18 @@ export class HttpRequest {
  *
  * @returns A instance of the class `HttpRequest()`.
  */
-export function makeHttpRequestInstance (config: Configuration, restEndPoint: RestEndPoint, urlFillIn: string): HttpRequest {
+export function makeHttpRequestInstance (
+  config: Configuration,
+  restEndPoint: RestEndPoint,
+  urlFillIn: string
+): HttpRequest {
   return new HttpRequest(config, restEndPoint, urlFillIn)
 }
 
 /**
  * Check if a URL is reachable.
  *
- * @param url A fully qualified HTTP URL
+ * @param url - A fully qualified HTTP URL
  *
  * @returns True if the URL is reachable, false else.
  */

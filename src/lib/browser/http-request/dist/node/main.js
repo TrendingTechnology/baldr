@@ -32,8 +32,8 @@ class HttpRequest {
     /**
      * Make an configured instance of the `HttpRequest()` class.
      *
-     * @param config: The parsed configuration file `/etc/baldr.json`.
-     * @param restEndPoint: Possible values are `local`, `remote` and `automatic`.
+     * @param config - The parsed configuration file `/etc/baldr.json`.
+     * @param restEndPoint - Possible values are `local`, `remote` and `automatic`.
      *   The value `automatic` needs the global object `location`.
      * @param urlFillIn - A URL segment that is inserted between the base
      *   URL and the last part of  the URL. For example
@@ -49,7 +49,11 @@ class HttpRequest {
         let isRemote = false;
         // Electron (build version): location.hostname: '.'
         // Electron (build version): location.protocol: 'app'
-        if (restEndPoint === 'remote' || (restEndPoint === 'automatic' && (location != null && location.hostname !== 'localhost' && location.hostname !== '.'))) {
+        if (restEndPoint === 'remote' ||
+            (restEndPoint === 'automatic' &&
+                location != null &&
+                location.hostname !== 'localhost' &&
+                location.hostname !== '.')) {
             isRemote = true;
         }
         if (!isRemote) {
@@ -156,7 +160,7 @@ exports.makeHttpRequestInstance = makeHttpRequestInstance;
 /**
  * Check if a URL is reachable.
  *
- * @param url A fully qualified HTTP URL
+ * @param url - A fully qualified HTTP URL
  *
  * @returns True if the URL is reachable, false else.
  */

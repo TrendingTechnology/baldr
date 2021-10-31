@@ -3,7 +3,10 @@ const assert = require('assert')
 
 const config = require('@bldr/config')
 
-const { makeHttpRequestInstance, checkReachability } = require('../dist/node/main.js')
+const {
+  makeHttpRequestInstance,
+  checkReachability
+} = require('../dist/node/main.js')
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
