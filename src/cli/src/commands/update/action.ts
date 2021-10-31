@@ -76,7 +76,7 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     // For example:
     //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
     if (result.stdout === '') {
-      log.error('Git repo is not clean: %s', config.localRepo)
+      log.error('Git repo is not clean: %s', [config.localRepo])
       log.warn(result.stdout)
       process.exit(1)
     }

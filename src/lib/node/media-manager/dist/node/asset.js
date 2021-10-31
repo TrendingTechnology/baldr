@@ -55,7 +55,7 @@ function move(oldPath, newPath, { copy, dryRun }) {
     }
     if (copy != null && copy) {
         if (!(dryRun != null && dryRun)) {
-            log.debug('Copy file from %s to %s', oldPath, newPath);
+            log.debug('Copy file from %s to %s', [oldPath, newPath]);
             fs_1.default.copyFileSync(oldPath, newPath);
         }
     }
@@ -63,13 +63,14 @@ function move(oldPath, newPath, { copy, dryRun }) {
         if (!(dryRun != null && dryRun)) {
             //  Error: EXDEV: cross-device link not permitted,
             try {
-                log.debug('Move file from %s to %s', oldPath, newPath);
+                log.debug('Move file from %s to %s', [oldPath, newPath]);
                 fs_1.default.renameSync(oldPath, newPath);
             }
             catch (error) {
                 const e = error;
                 if (e.code === 'EXDEV') {
-                    log.debug('Move file by copying and deleting from %s to %s', oldPath, newPath);
+                    log.debug('Move file by copying and deleting from %s to %s', [oldPath,
+                        newPath]);
                     fs_1.default.copyFileSync(oldPath, newPath);
                     fs_1.default.unlinkSync(oldPath);
                 }
@@ -90,7 +91,8 @@ function moveCorrespondingFiles(oldParentPath, newParentPath, search, replaces, 
         const oldCorrespondingPath = oldParentPath.replace(search, replace);
         if (fs_1.default.existsSync(oldCorrespondingPath)) {
             const newCorrespondingPath = newParentPath.replace(search, replace);
-            log.debug('Move corresponding file from %s to %s', oldCorrespondingPath, newCorrespondingPath);
+            log.debug('Move corresponding file from %s to %s', [oldCorrespondingPath,
+                newCorrespondingPath]);
             move(oldCorrespondingPath, newCorrespondingPath, opts);
         }
     }
@@ -187,7 +189,7 @@ function renameByRef(filePath) {
         result = (0, main_1.readYamlMetaData)(filePath);
     }
     catch (error) {
-        log.error(error);
+        log.errorAny(error);
         return;
     }
     if (result.ref != null) {
@@ -214,7 +216,9 @@ function renameByRef(filePath) {
         if (ref === oldBaseName) {
             return;
         }
-        log.info('Rename the file %s by reference from %s to %s', filePath, oldBaseName, ref);
+        log.info('Rename the file %s by reference from %s to %s', [filePath,
+            oldBaseName,
+            ref]);
         newPath = path_1.default.join(path_1.default.dirname(oldPath), `${ref}${extension}`);
         moveAsset(oldPath, newPath);
     }
@@ -223,7 +227,7 @@ exports.renameByRef = renameByRef;
 function queryWikidata(metaData, categoryNames, categoryCollection) {
     return __awaiter(this, void 0, void 0, function* () {
         const dataWiki = yield wikidata_1.default.query(metaData.wikidata, categoryNames, categoryCollection);
-        log.verbose(dataWiki);
+        log.verboseAny(dataWiki);
         metaData = wikidata_1.default.mergeData(metaData, dataWiki, categoryCollection);
         // To avoid blocking
         // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
@@ -278,7 +282,7 @@ function normalizeMediaAsset(filePath, options) {
         }
         catch (error) {
             log.error(filePath);
-            log.error(error);
+            log.errorAny(error);
             process.exit();
         }
     });
@@ -328,7 +332,7 @@ function convertAsset(filePath, cmdObj = {}) {
             mimeType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
         }
         catch (error) {
-            log.error('Unsupported extension %s', asset.extension);
+            log.error('Unsupported extension %s', [asset.extension]);
             return;
         }
         const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
@@ -420,7 +424,7 @@ function convertAsset(filePath, cmdObj = {}) {
                         metaData = (yield (0, audio_metadata_1.collectAudioMetadata)(filePath));
                     }
                     catch (error) {
-                        log.error(error);
+                        log.errorAny(error);
                     }
                     if (metaData != null) {
                         yield (0, yaml_1.writeYamlMetaData)(outputFile, metaData);

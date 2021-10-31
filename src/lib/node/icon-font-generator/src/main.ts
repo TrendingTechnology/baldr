@@ -46,7 +46,7 @@ function downloadIcon (
   } else {
     destName = oldName
   }
-  log.info('Download icon %s from %s', destName, url)
+  log.info('Download icon %s from %s', [destName, url])
   cmd.execSync(['wget', '-O', path.join(destDir, `${destName}.svg`), url])
 }
 
@@ -81,7 +81,7 @@ function downloadIcons (
     count++
     cmd.updateProgress(
       count / iconsCount,
-      log.format('download icon “%s”', newName)
+      log.format('download icon “%s”', [newName])
     )
   }
   cmd.stopProgress()
@@ -102,9 +102,11 @@ function copyIcons (srcFolder: string, destFolder: string): void {
       fs.copyFileSync(src, dest)
       log.info(
         'Copy the file “%s” from the source folder “%s” to the destination folder “%s”.',
-        icon,
-        src,
-        dest
+        [
+          icon,
+          src,
+          dest
+        ]
       )
     }
   }
@@ -112,7 +114,7 @@ function copyIcons (srcFolder: string, destFolder: string): void {
 
 function writeFile (destPath: string, content: string): void {
   fs.writeFileSync(destPath, content)
-  log.verbose('Create file: %s', destPath)
+  log.verbose('Create file: %s', [destPath])
 }
 
 function writeBuffer (destPath: string, content?: Buffer): void {
@@ -120,7 +122,7 @@ function writeBuffer (destPath: string, content?: Buffer): void {
     return
   }
   fs.writeFileSync(destPath, content)
-  log.verbose('Create file: %s', destPath)
+  log.verbose('Create file: %s', [destPath])
 }
 
 interface GlyphMetadata {
@@ -235,7 +237,7 @@ async function convertIntoFontFiles (
   tmpDir: string,
   destDir: string
 ): Promise<void> {
-  log.info(config)
+  log.infoAny(config)
 
   try {
     const result = await webfont({
@@ -245,7 +247,7 @@ async function convertIntoFontFiles (
       fontHeight: 512,
       descent: 64
     })
-    log.info(result)
+    log.infoAny(result)
 
     if (result.glyphsData == null) {
       throw new Error('No glyphs data found.')
@@ -265,7 +267,7 @@ async function convertIntoFontFiles (
     writeBuffer(path.join(destDir, 'baldr-icons.woff'), result.woff)
     writeBuffer(path.join(destDir, 'baldr-icons.woff2'), result.woff2)
   } catch (error) {
-    log.error(error)
+    log.errorAny(error)
     throw error
   }
 }
@@ -286,7 +288,7 @@ function patchConfig (metadataCollection: GlyphMetadata[], destPath: string): vo
   configJson.iconFont.unicodeAssignment = assigment
 
   for (const filePath of config.configurationFileLocations) {
-    log.info('Patch configuration file %s', filePath)
+    log.info('Patch configuration file %s', [filePath])
     writeJsonFile(filePath, configJson)
   }
 }
@@ -297,7 +299,7 @@ export async function createIconFont (
 ): Promise<void> {
   log.info(
     'The SVG files of the icons are downloaded to this temporary directory: %s',
-    tmpDir
+    [tmpDir]
   )
 
   downloadIcons(

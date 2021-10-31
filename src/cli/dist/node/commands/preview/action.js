@@ -63,7 +63,7 @@ function createAudioWaveForm(srcPath) {
             '-y',
             destPath
         ]);
-        log.verbose('Create waveform image %s from %s.', destPath, srcPath);
+        log.verbose('Create waveform image %s from %s.', [destPath, srcPath]);
     });
 }
 function downloadAudioCoverImage(srcPath, destPath) {
@@ -72,7 +72,10 @@ function downloadAudioCoverImage(srcPath, destPath) {
         const metaData = file_reader_writer_1.readYamlFile(yamlFile);
         if (metaData.coverSource != null) {
             yield core_node_1.fetchFile(metaData.coverSource, destPath);
-            log.verbose('Download preview image %s from %s.', destPath, metaData.coverSource);
+            log.verbose('Download preview image %s from %s.', [
+                destPath,
+                metaData.coverSource
+            ]);
         }
         else {
             log.error('No property “cover_source” found.');
@@ -110,7 +113,7 @@ function extractFrameFromVideo(srcPath, destPath, second = 10) {
         '-y',
         destPath
     ]);
-    log.verbose('Create preview image %s of a video file.', destPath);
+    log.verbose('Create preview image %s of a video file.', [destPath]);
 }
 function convertFirstPdfPageToJpg(srcPath, destPath) {
     destPath = destPath.replace('.jpg', '');
@@ -125,13 +128,13 @@ function convertFirstPdfPageToJpg(srcPath, destPath) {
         srcPath,
         destPath
     ]);
-    log.verbose('Create preview image %s of a PDF file.', destPath);
+    log.verbose('Create preview image %s of a PDF file.', [destPath]);
 }
 function createPreviewOneFile(srcPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.info('Create preview files for %s', srcPath);
+        log.info('Create preview files for %s', [srcPath]);
         const mimeType = media_manager_1.filePathToMimeType(srcPath);
-        log.debug('The MIME type of the file is %s', mimeType);
+        log.debug('The MIME type of the file is %s', [mimeType]);
         const destPathPreview = `${srcPath}_preview.jpg`;
         const destPathWavefrom = `${srcPath}_waveform.png`;
         if (mimeType === 'audio' &&

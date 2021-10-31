@@ -64,7 +64,7 @@ function action(globPattern, prefix, cmdObj) {
             // Omit already existent info file by the renaming.
             if (oldFileName.match(/yml$/i) == null) {
                 const newFileName = core_browser_1.formatMultiPartAssetFileName(`${prefix}.${extension}`, no);
-                log.info('%s -> %s', oldFileName, newFileName);
+                log.info('%s -> %s', [oldFileName, newFileName]);
                 if (!cmdObj.dryRun)
                     fs_1.default.renameSync(oldFileName, newFileName);
                 no += 1;

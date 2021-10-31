@@ -54,10 +54,9 @@ function collectSongs (basePath: string): SongCollection<ExtendedSong> {
     const song = new ExtendedSong(path.join(basePath, songPath))
     if (song.songId in songs) {
       throw new Error(
-        log.format(
-          'A song with the same songId already exists: %s',
+        log.format('A song with the same songId already exists: %s', [
           song.songId
-        )
+        ])
       )
     }
     songs[song.songId] = song
@@ -102,7 +101,7 @@ class Library extends CoreLibrary {
         songs[songId] = this.songs[songId]
       } else {
         throw new Error(
-          log.format('There is no song with song ID “%s”', songId)
+          log.format('There is no song with song ID “%s”', [songId])
         )
       }
     }
@@ -388,7 +387,7 @@ export class PianoScore {
     // Write contents to the text file.
     log.info(
       'The TeX markup was written to: %s', // Do not change text: This will break tests.
-      this.texFile.path // No color: This will break tests.
+      [this.texFile.path] // No color: This will break tests.
     )
     this.texFile.append(texMarkup)
 
@@ -400,11 +399,10 @@ export class PianoScore {
     // Compile twice for the table of contents
     // The page numbers in the toc only matches after three runs.
     for (let index = 0; index < 3; index++) {
-      log.info(
-        'Compile the TeX file “%s” the %d time.',
+      log.info('Compile the TeX file “%s” the %d time.', [
         this.texFile.path,
         index + 1
-      )
+      ])
       this.spawnTex(this.texFile.path, cwd)
     }
 
@@ -463,7 +461,7 @@ class PianoFilesCountTree {
     if (this.validCounts.includes(count)) {
       return true
     } else {
-      throw new Error(log.format('Invalid piano file count: %s', count))
+      throw new Error(log.format('Invalid piano file count: %s', [count]))
     }
   }
 
@@ -549,7 +547,7 @@ export class IntermediateLibrary extends Library {
         throw new Error(
           log.format(
             'A song with the same songId already exists: %s',
-            song.songId
+            [song.songId]
           )
         )
       }
@@ -579,7 +577,7 @@ export class IntermediateLibrary extends Library {
 
     glob.sync('**/.*.mscx,', { cwd: this.basePath }).forEach(relativePath => {
       const tmpMscx = path.join(this.basePath, relativePath)
-      log.info('Delete temporary MuseScore file: %s', tmpMscx)
+      log.info('Delete temporary MuseScore file: %s', [tmpMscx])
       fs.unlinkSync(tmpMscx)
     })
     this.deleteFiles(['songs.tex', 'filehashes.db'])
@@ -612,7 +610,7 @@ export class IntermediateLibrary extends Library {
   public generateLibraryJson (): void {
     const jsonPath = path.join(this.basePath, 'songs.json')
     fs.writeFileSync(jsonPath, JSON.stringify(this, null, '  '))
-    log.info('Create JSON file: %s', jsonPath)
+    log.info('Create JSON file: %s', [jsonPath])
   }
 
   compilePianoScore (
@@ -654,7 +652,7 @@ export class IntermediateLibrary extends Library {
       song = this.songs[songId]
     } else {
       throw new Error(
-        log.format('The song with the song ID “%s” is unkown.', songId)
+        log.format('The song with the song ID “%s” is unkown.', [songId])
       )
     }
     song.generateIntermediateFiles(mode, true)

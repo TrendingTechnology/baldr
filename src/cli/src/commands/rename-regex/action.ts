@@ -8,7 +8,7 @@ import * as log from '@bldr/log'
 function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   const newFilePath = filePath.replace(pattern, replacement)
   if (filePath !== newFilePath) {
-    log.info('\nRename:\n  old: %s \n  new: %s', filePath, newFilePath)
+    log.info('\nRename:\n  old: %s \n  new: %s', [filePath, newFilePath])
     fs.renameSync(filePath, newFilePath)
   }
 }

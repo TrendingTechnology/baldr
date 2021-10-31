@@ -95,12 +95,12 @@ export function patchTexTitles (filePath: string): boolean {
   }
 
   if (texFileContent !== texFileContentPatched) {
-    log.info('Patch titles in TeX file %s', filePath)
+    log.info('Patch titles in TeX file %s', [filePath])
     log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched))
     writeFile(filePath, texFileContentPatched)
     return true
   }
-  log.verbose('Nothing to patch in TeX file %s', filePath)
+  log.verbose('Nothing to patch in TeX file %s', [filePath])
   return false
 }
 
@@ -133,7 +133,7 @@ async function generateSvg (
   pageCount: number,
   pageNo: number
 ): Promise<void> {
-  log.info('Convert page %s from %s', pageNo.toString(), pageCount.toString())
+  log.info('Convert page %s from %s', [pageNo.toString(), pageCount.toString()])
   const svgFileName = `${pageNo}.svg`
   const svgFilePath = path.join(destDir, svgFileName)
 
@@ -155,7 +155,7 @@ async function generateSvg (
 
   initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount)
 
-  log.info('Result svg: %s', destPath)
+  log.info('Result svg: %s', [destPath])
   operations.moveAsset(svgFilePath, destPath)
   await operations.normalizeMediaAsset(destPath, { wikidata: false })
 }
@@ -189,7 +189,7 @@ function compileTex (tmpTexFile: string): string {
   }
 
   const tmpPdf = path.join(tmpDir, `${jobName}.pdf`)
-  log.debug('Compiled to temporary PDF: %s', tmpPdf)
+  log.debug('Compiled to temporary PDF: %s', [tmpPdf])
   return tmpPdf
 }
 
@@ -200,11 +200,11 @@ export async function generateCloze (filePath: string): Promise<void> {
   filePath = path.resolve(filePath)
   const texFileContent = readFile(filePath)
   if (!texFileContent.includes('cloze')) {
-    log.warn('%s has no cloze texts.', filePath)
+    log.warn('%s has no cloze texts.', [filePath])
     return
   }
 
-  log.debug('Resolved input path: %s', filePath)
+  log.debug('Resolved input path: %s', [filePath])
 
   // Move to LT (Lückentext) subdir.
   const parentDir = locationIndicator.getPresParentDir(filePath)
@@ -214,11 +214,11 @@ export async function generateCloze (filePath: string): Promise<void> {
   const destDir = path.join(parentDir, 'LT')
 
   const tmpTexFile = filePath.replace('.tex', '_Loesung.tex')
-  log.debug('Create temporary file %s', tmpTexFile)
+  log.debug('Create temporary file %s', [tmpTexFile])
 
   writeFile(tmpTexFile, patchTex(texFileContent))
 
-  log.info('Generate SVGs from the file %s.', tmpTexFile)
+  log.info('Generate SVGs from the file %s.', [tmpTexFile])
 
   const tmpPdfFile = compileTex(tmpTexFile)
   const pageCount = getPdfPageCount(tmpPdfFile)

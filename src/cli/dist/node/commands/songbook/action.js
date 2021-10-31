@@ -21,8 +21,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const log = __importStar(require("@bldr/log"));
 const songbook_intermediate_files_1 = require("@bldr/songbook-intermediate-files");
@@ -55,9 +53,9 @@ function action(cmdObj) {
     if (!{}.hasOwnProperty.call(cmdObj, 'pageTurnOptimized')) {
         cmdObj.pageTurnOptimized = false;
     }
-    log.info('The base path of the song collection is located at:\n    %s\n', chalk_1.default.cyan(config_1.default.songbook.path));
+    log.info('The base path of the song collection is located at:\n    %s\n', [log.colorize.cyan(config_1.default.songbook.path)]);
     const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path);
-    log.info('Found %s songs.', library.countSongs());
+    log.info('Found %s songs.', [library.countSongs()]);
     if (cmdObj.list != null)
         library.loadSongList(cmdObj.list);
     if (cmdObj.clean) {

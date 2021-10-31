@@ -1,6 +1,3 @@
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import * as log from '@bldr/log'
 import {
@@ -55,11 +52,11 @@ function action (cmdObj: CmdObj): void {
 
   log.info(
     'The base path of the song collection is located at:\n    %s\n',
-    chalk.cyan(config.songbook.path)
+    [log.colorize.cyan(config.songbook.path)]
   )
 
   const library = new IntermediateLibrary(config.songbook.path)
-  log.info('Found %s songs.', library.countSongs())
+  log.info('Found %s songs.', [library.countSongs()])
   if (cmdObj.list != null) library.loadSongList(cmdObj.list)
 
   if (cmdObj.clean) {

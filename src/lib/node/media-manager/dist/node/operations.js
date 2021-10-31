@@ -47,11 +47,15 @@ const asset_1 = require("./asset");
 function validateYamlOneFile(filePath) {
     try {
         (0, yaml_1.convertFromYamlRaw)(fs_1.default.readFileSync(filePath, 'utf8'));
-        log.debug('Valid YAML file: %s', filePath);
+        log.debug('Valid YAML file: %s', [filePath]);
     }
     catch (error) {
         const e = error;
-        log.error('Invalid YAML file %s. Error: %s: %s', filePath, e.name, e.message);
+        log.error('Invalid YAML file %s. Error: %s: %s', [
+            filePath,
+            e.name,
+            e.message
+        ]);
         throw new Error(e.name);
     }
 }
@@ -114,13 +118,13 @@ function normalize(filePaths) {
                 exports.operations.normalizePresentationFile(filePath);
             },
             tex(filePath) {
-                log.info('\nPatch the titles of the TeX file “%s”', filePath);
+                log.info('\nPatch the titles of the TeX file “%s”', [filePath]);
                 exports.operations.patchTexTitles(filePath);
             }
         }, {
             path: filePaths
         });
-        log.verbose('Generate presentation automatically on path %s:', filePaths[0]);
+        log.verbose('Generate presentation automatically on path %s:', [filePaths[0]]);
         exports.operations.generateAutomaticPresentation(filePaths[0]);
     });
 }

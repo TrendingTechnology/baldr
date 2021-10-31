@@ -39,12 +39,12 @@ function action() {
         for (const file of files) {
             if (file.match(/\.m4a$/) != null) {
                 fs_1.default.unlinkSync(file);
-                log.always('Delete %s', file);
+                log.always('Delete %s', [file]);
             }
             if (file.match(/\.m4a.+/i) != null) {
                 const newFile = file.replace(/\.m4a/i, '.mp3');
                 fs_1.default.renameSync(file, newFile);
-                log.always('Rename from %s to %s', file, newFile);
+                log.always('Rename from %s to %s', [file, newFile]);
             }
         }
     });

@@ -86,7 +86,7 @@ export class CommandRunner {
   private message: string
 
   constructor (options?: CommandRunnerOption) {
-    this.verbose = (options?.verbose != null && options?.verbose)
+    this.verbose = options?.verbose != null && options?.verbose
     this.spinner = ora({ spinner: 'line' })
     this.gauge = new Gauge()
     this.gauge.setTheme('ASCII')
@@ -141,7 +141,10 @@ export class CommandRunner {
    * @returns
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  async exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandResult> {
+  async exec (
+    args: string[],
+    options?: CommandRunnerExecOption
+  ): Promise<CommandResult> {
     const argsParser = new ArgsParser(args)
 
     if (this.verbose) {
@@ -162,10 +165,14 @@ export class CommandRunner {
     }
 
     return await new Promise((resolve, reject) => {
-      const command = childProcess.spawn(argsParser.command, argsParser.args, options)
+      const command = childProcess.spawn(
+        argsParser.command,
+        argsParser.args,
+        options
+      )
 
       if (this.verbose) {
-        this.message = log.format('Exec: %s', argsParser.toString())
+        this.message = log.format('Exec: %s', [argsParser.toString()])
       }
 
       if (options?.detached != null && options.detached) {
@@ -187,11 +194,11 @@ export class CommandRunner {
         stderr = stderr + data.toString()
       })
 
-      command.on('error', (code) => {
+      command.on('error', code => {
         reject(new Error(stderr))
       })
 
-      command.on('exit', (code) => {
+      command.on('exit', code => {
         if (code === 0) {
           resolve(new CommandResult({ stdout, stderr }))
         } else {
@@ -203,12 +210,22 @@ export class CommandRunner {
 
   execSync (args: string[]): CommandResult {
     const argsParser = new ArgsParser(args)
-    const command = childProcess.spawnSync(argsParser.command, argsParser.args, { encoding: 'utf-8', shell: true })
+    const command = childProcess.spawnSync(
+      argsParser.command,
+      argsParser.args,
+      { encoding: 'utf-8', shell: true }
+    )
     if (command.status !== 0) {
       if (command.stderr != null) {
         log.error(command.stderr)
       }
-      throw new Error(log.formatWithoutColor('Command “%s” exists with a nonzero exit code.', argsParser.toString()))
+      throw new Error(
+        log.format(
+          'Command “%s” exists with a nonzero exit code.',
+          [argsParser.toString()],
+          'none'
+        )
+      )
     }
     return new CommandResult(command)
   }

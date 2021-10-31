@@ -288,7 +288,7 @@ function moveFromArchive(oldPath, extension, cmdObj) {
         const newPath = media_manager_1.locationIndicator.getMirroredPath(oldPath);
         if (newPath === undefined)
             return;
-        log.info('%s -> %s', oldPath, newPath);
+        log.info('%s -> %s', [oldPath, newPath]);
         if (extension === 'tex') {
             moveTex(oldPath, newPath, cmdObj);
         }

@@ -34,11 +34,11 @@ function action (cmdObj: CmdObj): void {
   }
 
   if (!fs.existsSync(mirroredPath)) {
-    log.error('The path “%s” doesn’t exist.', mirroredPath)
+    log.error('The path “%s” doesn’t exist.', [mirroredPath])
     process.exit(1)
   }
 
-  log.info('Go to: %s', mirroredPath)
+  log.info('Go to: %s', [mirroredPath])
   if (cmdObj.fileManager) {
     openInFileManager(mirroredPath, true)
   } else {

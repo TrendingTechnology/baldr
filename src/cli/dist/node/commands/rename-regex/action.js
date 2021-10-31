@@ -38,7 +38,7 @@ const log = __importStar(require("@bldr/log"));
 function renameByRegex(filePath, { pattern, replacement }) {
     const newFilePath = filePath.replace(pattern, replacement);
     if (filePath !== newFilePath) {
-        log.info('\nRename:\n  old: %s \n  new: %s', filePath, newFilePath);
+        log.info('\nRename:\n  old: %s \n  new: %s', [filePath, newFilePath]);
         fs_1.default.renameSync(filePath, newFilePath);
     }
 }

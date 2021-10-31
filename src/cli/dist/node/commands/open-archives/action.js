@@ -42,7 +42,7 @@ function action(filePath, cmdObj) {
     }
     const regex = /^[a-zA-Z0-9-_./]+$/g;
     if (!regex.test(filePath)) {
-        log.info('The current working directory “%s” contains illegal characters.', filePath);
+        log.info('The current working directory “%s” contains illegal characters.', [filePath]);
         return;
     }
     filePath = path_1.default.resolve(filePath);

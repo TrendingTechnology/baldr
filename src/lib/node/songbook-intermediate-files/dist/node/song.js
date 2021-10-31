@@ -125,17 +125,17 @@ class ExtendedSongMetaData {
             'youtube'
         ];
         if (!fs.existsSync(folder)) {
-            throw new Error(log.format('Song folder doesn’t exist: %s', folder));
+            throw new Error(log.format('Song folder doesn’t exist: %s', [folder]));
         }
         this.folder = folder;
         const ymlFile = path.join(folder, this.yamlFile);
         if (!fs.existsSync(ymlFile)) {
-            throw new Error(log.format('YAML file could not be found: %s', ymlFile));
+            throw new Error(log.format('YAML file could not be found: %s', [ymlFile]));
         }
         this.rawYaml = yaml_1.convertFromYamlRaw(fs.readFileSync(ymlFile, 'utf8'));
         for (const key in this.rawYaml) {
             if (!this.allowedProperties.includes(key)) {
-                throw new Error(log.format('Unsupported key: %s', key));
+                throw new Error(log.format('Unsupported key: %s', [key]));
             }
         }
         this.alias = this.rawYaml.alias;
@@ -158,7 +158,7 @@ class ExtendedSongMetaData {
         if (this.wikidata != null) {
             const wikidataID = parseInt(this.wikidata);
             if (isNaN(wikidataID)) {
-                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', this.title, this.wikidata));
+                throw new Error(log.format('Wikidata entry “%s” of song “%s” must be an number (without Q).', [this.title, this.wikidata]));
             }
         }
     }
@@ -235,7 +235,7 @@ class ExtendedSong {
                 return absPath;
             }
         }
-        throw new Error(log.format('File doesn’t exist: %s', absPath));
+        throw new Error(log.format('File doesn’t exist: %s', [absPath]));
     }
     toJSON() {
         return {
@@ -280,10 +280,14 @@ class IntermediateSong extends ExtendedSong {
      */
     formatPianoTex() {
         if (this.pianoFiles.length === 0) {
-            throw new Error(log.format('The song “%s” has no EPS piano score files.', this.metaData.title));
+            throw new Error(log.format('The song “%s” has no EPS piano score files.', [
+                this.metaData.title
+            ]));
         }
         if (this.pianoFiles.length > 4) {
-            throw new Error(log.format('The song “%s” has more than 4 EPS piano score files.', this.metaData.title));
+            throw new Error(log.format('The song “%s” has more than 4 EPS piano score files.', [
+                this.metaData.title
+            ]));
         }
         const template = `\n\\tmpmetadata
 {%s} % title
@@ -291,7 +295,12 @@ class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `;
-        const output = log.formatWithoutColor(template, main_1.PianoScore.sanitize(this.metaDataCombined.title), main_1.PianoScore.sanitize(this.metaDataCombined.subtitle), main_1.PianoScore.sanitize(this.metaDataCombined.composer), main_1.PianoScore.sanitize(this.metaDataCombined.lyricist));
+        const output = log.format(template, [
+            main_1.PianoScore.sanitize(this.metaDataCombined.title),
+            main_1.PianoScore.sanitize(this.metaDataCombined.subtitle),
+            main_1.PianoScore.sanitize(this.metaDataCombined.composer),
+            main_1.PianoScore.sanitize(this.metaDataCombined.lyricist)
+        ]);
         const epsFiles = [];
         for (let i = 0; i < this.pianoFiles.length; i++) {
             epsFiles.push(this.formatPianoTeXEpsFile(i));
@@ -369,7 +378,7 @@ class IntermediateSong extends ExtendedSong {
         ]);
         fs.unlinkSync(src);
         const result = this.renameMultipartFiles(subFolder, constants.slideRegExp, constants.firstSlideName);
-        log.info('  Generate SVG files: %s', result.toString());
+        log.info('  Generate SVG files: %s', [result.toString()]);
         if (result.length === 0) {
             throw new Error('The SVG files for the slides couldn’t be generated.');
         }
@@ -389,7 +398,7 @@ class IntermediateSong extends ExtendedSong {
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);
         const result = this.renameMultipartFiles(subFolder, constants.pianoRegExp, constants.firstPianoName);
-        log.info('  Generate EPS files: %s', result.toString());
+        log.info('  Generate EPS files: %s', [result.toString()]);
         if (result.length === 0) {
             throw new Error('The EPS files for the piano score couldn’t be generated.');
         }
@@ -412,7 +421,9 @@ class IntermediateSong extends ExtendedSong {
             this.generatePDF('projector');
             this.generateSlides();
         }
-        log.info('Check if the MuseScore files of the Song “%s” have changed.', log.colorize.green(this.songId));
+        log.info('Check if the MuseScore files of the Song “%s” have changed.', [
+            log.colorize.green(this.songId)
+        ]);
         // piano
         if ((mode === 'all' || mode === 'piano') &&
             (force ||
@@ -428,7 +439,7 @@ class IntermediateSong extends ExtendedSong {
         this.folderIntermediateFiles.remove();
         function removeFile(message, filePath) {
             if (fs.existsSync(filePath)) {
-                log.info(message, filePath);
+                log.info(message, [filePath]);
                 fs.removeSync(filePath);
             }
         }

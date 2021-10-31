@@ -43,10 +43,10 @@ function action(scriptName, filePath) {
         filePath = path_1.default.resolve(filePath);
         const packageJson = core_node_1.findParentFile(path_1.default.resolve(filePath), 'package.json');
         if (packageJson == null) {
-            log.info('No package.json found on %s.', filePath);
+            log.info('No package.json found on %s.', [filePath]);
             throw Error('No package.json found.');
         }
-        log.info('Found %s', packageJson);
+        log.info('Found %s', [packageJson]);
         return yield new Promise(function (resolve, reject) {
             const parentDir = path_1.default.dirname(packageJson);
             const npm = child_process_1.default.spawn('npm', ['run', scriptName], {
@@ -59,7 +59,7 @@ function action(scriptName, filePath) {
                     resolve();
                 }
                 else {
-                    reject(new Error(log.formatWithoutColor('The script % failed', scriptName)));
+                    reject(new Error(log.format('The script % failed', [scriptName], 'none')));
                 }
             });
         });

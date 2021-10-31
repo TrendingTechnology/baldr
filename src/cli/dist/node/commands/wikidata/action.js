@@ -55,7 +55,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         }
         rawData.categories = category;
         const data = yield media_categories_1.categoriesManagement.process(rawData);
-        log.info(data);
+        log.infoAny(data);
         let downloadWikicommons = true;
         if ((rawData === null || rawData === void 0 ? void 0 : rawData.mainImage) == null) {
             data.mainImage = 'blank.jpg';
@@ -69,7 +69,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
                 yield wikidata_1.fetchCommonsFile(data.mainImage, dest);
             }
             else {
-                log.info('Dry run! Destination: %s', dest);
+                log.info('Dry run! Destination: %s', [dest]);
             }
         }
         if (!cmdObj.dryRun && !fs_1.default.existsSync(dest)) {
@@ -82,12 +82,12 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         const yamlFile = `${dest}.yml`;
         if (!fs_1.default.existsSync(yamlFile)) {
             if (!cmdObj.dryRun) {
-                log.info('Write YAML file: %s', yamlFile);
+                log.info('Write YAML file: %s', [yamlFile]);
                 file_reader_writer_1.writeYamlFile(yamlFile, data);
             }
         }
         else {
-            log.info('The YAML file already exists: %s', yamlFile);
+            log.info('The YAML file already exists: %s', [yamlFile]);
         }
     });
 }

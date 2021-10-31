@@ -44,7 +44,7 @@ async function action (
         `${prefix}.${extension}`,
         no
       )
-      log.info('%s -> %s', oldFileName, newFileName)
+      log.info('%s -> %s', [oldFileName, newFileName])
       if (!cmdObj.dryRun) fs.renameSync(oldFileName, newFileName)
       no += 1
     }

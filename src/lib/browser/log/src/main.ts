@@ -1,10 +1,16 @@
 export {
   always,
+  alwaysAny,
   debug,
+  debugAny,
   verbose,
+  verboseAny,
   info,
+  infoAny,
   warn,
+  warnAny,
   error,
+  errorAny,
   setLogLevel
 } from './log'
 

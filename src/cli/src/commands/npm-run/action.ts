@@ -14,10 +14,10 @@ async function action (scriptName: string, filePath: string): Promise<void> {
   const packageJson = findParentFile(path.resolve(filePath), 'package.json')
 
   if (packageJson == null) {
-    log.info('No package.json found on %s.', filePath)
+    log.info('No package.json found on %s.', [filePath])
     throw Error('No package.json found.')
   }
-  log.info('Found %s', packageJson)
+  log.info('Found %s', [packageJson])
 
   return await new Promise(function (resolve, reject) {
     const parentDir = path.dirname(packageJson)
@@ -32,7 +32,7 @@ async function action (scriptName: string, filePath: string): Promise<void> {
       if (code === 0) {
         resolve()
       } else {
-        reject(new Error(log.formatWithoutColor('The script % failed', scriptName)))
+        reject(new Error(log.format('The script % failed', [scriptName], 'none')))
       }
     })
   })

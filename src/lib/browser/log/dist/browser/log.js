@@ -1,67 +1,77 @@
 import { format } from './format';
 let logLevel = 0;
 /**
- * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
+ * Log always.
  */
 export function always(template, args) {
     console.log(format(template, args, 'green'));
 }
+export function alwaysAny(...args) {
+    console.log(...args);
+}
 /**
  * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
 export function error(template, args) {
     if (logLevel > 0) {
         console.error(format(template, args, 'red'));
     }
 }
+export function errorAny(...args) {
+    if (logLevel > 0) {
+        console.error(...args);
+    }
+}
 /**
  * Log on level 2.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
 export function warn(template, args) {
     if (logLevel > 1) {
         console.warn(format(template, args, 'yellow'));
     }
 }
+export function warnAny(...args) {
+    if (logLevel > 1) {
+        console.warn(...args);
+    }
+}
 /**
  * Log with a format string on level 3.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
 export function info(template, args) {
     if (logLevel > 2) {
         console.info(format(template, args, 'blue'));
     }
 }
+export function infoAny(...args) {
+    if (logLevel > 2) {
+        console.info(...args);
+    }
+}
 /**
  * Log on level 4.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
 export function verbose(template, args) {
     if (logLevel > 3) {
         console.debug(format(template, args, 'magenta'));
     }
 }
+export function verboseAny(...args) {
+    if (logLevel > 3) {
+        console.debug(...args);
+    }
+}
 /**
  * Log on level 5.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
 export function debug(template, args) {
     if (logLevel > 4) {
         console.log(format(template, args, 'cyan'));
+    }
+}
+export function debugAny(...args) {
+    if (logLevel > 4) {
+        console.log(...args);
     }
 }
 /**
