@@ -1,6 +1,7 @@
 import { DataCutter } from './data-management';
 import { convertToString } from '@bldr/core-browser';
 import { masterCollection } from './master-collection';
+import * as log from '@bldr/log';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -36,5 +37,11 @@ export class Slide {
             throw new Error(`Each slide must have only one master slide: ${convertToString(data.raw)}`);
         }
         return masterCollection[intersection[0]];
+    }
+    /**
+     * Log to the console.
+     */
+    log() {
+        log.always('Slide No. %s', this.no);
     }
 }

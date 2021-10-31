@@ -34,4 +34,9 @@ export declare function formatWithoutColor(template: FormatString, ...args: any[
 export declare function format(template: FormatString, ...args: any[]): string;
 export declare function colorizeFormat(template: FormatString, args: any[], colorFunction: Function): string;
 export declare function detectFormatTemplate(msg: any[], colorFunction: Function): any[];
+interface FormatObjectOption {
+    indentation?: number;
+    color?: string;
+}
+export declare function formatObject(obj: any, options?: FormatObjectOption): string;
 export {};

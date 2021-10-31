@@ -58,7 +58,7 @@ export class SlideCollection {
     return result
   }
 
-  get optionalMediaUris () {
+  get optionalMediaUris (): Set<string> {
     const result = new Set<string>()
     for (const slide of this.flat) {
       for (const mediaUri of slide.optionalMediaUris) {

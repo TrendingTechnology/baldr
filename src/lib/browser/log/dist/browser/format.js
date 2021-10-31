@@ -8,24 +8,24 @@ export function formatWithoutColor(template, ...args) {
     }
     return printf(template, ...args);
 }
-export function format(template, ...args) {
-    args = args.map(value => {
-        if (typeof value !== 'string' ||
-            (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
-            return value;
+function colorizeArgs(args, colorFunction) {
+    return args.map(value => {
+        if (typeof value === 'number') {
+            value = value.toString();
         }
-        return color.yellow(value);
-    });
-    return formatWithoutColor(template, ...args);
-}
-export function colorizeFormat(template, args, colorFunction) {
-    args = args.map(value => {
         if (typeof value !== 'string' ||
             (typeof value === 'string' && (value === null || value === void 0 ? void 0 : value.match(ansiRegexp)) != null)) {
             return value;
         }
         return colorFunction(value);
     });
+}
+export function format(template, ...args) {
+    args = colorizeArgs(args, color.yellow);
+    return formatWithoutColor(template, ...args);
+}
+export function colorizeFormat(template, args, colorFunction) {
+    args = colorizeArgs(args, colorFunction);
     return formatWithoutColor(template, ...args);
 }
 export function detectFormatTemplate(msg, colorFunction) {
@@ -34,4 +34,17 @@ export function detectFormatTemplate(msg, colorFunction) {
         return [colorizeFormat(firstArg, msg.slice(1), colorFunction)];
     }
     return msg;
+}
+export function formatObject(obj, options) {
+    let indentation = 0;
+    if ((options === null || options === void 0 ? void 0 : options.indentation) != null) {
+        indentation = options.indentation;
+    }
+    const output = [];
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key) && obj[key] != null) {
+            output.push(printf('%s%s: %s', ' '.repeat(indentation), color.blue(key), obj[key]));
+        }
+    }
+    return output.join('\n');
 }

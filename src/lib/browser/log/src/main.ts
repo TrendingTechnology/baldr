@@ -8,7 +8,7 @@ export {
   setLogLevel
 } from './log'
 
-export { format, formatWithoutColor } from './format'
+export { format, formatWithoutColor, formatObject } from './format'
 export { colorizeDiff } from './diff'
 
 export * as colorize from './color'

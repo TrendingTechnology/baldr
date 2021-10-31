@@ -1,4 +1,4 @@
-import { parse } from '@bldr/presentation-parser'
+import { parseAndResolve } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/file-reader-writer'
 import { walk } from '@bldr/media-manager'
 
@@ -10,8 +10,9 @@ import { walk } from '@bldr/media-manager'
 async function action (filePaths?: string): Promise<void> {
   await walk(
     {
-      presentation (presPath) {
-        parse(readFile(presPath))
+      async presentation (presPath) {
+        const presentation = await parseAndResolve(readFile(presPath))
+        presentation.log()
       }
     },
     {

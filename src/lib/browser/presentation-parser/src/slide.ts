@@ -2,6 +2,7 @@ import { DataCutter } from './data-management'
 import { convertToString } from '@bldr/core-browser'
 import { masterCollection } from './master-collection'
 import { Master, FieldData } from './master'
+import * as log from '@bldr/log'
 
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -113,5 +114,12 @@ export class Slide {
     }
 
     return masterCollection[intersection[0]]
+  }
+
+  /**
+   * Log to the console.
+   */
+  public log (): void {
+    log.always('Slide No. %s', this.no)
   }
 }

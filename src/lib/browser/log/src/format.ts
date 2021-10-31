@@ -48,25 +48,11 @@ export function formatWithoutColor (
   return printf(template, ...args)
 }
 
-export function format (template: FormatString, ...args: any[]): string {
-  args = args.map(value => {
-    if (
-      typeof value !== 'string' ||
-      (typeof value === 'string' && value?.match(ansiRegexp) != null)
-    ) {
-      return value
+function colorizeArgs (args: any[], colorFunction: Function): any[] {
+  return args.map(value => {
+    if (typeof value === 'number') {
+      value = value.toString()
     }
-    return color.yellow(value)
-  })
-  return formatWithoutColor(template, ...args)
-}
-
-export function colorizeFormat (
-  template: FormatString,
-  args: any[],
-  colorFunction: Function
-): string {
-  args = args.map(value => {
     if (
       typeof value !== 'string' ||
       (typeof value === 'string' && value?.match(ansiRegexp) != null)
@@ -75,6 +61,19 @@ export function colorizeFormat (
     }
     return colorFunction(value)
   })
+}
+
+export function format (template: FormatString, ...args: any[]): string {
+  args = colorizeArgs(args, color.yellow)
+  return formatWithoutColor(template, ...args)
+}
+
+export function colorizeFormat (
+  template: FormatString,
+  args: any[],
+  colorFunction: Function
+): string {
+  args = colorizeArgs(args, colorFunction)
   return formatWithoutColor(template, ...args)
 }
 
@@ -87,4 +86,25 @@ export function detectFormatTemplate (
     return [colorizeFormat(firstArg, msg.slice(1), colorFunction)]
   }
   return msg
+}
+
+interface FormatObjectOption {
+  indentation?: number
+  color?: string
+}
+
+export function formatObject (obj: any, options?: FormatObjectOption): string {
+  let indentation = 0
+  if (options?.indentation != null) {
+    indentation = options.indentation
+  }
+  const output = []
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key) && obj[key] != null) {
+      output.push(
+        printf('%s%s: %s', ' '.repeat(indentation), color.blue(key), obj[key])
+      )
+    }
+  }
+  return output.join('\n')
 }
