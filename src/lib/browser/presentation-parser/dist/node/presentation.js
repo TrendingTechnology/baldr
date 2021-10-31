@@ -61,6 +61,10 @@ class Presentation {
         for (const slide of this.slides.flat) {
             slide.log();
         }
+        const assets = exports.resolver.exportAssets(this.slides.mediaUris);
+        for (const asset of assets) {
+            console.log(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
+        }
     }
 }
 exports.Presentation = Presentation;
