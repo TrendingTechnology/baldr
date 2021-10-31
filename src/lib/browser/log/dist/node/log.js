@@ -6,8 +6,11 @@ let logLevel = 0;
 /**
  * Log always.
  */
-function always(template, args) {
-    console.log(format_1.format(template, args, 'green'));
+function always(template, args, options) {
+    if (options == null) {
+        options = 'green';
+    }
+    console.log(format_1.format(template, args, options));
 }
 exports.always = always;
 function alwaysAny(...args) {
@@ -17,8 +20,11 @@ exports.alwaysAny = alwaysAny;
 /**
  * Log on level 1.
  */
-function error(template, args) {
+function error(template, args, options) {
     if (logLevel > 0) {
+        if (options == null) {
+            options = 'red';
+        }
         console.error(format_1.format(template, args, 'red'));
     }
 }
@@ -32,9 +38,12 @@ exports.errorAny = errorAny;
 /**
  * Log on level 2.
  */
-function warn(template, args) {
+function warn(template, args, options) {
     if (logLevel > 1) {
-        console.warn(format_1.format(template, args, 'yellow'));
+        if (options == null) {
+            options = 'yellow';
+        }
+        console.warn(format_1.format(template, args, options));
     }
 }
 exports.warn = warn;
@@ -47,9 +56,12 @@ exports.warnAny = warnAny;
 /**
  * Log with a format string on level 3.
  */
-function info(template, args) {
+function info(template, args, options) {
     if (logLevel > 2) {
-        console.info(format_1.format(template, args, 'blue'));
+        if (options == null) {
+            options = 'blue';
+        }
+        console.info(format_1.format(template, args, options));
     }
 }
 exports.info = info;
@@ -62,9 +74,12 @@ exports.infoAny = infoAny;
 /**
  * Log on level 4.
  */
-function verbose(template, args) {
+function verbose(template, args, options) {
     if (logLevel > 3) {
-        console.debug(format_1.format(template, args, 'magenta'));
+        if (options == null) {
+            options = 'magenta';
+        }
+        console.debug(format_1.format(template, args, options));
     }
 }
 exports.verbose = verbose;
@@ -77,9 +92,12 @@ exports.verboseAny = verboseAny;
 /**
  * Log on level 5.
  */
-function debug(template, args) {
+function debug(template, args, options) {
     if (logLevel > 4) {
-        console.log(format_1.format(template, args, 'cyan'));
+        if (options == null) {
+            options = 'cyan';
+        }
+        console.log(format_1.format(template, args, options));
     }
 }
 exports.debug = debug;

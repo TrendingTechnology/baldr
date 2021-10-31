@@ -79,10 +79,12 @@ interface FormatOption {
   colors?: ColorSpecification
 }
 
+export type FormatOptions = FormatOption | ColorSpecification
+
 export function format (
   template: string,
   args?: any[],
-  options?: FormatOption | ColorSpecification
+  options?: FormatOptions
 ): string {
   if (args == null) {
     return template

@@ -3,8 +3,11 @@ let logLevel = 0;
 /**
  * Log always.
  */
-export function always(template, args) {
-    console.log(format(template, args, 'green'));
+export function always(template, args, options) {
+    if (options == null) {
+        options = 'green';
+    }
+    console.log(format(template, args, options));
 }
 export function alwaysAny(...args) {
     console.log(...args);
@@ -12,8 +15,11 @@ export function alwaysAny(...args) {
 /**
  * Log on level 1.
  */
-export function error(template, args) {
+export function error(template, args, options) {
     if (logLevel > 0) {
+        if (options == null) {
+            options = 'red';
+        }
         console.error(format(template, args, 'red'));
     }
 }
@@ -25,9 +31,12 @@ export function errorAny(...args) {
 /**
  * Log on level 2.
  */
-export function warn(template, args) {
+export function warn(template, args, options) {
     if (logLevel > 1) {
-        console.warn(format(template, args, 'yellow'));
+        if (options == null) {
+            options = 'yellow';
+        }
+        console.warn(format(template, args, options));
     }
 }
 export function warnAny(...args) {
@@ -38,9 +47,12 @@ export function warnAny(...args) {
 /**
  * Log with a format string on level 3.
  */
-export function info(template, args) {
+export function info(template, args, options) {
     if (logLevel > 2) {
-        console.info(format(template, args, 'blue'));
+        if (options == null) {
+            options = 'blue';
+        }
+        console.info(format(template, args, options));
     }
 }
 export function infoAny(...args) {
@@ -51,9 +63,12 @@ export function infoAny(...args) {
 /**
  * Log on level 4.
  */
-export function verbose(template, args) {
+export function verbose(template, args, options) {
     if (logLevel > 3) {
-        console.debug(format(template, args, 'magenta'));
+        if (options == null) {
+            options = 'magenta';
+        }
+        console.debug(format(template, args, options));
     }
 }
 export function verboseAny(...args) {
@@ -64,9 +79,12 @@ export function verboseAny(...args) {
 /**
  * Log on level 5.
  */
-export function debug(template, args) {
+export function debug(template, args, options) {
     if (logLevel > 4) {
-        console.log(format(template, args, 'cyan'));
+        if (options == null) {
+            options = 'cyan';
+        }
+        console.log(format(template, args, options));
     }
 }
 export function debugAny(...args) {

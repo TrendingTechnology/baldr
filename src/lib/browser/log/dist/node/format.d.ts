@@ -3,7 +3,8 @@ declare type ColorSpecification = color.ColorName[] | color.ColorName;
 interface FormatOption {
     colors?: ColorSpecification;
 }
-export declare function format(template: string, args?: any[], options?: FormatOption | ColorSpecification): string;
+export declare type FormatOptions = FormatOption | ColorSpecification;
+export declare function format(template: string, args?: any[], options?: FormatOptions): string;
 interface FormatObjectOption {
     indentation?: number;
     keys?: string[];
