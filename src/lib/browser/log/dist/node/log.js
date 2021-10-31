@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLogLevel = exports.debug = exports.verbose = exports.info = exports.warn = exports.error = exports.always = void 0;
 const format_1 = require("./format");
-const colorize = require("./color");
 let logLevel = 0;
 /**
  * Log on level 1.
@@ -10,8 +9,8 @@ let logLevel = 0;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function always(...msg) {
-    console.log(...format_1.detectFormatTemplate(msg, colorize.green));
+function always(template, args) {
+    console.log(format_1.format(template, args, 'green'));
 }
 exports.always = always;
 /**
@@ -20,9 +19,9 @@ exports.always = always;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function error(...msg) {
+function error(template, args) {
     if (logLevel > 0) {
-        console.error(...format_1.detectFormatTemplate(msg, colorize.red));
+        console.error(format_1.format(template, args, 'red'));
     }
 }
 exports.error = error;
@@ -32,9 +31,9 @@ exports.error = error;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function warn(...msg) {
+function warn(template, args) {
     if (logLevel > 1) {
-        console.warn(...format_1.detectFormatTemplate(msg, colorize.yellow));
+        console.warn(format_1.format(template, args, 'yellow'));
     }
 }
 exports.warn = warn;
@@ -44,9 +43,9 @@ exports.warn = warn;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function info(...msg) {
+function info(template, args) {
     if (logLevel > 2) {
-        console.info(...format_1.detectFormatTemplate(msg, colorize.blue));
+        console.info(format_1.format(template, args, 'blue'));
     }
 }
 exports.info = info;
@@ -56,9 +55,9 @@ exports.info = info;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function verbose(...msg) {
+function verbose(template, args) {
     if (logLevel > 3) {
-        console.debug(...format_1.detectFormatTemplate(msg, colorize.magenta));
+        console.debug(format_1.format(template, args, 'magenta'));
     }
 }
 exports.verbose = verbose;
@@ -68,9 +67,9 @@ exports.verbose = verbose;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-function debug(...msg) {
+function debug(template, args) {
     if (logLevel > 4) {
-        console.log(...format_1.detectFormatTemplate(msg, colorize.cyan));
+        console.log(format_1.format(template, args, 'cyan'));
     }
 }
 exports.debug = debug;

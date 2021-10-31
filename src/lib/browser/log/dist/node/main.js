@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.colorize = exports.colorizeDiff = exports.formatObject = exports.formatWithoutColor = exports.format = exports.setLogLevel = exports.error = exports.warn = exports.info = exports.verbose = exports.debug = exports.always = void 0;
+exports.colorize = exports.colorizeDiff = exports.formatObject = exports.format = exports.setLogLevel = exports.error = exports.warn = exports.info = exports.verbose = exports.debug = exports.always = void 0;
 var log_1 = require("./log");
 Object.defineProperty(exports, "always", { enumerable: true, get: function () { return log_1.always; } });
 Object.defineProperty(exports, "debug", { enumerable: true, get: function () { return log_1.debug; } });
@@ -11,7 +11,6 @@ Object.defineProperty(exports, "error", { enumerable: true, get: function () { r
 Object.defineProperty(exports, "setLogLevel", { enumerable: true, get: function () { return log_1.setLogLevel; } });
 var format_1 = require("./format");
 Object.defineProperty(exports, "format", { enumerable: true, get: function () { return format_1.format; } });
-Object.defineProperty(exports, "formatWithoutColor", { enumerable: true, get: function () { return format_1.formatWithoutColor; } });
 Object.defineProperty(exports, "formatObject", { enumerable: true, get: function () { return format_1.formatObject; } });
 var diff_1 = require("./diff");
 Object.defineProperty(exports, "colorizeDiff", { enumerable: true, get: function () { return diff_1.colorizeDiff; } });

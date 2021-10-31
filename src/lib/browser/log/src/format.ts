@@ -36,56 +36,65 @@ const ansiRegexp = /\u001b\[.*?m/
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-type FormatString = string | number
 
-export function formatWithoutColor (
-  template: FormatString,
-  ...args: any[]
-): string {
-  if (typeof template === 'number') {
-    template = template.toString()
+function getColorFunctionByIndex (
+  index: number,
+  colorSpecs?: ColorSpecification
+): (input: unknown) => string {
+  if (colorSpecs == null) {
+    return color.getColorFunction('yellow')
   }
+
+  if (typeof colorSpecs === 'string') {
+    return color.getColorFunction(colorSpecs)
+  }
+
+  if (index < colorSpecs.length) {
+    return color.getColorFunction(colorSpecs[index])
+  }
+
+  return color.getColorFunction(colorSpecs[colorSpecs.length - 1])
+}
+
+function colorizeArgs (args: any[], colorSpecs?: ColorSpecification): any[] {
+  if (typeof colorSpecs === 'string') {
+    colorSpecs = [colorSpecs]
+  }
+  for (let index = 0; index < args.length; index++) {
+    let arg = args[0]
+    if (typeof arg === 'number') {
+      arg = arg.toString()
+    }
+    if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
+      arg = getColorFunctionByIndex(index, colorSpecs)(arg)
+    }
+    args[index] = arg
+  }
+  return args
+}
+
+type ColorSpecification = color.ColorName[] | color.ColorName
+
+interface FormatOption {
+  colors?: ColorSpecification
+}
+
+export function format (
+  template: string,
+  args?: any[],
+  options?: FormatOption | ColorSpecification
+): string {
+  if (args == null) {
+    return template
+  }
+  let colorSpecs
+  if (typeof options === 'string' || Array.isArray(options)) {
+    colorSpecs = options
+  } else if (options?.colors != null) {
+    colorSpecs = options.colors
+  }
+  args = colorizeArgs(args, colorSpecs)
   return printf(template, ...args)
-}
-
-function colorizeArgs (args: any[], colorFunction: Function): any[] {
-  return args.map(value => {
-    if (typeof value === 'number') {
-      value = value.toString()
-    }
-    if (
-      typeof value !== 'string' ||
-      (typeof value === 'string' && value?.match(ansiRegexp) != null)
-    ) {
-      return value
-    }
-    return colorFunction(value)
-  })
-}
-
-export function format (template: FormatString, ...args: any[]): string {
-  args = colorizeArgs(args, color.yellow)
-  return formatWithoutColor(template, ...args)
-}
-
-export function colorizeFormat (
-  template: FormatString,
-  args: any[],
-  colorFunction: Function
-): string {
-  args = colorizeArgs(args, colorFunction)
-  return formatWithoutColor(template, ...args)
-}
-
-export function detectFormatTemplate (
-  msg: any[],
-  colorFunction: Function
-): any[] {
-  const firstArg = msg[0]
-  if (typeof firstArg === 'number' || typeof firstArg === 'string') {
-    return [colorizeFormat(firstArg, msg.slice(1), colorFunction)]
-  }
-  return msg
 }
 
 interface FormatObjectOption {

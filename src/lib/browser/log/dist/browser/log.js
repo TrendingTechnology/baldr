@@ -1,5 +1,4 @@
-import { detectFormatTemplate } from './format';
-import * as colorize from './color';
+import { format } from './format';
 let logLevel = 0;
 /**
  * Log on level 1.
@@ -7,8 +6,8 @@ let logLevel = 0;
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function always(...msg) {
-    console.log(...detectFormatTemplate(msg, colorize.green));
+export function always(template, args) {
+    console.log(format(template, args, 'green'));
 }
 /**
  * Log on level 1.
@@ -16,9 +15,9 @@ export function always(...msg) {
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function error(...msg) {
+export function error(template, args) {
     if (logLevel > 0) {
-        console.error(...detectFormatTemplate(msg, colorize.red));
+        console.error(format(template, args, 'red'));
     }
 }
 /**
@@ -27,9 +26,9 @@ export function error(...msg) {
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function warn(...msg) {
+export function warn(template, args) {
     if (logLevel > 1) {
-        console.warn(...detectFormatTemplate(msg, colorize.yellow));
+        console.warn(format(template, args, 'yellow'));
     }
 }
 /**
@@ -38,9 +37,9 @@ export function warn(...msg) {
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function info(...msg) {
+export function info(template, args) {
     if (logLevel > 2) {
-        console.info(...detectFormatTemplate(msg, colorize.blue));
+        console.info(format(template, args, 'blue'));
     }
 }
 /**
@@ -49,9 +48,9 @@ export function info(...msg) {
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function verbose(...msg) {
+export function verbose(template, args) {
     if (logLevel > 3) {
-        console.debug(...detectFormatTemplate(msg, colorize.magenta));
+        console.debug(format(template, args, 'magenta'));
     }
 }
 /**
@@ -60,9 +59,9 @@ export function verbose(...msg) {
  * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
  *   arguments or any arguments the function console.log() accepts.
  */
-export function debug(...msg) {
+export function debug(template, args) {
     if (logLevel > 4) {
-        console.log(...detectFormatTemplate(msg, colorize.cyan));
+        console.log(format(template, args, 'cyan'));
     }
 }
 /**

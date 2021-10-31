@@ -46,7 +46,7 @@ class Slide {
      * Log to the console.
      */
     log() {
-        log.always('Slide No. %s', this.no);
+        log.always('Slide No. %s', [this.no]);
     }
 }
 exports.Slide = Slide;

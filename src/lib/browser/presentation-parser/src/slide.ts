@@ -120,6 +120,6 @@ export class Slide {
    * Log to the console.
    */
   public log (): void {
-    log.always('Slide No. %s', this.no)
+    log.always('Slide No. %s', [this.no])
   }
 }
