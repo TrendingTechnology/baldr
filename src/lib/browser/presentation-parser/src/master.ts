@@ -102,6 +102,20 @@ export abstract class Master {
     return fields
   }
 
+  private static convertToSet (
+    uris: string | string[] | Set<string> | undefined
+  ): Set<string> {
+    if (uris == null) {
+      return new Set<string>()
+    }
+    if (typeof uris === 'string') {
+      return new Set([uris])
+    } else if (Array.isArray(uris)) {
+      return new Set(uris)
+    }
+    return uris
+  }
+
   /**
    * Retrieve the media URIs which have to be resolved.
    *
@@ -118,7 +132,7 @@ export abstract class Master {
    * }
    * ```
    */
-  collectMandatoryMediaUris (
+  protected collectMediaUris (
     fields: FieldData
   ): string | string[] | Set<string> | undefined {
     return
@@ -130,30 +144,17 @@ export abstract class Master {
    * slide. This master slide uses the online version, if no offline video could
    * be resolved.
    */
-  collectOptionalMediaUris (
+  protected collectOptionalMediaUris (
     fields: FieldData
   ): string | string[] | Set<string> | undefined {
     return
   }
 
-  private static convertToSet (
-    uris: string | string[] | Set<string> | undefined
-  ): Set<string> | undefined {
-    if (uris == null) {
-      return
-    }
-    if (typeof uris === 'string') {
-      return new Set([uris])
-    } else if (Array.isArray(uris)) {
-      return new Set(uris)
-    }
-    return uris
+  public processMediaUris (fields: FieldData): Set<string> {
+    return Master.convertToSet(this.collectMediaUris(fields))
   }
 
-  collectMediaUris (fields: FieldData) {
-    return {
-      mandatory: Master.convertToSet(this.collectMandatoryMediaUris(fields)),
-      optional: Master.convertToSet(this.collectOptionalMediaUris(fields))
-    }
+  public processOptionalMediaUris (fields: FieldData): Set<string> {
+    return Master.convertToSet(this.collectOptionalMediaUris(fields))
   }
 }

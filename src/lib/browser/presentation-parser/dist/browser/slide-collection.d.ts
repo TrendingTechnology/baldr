@@ -10,7 +10,7 @@ export declare class SlideCollection {
     flat: Slide[];
     /**
      * Only the top level slide objects are included in this array. Child slides
-     * can be accessed under the `slides` property.
+     * can be accessed under the `slides` property of each slide object.
      */
     tree: Slide[];
     /**
@@ -27,4 +27,6 @@ export declare class SlideCollection {
      *   Main level, 2: First child level ...
      */
     private parse;
+    get mediaUris(): Set<string>;
+    get optionalMediaUris(): Set<string>;
 }

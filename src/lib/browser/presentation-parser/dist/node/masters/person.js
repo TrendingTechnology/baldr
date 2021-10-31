@@ -22,7 +22,7 @@ class PersonMaster extends master_1.Master {
         }
         return fields;
     }
-    collectMandatoryMediaUris(fields) {
+    collectMediaUris(fields) {
         return this.convertPersonIdToMediaUri(fields.personId);
     }
     convertPersonIdToMediaUri(personId) {

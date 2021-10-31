@@ -13,7 +13,7 @@ export declare class PersonMaster extends Master {
         };
     };
     normalizeFields(fields: RawFieldData): FieldData;
-    collectMandatoryMediaUris(fields: FieldData): string;
+    protected collectMediaUris(fields: FieldData): string;
     private convertPersonIdToMediaUri;
 }
 export {};

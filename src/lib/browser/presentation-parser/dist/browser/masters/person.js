@@ -19,7 +19,7 @@ export class PersonMaster extends Master {
         }
         return fields;
     }
-    collectMandatoryMediaUris(fields) {
+    collectMediaUris(fields) {
         return this.convertPersonIdToMediaUri(fields.personId);
     }
     convertPersonIdToMediaUri(personId) {

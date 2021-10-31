@@ -55,6 +55,7 @@ export class Slide {
   slides?: Slide[]
 
   metaData: SlideMetaData
+
   master: Master
 
   /**
@@ -73,14 +74,14 @@ export class Slide {
   propsPreview?: any
 
   /**
-   * A list of media URIs.
+   * URIs of media assets that must necessarily be present.
    */
-  mandatoryMediaUris?: Set<string>
+  mediaUris: Set<string>
 
   /**
-   * Media URIs that do not have to exist.
+   * URIs of media assets that do not have to exist.
    */
-  optionalMediaUris?: Set<string>
+  optionalMediaUris: Set<string>
 
   constructor (raw: any, no: number, level: number) {
     this.no = no
@@ -89,7 +90,8 @@ export class Slide {
     this.metaData = new SlideMetaData(data)
     this.master = this.detectMaster(data)
     this.fields = this.master.normalizeFields(data.cutAny(this.master.name))
-    this.collectMediaUris()
+    this.mediaUris = this.master.processMediaUris(this.fields)
+    this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
   }
 
   private detectMaster (data: DataCutter): Master {
@@ -111,11 +113,5 @@ export class Slide {
     }
 
     return masterCollection[intersection[0]]
-  }
-
-  private collectMediaUris () {
-    const uris = this.master.collectMediaUris(this.fields)
-    this.mandatoryMediaUris = uris.mandatory
-    this.optionalMediaUris = uris.optional
   }
 }

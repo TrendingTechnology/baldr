@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@bldr/core-browser": "*",
+    "@bldr/media-resolver-ng": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*"
   },

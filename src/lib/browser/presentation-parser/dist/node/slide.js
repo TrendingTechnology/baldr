@@ -27,7 +27,8 @@ class Slide {
         this.metaData = new SlideMetaData(data);
         this.master = this.detectMaster(data);
         this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
-        this.collectMediaUris();
+        this.mediaUris = this.master.processMediaUris(this.fields);
+        this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields);
     }
     detectMaster(data) {
         const masterNames = Object.keys(master_collection_1.masterCollection);
@@ -39,11 +40,6 @@ class Slide {
             throw new Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data.raw)}`);
         }
         return master_collection_1.masterCollection[intersection[0]];
-    }
-    collectMediaUris() {
-        const uris = this.master.collectMediaUris(this.fields);
-        this.mandatoryMediaUris = uris.mandatory;
-        this.optionalMediaUris = uris.optional;
     }
 }
 exports.Slide = Slide;

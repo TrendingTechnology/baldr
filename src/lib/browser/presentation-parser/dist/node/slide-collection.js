@@ -17,7 +17,7 @@ class SlideCollection {
         this.flat = [];
         /**
          * Only the top level slide objects are included in this array. Child slides
-         * can be accessed under the `slides` property.
+         * can be accessed under the `slides` property of each slide object.
          */
         this.tree = [];
         this.parse(raw, this.tree, 1);
@@ -45,6 +45,24 @@ class SlideCollection {
                 }
             }
         }
+    }
+    get mediaUris() {
+        const result = new Set();
+        for (const slide of this.flat) {
+            for (const mediaUri of slide.mediaUris) {
+                result.add(mediaUri);
+            }
+        }
+        return result;
+    }
+    get optionalMediaUris() {
+        const result = new Set();
+        for (const slide of this.flat) {
+            for (const mediaUri of slide.optionalMediaUris) {
+                result.add(mediaUri);
+            }
+        }
+        return result;
     }
 }
 exports.SlideCollection = SlideCollection;

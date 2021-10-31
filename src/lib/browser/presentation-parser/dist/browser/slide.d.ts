@@ -53,14 +53,13 @@ export declare class Slide {
      */
     propsPreview?: any;
     /**
-     * A list of media URIs.
+     * URIs of media assets that must necessarily be present.
      */
-    mandatoryMediaUris?: Set<string>;
+    mediaUris: Set<string>;
     /**
-     * Media URIs that do not have to exist.
+     * URIs of media assets that do not have to exist.
      */
-    optionalMediaUris?: Set<string>;
+    optionalMediaUris: Set<string>;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
-    private collectMediaUris;
 }

@@ -3,6 +3,9 @@ import { LampTypes } from '@bldr/type-definitions'
 
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
+import { Resolver } from '@bldr/media-resolver-ng'
+
+export const resolver = new Resolver()
 
 /**
  * @inheritdoc
@@ -72,5 +75,10 @@ export class Presentation {
     this.meta = new Meta(data.cutNotNull('meta'))
     this.slides = new SlideCollection(data.cutNotNull('slides'))
     data.checkEmpty()
+  }
+
+  public async resolveMediaAssets () {
+    await resolver.resolve(this.slides.mediaUris, true)
+    await resolver.resolve(this.slides.optionalMediaUris, false)
   }
 }

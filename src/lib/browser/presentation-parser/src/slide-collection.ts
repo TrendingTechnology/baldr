@@ -12,7 +12,7 @@ export class SlideCollection {
 
   /**
    * Only the top level slide objects are included in this array. Child slides
-   * can be accessed under the `slides` property.
+   * can be accessed under the `slides` property of each slide object.
    */
   public tree: Slide[] = []
 
@@ -46,5 +46,25 @@ export class SlideCollection {
         }
       }
     }
+  }
+
+  get mediaUris (): Set<string> {
+    const result = new Set<string>()
+    for (const slide of this.flat) {
+      for (const mediaUri of slide.mediaUris) {
+        result.add(mediaUri)
+      }
+    }
+    return result
+  }
+
+  get optionalMediaUris () {
+    const result = new Set<string>()
+    for (const slide of this.flat) {
+      for (const mediaUri of slide.optionalMediaUris) {
+        result.add(mediaUri)
+      }
+    }
+    return result
   }
 }

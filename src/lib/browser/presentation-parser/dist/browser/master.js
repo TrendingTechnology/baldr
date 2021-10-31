@@ -17,6 +17,18 @@ export class Master {
     normalizeFields(fields) {
         return fields;
     }
+    static convertToSet(uris) {
+        if (uris == null) {
+            return new Set();
+        }
+        if (typeof uris === 'string') {
+            return new Set([uris]);
+        }
+        else if (Array.isArray(uris)) {
+            return new Set(uris);
+        }
+        return uris;
+    }
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -33,7 +45,7 @@ export class Master {
      * }
      * ```
      */
-    collectMandatoryMediaUris(fields) {
+    collectMediaUris(fields) {
         return;
     }
     /**
@@ -45,22 +57,10 @@ export class Master {
     collectOptionalMediaUris(fields) {
         return;
     }
-    static convertToSet(uris) {
-        if (uris == null) {
-            return;
-        }
-        if (typeof uris === 'string') {
-            return new Set([uris]);
-        }
-        else if (Array.isArray(uris)) {
-            return new Set(uris);
-        }
-        return uris;
+    processMediaUris(fields) {
+        return Master.convertToSet(this.collectMediaUris(fields));
     }
-    collectMediaUris(fields) {
-        return {
-            mandatory: Master.convertToSet(this.collectMandatoryMediaUris(fields)),
-            optional: Master.convertToSet(this.collectOptionalMediaUris(fields))
-        };
+    processOptionalMediaUris(fields) {
+        return Master.convertToSet(this.collectOptionalMediaUris(fields));
     }
 }

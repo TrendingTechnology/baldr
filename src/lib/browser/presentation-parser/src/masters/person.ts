@@ -26,7 +26,7 @@ export class PersonMaster extends Master {
     return fields
   }
 
-  collectMandatoryMediaUris (fields: FieldData): string {
+  protected collectMediaUris (fields: FieldData): string {
     return this.convertPersonIdToMediaUri(fields.personId)
   }
 

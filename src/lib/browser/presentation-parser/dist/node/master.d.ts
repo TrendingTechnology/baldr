@@ -88,6 +88,7 @@ export declare abstract class Master {
      * ```
      */
     normalizeFields(fields: any): FieldData;
+    private static convertToSet;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -104,18 +105,15 @@ export declare abstract class Master {
      * }
      * ```
      */
-    collectMandatoryMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    protected collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master
      * slide. This master slide uses the online version, if no offline video could
      * be resolved.
      */
-    collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
-    private static convertToSet;
-    collectMediaUris(fields: FieldData): {
-        mandatory: Set<string> | undefined;
-        optional: Set<string> | undefined;
-    };
+    protected collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    processMediaUris(fields: FieldData): Set<string>;
+    processOptionalMediaUris(fields: FieldData): Set<string>;
 }
 export {};
