@@ -64,6 +64,9 @@ class SlideCollection {
         }
         return result;
     }
+    get numberOfSlides() {
+        return this.flat.length;
+    }
     *[Symbol.iterator]() {
         for (const slide of this.flat) {
             yield slide;

@@ -68,6 +68,10 @@ export class SlideCollection {
     return result
   }
 
+  get numberOfSlides (): number {
+    return this.flat.length
+  }
+
   * [Symbol.iterator] (): Generator<Slide, any, any> {
     for (const slide of this.flat) {
       yield slide
