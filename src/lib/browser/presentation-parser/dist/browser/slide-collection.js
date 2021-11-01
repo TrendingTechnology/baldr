@@ -61,4 +61,9 @@ export class SlideCollection {
         }
         return result;
     }
+    *[Symbol.iterator]() {
+        for (const slide of this.flat) {
+            yield slide;
+        }
+    }
 }

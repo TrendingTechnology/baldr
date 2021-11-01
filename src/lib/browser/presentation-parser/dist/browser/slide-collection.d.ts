@@ -29,4 +29,5 @@ export declare class SlideCollection {
     private parse;
     get mediaUris(): Set<string>;
     get optionalMediaUris(): Set<string>;
+    [Symbol.iterator](): Generator<Slide, any, any>;
 }

@@ -100,6 +100,13 @@ describe('Package “@bldr/presentation-parser”', function () {
       assert.strictEqual(tree[0].slides[0].master.name, 'generic')
       assert.strictEqual(tree[0].slides[0].slides[0].master.name, 'generic')
     })
+
+    it('iterator', function () {
+      const presentation = parseTestPresentation('nested-slides')
+      for (const slide of presentation.slides) {
+        assert.strictEqual(typeof slide.no, 'number')
+      }
+    })
   })
 
   it('Unknown property in the presentation root', function () {
