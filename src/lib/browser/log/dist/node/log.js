@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setLogLevel = exports.debugAny = exports.debug = exports.verboseAny = exports.verbose = exports.infoAny = exports.info = exports.warnAny = exports.warn = exports.errorAny = exports.error = exports.alwaysAny = exports.always = void 0;
 const format_1 = require("./format");
-let logLevel = 0;
+let logLevel = 2;
 /**
  * Log always.
  */

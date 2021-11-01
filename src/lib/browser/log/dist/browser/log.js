@@ -1,5 +1,5 @@
 import { format } from './format';
-let logLevel = 0;
+let logLevel = 2;
 /**
  * Log always.
  */
