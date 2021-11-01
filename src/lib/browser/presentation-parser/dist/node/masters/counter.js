@@ -7,6 +7,11 @@ class CounterMaster extends master_1.Master {
         super(...arguments);
         this.name = 'counter';
         this.displayName = 'Zähler';
+        this.iconSpec = {
+            name: 'counter',
+            color: 'black',
+            size: 'large'
+        };
     }
 }
 exports.CounterMaster = CounterMaster;

@@ -7,6 +7,10 @@ class YoutubeMaster extends master_1.Master {
         super(...arguments);
         this.name = 'youtube';
         this.displayName = 'YouTube';
+        this.iconSpec = {
+            name: 'youtube',
+            color: 'red'
+        };
         this.fieldsDefintion = {
             id: {
                 type: String,

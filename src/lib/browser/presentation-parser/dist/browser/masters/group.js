@@ -4,5 +4,9 @@ export class GroupMaster extends Master {
         super(...arguments);
         this.name = 'group';
         this.displayName = 'Gruppe';
+        this.iconSpec = {
+            name: 'account-group',
+            color: 'orange'
+        };
     }
 }

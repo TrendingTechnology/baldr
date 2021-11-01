@@ -7,6 +7,10 @@ class SectionMaster extends master_1.Master {
         super(...arguments);
         this.name = 'section';
         this.displayName = 'Abschnitt';
+        this.iconSpec = {
+            name: 'file-tree',
+            color: 'orange-dark'
+        };
     }
 }
 exports.SectionMaster = SectionMaster;

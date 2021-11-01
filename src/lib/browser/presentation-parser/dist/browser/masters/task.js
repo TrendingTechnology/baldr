@@ -4,5 +4,10 @@ export class TaskMaster extends Master {
         super(...arguments);
         this.name = 'task';
         this.displayName = 'Arbeitsauftrag';
+        this.iconSpec = {
+            name: 'task',
+            color: 'yellow-dark',
+            size: 'large'
+        };
     }
 }

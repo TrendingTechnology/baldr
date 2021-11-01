@@ -147,8 +147,8 @@ export class Presentation {
    */
   private convertFromYaml (yamlString: string): DataCutter {
     let raw = convertFromYaml(yamlString)
-    if (yamlString.indexOf('ref:./') > -1) {
-      let ref: string | undefined = undefined
+    if (yamlString.includes('ref:./')) {
+      let ref: string | undefined
       if (raw.ref != null) {
         ref = raw.ref
       }

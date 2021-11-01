@@ -7,6 +7,10 @@ interface FieldData {
 export declare class YoutubeMaster extends Master {
     name: string;
     displayName: string;
+    iconSpec: {
+        name: string;
+        color: string;
+    };
     fieldsDefintion: {
         id: {
             type: StringConstructor;

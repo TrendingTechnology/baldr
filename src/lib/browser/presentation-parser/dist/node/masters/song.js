@@ -7,6 +7,10 @@ class SongMaster extends master_1.Master {
         super(...arguments);
         this.name = 'song';
         this.displayName = 'Lied';
+        this.iconSpec = {
+            name: 'file-audio',
+            color: 'green'
+        };
     }
 }
 exports.SongMaster = SongMaster;

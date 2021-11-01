@@ -7,6 +7,10 @@ class CameraMaster extends master_1.Master {
         super(...arguments);
         this.name = 'camera';
         this.displayName = 'Dokumentenkamera';
+        this.iconSpec = {
+            name: 'document-camera',
+            color: 'red'
+        };
     }
 }
 exports.CameraMaster = CameraMaster;

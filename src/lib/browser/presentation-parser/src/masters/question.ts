@@ -232,7 +232,14 @@ export function generateTexMarkup (questions: Question[]): string {
 
 export class QuestionMaster extends Master {
   name = 'question'
+
   displayName = 'Frage'
+
+  iconSpec = {
+    name: 'question',
+    color: 'yellow',
+    size: 'large' as const
+  }
 
   fieldsDefintion = {
     questions: {

@@ -9,7 +9,13 @@ interface FieldData {
 
 export class ImageMaster extends Master {
   name = 'image'
+
   displayName = 'Bild'
+
+  iconSpec = {
+    name: 'image',
+    color: 'green'
+  }
 
   fieldsDefintion = {
     src: {

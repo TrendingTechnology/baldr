@@ -7,6 +7,10 @@ class VideoMaster extends master_1.Master {
         super(...arguments);
         this.name = 'video';
         this.displayName = 'Video';
+        this.iconSpec = {
+            name: 'video-vintage',
+            color: 'purple'
+        };
     }
 }
 exports.VideoMaster = VideoMaster;

@@ -7,6 +7,10 @@ class AudioMaster extends master_1.Master {
         super(...arguments);
         this.name = 'audio';
         this.displayName = 'Hörbeispiel';
+        this.iconSpec = {
+            name: 'music',
+            color: 'brown'
+        };
     }
 }
 exports.AudioMaster = AudioMaster;

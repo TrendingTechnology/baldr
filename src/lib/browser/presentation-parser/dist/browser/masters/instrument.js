@@ -4,5 +4,9 @@ export class InstrumentMaster extends Master {
         super(...arguments);
         this.name = 'instrument';
         this.displayName = 'Instrument';
+        this.iconSpec = {
+            name: 'instrument',
+            color: 'yellow'
+        };
     }
 }

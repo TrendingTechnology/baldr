@@ -8,7 +8,13 @@ type RawFieldData = string | FieldData
 
 export class PersonMaster extends Master {
   name = 'person'
+
   displayName = 'Porträt'
+
+  iconSpec = {
+    name: 'person',
+    color: 'orange'
+  }
 
   fieldsDefintion = {
     personId: {

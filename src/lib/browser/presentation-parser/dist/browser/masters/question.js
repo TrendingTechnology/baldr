@@ -166,6 +166,11 @@ export class QuestionMaster extends Master {
         super(...arguments);
         this.name = 'question';
         this.displayName = 'Frage';
+        this.iconSpec = {
+            name: 'question',
+            color: 'yellow',
+            size: 'large'
+        };
         this.fieldsDefintion = {
             questions: {
                 type: Array,

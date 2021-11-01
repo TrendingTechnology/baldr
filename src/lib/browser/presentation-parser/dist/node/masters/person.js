@@ -7,6 +7,10 @@ class PersonMaster extends master_1.Master {
         super(...arguments);
         this.name = 'person';
         this.displayName = 'Porträt';
+        this.iconSpec = {
+            name: 'person',
+            color: 'orange'
+        };
         this.fieldsDefintion = {
             personId: {
                 type: String,

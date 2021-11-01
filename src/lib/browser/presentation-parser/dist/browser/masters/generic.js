@@ -4,5 +4,10 @@ export class GenericMaster extends Master {
         super(...arguments);
         this.name = 'generic';
         this.displayName = 'Folie';
+        this.iconSpec = {
+            name: 'file-presentation-box',
+            color: 'gray',
+            showOnSlides: false
+        };
     }
 }

@@ -8,7 +8,13 @@ interface FieldData {
 
 export class YoutubeMaster extends Master {
   name = 'youtube'
+
   displayName = 'YouTube'
+
+  iconSpec = {
+    name: 'youtube',
+    color: 'red'
+  }
 
   fieldsDefintion = {
     id: {

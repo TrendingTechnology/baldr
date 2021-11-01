@@ -7,6 +7,11 @@ class InteractiveGraphicMaster extends master_1.Master {
         super(...arguments);
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
+        this.iconSpec = {
+            name: 'image',
+            color: 'blue',
+            showOnSlides: false
+        };
     }
 }
 exports.InteractiveGraphicMaster = InteractiveGraphicMaster;

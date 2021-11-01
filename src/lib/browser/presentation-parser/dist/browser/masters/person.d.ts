@@ -6,6 +6,10 @@ declare type RawFieldData = string | FieldData;
 export declare class PersonMaster extends Master {
     name: string;
     displayName: string;
+    iconSpec: {
+        name: string;
+        color: string;
+    };
     fieldsDefintion: {
         personId: {
             type: StringConstructor;

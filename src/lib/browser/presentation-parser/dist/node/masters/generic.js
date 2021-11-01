@@ -7,6 +7,11 @@ class GenericMaster extends master_1.Master {
         super(...arguments);
         this.name = 'generic';
         this.displayName = 'Folie';
+        this.iconSpec = {
+            name: 'file-presentation-box',
+            color: 'gray',
+            showOnSlides: false
+        };
     }
 }
 exports.GenericMaster = GenericMaster;

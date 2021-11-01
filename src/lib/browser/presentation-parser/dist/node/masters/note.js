@@ -7,6 +7,10 @@ class NoteMaster extends master_1.Master {
         super(...arguments);
         this.name = 'note';
         this.displayName = 'Hefteintrag';
+        this.iconSpec = {
+            name: 'pencil',
+            color: 'blue'
+        };
     }
 }
 exports.NoteMaster = NoteMaster;

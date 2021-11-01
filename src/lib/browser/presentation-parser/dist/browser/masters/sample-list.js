@@ -4,5 +4,9 @@ export class SampleListMaster extends Master {
         super(...arguments);
         this.name = 'sampleList';
         this.displayName = 'Audio-Ausschnitte';
+        this.iconSpec = {
+            name: 'music',
+            color: 'red'
+        };
     }
 }

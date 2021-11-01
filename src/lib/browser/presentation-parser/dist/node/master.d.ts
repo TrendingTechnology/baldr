@@ -57,6 +57,50 @@ interface FieldDefinition {
      */
     type?: object;
 }
+/**
+ * Specification of the master slide icon that is normally displayed on the
+ * top left corner of a slide.
+ *
+ * ```js
+ * icon: {
+ *   name: 'quote',
+ *   color: 'brown',
+ *   size: 'large'
+ *   showOnSlides: true
+ * }
+ * ```
+ */
+interface MasterIconSpec {
+    /**
+     * For allowed icon names see the
+     * {@link module:@bldr/icons Baldr icon font}.
+     */
+    name: string;
+    /**
+     * A color name (CSS color class name) to colorize the master icon.
+     * @see {@link module:@bldr/themes}
+     */
+    color?: string;
+    /**
+     * The size of a master icon: `small` or `large`.
+     */
+    size?: 'large' | 'small';
+    /**
+     * Show the icon on the slide view.
+     */
+    showOnSlides?: boolean;
+}
+/**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+declare class MasterIcon implements MasterIconSpec {
+    name: string;
+    color: string;
+    size: 'large' | 'small';
+    showOnSlides: boolean;
+    constructor({ name, color, size, showOnSlides }: MasterIconSpec);
+}
 export declare abstract class Master {
     /**
      * The name of the master slide. A short name in lower case letters like `audio`.
@@ -66,6 +110,8 @@ export declare abstract class Master {
      * A human readable name of the master slide.
      */
     abstract displayName: string;
+    protected abstract iconSpec: MasterIconSpec;
+    get icon(): MasterIcon;
     /**
      * The defintion of the fields of the master slide.
      */

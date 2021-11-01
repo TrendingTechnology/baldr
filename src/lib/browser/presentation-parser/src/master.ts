@@ -65,6 +65,75 @@ interface FieldDefinition {
   type?: object
 }
 
+/**
+ * Specification of the master slide icon that is normally displayed on the
+ * top left corner of a slide.
+ *
+ * ```js
+ * icon: {
+ *   name: 'quote',
+ *   color: 'brown',
+ *   size: 'large'
+ *   showOnSlides: true
+ * }
+ * ```
+ */
+interface MasterIconSpec {
+  /**
+   * For allowed icon names see the
+   * {@link module:@bldr/icons Baldr icon font}.
+   */
+  name: string
+
+  /**
+   * A color name (CSS color class name) to colorize the master icon.
+   * @see {@link module:@bldr/themes}
+   */
+  color?: string
+
+  /**
+   * The size of a master icon: `small` or `large`.
+   */
+  size?: 'large' | 'small'
+
+  /**
+   * Show the icon on the slide view.
+   */
+  showOnSlides?: boolean
+}
+
+/**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+class MasterIcon implements MasterIconSpec {
+  name: string
+  color: string
+  size: 'large' | 'small'
+  showOnSlides: boolean
+
+  constructor ({ name, color, size, showOnSlides }: MasterIconSpec) {
+    if (size != null && !['small', 'large'].includes(size)) {
+      throw new Error(
+        `The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`
+      )
+    }
+
+    if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
+      throw new Error(
+        `The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${String(
+          showOnSlides
+        )}`
+      )
+    }
+
+    this.name = name
+    this.color = color != null ? color : 'orange'
+    this.showOnSlides = showOnSlides != null ? showOnSlides : false
+    this.size = size != null ? size : 'small'
+  }
+}
+
 export abstract class Master {
   /**
    * The name of the master slide. A short name in lower case letters like `audio`.
@@ -75,6 +144,12 @@ export abstract class Master {
    * A human readable name of the master slide.
    */
   public abstract displayName: string
+
+  protected abstract iconSpec: MasterIconSpec
+
+  get icon (): MasterIcon {
+    return new MasterIcon(this.iconSpec)
+  }
 
   /**
    * The defintion of the fields of the master slide.

@@ -53,6 +53,11 @@ export declare function generateTexMarkup(questions: Question[]): string;
 export declare class QuestionMaster extends Master {
     name: string;
     displayName: string;
+    iconSpec: {
+        name: string;
+        color: string;
+        size: "large";
+    };
     fieldsDefintion: {
         questions: {
             type: ArrayConstructor;

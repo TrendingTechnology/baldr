@@ -7,6 +7,11 @@ class QuoteMaster extends master_1.Master {
         super(...arguments);
         this.name = 'quote';
         this.displayName = 'Zitat';
+        this.iconSpec = {
+            name: 'quote',
+            color: 'brown',
+            size: 'large'
+        };
     }
 }
 exports.QuoteMaster = QuoteMaster;

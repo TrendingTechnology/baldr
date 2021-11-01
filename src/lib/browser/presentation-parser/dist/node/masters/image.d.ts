@@ -8,6 +8,10 @@ interface FieldData {
 export declare class ImageMaster extends Master {
     name: string;
     displayName: string;
+    iconSpec: {
+        name: string;
+        color: string;
+    };
     fieldsDefintion: {
         src: {
             type: StringConstructor;
