@@ -1,0 +1,8 @@
+---
+ref: unknown-property
+title: Unknown property in the presentation root
+
+slides:
+- generic: test
+
+unknown: test

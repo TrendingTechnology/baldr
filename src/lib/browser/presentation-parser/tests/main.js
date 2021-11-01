@@ -86,13 +86,19 @@ describe('Package “@bldr/presentation-parser”', function () {
 
   it('“ref” and “title” not in “meta”', function () {
     const presentation = parseTestPresentation('ref-title-not-in-meta')
-    assert.strictEqual(
-      presentation.meta.title,
-      'Title'
-    )
-    assert.strictEqual(
-      presentation.meta.ref,
-      'Reference'
+    assert.strictEqual(presentation.meta.title, 'Title')
+    assert.strictEqual(presentation.meta.ref, 'Reference')
+  })
+
+  it('Unknown property in the presentation root', function () {
+    assert.throws(
+      () => {
+        parseTestPresentation('unknown-property')
+      },
+      {
+        message: 'Unknown properties in raw object: {"unknown":"test"}',
+        name: 'Error'
+      }
     )
   })
 })
