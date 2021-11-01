@@ -8,13 +8,13 @@ import * as marked from 'marked';
  * @param text - The raw input text coming directly form YAML.
  */
 function convertCustomMarkup(text) {
-    return text
+    return (text
         // ↔ 8596 2194 &harr; LEFT RIGHT ARROW
         .replace(/<->/g, '↔')
         // → 8594 2192 &rarr; RIGHTWARDS ARROW
         .replace(/->/g, '→')
         // ← 8592 2190 &larr; LEFTWARDS ARROW
-        .replace(/<-/g, '←');
+        .replace(/<-/g, '←'));
 }
 /**
  * Convert a string from Markdown to HTML. Automatically generate a
@@ -30,7 +30,8 @@ function convertMarkdownAutoInline(text) {
     text = marked(text);
     const dom = new DOMParser().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
-    if (dom.body.childElementCount === 1 && dom.body.children[0].tagName === 'P') {
+    if (dom.body.childElementCount === 1 &&
+        dom.body.children[0].tagName === 'P') {
         return dom.body.children[0].innerHTML;
     }
     else {

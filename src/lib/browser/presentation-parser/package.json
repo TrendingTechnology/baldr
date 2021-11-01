@@ -24,7 +24,7 @@
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "npm run build && mocha 'tests/*'"
+    "test": "npm run build && mocha 'tests/**/*.js'"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
@@ -33,9 +33,11 @@
   },
   "dependencies": {
     "@bldr/core-browser": "*",
-    "@bldr/media-resolver-ng": "*",
-    "@bldr/type-definitions": "*",
     "@bldr/log": "*",
+    "@bldr/markdown-to-html": "*",
+    "@bldr/media-resolver-ng": "*",
+    "@bldr/tex-templates": "*",
+    "@bldr/type-definitions": "*",
     "@bldr/yaml": "*"
   },
   "devDependencies": {

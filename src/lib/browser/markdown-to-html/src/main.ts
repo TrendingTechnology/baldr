@@ -10,13 +10,15 @@ import * as marked from 'marked'
  * @param text - The raw input text coming directly form YAML.
  */
 function convertCustomMarkup (text: string): string {
-  return text
-    // ↔ 8596 2194 &harr; LEFT RIGHT ARROW
-    .replace(/<->/g, '↔')
-    // → 8594 2192 &rarr; RIGHTWARDS ARROW
-    .replace(/->/g, '→')
-    // ← 8592 2190 &larr; LEFTWARDS ARROW
-    .replace(/<-/g, '←')
+  return (
+    text
+      // ↔ 8596 2194 &harr; LEFT RIGHT ARROW
+      .replace(/<->/g, '↔')
+      // → 8594 2192 &rarr; RIGHTWARDS ARROW
+      .replace(/->/g, '→')
+      // ← 8592 2190 &larr; LEFTWARDS ARROW
+      .replace(/<-/g, '←')
+  )
 }
 
 /**
@@ -33,7 +35,10 @@ function convertMarkdownAutoInline (text: string): string {
   text = marked(text)
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // Solution using the browser only implementation.
-  if (dom.body.childElementCount === 1 && dom.body.children[0].tagName === 'P') {
+  if (
+    dom.body.childElementCount === 1 &&
+    dom.body.children[0].tagName === 'P'
+  ) {
     return dom.body.children[0].innerHTML
   } else {
     return dom.body.innerHTML
@@ -54,8 +59,8 @@ type Any = string | string[] | { [key: string]: Any }
 /**
  * Convert Markdown texts into HTML texts.
  *
- * The conversion is done in a recursive fashion, that means in object or array
- * nested strings are also converted.
+ * The conversion is done in a recursive fashion, that means
+ * strings nested in objects or arrays are also converted.
  *
  * @param input - Various input types
  */
@@ -64,7 +69,7 @@ export function convertMarkdownToHtml (input: Any): Any {
   if (typeof input === 'string') {
     return convertMarkdownStringToHtml(input)
 
-  // array
+    // array
   } else if (Array.isArray(input)) {
     for (let index = 0; index < input.length; index++) {
       const value = input[index]
@@ -75,7 +80,7 @@ export function convertMarkdownToHtml (input: Any): Any {
       }
     }
 
-  // object
+    // object
   } else if (typeof input === 'object') {
     for (const key in input) {
       const value = input[key]
