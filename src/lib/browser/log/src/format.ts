@@ -5,8 +5,52 @@ import * as color from './color'
 // eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/
 
+function getColorFunctionByIndex (
+  index: number,
+  colorSpecs?: ColorSpecification
+): (input: unknown) => string {
+  if (colorSpecs == null) {
+    return color.getColorFunction('yellow')
+  }
+
+  if (typeof colorSpecs === 'string') {
+    return color.getColorFunction(colorSpecs)
+  }
+
+  if (index < colorSpecs.length) {
+    return color.getColorFunction(colorSpecs[index])
+  }
+
+  return color.getColorFunction(colorSpecs[colorSpecs.length - 1])
+}
+
+function colorizeArgs (args: any[], colorSpecs?: ColorSpecification): any[] {
+  if (typeof colorSpecs === 'string') {
+    colorSpecs = [colorSpecs]
+  }
+  for (let index = 0; index < args.length; index++) {
+    let arg = args[index]
+    if (typeof arg === 'number') {
+      arg = arg.toString()
+    }
+    if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
+      arg = getColorFunctionByIndex(index, colorSpecs)(arg)
+    }
+    args[index] = arg
+  }
+  return args
+}
+
+type ColorSpecification = color.ColorName[] | color.ColorName
+
+interface FormatOption {
+  colors?: ColorSpecification
+}
+
+export type FormatOptions = FormatOption | ColorSpecification
+
 /**
- * A string in the “printf” format.
+ * @param template - A string in the “printf” format:
  *
  * - `%c` character
  * - `%C` converts to uppercase character (if not already)
@@ -36,51 +80,6 @@ const ansiRegexp = /\u001b\[.*?m/
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-
-function getColorFunctionByIndex (
-  index: number,
-  colorSpecs?: ColorSpecification
-): (input: unknown) => string {
-  if (colorSpecs == null) {
-    return color.getColorFunction('yellow')
-  }
-
-  if (typeof colorSpecs === 'string') {
-    return color.getColorFunction(colorSpecs)
-  }
-
-  if (index < colorSpecs.length) {
-    return color.getColorFunction(colorSpecs[index])
-  }
-
-  return color.getColorFunction(colorSpecs[colorSpecs.length - 1])
-}
-
-function colorizeArgs (args: any[], colorSpecs?: ColorSpecification): any[] {
-  if (typeof colorSpecs === 'string') {
-    colorSpecs = [colorSpecs]
-  }
-  for (let index = 0; index < args.length; index++) {
-    let arg = args[0]
-    if (typeof arg === 'number') {
-      arg = arg.toString()
-    }
-    if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
-      arg = getColorFunctionByIndex(index, colorSpecs)(arg)
-    }
-    args[index] = arg
-  }
-  return args
-}
-
-type ColorSpecification = color.ColorName[] | color.ColorName
-
-interface FormatOption {
-  colors?: ColorSpecification
-}
-
-export type FormatOptions = FormatOption | ColorSpecification
-
 export function format (
   template: string,
   args?: any[],

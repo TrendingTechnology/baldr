@@ -10,7 +10,7 @@ function always(template, args, options) {
     if (options == null) {
         options = 'green';
     }
-    console.log(format_1.format(template, args, options));
+    console.log((0, format_1.format)(template, args, options));
 }
 exports.always = always;
 function alwaysAny(...args) {
@@ -25,7 +25,7 @@ function error(template, args, options) {
         if (options == null) {
             options = 'red';
         }
-        console.error(format_1.format(template, args, 'red'));
+        console.error((0, format_1.format)(template, args, 'red'));
     }
 }
 exports.error = error;
@@ -43,7 +43,7 @@ function warn(template, args, options) {
         if (options == null) {
             options = 'yellow';
         }
-        console.warn(format_1.format(template, args, options));
+        console.warn((0, format_1.format)(template, args, options));
     }
 }
 exports.warn = warn;
@@ -61,7 +61,7 @@ function info(template, args, options) {
         if (options == null) {
             options = 'blue';
         }
-        console.info(format_1.format(template, args, options));
+        console.info((0, format_1.format)(template, args, options));
     }
 }
 exports.info = info;
@@ -79,7 +79,7 @@ function verbose(template, args, options) {
         if (options == null) {
             options = 'magenta';
         }
-        console.debug(format_1.format(template, args, options));
+        console.debug((0, format_1.format)(template, args, options));
     }
 }
 exports.verbose = verbose;
@@ -97,7 +97,7 @@ function debug(template, args, options) {
         if (options == null) {
             options = 'cyan';
         }
-        console.log(format_1.format(template, args, options));
+        console.log((0, format_1.format)(template, args, options));
     }
 }
 exports.debug = debug;

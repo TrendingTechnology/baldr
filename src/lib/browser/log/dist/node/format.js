@@ -5,8 +5,36 @@ const fast_printf_1 = require("fast-printf");
 const color = require("./color");
 // eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/;
+function getColorFunctionByIndex(index, colorSpecs) {
+    if (colorSpecs == null) {
+        return color.getColorFunction('yellow');
+    }
+    if (typeof colorSpecs === 'string') {
+        return color.getColorFunction(colorSpecs);
+    }
+    if (index < colorSpecs.length) {
+        return color.getColorFunction(colorSpecs[index]);
+    }
+    return color.getColorFunction(colorSpecs[colorSpecs.length - 1]);
+}
+function colorizeArgs(args, colorSpecs) {
+    if (typeof colorSpecs === 'string') {
+        colorSpecs = [colorSpecs];
+    }
+    for (let index = 0; index < args.length; index++) {
+        let arg = args[index];
+        if (typeof arg === 'number') {
+            arg = arg.toString();
+        }
+        if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
+            arg = getColorFunctionByIndex(index, colorSpecs)(arg);
+        }
+        args[index] = arg;
+    }
+    return args;
+}
 /**
- * A string in the “printf” format.
+ * @param template - A string in the “printf” format:
  *
  * - `%c` character
  * - `%C` converts to uppercase character (if not already)
@@ -36,34 +64,6 @@ const ansiRegexp = /\u001b\[.*?m/;
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-function getColorFunctionByIndex(index, colorSpecs) {
-    if (colorSpecs == null) {
-        return color.getColorFunction('yellow');
-    }
-    if (typeof colorSpecs === 'string') {
-        return color.getColorFunction(colorSpecs);
-    }
-    if (index < colorSpecs.length) {
-        return color.getColorFunction(colorSpecs[index]);
-    }
-    return color.getColorFunction(colorSpecs[colorSpecs.length - 1]);
-}
-function colorizeArgs(args, colorSpecs) {
-    if (typeof colorSpecs === 'string') {
-        colorSpecs = [colorSpecs];
-    }
-    for (let index = 0; index < args.length; index++) {
-        let arg = args[0];
-        if (typeof arg === 'number') {
-            arg = arg.toString();
-        }
-        if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
-            arg = getColorFunctionByIndex(index, colorSpecs)(arg);
-        }
-        args[index] = arg;
-    }
-    return args;
-}
 function format(template, args, options) {
     if (args == null) {
         return template;
@@ -76,7 +76,7 @@ function format(template, args, options) {
         colorSpecs = options.colors;
     }
     args = colorizeArgs(args, colorSpecs);
-    return fast_printf_1.printf(template, ...args);
+    return (0, fast_printf_1.printf)(template, ...args);
 }
 exports.format = format;
 /**
@@ -124,7 +124,7 @@ function formatObject(object, options) {
     const output = [];
     for (const key of keys) {
         const keyWithSpaces = color.blue(key) + ':' + ' '.repeat(maxKeyLength - key.length);
-        output.push(fast_printf_1.printf('%s%s %s', ' '.repeat(indentation), color.blue(keyWithSpaces), object[key]));
+        output.push((0, fast_printf_1.printf)('%s%s %s', ' '.repeat(indentation), color.blue(keyWithSpaces), object[key]));
     }
     return output.join('\n');
 }
