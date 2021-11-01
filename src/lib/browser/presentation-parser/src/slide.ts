@@ -7,26 +7,26 @@ import * as log from '@bldr/log'
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
-export class SlideMetaData {
+class SlideMeta {
   /**
    * The ID of a slide (Used for links)
    */
-  ref?: string
+  public readonly ref?: string
 
   /**
    * The title of a slide.
    */
-  title?: string
+  public readonly title?: string
 
   /**
    * Some text that describes the slide.
    */
-  description?: string
+  public readonly description?: string
 
   /**
    * The source of the slide, for example a HTTP URL.
    */
-  source?: string
+  public readonly source?: string
 
   /**
    * @param {Object} rawSlideObject
@@ -43,21 +43,21 @@ export class Slide {
   /**
    * The slide number
    */
-  no: number
+  public no: number
 
   /**
    * The level in the hierarchial slide tree.
    */
-  level: number
+  public level: number
 
   /**
    * An array of child slide objects.
    */
-  slides?: Slide[]
+  public slides?: Slide[]
 
-  metaData: SlideMetaData
+  public readonly meta: SlideMeta
 
-  master: Master
+  public readonly master: Master
 
   /**
    * In this attribute we save the normalized field data of a slide.
@@ -77,18 +77,18 @@ export class Slide {
   /**
    * URIs of media assets that must necessarily be present.
    */
-  mediaUris: Set<string>
+  public readonly mediaUris: Set<string>
 
   /**
    * URIs of media assets that do not have to exist.
    */
-  optionalMediaUris: Set<string>
+  public readonly optionalMediaUris: Set<string>
 
   constructor (raw: any, no: number, level: number) {
     this.no = no
     this.level = level
     const data = new DataCutter(raw)
-    this.metaData = new SlideMetaData(data)
+    this.meta = new SlideMeta(data)
     this.master = this.detectMaster(data)
     this.fields = this.master.normalizeFields(data.cutAny(this.master.name))
     this.mediaUris = this.master.processMediaUris(this.fields)

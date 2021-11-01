@@ -1,0 +1,10 @@
+---
+ref: slide-meta
+title: Slide metadata
+
+slides:
+- ref: Reference
+  title: Title
+  description: Description
+  generic: test
+  source: Source

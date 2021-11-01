@@ -3,23 +3,23 @@ import { Master, FieldData } from './master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
-export declare class SlideMetaData {
+declare class SlideMeta {
     /**
      * The ID of a slide (Used for links)
      */
-    ref?: string;
+    readonly ref?: string;
     /**
      * The title of a slide.
      */
-    title?: string;
+    readonly title?: string;
     /**
      * Some text that describes the slide.
      */
-    description?: string;
+    readonly description?: string;
     /**
      * The source of the slide, for example a HTTP URL.
      */
-    source?: string;
+    readonly source?: string;
     /**
      * @param {Object} rawSlideObject
      */
@@ -38,8 +38,8 @@ export declare class Slide {
      * An array of child slide objects.
      */
     slides?: Slide[];
-    metaData: SlideMetaData;
-    master: Master;
+    readonly meta: SlideMeta;
+    readonly master: Master;
     /**
      * In this attribute we save the normalized field data of a slide.
      */
@@ -55,11 +55,11 @@ export declare class Slide {
     /**
      * URIs of media assets that must necessarily be present.
      */
-    mediaUris: Set<string>;
+    readonly mediaUris: Set<string>;
     /**
      * URIs of media assets that do not have to exist.
      */
-    optionalMediaUris: Set<string>;
+    readonly optionalMediaUris: Set<string>;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
     /**
@@ -67,3 +67,4 @@ export declare class Slide {
      */
     log(): void;
 }
+export {};

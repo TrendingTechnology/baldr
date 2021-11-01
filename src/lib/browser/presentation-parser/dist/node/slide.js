@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Slide = exports.SlideMetaData = void 0;
+exports.Slide = void 0;
 const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
 const master_collection_1 = require("./master-collection");
@@ -8,7 +8,7 @@ const log = require("@bldr/log");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
-class SlideMetaData {
+class SlideMeta {
     /**
      * @param {Object} rawSlideObject
      */
@@ -19,13 +19,12 @@ class SlideMetaData {
         this.source = data.cutString('source');
     }
 }
-exports.SlideMetaData = SlideMetaData;
 class Slide {
     constructor(raw, no, level) {
         this.no = no;
         this.level = level;
         const data = new data_management_1.DataCutter(raw);
-        this.metaData = new SlideMetaData(data);
+        this.meta = new SlideMeta(data);
         this.master = this.detectMaster(data);
         this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);

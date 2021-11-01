@@ -1,0 +1,10 @@
+---
+ref: slide-state-absent
+title: Slide state absent
+
+slides:
+- generic: absent
+  state: absent
+- title: Present
+  generic: present
+  state: present

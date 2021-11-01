@@ -5,7 +5,7 @@ import * as log from '@bldr/log';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
-export class SlideMetaData {
+class SlideMeta {
     /**
      * @param {Object} rawSlideObject
      */
@@ -21,7 +21,7 @@ export class Slide {
         this.no = no;
         this.level = level;
         const data = new DataCutter(raw);
-        this.metaData = new SlideMetaData(data);
+        this.meta = new SlideMeta(data);
         this.master = this.detectMaster(data);
         this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);
