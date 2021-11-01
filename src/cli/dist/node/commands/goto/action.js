@@ -49,10 +49,10 @@ function action(cmdObj) {
         mirroredPath = config_1.default.mediaServer.basePath;
     }
     if (!fs_1.default.existsSync(mirroredPath)) {
-        log.error('The path “%s” doesn’t exist.', mirroredPath);
+        log.error('The path “%s” doesn’t exist.', [mirroredPath]);
         process.exit(1);
     }
-    log.info('Go to: %s', mirroredPath);
+    log.info('Go to: %s', [mirroredPath]);
     if (cmdObj.fileManager) {
         open_with_1.openInFileManager(mirroredPath, true);
     }

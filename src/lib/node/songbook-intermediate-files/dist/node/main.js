@@ -60,7 +60,9 @@ function collectSongs(basePath) {
     for (const songPath of songsPaths) {
         const song = new song_1.ExtendedSong(path.join(basePath, songPath));
         if (song.songId in songs) {
-            throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
+            throw new Error(log.format('A song with the same songId already exists: %s', [
+                song.songId
+            ]));
         }
         songs[song.songId] = song;
     }
@@ -96,7 +98,7 @@ class Library extends songbook_core_1.CoreLibrary {
                 songs[songId] = this.songs[songId];
             }
             else {
-                throw new Error(log.format('There is no song with song ID “%s”', songId));
+                throw new Error(log.format('There is no song with song ID “%s”', [songId]));
             }
         }
         this.songs = songs;
@@ -323,7 +325,7 @@ class PianoScore {
         texMarkup = texMarkup.replace('//basepath//', this.library.basePath);
         // Write contents to the text file.
         log.info('The TeX markup was written to: %s', // Do not change text: This will break tests.
-        this.texFile.path // No color: This will break tests.
+        [this.texFile.path] // No color: This will break tests.
         );
         this.texFile.append(texMarkup);
         // To avoid temporary TeX files in the working directory of the shell
@@ -333,7 +335,10 @@ class PianoScore {
         // Compile twice for the table of contents
         // The page numbers in the toc only matches after three runs.
         for (let index = 0; index < 3; index++) {
-            log.info('Compile the TeX file “%s” the %d time.', this.texFile.path, index + 1);
+            log.info('Compile the TeX file “%s” the %d time.', [
+                this.texFile.path,
+                index + 1
+            ]);
             this.spawnTex(this.texFile.path, cwd);
         }
         // Open the pdf file.
@@ -390,7 +395,7 @@ class PianoFilesCountTree {
             return true;
         }
         else {
-            throw new Error(log.format('Invalid piano file count: %s', count));
+            throw new Error(log.format('Invalid piano file count: %s', [count]));
         }
     }
     /**
@@ -468,7 +473,7 @@ class IntermediateLibrary extends Library {
         for (const songPath of this.detectSongs()) {
             const song = new song_1.IntermediateSong(path.join(this.basePath, songPath));
             if (song.songId in songs) {
-                throw new Error(log.format('A song with the same songId already exists: %s', song.songId));
+                throw new Error(log.format('A song with the same songId already exists: %s', [song.songId]));
             }
             songs[song.songId] = song;
         }
@@ -493,7 +498,7 @@ class IntermediateLibrary extends Library {
         }
         glob_1.default.sync('**/.*.mscx,', { cwd: this.basePath }).forEach(relativePath => {
             const tmpMscx = path.join(this.basePath, relativePath);
-            log.info('Delete temporary MuseScore file: %s', tmpMscx);
+            log.info('Delete temporary MuseScore file: %s', [tmpMscx]);
             fs.unlinkSync(tmpMscx);
         });
         this.deleteFiles(['songs.tex', 'filehashes.db']);
@@ -520,7 +525,7 @@ class IntermediateLibrary extends Library {
     generateLibraryJson() {
         const jsonPath = path.join(this.basePath, 'songs.json');
         fs.writeFileSync(jsonPath, JSON.stringify(this, null, '  '));
-        log.info('Create JSON file: %s', jsonPath);
+        log.info('Create JSON file: %s', [jsonPath]);
     }
     compilePianoScore(groupAlphabetically, pageTurnOptimized) {
         const pianoScore = new PianoScore(this, groupAlphabetically, pageTurnOptimized);
@@ -552,7 +557,7 @@ class IntermediateLibrary extends Library {
             song = this.songs[songId];
         }
         else {
-            throw new Error(log.format('The song with the song ID “%s” is unkown.', songId));
+            throw new Error(log.format('The song with the song ID “%s” is unkown.', [songId]));
         }
         song.generateIntermediateFiles(mode, true);
     }

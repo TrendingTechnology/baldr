@@ -93,7 +93,7 @@ function extractSamples (audacityTextmarkFile: string): RawSample[] {
  */
 function action (filePath: string): void {
   const text = readFile(filePath)
-  log.info('The content of the source file “%s”:\n', filePath)
+  log.info('The content of the source file “%s”:\n', [filePath])
   log.info(text)
 
   const rawSamples = extractSamples(text)
@@ -149,7 +149,7 @@ function action (filePath: string): void {
   }
 
   const dest = `${filePath}.yml`
-  log.info('The content of the destination file “%s”:\n', dest)
+  log.info('The content of the destination file “%s”:\n', [dest])
   log.always(writeYamlFile(dest, { samples }))
 }
 

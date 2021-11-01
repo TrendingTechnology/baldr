@@ -47,6 +47,20 @@ class AssetCache extends Cache<Asset> {
       return super.get(ref)
     }
   }
+
+  getMultiple (uuidOrRefs: string | string[] | Set<string>): Asset[] {
+    if (typeof uuidOrRefs === 'string') {
+      uuidOrRefs = [uuidOrRefs]
+    }
+    const output: Asset[] = []
+    for (const uuidOrRef of uuidOrRefs) {
+      const asset = this.get(uuidOrRef)
+      if (asset != null) {
+        output.push(asset)
+      }
+    }
+    return output
+  }
 }
 
 /**
@@ -276,7 +290,10 @@ export class Resolver {
   /**
    * @returns All previously resolved media assets.
    */
-  public exportAssets (): Asset[] {
+  public exportAssets (refs?: string | string[] | Set<string>): Asset[] {
+    if (refs != null) {
+      return this.assetCache.getMultiple(refs)
+    }
     return this.assetCache.getAll()
   }
 

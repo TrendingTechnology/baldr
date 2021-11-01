@@ -117,12 +117,12 @@ function patchTexTitles(filePath) {
         texFileContentPatched = texFileContent.replace(/(\\documentclass(\[.*\])?\{schule-arbeitsblatt\})/, '$1\n\n' + patchedTitles);
     }
     if (texFileContent !== texFileContentPatched) {
-        log.info('Patch titles in TeX file %s', filePath);
+        log.info('Patch titles in TeX file %s', [filePath]);
         log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched));
         (0, file_reader_writer_1.writeFile)(filePath, texFileContentPatched);
         return true;
     }
-    log.verbose('Nothing to patch in TeX file %s', filePath);
+    log.verbose('Nothing to patch in TeX file %s', [filePath]);
     return false;
 }
 exports.patchTexTitles = patchTexTitles;
@@ -145,7 +145,7 @@ function initializeMetaYaml(pdfFile, dest, pageNo, pageCount) {
 }
 function generateSvg(tmpPdfFile, destDir, pageCount, pageNo) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.info('Convert page %s from %s', pageNo.toString(), pageCount.toString());
+        log.info('Convert page %s from %s', [pageNo.toString(), pageCount.toString()]);
         const svgFileName = `${pageNo}.svg`;
         const svgFilePath = path_1.default.join(destDir, svgFileName);
         fs_1.default.mkdirSync(destDir, { recursive: true });
@@ -158,7 +158,7 @@ function generateSvg(tmpPdfFile, destDir, pageCount, pageNo) {
         // Move to LT (Lückentext) subdir.
         const destPath = path_1.default.join(destDir, svgFileName);
         initializeMetaYaml(tmpPdfFile, `${destPath}.yml`, pageNo, pageCount);
-        log.info('Result svg: %s', destPath);
+        log.info('Result svg: %s', [destPath]);
         main_1.operations.moveAsset(svgFilePath, destPath);
         yield main_1.operations.normalizeMediaAsset(destPath, { wikidata: false });
     });
@@ -183,7 +183,7 @@ function compileTex(tmpTexFile) {
         throw new Error('lualatex compilation failed.');
     }
     const tmpPdf = path_1.default.join(tmpDir, `${jobName}.pdf`);
-    log.debug('Compiled to temporary PDF: %s', tmpPdf);
+    log.debug('Compiled to temporary PDF: %s', [tmpPdf]);
     return tmpPdf;
 }
 /**
@@ -194,10 +194,10 @@ function generateCloze(filePath) {
         filePath = path_1.default.resolve(filePath);
         const texFileContent = (0, file_reader_writer_1.readFile)(filePath);
         if (!texFileContent.includes('cloze')) {
-            log.warn('%s has no cloze texts.', filePath);
+            log.warn('%s has no cloze texts.', [filePath]);
             return;
         }
-        log.debug('Resolved input path: %s', filePath);
+        log.debug('Resolved input path: %s', [filePath]);
         // Move to LT (Lückentext) subdir.
         const parentDir = location_indicator_1.locationIndicator.getPresParentDir(filePath);
         if (parentDir == null) {
@@ -205,9 +205,9 @@ function generateCloze(filePath) {
         }
         const destDir = path_1.default.join(parentDir, 'LT');
         const tmpTexFile = filePath.replace('.tex', '_Loesung.tex');
-        log.debug('Create temporary file %s', tmpTexFile);
+        log.debug('Create temporary file %s', [tmpTexFile]);
         (0, file_reader_writer_1.writeFile)(tmpTexFile, patchTex(texFileContent));
-        log.info('Generate SVGs from the file %s.', tmpTexFile);
+        log.info('Generate SVGs from the file %s.', [tmpTexFile]);
         const tmpPdfFile = compileTex(tmpTexFile);
         const pageCount = (0, core_node_1.getPdfPageCount)(tmpPdfFile);
         for (let pageNo = 1; pageNo <= pageCount; pageNo++) {

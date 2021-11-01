@@ -4,6 +4,7 @@ import { LampTypes } from '@bldr/type-definitions'
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
 import { Resolver } from '@bldr/media-resolver-ng'
+import * as log from '@bldr/log'
 
 export const resolver = new Resolver()
 
@@ -63,10 +64,17 @@ class Meta implements LampTypes.PresentationMeta {
     this.curriculumUrl = data.cutString('curriculumUrl')
     data.checkEmpty()
   }
+
+  /**
+   * Log to the console.
+   */
+  public log (): void {
+    console.log(log.formatObject(this, { indentation: 2 }))
+  }
 }
 
 export class Presentation {
-  meta: LampTypes.PresentationMeta
+  meta: Meta
   slides: SlideCollection
 
   constructor (yamlString: string) {
@@ -77,8 +85,23 @@ export class Presentation {
     data.checkEmpty()
   }
 
-  public async resolveMediaAssets () {
+  public async resolveMediaAssets (): Promise<void> {
     await resolver.resolve(this.slides.mediaUris, true)
     await resolver.resolve(this.slides.optionalMediaUris, false)
+  }
+
+  /**
+   * Log to the console.
+   */
+  public log (): void {
+    this.meta.log()
+    for (const slide of this.slides.flat) {
+      slide.log()
+    }
+
+    const assets = resolver.exportAssets(this.slides.mediaUris)
+    for (const asset of assets) {
+      console.log(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }))
+    }
   }
 }

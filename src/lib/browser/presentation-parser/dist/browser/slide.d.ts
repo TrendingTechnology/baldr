@@ -62,4 +62,8 @@ export declare class Slide {
     optionalMediaUris: Set<string>;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
+    /**
+     * Log to the console.
+     */
+    log(): void;
 }

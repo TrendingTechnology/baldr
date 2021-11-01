@@ -38,7 +38,7 @@ async function action (
   const data = await categoriesManagement.process(
     rawData as MediaResolverTypes.YamlFormat
   )
-  log.info(data)
+  log.infoAny(data)
 
   let downloadWikicommons = true
   if (rawData?.mainImage == null) {
@@ -52,7 +52,7 @@ async function action (
     if (!cmdObj.dryRun && data.mainImage != null) {
       await fetchCommonsFile(data.mainImage, dest)
     } else {
-      log.info('Dry run! Destination: %s', dest)
+      log.info('Dry run! Destination: %s', [dest])
     }
   }
 
@@ -67,11 +67,11 @@ async function action (
   const yamlFile = `${dest}.yml`
   if (!fs.existsSync(yamlFile)) {
     if (!cmdObj.dryRun) {
-      log.info('Write YAML file: %s', yamlFile)
+      log.info('Write YAML file: %s', [yamlFile])
       writeYamlFile(yamlFile, data)
     }
   } else {
-    log.info('The YAML file already exists: %s', yamlFile)
+    log.info('The YAML file already exists: %s', [yamlFile])
   }
 }
 

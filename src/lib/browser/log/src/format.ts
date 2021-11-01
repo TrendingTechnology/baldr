@@ -36,55 +36,135 @@ const ansiRegexp = /\u001b\[.*?m/
  * - `\%` prints a percent sign
  * - `%2$s %1$s` positional arguments
  */
-type FormatString = string | number
 
-export function formatWithoutColor (
-  template: FormatString,
-  ...args: any[]
-): string {
-  if (typeof template === 'number') {
-    template = template.toString()
+function getColorFunctionByIndex (
+  index: number,
+  colorSpecs?: ColorSpecification
+): (input: unknown) => string {
+  if (colorSpecs == null) {
+    return color.getColorFunction('yellow')
   }
+
+  if (typeof colorSpecs === 'string') {
+    return color.getColorFunction(colorSpecs)
+  }
+
+  if (index < colorSpecs.length) {
+    return color.getColorFunction(colorSpecs[index])
+  }
+
+  return color.getColorFunction(colorSpecs[colorSpecs.length - 1])
+}
+
+function colorizeArgs (args: any[], colorSpecs?: ColorSpecification): any[] {
+  if (typeof colorSpecs === 'string') {
+    colorSpecs = [colorSpecs]
+  }
+  for (let index = 0; index < args.length; index++) {
+    let arg = args[0]
+    if (typeof arg === 'number') {
+      arg = arg.toString()
+    }
+    if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
+      arg = getColorFunctionByIndex(index, colorSpecs)(arg)
+    }
+    args[index] = arg
+  }
+  return args
+}
+
+type ColorSpecification = color.ColorName[] | color.ColorName
+
+interface FormatOption {
+  colors?: ColorSpecification
+}
+
+export type FormatOptions = FormatOption | ColorSpecification
+
+export function format (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): string {
+  if (args == null) {
+    return template
+  }
+  let colorSpecs
+  if (typeof options === 'string' || Array.isArray(options)) {
+    colorSpecs = options
+  } else if (options?.colors != null) {
+    colorSpecs = options.colors
+  }
+  args = colorizeArgs(args, colorSpecs)
   return printf(template, ...args)
 }
 
-export function format (template: FormatString, ...args: any[]): string {
-  args = args.map(value => {
-    if (
-      typeof value !== 'string' ||
-      (typeof value === 'string' && value?.match(ansiRegexp) != null)
-    ) {
-      return value
-    }
-    return color.yellow(value)
-  })
-  return formatWithoutColor(template, ...args)
+interface FormatObjectOption {
+  indentation?: number
+  keys?: string[]
 }
 
-export function colorizeFormat (
-  template: FormatString,
-  args: any[],
-  colorFunction: Function
+/**
+ * Format a string indexed object.
+ *
+ * ```
+ * ref:        Konzertkritik
+ * uuid:       13fb6aa9-9c07-4b5c-a113-d259d9caad8d
+ * title:      Interpreten und Interpretationen im Spiegel der Musikkritik
+ * subtitle:   <em class="person">Ludwig van Beethoven</em>: <em class="piece">Klaviersonate f-Moll op. 57 „Appassionata“</em> (1807)
+ * subject:    Musik
+ * grade:      12
+ * curriculum: Interpreten und Interpretationen / Konzertierende Musiker
+ * ```
+ *
+ * @param object - A object with string properties.
+ * @param options - Some options. See interface
+ *
+ * @returns A formatted string containing line breaks.
+ */
+export function formatObject (
+  object: any,
+  options?: FormatObjectOption
 ): string {
-  args = args.map(value => {
-    if (
-      typeof value !== 'string' ||
-      (typeof value === 'string' && value?.match(ansiRegexp) != null)
-    ) {
-      return value
+  let keys: string[]
+  if (options?.keys != null) {
+    keys = options.keys
+  } else {
+    keys = []
+    for (const key in object) {
+      if (
+        Object.prototype.hasOwnProperty.call(object, key) &&
+        object[key] != null
+      ) {
+        keys.push(key)
+      }
     }
-    return colorFunction(value)
-  })
-  return formatWithoutColor(template, ...args)
-}
-
-export function detectFormatTemplate (
-  msg: any[],
-  colorFunction: Function
-): any[] {
-  const firstArg = msg[0]
-  if (typeof firstArg === 'number' || typeof firstArg === 'string') {
-    return [colorizeFormat(firstArg, msg.slice(1), colorFunction)]
   }
-  return msg
+
+  let maxKeyLength = 0
+  for (const key of keys) {
+    if (key.length > maxKeyLength) {
+      maxKeyLength = key.length
+    }
+  }
+
+  let indentation = 0
+  if (options?.indentation != null) {
+    indentation = options.indentation
+  }
+
+  const output = []
+  for (const key of keys) {
+    const keyWithSpaces =
+      color.blue(key) + ':' + ' '.repeat(maxKeyLength - key.length)
+    output.push(
+      printf(
+        '%s%s %s',
+        ' '.repeat(indentation),
+        color.blue(keyWithSpaces),
+        object[key]
+      )
+    )
+  }
+  return output.join('\n')
 }

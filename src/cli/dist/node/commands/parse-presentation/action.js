@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const presentation_parser_1 = require("@bldr/presentation-parser");
-const media_manager_1 = require("@bldr/media-manager");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * @param filePath - A file path.
  * @param cmdObj - An object containing options as key-value pairs.
@@ -21,7 +21,10 @@ function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
         yield media_manager_1.walk({
             presentation(presPath) {
-                presentation_parser_1.parse(file_reader_writer_1.readFile(presPath));
+                return __awaiter(this, void 0, void 0, function* () {
+                    const presentation = yield presentation_parser_1.parseAndResolve(file_reader_writer_1.readFile(presPath));
+                    presentation.log();
+                });
             }
         }, {
             path: filePaths

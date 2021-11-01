@@ -32,7 +32,7 @@ function action() {
     configJson.mediaCategories = media_categories_1.stripCategories();
     configJson.twoLetterAbbreviations = media_categories_1.twoLetterAbbreviations;
     for (const filePath of config_1.default.configurationFileLocations) {
-        log.info('Patch configuration file %s\n', filePath);
+        log.info('Patch configuration file %s\n', [filePath]);
         log.info(file_reader_writer_1.writeJsonFile(filePath, configJson));
     }
 }

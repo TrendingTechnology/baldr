@@ -36,13 +36,13 @@ async function action (youtubeId: string): Promise<void> {
   if (meta == null) {
     log.error(
       'Metadata of the YouTube video “%s” could not be fetched.',
-      youtubeId
+      [youtubeId]
     )
     return
   }
 
   const metaData = meta as MediaResolverTypes.YamlFormat
-  log.verbose(metaData)
+  log.verboseAny(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())
   if (parentDir == null) {

@@ -95,7 +95,7 @@ function action(what, cmdObj) {
             // For example:
             //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
             if (result.stdout === '') {
-                log.error('Git repo is not clean: %s', config_1.default.localRepo);
+                log.error('Git repo is not clean: %s', [config_1.default.localRepo]);
                 log.warn(result.stdout);
                 process.exit(1);
             }

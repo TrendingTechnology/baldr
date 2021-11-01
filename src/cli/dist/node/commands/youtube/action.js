@@ -57,11 +57,11 @@ function action(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
         const meta = (yield requestYoutubeApi(youtubeId));
         if (meta == null) {
-            log.error('Metadata of the YouTube video “%s” could not be fetched.', youtubeId);
+            log.error('Metadata of the YouTube video “%s” could not be fetched.', [youtubeId]);
             return;
         }
         const metaData = meta;
-        log.verbose(metaData);
+        log.verboseAny(metaData);
         const parentDir = media_manager_1.locationIndicator.getPresParentDir(process.cwd());
         if (parentDir == null) {
             throw new Error('You are not in a presentation folder!');

@@ -38,22 +38,22 @@ function move (
   }
   if (copy != null && copy) {
     if (!(dryRun != null && dryRun)) {
-      log.debug('Copy file from %s to %s', oldPath, newPath)
+      log.debug('Copy file from %s to %s', [oldPath, newPath])
       fs.copyFileSync(oldPath, newPath)
     }
   } else {
     if (!(dryRun != null && dryRun)) {
       //  Error: EXDEV: cross-device link not permitted,
       try {
-        log.debug('Move file from %s to %s', oldPath, newPath)
+        log.debug('Move file from %s to %s', [oldPath, newPath])
         fs.renameSync(oldPath, newPath)
       } catch (error) {
         const e = error as GenericError
         if (e.code === 'EXDEV') {
           log.debug(
             'Move file by copying and deleting from %s to %s',
-            oldPath,
-            newPath
+            [oldPath,
+            newPath]
           )
           fs.copyFileSync(oldPath, newPath)
           fs.unlinkSync(oldPath)
@@ -84,8 +84,8 @@ function moveCorrespondingFiles (
       const newCorrespondingPath = newParentPath.replace(search, replace)
       log.debug(
         'Move corresponding file from %s to %s',
-        oldCorrespondingPath,
-        newCorrespondingPath
+        [oldCorrespondingPath,
+        newCorrespondingPath]
       )
       move(oldCorrespondingPath, newCorrespondingPath, opts)
     }
@@ -198,7 +198,7 @@ export function renameByRef (filePath: string): void {
   try {
     result = readYamlMetaData(filePath)
   } catch (error) {
-    log.error(error)
+    log.errorAny(error)
     return
   }
 
@@ -233,9 +233,9 @@ export function renameByRef (filePath: string): void {
     }
     log.info(
       'Rename the file %s by reference from %s to %s',
-      filePath,
+      [filePath,
       oldBaseName,
-      ref
+      ref]
     )
     newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     moveAsset(oldPath, newPath)
@@ -252,7 +252,7 @@ async function queryWikidata (
     categoryNames,
     categoryCollection
   )
-  log.verbose(dataWiki)
+  log.verboseAny(dataWiki)
   metaData = wikidata.mergeData(
     metaData,
     dataWiki,
@@ -326,7 +326,7 @@ export async function normalizeMediaAsset (
     }
   } catch (error) {
     log.error(filePath)
-    log.error(error)
+    log.errorAny(error)
     process.exit()
   }
 }
@@ -379,7 +379,7 @@ export async function convertAsset (
   try {
     mimeType = mimeTypeManager.extensionToType(asset.extension)
   } catch (error) {
-    log.error('Unsupported extension %s', asset.extension)
+    log.error('Unsupported extension %s', [asset.extension])
     return
   }
   const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
@@ -477,7 +477,7 @@ export async function convertAsset (
         try {
           metaData = (await collectAudioMetadata(filePath)) as unknown
         } catch (error) {
-          log.error(error)
+          log.errorAny(error)
         }
         if (metaData != null) {
           await writeYamlMetaData(

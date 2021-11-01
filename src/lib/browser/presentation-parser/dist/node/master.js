@@ -49,7 +49,7 @@ class Master {
      * ```
      */
     collectMediaUris(fields) {
-        return;
+        return undefined;
     }
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
@@ -58,7 +58,7 @@ class Master {
      * be resolved.
      */
     collectOptionalMediaUris(fields) {
-        return;
+        return undefined;
     }
     processMediaUris(fields) {
         return Master.convertToSet(this.collectMediaUris(fields));

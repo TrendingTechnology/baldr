@@ -10,7 +10,7 @@ function action (): void {
   configJson.twoLetterAbbreviations = twoLetterAbbreviations
 
   for (const filePath of config.configurationFileLocations) {
-    log.info('Patch configuration file %s\n', filePath)
+    log.info('Patch configuration file %s\n', [filePath])
     log.info(writeJsonFile(filePath, configJson))
   }
 }

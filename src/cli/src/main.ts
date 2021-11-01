@@ -62,7 +62,7 @@ function convertPathArgToParentPresDir (args: any[]): any[] {
     if (presParentDir != null) {
       log.info(
         '--parent-pres-dir: Run the task on the parent presentation folder: %s',
-        presParentDir
+        [presParentDir]
       )
       args[0][0] = presParentDir
     }
@@ -183,7 +183,7 @@ async function main (): Promise<void> {
   try {
     await program.parseAsync(process.argv)
   } catch (error) {
-    log.error(error)
+    log.error(String(error))
   }
 
   // [
@@ -198,5 +198,5 @@ async function main (): Promise<void> {
 if (require.main === module) {
   main()
     .then()
-    .catch(reason => log.info(reason))
+    .catch(reason => log.info(String(reason)))
 }

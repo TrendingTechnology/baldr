@@ -1,45 +1,34 @@
+import { FormatOptions } from './format';
+/**
+ * Log always.
+ */
+export declare function always(template: string, args?: any[], options?: FormatOptions): void;
+export declare function alwaysAny(...args: any[]): void;
 /**
  * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export declare function always(...msg: any[]): void;
-/**
- * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
- */
-export declare function error(...msg: any[]): void;
+export declare function error(template: string, args?: any[], options?: FormatOptions): void;
+export declare function errorAny(...args: any[]): void;
 /**
  * Log on level 2.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export declare function warn(...msg: any[]): void;
+export declare function warn(template: string, args?: any[], options?: FormatOptions): void;
+export declare function warnAny(...args: any[]): void;
 /**
  * Log with a format string on level 3.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export declare function info(...msg: any[]): void;
+export declare function info(template: string, args?: any[], options?: FormatOptions): void;
+export declare function infoAny(...args: any[]): void;
 /**
  * Log on level 4.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export declare function verbose(...msg: any[]): void;
+export declare function verbose(template: string, args?: any[], options?: FormatOptions): void;
+export declare function verboseAny(...args: any[]): void;
 /**
  * Log on level 5.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export declare function debug(...msg: any[]): void;
+export declare function debug(template: string, args?: any[], options?: FormatOptions): void;
+export declare function debugAny(...args: any[]): void;
 /**
  * Set the log level.
  *

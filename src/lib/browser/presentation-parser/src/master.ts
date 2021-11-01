@@ -135,7 +135,7 @@ export abstract class Master {
   protected collectMediaUris (
     fields: FieldData
   ): string | string[] | Set<string> | undefined {
-    return
+    return undefined
   }
 
   /**
@@ -147,7 +147,7 @@ export abstract class Master {
   protected collectOptionalMediaUris (
     fields: FieldData
   ): string | string[] | Set<string> | undefined {
-    return
+    return undefined
   }
 
   public processMediaUris (fields: FieldData): Set<string> {

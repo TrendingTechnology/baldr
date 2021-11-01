@@ -4,6 +4,7 @@ exports.Slide = exports.SlideMetaData = void 0;
 const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
 const master_collection_1 = require("./master-collection");
+const log = require("@bldr/log");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -40,6 +41,12 @@ class Slide {
             throw new Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data.raw)}`);
         }
         return master_collection_1.masterCollection[intersection[0]];
+    }
+    /**
+     * Log to the console.
+     */
+    log() {
+        log.always('Slide No. %s', [this.no]);
     }
 }
 exports.Slide = Slide;

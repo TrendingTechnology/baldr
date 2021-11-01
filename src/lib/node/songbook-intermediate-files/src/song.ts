@@ -152,14 +152,14 @@ class ExtendedSongMetaData implements SongMetaData {
    */
   constructor (folder: string) {
     if (!fs.existsSync(folder)) {
-      throw new Error(log.format('Song folder doesn’t exist: %s', folder))
+      throw new Error(log.format('Song folder doesn’t exist: %s', [folder]))
     }
 
     this.folder = folder
 
     const ymlFile = path.join(folder, this.yamlFile)
     if (!fs.existsSync(ymlFile)) {
-      throw new Error(log.format('YAML file could not be found: %s', ymlFile))
+      throw new Error(log.format('YAML file could not be found: %s', [ymlFile]))
     }
 
     this.rawYaml = convertFromYamlRaw(
@@ -168,7 +168,7 @@ class ExtendedSongMetaData implements SongMetaData {
 
     for (const key in this.rawYaml) {
       if (!this.allowedProperties.includes(key)) {
-        throw new Error(log.format('Unsupported key: %s', key))
+        throw new Error(log.format('Unsupported key: %s', [key]))
       }
     }
 
@@ -196,8 +196,7 @@ class ExtendedSongMetaData implements SongMetaData {
         throw new Error(
           log.format(
             'Wikidata entry “%s” of song “%s” must be an number (without Q).',
-            this.title,
-            this.wikidata
+            [this.title, this.wikidata]
           )
         )
       }
@@ -321,7 +320,7 @@ export class ExtendedSong implements Song {
         return absPath
       }
     }
-    throw new Error(log.format('File doesn’t exist: %s', absPath))
+    throw new Error(log.format('File doesn’t exist: %s', [absPath]))
   }
 
   toJSON (): object {
@@ -374,18 +373,16 @@ export class IntermediateSong extends ExtendedSong {
   formatPianoTex (): string {
     if (this.pianoFiles.length === 0) {
       throw new Error(
-        log.format(
-          'The song “%s” has no EPS piano score files.',
+        log.format('The song “%s” has no EPS piano score files.', [
           this.metaData.title
-        )
+        ])
       )
     }
     if (this.pianoFiles.length > 4) {
       throw new Error(
-        log.format(
-          'The song “%s” has more than 4 EPS piano score files.',
+        log.format('The song “%s” has more than 4 EPS piano score files.', [
           this.metaData.title
-        )
+        ])
       )
     }
     const template = `\n\\tmpmetadata
@@ -394,13 +391,12 @@ export class IntermediateSong extends ExtendedSong {
 {%s} % composer
 {%s} % lyricist
 `
-    const output = log.formatWithoutColor(
-      template,
+    const output = log.format(template, [
       PianoScore.sanitize(this.metaDataCombined.title),
       PianoScore.sanitize(this.metaDataCombined.subtitle),
       PianoScore.sanitize(this.metaDataCombined.composer),
       PianoScore.sanitize(this.metaDataCombined.lyricist)
-    )
+    ])
     const epsFiles = []
     for (let i = 0; i < this.pianoFiles.length; i++) {
       epsFiles.push(this.formatPianoTeXEpsFile(i))
@@ -503,7 +499,7 @@ export class IntermediateSong extends ExtendedSong {
       constants.firstSlideName
     )
 
-    log.info('  Generate SVG files: %s', result.toString())
+    log.info('  Generate SVG files: %s', [result.toString()])
     if (result.length === 0) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
@@ -528,7 +524,7 @@ export class IntermediateSong extends ExtendedSong {
       constants.pianoRegExp,
       constants.firstPianoName
     )
-    log.info('  Generate EPS files: %s', result.toString())
+    log.info('  Generate EPS files: %s', [result.toString()])
     if (result.length === 0) {
       throw new Error(
         'The EPS files for the piano score couldn’t be generated.'
@@ -560,10 +556,9 @@ export class IntermediateSong extends ExtendedSong {
       this.generateSlides()
     }
 
-    log.info(
-      'Check if the MuseScore files of the Song “%s” have changed.',
+    log.info('Check if the MuseScore files of the Song “%s” have changed.', [
       log.colorize.green(this.songId)
-    )
+    ])
 
     // piano
     if (
@@ -584,7 +579,7 @@ export class IntermediateSong extends ExtendedSong {
 
     function removeFile (message: string, filePath: string): void {
       if (fs.existsSync(filePath)) {
-        log.info(message, filePath)
+        log.info(message, [filePath])
         fs.removeSync(filePath)
       }
     }

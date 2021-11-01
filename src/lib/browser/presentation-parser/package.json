@@ -35,6 +35,7 @@
     "@bldr/core-browser": "*",
     "@bldr/media-resolver-ng": "*",
     "@bldr/type-definitions": "*",
+    "@bldr/log": "*",
     "@bldr/yaml": "*"
   },
   "devDependencies": {

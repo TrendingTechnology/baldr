@@ -68,7 +68,7 @@ function downloadIcon(url, destDir, oldName, newName) {
     else {
         destName = oldName;
     }
-    log.info('Download icon %s from %s', destName, url);
+    log.info('Download icon %s from %s', [destName, url]);
     cmd.execSync(['wget', '-O', path_1.default.join(destDir, `${destName}.svg`), url]);
 }
 /**
@@ -94,7 +94,7 @@ function downloadIcons(iconMapping, urlTemplate, destDir) {
         const url = urlTemplate.replace('{icon}', oldName);
         downloadIcon(url, destDir, oldName, newName);
         count++;
-        cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', newName));
+        cmd.updateProgress(count / iconsCount, log.format('download icon “%s”', [newName]));
     }
     cmd.stopProgress();
 }
@@ -111,20 +111,24 @@ function copyIcons(srcFolder, destFolder) {
             const src = path_1.default.join(srcFolder, icon);
             const dest = path_1.default.join(destFolder, icon);
             fs_1.default.copyFileSync(src, dest);
-            log.info('Copy the file “%s” from the source folder “%s” to the destination folder “%s”.', icon, src, dest);
+            log.info('Copy the file “%s” from the source folder “%s” to the destination folder “%s”.', [
+                icon,
+                src,
+                dest
+            ]);
         }
     }
 }
 function writeFile(destPath, content) {
     fs_1.default.writeFileSync(destPath, content);
-    log.verbose('Create file: %s', destPath);
+    log.verbose('Create file: %s', [destPath]);
 }
 function writeBuffer(destPath, content) {
     if (content == null) {
         return;
     }
     fs_1.default.writeFileSync(destPath, content);
-    log.verbose('Create file: %s', destPath);
+    log.verbose('Create file: %s', [destPath]);
 }
 const cssStyleHeader = `
 @font-face {
@@ -192,7 +196,7 @@ function createJsonFile(metadataCollection, destDir) {
 }
 function convertIntoFontFiles(tmpDir, destDir) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.info(config_1.default);
+        log.infoAny(config_1.default);
         try {
             const result = yield (0, webfont_1.default)({
                 files: `${tmpDir}/*.svg`,
@@ -201,7 +205,7 @@ function convertIntoFontFiles(tmpDir, destDir) {
                 fontHeight: 512,
                 descent: 64
             });
-            log.info(result);
+            log.infoAny(result);
             if (result.glyphsData == null) {
                 throw new Error('No glyphs data found.');
             }
@@ -218,7 +222,7 @@ function convertIntoFontFiles(tmpDir, destDir) {
             writeBuffer(path_1.default.join(destDir, 'baldr-icons.woff2'), result.woff2);
         }
         catch (error) {
-            log.error(error);
+            log.errorAny(error);
             throw error;
         }
     });
@@ -236,13 +240,13 @@ function patchConfig(metadataCollection, destPath) {
     }
     configJson.iconFont.unicodeAssignment = assigment;
     for (const filePath of config_1.default.configurationFileLocations) {
-        log.info('Patch configuration file %s', filePath);
+        log.info('Patch configuration file %s', [filePath]);
         (0, file_reader_writer_1.writeJsonFile)(filePath, configJson);
     }
 }
 function createIconFont(config, tmpDir) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.info('The SVG files of the icons are downloaded to this temporary directory: %s', tmpDir);
+        log.info('The SVG files of the icons are downloaded to this temporary directory: %s', [tmpDir]);
         downloadIcons(config.iconFont.iconMapping, config.iconFont.urlTemplate, tmpDir);
         copyIcons(config.iconFont.additionalIconsPath, tmpDir);
         yield convertIntoFontFiles(tmpDir, config.iconFont.destPath);

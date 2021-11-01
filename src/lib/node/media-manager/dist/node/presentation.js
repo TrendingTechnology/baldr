@@ -131,12 +131,12 @@ function normalizePresentationFile(filePath) {
     textContent = removeSingleQuotes(textContent);
     // Remove single quotes.
     if (oldTextContent !== textContent) {
-        log.info('Normalized presentation %s', filePath);
+        log.info('Normalized presentation %s', [filePath]);
         log.verbose(log.colorizeDiff(oldTextContent, textContent));
         (0, file_reader_writer_1.writeFile)(filePath, textContent);
     }
     else {
-        log.info('No changes after normalization of the presentation %s', filePath);
+        log.info('No changes after normalization of the presentation %s', [filePath]);
     }
 }
 exports.normalizePresentationFile = normalizePresentationFile;
@@ -206,7 +206,7 @@ function generatePresentation(filePath) {
                 source: 'Arbeitsblatt.tex'
             }));
         }
-        log.verbose('Write automatically generated presentation file to path %s', filePath);
+        log.verbose('Write automatically generated presentation file to path %s', [filePath]);
         const result = (0, yaml_1.convertToYaml)({
             slides
         });
@@ -234,17 +234,17 @@ function generateAutomaticPresentation(filePath, force) {
         }
         filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
         if (!fs_1.default.existsSync(filePath) || (force != null && force)) {
-            log.info('Presentation template created at: %s', filePath);
+            log.info('Presentation template created at: %s', [filePath]);
         }
         else {
             const rawPresentation = (0, file_reader_writer_1.readYamlFile)(filePath);
             console.log(rawPresentation);
             if ((rawPresentation === null || rawPresentation === void 0 ? void 0 : rawPresentation.slides) != null) {
                 filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml');
-                log.info('Presentation already exists, create tmp file: %s', log.colorize.red(filePath));
+                log.info('Presentation already exists, create tmp file: %s', [log.colorize.red(filePath)]);
             }
             else {
-                log.info('Overwrite the presentation as it has no slides: %s', log.colorize.red(filePath));
+                log.info('Overwrite the presentation as it has no slides: %s', [log.colorize.red(filePath)]);
             }
         }
         yield generatePresentation(filePath);

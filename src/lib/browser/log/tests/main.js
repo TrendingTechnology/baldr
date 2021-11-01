@@ -1,8 +1,6 @@
 /* globals describe it */
 const assert = require('assert')
 
-const { detectFormatTemplate } = require('../dist/node/format')
-
 const log = require('../dist/node/main')
 
 log.setLogLevel(4)
@@ -13,24 +11,8 @@ describe('Package “@bldr/log”', function () {
 
     log.info(
       'Test: string (default color) %s string (colored) %s decimal %d float %.1f',
-      'troll',
-      log.colorize.red('red'),
-      123.456,
-      123.456
+      ['troll', log.colorize.red('red'), 123.456, 123.456]
     )
-  })
-
-  it('detectFormatTemplate()', function () {
-    assert.deepStrictEqual(
-      detectFormatTemplate(['%s', 'test'], log.colorize.blue),
-      ['test']
-    )
-
-    const result = detectFormatTemplate(
-      ['hello, %s', 'world'],
-      log.colorize.blue
-    )
-    assert.ok(result[0].includes('world'))
   })
 
   it('colorizeDiff()', function () {

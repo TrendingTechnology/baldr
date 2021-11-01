@@ -3,7 +3,6 @@
  */
 import fs from 'fs'
 
-import { locationIndicator } from './location-indicator'
 import { convertFromYamlRaw } from '@bldr/yaml'
 import { GenericError } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/core-browser'
@@ -28,15 +27,14 @@ import {
 function validateYamlOneFile (filePath: string): void {
   try {
     convertFromYamlRaw(fs.readFileSync(filePath, 'utf8'))
-    log.debug('Valid YAML file: %s', filePath)
+    log.debug('Valid YAML file: %s', [filePath])
   } catch (error) {
     const e = error as GenericError
-    log.error(
-      'Invalid YAML file %s. Error: %s: %s',
+    log.error('Invalid YAML file %s. Error: %s: %s', [
       filePath,
       e.name,
       e.message
-    )
+    ])
     throw new Error(e.name)
   }
 }
@@ -98,7 +96,7 @@ async function normalize (filePaths: string[]): Promise<void> {
         operations.normalizePresentationFile(filePath)
       },
       tex (filePath) {
-        log.info('\nPatch the titles of the TeX file “%s”', filePath)
+        log.info('\nPatch the titles of the TeX file “%s”', [filePath])
         operations.patchTexTitles(filePath)
       }
     },
@@ -106,7 +104,7 @@ async function normalize (filePaths: string[]): Promise<void> {
       path: filePaths
     }
   )
-  log.verbose('Generate presentation automatically on path %s:', filePaths[0])
+  log.verbose('Generate presentation automatically on path %s:', [filePaths[0]])
   operations.generateAutomaticPresentation(filePaths[0])
 }
 

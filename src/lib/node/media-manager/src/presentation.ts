@@ -122,11 +122,11 @@ export function normalizePresentationFile (filePath: string): void {
 
   // Remove single quotes.
   if (oldTextContent !== textContent) {
-    log.info('Normalized presentation %s', filePath)
+    log.info('Normalized presentation %s', [filePath])
     log.verbose(log.colorizeDiff(oldTextContent, textContent))
     writeFile(filePath, textContent)
   } else {
-    log.info('No changes after normalization of the presentation %s', filePath)
+    log.info('No changes after normalization of the presentation %s', [filePath])
   }
 }
 
@@ -211,7 +211,7 @@ async function generatePresentation (filePath: string): Promise<void> {
     )
   }
 
-  log.verbose('Write automatically generated presentation file to path %s', filePath)
+  log.verbose('Write automatically generated presentation file to path %s', [filePath])
   const result = convertToYaml({
     slides
   })
@@ -242,7 +242,7 @@ export async function generateAutomaticPresentation (
 
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
   if (!fs.existsSync(filePath) || (force != null && force)) {
-    log.info('Presentation template created at: %s', filePath)
+    log.info('Presentation template created at: %s', [filePath])
   } else {
     const rawPresentation = readYamlFile(filePath)
     console.log(rawPresentation)
@@ -250,12 +250,12 @@ export async function generateAutomaticPresentation (
       filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml')
       log.info(
         'Presentation already exists, create tmp file: %s',
-        log.colorize.red(filePath)
+        [log.colorize.red(filePath)]
       )
     } else {
       log.info(
         'Overwrite the presentation as it has no slides: %s',
-        log.colorize.red(filePath)
+        [log.colorize.red(filePath)]
       )
     }
   }

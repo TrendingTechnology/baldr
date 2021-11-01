@@ -286,7 +286,7 @@ async function moveFromArchive (
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
   const newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
-  log.info('%s -> %s', oldPath, newPath)
+  log.info('%s -> %s', [oldPath, newPath])
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
   } else if (extension === 'mp3') {

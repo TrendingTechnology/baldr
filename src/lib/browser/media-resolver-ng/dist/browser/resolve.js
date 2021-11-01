@@ -43,6 +43,19 @@ class AssetCache extends Cache {
             return super.get(ref);
         }
     }
+    getMultiple(uuidOrRefs) {
+        if (typeof uuidOrRefs === 'string') {
+            uuidOrRefs = [uuidOrRefs];
+        }
+        const output = [];
+        for (const uuidOrRef of uuidOrRefs) {
+            const asset = this.get(uuidOrRef);
+            if (asset != null) {
+                output.push(asset);
+            }
+        }
+        return output;
+    }
 }
 /**
  * Manager to set shortcuts on  three MIME types (audio, video, image).
@@ -238,7 +251,10 @@ export class Resolver {
     /**
      * @returns All previously resolved media assets.
      */
-    exportAssets() {
+    exportAssets(refs) {
+        if (refs != null) {
+            return this.assetCache.getMultiple(refs);
+        }
         return this.assetCache.getAll();
     }
     /**

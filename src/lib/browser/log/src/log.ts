@@ -1,76 +1,132 @@
-import { detectFormatTemplate } from './format'
-
-import * as colorize from './color'
+import { format, FormatOptions } from './format'
 
 let logLevel = 0
 
 /**
- * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
+ * Log always.
  */
-export function always (...msg: any[]): void {
-  console.log(...detectFormatTemplate(msg, colorize.green))
+export function always (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
+  if (options == null) {
+    options = 'green'
+  }
+  console.log(format(template, args, options))
+}
+
+export function alwaysAny (...args: any[]): void {
+  console.log(...args)
 }
 
 /**
  * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export function error (...msg: any[]): void {
+export function error (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
   if (logLevel > 0) {
-    console.error(...detectFormatTemplate(msg, colorize.red))
+    if (options == null) {
+      options = 'red'
+    }
+    console.error(format(template, args, 'red'))
+  }
+}
+
+export function errorAny (...args: any[]): void {
+  if (logLevel > 0) {
+    console.error(...args)
   }
 }
 
 /**
  * Log on level 2.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export function warn (...msg: any[]): void {
+export function warn (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
   if (logLevel > 1) {
-    console.warn(...detectFormatTemplate(msg, colorize.yellow))
+    if (options == null) {
+      options = 'yellow'
+    }
+    console.warn(format(template, args, options))
+  }
+}
+
+export function warnAny (...args: any[]): void {
+  if (logLevel > 1) {
+    console.warn(...args)
   }
 }
 
 /**
  * Log with a format string on level 3.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export function info (...msg: any[]): void {
+export function info (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
   if (logLevel > 2) {
-    console.info(...detectFormatTemplate(msg, colorize.blue))
+    if (options == null) {
+      options = 'blue'
+    }
+    console.info(format(template, args, options))
+  }
+}
+
+export function infoAny (...args: any[]): void {
+  if (logLevel > 2) {
+    console.info(...args)
   }
 }
 
 /**
  * Log on level 4.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export function verbose (...msg: any[]): void {
+export function verbose (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
   if (logLevel > 3) {
-    console.debug(...detectFormatTemplate(msg, colorize.magenta))
+    if (options == null) {
+      options = 'magenta'
+    }
+    console.debug(format(template, args, options))
+  }
+}
+
+export function verboseAny (...args: any[]): void {
+  if (logLevel > 3) {
+    console.debug(...args)
   }
 }
 
 /**
  * Log on level 5.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-export function debug (...msg: any[]): void {
+export function debug (
+  template: string,
+  args?: any[],
+  options?: FormatOptions
+): void {
   if (logLevel > 4) {
-    console.log(...detectFormatTemplate(msg, colorize.cyan))
+    if (options == null) {
+      options = 'cyan'
+    }
+    console.log(format(template, args, options))
+  }
+}
+
+export function debugAny (...args: any[]): void {
+  if (logLevel > 4) {
+    console.log(...args)
   }
 }
 

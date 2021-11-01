@@ -11,6 +11,7 @@ import { convertFromYaml } from '@bldr/yaml';
 import { DataCutter } from './data-management';
 import { SlideCollection } from './slide-collection';
 import { Resolver } from '@bldr/media-resolver-ng';
+import * as log from '@bldr/log';
 export const resolver = new Resolver();
 /**
  * @inheritdoc
@@ -28,6 +29,12 @@ class Meta {
         this.curriculumUrl = data.cutString('curriculumUrl');
         data.checkEmpty();
     }
+    /**
+     * Log to the console.
+     */
+    log() {
+        console.log(log.formatObject(this, { indentation: 2 }));
+    }
 }
 export class Presentation {
     constructor(yamlString) {
@@ -42,5 +49,18 @@ export class Presentation {
             yield resolver.resolve(this.slides.mediaUris, true);
             yield resolver.resolve(this.slides.optionalMediaUris, false);
         });
+    }
+    /**
+     * Log to the console.
+     */
+    log() {
+        this.meta.log();
+        for (const slide of this.slides.flat) {
+            slide.log();
+        }
+        const assets = resolver.exportAssets(this.slides.mediaUris);
+        for (const asset of assets) {
+            console.log(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
+        }
     }
 }

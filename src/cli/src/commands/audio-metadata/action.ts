@@ -8,7 +8,7 @@ import * as log from '@bldr/log'
  */
 async function action (filePath: string): Promise<void> {
   const result = await collectAudioMetadata(filePath)
-  log.info(result)
+  log.infoAny(result)
 }
 
 export = action

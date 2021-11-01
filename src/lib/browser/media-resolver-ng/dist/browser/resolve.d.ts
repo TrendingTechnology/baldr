@@ -71,7 +71,7 @@ export declare class Resolver {
     /**
      * @returns All previously resolved media assets.
      */
-    exportAssets(): Asset[];
+    exportAssets(refs?: string | string[] | Set<string>): Asset[];
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.

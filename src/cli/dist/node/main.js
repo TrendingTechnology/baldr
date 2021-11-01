@@ -70,7 +70,7 @@ function convertPathArgToParentPresDir(args) {
         typeof args[0][0] === 'string') {
         const presParentDir = mediaManager.locationIndicator.getPresParentDir(args[0][0]);
         if (presParentDir != null) {
-            log.info('--parent-pres-dir: Run the task on the parent presentation folder: %s', presParentDir);
+            log.info('--parent-pres-dir: Run the task on the parent presentation folder: %s', [presParentDir]);
             args[0][0] = presParentDir;
         }
     }
@@ -169,7 +169,7 @@ function main() {
             yield program.parseAsync(process.argv);
         }
         catch (error) {
-            log.error(error);
+            log.error(String(error));
         }
         // [
         //  '/usr/local/bin/node',
@@ -183,5 +183,5 @@ function main() {
 if (require.main === module) {
     main()
         .then()
-        .catch(reason => log.info(reason));
+        .catch(reason => log.info(String(reason)));
 }

@@ -27,7 +27,7 @@ function action (filePath: string, cmdObj: CmdObj): void {
   if (!regex.test(filePath)) {
     log.info(
       'The current working directory “%s” contains illegal characters.',
-      filePath
+      [filePath]
     )
     return
   }

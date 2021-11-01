@@ -14,6 +14,7 @@ const yaml_1 = require("@bldr/yaml");
 const data_management_1 = require("./data-management");
 const slide_collection_1 = require("./slide-collection");
 const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+const log = require("@bldr/log");
 exports.resolver = new media_resolver_ng_1.Resolver();
 /**
  * @inheritdoc
@@ -31,6 +32,12 @@ class Meta {
         this.curriculumUrl = data.cutString('curriculumUrl');
         data.checkEmpty();
     }
+    /**
+     * Log to the console.
+     */
+    log() {
+        console.log(log.formatObject(this, { indentation: 2 }));
+    }
 }
 class Presentation {
     constructor(yamlString) {
@@ -45,6 +52,19 @@ class Presentation {
             yield exports.resolver.resolve(this.slides.mediaUris, true);
             yield exports.resolver.resolve(this.slides.optionalMediaUris, false);
         });
+    }
+    /**
+     * Log to the console.
+     */
+    log() {
+        this.meta.log();
+        for (const slide of this.slides.flat) {
+            slide.log();
+        }
+        const assets = exports.resolver.exportAssets(this.slides.mediaUris);
+        for (const asset of assets) {
+            console.log(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
+        }
     }
 }
 exports.Presentation = Presentation;

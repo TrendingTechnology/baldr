@@ -101,7 +101,7 @@ function extractSamples(audacityTextmarkFile) {
  */
 function action(filePath) {
     const text = file_reader_writer_1.readFile(filePath);
-    log.info('The content of the source file “%s”:\n', filePath);
+    log.info('The content of the source file “%s”:\n', [filePath]);
     log.info(text);
     const rawSamples = extractSamples(text);
     // If the first sample doesn’t start at 0 add a new first sample beginning from 0.
@@ -148,7 +148,7 @@ function action(filePath) {
         counter += 1;
     }
     const dest = `${filePath}.yml`;
-    log.info('The content of the destination file “%s”:\n', dest);
+    log.info('The content of the destination file “%s”:\n', [dest]);
     log.always(file_reader_writer_1.writeYamlFile(dest, { samples }));
 }
 module.exports = action;

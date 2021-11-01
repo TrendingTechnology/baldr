@@ -1,79 +1,112 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.debug = exports.verbose = exports.info = exports.warn = exports.error = exports.always = void 0;
+exports.setLogLevel = exports.debugAny = exports.debug = exports.verboseAny = exports.verbose = exports.infoAny = exports.info = exports.warnAny = exports.warn = exports.errorAny = exports.error = exports.alwaysAny = exports.always = void 0;
 const format_1 = require("./format");
-const colorize = require("./color");
 let logLevel = 0;
 /**
- * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
+ * Log always.
  */
-function always(...msg) {
-    console.log(...format_1.detectFormatTemplate(msg, colorize.green));
+function always(template, args, options) {
+    if (options == null) {
+        options = 'green';
+    }
+    console.log(format_1.format(template, args, options));
 }
 exports.always = always;
+function alwaysAny(...args) {
+    console.log(...args);
+}
+exports.alwaysAny = alwaysAny;
 /**
  * Log on level 1.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-function error(...msg) {
+function error(template, args, options) {
     if (logLevel > 0) {
-        console.error(...format_1.detectFormatTemplate(msg, colorize.red));
+        if (options == null) {
+            options = 'red';
+        }
+        console.error(format_1.format(template, args, 'red'));
     }
 }
 exports.error = error;
+function errorAny(...args) {
+    if (logLevel > 0) {
+        console.error(...args);
+    }
+}
+exports.errorAny = errorAny;
 /**
  * Log on level 2.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-function warn(...msg) {
+function warn(template, args, options) {
     if (logLevel > 1) {
-        console.warn(...format_1.detectFormatTemplate(msg, colorize.yellow));
+        if (options == null) {
+            options = 'yellow';
+        }
+        console.warn(format_1.format(template, args, options));
     }
 }
 exports.warn = warn;
+function warnAny(...args) {
+    if (logLevel > 1) {
+        console.warn(...args);
+    }
+}
+exports.warnAny = warnAny;
 /**
  * Log with a format string on level 3.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-function info(...msg) {
+function info(template, args, options) {
     if (logLevel > 2) {
-        console.info(...format_1.detectFormatTemplate(msg, colorize.blue));
+        if (options == null) {
+            options = 'blue';
+        }
+        console.info(format_1.format(template, args, options));
     }
 }
 exports.info = info;
+function infoAny(...args) {
+    if (logLevel > 2) {
+        console.info(...args);
+    }
+}
+exports.infoAny = infoAny;
 /**
  * Log on level 4.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-function verbose(...msg) {
+function verbose(template, args, options) {
     if (logLevel > 3) {
-        console.debug(...format_1.detectFormatTemplate(msg, colorize.magenta));
+        if (options == null) {
+            options = 'magenta';
+        }
+        console.debug(format_1.format(template, args, options));
     }
 }
 exports.verbose = verbose;
+function verboseAny(...args) {
+    if (logLevel > 3) {
+        console.debug(...args);
+    }
+}
+exports.verboseAny = verboseAny;
 /**
  * Log on level 5.
- *
- * @param msg - A string in the “printf” format (`Hello, %s`) followed by any
- *   arguments or any arguments the function console.log() accepts.
  */
-function debug(...msg) {
+function debug(template, args, options) {
     if (logLevel > 4) {
-        console.log(...format_1.detectFormatTemplate(msg, colorize.cyan));
+        if (options == null) {
+            options = 'cyan';
+        }
+        console.log(format_1.format(template, args, options));
     }
 }
 exports.debug = debug;
+function debugAny(...args) {
+    if (logLevel > 4) {
+        console.log(...args);
+    }
+}
+exports.debugAny = debugAny;
 /**
  * Set the log level.
  *
