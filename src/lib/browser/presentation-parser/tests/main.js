@@ -54,6 +54,32 @@ describe('Package “@bldr/presentation-parser”', function () {
     )
   })
 
+  it('Irresolvable required asset', async function () {
+    const presentation = parseTestPresentation('media-assets-irresolvable')
+
+    await assert.rejects(
+      async () => {
+        await presentation.resolveMediaAssets()
+      },
+      err => {
+        assert.strictEqual(err.name, 'Error')
+        assert.strictEqual(
+          err.message,
+          'Media with the ref ”xxxxxxx” couldn’t be resolved.'
+        )
+        return true
+      }
+    )
+  })
+
+  it('Irresolvable optional asset', async function () {
+    const presentation = parseTestPresentation(
+      'media-assets-irresolvable-optional'
+    )
+    const assets = await presentation.resolveMediaAssets()
+    assert.strictEqual(assets.length, 0)
+  })
+
   describe('Media URI reference abbreviation', function () {
     it('ok', function () {
       const presentation = parseTestPresentation('ref-abbreviation-ok')

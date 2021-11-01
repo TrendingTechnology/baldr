@@ -8,3 +8,4 @@
  * ```
  */
 export { Resolver } from './resolve'
+export { Asset } from './types'

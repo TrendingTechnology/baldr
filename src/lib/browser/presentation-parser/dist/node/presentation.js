@@ -110,8 +110,8 @@ class Presentation {
     }
     resolveMediaAssets() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield exports.resolver.resolve(this.slides.mediaUris, true);
-            yield exports.resolver.resolve(this.slides.optionalMediaUris, false);
+            const assets = yield exports.resolver.resolve(this.slides.mediaUris, true);
+            return assets.concat(yield exports.resolver.resolve(this.slides.optionalMediaUris, false));
         });
     }
     /**
