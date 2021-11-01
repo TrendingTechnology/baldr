@@ -23,9 +23,10 @@ function colorizeArgs(args, colorSpecs) {
     }
     for (let index = 0; index < args.length; index++) {
         let arg = args[index];
-        if (typeof arg === 'number') {
-            arg = arg.toString();
-        }
+        // to get %f support
+        // if (typeof arg === 'number') {
+        //   arg = arg.toString()
+        // }
         if (typeof arg === 'string' && arg.match(ansiRegexp) == null) {
             arg = getColorFunctionByIndex(index, colorSpecs)(arg);
         }

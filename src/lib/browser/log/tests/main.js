@@ -13,10 +13,18 @@ describe('Package “@bldr/log”', function () {
   })
 
   it('log.info(): With replacements', function () {
+    const spyInfo = sinon.spy(console, 'info')
+
     log.info(
-      'Test: string (default color) %s string (colored) %s decimal %d float %.1f',
-      ['troll', log.colorize.red('red'), 123.456, 123.456]
+      'string (default color): %s; string (colored): %s; float %.1f',
+      ['troll', log.colorize.red('red'), 123.456]
     )
+    assert(
+      spyInfo.calledWith(
+        'string (default color): \u001b[34mtroll\u001b[39m; string (colored): \u001b[31mred\u001b[39m; float 123.5'
+      )
+    )
+    spyInfo.restore()
   })
 
   it('colors', function () {
