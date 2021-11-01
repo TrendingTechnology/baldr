@@ -957,7 +957,7 @@ export interface PresentationMeta {
   /**
    * A Universally Unique Identifier to identify the presentation.
    */
-  uuid: string
+  uuid?: string
 
   /**
    * The title of the presentation. (for example: `Das orchestrale Klangbild bei
@@ -976,18 +976,18 @@ export interface PresentationMeta {
   /**
    * The school subject, for example `Musik` or `Informatik`.
    */
-  subject: string
+  subject?: string
 
   /**
    * The grade the presentation belongs to. (for example: `11`)
    */
-  grade: number
+  grade?: number
 
   /**
    * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das
    * Klangbild der Klassik`)
    */
-  curriculum: string
+  curriculum?: string
 
   /**
    * URL of the curriculum web page. (for example:

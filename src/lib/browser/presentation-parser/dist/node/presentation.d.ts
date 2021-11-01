@@ -13,7 +13,7 @@ declare class Meta implements LampTypes.PresentationMeta {
     /**
      * @inheritdoc
      */
-    uuid: string;
+    uuid?: string;
     /**
      * @inheritdoc
      */
@@ -25,15 +25,15 @@ declare class Meta implements LampTypes.PresentationMeta {
     /**
      * @inheritdoc
      */
-    subject: string;
+    subject?: string;
     /**
      * @inheritdoc
      */
-    grade: number;
+    grade?: number;
     /**
      * @inheritdoc
      */
-    curriculum: string;
+    curriculum?: string;
     /**
      * @inheritdoc
      */
@@ -48,6 +48,7 @@ export declare class Presentation {
     meta: Meta;
     slides: SlideCollection;
     constructor(yamlString: string);
+    private cutMeta;
     resolveMediaAssets(): Promise<void>;
     /**
      * Log to the console.

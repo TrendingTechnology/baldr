@@ -22,6 +22,10 @@ function parsePresentation (relPath) {
   return parse(getPresentationContent(relPath))
 }
 
+function parseTestPresentation (fileName) {
+  return parse(readFile(path.join(__dirname, 'files', `${fileName}.baldr.yml`)))
+}
+
 describe('Package “@bldr/presentation-parser”', function () {
   it('presentation.meta', function () {
     const presentation = parsePresentation(
@@ -50,7 +54,9 @@ describe('Package “@bldr/presentation-parser”', function () {
   })
 
   it('presentation.slides', function () {
-    const presentation = parsePresentation('12/20_Tradition/10_Umgang-Tradition/10_Futurismus')
+    const presentation = parsePresentation(
+      '12/20_Tradition/10_Umgang-Tradition/10_Futurismus'
+    )
     const slides = presentation.slides
     assert.strictEqual(slides.flat[0].no, 1)
     assert.strictEqual(slides.flat[0].level, 1)
@@ -64,5 +70,29 @@ describe('Package “@bldr/presentation-parser”', function () {
     assert.strictEqual(slide.slides[0].master.name, 'task')
     assert.strictEqual(slide.slides[0].level, 2)
     assert.strictEqual(slide.slides[1].master.name, 'scoreSample')
+  })
+
+  it('no slides', function () {
+    assert.throws(
+      () => {
+        parseTestPresentation('no-slides')
+      },
+      {
+        message: 'The property “slides” must not be null.',
+        name: 'Error'
+      }
+    )
+  })
+
+  it('“ref” and “title” not in “meta”', function () {
+    const presentation = parseTestPresentation('ref-title-not-in-meta')
+    assert.strictEqual(
+      presentation.meta.title,
+      'Title'
+    )
+    assert.strictEqual(
+      presentation.meta.ref,
+      'Reference'
+    )
   })
 })

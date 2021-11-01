@@ -83,6 +83,14 @@ export class DataCutter {
     return this.cutAny(propertyName)
   }
 
+  public cutNumber (propertyName: string): number | undefined {
+    if (this.raw[propertyName] == null) {
+      return
+    }
+    this.checkNumber(propertyName)
+    return this.cutAny(propertyName)
+  }
+
   public cutNumberNotNull (propertyName: string): number {
     this.checkNull(propertyName)
     this.checkNumber(propertyName)

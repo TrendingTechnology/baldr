@@ -20,7 +20,7 @@ class Meta implements LampTypes.PresentationMeta {
   /**
    * @inheritdoc
    */
-  uuid: string
+  uuid?: string
 
   /**
    * @inheritdoc
@@ -35,17 +35,17 @@ class Meta implements LampTypes.PresentationMeta {
   /**
    * @inheritdoc
    */
-  subject: string
+  subject?: string
 
   /**
    * @inheritdoc
    */
-  grade: number
+  grade?: number
 
   /**
    * @inheritdoc
    */
-  curriculum: string
+  curriculum?: string
 
   /**
    * @inheritdoc
@@ -55,12 +55,12 @@ class Meta implements LampTypes.PresentationMeta {
   constructor (raw: any) {
     const data = new DataCutter(raw)
     this.ref = data.cutStringNotNull('ref')
-    this.uuid = data.cutStringNotNull('uuid')
+    this.uuid = data.cutString('uuid')
     this.title = data.cutStringNotNull('title')
     this.subtitle = data.cutString('subtitle')
-    this.subject = data.cutStringNotNull('subject')
-    this.grade = data.cutNumberNotNull('grade')
-    this.curriculum = data.cutStringNotNull('curriculum')
+    this.subject = data.cutString('subject')
+    this.grade = data.cutNumber('grade')
+    this.curriculum = data.cutString('curriculum')
     this.curriculumUrl = data.cutString('curriculumUrl')
     data.checkEmpty()
   }
@@ -80,9 +80,31 @@ export class Presentation {
   constructor (yamlString: string) {
     const raw = convertFromYaml(yamlString)
     const data = new DataCutter(raw)
-    this.meta = new Meta(data.cutNotNull('meta'))
+    this.meta = this.cutMeta(data)
     this.slides = new SlideCollection(data.cutNotNull('slides'))
     data.checkEmpty()
+  }
+
+  private cutMeta (data: DataCutter): Meta {
+    const meta = data.cutAny('meta')
+    const title = data.cutString('title')
+    const ref = data.cutString('ref')
+
+    if (meta != null && (title != null || ref != null)) {
+      throw new Error(
+        'Specify the “title” or “ref” inside or outside of the “meta” property not both!'
+      )
+    }
+
+    if (meta != null) {
+      return new Meta(meta)
+    }
+
+    if (title == null || ref == null) {
+      throw new Error('Specify both title and ref!')
+    }
+
+    return new Meta({ title, ref })
   }
 
   public async resolveMediaAssets (): Promise<void> {

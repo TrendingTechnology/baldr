@@ -31,6 +31,7 @@ export declare class DataCutter {
     cutAny(propertyName: string): any;
     cutString(propertyName: string): string | undefined;
     cutStringNotNull(propertyName: string): string;
+    cutNumber(propertyName: string): number | undefined;
     cutNumberNotNull(propertyName: string): number;
     cutNotNull(propertyName: string): any;
     /**

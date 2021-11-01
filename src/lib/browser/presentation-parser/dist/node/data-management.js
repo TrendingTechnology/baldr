@@ -64,6 +64,13 @@ class DataCutter {
         this.checkString(propertyName);
         return this.cutAny(propertyName);
     }
+    cutNumber(propertyName) {
+        if (this.raw[propertyName] == null) {
+            return;
+        }
+        this.checkNumber(propertyName);
+        return this.cutAny(propertyName);
+    }
     cutNumberNotNull(propertyName) {
         this.checkNull(propertyName);
         this.checkNumber(propertyName);
