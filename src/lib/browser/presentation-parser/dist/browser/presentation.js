@@ -112,6 +112,19 @@ export class Presentation {
         });
     }
     /**
+     * The first slide of a presentation. It is equivalent to
+     * `presentation.slides.flat[0]`.
+     */
+    get firstSlide() {
+        return this.slides.flat[0];
+    }
+    /**
+     * @param no - Slide number starting from 1
+     */
+    getSlideByNo(no) {
+        return this.slides.flat[no - 1];
+    }
+    /**
      * Log to the console.
      */
     log() {

@@ -20,6 +20,16 @@ describe('Class “Slide()”', function () {
     assert.strictEqual(slide.meta.source, 'Source')
   })
 
+  it('attribute “mediaUris” and “optionalMediaUris”', function () {
+    const presentation = parseTestPresentation('slide-media-uris')
+
+    let slide = presentation.getSlideByNo(1)
+    assert.deepStrictEqual(slide.mediaUris, new Set(['ref:test']))
+
+    slide = presentation.getSlideByNo(2)
+    assert.deepStrictEqual(slide.optionalMediaUris, new Set(['ref:YT_jNQXAC9IVRw']))
+  })
+
   it('Slide state absent', function () {
     const presentation = parseTestPresentation('slide-state-absent')
     assert.strictEqual(presentation.slides.numberOfSlides, 1)

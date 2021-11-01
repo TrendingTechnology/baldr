@@ -69,12 +69,12 @@ export abstract class Master {
   /**
    * The name of the master slide. A short name in lower case letters like `audio`.
    */
-  abstract name: string
+  public abstract name: string
 
   /**
    * A human readable name of the master slide.
    */
-  abstract displayName: string
+  public abstract displayName: string
 
   /**
    * The defintion of the fields of the master slide.
@@ -98,7 +98,7 @@ export abstract class Master {
    * }
    * ```
    */
-  normalizeFields (fields: any): FieldData {
+  public normalizeFields (fields: any): FieldData {
     return fields
   }
 

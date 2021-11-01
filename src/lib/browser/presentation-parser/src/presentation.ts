@@ -3,6 +3,7 @@ import { LampTypes } from '@bldr/type-definitions'
 
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
+import { Slide } from './slide'
 import { Resolver } from '@bldr/media-resolver-ng'
 import * as log from '@bldr/log'
 
@@ -169,6 +170,21 @@ export class Presentation {
   public async resolveMediaAssets (): Promise<void> {
     await resolver.resolve(this.slides.mediaUris, true)
     await resolver.resolve(this.slides.optionalMediaUris, false)
+  }
+
+  /**
+   * The first slide of a presentation. It is equivalent to
+   * `presentation.slides.flat[0]`.
+   */
+  public get firstSlide (): Slide {
+    return this.slides.flat[0]
+  }
+
+  /**
+   * @param no - Slide number starting from 1
+   */
+  public getSlideByNo (no: number): Slide {
+    return this.slides.flat[no - 1]
   }
 
   /**

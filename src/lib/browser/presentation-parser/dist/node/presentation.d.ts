@@ -1,5 +1,6 @@
 import { LampTypes } from '@bldr/type-definitions';
 import { SlideCollection } from './slide-collection';
+import { Slide } from './slide';
 import { Resolver } from '@bldr/media-resolver-ng';
 export declare const resolver: Resolver;
 /**
@@ -83,6 +84,15 @@ export declare class Presentation {
      */
     private convertFromYaml;
     resolveMediaAssets(): Promise<void>;
+    /**
+     * The first slide of a presentation. It is equivalent to
+     * `presentation.slides.flat[0]`.
+     */
+    get firstSlide(): Slide;
+    /**
+     * @param no - Slide number starting from 1
+     */
+    getSlideByNo(no: number): Slide;
     /**
      * Log to the console.
      */
