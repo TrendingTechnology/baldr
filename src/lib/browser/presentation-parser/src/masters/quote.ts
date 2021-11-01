@@ -5,7 +5,7 @@ export class QuoteMaster extends Master {
 
   displayName = 'Zitat'
 
-  iconSpec = {
+  icon = {
     name: 'quote',
     color: 'brown',
     size: 'large' as const

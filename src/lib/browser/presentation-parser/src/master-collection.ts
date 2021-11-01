@@ -22,30 +22,30 @@ import { VideoMaster } from './masters/video'
 import { WikipediaMaster } from './masters/wikipedia'
 import { YoutubeMaster } from './masters/youtube'
 
-import { Master } from './master'
+import { MasterWrapper } from './master'
 
-export const masterCollection: { [masterName: string]: Master } = {
-  audio: new AudioMaster(),
-  camera: new CameraMaster(),
-  cloze: new ClozeMaster(),
-  counter: new CounterMaster(),
-  document: new DocumentMaster(),
-  editor: new EditorMaster(),
-  generic: new GenericMaster(),
-  group: new GroupMaster(),
-  image: new ImageMaster(),
-  instrument: new InstrumentMaster(),
-  interactiveGraphic: new InteractiveGraphicMaster(),
-  note: new NoteMaster(),
-  person: new PersonMaster(),
-  question: new QuestionMaster(),
-  quote: new QuoteMaster(),
-  sampleList: new SampleListMaster(),
-  scoreSample: new ScoreSampleMaster(),
-  section: new SectionMaster(),
-  song: new SongMaster(),
-  task: new TaskMaster(),
-  video: new VideoMaster(),
-  wikipedia: new WikipediaMaster(),
-  youtube: new YoutubeMaster()
+export const masterCollection: { [masterName: string]: MasterWrapper } = {
+  audio: new MasterWrapper(AudioMaster),
+  camera: new MasterWrapper(CameraMaster),
+  cloze: new MasterWrapper(ClozeMaster),
+  counter: new MasterWrapper(CounterMaster),
+  document: new MasterWrapper(DocumentMaster),
+  editor: new MasterWrapper(EditorMaster),
+  generic: new MasterWrapper(GenericMaster),
+  group: new MasterWrapper(GroupMaster),
+  image: new MasterWrapper(ImageMaster),
+  instrument: new MasterWrapper(InstrumentMaster),
+  interactiveGraphic: new MasterWrapper(InteractiveGraphicMaster),
+  note: new MasterWrapper(NoteMaster),
+  person: new MasterWrapper(PersonMaster),
+  question: new MasterWrapper(QuestionMaster),
+  quote: new MasterWrapper(QuoteMaster),
+  sampleList: new MasterWrapper(SampleListMaster),
+  scoreSample: new MasterWrapper(ScoreSampleMaster),
+  section: new MasterWrapper(SectionMaster),
+  song: new MasterWrapper(SongMaster),
+  task: new MasterWrapper(TaskMaster),
+  video: new MasterWrapper(VideoMaster),
+  wikipedia: new MasterWrapper(WikipediaMaster),
+  youtube: new MasterWrapper(YoutubeMaster)
 }

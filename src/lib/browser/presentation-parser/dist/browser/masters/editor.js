@@ -4,7 +4,7 @@ export class EditorMaster extends Master {
         super(...arguments);
         this.name = 'editor';
         this.displayName = 'Hefteintrag';
-        this.iconSpec = {
+        this.icon = {
             name: 'pencil',
             color: 'blue'
         };

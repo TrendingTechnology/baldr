@@ -235,7 +235,7 @@ export class QuestionMaster extends Master {
 
   displayName = 'Frage'
 
-  iconSpec = {
+  icon = {
     name: 'question',
     color: 'yellow',
     size: 'large' as const

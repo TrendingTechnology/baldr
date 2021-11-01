@@ -7,7 +7,7 @@ class SongMaster extends master_1.Master {
         super(...arguments);
         this.name = 'song';
         this.displayName = 'Lied';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-audio',
             color: 'green'
         };

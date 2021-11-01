@@ -4,7 +4,7 @@ export class WikipediaMaster extends Master {
         super(...arguments);
         this.name = 'wikipedia';
         this.displayName = 'Wikipedia';
-        this.iconSpec = {
+        this.icon = {
             name: 'wikipedia',
             color: 'black'
         };

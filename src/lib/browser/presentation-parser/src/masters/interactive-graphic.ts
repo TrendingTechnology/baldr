@@ -5,7 +5,7 @@ export class InteractiveGraphicMaster extends Master {
 
   displayName = 'Interaktive Grafik'
 
-  iconSpec = {
+  icon = {
     name: 'image',
     color: 'blue',
     showOnSlides: false

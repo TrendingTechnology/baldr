@@ -5,7 +5,7 @@ export class ClozeMaster extends Master {
 
   displayName = 'Lückentext'
 
-  iconSpec = {
+  icon = {
     name: 'cloze',
     color: 'blue'
   }

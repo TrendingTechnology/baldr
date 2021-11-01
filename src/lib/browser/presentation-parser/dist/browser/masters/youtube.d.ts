@@ -7,7 +7,7 @@ interface FieldData {
 export declare class YoutubeMaster extends Master {
     name: string;
     displayName: string;
-    iconSpec: {
+    icon: {
         name: string;
         color: string;
     };
@@ -29,7 +29,7 @@ export declare class YoutubeMaster extends Master {
         };
     };
     normalizeFields(fields: any): FieldData;
-    protected collectOptionalMediaUris(fields: FieldData): string;
+    collectOptionalMediaUris(fields: FieldData): string;
     private convertYoutubeIdToUri;
 }
 export {};

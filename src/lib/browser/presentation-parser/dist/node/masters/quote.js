@@ -7,7 +7,7 @@ class QuoteMaster extends master_1.Master {
         super(...arguments);
         this.name = 'quote';
         this.displayName = 'Zitat';
-        this.iconSpec = {
+        this.icon = {
             name: 'quote',
             color: 'brown',
             size: 'large'

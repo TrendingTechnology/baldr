@@ -7,7 +7,7 @@ class YoutubeMaster extends master_1.Master {
         super(...arguments);
         this.name = 'youtube';
         this.displayName = 'YouTube';
-        this.iconSpec = {
+        this.icon = {
             name: 'youtube',
             color: 'red'
         };

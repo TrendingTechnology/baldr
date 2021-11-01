@@ -4,7 +4,7 @@ export class AudioMaster extends Master {
         super(...arguments);
         this.name = 'audio';
         this.displayName = 'Hörbeispiel';
-        this.iconSpec = {
+        this.icon = {
             name: 'music',
             color: 'brown'
         };

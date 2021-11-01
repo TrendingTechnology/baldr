@@ -5,7 +5,7 @@ export class DocumentMaster extends Master {
 
   displayName = 'Dokument'
 
-  iconSpec = {
+  icon = {
     name: 'file-outline',
     color: 'gray'
   }

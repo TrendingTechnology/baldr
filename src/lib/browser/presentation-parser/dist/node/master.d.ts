@@ -110,8 +110,7 @@ export declare abstract class Master {
      * A human readable name of the master slide.
      */
     abstract displayName: string;
-    protected abstract iconSpec: MasterIconSpec;
-    get icon(): MasterIcon;
+    abstract icon: MasterIconSpec;
     /**
      * The defintion of the fields of the master slide.
      */
@@ -134,7 +133,6 @@ export declare abstract class Master {
      * ```
      */
     normalizeFields(fields: any): FieldData;
-    private static convertToSet;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -151,14 +149,25 @@ export declare abstract class Master {
      * }
      * ```
      */
-    protected collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master
      * slide. This master slide uses the online version, if no offline video could
      * be resolved.
      */
-    protected collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+}
+interface MasterConstructor {
+    new (): Master;
+}
+export declare class MasterWrapper {
+    private master;
+    icon: MasterIcon;
+    constructor(MasterClass: MasterConstructor);
+    get name(): string;
+    normalizeFields(fields: any): FieldData;
+    private static convertToSet;
     processMediaUris(fields: FieldData): Set<string>;
     processOptionalMediaUris(fields: FieldData): Set<string>;
 }

@@ -7,7 +7,7 @@ class GroupMaster extends master_1.Master {
         super(...arguments);
         this.name = 'group';
         this.displayName = 'Gruppe';
-        this.iconSpec = {
+        this.icon = {
             name: 'account-group',
             color: 'orange'
         };

@@ -2,9 +2,10 @@ import { Master } from '../master'
 
 export class AudioMaster extends Master {
   name = 'audio'
+
   displayName = 'Hörbeispiel'
 
-  iconSpec = {
+  icon = {
     name: 'music',
     color: 'brown'
   }

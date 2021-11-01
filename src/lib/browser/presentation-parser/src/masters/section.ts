@@ -5,7 +5,7 @@ export class SectionMaster extends Master {
 
   displayName = 'Abschnitt'
 
-  iconSpec = {
+  icon = {
     name: 'file-tree',
     color: 'orange-dark'
   }

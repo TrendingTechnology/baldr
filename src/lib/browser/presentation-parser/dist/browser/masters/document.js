@@ -4,7 +4,7 @@ export class DocumentMaster extends Master {
         super(...arguments);
         this.name = 'document';
         this.displayName = 'Dokument';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-outline',
             color: 'gray'
         };

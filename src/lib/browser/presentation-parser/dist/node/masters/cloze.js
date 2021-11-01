@@ -7,7 +7,7 @@ class ClozeMaster extends master_1.Master {
         super(...arguments);
         this.name = 'cloze';
         this.displayName = 'Lückentext';
-        this.iconSpec = {
+        this.icon = {
             name: 'cloze',
             color: 'blue'
         };

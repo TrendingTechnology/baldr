@@ -4,7 +4,7 @@ export class SectionMaster extends Master {
         super(...arguments);
         this.name = 'section';
         this.displayName = 'Abschnitt';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-tree',
             color: 'orange-dark'
         };

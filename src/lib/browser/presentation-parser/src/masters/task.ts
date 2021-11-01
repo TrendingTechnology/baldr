@@ -5,7 +5,7 @@ export class TaskMaster extends Master {
 
   displayName = 'Arbeitsauftrag'
 
-  iconSpec = {
+  icon = {
     name: 'task',
     color: 'yellow-dark',
     size: 'large' as const

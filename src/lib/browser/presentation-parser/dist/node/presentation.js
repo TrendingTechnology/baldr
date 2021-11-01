@@ -91,8 +91,8 @@ class Presentation {
     convertFromYaml(yamlString) {
         var _a;
         let raw = yaml_1.convertFromYaml(yamlString);
-        if (yamlString.indexOf('ref:./') > -1) {
-            let ref = undefined;
+        if (yamlString.includes('ref:./')) {
+            let ref;
             if (raw.ref != null) {
                 ref = raw.ref;
             }

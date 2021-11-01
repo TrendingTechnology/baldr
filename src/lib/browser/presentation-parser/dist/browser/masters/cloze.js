@@ -4,7 +4,7 @@ export class ClozeMaster extends Master {
         super(...arguments);
         this.name = 'cloze';
         this.displayName = 'Lückentext';
-        this.iconSpec = {
+        this.icon = {
             name: 'cloze',
             color: 'blue'
         };

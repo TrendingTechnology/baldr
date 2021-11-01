@@ -11,7 +11,7 @@ export class YoutubeMaster extends Master {
 
   displayName = 'YouTube'
 
-  iconSpec = {
+  icon = {
     name: 'youtube',
     color: 'red'
   }
@@ -34,14 +34,14 @@ export class YoutubeMaster extends Master {
     }
   }
 
-  public normalizeFields (fields: any): FieldData {
+  normalizeFields (fields: any): FieldData {
     if (typeof fields === 'string') {
       fields = { id: fields }
     }
     return fields
   }
 
-  protected collectOptionalMediaUris (fields: FieldData) {
+  collectOptionalMediaUris (fields: FieldData) {
     return this.convertYoutubeIdToUri(fields.id)
   }
 

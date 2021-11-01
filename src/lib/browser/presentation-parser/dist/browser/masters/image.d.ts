@@ -8,7 +8,7 @@ interface FieldData {
 export declare class ImageMaster extends Master {
     name: string;
     displayName: string;
-    iconSpec: {
+    icon: {
         name: string;
         color: string;
     };
@@ -36,6 +36,6 @@ export declare class ImageMaster extends Master {
         };
     };
     normalizeFields(fields: any): FieldData;
-    protected collectMediaUris(fields: FieldData): string;
+    collectMediaUris(fields: FieldData): string;
 }
 export {};

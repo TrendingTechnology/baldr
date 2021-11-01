@@ -4,7 +4,7 @@ export class CounterMaster extends Master {
         super(...arguments);
         this.name = 'counter';
         this.displayName = 'Zähler';
-        this.iconSpec = {
+        this.icon = {
             name: 'counter',
             color: 'black',
             size: 'large'

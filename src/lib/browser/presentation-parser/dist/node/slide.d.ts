@@ -1,5 +1,5 @@
 import { DataCutter } from './data-management';
-import { Master, FieldData } from './master';
+import { MasterWrapper, FieldData } from './master';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -39,7 +39,7 @@ export declare class Slide {
      */
     slides?: Slide[];
     readonly meta: SlideMeta;
-    readonly master: Master;
+    readonly master: MasterWrapper;
     /**
      * In this attribute we save the normalized field data of a slide.
      */

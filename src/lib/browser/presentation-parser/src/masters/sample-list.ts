@@ -5,7 +5,7 @@ export class SampleListMaster extends Master {
 
   displayName = 'Audio-Ausschnitte'
 
-  iconSpec = {
+  icon = {
     name: 'music',
     color: 'red'
   }

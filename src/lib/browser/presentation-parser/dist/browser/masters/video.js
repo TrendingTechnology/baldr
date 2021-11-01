@@ -4,7 +4,7 @@ export class VideoMaster extends Master {
         super(...arguments);
         this.name = 'video';
         this.displayName = 'Video';
-        this.iconSpec = {
+        this.icon = {
             name: 'video-vintage',
             color: 'purple'
         };

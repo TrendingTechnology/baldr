@@ -1,7 +1,7 @@
 import { DataCutter } from './data-management'
 import { convertToString } from '@bldr/core-browser'
 import { masterCollection } from './master-collection'
-import { Master, FieldData } from './master'
+import { MasterWrapper, FieldData } from './master'
 import * as log from '@bldr/log'
 
 /**
@@ -57,7 +57,7 @@ export class Slide {
 
   public readonly meta: SlideMeta
 
-  public readonly master: Master
+  public readonly master: MasterWrapper
 
   /**
    * In this attribute we save the normalized field data of a slide.
@@ -95,7 +95,7 @@ export class Slide {
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
   }
 
-  private detectMaster (data: DataCutter): Master {
+  private detectMaster (data: DataCutter): MasterWrapper {
     const masterNames = Object.keys(masterCollection)
     const intersection = masterNames.filter(masterName =>
       data.keys.includes(masterName)

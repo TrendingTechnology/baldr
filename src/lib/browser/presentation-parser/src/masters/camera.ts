@@ -5,7 +5,7 @@ export class CameraMaster extends Master {
 
   displayName = 'Dokumentenkamera'
 
-  iconSpec = {
+  icon = {
     name: 'document-camera',
     color: 'red'
   }

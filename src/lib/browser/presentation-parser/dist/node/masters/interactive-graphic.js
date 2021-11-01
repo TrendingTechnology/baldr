@@ -7,7 +7,7 @@ class InteractiveGraphicMaster extends master_1.Master {
         super(...arguments);
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
-        this.iconSpec = {
+        this.icon = {
             name: 'image',
             color: 'blue',
             showOnSlides: false

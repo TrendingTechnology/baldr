@@ -12,7 +12,7 @@ export class ImageMaster extends Master {
 
   displayName = 'Bild'
 
-  iconSpec = {
+  icon = {
     name: 'image',
     color: 'green'
   }
@@ -42,14 +42,14 @@ export class ImageMaster extends Master {
     }
   }
 
-  public normalizeFields (fields: any): FieldData {
+  normalizeFields (fields: any): FieldData {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }
     return fields
   }
 
-  protected collectMediaUris (fields: FieldData): string {
+  collectMediaUris (fields: FieldData): string {
     return fields.src
   }
 }

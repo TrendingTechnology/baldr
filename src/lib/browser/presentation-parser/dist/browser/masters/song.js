@@ -4,7 +4,7 @@ export class SongMaster extends Master {
         super(...arguments);
         this.name = 'song';
         this.displayName = 'Lied';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-audio',
             color: 'green'
         };

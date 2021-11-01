@@ -5,7 +5,7 @@ export class WikipediaMaster extends Master {
 
   displayName = 'Wikipedia'
 
-  iconSpec = {
+  icon = {
     name: 'wikipedia',
     color: 'black'
   }

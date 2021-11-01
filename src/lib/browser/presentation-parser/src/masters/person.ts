@@ -11,7 +11,7 @@ export class PersonMaster extends Master {
 
   displayName = 'Porträt'
 
-  iconSpec = {
+  icon = {
     name: 'person',
     color: 'orange'
   }
@@ -32,7 +32,7 @@ export class PersonMaster extends Master {
     return fields
   }
 
-  protected collectMediaUris (fields: FieldData): string {
+  collectMediaUris (fields: FieldData): string {
     return this.convertPersonIdToMediaUri(fields.personId)
   }
 

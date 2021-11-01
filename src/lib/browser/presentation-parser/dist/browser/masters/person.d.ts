@@ -6,7 +6,7 @@ declare type RawFieldData = string | FieldData;
 export declare class PersonMaster extends Master {
     name: string;
     displayName: string;
-    iconSpec: {
+    icon: {
         name: string;
         color: string;
     };
@@ -17,7 +17,7 @@ export declare class PersonMaster extends Master {
         };
     };
     normalizeFields(fields: RawFieldData): FieldData;
-    protected collectMediaUris(fields: FieldData): string;
+    collectMediaUris(fields: FieldData): string;
     private convertPersonIdToMediaUri;
 }
 export {};

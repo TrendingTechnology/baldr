@@ -4,22 +4,19 @@
  */
 class MasterIcon {
     constructor({ name, color, size, showOnSlides }) {
-        if (size && !['small', 'large'].includes(size)) {
+        if (size != null && !['small', 'large'].includes(size)) {
             throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`);
         }
         if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
-            throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`);
+            throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${String(showOnSlides)}`);
         }
         this.name = name;
-        this.color = color || 'orange';
-        this.showOnSlides = showOnSlides !== false;
-        this.size = size || 'small';
+        this.color = color != null ? color : 'orange';
+        this.showOnSlides = showOnSlides != null ? showOnSlides : false;
+        this.size = size != null ? size : 'small';
     }
 }
 export class Master {
-    get icon() {
-        return new MasterIcon(this.iconSpec);
-    }
     /**
      * The result must correspond to the fields definition.
      *
@@ -37,18 +34,6 @@ export class Master {
      */
     normalizeFields(fields) {
         return fields;
-    }
-    static convertToSet(uris) {
-        if (uris == null) {
-            return new Set();
-        }
-        if (typeof uris === 'string') {
-            return new Set([uris]);
-        }
-        else if (Array.isArray(uris)) {
-            return new Set(uris);
-        }
-        return uris;
     }
     /**
      * Retrieve the media URIs which have to be resolved.
@@ -78,10 +63,34 @@ export class Master {
     collectOptionalMediaUris(fields) {
         return undefined;
     }
+}
+export class MasterWrapper {
+    constructor(MasterClass) {
+        this.master = new MasterClass();
+        this.icon = new MasterIcon(this.master.icon);
+    }
+    get name() {
+        return this.master.name;
+    }
+    normalizeFields(fields) {
+        return this.master.normalizeFields(fields);
+    }
+    static convertToSet(uris) {
+        if (uris == null) {
+            return new Set();
+        }
+        if (typeof uris === 'string') {
+            return new Set([uris]);
+        }
+        else if (Array.isArray(uris)) {
+            return new Set(uris);
+        }
+        return uris;
+    }
     processMediaUris(fields) {
-        return Master.convertToSet(this.collectMediaUris(fields));
+        return MasterWrapper.convertToSet(this.master.collectMediaUris(fields));
     }
     processOptionalMediaUris(fields) {
-        return Master.convertToSet(this.collectOptionalMediaUris(fields));
+        return MasterWrapper.convertToSet(this.master.collectOptionalMediaUris(fields));
     }
 }

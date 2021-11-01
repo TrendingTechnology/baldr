@@ -171,7 +171,7 @@ class QuestionMaster extends master_1.Master {
         super(...arguments);
         this.name = 'question';
         this.displayName = 'Frage';
-        this.iconSpec = {
+        this.icon = {
             name: 'question',
             color: 'yellow',
             size: 'large'

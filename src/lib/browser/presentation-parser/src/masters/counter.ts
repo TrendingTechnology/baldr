@@ -5,7 +5,7 @@ export class CounterMaster extends Master {
 
   displayName = 'Zähler'
 
-  iconSpec = {
+  icon = {
     name: 'counter',
     color: 'black',
     size: 'large' as const

@@ -5,7 +5,7 @@ export class GenericMaster extends Master {
 
   displayName = 'Folie'
 
-  iconSpec = {
+  icon = {
     name: 'file-presentation-box',
     color: 'gray',
     showOnSlides: false

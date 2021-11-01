@@ -4,7 +4,7 @@ export class NoteMaster extends Master {
         super(...arguments);
         this.name = 'note';
         this.displayName = 'Hefteintrag';
-        this.iconSpec = {
+        this.icon = {
             name: 'pencil',
             color: 'blue'
         };

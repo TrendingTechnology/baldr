@@ -4,7 +4,7 @@ export class ImageMaster extends Master {
         super(...arguments);
         this.name = 'image';
         this.displayName = 'Bild';
-        this.iconSpec = {
+        this.icon = {
             name: 'image',
             color: 'green'
         };

@@ -5,7 +5,7 @@ export class VideoMaster extends Master {
 
   displayName = 'Video'
 
-  iconSpec = {
+  icon = {
     name: 'video-vintage',
     color: 'purple'
   }

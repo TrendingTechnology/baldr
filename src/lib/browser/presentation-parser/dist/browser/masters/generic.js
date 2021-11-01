@@ -4,7 +4,7 @@ export class GenericMaster extends Master {
         super(...arguments);
         this.name = 'generic';
         this.displayName = 'Folie';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-presentation-box',
             color: 'gray',
             showOnSlides: false

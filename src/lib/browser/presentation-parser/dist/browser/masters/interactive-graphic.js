@@ -4,7 +4,7 @@ export class InteractiveGraphicMaster extends Master {
         super(...arguments);
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
-        this.iconSpec = {
+        this.icon = {
             name: 'image',
             color: 'blue',
             showOnSlides: false

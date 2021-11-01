@@ -5,7 +5,7 @@ export class InstrumentMaster extends Master {
 
   displayName = 'Instrument'
 
-  iconSpec = {
+  icon = {
     name: 'instrument',
     color: 'yellow'
   }

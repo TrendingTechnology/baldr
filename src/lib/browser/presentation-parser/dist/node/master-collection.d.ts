@@ -1,4 +1,4 @@
-import { Master } from './master';
+import { MasterWrapper } from './master';
 export declare const masterCollection: {
-    [masterName: string]: Master;
+    [masterName: string]: MasterWrapper;
 };

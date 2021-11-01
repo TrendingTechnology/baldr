@@ -5,7 +5,7 @@ export class NoteMaster extends Master {
 
   displayName = 'Hefteintrag'
 
-  iconSpec = {
+  icon = {
     name: 'pencil',
     color: 'blue'
   }

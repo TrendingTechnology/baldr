@@ -5,7 +5,7 @@ export class ScoreSampleMaster extends Master {
 
   displayName = 'Notenbeispiel'
 
-  iconSpec = {
+  icon = {
     name: 'file-audio',
     color: 'black'
   }

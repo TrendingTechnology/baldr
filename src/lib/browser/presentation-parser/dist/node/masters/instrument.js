@@ -7,7 +7,7 @@ class InstrumentMaster extends master_1.Master {
         super(...arguments);
         this.name = 'instrument';
         this.displayName = 'Instrument';
-        this.iconSpec = {
+        this.icon = {
             name: 'instrument',
             color: 'yellow'
         };

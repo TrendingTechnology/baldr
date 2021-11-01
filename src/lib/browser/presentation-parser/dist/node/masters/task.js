@@ -7,7 +7,7 @@ class TaskMaster extends master_1.Master {
         super(...arguments);
         this.name = 'task';
         this.displayName = 'Arbeitsauftrag';
-        this.iconSpec = {
+        this.icon = {
             name: 'task',
             color: 'yellow-dark',
             size: 'large'

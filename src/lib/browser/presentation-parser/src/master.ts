@@ -102,6 +102,84 @@ interface MasterIconSpec {
   showOnSlides?: boolean
 }
 
+export abstract class Master {
+  /**
+   * The name of the master slide. A short name in lower case letters like `audio`.
+   */
+  public abstract name: string
+
+  /**
+   * A human readable name of the master slide.
+   */
+  public abstract displayName: string
+
+  public abstract icon: MasterIconSpec
+
+  /**
+   * The defintion of the fields of the master slide.
+   */
+  public fieldsDefintion?: {
+    [key: string]: FieldDefinition
+  }
+
+  /**
+   * The result must correspond to the fields definition.
+   *
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
+   *
+   * ```js
+   * normalizeFields (fields) {
+   *   if (typeof fields === 'string') {
+   *     return {
+   *       markup: fields
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  public normalizeFields (fields: any): FieldData {
+    return fields
+  }
+
+  /**
+   * Retrieve the media URIs which have to be resolved.
+   *
+   * Call the master funtion `resolveMediaUris` and collect the media URIs.
+   * (like [id:beethoven, ref:mozart]). Extract media URIs from
+   * the text props.
+   *
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+   *
+   * ```js
+   * // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
+   * collectMediaUris (fields) {
+   *   return fields.src
+   * }
+   * ```
+   */
+  public collectMediaUris (
+    fields: FieldData
+  ): string | string[] | Set<string> | undefined {
+    return undefined
+  }
+
+  /**
+   * Check if the handed over media URIs can be resolved. Throw no errors, if
+   * the media assets are not present. This hook is used in the YouTube master
+   * slide. This master slide uses the online version, if no offline video could
+   * be resolved.
+   */
+  public collectOptionalMediaUris (
+    fields: FieldData
+  ): string | string[] | Set<string> | undefined {
+    return undefined
+  }
+}
+
+interface MasterConstructor {
+  new (): Master
+}
+
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -134,47 +212,25 @@ class MasterIcon implements MasterIconSpec {
   }
 }
 
-export abstract class Master {
-  /**
-   * The name of the master slide. A short name in lower case letters like `audio`.
-   */
-  public abstract name: string
+/**
+ * Wraps a master object. Processes, hides, forwards the master data and
+ * methods.
+ */
+export class MasterWrapper {
+  private master: Master
 
-  /**
-   * A human readable name of the master slide.
-   */
-  public abstract displayName: string
-
-  protected abstract iconSpec: MasterIconSpec
-
-  get icon (): MasterIcon {
-    return new MasterIcon(this.iconSpec)
+  public icon: MasterIcon
+  constructor (MasterClass: MasterConstructor) {
+    this.master = new MasterClass()
+    this.icon = new MasterIcon(this.master.icon)
   }
 
-  /**
-   * The defintion of the fields of the master slide.
-   */
-  fieldsDefintion?: {
-    [key: string]: FieldDefinition
+  public get name (): string {
+    return this.master.name
   }
 
-  /**
-   * The result must correspond to the fields definition.
-   *
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-   *
-   * ```js
-   * normalizeFields (fields) {
-   *   if (typeof fields === 'string') {
-   *     return {
-   *       markup: fields
-   *     }
-   *   }
-   * }
-   * ```
-   */
   public normalizeFields (fields: any): FieldData {
-    return fields
+    return this.master.normalizeFields(fields)
   }
 
   private static convertToSet (
@@ -191,45 +247,13 @@ export abstract class Master {
     return uris
   }
 
-  /**
-   * Retrieve the media URIs which have to be resolved.
-   *
-   * Call the master funtion `resolveMediaUris` and collect the media URIs.
-   * (like [id:beethoven, ref:mozart]). Extract media URIs from
-   * the text props.
-   *
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-   *
-   * ```js
-   * // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
-   * collectMediaUris (fields) {
-   *   return fields.src
-   * }
-   * ```
-   */
-  protected collectMediaUris (
-    fields: FieldData
-  ): string | string[] | Set<string> | undefined {
-    return undefined
-  }
-
-  /**
-   * Check if the handed over media URIs can be resolved. Throw no errors, if
-   * the media assets are not present. This hook is used in the YouTube master
-   * slide. This master slide uses the online version, if no offline video could
-   * be resolved.
-   */
-  protected collectOptionalMediaUris (
-    fields: FieldData
-  ): string | string[] | Set<string> | undefined {
-    return undefined
-  }
-
   public processMediaUris (fields: FieldData): Set<string> {
-    return Master.convertToSet(this.collectMediaUris(fields))
+    return MasterWrapper.convertToSet(this.master.collectMediaUris(fields))
   }
 
   public processOptionalMediaUris (fields: FieldData): Set<string> {
-    return Master.convertToSet(this.collectOptionalMediaUris(fields))
+    return MasterWrapper.convertToSet(
+      this.master.collectOptionalMediaUris(fields)
+    )
   }
 }

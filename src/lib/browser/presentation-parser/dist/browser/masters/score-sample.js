@@ -4,7 +4,7 @@ export class ScoreSampleMaster extends Master {
         super(...arguments);
         this.name = 'scoreSample';
         this.displayName = 'Notenbeispiel';
-        this.iconSpec = {
+        this.icon = {
             name: 'file-audio',
             color: 'black'
         };

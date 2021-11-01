@@ -5,7 +5,7 @@ export class GroupMaster extends Master {
 
   displayName = 'Gruppe'
 
-  iconSpec = {
+  icon = {
     name: 'account-group',
     color: 'orange'
   }

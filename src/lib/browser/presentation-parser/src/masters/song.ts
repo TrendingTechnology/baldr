@@ -5,7 +5,7 @@ export class SongMaster extends Master {
 
   displayName = 'Lied'
 
-  iconSpec = {
+  icon = {
     name: 'file-audio',
     color: 'green'
   }
