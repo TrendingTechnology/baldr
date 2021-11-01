@@ -1,0 +1,6 @@
+---
+title: Reference abbreviation
+
+slides:
+- generic: ref:./file-1
+- generic: ref:./file-2

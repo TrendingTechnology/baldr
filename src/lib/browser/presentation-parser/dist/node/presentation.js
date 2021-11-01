@@ -41,8 +41,8 @@ class Meta {
 }
 class Presentation {
     constructor(yamlString) {
-        const raw = yaml_1.convertFromYaml(yamlString);
-        const data = new data_management_1.DataCutter(raw);
+        this.rawYamlString = yamlString;
+        const data = this.convertFromYaml(yamlString);
         this.meta = this.cutMeta(data);
         this.slides = new slide_collection_1.SlideCollection(data.cutNotNull('slides'));
         data.checkEmpty();
@@ -61,6 +61,52 @@ class Presentation {
             throw new Error('Specify both title and ref!');
         }
         return new Meta({ title, ref });
+    }
+    /**
+     * Media URIs in the “ref” can be shorted with the string `./`. The
+     * abbreviationn `./` is replaced with the presentation reference and a
+     * underscore, for example the media URI
+     * `ref:Leitmotivtechnik_VD_Verdeutlichung_Duell-Mundharmonika-Frank` can be
+     * shortend with `ref:./VD_Verdeutlichung_Duell-Mundharmonika-Frank`. The
+     * abbreviationn `./` is inspired by the UNIX dot notation for the current
+     * directory.
+     *
+     * @param rawYamlString - The raw YAML string of the presentation file.
+     * @param metaRef - The reference of the presentation.
+     *
+     * @returns A raw YAML string with fully expanded media URIs.
+     */
+    expandMediaRefs(rawYamlString, metaRef) {
+        return rawYamlString.replace(/ref:.\//g, `ref:${metaRef}_`);
+    }
+    /**
+     * Convert the raw YAML string into javascript object.
+     *
+     * @param rawYamlString - The raw YAML string of the presentation file.
+     *
+     * @returns A data cutter object.
+     *
+     * @throws {Error} If the media URI references cannot be resolved.
+     */
+    convertFromYaml(yamlString) {
+        var _a;
+        let raw = yaml_1.convertFromYaml(yamlString);
+        if (yamlString.indexOf('ref:./') > -1) {
+            let ref = undefined;
+            if (raw.ref != null) {
+                ref = raw.ref;
+            }
+            if (((_a = raw.meta) === null || _a === void 0 ? void 0 : _a.ref) != null) {
+                ref = raw.meta.ref;
+            }
+            if (ref == null) {
+                throw new Error('A reference abbreviation was found, but the presentation has no reference meta information.');
+            }
+            yamlString = this.expandMediaRefs(yamlString, ref);
+            this.rawYamlStringExpanded = yamlString;
+            raw = yaml_1.convertFromYaml(yamlString);
+        }
+        return new data_management_1.DataCutter(raw);
     }
     resolveMediaAssets() {
         return __awaiter(this, void 0, void 0, function* () {

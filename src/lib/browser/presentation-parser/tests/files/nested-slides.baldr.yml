@@ -1,0 +1,11 @@
+---
+ref: nested-slides
+title: Nested slides
+
+slides:
+- generic: Level 1
+  slides:
+  - generic: Level 2
+    slides:
+    - generic: Level 3
+      slides:
