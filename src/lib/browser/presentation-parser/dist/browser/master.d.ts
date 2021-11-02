@@ -170,9 +170,7 @@ export interface Master {
      */
     generateTexMarkup?: (payload: any) => string;
 }
-interface MasterConstructor {
-    new (): Master;
-}
+declare type MasterConstructor = new () => Master;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -189,7 +187,7 @@ declare class MasterIcon implements MasterIconSpec {
  * slides and methods.
  */
 export declare class MasterWrapper {
-    private master;
+    private readonly master;
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
     get name(): string;

@@ -197,9 +197,7 @@ export interface Master {
   generateTexMarkup?: (payload: any) => string
 }
 
-interface MasterConstructor {
-  new (): Master
-}
+type MasterConstructor = new () => Master
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -238,7 +236,7 @@ class MasterIcon implements MasterIconSpec {
  * slides and methods.
  */
 export class MasterWrapper {
-  private master: Master
+  private readonly master: Master
 
   public icon: MasterIcon
   constructor (MasterClass: MasterConstructor) {
@@ -286,7 +284,7 @@ export class MasterWrapper {
     return new Set<string>()
   }
 
-  public generateTexMarkup (fields: FieldData) {
+  public generateTexMarkup (fields: FieldData): string | undefined {
     if (this.master.generateTexMarkup != null) {
       return this.master.generateTexMarkup(fields)
     }
