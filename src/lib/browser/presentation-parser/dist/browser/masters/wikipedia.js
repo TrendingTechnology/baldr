@@ -1,8 +1,6 @@
-import { Master } from '../master';
 const DEFAULT_LANGUAGE = 'de';
-export class WikipediaMaster extends Master {
+export class WikipediaMaster {
     constructor() {
-        super(...arguments);
         this.name = 'wikipedia';
         this.displayName = 'Wikipedia';
         this.icon = {

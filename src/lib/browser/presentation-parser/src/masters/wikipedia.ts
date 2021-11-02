@@ -2,7 +2,7 @@ import { Master } from '../master'
 
 const DEFAULT_LANGUAGE = 'de'
 
-export class WikipediaMaster extends Master {
+export class WikipediaMaster implements Master {
   name = 'wikipedia'
 
   displayName = 'Wikipedia'

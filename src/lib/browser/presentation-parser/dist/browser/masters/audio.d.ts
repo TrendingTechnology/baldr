@@ -11,7 +11,7 @@ interface AudioFieldData {
     playthrough?: boolean;
 }
 declare type RawFieldData = string | AudioFieldData;
-export declare class AudioMaster extends Master {
+export declare class AudioMaster implements Master {
     name: string;
     displayName: string;
     icon: {

@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuestionMaster = exports.generateTexMarkup = exports.Question = void 0;
+exports.QuestionMaster = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const tex = require("@bldr/tex-templates");
-const master_1 = require("../master");
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
  * heading. `1. act` is convert by `marked` into those lists. This is a
@@ -138,7 +137,13 @@ class Question {
         return Question.parseRecursively(rawSpec, [], counter, 0);
     }
 }
-exports.Question = Question;
+function formatTexMultipleQuestions(questions) {
+    const markup = [];
+    for (const question of questions) {
+        markup.push(formatTexQuestion(question));
+    }
+    return tex.environment('enumerate', markup.join('\n'));
+}
 function formatTexQuestion(question) {
     const markup = ['\\item'];
     if (question.heading != null) {
@@ -155,20 +160,8 @@ function formatTexQuestion(question) {
     }
     return markup.join('\n\n') + '\n';
 }
-function formatTexMultipleQuestions(questions) {
-    const markup = [];
-    for (const question of questions) {
-        markup.push(formatTexQuestion(question));
-    }
-    return tex.environment('enumerate', markup.join('\n'));
-}
-function generateTexMarkup(questions) {
-    return formatTexMultipleQuestions(questions);
-}
-exports.generateTexMarkup = generateTexMarkup;
-class QuestionMaster extends master_1.Master {
+class QuestionMaster {
     constructor() {
-        super(...arguments);
         this.name = 'question';
         this.displayName = 'Frage';
         this.icon = {
@@ -195,6 +188,13 @@ class QuestionMaster extends master_1.Master {
             questions,
             sequence: questions[0].sequence
         };
+    }
+    generateTexMarkup(fields) {
+        const markup = [];
+        for (const question of fields.questions) {
+            markup.push(formatTexQuestion(question));
+        }
+        return tex.environment('enumerate', markup.join('\n'));
     }
 }
 exports.QuestionMaster = QuestionMaster;

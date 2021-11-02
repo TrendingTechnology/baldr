@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class NoteMaster extends Master {
+export class NoteMaster implements Master {
   name = 'note'
 
   displayName = 'Hefteintrag'

@@ -5,7 +5,7 @@ interface FieldData {
     description?: string;
     noMeta?: boolean;
 }
-export declare class ImageMaster extends Master {
+export declare class ImageMaster implements Master {
     name: string;
     displayName: string;
     icon: {
@@ -36,6 +36,6 @@ export declare class ImageMaster extends Master {
         };
     };
     normalizeFields(fields: any): FieldData;
-    collectMediaUris(fields: FieldData): string;
+    collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
 }
 export {};

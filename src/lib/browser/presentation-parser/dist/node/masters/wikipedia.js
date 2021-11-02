@@ -1,11 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WikipediaMaster = void 0;
-const master_1 = require("../master");
 const DEFAULT_LANGUAGE = 'de';
-class WikipediaMaster extends master_1.Master {
+class WikipediaMaster {
     constructor() {
-        super(...arguments);
         this.name = 'wikipedia';
         this.displayName = 'Wikipedia';
         this.icon = {

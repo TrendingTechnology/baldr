@@ -1,11 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GenericMaster = void 0;
-const master_1 = require("../master");
 const CHARACTERS_ON_SLIDE = 400;
-class GenericMaster extends master_1.Master {
+class GenericMaster {
     constructor() {
-        super(...arguments);
         this.name = 'generic';
         this.displayName = 'Folie';
         this.icon = {

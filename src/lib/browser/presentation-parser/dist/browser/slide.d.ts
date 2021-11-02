@@ -43,7 +43,7 @@ export declare class Slide {
     /**
      * In this attribute we save the normalized field data of a slide.
      */
-    fields: FieldData;
+    fields?: FieldData;
     /**
      * Props (properties) to send to the main Vue master component.
      */

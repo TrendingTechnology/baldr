@@ -2,7 +2,7 @@ import { Master } from '../master'
 
 const CHARACTERS_ON_SLIDE = 400
 
-export class GenericMaster extends Master {
+export class GenericMaster implements Master {
   name = 'generic'
 
   displayName = 'Folie'

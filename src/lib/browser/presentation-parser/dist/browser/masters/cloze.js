@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class ClozeMaster extends Master {
+export class ClozeMaster {
     constructor() {
-        super(...arguments);
         this.name = 'cloze';
         this.displayName = 'Lückentext';
         this.icon = {

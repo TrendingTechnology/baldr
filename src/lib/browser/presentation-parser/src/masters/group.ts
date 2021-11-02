@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class GroupMaster extends Master {
+export class GroupMaster implements Master {
   name = 'group'
 
   displayName = 'Gruppe'

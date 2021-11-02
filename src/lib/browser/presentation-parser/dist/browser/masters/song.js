@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class SongMaster extends Master {
+export class SongMaster {
     constructor() {
-        super(...arguments);
         this.name = 'song';
         this.displayName = 'Lied';
         this.icon = {

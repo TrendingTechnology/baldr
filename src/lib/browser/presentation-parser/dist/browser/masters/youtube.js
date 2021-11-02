@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class YoutubeMaster extends Master {
+export class YoutubeMaster {
     constructor() {
-        super(...arguments);
         this.name = 'youtube';
         this.displayName = 'YouTube';
         this.icon = {

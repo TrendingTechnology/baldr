@@ -1,5 +1,5 @@
 import { Master } from '../master';
-export declare class DocumentMaster extends Master {
+export declare class DocumentMaster implements Master {
     name: string;
     displayName: string;
     icon: {

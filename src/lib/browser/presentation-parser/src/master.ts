@@ -102,23 +102,23 @@ interface MasterIconSpec {
   showOnSlides?: boolean
 }
 
-export abstract class Master {
+export interface Master {
   /**
    * The name of the master slide. A short name in lower case letters like `audio`.
    */
-  public abstract name: string
+  name: string
 
   /**
    * A human readable name of the master slide.
    */
-  public abstract displayName: string
+  displayName: string
 
-  public abstract icon: MasterIconSpec
+  icon: MasterIconSpec
 
   /**
    * The defintion of the fields of the master slide.
    */
-  public fieldsDefintion?: {
+  fieldsDefintion?: {
     [key: string]: FieldDefinition
   }
 
@@ -137,9 +137,7 @@ export abstract class Master {
    * }
    * ```
    */
-  public normalizeFields (fields: any): FieldData {
-    return fields
-  }
+  normalizeFields?: (fields: any) => FieldData
 
   /**
    * Retrieve the media URIs which have to be resolved.
@@ -157,11 +155,9 @@ export abstract class Master {
    * }
    * ```
    */
-  public collectMediaUris (
-    fields: FieldData
-  ): string | string[] | Set<string> | undefined {
-    return undefined
-  }
+  collectMediaUris?: (
+    fields: any
+  ) => string | string[] | Set<string> | undefined
 
   /**
    * Check if the handed over media URIs can be resolved. Throw no errors, if
@@ -169,11 +165,28 @@ export abstract class Master {
    * slide. This master slide uses the online version, if no offline video could
    * be resolved.
    */
-  public collectOptionalMediaUris (
-    fields: FieldData
-  ): string | string[] | Set<string> | undefined {
-    return undefined
-  }
+  collectOptionalMediaUris?: (
+    fields: any
+  ) => string | string[] | Set<string> | undefined
+
+  /**
+   * Generate TeX markup from the current slide. See TeX package
+   * `schule-baldr.dtx`.
+   *
+   * ```js
+   * import * as tex from '@bldr/tex-templates'
+   *
+   * export class GenericMaster extends Master {
+   *   generateTexMarkup ({ props, propsMain, propsPreview }) {
+   *     const yaml = propsMain.asset.yaml
+   *     return tex.environment('baldrPerson', yaml.shortBiography, {
+   *       name: yaml.name
+   *     })
+   *   }
+   * }
+   * ```
+   */
+  generateTexMarkup?: (payload: any) => string
 }
 
 interface MasterConstructor {
@@ -213,8 +226,8 @@ class MasterIcon implements MasterIconSpec {
 }
 
 /**
- * Wraps a master object. Processes, hides, forwards the master data and
- * methods.
+ * Wraps a master object. Processes, hides, forwards the field data of the
+ * slides and methods.
  */
 export class MasterWrapper {
   private master: Master
@@ -229,8 +242,10 @@ export class MasterWrapper {
     return this.master.name
   }
 
-  public normalizeFields (fields: any): FieldData {
-    return this.master.normalizeFields(fields)
+  public normalizeFields (fields: any): FieldData | undefined {
+    if (this.master.normalizeFields != null) {
+      return this.master.normalizeFields(fields)
+    }
   }
 
   private static convertToSet (
@@ -247,13 +262,25 @@ export class MasterWrapper {
     return uris
   }
 
-  public processMediaUris (fields: FieldData): Set<string> {
-    return MasterWrapper.convertToSet(this.master.collectMediaUris(fields))
+  public processMediaUris (fields?: FieldData): Set<string> {
+    if (this.master.collectMediaUris != null && fields != null) {
+      return MasterWrapper.convertToSet(this.master.collectMediaUris(fields))
+    }
+    return new Set<string>()
   }
 
-  public processOptionalMediaUris (fields: FieldData): Set<string> {
-    return MasterWrapper.convertToSet(
-      this.master.collectOptionalMediaUris(fields)
-    )
+  public processOptionalMediaUris (fields?: FieldData): Set<string> {
+    if (this.master.collectOptionalMediaUris != null && fields != null) {
+      return MasterWrapper.convertToSet(
+        this.master.collectOptionalMediaUris(fields)
+      )
+    }
+    return new Set<string>()
+  }
+
+  generateTexMarkup (fields: FieldData) {
+    if (this.master.generateTexMarkup != null) {
+      return this.master.generateTexMarkup(fields)
+    }
   }
 }

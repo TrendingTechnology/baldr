@@ -6,7 +6,7 @@ interface FieldData {
   info?: string
 }
 
-export class YoutubeMaster extends Master {
+export class YoutubeMaster implements Master {
   name = 'youtube'
 
   displayName = 'YouTube'
@@ -41,7 +41,7 @@ export class YoutubeMaster extends Master {
     return fields
   }
 
-  collectOptionalMediaUris (fields: FieldData) {
+  collectOptionalMediaUris (fields: FieldData): string | string[] | Set<string> | undefined {
     return this.convertYoutubeIdToUri(fields.id)
   }
 

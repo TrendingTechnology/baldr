@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class ClozeMaster extends Master {
+export class ClozeMaster implements Master {
   name = 'cloze'
 
   displayName = 'Lückentext'

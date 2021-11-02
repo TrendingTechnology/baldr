@@ -6,7 +6,7 @@ interface FieldData {
 
 type RawFieldData = string | FieldData
 
-export class PersonMaster extends Master {
+export class PersonMaster implements Master {
   name = 'person'
 
   displayName = 'Porträt'

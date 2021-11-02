@@ -7,7 +7,7 @@ interface FieldData {
   noMeta?: boolean
 }
 
-export class ImageMaster extends Master {
+export class ImageMaster implements Master {
   name = 'image'
 
   displayName = 'Bild'
@@ -49,7 +49,9 @@ export class ImageMaster extends Master {
     return fields
   }
 
-  collectMediaUris (fields: FieldData): string {
+  collectMediaUris (
+    fields: FieldData
+  ): string | string[] | Set<string> | undefined {
     return fields.src
   }
 }

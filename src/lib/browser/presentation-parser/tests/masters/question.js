@@ -2,99 +2,7 @@
 
 const assert = require('assert')
 
-const {
-  Question,
-  generateTexMarkup
-} = require('../../dist/node/masters/question')
-
 const { parseMasterPresentation } = require('../_helper.js')
-
-const threeQuestions = [
-  {
-    question: 'Question one?',
-    answer: 'Answer one'
-  },
-  {
-    question: 'Question two?',
-    answer: 'Answer two'
-  },
-  {
-    question: 'Question three?',
-    answer: 'Answer three'
-  }
-]
-
-const threeQuestionsTex = `\\begin{enumerate}
-\\item
-
-Question one?
-
-\\textit{Answer one}
-
-\\item
-
-Question two?
-
-\\textit{Answer two}
-
-\\item
-
-Question three?
-
-\\textit{Answer three}
-\\end{enumerate}`
-
-const recursiveStructure = {
-  heading: 'Heading',
-  subQuestions: [
-    {
-      question: 'Questions Level 1',
-      answer: 'Answer Level 1',
-      subQuestions: [
-        {
-          question: 'Questions Level 2',
-          answer: 'Answer Level 2',
-          subQuestions: [
-            {
-              question: 'Questions Level 3',
-              answer: 'Answer Level 3'
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-
-const recursiveStructureTex = `\\begin{enumerate}
-\\item
-
-\\textbf{Heading}
-
-\\begin{enumerate}
-\\item
-
-Questions Level 1
-
-\\textit{Answer Level 1}
-
-\\begin{enumerate}
-\\item
-
-Questions Level 2
-
-\\textit{Answer Level 2}
-
-\\begin{enumerate}
-\\item
-
-Questions Level 3
-
-\\textit{Answer Level 3}
-\\end{enumerate}
-\\end{enumerate}
-\\end{enumerate}
-\\end{enumerate}`
 
 const presentation = parseMasterPresentation('question')
 
@@ -124,19 +32,16 @@ describe('Master question', function () {
       assert.strictEqual(questions.length, 3)
     })
 
-    it('recursiveStructure', function () {
-      const questions = Question.parse(recursiveStructure)
+    it('Recursive structure', function () {
+      const questions = getQuestions(4)
       assert.strictEqual(
         questions[0].subQuestions[0].subQuestions[0].subQuestions[0].question,
         'Questions Level 3'
       )
     })
 
-    it('markupShort', function () {
-      const questions = Question.parse({
-        question: 'Markup support: *italic* **bold**',
-        answer: 'Markup support: *italic* **bold**'
-      })
+    it('Markup support in short form', function () {
+      const questions = getQuestions(5)
       assert.strictEqual(
         questions[0].question,
         'Markup support: <em>italic</em> <strong>bold</strong>'
@@ -147,11 +52,8 @@ describe('Master question', function () {
       )
     })
 
-    it('markupMultiLine', function () {
-      const questions = Question.parse({
-        question: '1. one\n2. two\n3. three\n',
-        answer: '1. one\n2. two\n3. three\n'
-      })
+    it('Markup multiline', function () {
+      const questions = getQuestions(16)
       assert.strictEqual(questions[0].question, 'one\ntwo\nthree')
       assert.strictEqual(
         questions[0].answer,
@@ -159,45 +61,85 @@ describe('Master question', function () {
       )
     })
 
-    it('heading', function () {
-      const questions = Question.parse({
-        heading: 'Questions about the text',
-        questions: [
-          {
-            question: 'Question one?',
-            answer: 'Answer one'
-          }
-        ]
-      })
+    it('Heading', function () {
+      const questions = getQuestions(7)
       assert.strictEqual(questions[0].heading, 'Questions about the text')
     })
 
-    it('questionsAsString', function () {
-      const questions = Question.parse([
-        'Question one?',
-        'Question two?',
-        'Question three?'
-      ])
+    it('Questions as string', function () {
+      const questions = getQuestions(11)
       assert.strictEqual(questions[0].question, 'Question one?')
       assert.strictEqual(questions[1].question, 'Question two?')
       assert.strictEqual(questions[2].question, 'Question three?')
     })
 
-    it('oneQuestionAsString', function () {
-      const questions = Question.parse('One big question?')
+    it('One question as string', function () {
+      const questions = getQuestions(12)
       assert.strictEqual(questions[0].question, 'One big question?')
     })
   })
 
   describe('Function “generateTexMarkup”', function () {
     it('threeQuestions', function () {
-      const questions = Question.parse(threeQuestions)
-      assert.strictEqual(generateTexMarkup(questions), threeQuestionsTex)
+      const slide = presentation.getSlideByNo(3)
+      assert.strictEqual(
+        slide.master.generateTexMarkup(slide.fields),
+        `\\begin{enumerate}
+\\item
+
+Question one?
+
+\\textit{Answer one}
+
+\\item
+
+Question two?
+
+\\textit{Answer two}
+
+\\item
+
+Question three?
+
+\\textit{Answer three}
+\\end{enumerate}`
+      )
     })
 
     it.skip('recursiveStructure', function () {
-      const questions = Question.parse(recursiveStructure)
-      assert.strictEqual(generateTexMarkup(questions), recursiveStructureTex)
+      const slide = presentation.getSlideByNo(4)
+      assert.strictEqual(
+        slide.master.generateTexMarkup(slide.fields),
+        `\\begin{enumerate}
+\\item
+
+\\textbf{Heading}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 1
+
+\\textit{Answer Level 1}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 2
+
+\\textit{Answer Level 2}
+
+\\begin{enumerate}
+\\item
+
+Questions Level 3
+
+\\textit{Answer Level 3}
+\\end{enumerate}
+\\end{enumerate}
+\\end{enumerate}
+\\end{enumerate}`
+      )
     })
   })
 })

@@ -4,7 +4,7 @@ interface FieldData {
     heading?: string;
     info?: string;
 }
-export declare class YoutubeMaster extends Master {
+export declare class YoutubeMaster implements Master {
     name: string;
     displayName: string;
     icon: {
@@ -29,7 +29,7 @@ export declare class YoutubeMaster extends Master {
         };
     };
     normalizeFields(fields: any): FieldData;
-    collectOptionalMediaUris(fields: FieldData): string;
+    collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
     private convertYoutubeIdToUri;
 }
 export {};

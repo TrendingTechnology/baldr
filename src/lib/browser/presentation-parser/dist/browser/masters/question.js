@@ -1,6 +1,5 @@
 import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html';
 import * as tex from '@bldr/tex-templates';
-import { Master } from '../master';
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
  * heading. `1. act` is convert by `marked` into those lists. This is a
@@ -63,7 +62,7 @@ function normalizeMultipleSpecs(rawSpec) {
 /**
  * A question with sub questions.
  */
-export class Question {
+class Question {
     constructor(spec, counter, level) {
         this.counter = counter;
         if (spec.heading != null) {
@@ -135,6 +134,13 @@ export class Question {
         return Question.parseRecursively(rawSpec, [], counter, 0);
     }
 }
+function formatTexMultipleQuestions(questions) {
+    const markup = [];
+    for (const question of questions) {
+        markup.push(formatTexQuestion(question));
+    }
+    return tex.environment('enumerate', markup.join('\n'));
+}
 function formatTexQuestion(question) {
     const markup = ['\\item'];
     if (question.heading != null) {
@@ -151,19 +157,8 @@ function formatTexQuestion(question) {
     }
     return markup.join('\n\n') + '\n';
 }
-function formatTexMultipleQuestions(questions) {
-    const markup = [];
-    for (const question of questions) {
-        markup.push(formatTexQuestion(question));
-    }
-    return tex.environment('enumerate', markup.join('\n'));
-}
-export function generateTexMarkup(questions) {
-    return formatTexMultipleQuestions(questions);
-}
-export class QuestionMaster extends Master {
+export class QuestionMaster {
     constructor() {
-        super(...arguments);
         this.name = 'question';
         this.displayName = 'Frage';
         this.icon = {
@@ -190,5 +185,12 @@ export class QuestionMaster extends Master {
             questions,
             sequence: questions[0].sequence
         };
+    }
+    generateTexMarkup(fields) {
+        const markup = [];
+        for (const question of fields.questions) {
+            markup.push(formatTexQuestion(question));
+        }
+        return tex.environment('enumerate', markup.join('\n'));
     }
 }

@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InteractiveGraphicMaster = void 0;
-const master_1 = require("../master");
-class InteractiveGraphicMaster extends master_1.Master {
+class InteractiveGraphicMaster {
     constructor() {
-        super(...arguments);
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
         this.icon = {

@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class CounterMaster extends Master {
+export class CounterMaster implements Master {
   name = 'counter'
 
   displayName = 'Zähler'

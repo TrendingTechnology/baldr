@@ -104,13 +104,15 @@ slides:
       answer: This is the answer
 
 # 11
-- question:
+- title: Questions as string
+  question:
     - Question one?
     - Question two?
     - Question three?
 
 # 12
-- question: One big question?
+- title: One question as string
+  question: One big question?
 
 # 13
 - question:
@@ -126,3 +128,15 @@ slides:
   question:
     question: Frage?
     answer: Antwort
+
+# 16
+- title: Markup multiline
+  question:
+    question: |
+      1. one
+      2. two
+      3. three
+    answer: |
+      1. one
+      2. two
+      3. three

@@ -3,7 +3,7 @@ interface FieldData {
     personId: string;
 }
 declare type RawFieldData = string | FieldData;
-export declare class PersonMaster extends Master {
+export declare class PersonMaster implements Master {
     name: string;
     displayName: string;
     icon: {

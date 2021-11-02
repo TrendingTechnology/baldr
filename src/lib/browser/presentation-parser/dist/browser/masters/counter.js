@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class CounterMaster extends Master {
+export class CounterMaster {
     constructor() {
-        super(...arguments);
         this.name = 'counter';
         this.displayName = 'Zähler';
         this.icon = {

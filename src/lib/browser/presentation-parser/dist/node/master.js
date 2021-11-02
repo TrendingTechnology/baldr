@@ -1,55 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.Master = void 0;
-class Master {
-    /**
-     * The result must correspond to the fields definition.
-     *
-     * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-     *
-     * ```js
-     * normalizeFields (fields) {
-     *   if (typeof fields === 'string') {
-     *     return {
-     *       markup: fields
-     *     }
-     *   }
-     * }
-     * ```
-     */
-    normalizeFields(fields) {
-        return fields;
-    }
-    /**
-     * Retrieve the media URIs which have to be resolved.
-     *
-     * Call the master funtion `resolveMediaUris` and collect the media URIs.
-     * (like [id:beethoven, ref:mozart]). Extract media URIs from
-     * the text props.
-     *
-     * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
-     *
-     * ```js
-     * // An array of media URIs to resolve (like [id:beethoven, ref:mozart.mp3])
-     * collectMediaUris (fields) {
-     *   return fields.src
-     * }
-     * ```
-     */
-    collectMediaUris(fields) {
-        return undefined;
-    }
-    /**
-     * Check if the handed over media URIs can be resolved. Throw no errors, if
-     * the media assets are not present. This hook is used in the YouTube master
-     * slide. This master slide uses the online version, if no offline video could
-     * be resolved.
-     */
-    collectOptionalMediaUris(fields) {
-        return undefined;
-    }
-}
-exports.Master = Master;
+exports.MasterWrapper = void 0;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -69,8 +20,8 @@ class MasterIcon {
     }
 }
 /**
- * Wraps a master object. Processes, hides, forwards the master data and
- * methods.
+ * Wraps a master object. Processes, hides, forwards the field data of the
+ * slides and methods.
  */
 class MasterWrapper {
     constructor(MasterClass) {
@@ -81,7 +32,9 @@ class MasterWrapper {
         return this.master.name;
     }
     normalizeFields(fields) {
-        return this.master.normalizeFields(fields);
+        if (this.master.normalizeFields != null) {
+            return this.master.normalizeFields(fields);
+        }
     }
     static convertToSet(uris) {
         if (uris == null) {
@@ -96,10 +49,21 @@ class MasterWrapper {
         return uris;
     }
     processMediaUris(fields) {
-        return MasterWrapper.convertToSet(this.master.collectMediaUris(fields));
+        if (this.master.collectMediaUris != null && fields != null) {
+            return MasterWrapper.convertToSet(this.master.collectMediaUris(fields));
+        }
+        return new Set();
     }
     processOptionalMediaUris(fields) {
-        return MasterWrapper.convertToSet(this.master.collectOptionalMediaUris(fields));
+        if (this.master.collectOptionalMediaUris != null && fields != null) {
+            return MasterWrapper.convertToSet(this.master.collectOptionalMediaUris(fields));
+        }
+        return new Set();
+    }
+    generateTexMarkup(fields) {
+        if (this.master.generateTexMarkup != null) {
+            return this.master.generateTexMarkup(fields);
+        }
     }
 }
 exports.MasterWrapper = MasterWrapper;

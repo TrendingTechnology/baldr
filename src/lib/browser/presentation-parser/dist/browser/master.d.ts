@@ -90,16 +90,16 @@ interface MasterIconSpec {
      */
     showOnSlides?: boolean;
 }
-export declare abstract class Master {
+export interface Master {
     /**
      * The name of the master slide. A short name in lower case letters like `audio`.
      */
-    abstract name: string;
+    name: string;
     /**
      * A human readable name of the master slide.
      */
-    abstract displayName: string;
-    abstract icon: MasterIconSpec;
+    displayName: string;
+    icon: MasterIconSpec;
     /**
      * The defintion of the fields of the master slide.
      */
@@ -121,7 +121,7 @@ export declare abstract class Master {
      * }
      * ```
      */
-    normalizeFields(fields: any): FieldData;
+    normalizeFields?: (fields: any) => FieldData;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -138,14 +138,32 @@ export declare abstract class Master {
      * }
      * ```
      */
-    collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    collectMediaUris?: (fields: any) => string | string[] | Set<string> | undefined;
     /**
      * Check if the handed over media URIs can be resolved. Throw no errors, if
      * the media assets are not present. This hook is used in the YouTube master
      * slide. This master slide uses the online version, if no offline video could
      * be resolved.
      */
-    collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    collectOptionalMediaUris?: (fields: any) => string | string[] | Set<string> | undefined;
+    /**
+     * Generate TeX markup from the current slide. See TeX package
+     * `schule-baldr.dtx`.
+     *
+     * ```js
+     * import * as tex from '@bldr/tex-templates'
+     *
+     * export class GenericMaster extends Master {
+     *   generateTexMarkup ({ props, propsMain, propsPreview }) {
+     *     const yaml = propsMain.asset.yaml
+     *     return tex.environment('baldrPerson', yaml.shortBiography, {
+     *       name: yaml.name
+     *     })
+     *   }
+     * }
+     * ```
+     */
+    generateTexMarkup?: (payload: any) => string;
 }
 interface MasterConstructor {
     new (): Master;
@@ -162,17 +180,18 @@ declare class MasterIcon implements MasterIconSpec {
     constructor({ name, color, size, showOnSlides }: MasterIconSpec);
 }
 /**
- * Wraps a master object. Processes, hides, forwards the master data and
- * methods.
+ * Wraps a master object. Processes, hides, forwards the field data of the
+ * slides and methods.
  */
 export declare class MasterWrapper {
     private master;
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
     get name(): string;
-    normalizeFields(fields: any): FieldData;
+    normalizeFields(fields: any): FieldData | undefined;
     private static convertToSet;
-    processMediaUris(fields: FieldData): Set<string>;
-    processOptionalMediaUris(fields: FieldData): Set<string>;
+    processMediaUris(fields?: FieldData): Set<string>;
+    processOptionalMediaUris(fields?: FieldData): Set<string>;
+    generateTexMarkup(fields: FieldData): string | undefined;
 }
 export {};

@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class GroupMaster extends Master {
+export class GroupMaster {
     constructor() {
-        super(...arguments);
         this.name = 'group';
         this.displayName = 'Gruppe';
         this.icon = {

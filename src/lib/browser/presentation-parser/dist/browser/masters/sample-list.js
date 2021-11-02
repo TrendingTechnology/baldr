@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class SampleListMaster extends Master {
+export class SampleListMaster {
     constructor() {
-        super(...arguments);
         this.name = 'sampleList';
         this.displayName = 'Audio-Ausschnitte';
         this.icon = {

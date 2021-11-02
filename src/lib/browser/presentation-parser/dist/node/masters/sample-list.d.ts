@@ -1,5 +1,5 @@
 import { Master } from '../master';
-export declare class SampleListMaster extends Master {
+export declare class SampleListMaster implements Master {
     name: string;
     displayName: string;
     icon: {

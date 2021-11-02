@@ -37,7 +37,7 @@ interface RawSpecObject extends Spec {
   questions?: RawSpecObject[]
 }
 
-interface FieldData {
+interface QuestionFieldData {
   questions: Question[]
   sequence: QuestionSequence
 }
@@ -101,7 +101,7 @@ type QuestionSequence = string[]
 /**
  * A question with sub questions.
  */
-export class Question {
+class Question {
   level: number
   heading?: string
   question?: string
@@ -197,6 +197,14 @@ export class Question {
   }
 }
 
+function formatTexMultipleQuestions (questions: Question[]): string {
+  const markup: string[] = []
+  for (const question of questions) {
+    markup.push(formatTexQuestion(question))
+  }
+  return tex.environment('enumerate', markup.join('\n'))
+}
+
 function formatTexQuestion (question: Question): string {
   const markup: string[] = ['\\item']
 
@@ -218,19 +226,7 @@ function formatTexQuestion (question: Question): string {
   return markup.join('\n\n') + '\n'
 }
 
-function formatTexMultipleQuestions (questions: Question[]): string {
-  const markup: string[] = []
-  for (const question of questions) {
-    markup.push(formatTexQuestion(question))
-  }
-  return tex.environment('enumerate', markup.join('\n'))
-}
-
-export function generateTexMarkup (questions: Question[]): string {
-  return formatTexMultipleQuestions(questions)
-}
-
-export class QuestionMaster extends Master {
+export class QuestionMaster implements Master {
   name = 'question'
 
   displayName = 'Frage'
@@ -256,11 +252,19 @@ export class QuestionMaster extends Master {
     }
   }
 
-  normalizeFields (fields: RawSpec): FieldData {
+  normalizeFields (fields: RawSpec): QuestionFieldData {
     const questions = Question.parse(fields)
     return {
       questions,
       sequence: questions[0].sequence
     }
+  }
+
+  generateTexMarkup(fields: QuestionFieldData): string {
+    const markup: string[] = []
+    for (const question of fields.questions) {
+      markup.push(formatTexQuestion(question))
+    }
+    return tex.environment('enumerate', markup.join('\n'))
   }
 }

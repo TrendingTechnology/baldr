@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class ImageMaster extends Master {
+export class ImageMaster {
     constructor() {
-        super(...arguments);
         this.name = 'image';
         this.displayName = 'Bild';
         this.icon = {

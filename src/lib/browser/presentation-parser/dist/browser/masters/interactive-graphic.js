@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class InteractiveGraphicMaster extends Master {
+export class InteractiveGraphicMaster {
     constructor() {
-        super(...arguments);
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
         this.icon = {

@@ -14,7 +14,7 @@ interface AudioFieldData {
 
 type RawFieldData = string | AudioFieldData
 
-export class AudioMaster extends Master {
+export class AudioMaster implements Master {
   name = 'audio'
 
   displayName = 'Hörbeispiel'

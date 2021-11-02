@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class SectionMaster extends Master {
+export class SectionMaster {
     constructor() {
-        super(...arguments);
         this.name = 'section';
         this.displayName = 'Abschnitt';
         this.icon = {

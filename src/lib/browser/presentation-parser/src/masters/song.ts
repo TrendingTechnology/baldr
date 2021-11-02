@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class SongMaster extends Master {
+export class SongMaster implements Master {
   name = 'song'
 
   displayName = 'Lied'

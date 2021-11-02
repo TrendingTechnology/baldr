@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class EditorMaster extends Master {
+export class EditorMaster {
     constructor() {
-        super(...arguments);
         this.name = 'editor';
         this.displayName = 'Hefteintrag';
         this.icon = {

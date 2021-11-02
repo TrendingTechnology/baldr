@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class NoteMaster extends Master {
+export class NoteMaster {
     constructor() {
-        super(...arguments);
         this.name = 'note';
         this.displayName = 'Hefteintrag';
         this.icon = {

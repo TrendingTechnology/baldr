@@ -17,7 +17,7 @@ interface RawSpecObject extends Spec {
     s?: RawSpecObject[];
     questions?: RawSpecObject[];
 }
-interface FieldData {
+interface QuestionFieldData {
     questions: Question[];
     sequence: QuestionSequence;
 }
@@ -29,7 +29,7 @@ declare type QuestionSequence = string[];
 /**
  * A question with sub questions.
  */
-export declare class Question {
+declare class Question {
     level: number;
     heading?: string;
     question?: string;
@@ -49,8 +49,7 @@ export declare class Question {
     private static initCounter;
     static parse(rawSpec: RawSpec): Question[];
 }
-export declare function generateTexMarkup(questions: Question[]): string;
-export declare class QuestionMaster extends Master {
+export declare class QuestionMaster implements Master {
     name: string;
     displayName: string;
     icon: {
@@ -70,6 +69,7 @@ export declare class QuestionMaster extends Master {
             type: ArrayConstructor;
         };
     };
-    normalizeFields(fields: RawSpec): FieldData;
+    normalizeFields(fields: RawSpec): QuestionFieldData;
+    generateTexMarkup(fields: QuestionFieldData): string;
 }
 export {};

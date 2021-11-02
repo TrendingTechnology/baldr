@@ -1,7 +1,5 @@
-import { Master } from '../master';
-export class TaskMaster extends Master {
+export class TaskMaster {
     constructor() {
-        super(...arguments);
         this.name = 'task';
         this.displayName = 'Arbeitsauftrag';
         this.icon = {

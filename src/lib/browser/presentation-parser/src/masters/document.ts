@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class DocumentMaster extends Master {
+export class DocumentMaster implements Master {
   name = 'document'
 
   displayName = 'Dokument'

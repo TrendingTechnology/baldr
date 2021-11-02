@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-export class TaskMaster extends Master {
+export class TaskMaster implements Master {
   name = 'task'
 
   displayName = 'Arbeitsauftrag'

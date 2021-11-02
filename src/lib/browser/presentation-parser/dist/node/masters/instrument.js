@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InstrumentMaster = void 0;
-const master_1 = require("../master");
-class InstrumentMaster extends master_1.Master {
+class InstrumentMaster {
     constructor() {
-        super(...arguments);
         this.name = 'instrument';
         this.displayName = 'Instrument';
         this.icon = {
