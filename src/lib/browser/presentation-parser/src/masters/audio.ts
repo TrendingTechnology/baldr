@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { Master, Resolver } from '../master'
 
 interface AudioFieldData {
   src: string
@@ -90,5 +90,43 @@ export class AudioMaster implements Master {
       uris.add(fields.cover)
     }
     return uris
+  }
+
+  collectFields (fields: AudioFieldData, resolver: Resolver): AudioFieldData {
+    const sample = resolver.getSampleSync(fields.src)
+    if (sample == null) {
+      throw new Error(`Sample couldn’t be resolved`)
+    }
+    const asset = sample.asset
+
+    // const grab = new ObjectPropertyPicker(props, asset.yaml)
+    // const artist = grab.pickProperty('artist')
+    // const composer = grab.pickProperty('composer')
+    // const description = grab.pickProperty('description')
+    // const partOf = grab.pickProperty('partOf')
+
+    if (fields.title == null) {
+      fields.title = sample.titleSafe
+    }
+
+    // let previewHttpUrl
+    // if (props.cover != null) {
+    //   const coverFile = this.$store.getters['media/assetByUri'](props.cover)
+    //   previewHttpUrl = coverFile.httpUrl
+    // } else if (asset.previewHttpUrl != null) {
+    //   previewHttpUrl = asset.previewHttpUrl
+    // }
+    // return {
+    //   sample,
+    //   previewHttpUrl,
+    //   waveformHttpUrl: asset.waveformHttpUrl,
+    //   artist,
+    //   composer,
+    //   title,
+    //   partOf,
+    //   description,
+    //   mediaAsset: asset
+    // }
+    return fields
   }
 }

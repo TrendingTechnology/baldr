@@ -1,3 +1,7 @@
+import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
+
+export type Resolver = ResolverType
+
 /**
  * Some data indexed by strings
  */
@@ -169,6 +173,8 @@ export interface Master {
     fields: any
   ) => string | string[] | Set<string> | undefined
 
+  collectFields?: (fields: any, resolver: Resolver) => FieldData
+
   /**
    * Generate TeX markup from the current slide. See TeX package
    * `schule-baldr.dtx`.
@@ -278,9 +284,18 @@ export class MasterWrapper {
     return new Set<string>()
   }
 
-  generateTexMarkup (fields: FieldData) {
+  public generateTexMarkup (fields: FieldData) {
     if (this.master.generateTexMarkup != null) {
       return this.master.generateTexMarkup(fields)
+    }
+  }
+
+  public collectFields (
+    fields: any,
+    resolver: Resolver
+  ): FieldData | undefined {
+    if (this.master.collectFields != null) {
+      return this.master.collectFields(fields, resolver)
     }
   }
 }

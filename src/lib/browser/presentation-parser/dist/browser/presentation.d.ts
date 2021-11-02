@@ -1,7 +1,7 @@
 import { LampTypes } from '@bldr/type-definitions';
 import { SlideCollection } from './slide-collection';
 import { Slide } from './slide';
-import { Resolver, Asset } from '@bldr/media-resolver-ng';
+import { Resolver, Asset, Sample } from '@bldr/media-resolver-ng';
 export declare const resolver: Resolver;
 /**
  * @inheritdoc
@@ -93,6 +93,8 @@ export declare class Presentation {
      * @param no - Slide number starting from 1
      */
     getSlideByNo(no: number): Slide;
+    getAsset(uri: string): Asset | undefined;
+    getSample(uri: string): Sample | undefined;
     /**
      * Log to the console.
      */

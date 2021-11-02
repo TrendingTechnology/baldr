@@ -110,8 +110,12 @@ class Presentation {
     }
     resolveMediaAssets() {
         return __awaiter(this, void 0, void 0, function* () {
-            const assets = yield exports.resolver.resolve(this.slides.mediaUris, true);
-            return assets.concat(yield exports.resolver.resolve(this.slides.optionalMediaUris, false));
+            let assets = yield exports.resolver.resolve(this.slides.mediaUris, true);
+            assets = assets.concat(yield exports.resolver.resolve(this.slides.optionalMediaUris, false));
+            for (const slide of this.slides) {
+                slide.master.collectFields(slide.fields, exports.resolver);
+            }
+            return assets;
         });
     }
     /**
@@ -126,6 +130,12 @@ class Presentation {
      */
     getSlideByNo(no) {
         return this.slides.flat[no - 1];
+    }
+    getAsset(uri) {
+        return exports.resolver.getAssetSync(uri);
+    }
+    getSample(uri) {
+        return exports.resolver.getSampleSync(uri);
     }
     /**
      * Log to the console.

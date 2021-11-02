@@ -62,4 +62,9 @@ export class MasterWrapper {
             return this.master.generateTexMarkup(fields);
         }
     }
+    collectFields(fields, resolver) {
+        if (this.master.collectFields != null) {
+            return this.master.collectFields(fields, resolver);
+        }
+    }
 }

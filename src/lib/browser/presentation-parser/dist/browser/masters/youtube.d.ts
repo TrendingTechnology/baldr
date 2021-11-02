@@ -1,5 +1,5 @@
 import { Master } from '../master';
-interface FieldData {
+interface YoutubeFieldData {
     id: string;
     heading?: string;
     info?: string;
@@ -28,8 +28,8 @@ export declare class YoutubeMaster implements Master {
             markup: boolean;
         };
     };
-    normalizeFields(fields: any): FieldData;
-    collectOptionalMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    normalizeFields(fields: any): YoutubeFieldData;
+    collectOptionalMediaUris(fields: YoutubeFieldData): string | string[] | Set<string> | undefined;
     private convertYoutubeIdToUri;
 }
 export {};

@@ -59,6 +59,15 @@ export declare class Resolver {
      */
     resolve(uris: UrisSpec, throwException?: boolean): Promise<Asset[]>;
     /**
+     * Return a media asset.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     */
+    getAssetSync(uri: string): Asset | undefined;
+    /**
      * Return a media asset. If the asset has not yet been resolved, it will be
      * resolved.
      *
@@ -72,6 +81,16 @@ export declare class Resolver {
      * @returns All previously resolved media assets.
      */
     exportAssets(refs?: string | string[] | Set<string>): Asset[];
+    /**
+     * Return a sample.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     *   sample fragment. If the fragment is omitted, the “complete” sample is
+     *   returned
+     *
+     * @returns A sample or undefined.
+     */
+    getSampleSync(uri: string): Sample | undefined;
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.

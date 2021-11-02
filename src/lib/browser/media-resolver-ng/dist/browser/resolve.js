@@ -228,6 +228,20 @@ export class Resolver {
         });
     }
     /**
+     * Return a media asset.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     */
+    getAssetSync(uri) {
+        const asset = this.assetCache.get(uri);
+        if (asset != null) {
+            return asset;
+        }
+    }
+    /**
      * Return a media asset. If the asset has not yet been resolved, it will be
      * resolved.
      *
@@ -258,6 +272,25 @@ export class Resolver {
         return this.assetCache.getAll();
     }
     /**
+     * Return a sample.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     *   sample fragment. If the fragment is omitted, the “complete” sample is
+     *   returned
+     *
+     * @returns A sample or undefined.
+     */
+    getSampleSync(uri) {
+        const mediaUri = new MediaUri(uri);
+        if (mediaUri.fragment == null) {
+            uri = uri + '#complete';
+        }
+        const sample = this.sampleCache.get(uri);
+        if (sample != null) {
+            return sample;
+        }
+    }
+    /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.
      *
@@ -269,11 +302,7 @@ export class Resolver {
      */
     getSample(uri) {
         return __awaiter(this, void 0, void 0, function* () {
-            const mediaUri = new MediaUri(uri);
-            if (mediaUri.fragment == null) {
-                uri = uri + '#complete';
-            }
-            const sample = this.sampleCache.get(uri);
+            const sample = this.getSampleSync(uri);
             if (sample != null) {
                 return sample;
             }

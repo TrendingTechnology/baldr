@@ -1,4 +1,4 @@
-import { Master } from '../master';
+import { Master, Resolver } from '../master';
 interface AudioFieldData {
     src: string;
     title?: string;
@@ -69,5 +69,6 @@ export declare class AudioMaster implements Master {
     };
     normalizeFields(fields: RawFieldData): AudioFieldData;
     resolveMediaUris(fields: AudioFieldData): Set<string>;
+    collectFields(fields: AudioFieldData, resolver: Resolver): AudioFieldData;
 }
 export {};

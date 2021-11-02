@@ -1,3 +1,5 @@
+import { Resolver as ResolverType } from '@bldr/media-resolver-ng';
+export declare type Resolver = ResolverType;
 /**
  * Some data indexed by strings
  */
@@ -146,6 +148,7 @@ export interface Master {
      * be resolved.
      */
     collectOptionalMediaUris?: (fields: any) => string | string[] | Set<string> | undefined;
+    collectFields?: (fields: any, resolver: Resolver) => FieldData;
     /**
      * Generate TeX markup from the current slide. See TeX package
      * `schule-baldr.dtx`.
@@ -193,5 +196,6 @@ export declare class MasterWrapper {
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
     generateTexMarkup(fields: FieldData): string | undefined;
+    collectFields(fields: any, resolver: Resolver): FieldData | undefined;
 }
 export {};

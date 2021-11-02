@@ -4,7 +4,7 @@ import { LampTypes } from '@bldr/type-definitions'
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
 import { Slide } from './slide'
-import { Resolver, Asset } from '@bldr/media-resolver-ng'
+import { Resolver, Asset, Sample } from '@bldr/media-resolver-ng'
 import * as log from '@bldr/log'
 
 export const resolver = new Resolver()
@@ -168,10 +168,16 @@ export class Presentation {
   }
 
   public async resolveMediaAssets (): Promise<Asset[]> {
-    const assets = await resolver.resolve(this.slides.mediaUris, true)
-    return assets.concat(
+    let assets = await resolver.resolve(this.slides.mediaUris, true)
+    assets = assets.concat(
       await resolver.resolve(this.slides.optionalMediaUris, false)
     )
+
+    for (const slide of this.slides) {
+      slide.master.collectFields(slide.fields, resolver)
+    }
+
+    return assets
   }
 
   /**
@@ -187,6 +193,14 @@ export class Presentation {
    */
   public getSlideByNo (no: number): Slide {
     return this.slides.flat[no - 1]
+  }
+
+  getAsset (uri: string): Asset | undefined {
+    return resolver.getAssetSync(uri)
+  }
+
+  getSample (uri: string): Sample | undefined {
+    return resolver.getSampleSync(uri)
   }
 
   /**
