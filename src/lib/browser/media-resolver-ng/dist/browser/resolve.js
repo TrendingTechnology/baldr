@@ -235,11 +235,12 @@ export class Resolver {
      *
      * @returns A media asset or undefined.
      */
-    getAssetSync(uri) {
+    getAsset(uri) {
         const asset = this.assetCache.get(uri);
-        if (asset != null) {
-            return asset;
+        if (asset == null) {
+            throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`);
         }
+        return asset;
     }
     /**
      * Return a media asset. If the asset has not yet been resolved, it will be
@@ -250,7 +251,7 @@ export class Resolver {
      *
      * @returns A media asset or undefined.
      */
-    getAsset(uri) {
+    resolveAsset(uri) {
         return __awaiter(this, void 0, void 0, function* () {
             const asset = this.assetCache.get(uri);
             if (asset != null) {
@@ -280,15 +281,16 @@ export class Resolver {
      *
      * @returns A sample or undefined.
      */
-    getSampleSync(uri) {
+    getSample(uri) {
         const mediaUri = new MediaUri(uri);
         if (mediaUri.fragment == null) {
             uri = uri + '#complete';
         }
         const sample = this.sampleCache.get(uri);
-        if (sample != null) {
-            return sample;
+        if (sample == null) {
+            throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`);
         }
+        return sample;
     }
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
@@ -300,9 +302,13 @@ export class Resolver {
      *
      * @returns A sample or undefined.
      */
-    getSample(uri) {
+    resolveSample(uri) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sample = this.getSampleSync(uri);
+            const mediaUri = new MediaUri(uri);
+            if (mediaUri.fragment == null) {
+                uri = uri + '#complete';
+            }
+            const sample = this.sampleCache.get(uri);
             if (sample != null) {
                 return sample;
             }

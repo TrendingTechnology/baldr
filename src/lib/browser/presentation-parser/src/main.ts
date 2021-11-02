@@ -8,6 +8,6 @@ export async function parseAndResolve (
   yamlString: string
 ): Promise<Presentation> {
   const presentation = new Presentation(yamlString)
-  await presentation.resolveMediaAssets()
+  await presentation.resolve()
   return presentation
 }

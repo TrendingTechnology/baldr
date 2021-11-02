@@ -65,9 +65,11 @@ class MasterWrapper {
             return this.master.generateTexMarkup(fields);
         }
     }
-    collectFields(fields, resolver) {
+    collectFields(slide, resolver) {
         if (this.master.collectFields != null) {
-            return this.master.collectFields(fields, resolver);
+            const fields = this.master.collectFields(slide.fields, resolver);
+            slide.fields = fields;
+            return fields;
         }
     }
 }

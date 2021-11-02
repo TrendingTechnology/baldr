@@ -59,7 +59,7 @@ describe('Package “@bldr/presentation-parser”', function () {
 
     await assert.rejects(
       async () => {
-        await presentation.resolveMediaAssets()
+        await presentation.resolve()
       },
       err => {
         assert.strictEqual(err.name, 'Error')
@@ -76,7 +76,7 @@ describe('Package “@bldr/presentation-parser”', function () {
     const presentation = parseTestPresentation(
       'media-assets-irresolvable-optional'
     )
-    const assets = await presentation.resolveMediaAssets()
+    const assets = await presentation.resolve()
     assert.strictEqual(assets.length, 0)
   })
 

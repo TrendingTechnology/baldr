@@ -14,7 +14,7 @@ export function parse(yamlString) {
 export function parseAndResolve(yamlString) {
     return __awaiter(this, void 0, void 0, function* () {
         const presentation = new Presentation(yamlString);
-        yield presentation.resolveMediaAssets();
+        yield presentation.resolve();
         return presentation;
     });
 }

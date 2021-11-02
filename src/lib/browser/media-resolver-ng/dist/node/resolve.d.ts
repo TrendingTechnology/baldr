@@ -66,7 +66,7 @@ export declare class Resolver {
      *
      * @returns A media asset or undefined.
      */
-    getAssetSync(uri: string): Asset | undefined;
+    getAsset(uri: string): Asset;
     /**
      * Return a media asset. If the asset has not yet been resolved, it will be
      * resolved.
@@ -76,7 +76,7 @@ export declare class Resolver {
      *
      * @returns A media asset or undefined.
      */
-    getAsset(uri: string): Promise<Asset | undefined>;
+    resolveAsset(uri: string): Promise<Asset | undefined>;
     /**
      * @returns All previously resolved media assets.
      */
@@ -90,7 +90,7 @@ export declare class Resolver {
      *
      * @returns A sample or undefined.
      */
-    getSampleSync(uri: string): Sample | undefined;
+    getSample(uri: string): Sample;
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.
@@ -101,7 +101,7 @@ export declare class Resolver {
      *
      * @returns A sample or undefined.
      */
-    getSample(uri: string): Promise<Sample | undefined>;
+    resolveSample(uri: string): Promise<Sample | undefined>;
     /**
      * @returns All previously resolved samples.
      */

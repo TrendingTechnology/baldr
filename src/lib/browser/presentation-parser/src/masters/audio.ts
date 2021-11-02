@@ -1,6 +1,8 @@
-import { Master, Resolver } from '../master'
+import { Master, Resolver, Asset, Sample } from '../master'
 
-interface AudioFieldData {
+type AudioFieldsRaw = string | AudioFieldsNormalized
+
+interface AudioFieldsNormalized {
   src: string
   title?: string
   composer?: string
@@ -12,7 +14,12 @@ interface AudioFieldData {
   playthrough?: boolean
 }
 
-type RawFieldData = string | AudioFieldData
+interface AudioFieldsResolved extends AudioFieldsNormalized {
+  asset: Asset
+  sample: Sample
+  title: string
+  previewHttpUrl?: string
+}
 
 export class AudioMaster implements Master {
   name = 'audio'
@@ -77,14 +84,14 @@ export class AudioMaster implements Master {
     }
   }
 
-  normalizeFields (fields: RawFieldData): AudioFieldData {
+  normalizeFields (fields: AudioFieldsRaw): AudioFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }
     return fields
   }
 
-  resolveMediaUris (fields: AudioFieldData): Set<string> {
+  collectMediaUris (fields: AudioFieldsNormalized): Set<string> {
     const uris = new Set([fields.src])
     if (fields.cover) {
       uris.add(fields.cover)
@@ -92,41 +99,41 @@ export class AudioMaster implements Master {
     return uris
   }
 
-  collectFields (fields: AudioFieldData, resolver: Resolver): AudioFieldData {
-    const sample = resolver.getSampleSync(fields.src)
-    if (sample == null) {
-      throw new Error(`Sample couldn’t be resolved`)
-    }
+  collectFields (
+    fields: AudioFieldsNormalized,
+    resolver: Resolver
+  ): AudioFieldsResolved {
+    const sample = resolver.getSample(fields.src)
     const asset = sample.asset
 
-    // const grab = new ObjectPropertyPicker(props, asset.yaml)
-    // const artist = grab.pickProperty('artist')
-    // const composer = grab.pickProperty('composer')
-    // const description = grab.pickProperty('description')
-    // const partOf = grab.pickProperty('partOf')
+    const artist = fields.artist == null ? asset.yaml.artist : fields.artist
+    const composer =
+      fields.composer == null ? asset.yaml.composer : fields.composer
+    const description =
+      fields.description == null ? asset.yaml.description : fields.description
+    const partOf = fields.partOf == null ? asset.yaml.partOf : fields.partOf
+    const title = fields.title == null ? sample.titleSafe : fields.title
 
-    if (fields.title == null) {
-      fields.title = sample.titleSafe
+    let previewHttpUrl
+    if (fields.cover != null) {
+      const coverFile = resolver.getAsset(fields.cover)
+      previewHttpUrl = coverFile.httpUrl
+    } else if (asset.previewHttpUrl != null) {
+      previewHttpUrl = asset.previewHttpUrl
     }
 
-    // let previewHttpUrl
-    // if (props.cover != null) {
-    //   const coverFile = this.$store.getters['media/assetByUri'](props.cover)
-    //   previewHttpUrl = coverFile.httpUrl
-    // } else if (asset.previewHttpUrl != null) {
-    //   previewHttpUrl = asset.previewHttpUrl
-    // }
-    // return {
-    //   sample,
-    //   previewHttpUrl,
-    //   waveformHttpUrl: asset.waveformHttpUrl,
-    //   artist,
-    //   composer,
-    //   title,
-    //   partOf,
-    //   description,
-    //   mediaAsset: asset
-    // }
-    return fields
+    return Object.assign(
+      {
+        title,
+        composer,
+        artist,
+        description,
+        sample,
+        asset,
+        partOf,
+        previewHttpUrl
+      },
+      fields
+    )
   }
 }

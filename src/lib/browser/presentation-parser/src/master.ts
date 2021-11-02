@@ -1,5 +1,7 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
+import { Slide } from './slide'
 
+export { Asset, Sample } from '@bldr/media-resolver-ng'
 export type Resolver = ResolverType
 
 /**
@@ -291,11 +293,13 @@ export class MasterWrapper {
   }
 
   public collectFields (
-    fields: any,
+    slide: Slide,
     resolver: Resolver
   ): FieldData | undefined {
     if (this.master.collectFields != null) {
-      return this.master.collectFields(fields, resolver)
+      const fields = this.master.collectFields(slide.fields, resolver)
+      slide.fields = fields
+      return fields
     }
   }
 }

@@ -1,5 +1,6 @@
-import { Master, Resolver } from '../master';
-interface AudioFieldData {
+import { Master, Resolver, Asset, Sample } from '../master';
+declare type AudioFieldsRaw = string | AudioFieldsNormalized;
+interface AudioFieldsNormalized {
     src: string;
     title?: string;
     composer?: string;
@@ -10,7 +11,12 @@ interface AudioFieldData {
     autoplay?: boolean;
     playthrough?: boolean;
 }
-declare type RawFieldData = string | AudioFieldData;
+interface AudioFieldsResolved extends AudioFieldsNormalized {
+    asset: Asset;
+    sample: Sample;
+    title: string;
+    previewHttpUrl?: string;
+}
 export declare class AudioMaster implements Master {
     name: string;
     displayName: string;
@@ -67,8 +73,8 @@ export declare class AudioMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: RawFieldData): AudioFieldData;
-    resolveMediaUris(fields: AudioFieldData): Set<string>;
-    collectFields(fields: AudioFieldData, resolver: Resolver): AudioFieldData;
+    normalizeFields(fields: AudioFieldsRaw): AudioFieldsNormalized;
+    collectMediaUris(fields: AudioFieldsNormalized): Set<string>;
+    collectFields(fields: AudioFieldsNormalized, resolver: Resolver): AudioFieldsResolved;
 }
 export {};

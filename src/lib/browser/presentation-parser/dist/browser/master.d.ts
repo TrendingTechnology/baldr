@@ -1,4 +1,6 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng';
+import { Slide } from './slide';
+export { Asset, Sample } from '@bldr/media-resolver-ng';
 export declare type Resolver = ResolverType;
 /**
  * Some data indexed by strings
@@ -196,6 +198,5 @@ export declare class MasterWrapper {
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
     generateTexMarkup(fields: FieldData): string | undefined;
-    collectFields(fields: any, resolver: Resolver): FieldData | undefined;
+    collectFields(slide: Slide, resolver: Resolver): FieldData | undefined;
 }
-export {};

@@ -274,11 +274,12 @@ export class Resolver {
    *
    * @returns A media asset or undefined.
    */
-  public getAssetSync (uri: string): Asset | undefined {
+  public getAsset (uri: string): Asset {
     const asset = this.assetCache.get(uri)
-    if (asset != null) {
-      return asset
+    if (asset == null) {
+      throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`)
     }
+    return asset
   }
 
   /**
@@ -290,7 +291,7 @@ export class Resolver {
    *
    * @returns A media asset or undefined.
    */
-  public async getAsset (uri: string): Promise<Asset | undefined> {
+  public async resolveAsset (uri: string): Promise<Asset | undefined> {
     const asset = this.assetCache.get(uri)
     if (asset != null) {
       return asset
@@ -321,15 +322,16 @@ export class Resolver {
    *
    * @returns A sample or undefined.
    */
-  public getSampleSync (uri: string): Sample | undefined {
+  public getSample (uri: string): Sample {
     const mediaUri = new MediaUri(uri)
     if (mediaUri.fragment == null) {
       uri = uri + '#complete'
     }
     const sample = this.sampleCache.get(uri)
-    if (sample != null) {
-      return sample
+    if (sample == null) {
+      throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`)
     }
+    return sample
   }
 
   /**
@@ -342,8 +344,12 @@ export class Resolver {
    *
    * @returns A sample or undefined.
    */
-  public async getSample (uri: string): Promise<Sample | undefined> {
-    const sample = this.getSampleSync(uri)
+  public async resolveSample (uri: string): Promise<Sample | undefined> {
+    const mediaUri = new MediaUri(uri)
+    if (mediaUri.fragment == null) {
+      uri = uri + '#complete'
+    }
+    const sample = this.sampleCache.get(uri)
     if (sample != null) {
       return sample
     }

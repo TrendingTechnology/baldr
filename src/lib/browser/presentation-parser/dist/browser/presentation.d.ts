@@ -1,7 +1,7 @@
 import { LampTypes } from '@bldr/type-definitions';
 import { SlideCollection } from './slide-collection';
 import { Slide } from './slide';
-import { Resolver, Asset, Sample } from '@bldr/media-resolver-ng';
+import { Resolver, Asset } from '@bldr/media-resolver-ng';
 export declare const resolver: Resolver;
 /**
  * @inheritdoc
@@ -83,7 +83,7 @@ export declare class Presentation {
      * @throws {Error} If the media URI references cannot be resolved.
      */
     private convertFromYaml;
-    resolveMediaAssets(): Promise<Asset[]>;
+    resolve(): Promise<Asset[]>;
     /**
      * The first slide of a presentation. It is equivalent to
      * `presentation.slides.flat[0]`.
@@ -93,8 +93,6 @@ export declare class Presentation {
      * @param no - Slide number starting from 1
      */
     getSlideByNo(no: number): Slide;
-    getAsset(uri: string): Asset | undefined;
-    getSample(uri: string): Sample | undefined;
     /**
      * Log to the console.
      */

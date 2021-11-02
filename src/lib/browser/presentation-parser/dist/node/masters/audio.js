@@ -65,7 +65,7 @@ class AudioMaster {
         }
         return fields;
     }
-    resolveMediaUris(fields) {
+    collectMediaUris(fields) {
         const uris = new Set([fields.src]);
         if (fields.cover) {
             uris.add(fields.cover);
@@ -73,38 +73,31 @@ class AudioMaster {
         return uris;
     }
     collectFields(fields, resolver) {
-        const sample = resolver.getSampleSync(fields.src);
-        if (sample == null) {
-            throw new Error(`Sample couldn’t be resolved`);
-        }
+        const sample = resolver.getSample(fields.src);
         const asset = sample.asset;
-        // const grab = new ObjectPropertyPicker(props, asset.yaml)
-        // const artist = grab.pickProperty('artist')
-        // const composer = grab.pickProperty('composer')
-        // const description = grab.pickProperty('description')
-        // const partOf = grab.pickProperty('partOf')
-        if (fields.title == null) {
-            fields.title = sample.titleSafe;
+        const artist = fields.artist == null ? asset.yaml.artist : fields.artist;
+        const composer = fields.composer == null ? asset.yaml.composer : fields.composer;
+        const description = fields.description == null ? asset.yaml.description : fields.description;
+        const partOf = fields.partOf == null ? asset.yaml.partOf : fields.partOf;
+        const title = fields.title == null ? sample.titleSafe : fields.title;
+        let previewHttpUrl;
+        if (fields.cover != null) {
+            const coverFile = resolver.getAsset(fields.cover);
+            previewHttpUrl = coverFile.httpUrl;
         }
-        // let previewHttpUrl
-        // if (props.cover != null) {
-        //   const coverFile = this.$store.getters['media/assetByUri'](props.cover)
-        //   previewHttpUrl = coverFile.httpUrl
-        // } else if (asset.previewHttpUrl != null) {
-        //   previewHttpUrl = asset.previewHttpUrl
-        // }
-        // return {
-        //   sample,
-        //   previewHttpUrl,
-        //   waveformHttpUrl: asset.waveformHttpUrl,
-        //   artist,
-        //   composer,
-        //   title,
-        //   partOf,
-        //   description,
-        //   mediaAsset: asset
-        // }
-        return fields;
+        else if (asset.previewHttpUrl != null) {
+            previewHttpUrl = asset.previewHttpUrl;
+        }
+        return Object.assign({
+            title,
+            composer,
+            artist,
+            description,
+            sample,
+            asset,
+            partOf,
+            previewHttpUrl
+        }, fields);
     }
 }
 exports.AudioMaster = AudioMaster;

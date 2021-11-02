@@ -105,12 +105,12 @@ export class Presentation {
         }
         return new DataCutter(raw);
     }
-    resolveMediaAssets() {
+    resolve() {
         return __awaiter(this, void 0, void 0, function* () {
             let assets = yield resolver.resolve(this.slides.mediaUris, true);
             assets = assets.concat(yield resolver.resolve(this.slides.optionalMediaUris, false));
             for (const slide of this.slides) {
-                slide.master.collectFields(slide.fields, resolver);
+                slide.master.collectFields(slide, resolver);
             }
             return assets;
         });
@@ -127,12 +127,6 @@ export class Presentation {
      */
     getSlideByNo(no) {
         return this.slides.flat[no - 1];
-    }
-    getAsset(uri) {
-        return resolver.getAssetSync(uri);
-    }
-    getSample(uri) {
-        return resolver.getSampleSync(uri);
     }
     /**
      * Log to the console.

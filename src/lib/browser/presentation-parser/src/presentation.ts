@@ -167,14 +167,14 @@ export class Presentation {
     return new DataCutter(raw)
   }
 
-  public async resolveMediaAssets (): Promise<Asset[]> {
+  public async resolve (): Promise<Asset[]> {
     let assets = await resolver.resolve(this.slides.mediaUris, true)
     assets = assets.concat(
       await resolver.resolve(this.slides.optionalMediaUris, false)
     )
 
     for (const slide of this.slides) {
-      slide.master.collectFields(slide.fields, resolver)
+      slide.master.collectFields(slide, resolver)
     }
 
     return assets
@@ -193,14 +193,6 @@ export class Presentation {
    */
   public getSlideByNo (no: number): Slide {
     return this.slides.flat[no - 1]
-  }
-
-  getAsset (uri: string): Asset | undefined {
-    return resolver.getAssetSync(uri)
-  }
-
-  getSample (uri: string): Sample | undefined {
-    return resolver.getSampleSync(uri)
   }
 
   /**

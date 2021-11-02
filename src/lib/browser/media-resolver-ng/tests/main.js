@@ -64,7 +64,7 @@ describe('Package “@bldr/media-resolver”', function () {
       // ref:Grosses-Tor_HB_Orchester_Samples
       const resolver = new Resolver()
       await resolver.resolve('uuid:702ba259-349a-459f-bc58-cf1b0da37263')
-      const sample = await resolver.getSample(
+      const sample = await resolver.resolveSample(
         'ref:Grosses-Tor_HB_Orchester_Samples#menschen'
       )
       assert.strictEqual(
@@ -76,7 +76,7 @@ describe('Package “@bldr/media-resolver”', function () {
     it('default complete sample', async function () {
       // ref:Fuge-Opfer_HB_Ricercar-a-3
       const resolver = new Resolver()
-      const sample = await resolver.getSample(
+      const sample = await resolver.resolveSample(
         'ref:Fuge-Opfer_HB_Ricercar-a-3#complete'
       )
       assert.strictEqual(sample.ref, 'ref:Fuge-Opfer_HB_Ricercar-a-3#complete')
@@ -114,7 +114,7 @@ describe('Package “@bldr/media-resolver”', function () {
 
     describe('Method “getAsset()”', function () {
       it('ref:', async function () {
-        const asset = await resolver.getAsset(
+        const asset = await resolver.resolveAsset(
           'ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island'
         )
         assert.strictEqual(
@@ -124,14 +124,14 @@ describe('Package “@bldr/media-resolver”', function () {
       })
 
       it('ref:#complete', async function () {
-        const asset = await resolver.getAsset(
+        const asset = await resolver.resolveAsset(
           'ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island#complete'
         )
         assert.ok(asset != null)
       })
 
       it('ref:#xxx', async function () {
-        const asset = await resolver.getAsset(
+        const asset = await resolver.resolveAsset(
           'ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island#xxx'
         )
         assert.ok(asset != null)
@@ -139,7 +139,7 @@ describe('Package “@bldr/media-resolver”', function () {
 
       it('uuid:', async function () {
         // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
-        const asset = await resolver.getAsset(
+        const asset = await resolver.resolveAsset(
           'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
         )
         assert.strictEqual(
@@ -203,7 +203,7 @@ describe('Package “@bldr/media-resolver”', function () {
 
     beforeEach(async function () {
       // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
-      asset = await resolver.getAsset(
+      asset = await resolver.resolveAsset(
         'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
       )
     })
@@ -237,7 +237,7 @@ describe('Package “@bldr/media-resolver”', function () {
     })
 
     it('asset.waveformHttpUrl: undefined document ref:Hip-Hop-Hoerquiz_QL_RAAbits', async function () {
-      const asset = await resolver.getAsset(
+      const asset = await resolver.resolveAsset(
         'uuid:c8c0f0e3-744e-4a22-b16f-b98695159d32'
       )
       assert.ok(asset != null)
@@ -249,7 +249,7 @@ describe('Package “@bldr/media-resolver”', function () {
     let sample
     beforeEach(async function () {
       // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
-      sample = await resolver.getSample(
+      sample = await resolver.resolveSample(
         'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
       )
     })
