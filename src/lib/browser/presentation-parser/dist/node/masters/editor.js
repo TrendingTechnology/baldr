@@ -11,6 +11,13 @@ class EditorMaster extends master_1.Master {
             name: 'pencil',
             color: 'blue'
         };
+        this.fieldsDefintion = {
+            markup: {
+                type: String,
+                markup: true,
+                description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
+            }
+        };
     }
 }
 exports.EditorMaster = EditorMaster;

@@ -9,4 +9,12 @@ export class GroupMaster extends Master {
     name: 'account-group',
     color: 'orange'
   }
+
+  fieldsDefintion = {
+    groupId: {
+      type: String,
+      required: true,
+      description: 'Die ID der Gruppe (z. B. „Beatles_The“).'
+    }
+  }
 }

@@ -6,4 +6,10 @@ export declare class SongMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        songId: {
+            type: StringConstructor;
+            description: string;
+        };
+    };
 }

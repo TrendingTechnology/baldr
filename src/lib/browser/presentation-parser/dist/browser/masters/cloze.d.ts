@@ -6,4 +6,12 @@ export declare class ClozeMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        src: {
+            type: StringConstructor;
+            required: boolean;
+            description: string;
+            assetUri: boolean;
+        };
+    };
 }

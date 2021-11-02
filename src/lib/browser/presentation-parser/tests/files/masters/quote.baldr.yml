@@ -1,0 +1,68 @@
+---
+slides:
+
+- title: short from
+  quote: Short form quote
+
+- title: All properties
+  quote:
+    text: Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.
+    author: Johann Wolfgang von Goethe
+    date: 1801
+
+- title: Only text
+  quote:
+    text: Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.
+
+- title: Markup support
+  quote:
+    text: 'With markup: __This text should be displayed as a bold text.__'
+
+- title: Prop source
+  quote:
+    text: 'With prop source'
+    author: Johann Wolfgang von Goethe
+    date: 1801
+    source: Doktor Fastus
+
+- title: Long text
+  quote: |
+    Long text: Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+    duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+    sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+    consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+    eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+    gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+    erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+    Lorem ipsum dolor sit amet.
+
+    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse
+    molestie consequat, vel illum dolore eu feugiat nulla facilisis at
+    vero eros et accumsan et iusto odio dignissim qui blandit praesent
+    luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+    Lorem ipsum dolor sit amet.
+
+- title: Prolog and Epilog
+  quote:
+    prolog: >-
+      Prolog: vel illum dolore eu feugiat nulla facilisis at vero eros et
+      accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
+      delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit
+      amet.
+    text: >-
+      Text: sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+      aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+      dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+      est Lorem ipsum dolor sit amet.
+    epilog: >-
+      Epilog: Duis autem vel eum iriure dolor in hendrerit in vulputate velit
+      esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at
+      vero eros et accumsan et iusto odio dignissim qui blandit praesent
+      luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem
+      ipsum dolor sit amet,

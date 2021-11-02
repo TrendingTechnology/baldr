@@ -1,0 +1,33 @@
+---
+slides:
+
+- title: Short from
+  counter: 1
+
+- title: Long form
+  counter:
+    to: 2
+
+- title: As string
+  counter:
+    to: 3
+
+- title: 'Format: arabic'
+  counter:
+    to: 3
+    format: arabic
+
+- title: 'Format: lower'
+  counter:
+    to: 3
+    format: lower
+
+- title: 'Format: upper'
+  counter:
+    to: 3
+    format: upper
+
+- title: 'Format: roman'
+  counter:
+    to: 3
+    format: roman

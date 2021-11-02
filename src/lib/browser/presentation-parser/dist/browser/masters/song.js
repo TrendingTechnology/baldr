@@ -8,5 +8,11 @@ export class SongMaster extends Master {
             name: 'file-audio',
             color: 'green'
         };
+        this.fieldsDefintion = {
+            songId: {
+                type: String,
+                description: 'Die ID des Liedes'
+            }
+        };
     }
 }

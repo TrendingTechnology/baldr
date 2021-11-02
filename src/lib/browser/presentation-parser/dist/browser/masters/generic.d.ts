@@ -7,4 +7,22 @@ export declare class GenericMaster extends Master {
         color: string;
         showOnSlides: boolean;
     };
+    fieldsDefintion: {
+        markup: {
+            type: (StringConstructor | ArrayConstructor)[];
+            required: boolean;
+            inlineMarkup: boolean;
+            description: string;
+        };
+        charactersOnSlide: {
+            type: NumberConstructor;
+            description: string;
+            default: number;
+        };
+        onOne: {
+            description: string;
+            type: BooleanConstructor;
+            default: boolean;
+        };
+    };
 }

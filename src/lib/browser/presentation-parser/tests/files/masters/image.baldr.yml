@@ -1,0 +1,40 @@
+---
+slides:
+
+- title: no_meta
+  image:
+    # ref:Bach-Haendel_BD_Johann-Sebastian-Bach
+    src: uuid:9c26a447-254c-4c96-a61e-e5e551334916
+    title: A title
+    description: A description
+    no_meta: true
+
+- image: ref:vergebliche-Reise_BD_Adolph-Menzel_Floetenkonzert-Friedrichs
+
+- image: ref:vergebliche-Reise_BD_Sanssouci
+
+- image: ref:Ibrahim-Mannenberg_BD_Manenberg-1
+
+- image:
+    src: 'ref:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
+
+- title: no_meta
+  image:
+    # ref:Bach-Haendel_BD_Johann-Sebastian-Bach
+    src: uuid:9c26a447-254c-4c96-a61e-e5e551334916
+    title: A title
+    description: A description
+    no_meta: false
+
+- title: Kurzform
+  # ref:Bach-Haendel_BD_Johann-Sebastian-Bach
+  image: uuid:9c26a447-254c-4c96-a61e-e5e551334916
+
+- title: 'URL: ref:'
+  image:
+    # ref:Haydn_Joseph
+    src: uuid:ad7b747f-fe50-49e3-a563-affdfddbdf80
+
+- image:
+    # ref:Beethoven_Ludwig-van
+    src: uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d

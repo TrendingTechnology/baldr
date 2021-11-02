@@ -8,5 +8,12 @@ export class GroupMaster extends Master {
             name: 'account-group',
             color: 'orange'
         };
+        this.fieldsDefintion = {
+            groupId: {
+                type: String,
+                required: true,
+                description: 'Die ID der Gruppe (z. B. „Beatles_The“).'
+            }
+        };
     }
 }

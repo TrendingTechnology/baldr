@@ -11,6 +11,18 @@ class VideoMaster extends master_1.Master {
             name: 'video-vintage',
             color: 'purple'
         };
+        this.fieldsDefintion = {
+            src: {
+                type: String,
+                required: true,
+                description: 'Den URI zu einer Video-Datei.',
+                assetUri: true
+            },
+            showMeta: {
+                type: Boolean,
+                description: 'Zeige Metainformationen'
+            }
+        };
     }
 }
 exports.VideoMaster = VideoMaster;

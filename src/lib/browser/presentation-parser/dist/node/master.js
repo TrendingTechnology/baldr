@@ -1,24 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MasterWrapper = exports.Master = void 0;
-/**
- * The icon of a master slide. This icon is shown in the documentation or
- * on the left corner of a slide.
- */
-class MasterIcon {
-    constructor({ name, color, size, showOnSlides }) {
-        if (size != null && !['small', 'large'].includes(size)) {
-            throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`);
-        }
-        if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
-            throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${String(showOnSlides)}`);
-        }
-        this.name = name;
-        this.color = color != null ? color : 'orange';
-        this.showOnSlides = showOnSlides != null ? showOnSlides : false;
-        this.size = size != null ? size : 'small';
-    }
-}
 class Master {
     /**
      * The result must correspond to the fields definition.
@@ -68,6 +50,28 @@ class Master {
     }
 }
 exports.Master = Master;
+/**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+class MasterIcon {
+    constructor({ name, color, size, showOnSlides }) {
+        if (size != null && !['small', 'large'].includes(size)) {
+            throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`);
+        }
+        if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
+            throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${String(showOnSlides)}`);
+        }
+        this.name = name;
+        this.color = color != null ? color : 'orange';
+        this.showOnSlides = showOnSlides != null ? showOnSlides : false;
+        this.size = size != null ? size : 'small';
+    }
+}
+/**
+ * Wraps a master object. Processes, hides, forwards the master data and
+ * methods.
+ */
 class MasterWrapper {
     constructor(MasterClass) {
         this.master = new MasterClass();

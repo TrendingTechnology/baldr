@@ -1,0 +1,30 @@
+---
+slides:
+
+- note: |
+    # heading 1
+
+    ---
+
+    * one two three
+    * one two three
+
+    lorem ipsum
+
+- note: |
+    lorem ipsum
+
+- note:
+    sections:
+    - Heading 1
+    - Heading 2
+    - Heading 2
+    items:
+    - item 1
+    - item 2
+    - item 3
+
+- note: |
+    # No steps
+
+    ---

@@ -90,17 +90,6 @@ interface MasterIconSpec {
      */
     showOnSlides?: boolean;
 }
-/**
- * The icon of a master slide. This icon is shown in the documentation or
- * on the left corner of a slide.
- */
-declare class MasterIcon implements MasterIconSpec {
-    name: string;
-    color: string;
-    size: 'large' | 'small';
-    showOnSlides: boolean;
-    constructor({ name, color, size, showOnSlides }: MasterIconSpec);
-}
 export declare abstract class Master {
     /**
      * The name of the master slide. A short name in lower case letters like `audio`.
@@ -161,6 +150,21 @@ export declare abstract class Master {
 interface MasterConstructor {
     new (): Master;
 }
+/**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+declare class MasterIcon implements MasterIconSpec {
+    name: string;
+    color: string;
+    size: 'large' | 'small';
+    showOnSlides: boolean;
+    constructor({ name, color, size, showOnSlides }: MasterIconSpec);
+}
+/**
+ * Wraps a master object. Processes, hides, forwards the master data and
+ * methods.
+ */
 export declare class MasterWrapper {
     private master;
     icon: MasterIcon;

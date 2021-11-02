@@ -11,6 +11,23 @@ class SampleListMaster extends master_1.Master {
             name: 'music',
             color: 'red'
         };
+        this.fieldsDefintion = {
+            samples: {
+                type: Array,
+                required: true,
+                description: 'Eine Liste von Audio-Ausschnitten.'
+            },
+            heading: {
+                type: String,
+                markup: true,
+                description: 'Überschrift der Ausschnitte.',
+                required: false
+            },
+            notNumbered: {
+                type: Boolean,
+                description: 'Nicht durchnummeriert'
+            }
+        };
     }
 }
 exports.SampleListMaster = SampleListMaster;

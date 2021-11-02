@@ -11,6 +11,13 @@ class GroupMaster extends master_1.Master {
             name: 'account-group',
             color: 'orange'
         };
+        this.fieldsDefintion = {
+            groupId: {
+                type: String,
+                required: true,
+                description: 'Die ID der Gruppe (z. B. „Beatles_The“).'
+            }
+        };
     }
 }
 exports.GroupMaster = GroupMaster;

@@ -6,4 +6,11 @@ export declare class EditorMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        markup: {
+            type: StringConstructor;
+            markup: boolean;
+            description: string;
+        };
+    };
 }

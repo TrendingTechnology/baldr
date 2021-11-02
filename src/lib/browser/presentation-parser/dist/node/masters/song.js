@@ -11,6 +11,12 @@ class SongMaster extends master_1.Master {
             name: 'file-audio',
             color: 'green'
         };
+        this.fieldsDefintion = {
+            songId: {
+                type: String,
+                description: 'Die ID des Liedes'
+            }
+        };
     }
 }
 exports.SongMaster = SongMaster;

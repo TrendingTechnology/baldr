@@ -1,0 +1,56 @@
+---
+slides:
+
+- title: With description
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    description: |
+      # Some text
+
+      1. one
+      2. two
+      3. three
+
+- title: Custom composer
+  audio:
+    src: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
+    composer: Ludwig B. (Custom composer)
+    autoplay: true
+
+- title: 'Autoplay: yes'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    title: Custom title
+    autoplay: true
+
+- title: 'Autoplay: no'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    title: Custom title
+    autoplay: false
+
+- title: 'Custom title'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    title: Custom title
+
+- title: 'Custom artist'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    artist: Custom artist
+
+- title: 'Custom cover'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+    cover: uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d
+    title: Custom cover
+
+- title: 'URL: ref:'
+  audio:
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
+
+- audio:
+    src: uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a
+
+- title: 'Lady Gaga: Yoü and I'
+  audio: uuid:96626fdb-4ece-47a5-9870-d89356e0f439

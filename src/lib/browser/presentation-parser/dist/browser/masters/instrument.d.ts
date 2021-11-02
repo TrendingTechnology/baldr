@@ -6,4 +6,10 @@ export declare class InstrumentMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        instrumentId: {
+            type: StringConstructor;
+            description: string;
+        };
+    };
 }

@@ -6,4 +6,11 @@ export declare class GroupMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        groupId: {
+            type: StringConstructor;
+            required: boolean;
+            description: string;
+        };
+    };
 }

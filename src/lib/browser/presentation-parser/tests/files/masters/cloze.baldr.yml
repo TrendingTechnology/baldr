@@ -1,0 +1,63 @@
+---
+slides:
+
+- title: Mozart Biographie-Kindheit_LT_1
+  cloze: uuid:2fb3f933-bd29-4bd0-9d1a-017b115586bf#3,5,7
+
+- title: All (Zauberlehrling)
+  cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+
+- title: 'step_subset: 53- (Zauberlehrling)'
+  cloze:
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    step_subset: 53-
+
+- title: 'step_subset: -11 (Zauberlehrling)'
+  cloze:
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    step_subset: '-11'
+
+- title: 'step_subset: 16,35,53 (Zauberlehrling)'
+  cloze:
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    step_subset: 16,35,53
+
+- title: 'step_subset: 12-15 (Zauberlehrling)'
+  cloze:
+    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    step_subset: 12-15
+
+- title: 'step_subset: 2,3,4 (Bachs vergebliche Reise)'
+  cloze:
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
+    step_subset: 2,3,4
+
+- title: 'Begin end step_subset: 3-5 (Bachs vergebliche Reise)'
+  cloze:
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
+    step_subset: 3-5
+
+- title: 'End: step_subset: -20 (Bachs vergebliche Reise)'
+  cloze:
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
+    step_subset: '-20'
+
+- title: 'Begin: step_subset: 21- (Bachs vergebliche Reise)'
+  cloze:
+    src: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
+    step_subset: 21-
+
+- title: Short form (Bachs vergebliche Reise)
+  cloze: uuid:622640f6-7e2a-4883-b8b8-ff8fec33b1c4
+
+- title: Long form (Bebop)
+  cloze:
+    src: uuid:68eba6f5-3483-457c-8296-1591b3080ecd
+
+- title: Table 1 (New-Orleans 1)
+  cloze:
+    src: uuid:c5d83d6b-833a-460e-ab30-5545ab7e3c32
+
+- title: Table 2 (New-Orleans 2)
+  cloze:
+    src: uuid:d3640a36-f692-4ce5-88c4-02676e9be1b8

@@ -8,5 +8,15 @@ export class DocumentMaster extends Master {
             name: 'file-outline',
             color: 'gray'
         };
+        this.fieldsDefintion = {
+            src: {
+                type: String,
+                description: 'URI eines Dokuments.'
+            },
+            page: {
+                type: Number,
+                description: 'Nur eine Seite des PDFs anzeigen'
+            }
+        };
     }
 }

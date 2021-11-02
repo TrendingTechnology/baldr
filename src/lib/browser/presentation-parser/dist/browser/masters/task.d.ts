@@ -7,4 +7,12 @@ export declare class TaskMaster extends Master {
         color: string;
         size: "large";
     };
+    fieldsDefintion: {
+        markup: {
+            type: StringConstructor;
+            required: boolean;
+            markup: boolean;
+            description: string;
+        };
+    };
 }

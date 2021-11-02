@@ -6,4 +6,14 @@ export declare class DocumentMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        src: {
+            type: StringConstructor;
+            description: string;
+        };
+        page: {
+            type: NumberConstructor;
+            description: string;
+        };
+    };
 }

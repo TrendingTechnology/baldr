@@ -6,4 +6,16 @@ export declare class VideoMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        src: {
+            type: StringConstructor;
+            required: boolean;
+            description: string;
+            assetUri: boolean;
+        };
+        showMeta: {
+            type: BooleanConstructor;
+            description: string;
+        };
+    };
 }

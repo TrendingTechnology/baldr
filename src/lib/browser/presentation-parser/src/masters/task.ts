@@ -10,4 +10,13 @@ export class TaskMaster extends Master {
     color: 'yellow-dark',
     size: 'large' as const
   }
+
+  fieldsDefintion = {
+    markup: {
+      type: String,
+      required: true,
+      markup: true,
+      description: 'Text im HTML oder Markdown-Format oder als reinen Text.'
+    }
+  }
 }

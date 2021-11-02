@@ -12,6 +12,14 @@ class InteractiveGraphicMaster extends master_1.Master {
             color: 'blue',
             showOnSlides: false
         };
+        this.fieldsDefintion = {
+            src: {
+                type: String,
+                required: true,
+                description: 'Den URI zu einer SVG-Datei.',
+                assetUri: true
+            }
+        };
     }
 }
 exports.InteractiveGraphicMaster = InteractiveGraphicMaster;

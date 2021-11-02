@@ -6,4 +6,17 @@ export declare class NoteMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        markup: {
+            type: StringConstructor;
+            markup: boolean;
+            description: string;
+        };
+        items: {
+            type: ArrayConstructor;
+        };
+        sections: {
+            type: ArrayConstructor;
+        };
+    };
 }

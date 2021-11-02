@@ -7,4 +7,12 @@ export declare class InteractiveGraphicMaster extends Master {
         color: string;
         showOnSlides: boolean;
     };
+    fieldsDefintion: {
+        src: {
+            type: StringConstructor;
+            required: boolean;
+            description: string;
+            assetUri: boolean;
+        };
+    };
 }

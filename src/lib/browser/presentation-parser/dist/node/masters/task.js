@@ -12,6 +12,14 @@ class TaskMaster extends master_1.Master {
             color: 'yellow-dark',
             size: 'large'
         };
+        this.fieldsDefintion = {
+            markup: {
+                type: String,
+                required: true,
+                markup: true,
+                description: 'Text im HTML oder Markdown-Format oder als reinen Text.'
+            }
+        };
     }
 }
 exports.TaskMaster = TaskMaster;

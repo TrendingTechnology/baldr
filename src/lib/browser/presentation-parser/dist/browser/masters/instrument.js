@@ -8,5 +8,11 @@ export class InstrumentMaster extends Master {
             name: 'instrument',
             color: 'yellow'
         };
+        this.fieldsDefintion = {
+            instrumentId: {
+                type: String,
+                description: 'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
+            }
+        };
     }
 }

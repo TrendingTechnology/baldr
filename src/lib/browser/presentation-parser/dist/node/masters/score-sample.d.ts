@@ -6,4 +6,22 @@ export declare class ScoreSampleMaster extends Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {
+        heading: {
+            type: StringConstructor;
+            description: string;
+            markup: boolean;
+        };
+        score: {
+            type: StringConstructor;
+            description: string;
+            assetUri: boolean;
+            required: boolean;
+        };
+        audio: {
+            type: StringConstructor;
+            description: string;
+            assetUri: boolean;
+        };
+    };
 }

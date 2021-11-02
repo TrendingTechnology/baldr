@@ -7,4 +7,15 @@ export declare class CounterMaster extends Master {
         color: string;
         size: "large";
     };
+    fieldsDefintion: {
+        to: {
+            type: NumberConstructor;
+            required: boolean;
+            description: string;
+        };
+        format: {
+            default: string;
+            description: string;
+        };
+    };
 }
