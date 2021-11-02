@@ -1,5 +1,5 @@
 import { Master } from '../master';
-interface FieldData {
+interface AudioFieldData {
     src: string;
     title?: string;
     composer?: string;
@@ -10,7 +10,7 @@ interface FieldData {
     autoplay?: boolean;
     playthrough?: boolean;
 }
-declare type RawFieldData = string | FieldData;
+declare type RawFieldData = string | AudioFieldData;
 export declare class AudioMaster extends Master {
     name: string;
     displayName: string;
@@ -67,7 +67,7 @@ export declare class AudioMaster extends Master {
             description: string;
         };
     };
-    normalizeFields(fields: RawFieldData): FieldData;
-    resolveMediaUris(fields: FieldData): Set<string>;
+    normalizeFields(fields: RawFieldData): AudioFieldData;
+    resolveMediaUris(fields: AudioFieldData): Set<string>;
 }
 export {};

@@ -2,7 +2,12 @@
 
 const assert = require('assert')
 
-const { Question, generateTexMarkup } = require('../../dist/node/masters/question')
+const {
+  Question,
+  generateTexMarkup
+} = require('../../dist/node/masters/question')
+
+const { parseMasterPresentation } = require('../_helper.js')
 
 const threeQuestions = [
   {
@@ -91,38 +96,31 @@ Questions Level 3
 \\end{enumerate}
 \\end{enumerate}`
 
+const presentation = parseMasterPresentation('question')
+
+function getQuestions (no) {
+  return presentation.getSlideByNo(no).fields.questions
+}
+
 describe('Master question', function () {
   describe('Class “Question”', function () {
-    it('aliasForSubQuestions', function () {
-      const questions = Question.parse({
-        heading: 'Alias for `sub_questions`',
-        questions: [
-          {
-            question: 'Questions Level 1',
-            answer: 'Answer Level 1'
-          }
-        ]
-      })
-      assert.strictEqual(questions[0].subQuestions[0].question, 'Questions Level 1')
+    it('Alias for sub_questions', function () {
+      const questions = getQuestions(1)
+      assert.strictEqual(
+        questions[0].subQuestions[0].question,
+        'Questions Level 1'
+      )
     })
 
-    it('aliases', function () {
-      const questions = Question.parse({
-        h: 'h',
-        s: [
-          {
-            q: 'q',
-            a: 'a'
-          }
-        ]
-      })
+    it('Aliases', function () {
+      const questions = getQuestions(2)
       assert.strictEqual(questions[0].heading, 'h')
       assert.strictEqual(questions[0].subQuestions[0].question, 'q')
       assert.strictEqual(questions[0].subQuestions[0].answer, 'a')
     })
 
-    it('threeQuestions', function () {
-      const questions = Question.parse(threeQuestions)
+    it('Three questions', function () {
+      const questions = getQuestions(3)
       assert.strictEqual(questions.length, 3)
     })
 
@@ -139,8 +137,14 @@ describe('Master question', function () {
         question: 'Markup support: *italic* **bold**',
         answer: 'Markup support: *italic* **bold**'
       })
-      assert.strictEqual(questions[0].question, 'Markup support: <em>italic</em> <strong>bold</strong>')
-      assert.strictEqual(questions[0].answer, 'Markup support: <em>italic</em> <strong>bold</strong>')
+      assert.strictEqual(
+        questions[0].question,
+        'Markup support: <em>italic</em> <strong>bold</strong>'
+      )
+      assert.strictEqual(
+        questions[0].answer,
+        'Markup support: <em>italic</em> <strong>bold</strong>'
+      )
     })
 
     it('markupMultiLine', function () {
@@ -149,7 +153,10 @@ describe('Master question', function () {
         answer: '1. one\n2. two\n3. three\n'
       })
       assert.strictEqual(questions[0].question, 'one\ntwo\nthree')
-      assert.strictEqual(questions[0].answer, '<ol>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ol>\n')
+      assert.strictEqual(
+        questions[0].answer,
+        '<ol>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ol>\n'
+      )
     })
 
     it('heading', function () {

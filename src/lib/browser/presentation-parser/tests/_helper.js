@@ -7,7 +7,7 @@ const { parse } = require('../dist/node/main.js')
 
 function parseMasterPresentation (masterName) {
   return parse(
-    readFile(path.join(__dirname, 'files', 'master', `${masterName}.baldr.yml`))
+    readFile(path.join(__dirname, 'files', 'masters', `${masterName}.baldr.yml`))
   )
 }
 
@@ -25,7 +25,9 @@ function parseRealWorldPresentation (relPath) {
 }
 
 function parseTestPresentation (fileName) {
-  return parse(readFile(path.join(__dirname, 'files', `${fileName}.baldr.yml`)))
+  return parse(
+    readFile(path.join(__dirname, 'files', `${fileName}.baldr.yml`))
+  )
 }
 
 module.exports = {

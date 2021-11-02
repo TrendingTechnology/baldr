@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-interface FieldData {
+interface AudioFieldData {
   src: string
   title?: string
   composer?: string
@@ -12,7 +12,7 @@ interface FieldData {
   playthrough?: boolean
 }
 
-type RawFieldData = string | FieldData
+type RawFieldData = string | AudioFieldData
 
 export class AudioMaster extends Master {
   name = 'audio'
@@ -77,14 +77,14 @@ export class AudioMaster extends Master {
     }
   }
 
-  normalizeFields (fields: RawFieldData): FieldData {
+  normalizeFields (fields: RawFieldData): AudioFieldData {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }
     return fields
   }
 
-  resolveMediaUris (fields: FieldData): Set<string> {
+  resolveMediaUris (fields: AudioFieldData): Set<string> {
     const uris = new Set([fields.src])
     if (fields.cover) {
       uris.add(fields.cover)
