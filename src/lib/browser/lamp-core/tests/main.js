@@ -1,7 +1,9 @@
 import path from 'path'
 
 import { readFile } from '@bldr/core-node'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 import assert from 'assert'
 

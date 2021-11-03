@@ -3,8 +3,9 @@ const path = require('path')
 const { ClientMediaAsset } = require('../dist/node/asset.js')
 const { deepCopy, genUuid, getExtension } = require('@bldr/core-browser')
 const { makeHttpRequestInstance } = require('@bldr/http-request')
-const config = require('@bldr/config')
 const { resolve } = require('../dist/node/resolve.js')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 const assetYamlSkeleton = {
   ref: 'test',

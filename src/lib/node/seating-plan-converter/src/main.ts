@@ -11,8 +11,10 @@ import csv from 'csv-parser'
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 import { writeFile } from '@bldr/file-reader-writer'
-import config from '@bldr/config'
 import { getFormatedSchoolYear } from '@bldr/core-browser'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 const documentTemplate = {
   grades: {},

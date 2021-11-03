@@ -7,8 +7,11 @@ import path from 'path'
 import fs from 'fs'
 
 // Project packages.
-import config from '@bldr/config'
+
 import { untildify, findParentFile } from '@bldr/core-node'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 /**
  * Indicates in which folder structure a file is located.
@@ -107,7 +110,9 @@ class LocationIndicator {
    * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
    * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
    */
-  public getTwoDigitPrefixedParentDir (currentPath: string): string | undefined {
+  public getTwoDigitPrefixedParentDir (
+    currentPath: string
+  ): string | undefined {
     let parentDir: string
     if (fs.existsSync(currentPath) && fs.lstatSync(currentPath).isDirectory()) {
       parentDir = currentPath

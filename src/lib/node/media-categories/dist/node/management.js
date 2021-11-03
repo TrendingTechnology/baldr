@@ -27,10 +27,11 @@ const path_1 = __importDefault(require("path"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
 const yaml_1 = require("@bldr/yaml");
-const config_1 = __importDefault(require("@bldr/config"));
 const titles_1 = require("@bldr/titles");
 const specs_1 = require("./specs");
 const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 two_letter_abbreviations_1.checkTypeAbbreviations(specs_1.categories);
 /**
  * Check a file path against a regular expression to get the category name.
@@ -103,7 +104,7 @@ function formatFilePath(data, oldPath) {
     let oldRelPath = '';
     if (oldPath != null) {
         oldRelPath = path_1.default.resolve(oldPath);
-        oldRelPath = oldRelPath.replace(config_1.default.mediaServer.basePath, '');
+        oldRelPath = oldRelPath.replace(config.mediaServer.basePath, '');
         oldRelPath = oldRelPath.replace(/^\//, '');
     }
     // b/Bush_George-Walker/main.jpeg
@@ -111,7 +112,7 @@ function formatFilePath(data, oldPath) {
     if (relPath == null) {
         throw new Error(`The relPath() function has to return a string for media category “${categoryName}”`);
     }
-    const basePath = category.basePath != null ? category.basePath : config_1.default.mediaServer.basePath;
+    const basePath = category.basePath != null ? category.basePath : config.mediaServer.basePath;
     return path_1.default.join(basePath, relPath);
 }
 exports.formatFilePath = formatFilePath;

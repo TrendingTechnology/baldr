@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@bldr/components-collection": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",

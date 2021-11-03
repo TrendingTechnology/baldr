@@ -2,7 +2,9 @@ import Sqlite3, { Database } from 'better-sqlite3'
 import * as crypto from 'crypto'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface SelectResult {
   hash: string

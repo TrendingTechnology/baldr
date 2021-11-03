@@ -1,7 +1,8 @@
 /* globals describe it */
 const assert = require('assert')
 
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 const {
   makeHttpRequestInstance,

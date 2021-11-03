@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@bldr/cli-utils": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/core-browser": "*",
     "csv-parser": "3.0.0"

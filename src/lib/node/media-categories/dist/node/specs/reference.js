@@ -7,10 +7,11 @@ exports.reference = void 0;
 const path_1 = __importDefault(require("path"));
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const config_1 = __importDefault(require("@bldr/config"));
 const core_node_2 = require("@bldr/core-node");
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function readReferencesYaml() {
-    const rawReferences = file_reader_writer_1.readYamlFile(path_1.default.join(config_1.default.mediaServer.basePath, 'Quellen.yml'));
+    const rawReferences = file_reader_writer_1.readYamlFile(path_1.default.join(config.mediaServer.basePath, 'Quellen.yml'));
     const result = {};
     for (const r of rawReferences) {
         const reference = r;

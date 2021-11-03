@@ -8,16 +8,15 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const { gitHead } = require('@bldr/core-node')
 
-const config = require('@bldr/config')
-// @TODO: Remove dirty hack
-delete config.default
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
 module.exports = {
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     config.resolve.symlinks(false)
   },
   configureWebpack: {
@@ -40,9 +39,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [
-        path.join(themePath, 'default.scss')
-      ]
+      patterns: [path.join(themePath, 'default.scss')]
     },
     electronBuilder: {
       builderOptions: {

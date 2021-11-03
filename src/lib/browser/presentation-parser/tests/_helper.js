@@ -1,9 +1,10 @@
 const path = require('path')
 
 const { readFile } = require('@bldr/file-reader-writer')
-const config = require('@bldr/config')
-
 const { parse } = require('../dist/node/main.js')
+const { getConfig } = require('@bldr/config-ng')
+
+const config = getConfig()
 
 function parseMasterPresentation (masterName) {
   return parse(

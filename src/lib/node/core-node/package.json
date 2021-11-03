@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/node": "14.14.35",
     "@types/node-fetch": "2.5.8",
-    "@bldr/config": "*"
+    "@bldr/config-ng": "*"
   },
   "publishConfig": {
     "access": "public"

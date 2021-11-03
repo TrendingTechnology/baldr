@@ -53,7 +53,7 @@ function move (
           log.debug(
             'Move file by copying and deleting from %s to %s',
             [oldPath,
-            newPath]
+              newPath]
           )
           fs.copyFileSync(oldPath, newPath)
           fs.unlinkSync(oldPath)
@@ -85,7 +85,7 @@ function moveCorrespondingFiles (
       log.debug(
         'Move corresponding file from %s to %s',
         [oldCorrespondingPath,
-        newCorrespondingPath]
+          newCorrespondingPath]
       )
       move(oldCorrespondingPath, newCorrespondingPath, opts)
     }
@@ -234,8 +234,8 @@ export function renameByRef (filePath: string): void {
     log.info(
       'Rename the file %s by reference from %s to %s',
       [filePath,
-      oldBaseName,
-      ref]
+        oldBaseName,
+        ref]
     )
     newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     moveAsset(oldPath, newPath)

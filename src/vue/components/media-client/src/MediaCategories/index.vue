@@ -31,9 +31,13 @@
 </template>
 
 <script>
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
 import { convertCamelToSnake } from '@bldr/yaml'
 import MediaCategory from './MediaCategory.vue'
+
+const config = getConfig()
+
 
 export default {
   name: 'MediaCategories',

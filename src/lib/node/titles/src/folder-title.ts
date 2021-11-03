@@ -1,6 +1,8 @@
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 
 import type { TitlesTypes } from '@bldr/type-definitions'
+
+const config = getConfig()
 
 export class FolderTitle implements TitlesTypes.FolderTitle {
   title: string

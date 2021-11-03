@@ -29,7 +29,7 @@
   "dependencies": {
     "@bldr/audio-metadata": "*",
     "@bldr/client-media-models": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",

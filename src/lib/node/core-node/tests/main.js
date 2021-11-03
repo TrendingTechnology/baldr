@@ -9,7 +9,8 @@ const {
   createTmpDir,
   copyToTmp
 } = require('../dist/node/main.js')
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 describe('Package “@bldr/core-node”', function () {
   it('function  “findParentFile()”', function () {

@@ -105,7 +105,7 @@ async function normalize (filePaths: string[]): Promise<void> {
     }
   )
   log.verbose('Generate presentation automatically on path %s:', [filePaths[0]])
-  operations.generateAutomaticPresentation(filePaths[0])
+  await operations.generateAutomaticPresentation(filePaths[0])
 }
 
 /**

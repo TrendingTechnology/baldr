@@ -2,9 +2,11 @@ import path from 'path'
 
 import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
-import config from '@bldr/config'
 
 import { validateDate } from '../main'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface GroupCategory extends MediaCategoriesTypes.Category {
   abbreviation: string

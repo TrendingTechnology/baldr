@@ -1,10 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FolderTitle = void 0;
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 class FolderTitle {
     /**
      * @param data - Some meta data about the folder.
@@ -15,7 +13,7 @@ class FolderTitle {
             this.subtitle = subtitle;
         }
         this.folderName = folderName;
-        relPath = relPath.replace(config_1.default.mediaServer.basePath, '');
+        relPath = relPath.replace(config.mediaServer.basePath, '');
         relPath = relPath.replace(/^\//, '');
         this.relPath = relPath;
         this.hasPresentation = hasPresentation;

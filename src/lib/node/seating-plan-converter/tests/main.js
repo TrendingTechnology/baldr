@@ -3,8 +3,9 @@
 const assert = require('assert')
 
 const { convertNotenmanagerMdbToJson } = require('../dist/node/main.js')
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
 
+const config = getConfig()
 describe('Package “@bldr/seating-plan-converter”', function () {
   it('Function “convertNotenmanagerMdbToJson()”', async function () {
     const result = await convertNotenmanagerMdbToJson(config.seatingPlan.notenmanagerMdbPath)

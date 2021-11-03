@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
 var ws_1 = __importDefault(require("ws"));
 // Globals.
-var config_1 = __importDefault(require("@bldr/config"));
+var config_1 = __importDefault(require("@bldr/config-ng"));
 /**
  * Launch the web socket server.
  */

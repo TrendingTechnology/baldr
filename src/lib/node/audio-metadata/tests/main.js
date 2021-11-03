@@ -5,8 +5,9 @@ const path = require('path')
 const fs = require('fs')
 
 const { collectAudioMetadata, extractCoverImage } = require('../dist/node/main.js')
-const config = require('@bldr/config')
 const { createTmpDir } = require('@bldr/core-node')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 function getPath (relPath) {
   return path.join(config.mediaServer.basePath, 'Musik', relPath)

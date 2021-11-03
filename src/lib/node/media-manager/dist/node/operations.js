@@ -125,7 +125,7 @@ function normalize(filePaths) {
             path: filePaths
         });
         log.verbose('Generate presentation automatically on path %s:', [filePaths[0]]);
-        exports.operations.generateAutomaticPresentation(filePaths[0]);
+        yield exports.operations.generateAutomaticPresentation(filePaths[0]);
     });
 }
 /**

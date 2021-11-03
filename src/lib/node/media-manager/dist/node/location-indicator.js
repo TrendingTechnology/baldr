@@ -11,8 +11,9 @@ exports.locationIndicator = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
-const config_1 = __importDefault(require("@bldr/config"));
 const core_node_1 = require("@bldr/core-node");
+const config_ng_1 = require("@bldr/config-ng");
+const config = (0, config_ng_1.getConfig)();
 /**
  * Indicates in which folder structure a file is located.
  *
@@ -21,10 +22,10 @@ const core_node_1 = require("@bldr/core-node");
  */
 class LocationIndicator {
     constructor() {
-        this.main = config_1.default.mediaServer.basePath;
+        this.main = config.mediaServer.basePath;
         const basePaths = [
-            config_1.default.mediaServer.basePath,
-            ...config_1.default.mediaServer.archivePaths
+            config.mediaServer.basePath,
+            ...config.mediaServer.archivePaths
         ];
         this.basePaths = [];
         for (let i = 0; i < basePaths.length; i++) {

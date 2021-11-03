@@ -4,8 +4,10 @@
 
 import mongodb from 'mongodb'
 
-import config from '@bldr/config'
-import type { StringIndexedObject } from '@bldr/type-definitions'
+import { StringIndexedObject } from '@bldr/type-definitions'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 /**
  * Connect to the MongoDB server.
@@ -17,10 +19,10 @@ export async function connectDb (): Promise<mongodb.MongoClient> {
   const authMechanism = 'DEFAULT'
   const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
 
-  const mongoClient = new mongodb.MongoClient(
-    url,
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  const mongoClient = new mongodb.MongoClient(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
 
   await mongoClient.connect()
   mongoClient.db(config.databases.mongodb.dbName)
@@ -62,27 +64,19 @@ export class Database {
         drop: true
       },
       presentations: {
-        indexes: [
-          { field: 'ref', unique: true }
-        ],
+        indexes: [{ field: 'ref', unique: true }],
         drop: true
       },
       updates: {
-        indexes: [
-          { field: 'begin', unique: false }
-        ],
+        indexes: [{ field: 'begin', unique: false }],
         drop: true
       },
       folderTitleTree: {
-        indexes: [
-          { field: 'ref', unique: true }
-        ],
+        indexes: [{ field: 'ref', unique: true }],
         drop: true
       },
       seatingPlan: {
-        indexes: [
-          { field: 'timeStampMsec', unique: true }
-        ],
+        indexes: [{ field: 'timeStampMsec', unique: true }],
         drop: false
       }
     }
@@ -118,14 +112,20 @@ export class Database {
       if (!collectionNames.includes(collectionName)) {
         const collection = await this.db.createCollection(collectionName)
         for (const index of this.schema[collectionName].indexes) {
-          await collection.createIndex({ [index.field]: 1 }, { unique: index.unique })
+          await collection.createIndex(
+            { [index.field]: 1 },
+            { unique: index.unique }
+          )
         }
       }
     }
 
     const result: StringIndexedObject = {}
     for (const collectionName in this.schema) {
-      const indexes = await this.db.collection(collectionName).listIndexes().toArray()
+      const indexes = await this.db
+        .collection(collectionName)
+        .listIndexes()
+        .toArray()
       result[collectionName] = {
         name: collectionName,
         indexes: {}
@@ -178,7 +178,8 @@ export class Database {
     await this.presentations.deleteMany({})
     await this.folderTitleTree.deleteMany({})
     return {
-      countDroppedAssets, countDroppedPresentations
+      countDroppedAssets,
+      countDroppedPresentations
     }
   }
 

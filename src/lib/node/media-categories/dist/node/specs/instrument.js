@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.instrument = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function check(data) {
     if (data.name == null) {
         throw new Error('A instrument needs a name.');
@@ -18,7 +19,7 @@ function check(data) {
 exports.instrument = {
     title: 'Instrument',
     abbreviation: 'IN',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Instrumente'),
+    basePath: path_1.default.join(config.mediaServer.basePath, 'Musik', 'Instrumente'),
     relPath: function ({ data }) {
         const instrumentData = data;
         const id = data.instrumentId.replace(/^IN_/, '');

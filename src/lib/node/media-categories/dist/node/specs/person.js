@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.person = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 const main_1 = require("../main");
 function check(data) {
     if (data.lastname == null && data.firstname == null) {
@@ -19,7 +20,7 @@ function check(data) {
 exports.person = {
     title: 'Person',
     abbreviation: 'PR',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'faecheruebergreifend', 'Personen'),
+    basePath: path_1.default.join(config.mediaServer.basePath, 'faecheruebergreifend', 'Personen'),
     relPath: function ({ data }) {
         const personData = data;
         return path_1.default.join(personData.personId.substr(0, 1).toLowerCase(), personData.personId, `main.${personData.extension}`);

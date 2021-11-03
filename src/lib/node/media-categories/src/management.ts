@@ -14,7 +14,7 @@ import path from 'path'
 // Project packages.
 import { deepCopy, getExtension } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
-import config from '@bldr/config'
+
 import {
   MediaCategoriesTypes,
   MediaResolverTypes
@@ -23,6 +23,9 @@ import {
 import { DeepTitle } from '@bldr/titles'
 import { categories } from './specs'
 import { checkTypeAbbreviations } from './two-letter-abbreviations'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 checkTypeAbbreviations(categories)
 

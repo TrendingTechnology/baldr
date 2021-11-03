@@ -9,9 +9,8 @@ const { DefinePlugin } = require('webpack')
 // Project packages.
 const { gitHead } = require('@bldr/core-node')
 
-const config = require('@bldr/config')
-// @TODO: Remove dirty hack
-delete config.default
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
 

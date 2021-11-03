@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@bldr/type-definitions": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "jsdom": "18.0.0"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"

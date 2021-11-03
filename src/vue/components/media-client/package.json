@@ -15,7 +15,7 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/client-media-models": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/http-request": "*",

@@ -1,9 +1,13 @@
 import path from 'path'
 
 import { referencify } from '@bldr/core-browser'
-import config from '@bldr/config'
-import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
+import {
+  MediaCategoriesTypes,
+  MediaResolverTypes
+} from '@bldr/type-definitions'
+import { getConfig } from '@bldr/config-ng'
 
+const config = getConfig()
 interface InstrumentCategory extends MediaCategoriesTypes.Category {
   abbreviation: string
   basePath: string
@@ -14,7 +18,7 @@ interface InstrumentFileFormat extends MediaResolverTypes.YamlFormat {
   extension: string
 }
 
-function check(data: any): void {
+function check (data: any): void {
   if (data.name == null) {
     throw new Error('A instrument needs a name.')
   }
@@ -30,7 +34,11 @@ export const instrument: MediaCategoriesTypes.Category = {
   relPath: function ({ data }) {
     const instrumentData = data as InstrumentFileFormat
     const id = data.instrumentId.replace(/^IN_/, '')
-    return path.join(id.substr(0, 1).toLowerCase(), id, `main.${instrumentData.extension}`)
+    return path.join(
+      id.substr(0, 1).toLowerCase(),
+      id,
+      `main.${instrumentData.extension}`
+    )
   },
   detectCategoryByPath: function (category) {
     const instrumentCategory = category as InstrumentCategory
@@ -50,7 +58,9 @@ export const instrument: MediaCategoriesTypes.Category = {
         // IS: Instrument
         const instrumentCategory = category as InstrumentCategory
         const instrumentData = data as InstrumentFileFormat
-        return `${instrumentCategory.abbreviation}_${referencify(instrumentData.name)}`
+        return `${instrumentCategory.abbreviation}_${referencify(
+          instrumentData.name
+        )}`
       },
       overwriteByDerived: true
     },

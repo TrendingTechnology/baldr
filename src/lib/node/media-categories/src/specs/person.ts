@@ -5,7 +5,9 @@ import {
   MediaResolverTypes
 } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 import { validateDate } from '../main'
 

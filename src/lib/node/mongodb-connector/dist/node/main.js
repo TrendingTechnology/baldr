@@ -44,7 +44,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = exports.connectDb = void 0;
 var mongodb_1 = __importDefault(require("mongodb"));
-var config_1 = __importDefault(require("@bldr/config"));
+var config_ng_1 = require("@bldr/config-ng");
+var config = config_ng_1.getConfig();
 /**
  * Connect to the MongoDB server.
  */
@@ -54,16 +55,19 @@ function connectDb() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    conf = config_1.default.databases.mongodb;
+                    conf = config.databases.mongodb;
                     user = encodeURIComponent(conf.user);
                     password = encodeURIComponent(conf.password);
                     authMechanism = 'DEFAULT';
                     url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
-                    mongoClient = new mongodb_1.default.MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+                    mongoClient = new mongodb_1.default.MongoClient(url, {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                    });
                     return [4 /*yield*/, mongoClient.connect()];
                 case 1:
                     _a.sent();
-                    mongoClient.db(config_1.default.databases.mongodb.dbName);
+                    mongoClient.db(config.databases.mongodb.dbName);
                     return [2 /*return*/, mongoClient];
             }
         });
@@ -86,27 +90,19 @@ var Database = /** @class */ (function () {
                 drop: true
             },
             presentations: {
-                indexes: [
-                    { field: 'ref', unique: true }
-                ],
+                indexes: [{ field: 'ref', unique: true }],
                 drop: true
             },
             updates: {
-                indexes: [
-                    { field: 'begin', unique: false }
-                ],
+                indexes: [{ field: 'begin', unique: false }],
                 drop: true
             },
             folderTitleTree: {
-                indexes: [
-                    { field: 'ref', unique: true }
-                ],
+                indexes: [{ field: 'ref', unique: true }],
                 drop: true
             },
             seatingPlan: {
-                indexes: [
-                    { field: 'timeStampMsec', unique: true }
-                ],
+                indexes: [{ field: 'timeStampMsec', unique: true }],
                 drop: false
             }
         };
@@ -119,7 +115,7 @@ var Database = /** @class */ (function () {
                     case 0: return [4 /*yield*/, connectDb()];
                     case 1:
                         mongoClient = _a.sent();
-                        this.db = mongoClient.db(config_1.default.databases.mongodb.dbName);
+                        this.db = mongoClient.db(config.databases.mongodb.dbName);
                         return [2 /*return*/];
                 }
             });
@@ -199,7 +195,10 @@ var Database = /** @class */ (function () {
                     case 9:
                         if (!(_g < _e.length)) return [3 /*break*/, 12];
                         collectionName = _e[_g];
-                        return [4 /*yield*/, this.db.collection(collectionName).listIndexes().toArray()];
+                        return [4 /*yield*/, this.db
+                                .collection(collectionName)
+                                .listIndexes()
+                                .toArray()];
                     case 10:
                         indexes = _k.sent();
                         result[collectionName] = {
@@ -302,7 +301,8 @@ var Database = /** @class */ (function () {
                     case 5:
                         _a.sent();
                         return [2 /*return*/, {
-                                countDroppedAssets: countDroppedAssets, countDroppedPresentations: countDroppedPresentations
+                                countDroppedAssets: countDroppedAssets,
+                                countDroppedPresentations: countDroppedPresentations
                             }];
                 }
             });

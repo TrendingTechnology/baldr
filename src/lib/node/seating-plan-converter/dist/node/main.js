@@ -23,8 +23,9 @@ const csv_parser_1 = __importDefault(require("csv-parser"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const config_1 = __importDefault(require("@bldr/config"));
 const core_browser_1 = require("@bldr/core-browser");
+const config_ng_1 = require("@bldr/config-ng");
+const config = (0, config_ng_1.getConfig)();
 const documentTemplate = {
     grades: {},
     jobs: {
@@ -46,8 +47,8 @@ const documentTemplate = {
     },
     timeStampMsec: 0,
     meta: {
-        location: config_1.default.meta.school,
-        teacher: config_1.default.meta.teacher,
+        location: config.meta.school,
+        teacher: config.meta.teacher,
         year: (0, core_browser_1.getFormatedSchoolYear)()
     }
 };

@@ -3,8 +3,10 @@ import path from 'path'
 import { getPdfPageCount } from '@bldr/core-node'
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
-import config from '@bldr/config'
 import { getBasename } from '@bldr/core-node'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface IndexedReferenceCollection {
   [ref: string]: MediaCategoriesTypes.CategoryReferenceYamlFormat

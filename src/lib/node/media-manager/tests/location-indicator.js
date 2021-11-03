@@ -3,7 +3,8 @@ const assert = require('assert')
 const path = require('path')
 
 const { locationIndicator } = require('../dist/node/location-indicator')
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 const testRelPath =
   'Musik/10/10_Kontext/40_Jazz/10_Entstehung/HB/Percy-Randolph_Shine.m4a'

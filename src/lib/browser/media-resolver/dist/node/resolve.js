@@ -13,7 +13,7 @@ exports.resolve = exports.resolver = exports.httpRequest = void 0;
 const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
-const config_1 = require("@bldr/config");
+const config_1 = require("@bldr/config-ng");
 const internal_1 = require("./internal");
 exports.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
 /**

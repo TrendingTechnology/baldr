@@ -24,7 +24,7 @@
     "lint": "npm run lint:depcheck & npm run lint:ts-standard"
   },
   "dependencies": {
-    "@bldr/config": "*"
+    "@bldr/config-ng": "*"
   },
   "devDependencies": {
     "@types/node": "14.14.7",

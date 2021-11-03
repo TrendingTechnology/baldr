@@ -33,7 +33,7 @@
     "music-metadata": "7.11.4"
   },
   "devDependencies": {
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-node": "*",
     "@types/node": "16.10.3",
     "depcheck": "1.4.2",

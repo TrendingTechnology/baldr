@@ -81,7 +81,7 @@ const jquery = require('jquery')
 const { Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 
 // Globals.
-const config = require('@bldr/config')
+const config = getConfig()
 ```
 
 #### Vue imports

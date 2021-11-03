@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.group = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const config_1 = __importDefault(require("@bldr/config"));
 const main_1 = require("../main");
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function check(data) {
     if (data.name == null) {
         throw new Error('A group needs a name.');
@@ -19,7 +20,7 @@ function check(data) {
 exports.group = {
     title: 'Gruppe',
     abbreviation: 'GR',
-    basePath: path_1.default.join(config_1.default.mediaServer.basePath, 'Musik', 'Gruppen'),
+    basePath: path_1.default.join(config.mediaServer.basePath, 'Musik', 'Gruppen'),
     relPath: function ({ data }) {
         const groupData = data;
         return path_1.default.join(groupData.groupId.substr(0, 1).toLowerCase(), groupData.groupId, `main.${groupData.extension}`);

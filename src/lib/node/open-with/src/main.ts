@@ -11,7 +11,9 @@ import fs from 'fs'
 import { StringIndexedObject } from '@bldr/type-definitions'
 
 // Project packages.
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 /**
  * Open a file path with an executable.
