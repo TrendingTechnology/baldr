@@ -53,8 +53,8 @@ exports.convertMarkdownStringToHtml = convertMarkdownStringToHtml;
 /**
  * Convert Markdown texts into HTML texts.
  *
- * The conversion is done in a recursive fashion, that means in object or array
- * nested strings are also converted.
+ * The conversion is done in a recursive fashion, that means
+ * strings nested in objects or arrays are also converted.
  *
  * @param input - Various input types
  */

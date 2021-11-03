@@ -75,7 +75,7 @@ class ArgsParser {
  */
 class CommandRunner {
     constructor(options) {
-        this.verbose = ((options === null || options === void 0 ? void 0 : options.verbose) != null && (options === null || options === void 0 ? void 0 : options.verbose));
+        this.verbose = (options === null || options === void 0 ? void 0 : options.verbose) != null && (options === null || options === void 0 ? void 0 : options.verbose);
         this.spinner = ora_1.default({ spinner: 'line' });
         this.gauge = new gauge_1.default();
         this.gauge.setTheme('ASCII');
@@ -143,7 +143,7 @@ class CommandRunner {
             return yield new Promise((resolve, reject) => {
                 const command = childProcess.spawn(argsParser.command, argsParser.args, options);
                 if (this.verbose) {
-                    this.message = log.format('Exec: %s', argsParser.toString());
+                    this.message = log.format('Exec: %s', [argsParser.toString()]);
                 }
                 if ((options === null || options === void 0 ? void 0 : options.detached) != null && options.detached) {
                     command.unref();
@@ -160,10 +160,10 @@ class CommandRunner {
                     this.logStdOutErr(data);
                     stderr = stderr + data.toString();
                 });
-                command.on('error', (code) => {
+                command.on('error', code => {
                     reject(new Error(stderr));
                 });
-                command.on('exit', (code) => {
+                command.on('exit', code => {
                     if (code === 0) {
                         resolve(new CommandResult({ stdout, stderr }));
                     }
@@ -181,7 +181,7 @@ class CommandRunner {
             if (command.stderr != null) {
                 log.error(command.stderr);
             }
-            throw new Error(log.formatWithoutColor('Command “%s” exists with a nonzero exit code.', argsParser.toString()));
+            throw new Error(log.format('Command “%s” exists with a nonzero exit code.', [argsParser.toString()], 'none'));
         }
         return new CommandResult(command);
     }

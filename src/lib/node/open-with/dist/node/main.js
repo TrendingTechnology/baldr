@@ -13,7 +13,8 @@ exports.openInFileManager = exports.openWith = void 0;
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
-const config_1 = __importDefault(require("@bldr/config-ng"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * Open a file path with an executable.
  *
@@ -61,7 +62,7 @@ function openInFileManager(currentPath, create) {
     }
     if (fs_1.default.existsSync(currentPath)) {
         // xdg-open opens a mounted root folder in vs code.
-        openWith(config_1.default.mediaServer.fileManager, currentPath);
+        openWith(config.mediaServer.fileManager, currentPath);
         result.open = true;
     }
     return result;

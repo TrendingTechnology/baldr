@@ -17,7 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:browser && npm run build:node && npm run lint",
+    "build:all": "npm run build:browser && npm run build:node && npm run lint",
     "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
     "lint:depcheck": "depcheck",

@@ -16,12 +16,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
 var ws_1 = __importDefault(require("ws"));
 // Globals.
-var config_1 = __importDefault(require("@bldr/config-ng"));
+var config_ng_1 = require("@bldr/config-ng");
+var config = config_ng_1.getConfig();
 /**
  * Launch the web socket server.
  */
 function main() {
-    var webSocketServer = new ws_1.default.Server({ port: config_1.default.wire.port });
+    var webSocketServer = new ws_1.default.Server({ port: config.wire.port });
     webSocketServer.on('connection', function connection(webSocket) {
         webSocket.on('message', function incoming(message) {
             console.log('received: %s', message);
