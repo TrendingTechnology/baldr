@@ -1,3 +1,6 @@
+import { IconFontConfiguration } from './types/icon-font-generator'
+import { Collection as MediaCategories } from './types/media-categories'
+
 interface ApiConfiguration {
   port: number
 }
@@ -133,7 +136,7 @@ export interface Configuration {
   configurationFileLocations: string[]
   databases: DatabasesConfiguration
   http: HttpConfiguration
-  iconFont: any
+  iconFont: IconFontConfiguration
 
   /**
    * The path of the local development repository, for example
@@ -149,7 +152,7 @@ export interface Configuration {
    * Use the command line utility `baldr categories` to patch the media
    * categories configurations into the json files at `/etc/baldr.json`
    */
-  mediaCategories: any
+  mediaCategories: MediaCategories
 
   /**
    * Subfolders are abbreviated with uppercase two letter names:
