@@ -15,7 +15,7 @@
   "main": "dist/node/main.js",
   "dependencies": {
     "@bldr/client-media-models": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
     "@bldr/media-manager": "*",
     "@bldr/mongodb-connector": "*",

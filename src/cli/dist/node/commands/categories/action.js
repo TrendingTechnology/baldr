@@ -18,20 +18,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const media_categories_1 = require("@bldr/media-categories");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function action() {
     media_categories_1.stripCategories();
-    const configJson = file_reader_writer_1.readJsonFile(config_1.default.configurationFileLocations[1]);
+    const configJson = file_reader_writer_1.readJsonFile(config.configurationFileLocations[1]);
     configJson.mediaCategories = media_categories_1.stripCategories();
     configJson.twoLetterAbbreviations = media_categories_1.twoLetterAbbreviations;
-    for (const filePath of config_1.default.configurationFileLocations) {
+    for (const filePath of config.configurationFileLocations) {
         log.info('Patch configuration file %s\n', [filePath]);
         log.info(file_reader_writer_1.writeJsonFile(filePath, configJson));
     }

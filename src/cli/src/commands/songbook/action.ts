@@ -4,7 +4,9 @@ import {
   IntermediateLibrary,
   GenerationMode
 } from '@bldr/songbook-intermediate-files'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface CmdObj {
   basePath: string
@@ -50,10 +52,9 @@ function action (cmdObj: CmdObj): void {
     cmdObj.pageTurnOptimized = false
   }
 
-  log.info(
-    'The base path of the song collection is located at:\n    %s\n',
-    [log.colorize.cyan(config.songbook.path)]
-  )
+  log.info('The base path of the song collection is located at:\n    %s\n', [
+    log.colorize.cyan(config.songbook.path)
+  ])
 
   const library = new IntermediateLibrary(config.songbook.path)
   log.info('Found %s songs.', [library.countSongs()])

@@ -5,8 +5,10 @@ import fs from 'fs'
 // Project packages.
 import { locationIndicator } from '@bldr/media-manager'
 import { openInFileManager } from '@bldr/open-with'
-import config from '@bldr/config'
 import * as log from '@bldr/log'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface CmdObj {
   fileManager: boolean

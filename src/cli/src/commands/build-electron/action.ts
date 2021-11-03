@@ -4,17 +4,20 @@ import path from 'path'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 
-const appNames = [
-  'lamp'
-]
+const config = getConfig()
+
+const appNames = ['lamp']
 
 /**
  * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<void> {
+async function buildElectronApp (
+  cmd: CommandRunner,
+  appName: string
+): Promise<void> {
   const appPath = path.join(config.localRepo, 'src', 'vue', 'apps', appName)
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
@@ -35,7 +38,11 @@ async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<v
 
   const version: string = packageJson.version
   cmd.log(`${appName}: install the .deb package.`)
-  await cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${version}_amd64.deb`)])
+  await cmd.exec([
+    'dpkg',
+    '-i',
+    path.join(appPath, 'dist_electron', `baldr-${appName}_${version}_amd64.deb`)
+  ])
 
   cmd.stopSpin()
 }

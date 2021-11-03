@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 import { locationIndicator } from '@bldr/media-manager'
 import { openWith, openInFileManager } from '@bldr/open-with'
 import { StringIndexedObject } from '@bldr/type-definitions'
@@ -11,6 +11,8 @@ import { StringIndexedObject } from '@bldr/type-definitions'
 import { database } from './main'
 
 export type MediaType = 'assets' | 'presentations'
+
+const config = getConfig()
 
 /**
  * Throw an error if the media type is unkown. Provide a default value.

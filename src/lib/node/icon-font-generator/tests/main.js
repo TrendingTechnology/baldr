@@ -6,8 +6,9 @@ const path = require('path')
 
 const { createIconFont, setLogLevel } = require('../dist/node/main.js')
 const { createTmpDir } = require('@bldr/core-node')
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
 
+const config = getConfig()
 const tmpDir = createTmpDir()
 const destDir = createTmpDir()
 

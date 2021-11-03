@@ -15,7 +15,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * Open the Inkscape template.
  */
@@ -26,7 +27,7 @@ function action() {
         });
         yield cmd.exec([
             'inkscape',
-            path_1.default.join(config_1.default.mediaServer.basePath, 'faecheruebergreifend', 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
+            path_1.default.join(config.mediaServer.basePath, 'faecheruebergreifend', 'Inkscape-Vorlagen', 'Inkscape-Vorlage.svg')
         ], { detached: true });
     });
 }

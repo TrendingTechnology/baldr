@@ -4,14 +4,11 @@ import path from 'path'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 
-const appNames = [
-  'lamp',
-  'seating-plan',
-  'showroom',
-  'songbook'
-]
+const config = getConfig()
+
+const appNames = ['lamp', 'seating-plan', 'showroom', 'songbook']
 
 /**
  * @param appName - The name of the name. The must be the same
@@ -33,17 +30,17 @@ async function buildApp (cmd: CommandRunner, appName: string): Promise<void> {
   }
 
   cmd.log(`${appName}: push the build to the remote HTTP server.`)
-  await cmd.exec(
-    [
-      'rsync',
-      '-av',
-      '--delete',
-      '--usermap', `jf:${config.http.webServerUser}`,
-      '--groupmap', `jf:${config.http.webServerGroup}`,
-      `${appPath}/dist/`,
-      `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
-    ]
-  )
+  await cmd.exec([
+    'rsync',
+    '-av',
+    '--delete',
+    '--usermap',
+    `jf:${config.http.webServerUser}`,
+    '--groupmap',
+    `jf:${config.http.webServerGroup}`,
+    `${appPath}/dist/`,
+    `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
+  ])
   cmd.stopSpin()
 }
 

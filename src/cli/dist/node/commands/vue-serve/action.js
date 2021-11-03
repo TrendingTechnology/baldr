@@ -15,7 +15,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * Serve a Vue web app.
  *
@@ -23,7 +24,7 @@ const config_1 = __importDefault(require("@bldr/config"));
  */
 function action(appName = 'lamp') {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path_1.default.join(config_1.default.localRepo, 'src', 'vue', 'apps', appName);
+        const appPath = path_1.default.join(config.localRepo, 'src', 'vue', 'apps', appName);
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         yield cmd.exec(['npm', 'run', 'serve:webapp'], { cwd: appPath });
     });

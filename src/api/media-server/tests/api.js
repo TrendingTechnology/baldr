@@ -4,7 +4,8 @@ const assert = require('assert')
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 // const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
 

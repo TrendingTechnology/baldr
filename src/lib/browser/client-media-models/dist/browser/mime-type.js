@@ -3,7 +3,8 @@
  *
  * @module @bldr/client-media-models/mime-type
  */
-import config from '@bldr/config';
+import { getConfig } from '@bldr/config-ng';
+const config = getConfig();
 /**
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.

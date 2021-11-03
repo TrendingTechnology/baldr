@@ -46,7 +46,8 @@ const cli_utils_1 = require("@bldr/cli-utils");
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = (0, config_ng_1.getConfig)();
 const cmd = new cli_utils_1.CommandRunner();
 /**
  * For the tests. To see whats going on. The test runs very long.
@@ -196,7 +197,7 @@ function createJsonFile(metadataCollection, destDir) {
 }
 function convertIntoFontFiles(tmpDir, destDir) {
     return __awaiter(this, void 0, void 0, function* () {
-        log.infoAny(config_1.default);
+        log.infoAny(config);
         try {
             const result = yield (0, webfont_1.default)({
                 files: `${tmpDir}/*.svg`,
@@ -229,7 +230,7 @@ function convertIntoFontFiles(tmpDir, destDir) {
 }
 function patchConfig(metadataCollection, destPath) {
     // to get a fresh unpatched version
-    const configJson = (0, file_reader_writer_1.readJsonFile)(config_1.default.configurationFileLocations[1]);
+    const configJson = (0, file_reader_writer_1.readJsonFile)(config.configurationFileLocations[1]);
     // Don’t update the configuration file when testing.
     if (configJson.iconFont.destPath !== destPath) {
         return;
@@ -239,7 +240,7 @@ function patchConfig(metadataCollection, destPath) {
         assigment[glyphData.name] = glyphData.unicode[0].charCodeAt(0);
     }
     configJson.iconFont.unicodeAssignment = assigment;
-    for (const filePath of config_1.default.configurationFileLocations) {
+    for (const filePath of config.configurationFileLocations) {
         log.info('Patch configuration file %s', [filePath]);
         (0, file_reader_writer_1.writeJsonFile)(filePath, configJson);
     }
@@ -255,7 +256,7 @@ function createIconFont(config, tmpDir) {
 exports.createIconFont = createIconFont;
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield createIconFont(config_1.default, (0, core_node_1.createTmpDir)());
+        yield createIconFont(config, (0, core_node_1.createTmpDir)());
     });
 }
 exports.default = action;

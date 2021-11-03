@@ -1,14 +1,21 @@
 import axios from 'axios'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 
-export async function getSnippet (youtubeId: string): Promise<YoutubeVideoSnippet | undefined> {
-  const snippet = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
-    params: {
-      part: 'snippet',
-      id: youtubeId,
-      key: config.youtube.apiKey
+const config = getConfig()
+
+export async function getSnippet (
+  youtubeId: string
+): Promise<YoutubeVideoSnippet | undefined> {
+  const snippet = await axios.get(
+    'https://www.googleapis.com/youtube/v3/videos',
+    {
+      params: {
+        part: 'snippet',
+        id: youtubeId,
+        key: config.youtube.apiKey
+      }
     }
-  })
+  )
 
   if (snippet.data.items.length > 0) {
     return snippet.data.items[0].snippet as YoutubeVideoSnippet
@@ -105,6 +112,21 @@ export interface YoutubeVideoParams {
 }
 
 export interface YoutubeDownloadOptions {
-  quality?: '144p' | '240p' | '270p' | '360p' | '480p' | '720p' | '720p60' | '1080p' | '1080p60' | '1440p' | '1440p60' | '2160p' | '2160p60' | '4320p' | '4320p60'
+  quality?:
+  | '144p'
+  | '240p'
+  | '270p'
+  | '360p'
+  | '480p'
+  | '720p'
+  | '720p60'
+  | '1080p'
+  | '1080p60'
+  | '1440p'
+  | '1440p60'
+  | '2160p'
+  | '2160p60'
+  | '4320p'
+  | '4320p60'
   format?: 'mp4' | 'flv' | '3gp' | 'webm' | 'ts'
 }

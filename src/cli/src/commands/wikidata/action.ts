@@ -7,8 +7,10 @@ import { categoriesManagement, categories } from '@bldr/media-categories'
 import { MediaResolverTypes } from '@bldr/type-definitions'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
 import { writeYamlFile } from '@bldr/file-reader-writer'
-import config from '@bldr/config'
 import * as log from '@bldr/log'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface CmdObj {
   dryRun: boolean

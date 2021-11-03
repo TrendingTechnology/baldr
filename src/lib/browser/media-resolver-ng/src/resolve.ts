@@ -1,11 +1,13 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
-import config from '@bldr/config'
 
 import { ClientMediaAsset } from './asset'
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache'
 import { Sample, Asset, RestApiRaw } from './types'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 type UrisSpec = string | string[] | Set<string>
 

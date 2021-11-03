@@ -71,7 +71,7 @@ import cors from 'cors'
 import express from 'express'
 
 // Project packages.
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
 import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
@@ -79,8 +79,13 @@ import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory, DeepTitle } from '@bldr/titles'
 
-import { StringIndexedObject, LampTypes } from '@bldr/type-definitions'
-import { MediaType, openParentFolder, openEditor, validateMediaType } from './operations'
+import { StringIndexedObject, LampTypes, GenericError } from '@bldr/type-definitions'
+import {
+  MediaType,
+  openParentFolder,
+  openEditor,
+  validateMediaType
+} from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
@@ -88,6 +93,8 @@ import { mimeTypeManager } from '@bldr/client-media-models'
 import { registerSeatingPlan } from './seating-plan'
 
 export { openArchivesInFileManager } from './operations'
+
+const config = getConfig()
 
 /**
  * Base path of the media server file store.
@@ -436,7 +443,8 @@ async function insertObjectIntoDb (
     if (object == null) return
     object = object.build()
     await database.db.collection(mediaType).insertOne(object)
-  } catch (error) {
+  } catch (e) {
+    const error = e as GenericError
     console.log(error)
     let relPath = filePath.replace(config.mediaServer.basePath, '')
     relPath = relPath.replace(new RegExp('^/'), '')
@@ -455,7 +463,9 @@ function gitPull (): void {
     cwd: basePath,
     encoding: 'utf-8'
   })
-  if (gitPull.status !== 0) { throw new Error('git pull exits with an non-zero status code.') }
+  if (gitPull.status !== 0) {
+    throw new Error('git pull exits with an non-zero status code.')
+  }
 }
 
 /**
@@ -767,7 +777,9 @@ function registerMediaRestApi (): express.Express {
   app.get('/mgmt/open', async (req, res, next) => {
     try {
       const query = req.query
-      if (query.ref == null) { throw new Error('You have to specify an ID (?ref=myfile).') }
+      if (query.ref == null) {
+        throw new Error('You have to specify an ID (?ref=myfile).')
+      }
       if (query.with == null) query.with = 'editor'
       if (query.type == null) query.type = 'presentations'
       const archive = 'archive' in query

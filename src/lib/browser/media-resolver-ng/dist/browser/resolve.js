@@ -10,9 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
-import config from '@bldr/config';
 import { ClientMediaAsset } from './asset';
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache';
+import { getConfig } from '@bldr/config-ng';
+const config = getConfig();
 class SampleCache extends Cache {
     constructor(translator) {
         super();

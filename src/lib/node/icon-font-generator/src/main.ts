@@ -17,7 +17,9 @@ import { CommandRunner } from '@bldr/cli-utils'
 import { createTmpDir } from '@bldr/core-node'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 const cmd = new CommandRunner()
 

@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@bldr/cli-utils": "*",
-    "@bldr/config": "*",
+    "@bldr/config-ng": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",

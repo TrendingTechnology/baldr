@@ -1,8 +1,9 @@
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-
-import config from '@bldr/config'
 import * as log from '@bldr/log'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 type whatType = 'api' | 'config' | 'media' | 'vue'
 
@@ -72,7 +73,9 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
 
   // api
   if (opts.local && opts.api) {
-    const result = await cmd.exec(['git', 'status', '--porcelain'], { cwd: config.localRepo })
+    const result = await cmd.exec(['git', 'status', '--porcelain'], {
+      cwd: config.localRepo
+    })
     // For example:
     //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
     if (result.stdout === '') {
@@ -89,7 +92,9 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     cmd.log('Restarting the systemd service named “baldr_api.service” locally.')
     await cmd.exec(['systemctl', 'restart', 'baldr_api.service'])
 
-    cmd.log('Restarting the systemd service named “baldr_wire.service” locally.')
+    cmd.log(
+      'Restarting the systemd service named “baldr_wire.service” locally.'
+    )
     await cmd.exec(['systemctl', 'restart', 'baldr_wire.service'])
   }
 
@@ -117,8 +122,10 @@ async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
     cmd.log('Commiting local changes in the media repository.')
     await cmd.exec(['git', 'add', '-Av'], { cwd: config.mediaServer.basePath })
     try {
-      await cmd.exec(['git', 'commit', '-m', 'Auto-commit'], { cwd: config.mediaServer.basePath })
-    } catch (error) { }
+      await cmd.exec(['git', 'commit', '-m', 'Auto-commit'], {
+        cwd: config.mediaServer.basePath
+      })
+    } catch (error) {}
 
     cmd.log('Pull remote changes into the local media repository.')
     await cmd.exec(['git', 'pull'], { cwd: config.mediaServer.basePath })

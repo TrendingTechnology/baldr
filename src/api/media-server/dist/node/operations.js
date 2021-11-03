@@ -44,10 +44,11 @@ exports.openParentFolder = exports.openEditor = exports.openArchivesInFileManage
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 // Project packages.
-var config_1 = __importDefault(require("@bldr/config"));
+var config_ng_1 = require("@bldr/config-ng");
 var media_manager_1 = require("@bldr/media-manager");
 var open_with_1 = require("@bldr/open-with");
 var main_1 = require("./main");
+var config = config_ng_1.getConfig();
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
@@ -93,7 +94,7 @@ function getAbsPathFromId(ref, mediaType) {
                     if (mediaType === 'assets') {
                         relPath = relPath + ".yml";
                     }
-                    return [2 /*return*/, path_1.default.join(config_1.default.mediaServer.basePath, relPath)];
+                    return [2 /*return*/, path_1.default.join(config.mediaServer.basePath, relPath)];
             }
         });
     });
@@ -141,13 +142,13 @@ function openEditor(ref, mediaType) {
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
-                    editor = config_1.default.mediaServer.editor;
+                    editor = config.mediaServer.editor;
                     if (!fs_1.default.existsSync(editor)) {
                         return [2 /*return*/, {
                                 error: "Editor \u201C" + editor + "\u201D can\u2019t be found."
                             }];
                     }
-                    open_with_1.openWith(config_1.default.mediaServer.editor, parentFolder);
+                    open_with_1.openWith(config.mediaServer.editor, parentFolder);
                     return [2 /*return*/, {
                             ref: ref,
                             mediaType: mediaType,

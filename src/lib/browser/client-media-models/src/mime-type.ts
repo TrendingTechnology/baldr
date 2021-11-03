@@ -6,7 +6,9 @@
 
 import { Configuration } from '@bldr/type-definitions'
 
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 interface SpreadExtensionCollection {
   [key: string]: string

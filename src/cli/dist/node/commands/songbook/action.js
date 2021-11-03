@@ -18,13 +18,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 // Project packages.
 const log = __importStar(require("@bldr/log"));
 const songbook_intermediate_files_1 = require("@bldr/songbook-intermediate-files");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
@@ -44,7 +42,7 @@ function action(cmdObj) {
         mode = 'all';
     }
     if (cmdObj.basePath != null && cmdObj.basePath.length > 0) {
-        config_1.default.songbook.path = cmdObj.basePath;
+        config.songbook.path = cmdObj.basePath;
     }
     // To avoid strange behavior when creating the piano score
     if (!{}.hasOwnProperty.call(cmdObj, 'groupAlphabetically')) {
@@ -53,8 +51,10 @@ function action(cmdObj) {
     if (!{}.hasOwnProperty.call(cmdObj, 'pageTurnOptimized')) {
         cmdObj.pageTurnOptimized = false;
     }
-    log.info('The base path of the song collection is located at:\n    %s\n', [log.colorize.cyan(config_1.default.songbook.path)]);
-    const library = new songbook_intermediate_files_1.IntermediateLibrary(config_1.default.songbook.path);
+    log.info('The base path of the song collection is located at:\n    %s\n', [
+        log.colorize.cyan(config.songbook.path)
+    ]);
+    const library = new songbook_intermediate_files_1.IntermediateLibrary(config.songbook.path);
     log.info('Found %s songs.', [library.countSongs()]);
     if (cmdObj.list != null)
         library.loadSongList(cmdObj.list);

@@ -3,7 +3,9 @@ import path from 'path'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 /**
  * Open the Inkscape template.

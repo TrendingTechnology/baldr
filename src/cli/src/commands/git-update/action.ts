@@ -1,6 +1,8 @@
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 async function action (): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
@@ -9,8 +11,10 @@ async function action (): Promise<void> {
   cmd.log('Commiting local changes in the media repository.')
   await cmd.exec(['git', 'add', '-Av'], { cwd: config.mediaServer.basePath })
   try {
-    await cmd.exec(['git', 'commit', '-m', 'Auto-commit'], { cwd: config.mediaServer.basePath })
-  } catch (error) { }
+    await cmd.exec(['git', 'commit', '-m', 'Auto-commit'], {
+      cwd: config.mediaServer.basePath
+    })
+  } catch (error) {}
 
   cmd.log('Pull remote changes into the local media repository.')
   await cmd.exec(['git', 'pull'], { cwd: config.mediaServer.basePath })

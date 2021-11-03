@@ -8,12 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner();
@@ -24,16 +22,17 @@ function action() {
             'rsync',
             '-av',
             '--delete',
-            '--exclude', 'logs',
-            `${config_1.default.mediaServer.sshAliasRemote}:${config_1.default.http.webRoot}/`,
-            `${config_1.default.http.webRoot}/`
+            '--exclude',
+            'logs',
+            `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/`,
+            `${config.http.webRoot}/`
         ]);
         cmd.log('Fixing the ownership of the Vue builds.');
         yield cmd.exec([
             'chown',
             '-R',
-            `${config_1.default.http.webServerUser}:${config_1.default.http.webServerUser}`,
-            config_1.default.http.webRoot
+            `${config.http.webServerUser}:${config.http.webServerUser}`,
+            config.http.webRoot
         ]);
         cmd.stopSpin();
     });

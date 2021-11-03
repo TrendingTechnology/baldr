@@ -27,13 +27,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
 const log = __importStar(require("@bldr/log"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
  *
@@ -91,18 +89,20 @@ function action(what, cmdObj) {
         // }
         // api
         if (opts.local && opts.api) {
-            const result = yield cmd.exec(['git', 'status', '--porcelain'], { cwd: config_1.default.localRepo });
+            const result = yield cmd.exec(['git', 'status', '--porcelain'], {
+                cwd: config.localRepo
+            });
             // For example:
             //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
             if (result.stdout === '') {
-                log.error('Git repo is not clean: %s', [config_1.default.localRepo]);
+                log.error('Git repo is not clean: %s', [config.localRepo]);
                 log.warn(result.stdout);
                 process.exit(1);
             }
             cmd.log('Updating the local BALDR repository.');
-            yield cmd.exec(['git', 'pull'], { cwd: config_1.default.localRepo });
+            yield cmd.exec(['git', 'pull'], { cwd: config.localRepo });
             cmd.log('Installing missing node packages in the local BALDR repository.');
-            yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config_1.default.localRepo });
+            yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config.localRepo });
             cmd.log('Restarting the systemd service named “baldr_api.service” locally.');
             yield cmd.exec(['systemctl', 'restart', 'baldr_api.service']);
             cmd.log('Restarting the systemd service named “baldr_wire.service” locally.');
@@ -126,15 +126,17 @@ function action(what, cmdObj) {
         // media
         if (opts.local && opts.media) {
             cmd.log('Commiting local changes in the media repository.');
-            yield cmd.exec(['git', 'add', '-Av'], { cwd: config_1.default.mediaServer.basePath });
+            yield cmd.exec(['git', 'add', '-Av'], { cwd: config.mediaServer.basePath });
             try {
-                yield cmd.exec(['git', 'commit', '-m', 'Auto-commit'], { cwd: config_1.default.mediaServer.basePath });
+                yield cmd.exec(['git', 'commit', '-m', 'Auto-commit'], {
+                    cwd: config.mediaServer.basePath
+                });
             }
             catch (error) { }
             cmd.log('Pull remote changes into the local media repository.');
-            yield cmd.exec(['git', 'pull'], { cwd: config_1.default.mediaServer.basePath });
+            yield cmd.exec(['git', 'pull'], { cwd: config.mediaServer.basePath });
             cmd.log('Push local changes into the remote media repository.');
-            yield cmd.exec(['git', 'push'], { cwd: config_1.default.mediaServer.basePath });
+            yield cmd.exec(['git', 'push'], { cwd: config.mediaServer.basePath });
             cmd.log('Updating the local MongoDB database.');
             yield cmd.exec(['curl', 'http://localhost/api/media/mgmt/update']);
         }

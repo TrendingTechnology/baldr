@@ -16,20 +16,16 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_1 = __importDefault(require("@bldr/config"));
-const appNames = [
-    'lamp',
-    'seating-plan',
-    'showroom',
-    'songbook'
-];
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
+const appNames = ['lamp', 'seating-plan', 'showroom', 'songbook'];
 /**
  * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
 function buildApp(cmd, appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        const appPath = path_1.default.join(config.localRepo, 'src', appName);
         if (!fs_1.default.existsSync(appPath)) {
             throw new Error(`App path doesn’t exist for app “${appName}”.`);
         }
@@ -47,10 +43,12 @@ function buildApp(cmd, appName) {
             'rsync',
             '-av',
             '--delete',
-            '--usermap', `jf:${config_1.default.http.webServerUser}`,
-            '--groupmap', `jf:${config_1.default.http.webServerGroup}`,
+            '--usermap',
+            `jf:${config.http.webServerUser}`,
+            '--groupmap',
+            `jf:${config.http.webServerGroup}`,
             `${appPath}/dist/`,
-            `${config_1.default.mediaServer.sshAliasRemote}:${config_1.default.http.webRoot}/${destinationDir}/`
+            `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
         ]);
         cmd.stopSpin();
     });

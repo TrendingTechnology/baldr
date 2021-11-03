@@ -14,7 +14,9 @@
 import WebSocket from 'ws'
 
 // Globals.
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 /**
  * Launch the web socket server.

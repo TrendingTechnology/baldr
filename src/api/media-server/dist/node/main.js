@@ -124,7 +124,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 // Project packages.
-var config_1 = __importDefault(require("@bldr/config"));
+var config_ng_1 = require("@bldr/config-ng");
 var core_browser_1 = require("@bldr/core-browser");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
@@ -137,10 +137,11 @@ var client_media_models_1 = require("@bldr/client-media-models");
 var seating_plan_1 = require("./seating-plan");
 var operations_2 = require("./operations");
 Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return operations_2.openArchivesInFileManager; } });
+var config = config_ng_1.getConfig();
 /**
  * Base path of the media server file store.
  */
-var basePath = config_1.default.mediaServer.basePath;
+var basePath = config.mediaServer.basePath;
 /**
  * A container array for all error messages send out via the REST API.
  */
@@ -381,7 +382,7 @@ var ServerPresentation = /** @class */ (function (_super) {
 }(ServerMediaFile));
 function insertObjectIntoDb(filePath, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
-        var object, error_1, relPath, msg;
+        var object, e_1, error, relPath, msg;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -403,11 +404,12 @@ function insertObjectIntoDb(filePath, mediaType) {
                     _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
-                    error_1 = _a.sent();
-                    console.log(error_1);
-                    relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
+                    e_1 = _a.sent();
+                    error = e_1;
+                    console.log(error);
+                    relPath = filePath.replace(config.mediaServer.basePath, '');
                     relPath = relPath.replace(new RegExp('^/'), '');
-                    msg = relPath + ": [" + error_1.name + "] " + error_1.message;
+                    msg = relPath + ": [" + error.name + "] " + error.message;
                     console.log(msg);
                     errors.push(msg);
                     return [3 /*break*/, 3];
@@ -526,7 +528,7 @@ function update(full) {
                         })];
                 case 7:
                     _a.sent();
-                    file_reader_writer_1.writeJsonFile(path_1.default.join(config_1.default.mediaServer.basePath, 'title-tree.json'), tree);
+                    file_reader_writer_1.writeJsonFile(path_1.default.join(config.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
                     return [4 /*yield*/, exports.database.db
                             .collection('updates')
@@ -640,7 +642,7 @@ function registerMediaRestApi() {
     });
     /* query */
     app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_2;
+        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -718,8 +720,8 @@ function registerMediaRestApi() {
                     res.json(result);
                     return [3 /*break*/, 7];
                 case 6:
-                    error_2 = _a.sent();
-                    next(error_2);
+                    error_1 = _a.sent();
+                    next(error_1);
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
             }
@@ -727,7 +729,7 @@ function registerMediaRestApi() {
     }); });
     /* get */
     app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var result, error_3;
+        var result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -741,8 +743,8 @@ function registerMediaRestApi() {
                     res.json(result.tree);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_3 = _a.sent();
-                    next(error_3);
+                    error_2 = _a.sent();
+                    next(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -750,13 +752,32 @@ function registerMediaRestApi() {
     }); });
     /* mgmt = management */
     app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_4;
+        var _a, _b, error_3;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
                     return [4 /*yield*/, exports.database.flushMediaFiles()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _c.sent();
+                    next(error_3);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_4;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.initialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -768,27 +789,8 @@ function registerMediaRestApi() {
             }
         });
     }); });
-    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_5;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
-                    return [4 /*yield*/, exports.database.initialize()];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_5 = _c.sent();
-                    next(error_5);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
     app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, ref, type, _a, _b, _c, _d, error_6;
+        var query, archive, create, ref, type, _a, _b, _c, _d, error_5;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -820,15 +822,15 @@ function registerMediaRestApi() {
                     _e.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_6 = _e.sent();
-                    next(error_6);
+                    error_5 = _e.sent();
+                    next(error_5);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/re-init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_7;
+        var _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -839,15 +841,15 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_7 = _c.sent();
-                    next(error_7);
+                    error_6 = _c.sent();
+                    next(error_6);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_8;
+        var _a, _b, error_7;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -860,8 +862,8 @@ function registerMediaRestApi() {
                     errors = [];
                     return [3 /*break*/, 3];
                 case 2:
-                    error_8 = _c.sent();
-                    next(error_8);
+                    error_7 = _c.sent();
+                    next(error_7);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -869,7 +871,7 @@ function registerMediaRestApi() {
     }); });
     /* stats = statistics */
     app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_9;
+        var _a, _b, error_8;
         var _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
@@ -886,15 +888,15 @@ function registerMediaRestApi() {
                             _c)]);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_9 = _d.sent();
-                    next(error_9);
+                    error_8 = _d.sent();
+                    next(error_8);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); });
     app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_10;
+        var _a, _b, error_9;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -910,8 +912,8 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_10 = _c.sent();
-                    next(error_10);
+                    error_9 = _c.sent();
+                    next(error_9);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -951,7 +953,7 @@ function runRestApi(port) {
                         });
                     });
                     if (port == null) {
-                        usedPort = config_1.default.api.port;
+                        usedPort = config.api.port;
                     }
                     else {
                         usedPort = port;

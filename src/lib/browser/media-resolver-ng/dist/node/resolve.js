@@ -13,9 +13,10 @@ exports.Resolver = void 0;
 const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
-const config_1 = require("@bldr/config");
 const asset_1 = require("./asset");
 const cache_1 = require("./cache");
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 class SampleCache extends cache_1.Cache {
     constructor(translator) {
         super();
@@ -101,7 +102,7 @@ class ShortcutManager {
  */
 class Resolver {
     constructor() {
-        this.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
+        this.httpRequest = http_request_1.makeHttpRequestInstance(config, 'automatic', '/api/media');
         this.cache = {};
         this.uriTranslator = new cache_1.UriTranslator();
         this.sampleCache = new SampleCache(this.uriTranslator);
@@ -158,7 +159,7 @@ class Resolver {
      * @returns The newly created media asset.
      */
     createAsset(uri, raw) {
-        const httpUrl = `${this.httpRequest.baseUrl}/${config_1.default.mediaServer.urlFillIn}/${raw.path}`;
+        const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
         const asset = new asset_1.ClientMediaAsset(uri, httpUrl, raw);
         this.assetCache.add(asset.ref, asset);
         this.shortcutManager.setOnAsset(asset);

@@ -37,8 +37,9 @@ const path_1 = __importDefault(require("path"));
 const media_categories_1 = require("@bldr/media-categories");
 const wikidata_1 = require("@bldr/wikidata");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const config_1 = __importDefault(require("@bldr/config"));
 const log = __importStar(require("@bldr/log"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
@@ -73,7 +74,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             }
         }
         if (!cmdObj.dryRun && !fs_1.default.existsSync(dest)) {
-            const src = path_1.default.join(config_1.default.localRepo, 'src', 'cli', 'src', 'blank.jpg');
+            const src = path_1.default.join(config.localRepo, 'src', 'cli', 'src', 'blank.jpg');
             log.info(src);
             fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
             fs_1.default.copyFileSync(src, dest);

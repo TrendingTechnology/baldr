@@ -10,8 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
-import config from '@bldr/config';
 import { assetCache, ClientMediaAsset } from './internal';
+import { getConfig } from '@bldr/config-ng';
+const config = getConfig();
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

@@ -1,7 +1,9 @@
 import { stripCategories, twoLetterAbbreviations } from '@bldr/media-categories'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import config from '@bldr/config'
+import { getConfig } from '@bldr/config-ng'
+
+const config = getConfig()
 
 function action (): void {
   stripCategories()

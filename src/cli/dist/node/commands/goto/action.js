@@ -27,8 +27,9 @@ const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
 const open_with_1 = require("@bldr/open-with");
-const config_1 = __importDefault(require("@bldr/config"));
 const log = __importStar(require("@bldr/log"));
+const config_ng_1 = require("@bldr/config-ng");
+const config = config_ng_1.getConfig();
 function openShell(filePath) {
     child_process_1.default.spawn('zsh', ['-i'], {
         cwd: filePath,
@@ -46,7 +47,7 @@ function action(cmdObj) {
     // If no mirrored path could be detected we show the base path of the
     // media server.
     if (mirroredPath == null) {
-        mirroredPath = config_1.default.mediaServer.basePath;
+        mirroredPath = config.mediaServer.basePath;
     }
     if (!fs_1.default.existsSync(mirroredPath)) {
         log.error('The path “%s” doesn’t exist.', [mirroredPath]);

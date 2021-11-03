@@ -1,7 +1,9 @@
 /* globals before */
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
-const config = require('@bldr/config')
+const { getConfig } = require('@bldr/config-ng')
+
+const config = getConfig()
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
