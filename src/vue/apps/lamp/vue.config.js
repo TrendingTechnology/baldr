@@ -9,9 +9,8 @@ const { DefinePlugin } = require('webpack')
 const { gitHead } = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
-const config = require('@bldr/config')
-// Remove dirty hack
-delete config.default
+const { getConfig } = require('@bldr/config-ng')
+const config = getConfig()
 
 function stylePath (themeName) {
   return path.join(

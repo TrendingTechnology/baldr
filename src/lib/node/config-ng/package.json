@@ -1,0 +1,41 @@
+{
+  "name": "@bldr/config-ng",
+  "version": "0.1.0",
+  "description": "Load the configuration file /etc/baldr.json (node) or provide typings (browser)",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "npm run build:node && npm run build:browser",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.6",
+    "ts-standard": "10.0.0",
+    "typescript": "4.4.4",
+    "mocha": "9.1.3",
+    "depcheck": "1.4.2"
+  },
+  "browser": "dist/browser/browser-main.js",
+  "main": "dist/node/node-main.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}
