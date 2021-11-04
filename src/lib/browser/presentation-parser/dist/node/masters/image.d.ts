@@ -1,5 +1,6 @@
 import { Master } from '../master';
-interface FieldData {
+declare type MasterFieldsRaw = string | MasterFieldsNormalized;
+interface MasterFieldsNormalized {
     src: string;
     title?: string;
     description?: string;
@@ -35,7 +36,7 @@ export declare class ImageMaster implements Master {
             default: boolean;
         };
     };
-    normalizeFields(fields: any): FieldData;
-    collectMediaUris(fields: FieldData): string | string[] | Set<string> | undefined;
+    normalizeFields(fields: MasterFieldsRaw): MasterFieldsNormalized;
+    collectMediaUris(fields: MasterFieldsNormalized): string;
 }
 export {};

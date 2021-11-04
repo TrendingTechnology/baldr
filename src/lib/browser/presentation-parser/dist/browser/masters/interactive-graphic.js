@@ -16,4 +16,16 @@ export class InteractiveGraphicMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = { src: fields };
+        }
+        if (fields.stepSelector == null) {
+            fields.stepSelector = 'g[inkscape\\:groupmode="layer"]';
+        }
+        return fields;
+    }
+    collectMediaUris(fields) {
+        return fields.src;
+    }
 }

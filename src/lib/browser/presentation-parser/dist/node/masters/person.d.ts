@@ -1,8 +1,8 @@
 import { Master } from '../master';
-interface FieldData {
+declare type PersonFieldsRaw = string | PersonFieldsNormalized;
+interface PersonFieldsNormalized {
     personId: string;
 }
-declare type RawFieldData = string | FieldData;
 export declare class PersonMaster implements Master {
     name: string;
     displayName: string;
@@ -16,8 +16,8 @@ export declare class PersonMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: RawFieldData): FieldData;
-    collectMediaUris(fields: FieldData): string;
+    normalizeFields(fields: PersonFieldsRaw): PersonFieldsNormalized;
+    collectMediaUris(fields: PersonFieldsNormalized): string;
     private convertPersonIdToMediaUri;
 }
 export {};

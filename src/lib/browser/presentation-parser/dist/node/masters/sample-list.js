@@ -26,6 +26,15 @@ class SampleListMaster {
                 description: 'Nicht durchnummeriert'
             }
         };
+        // collectionMediaUris (fields: SampleListFieldsNormalized) {
+        //   return mediaResolver.getUrisFromWrappedSpecs(fields.samples)
+        // }
+    }
+    normalizeFields(fields) {
+        if (typeof fields === 'string' || Array.isArray(fields)) {
+            fields = { samples: fields };
+        }
+        return fields;
     }
 }
 exports.SampleListMaster = SampleListMaster;

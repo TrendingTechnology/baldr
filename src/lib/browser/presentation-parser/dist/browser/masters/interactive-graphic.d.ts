@@ -1,4 +1,9 @@
 import { Master } from '../master';
+declare type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized;
+interface InteractiveGraphicFieldsNormalized {
+    src: string;
+    stepSelector: string;
+}
 export declare class InteractiveGraphicMaster implements Master {
     name: string;
     displayName: string;
@@ -15,4 +20,7 @@ export declare class InteractiveGraphicMaster implements Master {
             assetUri: boolean;
         };
     };
+    normalizeFields(fields: InteractiveGraphicFieldsRaw): InteractiveGraphicFieldsNormalized;
+    collectMediaUris(fields: InteractiveGraphicFieldsNormalized): string;
 }
+export {};

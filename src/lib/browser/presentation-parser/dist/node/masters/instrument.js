@@ -16,5 +16,19 @@ class InstrumentMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                instrumentId: fields
+            };
+        }
+        return fields;
+    }
+    resolveMediaUris(fields) {
+        return this.convertInstrumentIdToMediaId(fields.instrumentId);
+    }
+    convertInstrumentIdToMediaId(instrumentId) {
+        return `ref:IN_${instrumentId}`;
+    }
 }
 exports.InstrumentMaster = InstrumentMaster;

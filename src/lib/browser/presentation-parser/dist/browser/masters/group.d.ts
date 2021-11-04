@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type GroupFieldsRaw = string;
+interface GroupFieldsNormalized {
+    groupId: string;
+}
 export declare class GroupMaster implements Master {
     name: string;
     displayName: string;
@@ -13,4 +17,8 @@ export declare class GroupMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: GroupFieldsRaw): GroupFieldsNormalized;
+    collectMediaUris(fields: GroupFieldsNormalized): string;
+    private convertGroupIdToMediaId;
 }
+export {};

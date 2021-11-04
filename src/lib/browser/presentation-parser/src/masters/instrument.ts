@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type InstrumentFieldsRaw = string | InstrumentFieldsNormalized
+
+interface InstrumentFieldsNormalized {
+  instrumentId: string
+}
+
 export class InstrumentMaster implements Master {
   name = 'instrument'
 
@@ -16,5 +22,22 @@ export class InstrumentMaster implements Master {
       description:
         'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
     }
+  }
+
+  normalizeFields (fields: InstrumentFieldsRaw): InstrumentFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        instrumentId: fields
+      }
+    }
+    return fields
+  }
+
+  resolveMediaUris (fields: InstrumentFieldsNormalized): string {
+    return this.convertInstrumentIdToMediaId(fields.instrumentId)
+  }
+
+  private convertInstrumentIdToMediaId (instrumentId: string) {
+    return `ref:IN_${instrumentId}`
   }
 }

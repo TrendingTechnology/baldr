@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type SampleListFieldsRaw = string | SampleListFieldsNormalized;
+interface SampleListFieldsNormalized {
+    samples: string | string[];
+}
 export declare class SampleListMaster implements Master {
     name: string;
     displayName: string;
@@ -23,4 +27,6 @@ export declare class SampleListMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
 }
+export {};

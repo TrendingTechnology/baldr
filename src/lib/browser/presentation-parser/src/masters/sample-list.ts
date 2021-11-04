@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type SampleListFieldsRaw = string | SampleListFieldsNormalized
+
+interface SampleListFieldsNormalized {
+  samples: string | string[]
+}
+
 export class SampleListMaster implements Master {
   name = 'sampleList'
 
@@ -27,4 +33,15 @@ export class SampleListMaster implements Master {
       description: 'Nicht durchnummeriert'
     }
   }
+
+  normalizeFields (fields: SampleListFieldsRaw): SampleListFieldsNormalized {
+    if (typeof fields === 'string' || Array.isArray(fields)) {
+      fields = { samples: fields }
+    }
+    return fields
+  }
+
+  // collectionMediaUris (fields: SampleListFieldsNormalized) {
+  //   return mediaResolver.getUrisFromWrappedSpecs(fields.samples)
+  // }
 }
