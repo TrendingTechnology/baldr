@@ -111,20 +111,20 @@ async function callWalkFunctionBundle (
     await bundle.tex(filePath, payload)
   }
 }
-function normalizeOptions (raw: WalkOption): WalkOptionNormalized {
-  const normalized = {} as WalkOptionNormalized
+function normalizeOptions (raw?: WalkOption): WalkOptionNormalized {
+  const normalized: WalkOptionNormalized = {}
   // If regex is a string it is treated as an extension.
   let extension: string | undefined
 
-  if (typeof raw.regex === 'string' && raw.extension != null) {
+  if (typeof raw?.regex === 'string' && raw.extension != null) {
     throw new Error(
       'The options “extension” and “regex” are mutually exclusive.'
     )
   }
 
-  if (typeof raw.regex === 'string') {
+  if (typeof raw?.regex === 'string') {
     extension = raw.regex
-  } else if (raw.extension != null) {
+  } else if (raw?.extension != null) {
     extension = raw.extension
   }
 
@@ -132,7 +132,11 @@ function normalizeOptions (raw: WalkOption): WalkOptionNormalized {
     normalized.regex = new RegExp('.*.' + extension + '$', 'i') // eslint-disable-line
   }
 
-  if (raw.payload != null) {
+  if (raw?.regex != null && typeof raw.regex !== 'string') {
+    normalized.regex = raw.regex
+  }
+
+  if (raw?.payload != null) {
     normalized.payload = raw.payload
   }
   return normalized
@@ -145,29 +149,35 @@ async function walkRecursively (
 ): Promise<void> {
   // A list of file paths.
   if (Array.isArray(filePaths)) {
-    for (const relPath of filePaths) {
-      await walkRecursively(walkFunction, relPath, opt)
+    for (const filePath of filePaths) {
+      await walkRecursively(walkFunction, filePath, opt)
     }
     return
   }
 
-  // Rename action: Rename during walk, filePaths can change
-  if (!fs.existsSync(filePaths)) {
+  const filePath: string = filePaths
+
+  // Rename action: Rename during walk, filePath can change
+  if (!fs.existsSync(filePath)) {
     return
   }
 
   // A directory.
-  if (fs.statSync(filePaths).isDirectory()) {
+  if (fs.statSync(filePath).isDirectory()) {
+    const directoryPath: string = filePath
     if (typeof walkFunction !== 'function' && walkFunction.directory != null) {
-      await walkFunction.directory(filePaths, opt.payload)
+      await walkFunction.directory(directoryPath, opt.payload)
     }
-    if (fs.existsSync(filePaths)) {
-      const files = fs.readdirSync(filePaths)
+    if (fs.existsSync(directoryPath)) {
+      const files = fs.readdirSync(directoryPath)
       for (const fileName of files) {
         // Exclude hidden files and directories like '.git'
         if (fileName.charAt(0) !== '.') {
-          const relPath = path.join(filePaths, fileName)
-          await walkRecursively(walkFunction, relPath, opt)
+          await walkRecursively(
+            walkFunction,
+            path.join(directoryPath, fileName),
+            opt
+          )
         }
       }
     }
@@ -175,23 +185,23 @@ async function walkRecursively (
     // A single file.
   } else {
     // Exclude hidden files and directories like '.git'
-    if (path.basename(filePaths).charAt(0) === '.') {
+    if (path.basename(filePath).charAt(0) === '.') {
       return
     }
-    if (!fs.existsSync(filePaths)) {
+    if (!fs.existsSync(filePath)) {
       return
     }
     if (opt.regex != null) {
-      if (filePaths.match(opt.regex) == null) {
+      if (filePath.match(opt.regex) == null) {
         return
       }
     }
 
     if (typeof walkFunction === 'function') {
-      await walkFunction(filePaths, opt.payload)
+      await walkFunction(filePath, opt.payload)
       return
     }
-    await callWalkFunctionBundle(walkFunction, filePaths, opt.payload)
+    await callWalkFunctionBundle(walkFunction, filePath, opt.payload)
   }
 }
 
@@ -206,81 +216,23 @@ export async function walk (
   walkFunction: WalkFunction | WalkFunctionBundle,
   opt?: WalkOption
 ): Promise<void> {
-  // Some checks to exit early.
-  if (typeof opt !== 'object') {
-    opt = {}
-  }
-  if (typeof walkFunction === 'object' && opt.regex != null) {
+  if (typeof walkFunction === 'object' && opt?.regex != null) {
     throw new Error(
       'Use a single function and a regex or an object containing functions without a regex.'
     )
   }
 
+  let filePaths: string | string[]
+
   // commander [filepath...] -> without arguments is an empty array.
-  if (opt.path == null || (Array.isArray(opt.path) && opt.path.length === 0)) {
-    opt.path = process.cwd()
-  }
-
-  // A list of file paths.
-  if (Array.isArray(opt.path)) {
-    for (const relPath of opt.path) {
-      await walk(walkFunction, {
-        path: relPath,
-        payload: opt.payload,
-        regex: opt.regex
-      })
-    }
-    return
-  }
-
-  // Rename action: Rename during walk, opt.path can change
-  if (!fs.existsSync(opt.path)) {
-    return
-  }
-
-  // A directory.
-  if (fs.statSync(opt.path).isDirectory()) {
-    if (typeof walkFunction !== 'function' && walkFunction.directory != null) {
-      await walkFunction.directory(opt.path, opt.payload)
-    }
-    if (fs.existsSync(opt.path)) {
-      const files = fs.readdirSync(opt.path)
-      for (const fileName of files) {
-        // Exclude hidden files and directories like '.git'
-        if (fileName.charAt(0) !== '.') {
-          const relPath = path.join(opt.path, fileName)
-          await walk(walkFunction, {
-            path: relPath,
-            payload: opt.payload,
-            regex: opt.regex
-          })
-        }
-      }
-    }
-
-    // A single file.
+  if (
+    opt?.path == null ||
+    (Array.isArray(opt?.path) && opt?.path.length === 0)
+  ) {
+    filePaths = process.cwd()
   } else {
-    // Exclude hidden files and directories like '.git'
-    if (path.basename(opt.path).charAt(0) === '.') {
-      return
-    }
-    if (!fs.existsSync(opt.path)) {
-      return
-    }
-    if (opt.regex != null) {
-      // If regex is a string it is treated as an extension.
-      if (typeof opt.regex === 'string') {
-        opt.regex = new RegExp('.*.' + opt.regex + '$', 'i') // eslint-disable-line
-      }
-      if (opt.path.match(opt.regex) == null) {
-        return
-      }
-    }
-
-    if (typeof walkFunction === 'function') {
-      await walkFunction(opt.path, opt.payload)
-      return
-    }
-    await callWalkFunctionBundle(walkFunction, opt.path, opt.payload)
+    filePaths = opt.path
   }
+
+  await walkRecursively(walkFunction, filePaths, normalizeOptions(opt))
 }
