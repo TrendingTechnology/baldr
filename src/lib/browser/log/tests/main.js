@@ -5,9 +5,17 @@ const sinon = require('sinon')
 
 const log = require('../dist/node/main')
 
-log.setLogLevel(4)
+log.setLogLevel(5)
 
 describe('Package “@bldr/log”', function () {
+  it('all log functions', function () {
+    log.error('error')
+    log.warn('warn')
+    log.info('info')
+    log.verbose('verbose')
+    log.debug('debug')
+  })
+
   it('log.info(): No replacements', function () {
     log.info('Some string')
   })
@@ -21,7 +29,7 @@ describe('Package “@bldr/log”', function () {
     )
     assert(
       spyInfo.calledWith(
-        'string (default color): \u001b[34mtroll\u001b[39m; string (colored): \u001b[31mred\u001b[39m; float 123.5'
+        '\u001b[32m█\u001b[39m string (default color): \u001b[32mtroll\u001b[39m; string (colored): \u001b[31mred\u001b[39m; float 123.5'
       )
     )
     spyInfo.restore()
@@ -34,9 +42,11 @@ describe('Package “@bldr/log”', function () {
       ['green', 'yellow', 'red', 'should be red'],
       ['green', 'yellow', 'red']
     )
+    console.log(spyInfo.args)
+
     assert(
       spyInfo.calledWith(
-        '“\u001b[32mgreen\u001b[39m” “\u001b[33myellow\u001b[39m” “\u001b[31mred\u001b[39m” “\u001b[31mshould be red\u001b[39m”'
+        '\u001b[32m█\u001b[39m “\u001b[32mgreen\u001b[39m” “\u001b[33myellow\u001b[39m” “\u001b[31mred\u001b[39m” “\u001b[31mshould be red\u001b[39m”'
       )
     )
     spyInfo.restore()

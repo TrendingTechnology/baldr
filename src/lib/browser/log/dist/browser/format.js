@@ -2,6 +2,12 @@ import { printf } from 'fast-printf';
 import * as color from './color';
 // eslint-disable-next-line no-control-regex
 const ansiRegexp = /\u001b\[.*?m/;
+/**
+ * @param index - Index number starting from 0.
+ * @param colorSpecs - See types.
+ *
+ * @returns A color function.
+ */
 function getColorFunctionByIndex(index, colorSpecs) {
     if (colorSpecs == null) {
         return color.getColorFunction('yellow');
@@ -30,6 +36,9 @@ function colorizeArgs(args, colorSpecs) {
         args[index] = arg;
     }
     return args;
+}
+function generatePrefix(colorSpecs) {
+    return getColorFunctionByIndex(0, colorSpecs)('█') + ' ';
 }
 /**
  * @param template - A string in the “printf” format:
@@ -63,9 +72,6 @@ function colorizeArgs(args, colorSpecs) {
  * - `%2$s %1$s` positional arguments
  */
 export function format(template, args, options) {
-    if (args == null) {
-        return template;
-    }
     let colorSpecs;
     if (typeof options === 'string' || Array.isArray(options)) {
         colorSpecs = options;
@@ -73,8 +79,13 @@ export function format(template, args, options) {
     else if ((options === null || options === void 0 ? void 0 : options.colors) != null) {
         colorSpecs = options.colors;
     }
-    args = colorizeArgs(args, colorSpecs);
-    return printf(template, ...args);
+    if (args != null) {
+        args = colorizeArgs(args, colorSpecs);
+    }
+    else {
+        args = [];
+    }
+    return generatePrefix(colorSpecs) + printf(template, ...args);
 }
 /**
  * Format a string indexed object.

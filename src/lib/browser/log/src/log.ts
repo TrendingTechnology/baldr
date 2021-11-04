@@ -1,9 +1,22 @@
+/**
+ * @file The implementation of the log functions.
+ *
+ * # The log levels:
+ *
+ * - 0: silent
+ * - 1: error (red)
+ * - 2: warn (yellow)
+ * - 3: info (green)
+ * - 4: verbose (blue)
+ * - 5: debug (cyan)
+ */
+
 import { format, FormatOptions } from './format'
 
 let logLevel = 2
 
 /**
- * Log always.
+ * Log always using a printf like format string.
  */
 export function always (
   template: string,
@@ -16,12 +29,21 @@ export function always (
   console.log(format(template, args, options))
 }
 
+/**
+ * Log always any data types.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function alwaysAny (...args: any[]): void {
   console.log(...args)
 }
 
 /**
- * Log on level 1.
+ * Log using a printf like format string at level 1.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
  */
 export function error (
   template: string,
@@ -36,6 +58,12 @@ export function error (
   }
 }
 
+/**
+ * Log any data types at level 1.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function errorAny (...args: any[]): void {
   if (logLevel > 0) {
     console.error(...args)
@@ -43,7 +71,10 @@ export function errorAny (...args: any[]): void {
 }
 
 /**
- * Log on level 2.
+ * Log using a printf like format string at level 2.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
  */
 export function warn (
   template: string,
@@ -58,6 +89,12 @@ export function warn (
   }
 }
 
+/**
+ * Log any data types at level 2.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function warnAny (...args: any[]): void {
   if (logLevel > 1) {
     console.warn(...args)
@@ -65,8 +102,11 @@ export function warnAny (...args: any[]): void {
 }
 
 /**
- * Log with a format string on level 3.
- */
+ * Log using a printf like format string at level 3.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function info (
   template: string,
   args?: any[],
@@ -74,12 +114,18 @@ export function info (
 ): void {
   if (logLevel > 2) {
     if (options == null) {
-      options = 'blue'
+      options = 'green'
     }
     console.info(format(template, args, options))
   }
 }
 
+/**
+ * Log any data types at level 3.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function infoAny (...args: any[]): void {
   if (logLevel > 2) {
     console.info(...args)
@@ -87,8 +133,11 @@ export function infoAny (...args: any[]): void {
 }
 
 /**
- * Log on level 4.
- */
+ * Log using a printf like format string at level 4.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function verbose (
   template: string,
   args?: any[],
@@ -96,12 +145,18 @@ export function verbose (
 ): void {
   if (logLevel > 3) {
     if (options == null) {
-      options = 'magenta'
+      options = 'blue'
     }
     console.debug(format(template, args, options))
   }
 }
 
+/**
+ * Log any data types at level 4.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function verboseAny (...args: any[]): void {
   if (logLevel > 3) {
     console.debug(...args)
@@ -109,8 +164,11 @@ export function verboseAny (...args: any[]): void {
 }
 
 /**
- * Log on level 5.
- */
+ * Log using a printf like format string at level 5.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function debug (
   template: string,
   args?: any[],
@@ -124,6 +182,12 @@ export function debug (
   }
 }
 
+/**
+ * Log any data types at level 5.
+ *
+ * The log levels are:  0 (silent), 1 (error), 2 (warn), 3 (info), 4 (verbose),
+ * 5 (debug).
+ **/
 export function debugAny (...args: any[]): void {
   if (logLevel > 4) {
     console.log(...args)
