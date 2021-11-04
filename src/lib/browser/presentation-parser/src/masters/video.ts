@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type VideoFieldsRaw = string | VideoFieldsNormalized
+
+interface VideoFieldsNormalized {
+  src: string
+}
+
 export class VideoMaster implements Master {
   name = 'video'
 
@@ -21,5 +27,16 @@ export class VideoMaster implements Master {
       type: Boolean,
       description: 'Zeige Metainformationen'
     }
+  }
+
+  normalizeFields (fields: VideoFieldsRaw): VideoFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = { src: fields }
+    }
+    return fields
+  }
+
+  collectMediaUris (fields: VideoFieldsNormalized): string {
+    return fields.src
   }
 }

@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type VideoFieldsRaw = string | VideoFieldsNormalized;
+interface VideoFieldsNormalized {
+    src: string;
+}
 export declare class VideoMaster implements Master {
     name: string;
     displayName: string;
@@ -18,4 +22,7 @@ export declare class VideoMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: VideoFieldsRaw): VideoFieldsNormalized;
+    collectMediaUris(fields: VideoFieldsNormalized): string;
 }
+export {};

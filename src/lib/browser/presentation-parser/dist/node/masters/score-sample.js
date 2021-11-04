@@ -28,5 +28,20 @@ class ScoreSampleMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                score: fields
+            };
+        }
+        return fields;
+    }
+    collectMediaUris(fields) {
+        const uris = new Set([fields.score]);
+        if (fields.audio != null) {
+            uris.add(fields.audio);
+        }
+        return uris;
+    }
 }
 exports.ScoreSampleMaster = ScoreSampleMaster;

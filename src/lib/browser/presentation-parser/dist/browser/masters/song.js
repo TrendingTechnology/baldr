@@ -3,7 +3,7 @@ export class SongMaster {
         this.name = 'song';
         this.displayName = 'Lied';
         this.icon = {
-            name: 'file-audio',
+            name: 'file-Song',
             color: 'green'
         };
         this.fieldsDefintion = {
@@ -12,5 +12,17 @@ export class SongMaster {
                 description: 'Die ID des Liedes'
             }
         };
+    }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = { songId: fields };
+        }
+        return fields;
+    }
+    collectMediaUris(fields) {
+        return this.convertSongIdToRef(fields.songId);
+    }
+    convertSongIdToRef(songId) {
+        return `ref:LD_${songId}`;
     }
 }

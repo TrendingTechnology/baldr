@@ -1,5 +1,12 @@
 import { Master } from '../master'
 
+type ScoreSampleFieldsRaw = string | ScoreSampleFieldsNormalized
+
+interface ScoreSampleFieldsNormalized {
+  score: string
+  audio?: string
+}
+
 export class ScoreSampleMaster implements Master {
   name = 'scoreSample'
 
@@ -27,5 +34,22 @@ export class ScoreSampleMaster implements Master {
       description: 'URI der entsprechenden Audio-Datei oder des Samples.',
       assetUri: true
     }
+  }
+
+  normalizeFields (fields: ScoreSampleFieldsRaw): ScoreSampleFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        score: fields
+      }
+    }
+    return fields
+  }
+
+  collectMediaUris (fields: ScoreSampleFieldsNormalized) {
+    const uris = new Set([fields.score])
+    if (fields.audio != null) {
+      uris.add(fields.audio)
+    }
+    return uris
   }
 }
