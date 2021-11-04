@@ -40,23 +40,114 @@ exports.walk = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const media = __importStar(require("./media-file-classes"));
+function callWalkFunctionBundle(bundle, filePath, payload) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (bundle.everyFile != null) {
+            yield bundle.everyFile(filePath, payload);
+        }
+        const isPresentation = media.isPresentation(filePath);
+        const isAsset = media.isAsset(filePath);
+        const isTex = media.isTex(filePath);
+        if ((isPresentation || isAsset || isTex) && bundle.all != null) {
+            yield bundle.all(filePath, payload);
+        }
+        if (isPresentation && bundle.presentation != null) {
+            yield bundle.presentation(filePath, payload);
+        }
+        else if (isAsset && bundle.asset != null) {
+            yield bundle.asset(filePath, payload);
+        }
+        else if (isTex && bundle.tex != null) {
+            yield bundle.tex(filePath, payload);
+        }
+    });
+}
+function normalizeOptions(raw) {
+    const normalized = {};
+    // If regex is a string it is treated as an extension.
+    let extension = undefined;
+    if (typeof raw.regex === 'string' && raw.extension != null) {
+        throw new Error('The options “extension” and “regex” are mutually exclusive.');
+    }
+    if (typeof raw.regex === 'string') {
+        extension = raw.regex;
+    }
+    else if (raw.extension != null) {
+        extension = raw.extension;
+    }
+    if (extension != null) {
+        normalized.regex = new RegExp('.*.' + extension + '$', 'i'); // eslint-disable-line
+    }
+    if (raw.payload != null) {
+        normalized.payload = raw.payload;
+    }
+    return normalized;
+}
+function walkRecursively(walkFunction, filePaths, opt) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // A list of file paths.
+        if (Array.isArray(filePaths)) {
+            for (const relPath of filePaths) {
+                yield walkRecursively(walkFunction, relPath, opt);
+            }
+            return;
+        }
+        // Rename action: Rename during walk, filePaths can change
+        if (!fs_1.default.existsSync(filePaths)) {
+            return;
+        }
+        // A directory.
+        if (fs_1.default.statSync(filePaths).isDirectory()) {
+            if (typeof walkFunction !== 'function' && walkFunction.directory != null) {
+                yield walkFunction.directory(filePaths, opt.payload);
+            }
+            if (fs_1.default.existsSync(filePaths)) {
+                const files = fs_1.default.readdirSync(filePaths);
+                for (const fileName of files) {
+                    // Exclude hidden files and directories like '.git'
+                    if (fileName.charAt(0) !== '.') {
+                        const relPath = path_1.default.join(filePaths, fileName);
+                        yield walkRecursively(walkFunction, relPath, opt);
+                    }
+                }
+            }
+            // A single file.
+        }
+        else {
+            // Exclude hidden files and directories like '.git'
+            if (path_1.default.basename(filePaths).charAt(0) === '.') {
+                return;
+            }
+            if (!fs_1.default.existsSync(filePaths)) {
+                return;
+            }
+            if (opt.regex != null) {
+                if (filePaths.match(opt.regex) == null) {
+                    return;
+                }
+            }
+            if (typeof walkFunction === 'function') {
+                yield walkFunction(filePaths, opt.payload);
+                return;
+            }
+            yield callWalkFunctionBundle(walkFunction, filePaths, opt.payload);
+        }
+    });
+}
 /**
  * Execute a function on one file or walk trough all files matching a
  * regex in the current working directory or in the given directory
  * path.
  *
- * @param func - A single function or an object containing functions.
+ * @param walkFunction - A single function or an object containing functions.
  */
-function walk(func, opt) {
+function walk(walkFunction, opt) {
     return __awaiter(this, void 0, void 0, function* () {
         // Some checks to exit early.
-        if (func == null) {
-            throw new Error('Missing property: `func`.');
-        }
         if (typeof opt !== 'object') {
             opt = {};
         }
-        if (typeof func === 'object' && opt.regex != null) {
+        if (typeof walkFunction === 'object' && opt.regex != null) {
             throw new Error('Use a single function and a regex or an object containing functions without a regex.');
         }
         // commander [filepath...] -> without arguments is an empty array.
@@ -66,7 +157,7 @@ function walk(func, opt) {
         // A list of file paths.
         if (Array.isArray(opt.path)) {
             for (const relPath of opt.path) {
-                yield walk(func, {
+                yield walk(walkFunction, {
                     path: relPath,
                     payload: opt.payload,
                     regex: opt.regex
@@ -80,8 +171,8 @@ function walk(func, opt) {
         }
         // A directory.
         if (fs_1.default.statSync(opt.path).isDirectory()) {
-            if (typeof func !== 'function' && func.directory != null) {
-                yield func.directory(opt.path, opt.payload);
+            if (typeof walkFunction !== 'function' && walkFunction.directory != null) {
+                yield walkFunction.directory(opt.path, opt.payload);
             }
             if (fs_1.default.existsSync(opt.path)) {
                 const files = fs_1.default.readdirSync(opt.path);
@@ -89,7 +180,7 @@ function walk(func, opt) {
                     // Exclude hidden files and directories like '.git'
                     if (fileName.charAt(0) !== '.') {
                         const relPath = path_1.default.join(opt.path, fileName);
-                        yield walk(func, {
+                        yield walk(walkFunction, {
                             path: relPath,
                             payload: opt.payload,
                             regex: opt.regex
@@ -116,28 +207,11 @@ function walk(func, opt) {
                     return;
                 }
             }
-            if (typeof func === 'function') {
-                yield func(opt.path, opt.payload);
+            if (typeof walkFunction === 'function') {
+                yield walkFunction(opt.path, opt.payload);
                 return;
             }
-            if (func.everyFile != null) {
-                yield func.everyFile(opt.path, opt.payload);
-            }
-            const isPresentation = media.isPresentation(opt.path);
-            const isAsset = media.isAsset(opt.path);
-            const isTex = media.isTex(opt.path);
-            if ((isPresentation || isAsset || isTex) && func.all != null) {
-                yield func.all(opt.path, opt.payload);
-            }
-            if (isPresentation && func.presentation != null) {
-                yield func.presentation(opt.path, opt.payload);
-            }
-            else if (isAsset && func.asset != null) {
-                yield func.asset(opt.path, opt.payload);
-            }
-            else if (isTex && func.tex != null) {
-                yield func.tex(opt.path, opt.payload);
-            }
+            yield callWalkFunctionBundle(walkFunction, opt.path, opt.payload);
         }
     });
 }

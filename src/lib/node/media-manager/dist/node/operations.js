@@ -114,7 +114,13 @@ function normalize(filePaths, filter) {
             }
         }
         function normalizePresentation(filePath) {
-            exports.operations.normalizePresentationFile(filePath);
+            return __awaiter(this, void 0, void 0, function* () {
+                exports.operations.normalizePresentationFile(filePath);
+                log.verbose('Generate presentation automatically on path %s:', [
+                    filePaths[0]
+                ]);
+                yield exports.operations.generateAutomaticPresentation(filePaths[0]);
+            });
         }
         function normalizeTex(filePath) {
             log.info('\nPatch the titles of the TeX file “%s”', [filePath]);
@@ -150,12 +156,6 @@ function normalize(filePaths, filter) {
         yield (0, directory_tree_walk_1.walk)(functionBundle, {
             path: filePaths
         });
-        if (filter == null || filter === 'presentation') {
-            log.verbose('Generate presentation automatically on path %s:', [
-                filePaths[0]
-            ]);
-            yield exports.operations.generateAutomaticPresentation(filePaths[0]);
-        }
     });
 }
 /**

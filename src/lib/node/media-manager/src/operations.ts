@@ -96,8 +96,12 @@ async function normalize (
     }
   }
 
-  function normalizePresentation (filePath: string): void {
+  async function normalizePresentation (filePath: string): Promise<void> {
     operations.normalizePresentationFile(filePath)
+    log.verbose('Generate presentation automatically on path %s:', [
+      filePaths[0]
+    ])
+    await operations.generateAutomaticPresentation(filePaths[0])
   }
 
   function normalizeTex (filePath: string): void {
@@ -135,13 +139,6 @@ async function normalize (
   await walk(functionBundle, {
     path: filePaths
   })
-
-  if (filter == null || filter === 'presentation') {
-    log.verbose('Generate presentation automatically on path %s:', [
-      filePaths[0]
-    ])
-    await operations.generateAutomaticPresentation(filePaths[0])
-  }
 }
 
 /**

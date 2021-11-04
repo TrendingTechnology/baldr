@@ -6,36 +6,36 @@
 /**
  * A function which is called during the directory structure walk.
  */
-declare type WalkFunc = (path: string, payload?: object | any) => any;
+declare type WalkFunction = (path: string, payload?: object | any) => any;
 /**
  * A collection of walk functions.
  */
-interface WalkFuncBundle {
+interface WalkFunctionBundle {
     /**
      * This function is called on every presentation.
      */
-    presentation?: WalkFunc;
+    presentation?: WalkFunction;
     /**
      * This function is called on every asset.
      */
-    asset?: WalkFunc;
+    asset?: WalkFunction;
     /**
      * This function is called on every TeX file.
      */
-    tex?: WalkFunc;
+    tex?: WalkFunction;
     /**
      * This function is called on all media
      * types, at the moment on presentations and assets.
      */
-    all?: WalkFunc;
+    all?: WalkFunction;
     /**
      * This function is called on every file.
      */
-    everyFile?: WalkFunc;
+    everyFile?: WalkFunction;
     /**
      * This function is called on directories.
      */
-    directory?: WalkFunc;
+    directory?: WalkFunction;
 }
 /**
  * A collection of options for the walk function.
@@ -58,13 +58,19 @@ interface WalkOption {
      * converted into the regular expression `*.ext`.
      */
     regex?: string | RegExp;
+    extension?: string;
+    /**
+     * Descend at most levels (a non-negative integer) levels of directories
+     * below the starting-pointq.
+     */
+    maxDepths?: number;
 }
 /**
  * Execute a function on one file or walk trough all files matching a
  * regex in the current working directory or in the given directory
  * path.
  *
- * @param func - A single function or an object containing functions.
+ * @param walkFunction - A single function or an object containing functions.
  */
-export declare function walk(func: WalkFunc | WalkFuncBundle, opt?: WalkOption): Promise<void>;
+export declare function walk(walkFunction: WalkFunction | WalkFunctionBundle, opt?: WalkOption): Promise<void>;
 export {};
