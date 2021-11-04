@@ -243,7 +243,7 @@ function generateAutomaticPresentation(filePath, force) {
         }
         else {
             const rawPresentation = (0, file_reader_writer_1.readYamlFile)(filePath);
-            console.log(rawPresentation);
+            log.verboseAny(rawPresentation);
             if ((rawPresentation === null || rawPresentation === void 0 ? void 0 : rawPresentation.slides) != null) {
                 filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml');
                 log.info('Presentation already exists, create tmp file: %s', [
