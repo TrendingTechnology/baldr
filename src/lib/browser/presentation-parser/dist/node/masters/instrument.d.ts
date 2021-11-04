@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type InstrumentFieldsRaw = string | InstrumentFieldsNormalized;
+interface InstrumentFieldsNormalized {
+    instrumentId: string;
+}
 export declare class InstrumentMaster implements Master {
     name: string;
     displayName: string;
@@ -12,4 +16,8 @@ export declare class InstrumentMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: InstrumentFieldsRaw): InstrumentFieldsNormalized;
+    resolveMediaUris(fields: InstrumentFieldsNormalized): string;
+    private convertInstrumentIdToMediaId;
 }
+export {};

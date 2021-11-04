@@ -1,6 +1,8 @@
 import { Master } from '../master'
 
-interface FieldData {
+type MasterFieldsRaw = string | MasterFieldsNormalized
+
+interface MasterFieldsNormalized {
   src: string
   title?: string
   description?: string
@@ -42,16 +44,14 @@ export class ImageMaster implements Master {
     }
   }
 
-  normalizeFields (fields: any): FieldData {
+  normalizeFields (fields: MasterFieldsRaw): MasterFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }
     return fields
   }
 
-  collectMediaUris (
-    fields: FieldData
-  ): string | string[] | Set<string> | undefined {
+  collectMediaUris (fields: MasterFieldsNormalized): string {
     return fields.src
   }
 }

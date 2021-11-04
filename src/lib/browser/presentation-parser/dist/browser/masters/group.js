@@ -14,4 +14,18 @@ export class GroupMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            return {
+                groupId: fields
+            };
+        }
+        return fields;
+    }
+    collectMediaUris(fields) {
+        return this.convertGroupIdToMediaId(fields.groupId);
+    }
+    convertGroupIdToMediaId(groupId) {
+        return `ref:GR_${groupId}`;
+    }
 }

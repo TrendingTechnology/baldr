@@ -32,6 +32,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@bldr/client-media-models": "*",
     "@bldr/core-browser": "*",
     "@bldr/log": "*",
     "@bldr/markdown-to-html": "*",

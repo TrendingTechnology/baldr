@@ -20,5 +20,16 @@ class DocumentMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                src: fields
+            };
+        }
+        return fields;
+    }
+    collectMediaUris(fields) {
+        return fields.src;
+    }
 }
 exports.DocumentMaster = DocumentMaster;

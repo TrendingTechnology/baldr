@@ -1,5 +1,10 @@
 import { Master } from '../master'
 
+type DocumentFieldsRaw = string | DocumentFieldsNormalized
+interface DocumentFieldsNormalized {
+  src: string
+}
+
 export class DocumentMaster implements Master {
   name = 'document'
 
@@ -19,5 +24,18 @@ export class DocumentMaster implements Master {
       type: Number,
       description: 'Nur eine Seite des PDFs anzeigen'
     }
+  }
+
+  normalizeFields (fields: DocumentFieldsRaw) {
+    if (typeof fields === 'string') {
+      fields = {
+        src: fields
+      }
+    }
+    return fields
+  }
+
+  collectMediaUris (fields: DocumentFieldsNormalized): string {
+    return fields.src
   }
 }

@@ -1,10 +1,10 @@
 import { Master } from '../master'
 
-interface FieldData {
+type PersonFieldsRaw = string | PersonFieldsNormalized
+
+interface PersonFieldsNormalized {
   personId: string
 }
-
-type RawFieldData = string | FieldData
 
 export class PersonMaster implements Master {
   name = 'person'
@@ -23,7 +23,7 @@ export class PersonMaster implements Master {
     }
   }
 
-  normalizeFields (fields: RawFieldData) {
+  normalizeFields (fields: PersonFieldsRaw) {
     if (typeof fields === 'string') {
       return {
         personId: fields
@@ -32,7 +32,7 @@ export class PersonMaster implements Master {
     return fields
   }
 
-  collectMediaUris (fields: FieldData): string {
+  collectMediaUris (fields: PersonFieldsNormalized): string {
     return this.convertPersonIdToMediaUri(fields.personId)
   }
 
