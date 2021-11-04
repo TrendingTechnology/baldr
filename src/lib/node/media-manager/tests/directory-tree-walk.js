@@ -67,10 +67,34 @@ describe('Package “@bldr/media-manager”: directory-walk', function () {
 
     it('options.regex', async function () {
       await walk(
-        (filePath) => {
+        filePath => {
           assert.ok(filePath.match(/.*\.yml$/i) != null)
         },
         { path: getPath('Musik/05'), regex: /.*\.yml$/i }
+      )
+    })
+
+    it('options.extension', async function () {
+      await walk(
+        filePath => {
+          assert.ok(filePath.match(/.*\.yml$/i) != null)
+        },
+        { path: getPath('Musik/05'), extension: 'YML' }
+      )
+    })
+
+    it('options.maxDepths', async function () {
+      function countSegments (filePath) {
+        return filePath.split(path.sep).length
+      }
+      const baseDir = getPath('Musik/05/40_Grundlagen/95_Tempo')
+      const baseDepths = countSegments(baseDir)
+      await walk(
+        filePath => {
+          const depths = countSegments(filePath)
+          assert.ok(depths <= baseDepths + 2)
+        },
+        { path: getPath('Musik/05/40_Grundlagen/95_Tempo'), maxDepths: 1 }
       )
     })
   })

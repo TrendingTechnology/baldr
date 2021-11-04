@@ -81,13 +81,17 @@ function normalizeOptions(raw) {
     if ((raw === null || raw === void 0 ? void 0 : raw.regex) != null && typeof raw.regex !== 'string') {
         normalized.regex = raw.regex;
     }
+    normalized.maxDepths = raw === null || raw === void 0 ? void 0 : raw.maxDepths;
     if ((raw === null || raw === void 0 ? void 0 : raw.payload) != null) {
         normalized.payload = raw.payload;
     }
     return normalized;
 }
-function walkRecursively(walkFunction, filePaths, opt) {
+function walkRecursively(walkFunction, filePaths, opt, depths = 0) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (opt.maxDepths != null && opt.maxDepths + 1 < depths) {
+            return;
+        }
         // A list of file paths.
         if (Array.isArray(filePaths)) {
             for (const filePath of filePaths) {
@@ -108,10 +112,11 @@ function walkRecursively(walkFunction, filePaths, opt) {
             }
             if (fs_1.default.existsSync(directoryPath)) {
                 const files = fs_1.default.readdirSync(directoryPath);
+                depths++;
                 for (const fileName of files) {
                     // Exclude hidden files and directories like '.git'
                     if (fileName.charAt(0) !== '.') {
-                        yield walkRecursively(walkFunction, path_1.default.join(directoryPath, fileName), opt);
+                        yield walkRecursively(walkFunction, path_1.default.join(directoryPath, fileName), opt, depths);
                     }
                 }
             }

@@ -86,6 +86,7 @@ interface WalkOption {
 interface WalkOptionNormalized {
   payload?: any
   regex?: RegExp
+  maxDepths?: number
 }
 
 async function callWalkFunctionBundle (
@@ -136,6 +137,8 @@ function normalizeOptions (raw?: WalkOption): WalkOptionNormalized {
     normalized.regex = raw.regex
   }
 
+  normalized.maxDepths = raw?.maxDepths
+
   if (raw?.payload != null) {
     normalized.payload = raw.payload
   }
@@ -145,8 +148,12 @@ function normalizeOptions (raw?: WalkOption): WalkOptionNormalized {
 async function walkRecursively (
   walkFunction: WalkFunction | WalkFunctionBundle,
   filePaths: string | string[],
-  opt: WalkOptionNormalized
+  opt: WalkOptionNormalized,
+  depths: number = 0
 ): Promise<void> {
+  if (opt.maxDepths != null && opt.maxDepths + 1 < depths) {
+    return
+  }
   // A list of file paths.
   if (Array.isArray(filePaths)) {
     for (const filePath of filePaths) {
@@ -170,13 +177,15 @@ async function walkRecursively (
     }
     if (fs.existsSync(directoryPath)) {
       const files = fs.readdirSync(directoryPath)
+      depths++
       for (const fileName of files) {
         // Exclude hidden files and directories like '.git'
         if (fileName.charAt(0) !== '.') {
           await walkRecursively(
             walkFunction,
             path.join(directoryPath, fileName),
-            opt
+            opt,
+            depths
           )
         }
       }
