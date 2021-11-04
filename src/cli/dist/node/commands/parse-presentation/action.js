@@ -39,17 +39,26 @@ const log = __importStar(require("@bldr/log"));
  */
 function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
+        const errors = {};
         yield media_manager_1.walk({
-            presentation(presPath) {
+            presentation(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    log.info('Parse presentation %s', [presPath]);
-                    const presentation = yield presentation_parser_1.parseAndResolve(file_reader_writer_1.readFile(presPath));
-                    presentation.log();
+                    log.info('Parse presentation %s', [filePath]);
+                    try {
+                        const presentation = yield presentation_parser_1.parseAndResolve(file_reader_writer_1.readFile(filePath));
+                        presentation.log();
+                    }
+                    catch (e) {
+                        const error = e;
+                        log.error(error.message);
+                        errors[filePath] = error.message;
+                    }
                 });
             }
         }, {
             path: filePaths
         });
+        log.alwaysAny(errors);
     });
 }
 module.exports = action;
