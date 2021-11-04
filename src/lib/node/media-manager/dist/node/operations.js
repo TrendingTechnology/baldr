@@ -65,7 +65,7 @@ function validateYamlOneFile(filePath) {
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-function normalize(filePaths) {
+function normalize(filePaths, filter) {
     return __awaiter(this, void 0, void 0, function* () {
         if (filePaths.length === 0) {
             filePaths = [process.cwd()];
@@ -89,43 +89,73 @@ function normalize(filePaths) {
             filePaths[0].match(/\.baldr\.yml$/) == null) {
             filePaths[0] = filePaths[0].replace(/\.yml$/, '');
         }
-        yield (0, directory_tree_walk_1.walk)({
-            asset(filePath) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    if (!fs_1.default.existsSync(`${filePath}.yml`)) {
-                        yield exports.operations.initializeMetaYaml(filePath);
-                    }
-                    else {
-                        yield exports.operations.normalizeMediaAsset(filePath);
-                    }
-                    exports.operations.renameByRef(filePath);
-                });
-            },
-            everyFile(filePath) {
-                var _a;
-                const extension = (_a = (0, core_browser_1.getExtension)(filePath)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
-                if (extension != null && ['tex', 'yml', 'txt'].includes(extension)) {
-                    exports.operations.fixTypography(filePath);
+        function normalizeAsset(filePath) {
+            return __awaiter(this, void 0, void 0, function* () {
+                if (!fs_1.default.existsSync(`${filePath}.yml`)) {
+                    yield exports.operations.initializeMetaYaml(filePath);
                 }
-                if (filePath.match(/\.yml$/i) != null) {
-                    validateYamlOneFile(filePath);
+                else {
+                    yield exports.operations.normalizeMediaAsset(filePath);
                 }
-                else if (filePath.match(/\.svg$/i) != null) {
-                    exports.operations.removeWidthHeightInSvg(filePath);
-                }
-            },
-            presentation(filePath) {
-                exports.operations.normalizePresentationFile(filePath);
-            },
-            tex(filePath) {
-                log.info('\nPatch the titles of the TeX file “%s”', [filePath]);
-                exports.operations.patchTexTitles(filePath);
+                exports.operations.renameByRef(filePath);
+            });
+        }
+        function normalizeEveryFile(filePath) {
+            var _a;
+            const extension = (_a = (0, core_browser_1.getExtension)(filePath)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+            if (extension != null && ['tex', 'yml', 'txt'].includes(extension)) {
+                exports.operations.fixTypography(filePath);
             }
-        }, {
+            if (filePath.match(/\.yml$/i) != null) {
+                validateYamlOneFile(filePath);
+            }
+            else if (filePath.match(/\.svg$/i) != null) {
+                exports.operations.removeWidthHeightInSvg(filePath);
+            }
+        }
+        function normalizePresentation(filePath) {
+            exports.operations.normalizePresentationFile(filePath);
+        }
+        function normalizeTex(filePath) {
+            log.info('\nPatch the titles of the TeX file “%s”', [filePath]);
+            exports.operations.patchTexTitles(filePath);
+        }
+        let functionBundle = {};
+        if (filter == null) {
+            functionBundle = {
+                asset: normalizeAsset,
+                everyFile: normalizeEveryFile,
+                presentation: normalizePresentation,
+                tex: normalizeTex
+            };
+        }
+        else if (filter === 'presentation') {
+            log.info('Normalize only presentations');
+            functionBundle = {
+                presentation: normalizePresentation
+            };
+        }
+        else if (filter === 'tex') {
+            log.info('Normalize only TeX files');
+            functionBundle = {
+                tex: normalizeTex
+            };
+        }
+        else if (filter === 'asset') {
+            log.info('Normalize only assets');
+            functionBundle = {
+                asset: normalizeAsset
+            };
+        }
+        yield (0, directory_tree_walk_1.walk)(functionBundle, {
             path: filePaths
         });
-        log.verbose('Generate presentation automatically on path %s:', [filePaths[0]]);
-        yield exports.operations.generateAutomaticPresentation(filePaths[0]);
+        if (filter == null || filter === 'presentation') {
+            log.verbose('Generate presentation automatically on path %s:', [
+                filePaths[0]
+            ]);
+            yield exports.operations.generateAutomaticPresentation(filePaths[0]);
+        }
     });
 }
 /**

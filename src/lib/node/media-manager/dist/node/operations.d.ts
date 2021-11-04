@@ -8,7 +8,7 @@ import { renameMediaAsset, moveAsset, renameByRef, normalizeMediaAsset, initiali
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-declare function normalize(filePaths: string[]): Promise<void>;
+declare function normalize(filePaths: string[], filter?: 'presentation' | 'tex' | 'asset'): Promise<void>;
 /**
  * A collection of functions to manipulate the media assets and presentation files.
  */
