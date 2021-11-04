@@ -2,9 +2,7 @@
 
 const assert = require('assert')
 
-const {
-  WrappedUriList,
-} = require('../dist/node/fuzzy-uri.js')
+const { WrappedUriList } = require('../dist/node/fuzzy-uri.js')
 
 function createWrappedUriList (input) {
   const list = new WrappedUriList(input)
@@ -20,29 +18,29 @@ describe('File “fuzzy-uri.ts”', function () {
   describe('Class “WrappedUriList()”', function () {
     it('Single URI as a string', function () {
       const spec = getFirstWrappedUri('ref:test')
-      assert.strictEqual(spec.uri, 'ref:test#complete')
+      assert.strictEqual(spec.uri, 'ref:test')
     })
 
     it('Single URI as an array', function () {
       const spec = getFirstWrappedUri(['ref:test'])
-      assert.strictEqual(spec.uri, 'ref:test#complete')
+      assert.strictEqual(spec.uri, 'ref:test')
     })
 
     it('Single URI as a string with a custom title prefixed', function () {
       const spec = getFirstWrappedUri('A title ref:test')
-      assert.strictEqual(spec.uri, 'ref:test#complete')
+      assert.strictEqual(spec.uri, 'ref:test')
       assert.strictEqual(spec.title, 'A title')
     })
 
     it('Single URI as a string with a custom title suffixed', function () {
       const spec = getFirstWrappedUri('ref:test A title')
-      assert.strictEqual(spec.uri, 'ref:test#complete')
+      assert.strictEqual(spec.uri, 'ref:test')
       assert.strictEqual(spec.title, 'A title')
     })
 
     it('Single URI as a string with a custom title in the middle of the string', function () {
-      const spec = getFirstWrappedUri('prefix ref:test suffix')
-      assert.strictEqual(spec.uri, 'ref:test#complete')
+      const spec = getFirstWrappedUri('prefix ref:test   suffix')
+      assert.strictEqual(spec.uri, 'ref:test')
       assert.strictEqual(spec.title, 'prefix suffix')
     })
 
@@ -50,14 +48,27 @@ describe('File “fuzzy-uri.ts”', function () {
       const spec = getFirstWrappedUri(
         'prefix uuid:c64047d2-983d-4009-a35f-02c95534cb53 suffix'
       )
-      assert.strictEqual(
-        spec.uri,
-        'uuid:c64047d2-983d-4009-a35f-02c95534cb53#complete'
-      )
+      assert.strictEqual(spec.uri, 'uuid:c64047d2-983d-4009-a35f-02c95534cb53')
       assert.strictEqual(spec.title, 'prefix suffix')
     })
 
-    it('SimpleSampleSpec', function () {
+    it('No title with “.”', function () {
+      const spec = getFirstWrappedUri(
+        'ref:test .'
+      )
+      assert.strictEqual(spec.uri, 'ref:test')
+      assert.strictEqual(spec.title, undefined)
+    })
+
+    it('No title with “none”', function () {
+      const spec = getFirstWrappedUri(
+        'ref:test none'
+      )
+      assert.strictEqual(spec.uri, 'ref:test')
+      assert.strictEqual(spec.title, undefined)
+    })
+
+    it('WrappedUri', function () {
       const spec = getFirstWrappedUri({
         uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
         title: 'Original'
@@ -71,11 +82,11 @@ describe('File “fuzzy-uri.ts”', function () {
 
     it('string[]', function () {
       const specs = createWrappedUriList(['ref:test1', 'ref:test2'])
-      assert.strictEqual(specs[0].uri, 'ref:test1#complete')
-      assert.strictEqual(specs[1].uri, 'ref:test2#complete')
+      assert.strictEqual(specs[0].uri, 'ref:test1')
+      assert.strictEqual(specs[1].uri, 'ref:test2')
     })
 
-    it('SimpleSampleSpec[]', function () {
+    it('WrappedUri[]', function () {
       const input = [
         {
           uri: 'ref:Final-Countdown_HB_The-Final-Countdown#blaeser-intro',
@@ -100,11 +111,10 @@ describe('File “fuzzy-uri.ts”', function () {
     })
 
     it('getter “uris”', function () {
-      const list = new WrappedSpecList(['ref:test1#1', 'ref:test2#2'])
+      const list = new WrappedUriList(['ref:test1#1', 'ref:test2#2'])
       const iterator = list.uris.values()
       assert.strictEqual(iterator.next().value, 'ref:test1#1')
       assert.strictEqual(iterator.next().value, 'ref:test2#2')
     })
   })
-
 })
