@@ -126,7 +126,9 @@ export function normalizePresentationFile (filePath: string): void {
     log.verbose(log.colorizeDiff(oldTextContent, textContent))
     writeFile(filePath, textContent)
   } else {
-    log.info('No changes after normalization of the presentation %s', [filePath])
+    log.info('No changes after normalization of the presentation %s', [
+      filePath
+    ])
   }
 }
 
@@ -188,7 +190,7 @@ async function generatePresentation (filePath: string): Promise<void> {
         slides.push(slideData)
       }
     },
-    { path: basePath }
+    { path: basePath, maxDepths: 1 }
   )
 
   const notePath = path.join(basePath, 'Hefteintrag.tex')
@@ -211,7 +213,9 @@ async function generatePresentation (filePath: string): Promise<void> {
     )
   }
 
-  log.verbose('Write automatically generated presentation file to path %s', [filePath])
+  log.verbose('Write automatically generated presentation file to path %s', [
+    filePath
+  ])
   const result = convertToYaml({
     slides
   })
@@ -237,7 +241,8 @@ export async function generateAutomaticPresentation (
   filePath = locationIndicator.getTwoDigitPrefixedParentDir(filePath)
 
   if (filePath == null) {
-    throw new Error('You are not in a presentation folder prefixed with two digits!')
+    log.warn('You are not in a presentation folder prefixed with two digits!')
+    return
   }
 
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
@@ -248,15 +253,13 @@ export async function generateAutomaticPresentation (
     console.log(rawPresentation)
     if (rawPresentation?.slides != null) {
       filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml')
-      log.info(
-        'Presentation already exists, create tmp file: %s',
-        [log.colorize.red(filePath)]
-      )
+      log.info('Presentation already exists, create tmp file: %s', [
+        log.colorize.red(filePath)
+      ])
     } else {
-      log.info(
-        'Overwrite the presentation as it has no slides: %s',
-        [log.colorize.red(filePath)]
-      )
+      log.info('Overwrite the presentation as it has no slides: %s', [
+        log.colorize.red(filePath)
+      ])
     }
   }
 

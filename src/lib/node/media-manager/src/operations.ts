@@ -99,9 +99,9 @@ async function normalize (
   async function normalizePresentation (filePath: string): Promise<void> {
     operations.normalizePresentationFile(filePath)
     log.verbose('Generate presentation automatically on path %s:', [
-      filePaths[0]
+      filePath
     ])
-    await operations.generateAutomaticPresentation(filePaths[0])
+    await operations.generateAutomaticPresentation(filePath)
   }
 
   function normalizeTex (filePath: string): void {

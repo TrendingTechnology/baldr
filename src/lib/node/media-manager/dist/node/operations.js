@@ -117,9 +117,9 @@ function normalize(filePaths, filter) {
             return __awaiter(this, void 0, void 0, function* () {
                 exports.operations.normalizePresentationFile(filePath);
                 log.verbose('Generate presentation automatically on path %s:', [
-                    filePaths[0]
+                    filePath
                 ]);
-                yield exports.operations.generateAutomaticPresentation(filePaths[0]);
+                yield exports.operations.generateAutomaticPresentation(filePath);
             });
         }
         function normalizeTex(filePath) {
