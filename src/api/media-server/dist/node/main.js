@@ -447,8 +447,9 @@ function update(full) {
                 case 0:
                     // To get a fresh title tree, otherwise changes of the titles are not updated
                     titleTreeFactory = new titles_1.TreeFactory();
-                    if (full)
+                    if (full) {
                         gitPull();
+                    }
                     gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
                         cwd: basePath,
                         encoding: 'utf-8'

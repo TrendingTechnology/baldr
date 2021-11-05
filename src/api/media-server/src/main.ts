@@ -79,7 +79,12 @@ import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory, DeepTitle } from '@bldr/titles'
 
-import { StringIndexedObject, LampTypes, GenericError } from '@bldr/type-definitions'
+import {
+  StringIndexedObject,
+  LampTypes,
+  GenericError,
+  ApiTypes
+} from '@bldr/type-definitions'
 import {
   MediaType,
   openParentFolder,
@@ -475,10 +480,12 @@ function gitPull (): void {
  *
  * @returns {Promise.<Object>}
  */
-async function update (full: boolean = false): Promise<StringIndexedObject> {
+async function update (full: boolean = false): Promise<ApiTypes.UpdateResult> {
   // To get a fresh title tree, otherwise changes of the titles are not updated
   titleTreeFactory = new TreeFactory()
-  if (full) gitPull()
+  if (full) {
+    gitPull()
+  }
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
     cwd: basePath,
     encoding: 'utf-8'

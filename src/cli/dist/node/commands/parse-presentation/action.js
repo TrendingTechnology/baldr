@@ -30,6 +30,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const presentation_parser_1 = require("@bldr/presentation-parser");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
+const api_wrapper_1 = require("@bldr/api-wrapper");
 const media_manager_1 = require("@bldr/media-manager");
 const log = __importStar(require("@bldr/log"));
 /**
@@ -40,6 +41,8 @@ const log = __importStar(require("@bldr/log"));
 function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = {};
+        const result = yield api_wrapper_1.updateMediaServer();
+        log.infoAny(result);
         yield media_manager_1.walk({
             presentation(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +61,18 @@ function action(filePaths) {
         }, {
             path: filePaths
         });
-        log.alwaysAny(errors);
+        if (Object.keys(errors).length === 0) {
+            log.info('Congratulations! No parsing errors!');
+        }
+        else {
+            log.error('Parsing errors');
+            for (const filePath in errors) {
+                if (Object.prototype.hasOwnProperty.call(errors, filePath)) {
+                    const message = errors[filePath];
+                    log.error('Error in file “%s”:\n    %s', [filePath, message]);
+                }
+            }
+        }
     });
 }
 module.exports = action;
