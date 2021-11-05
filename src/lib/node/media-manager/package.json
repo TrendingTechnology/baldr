@@ -25,19 +25,21 @@
     "test": "npm run build && mocha 'tests/*' && npm run lint"
   },
   "dependencies": {
+    "@bldr/api-wrapper": "*",
     "@bldr/audio-metadata": "*",
     "@bldr/client-media-models": "*",
     "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
+    "@bldr/log": "*",
     "@bldr/media-categories": "*",
+    "@bldr/presentation-parser": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
     "@bldr/wikidata": "*",
-    "@bldr/yaml": "*",
-    "@bldr/log": "*"
+    "@bldr/yaml": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*",
@@ -52,10 +54,6 @@
     "access": "public"
   },
   "standardx": {
-    "global": [
-      "chrome",
-      "muon",
-      "postMessage"
-    ]
+    "global": ["chrome", "muon", "postMessage"]
   }
 }
