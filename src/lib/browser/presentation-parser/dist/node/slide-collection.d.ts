@@ -18,15 +18,18 @@ export declare class SlideCollection {
      */
     constructor(raw: any[]);
     /**
-     * Parse the slide objects in a recursive fashion. Child slides can be specified
-     * under the `slides` property.
+     * Parse the slide objects in a recursive fashion. Child slides can be
+     * specified under the `slides` property.
      *
-     * @param raw - The raw slide array from the YAML presentation
-     *  file, the slides property.
-     * @param level - The level in the hierachial tree the slide lies in 1:
-     *   Main level, 2: First child level ...
+     * @param raw - The raw slide array from the YAML presentation file, the
+     *  slides property.
+     * @param level - The level in the hierachial tree the slide lies in 1: Main
+     *   level, 2: First child level ...
      */
     private parse;
+    /**
+     * The media URIs from the slide attributes `mediaUris` and `audioOverlay`.
+     */
     get mediaUris(): Set<string>;
     get optionalMediaUris(): Set<string>;
     get numberOfSlides(): number;

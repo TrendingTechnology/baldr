@@ -24,13 +24,13 @@ export class SlideCollection {
   }
 
   /**
-   * Parse the slide objects in a recursive fashion. Child slides can be specified
-   * under the `slides` property.
+   * Parse the slide objects in a recursive fashion. Child slides can be
+   * specified under the `slides` property.
    *
-   * @param raw - The raw slide array from the YAML presentation
-   *  file, the slides property.
-   * @param level - The level in the hierachial tree the slide lies in 1:
-   *   Main level, 2: First child level ...
+   * @param raw - The raw slide array from the YAML presentation file, the
+   *  slides property.
+   * @param level - The level in the hierachial tree the slide lies in 1: Main
+   *   level, 2: First child level ...
    */
   private parse (raw: any[], slidesTree: Slide[], level: number): void {
     for (const slideRaw of raw) {
@@ -48,11 +48,19 @@ export class SlideCollection {
     }
   }
 
+  /**
+   * The media URIs from the slide attributes `mediaUris` and `audioOverlay`.
+   */
   get mediaUris (): Set<string> {
     const result = new Set<string>()
     for (const slide of this.flat) {
       for (const mediaUri of slide.mediaUris) {
         result.add(mediaUri)
+      }
+      if (slide.audioOverlay != null) {
+        for (const mediaUri of slide.audioOverlay.uris) {
+          result.add(mediaUri)
+        }
       }
     }
     return result

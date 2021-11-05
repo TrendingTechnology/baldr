@@ -27,7 +27,10 @@ describe('Class “Slide()”', function () {
     assert.deepStrictEqual(slide.mediaUris, new Set(['ref:test']))
 
     slide = presentation.getSlideByNo(2)
-    assert.deepStrictEqual(slide.optionalMediaUris, new Set(['ref:YT_jNQXAC9IVRw']))
+    assert.deepStrictEqual(
+      slide.optionalMediaUris,
+      new Set(['ref:YT_jNQXAC9IVRw'])
+    )
   })
 
   it('Slide state absent', function () {
@@ -47,5 +50,14 @@ describe('Class “Slide()”', function () {
         name: 'Error'
       }
     )
+  })
+
+  it('attribute “audioOverlay”', async function () {
+    const presentation = parseTestPresentation('audio-overlay')
+    const assets = await presentation.resolve()
+    assert.strictEqual(assets.length, 11)
+    for (const asset of assets) {
+      assert.ok(typeof asset.ref === 'string')
+    }
   })
 })

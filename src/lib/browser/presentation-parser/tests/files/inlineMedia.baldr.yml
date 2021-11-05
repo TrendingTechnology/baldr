@@ -1,0 +1,99 @@
+---
+meta:
+  ref: EP_common_inlineMedia
+  title: Inline media
+
+slides:
+
+- title: image
+  generic: |
+    [id:Haydn_Joseph caption="Joseph Haydn"]
+
+    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+    suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+- title: audio
+  generic: |
+    # Audio
+
+    [id:Nachtmusik_HB_1_Allegro]
+
+    Vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan
+    et iusto odio dignissim qui blandit praesent luptatum zzril delenit
+    augue duis dolore te feugait nulla facilisi.
+
+- title: video
+  generic: |
+    # Video
+
+    [id:Biographie-Salzburg-Wien_VD_Mozart-komponiert-und-spielt-Billard]
+
+    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+    suscipit lobortis nisl ut aliquip
+
+- title: The same image multiple times
+  generic: |
+    # Beethoven 1
+
+    [id:Beethoven_Ludwig-van]
+
+    # Beethoven 2
+
+    [id:Beethoven_Ludwig-van]
+
+    # Beethoven 3
+
+    [id:Beethoven_Ludwig-van]
+
+- title: Floating images
+  generic: |
+
+    [id:Haydn_Joseph align="left" caption="Joseph Haydn"] Ut wisi enim
+    ad minim veniam, quis nostrud exerci tation ullamcorper suscipit
+    lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum
+    iriure dolor in hendrerit in vulputate velit esse molestie
+    consequat, vel illum dolore eu feugiat nulla facilisis at vero eros
+    et accumsan et iusto odio dignissim qui blandit praesent luptatum
+    zzril delenit augue duis dolore te feugait nulla facilisi.
+
+    [id:Beethoven_Ludwig-van align="right" caption="Ludwig van
+    Beethoven"] Nam liber tempor cum soluta nobis eleifend option congue
+    nihil imperdiet doming id quod mazim placerat facer possim assum.
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
+    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+    volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
+    ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+    consequat.
+
+    [id:Mozart_Wolfgang-Amadeus align="left" caption="Wolfgang Amadeus
+    Mozart"] Duis autem vel eum iriure dolor in hendrerit in vulputate
+    velit esse molestie consequat, vel illum dolore eu feugiat nulla
+    facilisis.
+
+    At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+    kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+    amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+    duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+    sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+    consetetur sadipscing elitr, At accusam aliquyam diam diam dolore
+    dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt
+    justo labore Stet clita ea et gubergren, kasd magna no rebum.
+    sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit
+    amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat.
+
+    Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+    eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+    gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+    erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+    Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+    sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+    accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+    no sea takimata sanctus est Lorem ipsum dolor sit amet.

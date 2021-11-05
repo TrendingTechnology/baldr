@@ -1,0 +1,17 @@
+---
+meta:
+  ref: EP_common_multipartAssets
+  title: Multipart Assets
+
+slides:
+- title: All parts
+  score_sample: ref:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme
+
+- title: Part 1
+  score_sample: ref:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme#1
+
+- title: Part 2
+  score_sample: ref:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme#2
+
+- title: Part 3
+  score_sample: ref:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme#3

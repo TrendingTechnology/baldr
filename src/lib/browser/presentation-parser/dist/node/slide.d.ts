@@ -1,5 +1,6 @@
 import { DataCutter } from './data-management';
 import { MasterWrapper, FieldData } from './master';
+import { WrappedUriList } from './fuzzy-uri';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -45,14 +46,6 @@ export declare class Slide {
      */
     fields?: FieldData;
     /**
-     * Props (properties) to send to the main Vue master component.
-     */
-    propsMain?: any;
-    /**
-     * Props (properties) to send to the preview Vue master component.
-     */
-    propsPreview?: any;
-    /**
      * URIs of media assets that must necessarily be present.
      */
     readonly mediaUris: Set<string>;
@@ -60,8 +53,10 @@ export declare class Slide {
      * URIs of media assets that do not have to exist.
      */
     readonly optionalMediaUris: Set<string>;
+    readonly audioOverlay?: WrappedUriList;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
+    private parseAudioOverlay;
     /**
      * Log to the console.
      */

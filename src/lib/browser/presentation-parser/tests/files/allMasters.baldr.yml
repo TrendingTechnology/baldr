@@ -1,0 +1,135 @@
+---
+meta:
+  ref: EP_common_allMasters
+
+slides:
+
+- audio: uuid:7cf3ebba-932e-4445-9207-ae7342abd65e
+  description: 'Bilder einer Ausstellung (Klavier): 1. Der Gnom (mit vielen Samples)'
+
+- camera
+
+- cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+  description: Arbeitsblatt „Die Sinfonische Dichtung“ (Lückentext Seite 1 von 1)
+
+- document: uuid:d4b8d565-4a98-4b28-9ffb-4fa3f04857e1
+  description: Arbeitsblatt zum Thema „<em class="person">Ludwig van Beethoven</em>“
+
+- editor: |
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <td>Thema 1 (Spanier)</td>
+          <td>Thema 2 (Niederländer)</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Dynamik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Rhythmik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Satztechnik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Artikulation</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Tonlage</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+      </tbody>
+    </table>
+
+- generic:
+    step_mode: 'words'
+    markup: |
+      # Heading 1
+
+      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+
+      ## Adipisici elit, sed eiusmod
+
+      * Tempor incidunt ut labore.
+      * Veniam, quis nostrud.
+
+- group: Rolling-Stones_The
+
+- image: 'ref:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
+
+- instrument: Kontrabass
+
+- interactive_graphic:
+    src: ref:Requiem_NB_Confutatis_1-Takt
+    step_subset: 3-
+
+- note: |
+    # Heading
+
+    ---
+
+    1. one
+    2. two
+    3. three
+
+- person: Ibrahim_Abdullah
+
+- question:
+    heading: 'Alias for `sub_questions`'
+    questions:
+    - question: 'Questions Level 1'
+      answer: 'Answer Level 1'
+      questions:
+      - question: 'Questions Level 2'
+        answer: 'Answer Level 2'
+        questions:
+        - question: 'Questions Level 3'
+          answer: 'Answer Level 3'
+
+- quote:
+    text: >-
+      Der Mann begann zu tippen. Ich flippte fast aus! Er schlug
+      fantastische Rhythmen, indem er zwischen den Wörtern mit den
+      kleinen Fingern auf den Großschreibungstasten Akzente klopfte.
+      Und selbst wenn er auf die schlechten Kopien schaute, um den
+      nächsten Satz zu finden, spielte er weiter seinen Rhythmus auf
+      den beiden Umschalttasten. Jede Seite beendete er mit einer
+      glänzenden Passage über Ort und Datum des Eingangsstempels. -
+      Ich dankte ihm für seine Darbietung. Ich wusste: Dies war genau
+      das richtige Land, um Trommeln zu lernen.
+    author: Jahn Miller Chernaff
+    date: 1994
+    epilog: >-
+      So berichtet der amerikanische Schlagzeuger und Musikethnologe
+      <em class="person">John Miller Chernoff</em> über ein Erlebnis
+      bei seiner Einreise auf dem Flughafen von Accra, der Haupstadt
+      des westafrikanischen Staates Ghana.
+
+- score_sample:
+    score: 'ref:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
+    audio: 'ref:Schuetz-Freue_HB_Freue-dich'
+
+- section: >-
+    <em class="person">John Cage</em>: <em class="piece">Imaginary Landscape No. 4</em>
+
+- song: Last-Christmas
+
+- task: <em>“Do this!”</em> __subito__!
+
+- video: ref:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
+
+- wikipedia: Sequenz_(Musik)
+
+- youtube: -irE1AEH8Qg

@@ -2,6 +2,7 @@ import { DataCutter } from './data-management'
 import { convertToString } from '@bldr/core-browser'
 import { masterCollection } from './master-collection'
 import { MasterWrapper, FieldData } from './master'
+import { WrappedUriList } from './fuzzy-uri'
 import * as log from '@bldr/log'
 
 /**
@@ -65,16 +66,6 @@ export class Slide {
   fields?: FieldData
 
   /**
-   * Props (properties) to send to the main Vue master component.
-   */
-  propsMain?: any
-
-  /**
-   * Props (properties) to send to the preview Vue master component.
-   */
-  propsPreview?: any
-
-  /**
    * URIs of media assets that must necessarily be present.
    */
   public readonly mediaUris: Set<string>
@@ -83,6 +74,8 @@ export class Slide {
    * URIs of media assets that do not have to exist.
    */
   public readonly optionalMediaUris: Set<string>
+
+  public readonly audioOverlay?: WrappedUriList
 
   constructor (raw: any, no: number, level: number) {
     this.no = no
@@ -93,6 +86,8 @@ export class Slide {
     this.fields = this.master.normalizeFields(data.cutAny(this.master.name))
     this.mediaUris = this.master.processMediaUris(this.fields)
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
+    this.audioOverlay = this.parseAudioOverlay(data)
+    // data.checkEmpty()
   }
 
   private detectMaster (data: DataCutter): MasterWrapper {
@@ -114,6 +109,13 @@ export class Slide {
     }
 
     return masterCollection[intersection[0]]
+  }
+
+  private parseAudioOverlay (data: DataCutter): WrappedUriList | undefined {
+    const audioOverlay = data.cutAny('audioOverlay')
+    if (audioOverlay != null) {
+      return new WrappedUriList(audioOverlay)
+    }
   }
 
   /**

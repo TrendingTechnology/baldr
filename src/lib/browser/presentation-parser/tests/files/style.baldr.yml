@@ -1,0 +1,16 @@
+---
+meta:
+  ref: EP_common_style
+
+slides:
+- generic: fontSize 8em
+  style:
+    font_size: 8em
+
+- generic: |
+    <pre><code>background_color: $blue;
+    color: $green;
+    </code></pre>
+  style:
+    color: $green
+    background_color: $blue

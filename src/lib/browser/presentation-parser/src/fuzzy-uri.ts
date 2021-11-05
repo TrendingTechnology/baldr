@@ -35,6 +35,9 @@ class WrappedUriCollector implements WrappedUri {
         }
       }
     } else {
+      if (spec.uri == null) {
+        throw new Error(`No media URI found in “${JSON.stringify(spec)}”!`)
+      }
       this.uri = spec.uri
       if (spec.title != null) {
         this.title = spec.title

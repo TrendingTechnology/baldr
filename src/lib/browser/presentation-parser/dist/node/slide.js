@@ -4,6 +4,7 @@ exports.Slide = void 0;
 const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
 const master_collection_1 = require("./master-collection");
+const fuzzy_uri_1 = require("./fuzzy-uri");
 const log = require("@bldr/log");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -29,6 +30,8 @@ class Slide {
         this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);
         this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields);
+        this.audioOverlay = this.parseAudioOverlay(data);
+        // data.checkEmpty()
     }
     detectMaster(data) {
         const masterNames = Object.keys(master_collection_1.masterCollection);
@@ -40,6 +43,12 @@ class Slide {
             throw new Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data.raw)}`);
         }
         return master_collection_1.masterCollection[intersection[0]];
+    }
+    parseAudioOverlay(data) {
+        const audioOverlay = data.cutAny('audioOverlay');
+        if (audioOverlay != null) {
+            return new fuzzy_uri_1.WrappedUriList(audioOverlay);
+        }
     }
     /**
      * Log to the console.

@@ -1,6 +1,7 @@
 import { DataCutter } from './data-management';
 import { convertToString } from '@bldr/core-browser';
 import { masterCollection } from './master-collection';
+import { WrappedUriList } from './fuzzy-uri';
 import * as log from '@bldr/log';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -26,6 +27,8 @@ export class Slide {
         this.fields = this.master.normalizeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);
         this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields);
+        this.audioOverlay = this.parseAudioOverlay(data);
+        // data.checkEmpty()
     }
     detectMaster(data) {
         const masterNames = Object.keys(masterCollection);
@@ -37,6 +40,12 @@ export class Slide {
             throw new Error(`Each slide must have only one master slide: ${convertToString(data.raw)}`);
         }
         return masterCollection[intersection[0]];
+    }
+    parseAudioOverlay(data) {
+        const audioOverlay = data.cutAny('audioOverlay');
+        if (audioOverlay != null) {
+            return new WrappedUriList(audioOverlay);
+        }
     }
     /**
      * Log to the console.
