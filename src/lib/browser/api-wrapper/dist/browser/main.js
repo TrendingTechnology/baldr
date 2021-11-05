@@ -7,16 +7,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { makeHttpRequestInstance } from '@bldr/http-request';
 import { getConfig } from '@bldr/config-ng';
+import { makeHttpRequestInstance } from '@bldr/http-request';
 const config = getConfig();
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media');
-export function updateMediaServer() {
+function callWithErrorMessage(path, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield httpRequest.request('mgmt/update');
+        const result = yield httpRequest.request(path);
         if (result.status !== 200) {
-            throw new Error('Updating the media server failed.');
+            throw new Error(errorMessage);
         }
         return result.data;
+    });
+}
+export function updateMediaServer() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('mgmt/update', 'Updating the media server failed.');
+    });
+}
+export function getStatsCount() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('stats/count', 'Fetching of statistical informations (stats/count) failed.');
+    });
+}
+export function getStatsUpdates() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('stats/updates', 'Fetching of statistical informations (stats/updates) failed.');
     });
 }

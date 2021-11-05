@@ -1,12 +1,15 @@
-export interface UpdateResult {
-    finished: boolean;
+export interface Count {
+    assets: number;
+    presentations: number;
+}
+export interface Task {
     begin: number;
     end: number;
-    duration: number;
     lastCommitId: string;
+}
+export interface UpdateResult extends Task {
+    finished: boolean;
+    duration: number;
     errors: string[];
-    count: {
-        assets: number;
-        presentations: number;
-    };
+    count: Count;
 }

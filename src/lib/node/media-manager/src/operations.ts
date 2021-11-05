@@ -52,18 +52,6 @@ async function normalize (
   if (filePaths.length === 0) {
     filePaths = [process.cwd()]
   }
-  // let presParentDir
-  // if (parentPresDir != null && parentPresDir) {
-  //   presParentDir = locationIndicator.getPresParentDir(filePaths[0])
-  //   if (presParentDir != null) {
-  //     log.info(
-  //       'Run the normalization task on the parent presentation folder: %s',
-  //       presParentDir
-  //     )
-  //     filePaths = [presParentDir]
-  //   }
-  // }
-
   // `baldr normalize video.mp4.yml` only validates the YAML structure. We have
   // to call `baldr normalize video.mp4` to get the full normalization of the
   // metadata file video.mp4.yml.
@@ -76,17 +64,19 @@ async function normalize (
   }
 
   async function normalizeAsset (filePath: string): Promise<void> {
-    if (!fs.existsSync(`${filePath}.yml`)) {
+    const yamlFile = `${filePath}.yml`
+    if (yamlFile) {
       await operations.initializeMetaYaml(filePath)
     } else {
       await operations.normalizeMediaAsset(filePath)
     }
     operations.renameByRef(filePath)
+    operations.fixTypography(yamlFile)
   }
 
   function normalizeEveryFile (filePath: string): void {
     const extension = getExtension(filePath)?.toLowerCase()
-    if (extension != null && ['tex', 'yml', 'txt'].includes(extension)) {
+    if (extension != null && extension === 'txt') {
       operations.fixTypography(filePath)
     }
     if (filePath.match(/\.yml$/i) != null) {
@@ -98,15 +88,15 @@ async function normalize (
 
   async function normalizePresentation (filePath: string): Promise<void> {
     operations.normalizePresentationFile(filePath)
-    log.verbose('Generate presentation automatically on path %s:', [
-      filePath
-    ])
+    log.verbose('Generate presentation automatically on path %s:', [filePath])
     await operations.generateAutomaticPresentation(filePath)
+    operations.fixTypography(filePath)
   }
 
   function normalizeTex (filePath: string): void {
     log.info('\nPatch the titles of the TeX file “%s”', [filePath])
     operations.patchTexTitles(filePath)
+    operations.fixTypography(filePath)
   }
 
   let functionBundle = {}

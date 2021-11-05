@@ -9,18 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateMediaServer = void 0;
-const http_request_1 = require("@bldr/http-request");
+exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
 const config_ng_1 = require("@bldr/config-ng");
+const http_request_1 = require("@bldr/http-request");
 const config = config_ng_1.getConfig();
 const httpRequest = http_request_1.makeHttpRequestInstance(config, 'local', '/api/media');
-function updateMediaServer() {
+function callWithErrorMessage(path, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield httpRequest.request('mgmt/update');
+        const result = yield httpRequest.request(path);
         if (result.status !== 200) {
-            throw new Error('Updating the media server failed.');
+            throw new Error(errorMessage);
         }
         return result.data;
     });
 }
+function updateMediaServer() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('mgmt/update', 'Updating the media server failed.');
+    });
+}
 exports.updateMediaServer = updateMediaServer;
+function getStatsCount() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('stats/count', 'Fetching of statistical informations (stats/count) failed.');
+    });
+}
+exports.getStatsCount = getStatsCount;
+function getStatsUpdates() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage('stats/updates', 'Fetching of statistical informations (stats/updates) failed.');
+    });
+}
+exports.getStatsUpdates = getStatsUpdates;
