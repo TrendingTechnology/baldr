@@ -195,15 +195,6 @@ export declare class MasterWrapper {
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
     generateTexMarkup(fields: FieldData): string | undefined;
-    private normalizeFields;
-    /**
-     * Raise an error if there is an unknown field.
-     */
-    private detectUnkownFields;
-    /**
-     * Convert the fields marked as containing markup from markdown to HTML.
-     */
-    private convertFieldsToHtml;
     /**
      * Before resolving
      */

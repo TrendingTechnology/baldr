@@ -103,6 +103,7 @@ export class AudioMaster implements Master {
     fields: AudioFieldsNormalized,
     resolver: Resolver
   ): AudioFieldsResolved {
+    console.log(fields)
     const sample = resolver.getSample(fields.src)
     const asset = sample.asset
 

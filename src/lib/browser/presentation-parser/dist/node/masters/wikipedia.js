@@ -27,5 +27,23 @@ class WikipediaMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            // de:Wolfgang_Amadeus_Mozart
+            const regExp = new RegExp(/^([a-z]+):(.+)$/);
+            const match = fields.match(regExp);
+            if (match) {
+                fields = {
+                    title: match[2],
+                    language: match[1]
+                };
+            }
+            else {
+                // Wolfgang_Amadeus_Mozart
+                fields = { title: fields, language: DEFAULT_LANGUAGE };
+            }
+        }
+        return fields;
+    }
 }
 exports.WikipediaMaster = WikipediaMaster;

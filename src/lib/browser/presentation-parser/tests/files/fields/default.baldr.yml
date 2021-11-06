@@ -1,0 +1,6 @@
+---
+ref: default
+title: Default value of a slide field.
+
+slides:
+- audio: ref:test

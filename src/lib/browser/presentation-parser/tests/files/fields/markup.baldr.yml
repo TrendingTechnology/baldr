@@ -1,0 +1,8 @@
+---
+ref: markup
+title: Markup
+
+slides:
+- audio:
+    title: This is *markdown*
+    src: ref:test

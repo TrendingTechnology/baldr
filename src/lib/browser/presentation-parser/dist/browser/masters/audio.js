@@ -70,6 +70,7 @@ export class AudioMaster {
         return uris;
     }
     collectFields(fields, resolver) {
+        console.log(fields);
         const sample = resolver.getSample(fields.src);
         const asset = sample.asset;
         const artist = fields.artist == null ? asset.yaml.artist : fields.artist;

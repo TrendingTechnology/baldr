@@ -1,7 +1,7 @@
 /* globals describe it */
 
 const assert = require('assert')
-const { parseTestPresentation } = require('./_helper.js')
+const { parseTestPresentation, parseFirstSlide } = require('./_helper.js')
 
 describe('Class “Slide()”', function () {
   it('Basic attributes', function () {
@@ -59,5 +59,29 @@ describe('Class “Slide()”', function () {
     for (const asset of assets) {
       assert.ok(typeof asset.ref === 'string')
     }
+  })
+
+  describe('Fields', function () {
+    it('Unknown field', function () {
+      assert.throws(
+        () => {
+          parseTestPresentation('fields/unknown-field')
+        },
+        {
+          message: 'The master slide “generic” has no field named “xxx”.',
+          name: 'Error'
+        }
+      )
+    })
+
+    it('markup = true', function () {
+      const slide = parseFirstSlide('fields/markup')
+      assert.strictEqual(slide.fields.title, 'This is <em>markdown</em>')
+    })
+
+    it('Default value', function () {
+      const slide = parseFirstSlide('fields/default')
+      assert.strictEqual(slide.fields.autoplay, false)
+    })
   })
 })

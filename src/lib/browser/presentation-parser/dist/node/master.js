@@ -61,41 +61,30 @@ class MasterWrapper {
             return this.master.generateTexMarkup(fields);
         }
     }
-    normalizeFields(fields) {
-        if (this.master.normalizeFields != null) {
-            return this.master.normalizeFields(fields);
-        }
-        return fields;
-    }
-    /**
-     * Raise an error if there is an unknown field.
-     */
-    detectUnkownFields(fields) {
-        for (const fieldName in fields) {
-            if (this.master.fieldsDefintion[fieldName] == null) {
-                throw new Error(`The master slide “${this.master.name}” has no property named “${fieldName}”.`);
-            }
-        }
-    }
-    /**
-     * Convert the fields marked as containing markup from markdown to HTML.
-     */
-    convertFieldsToHtml(fields) {
-        for (const fieldName in fields) {
-            const fieldDefinition = this.master.fieldsDefintion[fieldName];
-            if (fieldDefinition.markup != null && fieldDefinition.markup) {
-                fields[fieldName] = markdown_to_html_1.convertMarkdownToHtml(fields[fieldName]);
-            }
-        }
-        return fields;
-    }
     /**
      * Before resolving
      */
     initializeFields(fields) {
-        fields = this.normalizeFields(fields);
-        this.detectUnkownFields(fields);
-        fields = this.convertFieldsToHtml(fields);
+        if (this.master.normalizeFields != null) {
+            fields = this.master.normalizeFields(fields);
+        }
+        for (const name in fields) {
+            // Raise an error if there is an unknown field.
+            if (this.master.fieldsDefintion[name] == null) {
+                throw new Error(`The master slide “${this.master.name}” has no field named “${name}”.`);
+            }
+        }
+        for (const name in this.master.fieldsDefintion) {
+            const def = this.master.fieldsDefintion[name];
+            // Set default values
+            if (def.default != null && fields[name] == null) {
+                fields[name] = def.default;
+            }
+            //  Convert the field marked as containing markup from markdown to HTML.
+            if (def.markup != null && def.markup && fields[name] != null) {
+                fields[name] = markdown_to_html_1.convertMarkdownToHtml(fields[name]);
+            }
+        }
         return fields;
     }
     /**

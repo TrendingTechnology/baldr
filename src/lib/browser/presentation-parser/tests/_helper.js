@@ -31,8 +31,14 @@ function parseTestPresentation (fileName) {
   )
 }
 
+function parseFirstSlide (relPath) {
+  const presentation = parseTestPresentation(relPath)
+  return presentation.getSlideByNo(1)
+}
+
 module.exports = {
   parseMasterPresentation,
   parseRealWorldPresentation,
-  parseTestPresentation
+  parseTestPresentation,
+  parseFirstSlide
 }

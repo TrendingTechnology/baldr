@@ -1,4 +1,10 @@
 import { Master } from '../master';
+declare type WikipediaFieldsRaw = string | WikipediaFieldsNormalized;
+interface WikipediaFieldsNormalized {
+    title: string;
+    language: string;
+    oldid?: number;
+}
 export declare class WikipediaMaster implements Master {
     name: string;
     displayName: string;
@@ -22,4 +28,6 @@ export declare class WikipediaMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: WikipediaFieldsRaw): WikipediaFieldsNormalized;
 }
+export {};
