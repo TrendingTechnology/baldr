@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type EditorFieldsRaw = string | EditorFieldsNormalized
+
+interface EditorFieldsNormalized {
+  markup: string
+}
+
 export class EditorMaster implements Master {
   name = 'editor'
 
@@ -14,7 +20,17 @@ export class EditorMaster implements Master {
     markup: {
       type: String,
       markup: true,
-      description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
+      description:
+        'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     }
+  }
+
+  normalizeFields (fields: EditorFieldsRaw): EditorFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        markup: fields
+      }
+    }
+    return fields
   }
 }

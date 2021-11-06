@@ -174,7 +174,7 @@ export class Presentation {
     )
 
     for (const slide of this.slides) {
-      slide.master.collectFields(slide, resolver)
+      slide.master.finalizeFields(slide, resolver)
     }
 
     return assets

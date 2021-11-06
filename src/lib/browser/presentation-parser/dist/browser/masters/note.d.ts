@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type NoteFieldsRaw = string | NoteFieldsNormalized;
+interface NoteFieldsNormalized {
+    markup: string;
+}
 export declare class NoteMaster implements Master {
     name: string;
     displayName: string;
@@ -19,4 +23,6 @@ export declare class NoteMaster implements Master {
             type: ArrayConstructor;
         };
     };
+    normalizeFields(fields: NoteFieldsRaw): NoteFieldsNormalized;
 }
+export {};

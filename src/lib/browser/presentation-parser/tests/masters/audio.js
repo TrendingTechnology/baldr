@@ -15,7 +15,7 @@ describe('Master audio', function () {
     assert.strictEqual(fields.artist, 'Paul Godwin')
     assert.strictEqual(
       fields.description,
-      '# Some text\n\n1. one\n2. two\n3. three\n'
+      '<h1 id="some-text">Some text</h1>\n<ol>\n<li>one</li>\n<li>two</li>\n<li>three</li>\n</ol>\n'
     )
     assert.strictEqual(
       fields.asset.uri.raw,

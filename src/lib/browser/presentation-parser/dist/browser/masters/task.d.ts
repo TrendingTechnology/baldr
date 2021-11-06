@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type TaskFieldsRaw = string | TaskFieldsNormalized;
+interface TaskFieldsNormalized {
+    markup: string;
+}
 export declare class TaskMaster implements Master {
     name: string;
     displayName: string;
@@ -15,4 +19,6 @@ export declare class TaskMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: TaskFieldsRaw): TaskFieldsNormalized;
 }
+export {};

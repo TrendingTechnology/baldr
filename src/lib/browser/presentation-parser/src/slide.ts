@@ -83,7 +83,7 @@ export class Slide {
     const data = new DataCutter(raw)
     this.meta = new SlideMeta(data)
     this.master = this.detectMaster(data)
-    this.fields = this.master.normalizeFields(data.cutAny(this.master.name))
+    this.fields = this.master.initializeFields(data.cutAny(this.master.name))
     this.mediaUris = this.master.processMediaUris(this.fields)
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
     this.audioOverlay = this.parseAudioOverlay(data)

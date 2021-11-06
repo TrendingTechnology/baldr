@@ -14,4 +14,12 @@ export class EditorMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                markup: fields
+            };
+        }
+        return fields;
+    }
 }

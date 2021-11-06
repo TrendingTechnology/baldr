@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type EditorFieldsRaw = string | EditorFieldsNormalized;
+interface EditorFieldsNormalized {
+    markup: string;
+}
 export declare class EditorMaster implements Master {
     name: string;
     displayName: string;
@@ -13,4 +17,6 @@ export declare class EditorMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: EditorFieldsRaw): EditorFieldsNormalized;
 }
+export {};

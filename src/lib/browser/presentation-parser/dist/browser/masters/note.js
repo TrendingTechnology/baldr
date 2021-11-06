@@ -20,4 +20,12 @@ export class NoteMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                markup: fields
+            };
+        }
+        return fields;
+    }
 }

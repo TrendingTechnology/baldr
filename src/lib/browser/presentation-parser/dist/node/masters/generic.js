@@ -32,5 +32,13 @@ class GenericMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string' || Array.isArray(fields)) {
+            fields = {
+                markup: fields
+            };
+        }
+        return fields;
+    }
 }
 exports.GenericMaster = GenericMaster;

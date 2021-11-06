@@ -107,7 +107,7 @@ export interface Master {
     /**
      * The defintion of the fields of the master slide.
      */
-    fieldsDefintion?: {
+    fieldsDefintion: {
         [key: string]: FieldDefinition;
     };
     /**
@@ -191,10 +191,25 @@ export declare class MasterWrapper {
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
     get name(): string;
-    normalizeFields(fields: any): FieldData | undefined;
     private static convertToSet;
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
     generateTexMarkup(fields: FieldData): string | undefined;
-    collectFields(slide: Slide, resolver: Resolver): FieldData | undefined;
+    private normalizeFields;
+    /**
+     * Raise an error if there is an unknown field.
+     */
+    private detectUnkownFields;
+    /**
+     * Convert the fields marked as containing markup from markdown to HTML.
+     */
+    private convertFieldsToHtml;
+    /**
+     * Before resolving
+     */
+    initializeFields(fields: FieldData): FieldData;
+    /**
+     * After resolving
+     */
+    finalizeFields(slide: Slide, resolver: Resolver): FieldData | undefined;
 }

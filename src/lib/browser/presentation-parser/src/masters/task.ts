@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type TaskFieldsRaw = string | TaskFieldsNormalized
+
+interface TaskFieldsNormalized {
+  markup: string
+}
+
 export class TaskMaster implements Master {
   name = 'task'
 
@@ -18,5 +24,14 @@ export class TaskMaster implements Master {
       markup: true,
       description: 'Text im HTML oder Markdown-Format oder als reinen Text.'
     }
+  }
+
+  normalizeFields (fields: TaskFieldsRaw): TaskFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        markup: fields
+      }
+    }
+    return fields
   }
 }

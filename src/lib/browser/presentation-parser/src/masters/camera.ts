@@ -9,4 +9,6 @@ export class CameraMaster implements Master {
     name: 'document-camera',
     color: 'red'
   }
+
+  fieldsDefintion = {}
 }

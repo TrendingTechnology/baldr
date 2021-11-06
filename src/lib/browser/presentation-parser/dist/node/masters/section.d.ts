@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type SectionFieldsRaw = string | SectionFieldsNormalized;
+interface SectionFieldsNormalized {
+    heading: string;
+}
 export declare class SectionMaster implements Master {
     name: string;
     displayName: string;
@@ -14,4 +18,6 @@ export declare class SectionMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: SectionFieldsRaw): SectionFieldsNormalized;
 }
+export {};

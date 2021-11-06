@@ -1,6 +1,7 @@
 import { Master } from '../master'
 
 type DocumentFieldsRaw = string | DocumentFieldsNormalized
+
 interface DocumentFieldsNormalized {
   src: string
 }

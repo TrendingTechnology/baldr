@@ -1,4 +1,8 @@
 import { Master } from '../master';
+declare type GenericFieldsRaw = string | GenericFieldsNormalized;
+interface GenericFieldsNormalized {
+    markup: string | string[];
+}
 export declare class GenericMaster implements Master {
     name: string;
     displayName: string;
@@ -25,4 +29,6 @@ export declare class GenericMaster implements Master {
             default: boolean;
         };
     };
+    normalizeFields(fields: GenericFieldsRaw): GenericFieldsNormalized;
 }
+export {};

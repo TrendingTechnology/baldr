@@ -9,6 +9,7 @@ class CameraMaster {
             name: 'document-camera',
             color: 'red'
         };
+        this.fieldsDefintion = {};
     }
 }
 exports.CameraMaster = CameraMaster;

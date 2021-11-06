@@ -2,6 +2,12 @@ import { Master } from '../master'
 
 const CHARACTERS_ON_SLIDE = 400
 
+type GenericFieldsRaw = string | GenericFieldsNormalized
+
+interface GenericFieldsNormalized {
+  markup: string | string[]
+}
+
 export class GenericMaster implements Master {
   name = 'generic'
 
@@ -24,13 +30,24 @@ export class GenericMaster implements Master {
     },
     charactersOnSlide: {
       type: Number,
-      description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
+      description:
+        'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
     onOne: {
-      description: 'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
+      description:
+        'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
       type: Boolean,
       default: false
     }
+  }
+
+  normalizeFields (fields: GenericFieldsRaw): GenericFieldsNormalized {
+    if (typeof fields === 'string' || Array.isArray(fields)) {
+      fields = {
+        markup: fields
+      }
+    }
+    return fields
   }
 }

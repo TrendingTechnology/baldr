@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type NoteFieldsRaw = string | NoteFieldsNormalized
+
+interface NoteFieldsNormalized {
+  markup: string
+}
+
 export class NoteMaster implements Master {
   name = 'note'
 
@@ -22,5 +28,14 @@ export class NoteMaster implements Master {
     sections: {
       type: Array
     }
+  }
+
+  normalizeFields (fields: NoteFieldsRaw): NoteFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        markup: fields
+      }
+    }
+    return fields
   }
 }

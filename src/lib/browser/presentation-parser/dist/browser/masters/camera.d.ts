@@ -6,4 +6,5 @@ export declare class CameraMaster implements Master {
         name: string;
         color: string;
     };
+    fieldsDefintion: {};
 }

@@ -1,5 +1,11 @@
 import { Master } from '../master'
 
+type SectionFieldsRaw = string | SectionFieldsNormalized
+
+interface SectionFieldsNormalized {
+  heading: string
+}
+
 export class SectionMaster implements Master {
   name = 'section'
 
@@ -17,5 +23,14 @@ export class SectionMaster implements Master {
       markup: true,
       description: 'Die Überschrift / der Titel des Abschnitts.'
     }
+  }
+
+  normalizeFields (fields: SectionFieldsRaw): SectionFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        heading: fields
+      }
+    }
+    return fields
   }
 }

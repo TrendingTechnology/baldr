@@ -1,5 +1,6 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
 import { Slide } from './slide'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 export { Asset, Sample } from '@bldr/media-resolver-ng'
 export type Resolver = ResolverType
@@ -124,7 +125,7 @@ export interface Master {
   /**
    * The defintion of the fields of the master slide.
    */
-  fieldsDefintion?: {
+  fieldsDefintion: {
     [key: string]: FieldDefinition
   }
 
@@ -248,12 +249,6 @@ export class MasterWrapper {
     return this.master.name
   }
 
-  public normalizeFields (fields: any): FieldData | undefined {
-    if (this.master.normalizeFields != null) {
-      return this.master.normalizeFields(fields)
-    }
-  }
-
   private static convertToSet (
     uris: string | string[] | Set<string> | undefined
   ): Set<string> {
@@ -284,13 +279,59 @@ export class MasterWrapper {
     return new Set<string>()
   }
 
-  public generateTexMarkup (fields: FieldData): string | undefined {
+  generateTexMarkup (fields: FieldData): string | undefined {
     if (this.master.generateTexMarkup != null) {
       return this.master.generateTexMarkup(fields)
     }
   }
 
-  public collectFields (
+  private normalizeFields (fields: any): FieldData {
+    if (this.master.normalizeFields != null) {
+      return this.master.normalizeFields(fields)
+    }
+    return fields
+  }
+
+  /**
+   * Raise an error if there is an unknown field.
+   */
+  private detectUnkownFields (fields: FieldData): void {
+    for (const fieldName in fields) {
+      if (this.master.fieldsDefintion[fieldName] == null) {
+        throw new Error(
+          `The master slide “${this.master.name}” has no property named “${fieldName}”.`
+        )
+      }
+    }
+  }
+
+  /**
+   * Convert the fields marked as containing markup from markdown to HTML.
+   */
+  private convertFieldsToHtml (fields: FieldData): FieldData {
+    for (const fieldName in fields) {
+      const fieldDefinition = this.master.fieldsDefintion[fieldName]
+      if (fieldDefinition.markup != null && fieldDefinition.markup) {
+        fields[fieldName] = convertMarkdownToHtml(fields[fieldName])
+      }
+    }
+    return fields
+  }
+
+  /**
+   * Before resolving
+   */
+  public initializeFields (fields: FieldData): FieldData {
+    fields = this.normalizeFields(fields)
+    this.detectUnkownFields(fields)
+    fields = this.convertFieldsToHtml(fields)
+    return fields
+  }
+
+  /**
+   * After resolving
+   */
+  public finalizeFields (
     slide: Slide,
     resolver: Resolver
   ): FieldData | undefined {

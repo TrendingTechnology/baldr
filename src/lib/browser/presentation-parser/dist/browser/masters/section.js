@@ -15,4 +15,12 @@ export class SectionMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                heading: fields
+            };
+        }
+        return fields;
+    }
 }
