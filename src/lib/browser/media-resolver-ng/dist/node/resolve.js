@@ -9,13 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Resolver = void 0;
+exports.updateMediaServer = exports.Resolver = void 0;
+const api = require("@bldr/api-wrapper");
+const config_ng_1 = require("@bldr/config-ng");
 const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const asset_1 = require("./asset");
 const cache_1 = require("./cache");
-const config_ng_1 = require("@bldr/config-ng");
 const config = config_ng_1.getConfig();
 class SampleCache extends cache_1.Cache {
     constructor(translator) {
@@ -119,32 +120,14 @@ class Resolver {
     queryMediaServer(uri, throwException = true) {
         return __awaiter(this, void 0, void 0, function* () {
             const mediaUri = new client_media_models_1.MediaUri(uri);
-            const field = mediaUri.scheme;
-            const search = mediaUri.authority;
             const cacheKey = mediaUri.uriWithoutFragment;
             if (this.cache[cacheKey] != null) {
                 return this.cache[cacheKey];
             }
-            const response = yield this.httpRequest.request({
-                url: 'query',
-                method: 'get',
-                params: {
-                    type: 'assets',
-                    method: 'exactMatch',
-                    field: field,
-                    search: search
-                }
-            });
-            if (response == null || response.status !== 200 || response.data == null) {
-                if (throwException) {
-                    throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`);
-                }
-            }
-            else {
-                const rawRestApiAsset = response.data;
-                this.cache[cacheKey] = rawRestApiAsset;
-                return rawRestApiAsset;
-            }
+            const asset = yield api.getAssetByUri(uri, throwException);
+            const rawRestApiAsset = asset;
+            this.cache[cacheKey] = rawRestApiAsset;
+            return rawRestApiAsset;
         });
     }
     /**
@@ -345,3 +328,9 @@ class Resolver {
     }
 }
 exports.Resolver = Resolver;
+function updateMediaServer() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield api.updateMediaServer();
+    });
+}
+exports.updateMediaServer = updateMediaServer;

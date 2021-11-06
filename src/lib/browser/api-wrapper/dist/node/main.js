@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
+exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
 const config_ng_1 = require("@bldr/config-ng");
 const http_request_1 = require("@bldr/http-request");
+const client_media_models_1 = require("@bldr/client-media-models");
 const config = config_ng_1.getConfig();
 const httpRequest = http_request_1.makeHttpRequestInstance(config, 'local', '/api/media');
 function callWithErrorMessage(path, errorMessage) {
@@ -41,3 +42,29 @@ function getStatsUpdates() {
     });
 }
 exports.getStatsUpdates = getStatsUpdates;
+function getAssetByUri(uri, throwException = true) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mediaUri = new client_media_models_1.MediaUri(uri);
+        const field = mediaUri.scheme;
+        const search = mediaUri.authority;
+        const response = yield httpRequest.request({
+            url: 'query',
+            method: 'get',
+            params: {
+                type: 'assets',
+                method: 'exactMatch',
+                field: field,
+                search: search
+            }
+        });
+        if (response == null || response.status !== 200 || response.data == null) {
+            if (throwException) {
+                throw new Error(`The media with the ${field} ”${search}” couldn’t be resolved.`);
+            }
+        }
+        else {
+            return response.data;
+        }
+    });
+}
+exports.getAssetByUri = getAssetByUri;

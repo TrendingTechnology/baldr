@@ -7,4 +7,4 @@
  * resolve.ts -> main.ts
  * ```
  */
-export { Resolver } from './resolve';
+export { Resolver, updateMediaServer } from './resolve';

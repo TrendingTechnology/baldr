@@ -1,6 +1,7 @@
 import { ApiTypes } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config-ng'
 import { makeHttpRequestInstance } from '@bldr/http-request'
+import { MediaUri } from '@bldr/client-media-models'
 
 const config = getConfig()
 
@@ -23,6 +24,7 @@ export async function updateMediaServer (): Promise<ApiTypes.UpdateResult> {
     'Updating the media server failed.'
   )
 }
+
 export async function getStatsCount (): Promise<ApiTypes.Count> {
   return await callWithErrorMessage(
     'stats/count',
@@ -35,4 +37,32 @@ export async function getStatsUpdates (): Promise<ApiTypes.Task[]> {
     'stats/updates',
     'Fetching of statistical informations (stats/updates) failed.'
   )
+}
+
+export async function getAssetByUri (
+  uri: string,
+  throwException: boolean = true
+): Promise<any | undefined> {
+  const mediaUri = new MediaUri(uri)
+  const field = mediaUri.scheme
+  const search = mediaUri.authority
+  const response = await httpRequest.request({
+    url: 'query',
+    method: 'get',
+    params: {
+      type: 'assets',
+      method: 'exactMatch',
+      field: field,
+      search: search
+    }
+  })
+  if (response == null || response.status !== 200 || response.data == null) {
+    if (throwException) {
+      throw new Error(
+        `The media with the ${field} ”${search}” couldn’t be resolved.`
+      )
+    }
+  } else {
+    return response.data
+  }
 }

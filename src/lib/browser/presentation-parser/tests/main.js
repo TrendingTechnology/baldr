@@ -65,7 +65,7 @@ describe('Package “@bldr/presentation-parser”', function () {
         assert.strictEqual(err.name, 'Error')
         assert.strictEqual(
           err.message,
-          'Media with the ref ”xxxxxxx” couldn’t be resolved.'
+          'The media with the ref ”xxxxxxx” couldn’t be resolved.'
         )
         return true
       }

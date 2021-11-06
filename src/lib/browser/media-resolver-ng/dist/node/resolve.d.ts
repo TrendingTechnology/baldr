@@ -117,4 +117,5 @@ export declare class Resolver {
      */
     reset(): void;
 }
+export declare function updateMediaServer(): Promise<void>;
 export {};
