@@ -1,3 +1,5 @@
+import * as api from '@bldr/api-wrapper'
+import { getConfig } from '@bldr/config-ng'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
@@ -5,7 +7,6 @@ import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 import { ClientMediaAsset } from './asset'
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache'
 import { Sample, Asset, RestApiRaw } from './types'
-import { getConfig } from '@bldr/config-ng'
 
 const config = getConfig()
 
@@ -149,33 +150,14 @@ export class Resolver {
     throwException: boolean = true
   ): Promise<RestApiRaw | undefined> {
     const mediaUri = new MediaUri(uri)
-    const field = mediaUri.scheme
-    const search = mediaUri.authority
     const cacheKey = mediaUri.uriWithoutFragment
     if (this.cache[cacheKey] != null) {
       return this.cache[cacheKey]
     }
-    const response = await this.httpRequest.request({
-      url: 'query',
-      method: 'get',
-      params: {
-        type: 'assets',
-        method: 'exactMatch',
-        field: field,
-        search: search
-      }
-    })
-    if (response == null || response.status !== 200 || response.data == null) {
-      if (throwException) {
-        throw new Error(
-          `Media with the ${field} ”${search}” couldn’t be resolved.`
-        )
-      }
-    } else {
-      const rawRestApiAsset: RestApiRaw = response.data
-      this.cache[cacheKey] = rawRestApiAsset
-      return rawRestApiAsset
-    }
+    const asset = await api.getAssetByUri(uri, throwException)
+    const rawRestApiAsset: RestApiRaw = asset
+    this.cache[cacheKey] = rawRestApiAsset
+    return rawRestApiAsset
   }
 
   /**
@@ -237,7 +219,7 @@ export class Resolver {
    * @param throwException - Throw an exception if the media URI
    *  cannot be resolved (default: `true`).
    */
-  async resolve (
+  public async resolve (
     uris: UrisSpec,
     throwException: boolean = true
   ): Promise<Asset[]> {
@@ -385,4 +367,8 @@ export class Resolver {
     this.uriTranslator.reset()
     this.shortcutManager.reset()
   }
+}
+
+export async function updateMediaServer (): Promise<void> {
+  await api.updateMediaServer()
 }

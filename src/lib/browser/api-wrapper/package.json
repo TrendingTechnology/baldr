@@ -29,6 +29,7 @@
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "dependencies": {
+    "@bldr/client-media-models": "*",
     "@bldr/config-ng": "*",
     "@bldr/http-request": "*"
   },

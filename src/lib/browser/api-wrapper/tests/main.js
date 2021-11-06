@@ -23,4 +23,9 @@ describe('Package “@bldr/api-wrapper”', function () {
     assert.strictEqual(typeof result[0].end, 'number')
     assert.strictEqual(typeof result[0].lastCommitId, 'string')
   })
+
+  it('Function “getAssetByUri()”', async function () {
+    const asset = await wrapper.getAssetByUri('ref:PR_Mussorgski_Modest')
+    assert.strictEqual(asset.ref, 'PR_Mussorgski_Modest')
+  })
 })

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { getConfig } from '@bldr/config-ng';
 import { makeHttpRequestInstance } from '@bldr/http-request';
+import { MediaUri } from '@bldr/client-media-models';
 const config = getConfig();
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media');
 function callWithErrorMessage(path, errorMessage) {
@@ -33,5 +34,30 @@ export function getStatsCount() {
 export function getStatsUpdates() {
     return __awaiter(this, void 0, void 0, function* () {
         return yield callWithErrorMessage('stats/updates', 'Fetching of statistical informations (stats/updates) failed.');
+    });
+}
+export function getAssetByUri(uri, throwException = true) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mediaUri = new MediaUri(uri);
+        const field = mediaUri.scheme;
+        const search = mediaUri.authority;
+        const response = yield httpRequest.request({
+            url: 'query',
+            method: 'get',
+            params: {
+                type: 'assets',
+                method: 'exactMatch',
+                field: field,
+                search: search
+            }
+        });
+        if (response == null || response.status !== 200 || response.data == null) {
+            if (throwException) {
+                throw new Error(`The media with the ${field} ”${search}” couldn’t be resolved.`);
+            }
+        }
+        else {
+            return response.data;
+        }
     });
 }

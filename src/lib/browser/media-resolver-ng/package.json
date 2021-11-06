@@ -32,6 +32,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@bldr/api-wrapper": "*",
     "@bldr/client-media-models": "*",
     "@bldr/config-ng": "*",
     "@bldr/core-browser": "*",
