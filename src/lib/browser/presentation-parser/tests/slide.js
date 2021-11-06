@@ -83,5 +83,17 @@ describe('Class “Slide()”', function () {
       const slide = parseFirstSlide('fields/default')
       assert.strictEqual(slide.fields.autoplay, false)
     })
+
+    it('required = true', function () {
+      assert.throws(
+        () => {
+          parseFirstSlide('fields/required')
+        },
+        {
+          message: 'A field named “src” is mandatory for the master slide “audio”.',
+          name: 'Error'
+        }
+      )
+    })
   })
 })

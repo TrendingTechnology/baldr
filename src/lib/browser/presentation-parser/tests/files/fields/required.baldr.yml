@@ -1,0 +1,8 @@
+---
+ref: required
+title: Missing required field
+
+slides:
+- audio:
+    title: This is *markdown*
+    composer: Beethoven

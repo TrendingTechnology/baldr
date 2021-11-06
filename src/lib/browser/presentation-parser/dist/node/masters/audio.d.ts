@@ -35,7 +35,6 @@ export declare class AudioMaster implements Master {
             type: StringConstructor;
             markup: boolean;
             description: string;
-            required: boolean;
         };
         composer: {
             type: StringConstructor;

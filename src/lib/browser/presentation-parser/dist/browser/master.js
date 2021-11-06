@@ -73,6 +73,9 @@ export class MasterWrapper {
         }
         for (const name in this.master.fieldsDefintion) {
             const def = this.master.fieldsDefintion[name];
+            if (def.required != null && def.required && fields[name] == null) {
+                throw new Error(`A field named “${name}” is mandatory for the master slide “${this.master.name}”.`);
+            }
             // Set default values
             if (def.default != null && fields[name] == null) {
                 fields[name] = def.default;
