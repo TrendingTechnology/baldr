@@ -133,4 +133,5 @@ export async function normalize (
   await walk(functionBundle, {
     path: filePaths
   })
+  
 }
