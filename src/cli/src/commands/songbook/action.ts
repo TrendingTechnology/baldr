@@ -8,7 +8,7 @@ import { getConfig } from '@bldr/config-ng'
 
 const config = getConfig()
 
-interface CmdObj {
+interface Options {
   basePath: string
   clean: boolean
   folder: string
@@ -26,7 +26,7 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (cmdObj: CmdObj): void {
+function action (cmdObj: Options): void {
   if (cmdObj.folder != null) {
     cmdObj.force = true
   }

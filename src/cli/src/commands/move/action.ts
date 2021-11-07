@@ -16,7 +16,7 @@ import { readFile, writeFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { MediaResolverTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 
-interface CmdObj {
+interface Options {
   regexp?: string
   extension?: string
   copy?: boolean
@@ -30,7 +30,7 @@ interface CmdObj {
  * @param {String} oldPath
  * @param {String} extension
  */
-function relocate (oldPath: string, extension: string, cmdObj: CmdObj): void {
+function relocate (oldPath: string, extension: string, cmdObj: Options): void {
   if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
     return
   }
@@ -84,7 +84,7 @@ const resolvedTexImages: { [key: string]: string } = {}
 function moveTexImage (
   oldPathTex: string,
   baseName: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): string | undefined {
   if (resolvedTexImages[baseName] != null) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
@@ -135,7 +135,7 @@ function moveTexImage (
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function moveTex (oldPath: string, newPath: string, cmdObj: CmdObj): void {
+function moveTex (oldPath: string, newPath: string, cmdObj: Options): void {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
@@ -203,7 +203,7 @@ function getMbrainzRecordingId (filePath: string): string | undefined {
 async function moveMp3 (
   oldPath: string,
   newPath: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): Promise<void> {
   // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
@@ -249,7 +249,7 @@ async function moveMp3 (
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param cmdObj - See commander docs.
  */
-async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
+async function moveReference (oldPath: string, cmdObj: Options): Promise<void> {
   let newPath = locationIndicator.getMirroredPath(oldPath)
   if (newPath === undefined) return
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
@@ -277,7 +277,7 @@ async function moveReference (oldPath: string, cmdObj: CmdObj): Promise<void> {
 async function moveFromArchive (
   oldPath: string,
   extension: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): Promise<void> {
   if (oldPath.includes('Tonart.pdf')) {
     await moveReference(oldPath, cmdObj)
@@ -301,7 +301,7 @@ async function moveFromArchive (
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param cmdObj - See commander docs.
  */
-async function move (oldPath: string, cmdObj: CmdObj): Promise<void> {
+async function move (oldPath: string, cmdObj: Options): Promise<void> {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
   const extension = getExtension(oldPath)
@@ -321,7 +321,7 @@ async function move (oldPath: string, cmdObj: CmdObj): Promise<void> {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
+async function action (filePaths: string[], cmdObj: Options): Promise<void> {
   const opts: { [key: string]: any } = {
     path: filePaths,
     payload: cmdObj

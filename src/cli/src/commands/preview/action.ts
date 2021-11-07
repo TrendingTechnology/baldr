@@ -8,7 +8,7 @@ import { CommandRunner } from '@bldr/cli-utils'
 import { filePathToMimeType, walk } from '@bldr/media-manager'
 import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
 
-interface CmdObj {
+interface Options {
   seconds: number
   force: boolean
 }
@@ -117,7 +117,7 @@ function convertFirstPdfPageToJpg (srcPath: string, destPath: string): void {
 
 async function createPreviewOneFile (
   srcPath: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): Promise<void> {
   log.info('Create preview files for %s', [srcPath])
   const mimeType = filePathToMimeType(srcPath)
@@ -154,7 +154,7 @@ async function createPreviewOneFile (
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths: string[], cmdObj: CmdObj): Promise<void> {
+async function action (filePaths: string[], cmdObj: Options): Promise<void> {
   await walk(
     {
       async asset (relPath) {

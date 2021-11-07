@@ -1,16 +1,20 @@
 import { GenericError } from '@bldr/type-definitions'
-import { parseAndResolve } from '@bldr/presentation-parser'
+import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/file-reader-writer'
 import { updateMediaServer } from '@bldr/api-wrapper'
 import { walk } from '@bldr/media-manager'
 import * as log from '@bldr/log'
+
+interface Options {
+  resolve?: boolean
+}
 
 /**
  * @param filePath - A file path.
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths?: string): Promise<void> {
+async function action (filePaths?: string, options?: Options): Promise<void> {
   const errors: { [filePath: string]: string } = {}
   const result = await updateMediaServer()
   log.infoAny(result)
@@ -19,7 +23,10 @@ async function action (filePaths?: string): Promise<void> {
       async presentation (filePath) {
         log.info('Parse presentation %s', [filePath])
         try {
-          const presentation = await parseAndResolve(readFile(filePath))
+          const presentation = parse(readFile(filePath))
+          if (options?.resolve != null && options.resolve) {
+            await presentation.resolve()
+          }
           presentation.log()
         } catch (e) {
           const error = e as GenericError

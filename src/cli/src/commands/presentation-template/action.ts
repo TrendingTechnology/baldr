@@ -1,6 +1,6 @@
 import { operations } from '@bldr/media-manager'
 
-interface CmdObj {
+interface Options {
   force: boolean
 }
 
@@ -9,7 +9,7 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePath?: string, cmdObj?: CmdObj): Promise<void> {
+async function action (filePath?: string, cmdObj?: Options): Promise<void> {
   await operations.generateAutomaticPresentation(filePath, cmdObj?.force)
 }
 

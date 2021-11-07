@@ -38,7 +38,7 @@ const log = __importStar(require("@bldr/log"));
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action(filePaths) {
+function action(filePaths, options) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = {};
         const result = yield api_wrapper_1.updateMediaServer();
@@ -48,7 +48,10 @@ function action(filePaths) {
                 return __awaiter(this, void 0, void 0, function* () {
                     log.info('Parse presentation %s', [filePath]);
                     try {
-                        const presentation = yield presentation_parser_1.parseAndResolve(file_reader_writer_1.readFile(filePath));
+                        const presentation = presentation_parser_1.parse(file_reader_writer_1.readFile(filePath));
+                        if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {
+                            yield presentation.resolve();
+                        }
                         presentation.log();
                     }
                     catch (e) {

@@ -12,7 +12,7 @@ import { getConfig } from '@bldr/config-ng'
 
 const config = getConfig()
 
-interface CmdObj {
+interface Options {
   dryRun: boolean
 }
 
@@ -26,7 +26,7 @@ async function action (
   itemId: string,
   arg1: string,
   arg2: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): Promise<void> {
   const rawData = await query(itemId, category, categories)
   if (arg1 != null) {

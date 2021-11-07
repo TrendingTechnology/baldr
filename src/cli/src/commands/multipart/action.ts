@@ -9,7 +9,7 @@ import { formatMultiPartAssetFileName, getExtension } from '@bldr/core-browser'
 import { writeYamlMetaData, operations } from '@bldr/media-manager'
 import * as log from '@bldr/log'
 
-interface CmdObj {
+interface Options {
   dryRun: boolean
 }
 
@@ -24,7 +24,7 @@ interface CmdObj {
 async function action (
   globPattern: string,
   prefix: string,
-  cmdObj: CmdObj
+  cmdObj: Options
 ): Promise<void> {
   const files = glob.sync(globPattern)
   if (files.length < 1) {

@@ -6,7 +6,7 @@ import { locationIndicator } from '@bldr/media-manager'
 import { openArchivesInFileManager } from '@bldr/media-server'
 import * as log from '@bldr/log'
 
-interface CmdObj {
+interface Options {
   createDirs: boolean
 }
 
@@ -19,7 +19,7 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePath: string, cmdObj: CmdObj): void {
+function action (filePath: string, cmdObj: Options): void {
   if (filePath == null) {
     filePath = process.cwd()
   }

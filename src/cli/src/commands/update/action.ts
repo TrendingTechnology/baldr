@@ -7,7 +7,7 @@ const config = getConfig()
 
 type whatType = 'api' | 'config' | 'media' | 'vue'
 
-interface CmdObj {
+interface Options {
   onlyRemote: boolean
   onlyLocal: boolean
 }
@@ -19,7 +19,7 @@ interface CmdObj {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (what: whatType, cmdObj: CmdObj): Promise<void> {
+async function action (what: whatType, cmdObj: Options): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
   cmd.checkRoot()
 
