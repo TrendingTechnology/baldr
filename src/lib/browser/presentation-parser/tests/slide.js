@@ -5,14 +5,14 @@ const { parsePresentation, parseFirstSlide } = require('./_helper.js')
 
 describe('Class “Slide()”', function () {
   it('Basic attributes', function () {
-    const presentation = parsePresentation('slide-meta')
+    const presentation = parsePresentation('slide/meta')
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.level, 1)
     assert.strictEqual(slide.no, 1)
   })
 
   it('Metadata', function () {
-    const presentation = parsePresentation('slide-meta')
+    const presentation = parsePresentation('slide/meta')
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.meta.ref, 'Reference')
     assert.strictEqual(slide.meta.title, 'Title')
@@ -21,7 +21,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('attribute “mediaUris” and “optionalMediaUris”', function () {
-    const presentation = parsePresentation('slide-media-uris')
+    const presentation = parsePresentation('slide/media-uris')
 
     let slide = presentation.getSlideByNo(1)
     assert.deepStrictEqual(slide.mediaUris, new Set(['ref:test']))
@@ -34,7 +34,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('Slide state absent', function () {
-    const presentation = parsePresentation('slide-state-absent')
+    const presentation = parsePresentation('slide/state-absent')
     assert.strictEqual(presentation.slides.numberOfSlides, 1)
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.meta.title, 'Present')
