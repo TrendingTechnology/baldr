@@ -1,8 +1,6 @@
 /* globals describe it */
 
 const assert = require('assert')
-const path = require('path')
-const fs = require('fs')
 const childProcess = require('child_process')
 
 describe('Package “@bldr/cli”', function () {
