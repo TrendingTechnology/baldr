@@ -647,7 +647,7 @@ function registerMediaRestApi() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 5, , 6]);
                     query = req.query;
                     if (Object.keys(query).length === 0) {
                         res.status(500).send({
@@ -674,24 +674,21 @@ function registerMediaRestApi() {
                     // result
                     if (!('result' in query))
                         query.result = 'fullObjects';
-                    return [4 /*yield*/, exports.database.connect()];
-                case 1:
-                    _a.sent();
                     collection = db.collection(type);
                     result = void 0;
                     find = void 0;
-                    if (!(query.method === 'exactMatch')) return [3 /*break*/, 3];
+                    if (!(query.method === 'exactMatch')) return [3 /*break*/, 2];
                     findObject = {};
                     findObject[field] = query.search;
                     find = collection.find(findObject, { projection: { _id: 0 } });
                     return [4 /*yield*/, find.next()
                         // substringSearch
                     ];
-                case 2:
+                case 1:
                     result = _a.sent();
-                    return [3 /*break*/, 5];
-                case 3:
-                    if (!(query.method === 'substringSearch')) return [3 /*break*/, 5];
+                    return [3 /*break*/, 4];
+                case 2:
+                    if (!(query.method === 'substringSearch')) return [3 /*break*/, 4];
                     search = '';
                     if (query.search != null && typeof query.search === 'string') {
                         search = query.search;
@@ -714,37 +711,34 @@ function registerMediaRestApi() {
                     }
                     find = collection.aggregate([{ $match: $match }, { $project: $project }]);
                     return [4 /*yield*/, find.toArray()];
-                case 4:
+                case 3:
                     result = _a.sent();
-                    _a.label = 5;
-                case 5:
+                    _a.label = 4;
+                case 4:
                     res.json(result);
-                    return [3 /*break*/, 7];
-                case 6:
+                    return [3 /*break*/, 6];
+                case 5:
                     error_1 = _a.sent();
                     next(error_1);
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     }); });
     /* get */
     app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var result, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, _b, error_2;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, db
-                            .collection('folderTitleTree')
-                            .find({ ref: 'root' }, { projection: { _id: 0 } })
-                            .next()];
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.getFolderTitleTree()];
                 case 1:
-                    result = _a.sent();
-                    res.json(result.tree);
+                    _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_2 = _a.sent();
+                    error_2 = _c.sent();
                     next(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
@@ -895,26 +889,20 @@ function registerMediaRestApi() {
     /* stats = statistics */
     app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_8;
-        var _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _d.trys.push([0, 3, , 4]);
+                    _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    _c = {};
-                    return [4 /*yield*/, db.collection('assets').countDocuments()];
+                    return [4 /*yield*/, exports.database.getDocumentCounts()];
                 case 1:
-                    _c.assets = _d.sent();
-                    return [4 /*yield*/, db.collection('presentations').countDocuments()];
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
                 case 2:
-                    _b.apply(_a, [(_c.presentations = _d.sent(),
-                            _c)]);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_8 = _d.sent();
+                    error_8 = _c.sent();
                     next(error_8);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     }); });
@@ -925,12 +913,7 @@ function registerMediaRestApi() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, db
-                            .collection('updates')
-                            .find({}, { projection: { _id: 0 } })
-                            .sort({ begin: -1 })
-                            .limit(20)
-                            .toArray()];
+                    return [4 /*yield*/, exports.database.listUpdateTasks()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];

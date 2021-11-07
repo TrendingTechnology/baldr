@@ -26,6 +26,25 @@ describe('Package “@bldr/mongodb-connector”', function () {
       await client.close()
     })
 
+    it('Getter methode “listUpdateTasks()”', async function () {
+      const updates = await database.listUpdateTasks()
+      const updateTask = updates[0]
+      assert.strictEqual(typeof updateTask.begin, 'number')
+      assert.strictEqual(typeof updateTask.end, 'number')
+      assert.strictEqual(typeof updateTask.lastCommitId, 'string')
+    })
+
+    it('Getter methode “getFolderTitleTree()”', async function () {
+      const tree = await database.getFolderTitleTree()
+      assert.ok(tree.Musik != null)
+    })
+
+    it('Getter methode “getDocumentCounts()”', async function () {
+      const counts = await database.getDocumentCounts()
+      assert.ok(counts.assets > 0)
+      assert.ok(counts.presentations > 0)
+    })
+
     it('Getter methode “getAllAssetUris()”', async function () {
       const uris = await database.getAllAssetUris()
       assert.ok(uris.length > 0)

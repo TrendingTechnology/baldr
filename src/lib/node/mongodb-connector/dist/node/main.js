@@ -428,6 +428,53 @@ var Database = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Database.prototype.listUpdateTasks = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.db
+                            .collection('updates')
+                            .find({}, { projection: { _id: 0 } })
+                            .sort({ begin: -1 })
+                            .limit(20)
+                            .toArray()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Database.prototype.getFolderTitleTree = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.folderTitleTree
+                            .find({ ref: 'root' }, { projection: { _id: 0 } })
+                            .next()];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.tree];
+                }
+            });
+        });
+    };
+    Database.prototype.getDocumentCounts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = {};
+                        return [4 /*yield*/, this.assets.countDocuments()];
+                    case 1:
+                        _a.assets = _b.sent();
+                        return [4 /*yield*/, this.presentations.countDocuments()];
+                    case 2: return [2 /*return*/, (_a.presentations = _b.sent(),
+                            _a)];
+                }
+            });
+        });
+    };
     Database.prototype.getAllAssetRefs = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {

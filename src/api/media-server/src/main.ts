@@ -111,9 +111,6 @@ const basePath = config.mediaServer.basePath
  */
 let errors: string[] = []
 
-/**
- * @type {module:@bldr/media-server/database.Database}
- */
 export let database: Database
 
 /* Media objects **************************************************************/
@@ -706,7 +703,7 @@ function registerMediaRestApi (): express.Express {
       // result
       if (!('result' in query)) query.result = 'fullObjects'
 
-      await database.connect()
+      // await database.connect()
       const collection = db.collection(type)
 
       // find
@@ -753,11 +750,7 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
-      const result = await db
-        .collection('folderTitleTree')
-        .find({ ref: 'root' }, { projection: { _id: 0 } })
-        .next()
-      res.json(result.tree)
+      res.json(await database.getFolderTitleTree())
     } catch (error) {
       next(error)
     }
@@ -842,10 +835,7 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/stats/count', async (req, res, next) => {
     try {
-      res.json({
-        assets: await db.collection('assets').countDocuments(),
-        presentations: await db.collection('presentations').countDocuments()
-      })
+      res.json(await database.getDocumentCounts())
     } catch (error) {
       next(error)
     }
@@ -854,12 +844,7 @@ function registerMediaRestApi (): express.Express {
   app.get('/stats/updates', async (req, res, next) => {
     try {
       res.json(
-        await db
-          .collection('updates')
-          .find({}, { projection: { _id: 0 } })
-          .sort({ begin: -1 })
-          .limit(20)
-          .toArray()
+        await database.listUpdateTasks()
       )
     } catch (error) {
       next(error)

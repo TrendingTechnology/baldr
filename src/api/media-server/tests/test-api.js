@@ -121,6 +121,19 @@ function runTests () {
     assert.ok(result.data.assets > 0)
     assert.ok(result.data.presentations > 0)
   })
+
+  it('/media/stats/updates', async function () {
+    const result = await httpRequest.request('stats/updates')
+    const updateTask = result.data[0]
+    assert.strictEqual(typeof updateTask.begin, 'number')
+    assert.strictEqual(typeof updateTask.end, 'number')
+    assert.strictEqual(typeof updateTask.lastCommitId, 'string')
+  })
+
+  it('/media/get/folder-title-tree', async function () {
+    const result = await httpRequest.request('get/folder-title-tree')
+    assert.ok(result.data.Musik != null)
+  })
 }
 
 describe('local: /api/media', runTests)

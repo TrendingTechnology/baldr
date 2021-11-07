@@ -61,7 +61,4 @@
  */
 import { Database } from '@bldr/mongodb-connector';
 export { openArchivesInFileManager } from './operations';
-/**
- * @type {module:@bldr/media-server/database.Database}
- */
 export declare let database: Database;

@@ -2,12 +2,16 @@
  * @module @bldr/media-server/database
  */
 import mongodb from 'mongodb';
+import { ApiTypes, TitlesTypes } from '@bldr/type-definitions';
 interface ClientWrapper {
     connect: () => Promise<DatabaseWrapper>;
     close: () => Promise<void>;
 }
 interface DatabaseWrapper {
     initialize: () => Promise<any>;
+    getDocumentCounts: () => Promise<ApiTypes.Count>;
+    getFolderTitleTree: () => Promise<TitlesTypes.TreeTitleList>;
+    listUpdateTasks: () => Promise<ApiTypes.Task[]>;
     getAllAssetUris: () => Promise<string[]>;
 }
 export declare class MongoDbClient implements ClientWrapper {
@@ -77,6 +81,9 @@ export declare class Database implements DatabaseWrapper {
     get updates(): mongodb.Collection<any>;
     get folderTitleTree(): mongodb.Collection<any>;
     get seatingPlan(): mongodb.Collection<any>;
+    listUpdateTasks(): Promise<ApiTypes.Task[]>;
+    getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
+    getDocumentCounts(): Promise<ApiTypes.Count>;
     private getAllAssetRefs;
     private getAllAssetUuids;
     getAllAssetUris(): Promise<string[]>;

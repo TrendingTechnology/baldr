@@ -1,3 +1,6 @@
+/**
+ * The number of assets and presentation documents in the MongoDB
+ */
 export interface Count {
   assets: number
   presentations: number

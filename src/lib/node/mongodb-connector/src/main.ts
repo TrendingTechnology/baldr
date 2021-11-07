@@ -4,7 +4,11 @@
 
 import mongodb from 'mongodb'
 
-import { StringIndexedObject } from '@bldr/type-definitions'
+import {
+  StringIndexedObject,
+  ApiTypes,
+  TitlesTypes
+} from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config-ng'
 
 const config = getConfig()
@@ -17,6 +21,9 @@ interface ClientWrapper {
 
 interface DatabaseWrapper {
   initialize: () => Promise<any>
+  getDocumentCounts: () => Promise<ApiTypes.Count>
+  getFolderTitleTree: () => Promise<TitlesTypes.TreeTitleList>
+  listUpdateTasks: () => Promise<ApiTypes.Task[]>
   getAllAssetUris: () => Promise<string[]>
 }
 
@@ -271,6 +278,29 @@ export class Database implements DatabaseWrapper {
 
   get seatingPlan (): mongodb.Collection<any> {
     return this.db.collection('seatingPlan')
+  }
+
+  public async listUpdateTasks (): Promise<ApiTypes.Task[]> {
+    return await this.db
+      .collection('updates')
+      .find({}, { projection: { _id: 0 } })
+      .sort({ begin: -1 })
+      .limit(20)
+      .toArray()
+  }
+
+  public async getFolderTitleTree (): Promise<TitlesTypes.TreeTitleList> {
+    const result = await this.folderTitleTree
+      .find({ ref: 'root' }, { projection: { _id: 0 } })
+      .next()
+    return result.tree
+  }
+
+  public async getDocumentCounts (): Promise<ApiTypes.Count> {
+    return {
+      assets: await this.assets.countDocuments(),
+      presentations: await this.presentations.countDocuments()
+    }
   }
 
   private async getAllAssetRefs (): Promise<string[]> {
