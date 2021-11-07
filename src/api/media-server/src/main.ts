@@ -763,6 +763,22 @@ function registerMediaRestApi (): express.Express {
     }
   })
 
+  app.get('/get/all-asset-refs', async (req, res, next) => {
+    try {
+      res.json({})
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/get/all-asset-uuids', async (req, res, next) => {
+    try {
+      res.json({})
+    } catch (error) {
+      next(error)
+    }
+  })
+
   /* mgmt = management */
 
   app.get('/mgmt/flush', async (req, res, next) => {

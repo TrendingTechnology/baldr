@@ -2,28 +2,44 @@
  * @module @bldr/media-server/database
  */
 import mongodb from 'mongodb';
+interface ClientWrapper {
+    connect: () => Promise<DatabaseWrapper>;
+    close: () => Promise<void>;
+}
+interface DatabaseWrapper {
+    initialize: () => Promise<any>;
+    getAllAssetUris: () => Promise<string[]>;
+}
+export declare class MongoDbClient implements ClientWrapper {
+    private readonly client;
+    private database?;
+    constructor();
+    /**
+     * Connect to the MongoDB database as a client, create a database wrapper object and
+     * initialize the database.
+     */
+    connect(): Promise<DatabaseWrapper>;
+    close(): Promise<void>;
+}
 /**
  * Connect to the MongoDB server.
  */
 export declare function connectDb(): Promise<mongodb.MongoClient>;
-interface IndexDefinition {
-    field: string;
-    unique: boolean;
-}
-interface CollectionDefinition {
-    indexes: IndexDefinition[];
-    drop: boolean;
-}
-interface DbSchema {
-    [key: string]: CollectionDefinition;
-}
+/**
+ * Connect and initialize the MongoDB database.
+ */
+export declare function getDatabaseWrapper(): Promise<Database>;
 /**
  * A wrapper around MongoDB.
  */
-export declare class Database {
-    schema: DbSchema;
+export declare class Database implements DatabaseWrapper {
+    private readonly schema;
     db: mongodb.Db;
+    private isInitialized;
     constructor(db: mongodb.Db);
+    /**
+     * @TODO Remove
+     */
     connect(): Promise<void>;
     /**
      * List all collection names in an array.
@@ -38,8 +54,8 @@ export declare class Database {
         [key: string]: any;
     }>;
     /**
-     * Drop all collections except collection which defined drop: false in
-     * this.schema
+     * Drop all collections except collection which defined `{drop: false}` in
+     * `this.schema`
      */
     drop(): Promise<{
         [key: string]: any;
@@ -61,5 +77,8 @@ export declare class Database {
     get updates(): mongodb.Collection<any>;
     get folderTitleTree(): mongodb.Collection<any>;
     get seatingPlan(): mongodb.Collection<any>;
+    private getAllAssetRefs;
+    private getAllAssetUuids;
+    getAllAssetUris(): Promise<string[]>;
 }
 export {};

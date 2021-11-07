@@ -42,10 +42,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Database = exports.connectDb = void 0;
+exports.Database = exports.getDatabaseWrapper = exports.connectDb = exports.MongoDbClient = void 0;
 var mongodb_1 = __importDefault(require("mongodb"));
 var config_ng_1 = require("@bldr/config-ng");
 var config = config_ng_1.getConfig();
+var MongoDbClient = /** @class */ (function () {
+    function MongoDbClient() {
+        var conf = config.databases.mongodb;
+        var user = encodeURIComponent(conf.user);
+        var password = encodeURIComponent(conf.password);
+        var authMechanism = 'DEFAULT';
+        var url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
+        this.client = new mongodb_1.default.MongoClient(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    }
+    /**
+     * Connect to the MongoDB database as a client, create a database wrapper object and
+     * initialize the database.
+     */
+    MongoDbClient.prototype.connect = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!!this.client.isConnected()) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.client.connect()];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        if (!(this.database == null)) return [3 /*break*/, 4];
+                        this.database = new Database(this.client.db(config.databases.mongodb.dbName));
+                        return [4 /*yield*/, this.database.initialize()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2 /*return*/, this.database];
+                }
+            });
+        });
+    };
+    MongoDbClient.prototype.close = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.client.close()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return MongoDbClient;
+}());
+exports.MongoDbClient = MongoDbClient;
 /**
  * Connect to the MongoDB server.
  */
@@ -75,10 +128,32 @@ function connectDb() {
 }
 exports.connectDb = connectDb;
 /**
+ * Connect and initialize the MongoDB database.
+ */
+function getDatabaseWrapper() {
+    return __awaiter(this, void 0, void 0, function () {
+        var mongoClient, database;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, connectDb()];
+                case 1:
+                    mongoClient = _a.sent();
+                    database = new Database(mongoClient.db());
+                    return [4 /*yield*/, database.initialize()];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, database];
+            }
+        });
+    });
+}
+exports.getDatabaseWrapper = getDatabaseWrapper;
+/**
  * A wrapper around MongoDB.
  */
 var Database = /** @class */ (function () {
     function Database(db) {
+        this.isInitialized = false;
         this.db = db;
         this.schema = {
             assets: {
@@ -107,6 +182,9 @@ var Database = /** @class */ (function () {
             }
         };
     }
+    /**
+     * @TODO Remove
+     */
     Database.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
             var mongoClient;
@@ -153,9 +231,11 @@ var Database = /** @class */ (function () {
             var _j;
             return __generator(this, function (_k) {
                 switch (_k.label) {
-                    case 0: return [4 /*yield*/, this.listCollectionNames()
-                        // https://stackoverflow.com/a/35868933
-                    ];
+                    case 0:
+                        if (!!this.isInitialized) return [3 /*break*/, 9];
+                        return [4 /*yield*/, this.listCollectionNames()
+                            // https://stackoverflow.com/a/35868933
+                        ];
                     case 1:
                         collectionNames = _k.sent();
                         _a = [];
@@ -186,20 +266,23 @@ var Database = /** @class */ (function () {
                         _i++;
                         return [3 /*break*/, 2];
                     case 8:
+                        this.isInitialized = true;
+                        _k.label = 9;
+                    case 9:
                         result = {};
                         _e = [];
                         for (_f in this.schema)
                             _e.push(_f);
                         _g = 0;
-                        _k.label = 9;
-                    case 9:
-                        if (!(_g < _e.length)) return [3 /*break*/, 12];
+                        _k.label = 10;
+                    case 10:
+                        if (!(_g < _e.length)) return [3 /*break*/, 13];
                         collectionName = _e[_g];
                         return [4 /*yield*/, this.db
                                 .collection(collectionName)
                                 .listIndexes()
                                 .toArray()];
-                    case 10:
+                    case 11:
                         indexes = _k.sent();
                         result[collectionName] = {
                             name: collectionName,
@@ -211,18 +294,18 @@ var Database = /** @class */ (function () {
                             unique = indexDefinition.unique ? 'true' : 'false';
                             result[collectionName].indexes[index.name] = "unique: " + unique;
                         }
-                        _k.label = 11;
-                    case 11:
+                        _k.label = 12;
+                    case 12:
                         _g++;
-                        return [3 /*break*/, 9];
-                    case 12: return [2 /*return*/, result];
+                        return [3 /*break*/, 10];
+                    case 13: return [2 /*return*/, result];
                 }
             });
         });
     };
     /**
-     * Drop all collections except collection which defined drop: false in
-     * this.schema
+     * Drop all collections except collection which defined `{drop: false}` in
+     * `this.schema`
      */
     Database.prototype.drop = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -248,9 +331,11 @@ var Database = /** @class */ (function () {
                     case 3:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/, {
-                            droppedCollections: droppedCollections
-                        }];
+                    case 4:
+                        this.isInitialized = false;
+                        return [2 /*return*/, {
+                                droppedCollections: droppedCollections
+                            }];
                 }
             });
         });
@@ -343,6 +428,51 @@ var Database = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Database.prototype.getAllAssetRefs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.assets.distinct('ref')];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Database.prototype.getAllAssetUuids = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.assets.distinct('uuid')];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Database.prototype.getAllAssetUris = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var refs, uuids, uris, _i, refs_1, ref, _a, uuids_1, uuid;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.getAllAssetRefs()];
+                    case 1:
+                        refs = _b.sent();
+                        return [4 /*yield*/, this.getAllAssetUuids()];
+                    case 2:
+                        uuids = _b.sent();
+                        uris = [];
+                        for (_i = 0, refs_1 = refs; _i < refs_1.length; _i++) {
+                            ref = refs_1[_i];
+                            uris.push("ref:" + ref);
+                        }
+                        for (_a = 0, uuids_1 = uuids; _a < uuids_1.length; _a++) {
+                            uuid = uuids_1[_a];
+                            uris.push("uuid:" + uuid);
+                        }
+                        return [2 /*return*/, uris];
+                }
+            });
+        });
+    };
     return Database;
 }());
 exports.Database = Database;

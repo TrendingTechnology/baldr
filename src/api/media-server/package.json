@@ -40,7 +40,7 @@
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "npm run build && npm run lint && mocha 'tests/*'"
+    "test": "npm run build && sudo systemctl restart baldr_api.service && sleep 5 && mocha 'tests/*' && npm run lint"
   },
   "publishConfig": {
     "access": "public"

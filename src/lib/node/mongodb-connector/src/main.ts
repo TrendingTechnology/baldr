@@ -9,6 +9,57 @@ import { getConfig } from '@bldr/config-ng'
 
 const config = getConfig()
 
+interface ClientWrapper {
+  connect: () => Promise<DatabaseWrapper>
+
+  close: () => Promise<void>
+}
+
+interface DatabaseWrapper {
+  initialize: () => Promise<any>
+  getAllAssetUris: () => Promise<string[]>
+}
+
+export class MongoDbClient implements ClientWrapper {
+  private readonly client: mongodb.MongoClient
+
+  private database?: DatabaseWrapper
+
+  constructor () {
+    const conf = config.databases.mongodb
+    const user = encodeURIComponent(conf.user)
+    const password = encodeURIComponent(conf.password)
+    const authMechanism = 'DEFAULT'
+    const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+
+    this.client = new mongodb.MongoClient(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
+  }
+
+  /**
+   * Connect to the MongoDB database as a client, create a database wrapper object and
+   * initialize the database.
+   */
+  async connect (): Promise<DatabaseWrapper> {
+    if (!this.client.isConnected()) {
+      await this.client.connect()
+    }
+    if (this.database == null) {
+      this.database = new Database(
+        this.client.db(config.databases.mongodb.dbName)
+      )
+      await this.database.initialize()
+    }
+    return this.database
+  }
+
+  async close (): Promise<void> {
+    await this.client.close()
+  }
+}
+
 /**
  * Connect to the MongoDB server.
  */
@@ -44,12 +95,24 @@ interface DbSchema {
 }
 
 /**
+ * Connect and initialize the MongoDB database.
+ */
+export async function getDatabaseWrapper (): Promise<Database> {
+  const mongoClient = await connectDb()
+  const database = new Database(mongoClient.db())
+  await database.initialize()
+  return database
+}
+
+/**
  * A wrapper around MongoDB.
  */
-export class Database {
-  schema: DbSchema
+export class Database implements DatabaseWrapper {
+  private readonly schema: DbSchema
 
-  db: mongodb.Db
+  public db: mongodb.Db
+
+  private isInitialized: boolean = false
 
   constructor (db: mongodb.Db) {
     this.db = db
@@ -82,6 +145,9 @@ export class Database {
     }
   }
 
+  /**
+   * @TODO Remove
+   */
   async connect (): Promise<void> {
     const mongoClient = await connectDb()
     this.db = mongoClient.db(config.databases.mongodb.dbName)
@@ -104,20 +170,23 @@ export class Database {
   /**
    * Create the collections with indexes.
    */
-  async initialize (): Promise<{ [key: string]: any }> {
-    const collectionNames = await this.listCollectionNames()
+  public async initialize (): Promise<{ [key: string]: any }> {
+    if (!this.isInitialized) {
+      const collectionNames = await this.listCollectionNames()
 
-    // https://stackoverflow.com/a/35868933
-    for (const collectionName in this.schema) {
-      if (!collectionNames.includes(collectionName)) {
-        const collection = await this.db.createCollection(collectionName)
-        for (const index of this.schema[collectionName].indexes) {
-          await collection.createIndex(
-            { [index.field]: 1 },
-            { unique: index.unique }
-          )
+      // https://stackoverflow.com/a/35868933
+      for (const collectionName in this.schema) {
+        if (!collectionNames.includes(collectionName)) {
+          const collection = await this.db.createCollection(collectionName)
+          for (const index of this.schema[collectionName].indexes) {
+            await collection.createIndex(
+              { [index.field]: 1 },
+              { unique: index.unique }
+            )
+          }
         }
       }
+      this.isInitialized = true
     }
 
     const result: StringIndexedObject = {}
@@ -140,8 +209,8 @@ export class Database {
   }
 
   /**
-   * Drop all collections except collection which defined drop: false in
-   * this.schema
+   * Drop all collections except collection which defined `{drop: false}` in
+   * `this.schema`
    */
   async drop (): Promise<{ [key: string]: any }> {
     const droppedCollections = []
@@ -151,6 +220,7 @@ export class Database {
         droppedCollections.push(collectionName)
       }
     }
+    this.isInitialized = false
     return {
       droppedCollections
     }
@@ -201,5 +271,28 @@ export class Database {
 
   get seatingPlan (): mongodb.Collection<any> {
     return this.db.collection('seatingPlan')
+  }
+
+  private async getAllAssetRefs (): Promise<string[]> {
+    return await this.assets.distinct('ref')
+  }
+
+  private async getAllAssetUuids (): Promise<string[]> {
+    return await this.assets.distinct('uuid')
+  }
+
+  public async getAllAssetUris (): Promise<string[]> {
+    const refs = await this.getAllAssetRefs()
+    const uuids = await this.getAllAssetUuids()
+
+    const uris = []
+    for (const ref of refs) {
+      uris.push(`ref:${ref}`)
+    }
+
+    for (const uuid of uuids) {
+      uris.push(`uuid:${uuid}`)
+    }
+    return uris
   }
 }

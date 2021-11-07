@@ -751,6 +751,28 @@ function registerMediaRestApi() {
             }
         });
     }); });
+    app.get('/get/all-asset-refs', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            try {
+                res.json({});
+            }
+            catch (error) {
+                next(error);
+            }
+            return [2 /*return*/];
+        });
+    }); });
+    app.get('/get/all-asset-uuids', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            try {
+                res.json({});
+            }
+            catch (error) {
+                next(error);
+            }
+            return [2 /*return*/];
+        });
+    }); });
     /* mgmt = management */
     app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_3;
