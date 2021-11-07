@@ -42,7 +42,7 @@ export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
     /**
      * Remove the fragment suffix of an media URI.
      *
-     * @param uri A media URI (Uniform Resource Identifier) with an optional
+     * @param uri - A media URI (Uniform Resource Identifier) with an optional
      *   fragment suffix, for example `ref:Yesterday#complete`.
      *
      * @returns A media URI (Uniform Resource Identifier) without an optional

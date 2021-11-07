@@ -1,11 +1,11 @@
 import { convertFromYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
+import { Resolver, Asset } from '@bldr/media-resolver-ng'
+import * as log from '@bldr/log'
 
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
 import { Slide } from './slide'
-import { Resolver, Asset } from '@bldr/media-resolver-ng'
-import * as log from '@bldr/log'
 
 export const resolver = new Resolver()
 

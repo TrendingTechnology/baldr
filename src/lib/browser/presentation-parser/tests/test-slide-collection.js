@@ -7,7 +7,7 @@ const {
 } = require('./_helper.js')
 
 describe('Class “SlideCollection()”', function () {
-  it('real world example', function () {
+  it('Real world example: 12/20_Tradition/10_Umgang-Tradition/10_Futurismus', function () {
     const presentation = parseRealWorldPresentation(
       '12/20_Tradition/10_Umgang-Tradition/10_Futurismus'
     )
@@ -26,7 +26,7 @@ describe('Class “SlideCollection()”', function () {
     assert.strictEqual(slide.slides[1].master.name, 'scoreSample')
   })
 
-  it('throws error: no slides', function () {
+  it('Throws error: no slides', function () {
     assert.throws(
       () => {
         parsePresentation('no-slides')
@@ -39,22 +39,29 @@ describe('Class “SlideCollection()”', function () {
   })
 
   it('Nested slides', function () {
-    const presentation = parsePresentation('nested-slides')
+    const presentation = parsePresentation('slide-collection/nested-slides')
     const tree = presentation.slides.tree
     assert.strictEqual(tree[0].master.name, 'generic')
     assert.strictEqual(tree[0].slides[0].master.name, 'generic')
     assert.strictEqual(tree[0].slides[0].slides[0].master.name, 'generic')
   })
 
-  it('iterator', function () {
-    const presentation = parsePresentation('nested-slides')
+  it('Iterator', function () {
+    const presentation = parsePresentation('slide-collection/nested-slides')
     for (const slide of presentation.slides) {
       assert.strictEqual(typeof slide.no, 'number')
     }
   })
 
-  it('getter attribute “numberOfSlides”', function () {
-    const presentation = parsePresentation('nested-slides')
+  it('Getter attribute “numberOfSlides”', function () {
+    const presentation = parsePresentation('slide-collection/nested-slides')
     assert.strictEqual(presentation.slides.numberOfSlides, 3)
+  })
+
+  it('Attributes “mediaUris”, “optionalMediaUris”', function () {
+    const presentation = parsePresentation('slide-collection/media-uris')
+    const slides = presentation.slides
+    assert.deepStrictEqual(slides.mediaUris, new Set(['ref:test']))
+    assert.deepStrictEqual(slides.optionalMediaUris, new Set(['ref:YT_12345678901']))
   })
 })

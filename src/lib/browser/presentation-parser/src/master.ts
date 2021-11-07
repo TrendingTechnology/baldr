@@ -1,8 +1,10 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
-import { Slide } from './slide'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { MediaUri } from '@bldr/client-media-models'
 
+import { Slide } from './slide'
 export { Asset, Sample } from '@bldr/media-resolver-ng'
+
 export type Resolver = ResolverType
 
 /**
@@ -248,30 +250,37 @@ export class MasterWrapper {
     return this.master.name
   }
 
-  private static convertToSet (
+  /**
+   * Convert to a set and remove sample fragments, e. g. `#complete`
+   */
+  private static processMediaUris (
     uris: string | string[] | Set<string> | undefined
   ): Set<string> {
+    const result = new Set<string>()
     if (uris == null) {
-      return new Set<string>()
+      return result
     }
     if (typeof uris === 'string') {
-      return new Set([uris])
-    } else if (Array.isArray(uris)) {
-      return new Set(uris)
+      uris = [uris]
     }
-    return uris
+    for (const uri of uris) {
+      result.add(MediaUri.removeFragment(uri))
+    }
+    return result
   }
 
   public processMediaUris (fields?: FieldData): Set<string> {
     if (this.master.collectMediaUris != null && fields != null) {
-      return MasterWrapper.convertToSet(this.master.collectMediaUris(fields))
+      return MasterWrapper.processMediaUris(
+        this.master.collectMediaUris(fields)
+      )
     }
     return new Set<string>()
   }
 
   public processOptionalMediaUris (fields?: FieldData): Set<string> {
     if (this.master.collectOptionalMediaUris != null && fields != null) {
-      return MasterWrapper.convertToSet(
+      return MasterWrapper.processMediaUris(
         this.master.collectOptionalMediaUris(fields)
       )
     }
@@ -315,7 +324,11 @@ export class MasterWrapper {
       }
 
       // type
-      if (def.type != null && typeof def.type === 'function' && fields[name] != null) {
+      if (
+        def.type != null &&
+        typeof def.type === 'function' &&
+        fields[name] != null
+      ) {
         fields[name] = def.type(fields[name])
       }
 

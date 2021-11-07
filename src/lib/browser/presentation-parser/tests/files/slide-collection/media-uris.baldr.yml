@@ -1,0 +1,10 @@
+---
+ref: media-uris
+title: Media URIs
+
+slides:
+- title: Mandatory media URI
+  audio: ref:test#sample
+
+- title: Optional media URI
+  youtube: 12345678901

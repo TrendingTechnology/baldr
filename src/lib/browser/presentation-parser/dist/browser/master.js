@@ -1,4 +1,5 @@
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
+import { MediaUri } from '@bldr/client-media-models';
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -29,27 +30,31 @@ export class MasterWrapper {
     get name() {
         return this.master.name;
     }
-    static convertToSet(uris) {
+    /**
+     * Convert to a set and remove sample fragments, e. g. `#complete`
+     */
+    static processMediaUris(uris) {
+        const result = new Set();
         if (uris == null) {
-            return new Set();
+            return result;
         }
         if (typeof uris === 'string') {
-            return new Set([uris]);
+            uris = [uris];
         }
-        else if (Array.isArray(uris)) {
-            return new Set(uris);
+        for (const uri of uris) {
+            result.add(MediaUri.removeFragment(uri));
         }
-        return uris;
+        return result;
     }
     processMediaUris(fields) {
         if (this.master.collectMediaUris != null && fields != null) {
-            return MasterWrapper.convertToSet(this.master.collectMediaUris(fields));
+            return MasterWrapper.processMediaUris(this.master.collectMediaUris(fields));
         }
         return new Set();
     }
     processOptionalMediaUris(fields) {
         if (this.master.collectOptionalMediaUris != null && fields != null) {
-            return MasterWrapper.convertToSet(this.master.collectOptionalMediaUris(fields));
+            return MasterWrapper.processMediaUris(this.master.collectOptionalMediaUris(fields));
         }
         return new Set();
     }
@@ -81,7 +86,9 @@ export class MasterWrapper {
                 fields[name] = def.default;
             }
             // type
-            if (def.type != null && typeof def.type === 'function' && fields[name] != null) {
+            if (def.type != null &&
+                typeof def.type === 'function' &&
+                fields[name] != null) {
                 fields[name] = def.type(fields[name]);
             }
             //  Convert the field marked as containing markup from markdown to HTML.

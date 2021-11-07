@@ -16,11 +16,17 @@ export class SlideCollection {
    */
   public tree: Slide[] = []
 
+  public mediaUris: Set<string>
+
+  public optionalMediaUris: Set<string>
+
   /**
    * @param raw - The raw slide array from the presentation’s slide property.
    */
   constructor (raw: any[]) {
     this.parse(raw, this.tree, 1)
+    this.mediaUris = this.collectMediaUris()
+    this.optionalMediaUris = this.collectOptionalMediaUris()
   }
 
   /**
@@ -51,7 +57,7 @@ export class SlideCollection {
   /**
    * The media URIs from the slide attributes `mediaUris` and `audioOverlay`.
    */
-  get mediaUris (): Set<string> {
+  private collectMediaUris (): Set<string> {
     const result = new Set<string>()
     for (const slide of this.flat) {
       for (const mediaUri of slide.mediaUris) {
@@ -66,7 +72,7 @@ export class SlideCollection {
     return result
   }
 
-  get optionalMediaUris (): Set<string> {
+  private collectOptionalMediaUris (): Set<string> {
     const result = new Set<string>()
     for (const slide of this.flat) {
       for (const mediaUri of slide.optionalMediaUris) {

@@ -13,6 +13,8 @@ export declare class SlideCollection {
      * can be accessed under the `slides` property of each slide object.
      */
     tree: Slide[];
+    mediaUris: Set<string>;
+    optionalMediaUris: Set<string>;
     /**
      * @param raw - The raw slide array from the presentation’s slide property.
      */
@@ -30,8 +32,8 @@ export declare class SlideCollection {
     /**
      * The media URIs from the slide attributes `mediaUris` and `audioOverlay`.
      */
-    get mediaUris(): Set<string>;
-    get optionalMediaUris(): Set<string>;
+    private collectMediaUris;
+    private collectOptionalMediaUris;
     get numberOfSlides(): number;
     [Symbol.iterator](): Generator<Slide, any, any>;
 }

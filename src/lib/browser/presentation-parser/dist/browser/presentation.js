@@ -8,10 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { convertFromYaml } from '@bldr/yaml';
-import { DataCutter } from './data-management';
-import { SlideCollection } from './slide-collection';
 import { Resolver } from '@bldr/media-resolver-ng';
 import * as log from '@bldr/log';
+import { DataCutter } from './data-management';
+import { SlideCollection } from './slide-collection';
 export const resolver = new Resolver();
 /**
  * @inheritdoc

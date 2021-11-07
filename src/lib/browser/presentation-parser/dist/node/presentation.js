@@ -11,10 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Presentation = exports.resolver = void 0;
 const yaml_1 = require("@bldr/yaml");
-const data_management_1 = require("./data-management");
-const slide_collection_1 = require("./slide-collection");
 const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 const log = require("@bldr/log");
+const data_management_1 = require("./data-management");
+const slide_collection_1 = require("./slide-collection");
 exports.resolver = new media_resolver_ng_1.Resolver();
 /**
  * @inheritdoc

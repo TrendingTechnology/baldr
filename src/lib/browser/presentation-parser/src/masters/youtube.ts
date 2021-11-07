@@ -1,6 +1,8 @@
 import { Master } from '../master'
 
-interface YoutubeFieldData {
+type YoutubeFieldsRaw = number | string | YoutubeFieldNormalized
+
+interface YoutubeFieldNormalized {
   id: string
   heading?: string
   info?: string
@@ -34,14 +36,18 @@ export class YoutubeMaster implements Master {
     }
   }
 
-  normalizeFields (fields: any): YoutubeFieldData {
+  normalizeFields (fields: YoutubeFieldsRaw): YoutubeFieldNormalized {
     if (typeof fields === 'string') {
       fields = { id: fields }
+    } else if (typeof fields === 'number') {
+      fields = { id: fields.toString() }
     }
     return fields
   }
 
-  collectOptionalMediaUris (fields: YoutubeFieldData): string | string[] | Set<string> | undefined {
+  collectOptionalMediaUris (
+    fields: YoutubeFieldNormalized
+  ): string | string[] | Set<string> | undefined {
     return this.convertYoutubeIdToUri(fields.id)
   }
 

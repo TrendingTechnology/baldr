@@ -32,6 +32,7 @@ const presentation_parser_1 = require("@bldr/presentation-parser");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const api_wrapper_1 = require("@bldr/api-wrapper");
 const media_manager_1 = require("@bldr/media-manager");
+const mongodb_connector_1 = require("@bldr/mongodb-connector");
 const log = __importStar(require("@bldr/log"));
 /**
  * @param filePath - A file path.
@@ -43,12 +44,26 @@ function action(filePaths, options) {
         const errors = {};
         const result = yield api_wrapper_1.updateMediaServer();
         log.infoAny(result);
+        let allUris;
+        if ((options === null || options === void 0 ? void 0 : options.checkUris) != null && options.checkUris) {
+            const mongoDbClient = new mongodb_connector_1.MongoDbClient();
+            const database = yield mongoDbClient.connect();
+            yield mongoDbClient.close();
+            allUris = yield database.getAllAssetUris();
+        }
         yield media_manager_1.walk({
             presentation(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
                     log.info('Parse presentation %s', [filePath]);
                     try {
                         const presentation = presentation_parser_1.parse(file_reader_writer_1.readFile(filePath));
+                        if (allUris != null) {
+                            for (const uri of presentation.slides.mediaUris) {
+                                if (!allUris.includes(uri)) {
+                                    throw new Error(`URI check failed for “${uri}”!`);
+                                }
+                            }
+                        }
                         if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {
                             yield presentation.resolve();
                         }

@@ -190,7 +190,10 @@ export declare class MasterWrapper {
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
     get name(): string;
-    private static convertToSet;
+    /**
+     * Convert to a set and remove sample fragments, e. g. `#complete`
+     */
+    private static processMediaUris;
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
     generateTexMarkup(fields: FieldData): string | undefined;

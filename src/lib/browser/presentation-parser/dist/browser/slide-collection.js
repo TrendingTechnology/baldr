@@ -18,6 +18,8 @@ export class SlideCollection {
          */
         this.tree = [];
         this.parse(raw, this.tree, 1);
+        this.mediaUris = this.collectMediaUris();
+        this.optionalMediaUris = this.collectOptionalMediaUris();
     }
     /**
      * Parse the slide objects in a recursive fashion. Child slides can be
@@ -46,7 +48,7 @@ export class SlideCollection {
     /**
      * The media URIs from the slide attributes `mediaUris` and `audioOverlay`.
      */
-    get mediaUris() {
+    collectMediaUris() {
         const result = new Set();
         for (const slide of this.flat) {
             for (const mediaUri of slide.mediaUris) {
@@ -60,7 +62,7 @@ export class SlideCollection {
         }
         return result;
     }
-    get optionalMediaUris() {
+    collectOptionalMediaUris() {
         const result = new Set();
         for (const slide of this.flat) {
             for (const mediaUri of slide.optionalMediaUris) {

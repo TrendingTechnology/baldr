@@ -3,10 +3,12 @@ import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/file-reader-writer'
 import { updateMediaServer } from '@bldr/api-wrapper'
 import { walk } from '@bldr/media-manager'
+import { MongoDbClient } from '@bldr/mongodb-connector'
 import * as log from '@bldr/log'
 
 interface Options {
   resolve?: boolean
+  checkUris?: boolean
 }
 
 /**
@@ -18,12 +20,29 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
   const errors: { [filePath: string]: string } = {}
   const result = await updateMediaServer()
   log.infoAny(result)
+
+  let allUris: string[] | undefined
+
+  if (options?.checkUris != null && options.checkUris) {
+    const mongoDbClient = new MongoDbClient()
+    const database = await mongoDbClient.connect()
+    await mongoDbClient.close()
+    allUris = await database.getAllAssetUris()
+  }
+
   await walk(
     {
       async presentation (filePath) {
         log.info('Parse presentation %s', [filePath])
         try {
           const presentation = parse(readFile(filePath))
+          if (allUris != null) {
+            for (const uri of presentation.slides.mediaUris) {
+              if (!allUris.includes(uri)) {
+                throw new Error(`URI check failed for “${uri}”!`)
+              }
+            }
+          }
           if (options?.resolve != null && options.resolve) {
             await presentation.resolve()
           }

@@ -80,7 +80,7 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
    *
    * @returns True if the given URI is a valid media URI.
    */
-  static check (uri: string): boolean {
+  public static check (uri: string): boolean {
     const matches = MediaUri.regExp.exec(uri)
     if (matches != null) {
       return true
@@ -88,7 +88,7 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
     return false
   }
 
-  static splitByFragment (uri: string): UriSplittedByFragment {
+  public static splitByFragment (uri: string): UriSplittedByFragment {
     if (uri.indexOf('#') > 0) {
       const segments = uri.split('#')
       if (segments.length !== 2) {
@@ -107,13 +107,13 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
   /**
    * Remove the fragment suffix of an media URI.
    *
-   * @param uri A media URI (Uniform Resource Identifier) with an optional
+   * @param uri - A media URI (Uniform Resource Identifier) with an optional
    *   fragment suffix, for example `ref:Yesterday#complete`.
    *
    * @returns A media URI (Uniform Resource Identifier) without an optional
    *   fragment suffix, for example `ref:Yesterday`.
    */
-  static removeFragment (uri: string): string {
+  public static removeFragment (uri: string): string {
     const splitted = MediaUri.splitByFragment(uri)
     return splitted.prefix
   }
@@ -126,7 +126,7 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
    *
    * @returns The URI without the scheme, for example `Fuer-Elise`.
    */
-  static removeScheme (uri: string): string {
+  public static removeScheme (uri: string): string {
     if (uri.indexOf('ref:') === 0) {
       return uri.replace('ref:', '')
     } else if (uri.indexOf('uuid:') === 0) {

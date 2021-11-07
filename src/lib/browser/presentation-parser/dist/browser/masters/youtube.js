@@ -28,6 +28,9 @@ export class YoutubeMaster {
         if (typeof fields === 'string') {
             fields = { id: fields };
         }
+        else if (typeof fields === 'number') {
+            fields = { id: fields.toString() };
+        }
         return fields;
     }
     collectOptionalMediaUris(fields) {
