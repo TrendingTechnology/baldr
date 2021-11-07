@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClozeMaster = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
+const master_1 = require("../master");
 class ClozeMaster {
     constructor() {
         this.name = 'cloze';
@@ -10,14 +11,12 @@ class ClozeMaster {
             name: 'cloze',
             color: 'blue'
         };
-        this.fieldsDefintion = {
-            src: {
+        this.fieldsDefintion = Object.assign({ src: {
                 type: String,
                 required: true,
                 description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
                 assetUri: true
-            }
-        };
+            } }, master_1.mapStepFieldDefintions(['subset']));
     }
     normalizeFields(fields) {
         if (typeof fields === 'string') {

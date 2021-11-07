@@ -113,8 +113,8 @@ describe('File “fuzzy-uri.ts”', function () {
     it('getter “uris”', function () {
       const list = new WrappedUriList(['ref:test1#1', 'ref:test2#2'])
       const iterator = list.uris.values()
-      assert.strictEqual(iterator.next().value, 'ref:test1#1')
-      assert.strictEqual(iterator.next().value, 'ref:test2#2')
+      assert.strictEqual(iterator.next().value, 'ref:test1')
+      assert.strictEqual(iterator.next().value, 'ref:test2')
     })
   })
 })

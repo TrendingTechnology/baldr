@@ -1,3 +1,4 @@
+import { mapStepFieldDefintions } from '../master';
 export class EditorMaster {
     constructor() {
         this.name = 'editor';
@@ -6,13 +7,11 @@ export class EditorMaster {
             name: 'pencil',
             color: 'blue'
         };
-        this.fieldsDefintion = {
-            markup: {
+        this.fieldsDefintion = Object.assign({ markup: {
                 type: String,
                 markup: true,
                 description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
-            }
-        };
+            } }, mapStepFieldDefintions(['mode', 'subset']));
     }
     normalizeFields(fields) {
         if (typeof fields === 'string') {

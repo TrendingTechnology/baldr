@@ -1,5 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models'
-import { Master } from '../master'
+import { Master, mapStepFieldDefintions } from '../master'
 
 type ClozeFieldsRaw = string | ClozeFieldsNormalized
 
@@ -24,7 +24,8 @@ export class ClozeMaster implements Master {
       required: true,
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       assetUri: true
-    }
+    },
+    ...mapStepFieldDefintions(['subset'])
   }
 
   normalizeFields (fields: ClozeFieldsRaw): ClozeFieldsNormalized {

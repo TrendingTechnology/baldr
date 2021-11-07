@@ -8,4 +8,7 @@ export class CameraMaster {
         };
         this.fieldsDefintion = {};
     }
+    normalizeFields(fields) {
+        return {};
+    }
 }

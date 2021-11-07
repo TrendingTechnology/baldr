@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { Master, mapStepFieldDefintions } from '../master'
 
 type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized
 
@@ -24,7 +24,8 @@ export class InteractiveGraphicMaster implements Master {
       required: true,
       description: 'Den URI zu einer SVG-Datei.',
       assetUri: true
-    }
+    },
+    ...mapStepFieldDefintions(['selector', 'subset'])
   }
 
   normalizeFields (

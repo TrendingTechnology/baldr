@@ -15,7 +15,7 @@ export declare class WrappedUriList {
     specs: WrappedUri[];
     constructor(spec: FuzzySpec);
     /**
-     * Get all URIs.
+     * Get all URIs (without sample fragment)
      */
     get uris(): Set<string>;
     [Symbol.iterator](): Generator<WrappedUri, any, any>;

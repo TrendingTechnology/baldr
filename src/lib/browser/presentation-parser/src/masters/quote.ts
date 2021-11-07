@@ -1,5 +1,16 @@
 import { Master } from '../master'
 
+type QuoteFieldsRaw = string | QuoteFieldsNormalized
+
+interface QuoteFieldsNormalized {
+  text: string
+  author?: string
+  date?: string
+  source?: string
+  prolog?: string
+  epilog?: string
+}
+
 export class QuoteMaster implements Master {
   name = 'quote'
 
@@ -41,5 +52,24 @@ export class QuoteMaster implements Master {
       markup: true,
       description: 'Längerer Text, der nach dem Zitat erscheint.'
     }
+  }
+
+  normalizeFields (fields: QuoteFieldsRaw): QuoteFieldsNormalized {
+    if (typeof fields === 'string') {
+      fields = {
+        text: fields
+      }
+    }
+    // Inject quotations marks after the first before the last word character
+    // <p><span class="quotation-mark">»</span>Quote
+    fields.text = fields.text.replace(
+      /^(\s*<.+>)?/,
+      '$1<span class="quotation-mark">»</span> '
+    )
+    fields.text = fields.text.replace(
+      /(<.+>\s*)?$/,
+      ' <span class="quotation-mark">«</span>$1'
+    )
+    return fields
   }
 }

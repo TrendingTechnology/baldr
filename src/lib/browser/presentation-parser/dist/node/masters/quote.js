@@ -42,5 +42,17 @@ class QuoteMaster {
             }
         };
     }
+    normalizeFields(fields) {
+        if (typeof fields === 'string') {
+            fields = {
+                text: fields
+            };
+        }
+        // Inject quotations marks after the first before the last word character
+        // <p><span class="quotation-mark">»</span>Quote
+        fields.text = fields.text.replace(/^(\s*<.+>)?/, '$1<span class="quotation-mark">»</span> ');
+        fields.text = fields.text.replace(/(<.+>\s*)?$/, ' <span class="quotation-mark">«</span>$1');
+        return fields;
+    }
 }
 exports.QuoteMaster = QuoteMaster;

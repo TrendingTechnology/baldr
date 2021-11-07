@@ -48,8 +48,8 @@ function action(filePaths, options) {
         if ((options === null || options === void 0 ? void 0 : options.checkUris) != null && options.checkUris) {
             const mongoDbClient = new mongodb_connector_1.MongoDbClient();
             const database = yield mongoDbClient.connect();
-            yield mongoDbClient.close();
             allUris = yield database.getAllAssetUris();
+            yield mongoDbClient.close();
         }
         yield media_manager_1.walk({
             presentation(filePath) {

@@ -11,5 +11,8 @@ class CameraMaster {
         };
         this.fieldsDefintion = {};
     }
+    normalizeFields(fields) {
+        return {};
+    }
 }
 exports.CameraMaster = CameraMaster;

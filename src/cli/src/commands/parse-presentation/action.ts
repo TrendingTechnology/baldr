@@ -26,8 +26,8 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
   if (options?.checkUris != null && options.checkUris) {
     const mongoDbClient = new MongoDbClient()
     const database = await mongoDbClient.connect()
-    await mongoDbClient.close()
     allUris = await database.getAllAssetUris()
+    await mongoDbClient.close()
   }
 
   await walk(

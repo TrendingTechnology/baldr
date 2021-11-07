@@ -1,3 +1,4 @@
+import { mapStepFieldDefintions } from '../master';
 export class InteractiveGraphicMaster {
     constructor() {
         this.name = 'interactiveGraphic';
@@ -7,14 +8,12 @@ export class InteractiveGraphicMaster {
             color: 'blue',
             showOnSlides: false
         };
-        this.fieldsDefintion = {
-            src: {
+        this.fieldsDefintion = Object.assign({ src: {
                 type: String,
                 required: true,
                 description: 'Den URI zu einer SVG-Datei.',
                 assetUri: true
-            }
-        };
+            } }, mapStepFieldDefintions(['selector', 'subset']));
     }
     normalizeFields(fields) {
         if (typeof fields === 'string') {

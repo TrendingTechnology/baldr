@@ -60,6 +60,16 @@ interface FieldDefinition {
      */
     type?: object;
 }
+declare type StepFieldNames = 'selector' | 'mode' | 'subset';
+interface FieldDefinitionCollection {
+    [key: string]: FieldDefinition;
+}
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ */
+export declare function mapStepFieldDefintions(selectors: StepFieldNames[]): FieldDefinitionCollection;
 /**
  * Specification of the master slide icon that is normally displayed on the
  * top left corner of a slide.

@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { Master, mapStepFieldDefintions } from '../master'
 
 type EditorFieldsRaw = string | EditorFieldsNormalized
 
@@ -22,7 +22,8 @@ export class EditorMaster implements Master {
       markup: true,
       description:
         'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
-    }
+    },
+    ...mapStepFieldDefintions(['mode', 'subset'])
   }
 
   normalizeFields (fields: EditorFieldsRaw): EditorFieldsNormalized {

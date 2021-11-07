@@ -1,8 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
+const stepFieldDefinitions = {
+    selector: {
+        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
+        default: 'g[inkscape\\:groupmode="layer"]'
+    },
+    mode: {
+        type: String,
+        description: '„words“ oder „sentences“'
+    },
+    subset: {
+        type: String,
+        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
+    }
+};
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ */
+function mapStepFieldDefintions(selectors) {
+    const result = {};
+    for (const selector of selectors) {
+        if (stepFieldDefinitions[selector] != null) {
+            result[`step${selector.charAt(0).toUpperCase()}${selector
+                .substr(1)
+                .toLowerCase()}`] = stepFieldDefinitions[selector];
+        }
+    }
+    return result;
+}
+exports.mapStepFieldDefintions = mapStepFieldDefintions;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.

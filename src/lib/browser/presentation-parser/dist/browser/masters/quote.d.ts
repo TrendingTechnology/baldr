@@ -1,4 +1,13 @@
 import { Master } from '../master';
+declare type QuoteFieldsRaw = string | QuoteFieldsNormalized;
+interface QuoteFieldsNormalized {
+    text: string;
+    author?: string;
+    date?: string;
+    source?: string;
+    prolog?: string;
+    epilog?: string;
+}
 export declare class QuoteMaster implements Master {
     name: string;
     displayName: string;
@@ -38,4 +47,6 @@ export declare class QuoteMaster implements Master {
             description: string;
         };
     };
+    normalizeFields(fields: QuoteFieldsRaw): QuoteFieldsNormalized;
 }
+export {};

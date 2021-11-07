@@ -1,4 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models';
+import { mapStepFieldDefintions } from '../master';
 export class ClozeMaster {
     constructor() {
         this.name = 'cloze';
@@ -7,14 +8,12 @@ export class ClozeMaster {
             name: 'cloze',
             color: 'blue'
         };
-        this.fieldsDefintion = {
-            src: {
+        this.fieldsDefintion = Object.assign({ src: {
                 type: String,
                 required: true,
                 description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
                 assetUri: true
-            }
-        };
+            } }, mapStepFieldDefintions(['subset']));
     }
     normalizeFields(fields) {
         if (typeof fields === 'string') {

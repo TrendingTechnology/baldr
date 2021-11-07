@@ -55,12 +55,12 @@ class WrappedUriList {
         }
     }
     /**
-     * Get all URIs.
+     * Get all URIs (without sample fragment)
      */
     get uris() {
         const uris = new Set();
         for (const spec of this.specs) {
-            uris.add(spec.uri);
+            uris.add(client_media_models_1.MediaUri.removeFragment(spec.uri));
         }
         return uris;
     }

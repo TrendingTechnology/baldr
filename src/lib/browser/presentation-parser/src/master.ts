@@ -73,6 +73,50 @@ interface FieldDefinition {
   type?: object
 }
 
+type StepFieldNames = 'selector' | 'mode' | 'subset'
+
+interface FieldDefinitionCollection {
+  [key: string]: FieldDefinition
+}
+
+const stepFieldDefinitions: FieldDefinitionCollection = {
+  selector: {
+    description:
+      'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
+    default: 'g[inkscape\\:groupmode="layer"]'
+  },
+  mode: {
+    type: String,
+    description: '„words“ oder „sentences“'
+  },
+  subset: {
+    type: String,
+    description:
+      'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
+  }
+}
+
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ */
+export function mapStepFieldDefintions (
+  selectors: StepFieldNames[]
+): FieldDefinitionCollection {
+  const result: FieldDefinitionCollection = {}
+  for (const selector of selectors) {
+    if (stepFieldDefinitions[selector] != null) {
+      result[
+        `step${selector.charAt(0).toUpperCase()}${selector
+          .substr(1)
+          .toLowerCase()}`
+      ] = stepFieldDefinitions[selector]
+    }
+  }
+  return result
+}
+
 /**
  * Specification of the master slide icon that is normally displayed on the
  * top left corner of a slide.

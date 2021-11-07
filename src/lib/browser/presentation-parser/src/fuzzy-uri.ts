@@ -67,12 +67,12 @@ export class WrappedUriList {
   }
 
   /**
-   * Get all URIs.
+   * Get all URIs (without sample fragment)
    */
   get uris (): Set<string> {
     const uris = new Set<string>()
     for (const spec of this.specs) {
-      uris.add(spec.uri)
+      uris.add(MediaUri.removeFragment(spec.uri))
     }
     return uris
   }
