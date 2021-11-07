@@ -2,9 +2,9 @@
 
 const assert = require('assert')
 
-const { parseMasterPresentation } = require('../_helper.js')
+const { parsePresentation } = require('../_helper.js')
 
-const presentation = parseMasterPresentation('question')
+const presentation = parsePresentation('masters/question')
 
 function getQuestions (no) {
   return presentation.getSlideByNo(no).fields.questions

@@ -80,6 +80,10 @@ export class MasterWrapper {
             if (def.default != null && fields[name] == null) {
                 fields[name] = def.default;
             }
+            // type
+            if (def.type != null && typeof def.type === 'function' && fields[name] != null) {
+                fields[name] = def.type(fields[name]);
+            }
             //  Convert the field marked as containing markup from markdown to HTML.
             if (def.markup != null && def.markup && fields[name] != null) {
                 fields[name] = convertMarkdownToHtml(fields[name]);

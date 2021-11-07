@@ -6,12 +6,6 @@ const { getConfig } = require('@bldr/config-ng')
 
 const config = getConfig()
 
-function parseMasterPresentation (masterName) {
-  return parse(
-    readFile(path.join(__dirname, 'files', 'masters', `${masterName}.baldr.yml`))
-  )
-}
-
 function parseRealWorldPresentation (relPath) {
   return parse(
     readFile(
@@ -25,20 +19,19 @@ function parseRealWorldPresentation (relPath) {
   )
 }
 
-function parseTestPresentation (fileName) {
+function parsePresentation (relPath) {
   return parse(
-    readFile(path.join(__dirname, 'files', `${fileName}.baldr.yml`))
+    readFile(path.join(__dirname, 'files', `${relPath}.baldr.yml`))
   )
 }
 
 function parseFirstSlide (relPath) {
-  const presentation = parseTestPresentation(relPath)
+  const presentation = parsePresentation(relPath)
   return presentation.getSlideByNo(1)
 }
 
 module.exports = {
-  parseMasterPresentation,
   parseRealWorldPresentation,
-  parseTestPresentation,
+  parsePresentation,
   parseFirstSlide
 }

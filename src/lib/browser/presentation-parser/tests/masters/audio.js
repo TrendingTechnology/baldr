@@ -2,9 +2,9 @@
 
 const assert = require('assert')
 
-const { parseMasterPresentation } = require('../_helper.js')
+const { parsePresentation } = require('../_helper.js')
 
-const presentation = parseMasterPresentation('audio')
+const presentation = parsePresentation('masters/audio')
 
 describe('Master audio', function () {
   it('Some fields', async function () {

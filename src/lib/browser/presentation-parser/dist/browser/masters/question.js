@@ -168,7 +168,6 @@ export class QuestionMaster {
         };
         this.fieldsDefintion = {
             questions: {
-                type: Array,
                 description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
                 required: true,
                 markup: true

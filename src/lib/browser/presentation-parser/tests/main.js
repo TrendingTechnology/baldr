@@ -4,7 +4,7 @@ const assert = require('assert')
 
 const {
   parseRealWorldPresentation,
-  parseTestPresentation
+  parsePresentation
 } = require('./_helper.js')
 
 describe('Package “@bldr/presentation-parser”', function () {
@@ -36,7 +36,7 @@ describe('Package “@bldr/presentation-parser”', function () {
     })
 
     it('“ref” and “title” not in “meta”', function () {
-      const presentation = parseTestPresentation('ref-title-not-in-meta')
+      const presentation = parsePresentation('ref-title-not-in-meta')
       assert.strictEqual(presentation.meta.title, 'Title')
       assert.strictEqual(presentation.meta.ref, 'Reference')
     })
@@ -45,7 +45,7 @@ describe('Package “@bldr/presentation-parser”', function () {
   it('Unknown property in the presentation root', function () {
     assert.throws(
       () => {
-        parseTestPresentation('unknown-property')
+        parsePresentation('unknown-property')
       },
       {
         message: 'Unknown properties in raw object: {"unknown":"test"}',
@@ -55,7 +55,7 @@ describe('Package “@bldr/presentation-parser”', function () {
   })
 
   it('Irresolvable required asset', async function () {
-    const presentation = parseTestPresentation('media-assets-irresolvable')
+    const presentation = parsePresentation('media-assets-irresolvable')
 
     await assert.rejects(
       async () => {
@@ -73,7 +73,7 @@ describe('Package “@bldr/presentation-parser”', function () {
   })
 
   it('Irresolvable optional asset', async function () {
-    const presentation = parseTestPresentation(
+    const presentation = parsePresentation(
       'media-assets-irresolvable-optional'
     )
     const assets = await presentation.resolve()
@@ -82,7 +82,7 @@ describe('Package “@bldr/presentation-parser”', function () {
 
   describe('Media URI reference abbreviation', function () {
     it('ok', function () {
-      const presentation = parseTestPresentation('ref-abbreviation-ok')
+      const presentation = parsePresentation('ref-abbreviation-ok')
       const rawString = presentation.rawYamlStringExpanded
       assert.ok(rawString != null)
       assert.ok(rawString.includes('ref:ref-abbreviation_file-1'))
@@ -92,7 +92,7 @@ describe('Package “@bldr/presentation-parser”', function () {
     it('error', function () {
       assert.throws(
         () => {
-          parseTestPresentation('ref-abbreviation-error')
+          parsePresentation('ref-abbreviation-error')
         },
         {
           message:

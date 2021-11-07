@@ -3,7 +3,7 @@
 const assert = require('assert')
 const {
   parseRealWorldPresentation,
-  parseTestPresentation
+  parsePresentation
 } = require('./_helper.js')
 
 describe('Class “SlideCollection()”', function () {
@@ -29,7 +29,7 @@ describe('Class “SlideCollection()”', function () {
   it('throws error: no slides', function () {
     assert.throws(
       () => {
-        parseTestPresentation('no-slides')
+        parsePresentation('no-slides')
       },
       {
         message: 'The property “slides” must not be null.',
@@ -39,7 +39,7 @@ describe('Class “SlideCollection()”', function () {
   })
 
   it('Nested slides', function () {
-    const presentation = parseTestPresentation('nested-slides')
+    const presentation = parsePresentation('nested-slides')
     const tree = presentation.slides.tree
     assert.strictEqual(tree[0].master.name, 'generic')
     assert.strictEqual(tree[0].slides[0].master.name, 'generic')
@@ -47,14 +47,14 @@ describe('Class “SlideCollection()”', function () {
   })
 
   it('iterator', function () {
-    const presentation = parseTestPresentation('nested-slides')
+    const presentation = parsePresentation('nested-slides')
     for (const slide of presentation.slides) {
       assert.strictEqual(typeof slide.no, 'number')
     }
   })
 
   it('getter attribute “numberOfSlides”', function () {
-    const presentation = parseTestPresentation('nested-slides')
+    const presentation = parsePresentation('nested-slides')
     assert.strictEqual(presentation.slides.numberOfSlides, 3)
   })
 })

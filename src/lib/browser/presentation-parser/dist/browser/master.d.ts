@@ -10,8 +10,7 @@ export interface FieldData {
 }
 /**
  * We name the properties of a master slide “field” to better distinguish them
- * from the Vue properties “props”.
- * It is an extended version of the Vue `props` defintion.
+ * from the Vue properties “props”. It is an extended version of the Vue `props` defintion.
  *
  * ```js
  *  const fields = {
@@ -49,7 +48,7 @@ interface FieldDefinition {
      */
     markup?: boolean;
     /**
-     * Indicates that this `prop` contains a media file URI.
+     * Indicates that this `field` contains a media file URI.
      */
     assetUri?: boolean;
     /**

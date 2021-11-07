@@ -59,7 +59,6 @@ export declare class QuestionMaster implements Master {
     };
     fieldsDefintion: {
         questions: {
-            type: ArrayConstructor;
             description: string;
             required: boolean;
             markup: boolean;

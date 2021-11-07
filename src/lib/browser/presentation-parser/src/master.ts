@@ -14,8 +14,7 @@ export interface FieldData {
 
 /**
  * We name the properties of a master slide “field” to better distinguish them
- * from the Vue properties “props”.
- * It is an extended version of the Vue `props` defintion.
+ * from the Vue properties “props”. It is an extended version of the Vue `props` defintion.
  *
  * ```js
  *  const fields = {
@@ -57,7 +56,7 @@ interface FieldDefinition {
   markup?: boolean
 
   /**
-   * Indicates that this `prop` contains a media file URI.
+   * Indicates that this `field` contains a media file URI.
    */
   assetUri?: boolean
 
@@ -313,6 +312,11 @@ export class MasterWrapper {
       // Set default values
       if (def.default != null && fields[name] == null) {
         fields[name] = def.default
+      }
+
+      // type
+      if (def.type != null && typeof def.type === 'function' && fields[name] != null) {
+        fields[name] = def.type(fields[name])
       }
 
       //  Convert the field marked as containing markup from markdown to HTML.

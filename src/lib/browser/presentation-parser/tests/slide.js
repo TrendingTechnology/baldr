@@ -1,18 +1,18 @@
 /* globals describe it */
 
 const assert = require('assert')
-const { parseTestPresentation, parseFirstSlide } = require('./_helper.js')
+const { parsePresentation, parseFirstSlide } = require('./_helper.js')
 
 describe('Class “Slide()”', function () {
   it('Basic attributes', function () {
-    const presentation = parseTestPresentation('slide-meta')
+    const presentation = parsePresentation('slide-meta')
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.level, 1)
     assert.strictEqual(slide.no, 1)
   })
 
   it('Metadata', function () {
-    const presentation = parseTestPresentation('slide-meta')
+    const presentation = parsePresentation('slide-meta')
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.meta.ref, 'Reference')
     assert.strictEqual(slide.meta.title, 'Title')
@@ -21,7 +21,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('attribute “mediaUris” and “optionalMediaUris”', function () {
-    const presentation = parseTestPresentation('slide-media-uris')
+    const presentation = parsePresentation('slide-media-uris')
 
     let slide = presentation.getSlideByNo(1)
     assert.deepStrictEqual(slide.mediaUris, new Set(['ref:test']))
@@ -34,7 +34,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('Slide state absent', function () {
-    const presentation = parseTestPresentation('slide-state-absent')
+    const presentation = parsePresentation('slide-state-absent')
     assert.strictEqual(presentation.slides.numberOfSlides, 1)
     const slide = presentation.slides.flat[0]
     assert.strictEqual(slide.meta.title, 'Present')
@@ -43,7 +43,7 @@ describe('Class “Slide()”', function () {
   it('throws error: Unknown master', function () {
     assert.throws(
       () => {
-        parseTestPresentation('unknown-master')
+        parsePresentation('unknown-master')
       },
       {
         message: 'No master slide found: {"unknownMaster":"test"}',
@@ -53,7 +53,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('attribute “audioOverlay”', async function () {
-    const presentation = parseTestPresentation('audio-overlay')
+    const presentation = parsePresentation('audio-overlay')
     const assets = await presentation.resolve()
     assert.strictEqual(assets.length, 11)
     for (const asset of assets) {
@@ -65,7 +65,7 @@ describe('Class “Slide()”', function () {
     it('Unknown field', function () {
       assert.throws(
         () => {
-          parseTestPresentation('fields/unknown-field')
+          parsePresentation('fields/unknown-field')
         },
         {
           message: 'The master slide “generic” has no field named “xxx”.',
@@ -74,17 +74,17 @@ describe('Class “Slide()”', function () {
       )
     })
 
-    it('markup = true', function () {
+    it('Attribute “markup”', function () {
       const slide = parseFirstSlide('fields/markup')
       assert.strictEqual(slide.fields.title, 'This is <em>markdown</em>')
     })
 
-    it('Default value', function () {
+    it('Attribute “default”', function () {
       const slide = parseFirstSlide('fields/default')
       assert.strictEqual(slide.fields.autoplay, false)
     })
 
-    it('required = true', function () {
+    it('Attribute “required”', function () {
       assert.throws(
         () => {
           parseFirstSlide('fields/required')
@@ -94,6 +94,11 @@ describe('Class “Slide()”', function () {
           name: 'Error'
         }
       )
+    })
+
+    it('Attribute “type”', function () {
+      const slide = parseFirstSlide('fields/type')
+      assert.strictEqual(slide.fields.title, '1')
     })
   })
 })
