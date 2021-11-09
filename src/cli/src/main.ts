@@ -184,6 +184,7 @@ async function main (): Promise<void> {
     await program.parseAsync(process.argv)
   } catch (error) {
     log.error(String(error))
+    log.errorAny(error)
   }
 
   // [

@@ -44,8 +44,8 @@ async function normalizeAsset (filePath: string): Promise<void> {
   } else {
     await assetOperations.normalizeMediaAsset(filePath)
   }
-  assetOperations.renameByRef(filePath)
   txtOperations.fixTypography(yamlFile)
+  assetOperations.renameByRef(filePath)
 }
 
 function normalizeEveryFile (filePath: string): void {
@@ -119,7 +119,6 @@ export async function normalize (
     }
   } else if (filter === 'tex') {
     log.info('Normalize only TeX files')
-
     functionBundle = {
       tex: normalizeTex
     }

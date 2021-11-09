@@ -75,8 +75,8 @@ function normalizeAsset(filePath) {
         else {
             yield assetOperations.normalizeMediaAsset(filePath);
         }
-        assetOperations.renameByRef(filePath);
         txtOperations.fixTypography(yamlFile);
+        assetOperations.renameByRef(filePath);
     });
 }
 function normalizeEveryFile(filePath) {

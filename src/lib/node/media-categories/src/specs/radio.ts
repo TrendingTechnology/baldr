@@ -1,6 +1,7 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import { validateMediaId } from '../main'
+import { getAudioMetadataValue } from '../audio-metadata'
 
 /**
  * The meta data type specification “radio”.
@@ -10,6 +11,12 @@ export const radio: MediaCategoriesTypes.Category = {
   detectCategoryByPath: new RegExp('^.*/SF/.*(m4a|mp3)$'),
   abbreviation: 'SF',
   props: {
+    title: {
+      title: 'Titel',
+      derive: async function ({ filePath }) {
+        return getAudioMetadataValue('title', filePath)
+      }
+    },
     author: {
       title: 'Autor*in'
     },

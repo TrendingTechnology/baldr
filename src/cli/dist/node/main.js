@@ -170,6 +170,7 @@ function main() {
         }
         catch (error) {
             log.error(String(error));
+            log.errorAny(error);
         }
         // [
         //  '/usr/local/bin/node',
