@@ -430,10 +430,10 @@ async function insertObjectIntoDb (
   mediaType: ServerMediaType
 ): Promise<void> {
   let object:
-  | ServerPresentation
-  | ServerMediaAsset
-  | ServerMediaFile
-  | undefined
+    | ServerPresentation
+    | ServerMediaAsset
+    | ServerMediaFile
+    | undefined
   try {
     if (mediaType === 'presentations') {
       object = new ServerPresentation(filePath)
@@ -796,8 +796,12 @@ function registerMediaRestApi (): express.Express {
       if (query.ref == null) {
         throw new Error('You have to specify an ID (?ref=myfile).')
       }
-      if (query.with == null) query.with = 'editor'
-      if (query.type == null) query.type = 'presentations'
+      if (query.with == null) {
+        query.with = 'editor'
+      }
+      if (query.type == null) {
+        query.type = 'presentations'
+      }
       const archive = 'archive' in query
       const create = 'create' in query
 
@@ -843,9 +847,7 @@ function registerMediaRestApi (): express.Express {
 
   app.get('/stats/updates', async (req, res, next) => {
     try {
-      res.json(
-        await database.listUpdateTasks()
-      )
+      res.json(await database.listUpdateTasks())
     } catch (error) {
       next(error)
     }
