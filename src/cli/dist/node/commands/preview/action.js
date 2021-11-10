@@ -66,10 +66,8 @@ function createAudioWaveForm(srcPath) {
         log.verbose('Create waveform image %s from %s.', [destPath, srcPath]);
     });
 }
-function downloadAudioCoverImage(srcPath, destPath) {
+function downloadAudioCoverImage(metaData, destPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const yamlFile = `${srcPath}.yml`;
-        const metaData = file_reader_writer_1.readYamlFile(yamlFile);
         if (metaData.coverSource != null) {
             yield core_node_1.fetchFile(metaData.coverSource, destPath);
             log.verbose('Download preview image %s from %s.', [
@@ -130,7 +128,7 @@ function convertFirstPdfPageToJpg(srcPath, destPath) {
     ]);
     log.verbose('Create preview image %s of a PDF file.', [destPath]);
 }
-function createPreviewOneFile(srcPath, cmdObj) {
+function createPreviewOneFile(srcPath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         log.info('Create preview files for %s', [srcPath]);
         const mimeType = media_manager_1.filePathToMimeType(srcPath);
@@ -138,20 +136,25 @@ function createPreviewOneFile(srcPath, cmdObj) {
         const destPathPreview = `${srcPath}_preview.jpg`;
         const destPathWavefrom = `${srcPath}_waveform.png`;
         if (mimeType === 'audio' &&
-            (!fs_1.default.existsSync(destPathWavefrom) || (cmdObj === null || cmdObj === void 0 ? void 0 : cmdObj.force))) {
+            (!fs_1.default.existsSync(destPathWavefrom) || (options === null || options === void 0 ? void 0 : options.force))) {
             yield createAudioWaveForm(srcPath);
         }
-        if (fs_1.default.existsSync(destPathPreview) && !cmdObj.force) {
+        if (fs_1.default.existsSync(destPathPreview) && !options.force) {
             return;
         }
         if (mimeType === 'video') {
-            extractFrameFromVideo(srcPath, destPathPreview, cmdObj.seconds);
+            extractFrameFromVideo(srcPath, destPathPreview, options.seconds);
         }
         else if (mimeType === 'document') {
             convertFirstPdfPageToJpg(srcPath, destPathPreview);
         }
         else if (mimeType === 'audio') {
-            yield downloadAudioCoverImage(srcPath, destPathPreview);
+            const yamlFile = `${srcPath}.yml`;
+            const metaData = file_reader_writer_1.readYamlFile(yamlFile);
+            if (metaData.cover != null) {
+                return;
+            }
+            yield downloadAudioCoverImage(metaData, destPathPreview);
             yield extractAudioCoverFromMetadata(srcPath, destPathPreview);
         }
     });

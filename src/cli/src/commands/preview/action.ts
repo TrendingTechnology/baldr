@@ -7,6 +7,7 @@ import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
 import { filePathToMimeType, walk } from '@bldr/media-manager'
 import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
+import { StringIndexedObject } from '@bldr/type-definitions'
 
 interface Options {
   seconds: number
@@ -43,12 +44,9 @@ async function createAudioWaveForm (srcPath: string): Promise<void> {
 }
 
 async function downloadAudioCoverImage (
-  srcPath: string,
+  metaData: StringIndexedObject,
   destPath: string
 ): Promise<void> {
-  const yamlFile = `${srcPath}.yml`
-  const metaData = readYamlFile(yamlFile)
-
   if (metaData.coverSource != null) {
     await fetchFile(metaData.coverSource, destPath)
     log.verbose('Download preview image %s from %s.', [
@@ -117,7 +115,7 @@ function convertFirstPdfPageToJpg (srcPath: string, destPath: string): void {
 
 async function createPreviewOneFile (
   srcPath: string,
-  cmdObj: Options
+  options: Options
 ): Promise<void> {
   log.info('Create preview files for %s', [srcPath])
   const mimeType = filePathToMimeType(srcPath)
@@ -127,21 +125,26 @@ async function createPreviewOneFile (
 
   if (
     mimeType === 'audio' &&
-    (!fs.existsSync(destPathWavefrom) || cmdObj?.force)
+    (!fs.existsSync(destPathWavefrom) || options?.force)
   ) {
     await createAudioWaveForm(srcPath)
   }
 
-  if (fs.existsSync(destPathPreview) && !cmdObj.force) {
+  if (fs.existsSync(destPathPreview) && !options.force) {
     return
   }
 
   if (mimeType === 'video') {
-    extractFrameFromVideo(srcPath, destPathPreview, cmdObj.seconds)
+    extractFrameFromVideo(srcPath, destPathPreview, options.seconds)
   } else if (mimeType === 'document') {
     convertFirstPdfPageToJpg(srcPath, destPathPreview)
   } else if (mimeType === 'audio') {
-    await downloadAudioCoverImage(srcPath, destPathPreview)
+    const yamlFile = `${srcPath}.yml`
+    const metaData = readYamlFile(yamlFile)
+    if (metaData.cover != null) {
+      return
+    }
+    await downloadAudioCoverImage(metaData, destPathPreview)
     await extractAudioCoverFromMetadata(srcPath, destPathPreview)
   }
 }
