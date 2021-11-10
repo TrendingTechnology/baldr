@@ -23,7 +23,7 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
 
   let allUris: string[] | undefined
 
-  if (options?.checkUris != null && options.checkUris) {
+  if (options?.resolve == null || !options.resolve) {
     const mongoDbClient = new MongoDbClient()
     const database = await mongoDbClient.connect()
     allUris = await database.getAllAssetUris()
@@ -36,15 +36,14 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
         log.info('Parse presentation %s', [filePath])
         try {
           const presentation = parse(readFile(filePath))
-          if (allUris != null) {
+          if (options?.resolve != null && options.resolve) {
+            await presentation.resolve()
+          } else if (allUris != null) {
             for (const uri of presentation.slides.mediaUris) {
               if (!allUris.includes(uri)) {
                 throw new Error(`URI check failed for “${uri}”!`)
               }
             }
-          }
-          if (options?.resolve != null && options.resolve) {
-            await presentation.resolve()
           }
           presentation.log()
         } catch (e) {

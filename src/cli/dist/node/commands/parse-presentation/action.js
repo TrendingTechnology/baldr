@@ -45,7 +45,7 @@ function action(filePaths, options) {
         const result = yield api_wrapper_1.updateMediaServer();
         log.infoAny(result);
         let allUris;
-        if ((options === null || options === void 0 ? void 0 : options.checkUris) != null && options.checkUris) {
+        if ((options === null || options === void 0 ? void 0 : options.resolve) == null || !options.resolve) {
             const mongoDbClient = new mongodb_connector_1.MongoDbClient();
             const database = yield mongoDbClient.connect();
             allUris = yield database.getAllAssetUris();
@@ -57,15 +57,15 @@ function action(filePaths, options) {
                     log.info('Parse presentation %s', [filePath]);
                     try {
                         const presentation = presentation_parser_1.parse(file_reader_writer_1.readFile(filePath));
-                        if (allUris != null) {
+                        if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {
+                            yield presentation.resolve();
+                        }
+                        else if (allUris != null) {
                             for (const uri of presentation.slides.mediaUris) {
                                 if (!allUris.includes(uri)) {
                                     throw new Error(`URI check failed for “${uri}”!`);
                                 }
                             }
-                        }
-                        if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {
-                            yield presentation.resolve();
                         }
                         presentation.log();
                     }
