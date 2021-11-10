@@ -1,5 +1,7 @@
 import { Presentation } from './presentation'
 
+export { mapStepFieldDefintions } from './master'
+
 export function parse (yamlString: string): Presentation {
   return new Presentation(yamlString)
 }

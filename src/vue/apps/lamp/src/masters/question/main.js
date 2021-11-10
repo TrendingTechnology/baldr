@@ -5,7 +5,8 @@
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { Question, generateTexMarkup } from '@bldr/master-question'
-import steps from '@/steps.js'
+
+import steps from '@/steps'
 
 /**
  * @param {Number} stepNo

@@ -6,7 +6,7 @@ import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
-import steps from '@/steps.js'
+import steps from '@/steps'
 
 function scroll (element) {
   if (!element) return

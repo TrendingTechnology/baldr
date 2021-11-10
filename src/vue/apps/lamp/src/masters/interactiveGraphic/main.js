@@ -5,9 +5,10 @@
 /* globals DOMParser */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import steps from '@/steps.js'
+import steps from '@/steps'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
 export default validateMasterSpec({
   name: 'interactiveGraphic',
@@ -19,7 +20,7 @@ export default validateMasterSpec({
       description: 'Den URI zu einer SVG-Datei.',
       assetUri: true
     },
-    ...steps.mapProps(['selector', 'subset'])
+    ...mapStepFieldDefintions(['selector', 'subset'])
   },
   icon: {
     name: 'image',
@@ -49,7 +50,7 @@ export default validateMasterSpec({
         props = { src: props }
       }
       if (!props.stepSelector) {
-        const propDefs = steps.mapProps(['selector'])
+        const propDefs = mapStepFieldDefintions(['selector'])
         props.stepSelector = propDefs.stepSelector.default
       }
       return props

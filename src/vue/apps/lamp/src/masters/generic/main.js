@@ -5,8 +5,9 @@
 import { convertHtmlToPlainText, splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-import steps from '@/steps.js'
+import steps from '@/steps'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -50,7 +51,7 @@ export default validateMasterSpec({
       type: Boolean,
       default: false
     },
-    ...steps.mapProps(['mode', 'subset'])
+    ...mapStepFieldDefintions(['mode', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',

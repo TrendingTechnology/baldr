@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import steps from '@/steps.js'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
@@ -29,7 +29,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    ...steps.mapProps(['mode', 'subset'])
+    ...mapStepFieldDefintions(['mode', 'subset'])
   },
   data () {
     return {

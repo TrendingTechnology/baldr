@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Presentation } from './presentation';
+export { mapStepFieldDefintions } from './master';
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

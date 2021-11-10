@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import steps from '@/steps.js'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
 export default {
   props: {
@@ -13,7 +13,7 @@ export default {
       type: String,
       required: true
     },
-    ...steps.mapProps(['subset'])
+    ...mapStepFieldDefintions(['subset'])
   },
   data () {
     return {

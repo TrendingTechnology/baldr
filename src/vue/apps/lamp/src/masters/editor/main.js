@@ -5,8 +5,9 @@
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-import steps from '@/steps.js'
+import steps from '@/steps'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -27,7 +28,7 @@ export default validateMasterSpec({
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    ...steps.mapProps(['mode', 'subset'])
+    ...mapStepFieldDefintions(['mode', 'subset'])
   },
   icon: {
     name: 'pencil',

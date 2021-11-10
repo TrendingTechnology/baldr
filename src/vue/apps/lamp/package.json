@@ -42,6 +42,7 @@
     "@bldr/wikipedia": "*",
     "@bldr/yaml": "*",
     "@bldr/youtube-api": "*",
+    "@bldr/presentation-parser": "*",
     "axios": "0.21.1",
     "core-js": "3.7.0",
     "electron-context-menu": "2.3.0",

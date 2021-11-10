@@ -6,8 +6,9 @@
 
 import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-import steps from '@/steps.js'
+import steps from '@/steps'
 import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
 
@@ -58,7 +59,7 @@ export default validateMasterSpec({
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       assetUri: true
     },
-    ...steps.mapProps(['subset'])
+    ...mapStepFieldDefintions(['subset'])
   },
   icon: {
     name: 'cloze',

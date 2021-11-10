@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import steps from '@/steps.js'
+import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
@@ -21,7 +21,7 @@ export default {
     markup: {
       type: String
     },
-    ...steps.mapProps(['mode', 'subset'])
+    ...mapStepFieldDefintions(['mode', 'subset'])
   },
   data () {
     return {

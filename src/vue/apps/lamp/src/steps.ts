@@ -5,6 +5,7 @@
 /* globals DOMParser NodeList */
 
 import vue from '@/main'
+const vm = vue as any
 import { selectSubset } from '@bldr/core-browser'
 import store from '@/store/index.js'
 
@@ -12,29 +13,43 @@ import store from '@/store/index.js'
  * Hold some meta data about a step of a slide. This class should not be
  * confused with the class `DomStepElement` which acts on the component level.
  */
-class SlideStep {
-  constructor ({ no, title, shortcut }) {
-    /**
-     * A number starting with 1.
-     *
-     * @type {Number}
-     */
+interface SlideStepSpec {
+  /**
+   * A number starting with 1.
+   */
+  no?: number
+
+  /**
+   * Thie title of the step
+   */
+  title?: string
+
+  /**
+   * The shortcut to display the step.
+   */
+  shortcut?: string
+}
+
+/**
+ * @TODO remove use interface only
+ */
+class SlideStep implements SlideStepSpec {
+  no?: number
+  title?: string
+  shortcut?: string
+  constructor ({ no, title, shortcut }: SlideStepSpec) {
     this.no = no
-
-    /**
-     * Thie title of the step
-     *
-     * @type {String}
-     */
     this.title = title
-
-    /**
-     * The shortcut to display the step.
-     *
-     * @type {String}
-     */
     this.shortcut = shortcut
   }
+}
+
+/**
+ * The value of the CSS attributes `visibility` and `display`.
+ */
+interface StyleValue {
+  visibility: 'hidden' | 'visible'
+  display: 'none' | 'block'
 }
 
 /**
@@ -42,24 +57,28 @@ class SlideStep {
  * HTML elements.
  */
 class DomStepElement {
+  htmlElements: HTMLElement[]
+  element: HTMLElement
+  private useVisibliltyProp_: boolean
+  private stylePropertyName_: 'visibility' | 'display'
+  styleValues_: StyleValue[]
   /**
-   * @property {(Array|Object)} - Multiple HTML elements as an array or a
+   * @property Multiple HTML elements as an array or a
    *   single HTML element.
-   * @property {Boolean} useVisibliltyProp - Set the visibility
+   * @property useVisibliltyProp - Set the visibility
    *   `element.style.visibility` instead of the display state.
    */
-  constructor (elements, useVisibliltyProp = false) {
-    /**
-     * A HTML element.
-     *
-     * @type {Array}
-     */
-    this.htmlElements = null
+  constructor (
+    elements: HTMLElement[] | HTMLElement,
+    useVisibliltyProp: boolean = false
+  ) {
     if (Array.isArray(elements)) {
       this.htmlElements = elements
     } else {
       this.htmlElements = [elements]
     }
+
+    this.element = this.htmlElements[0]
 
     /**
      * @private
@@ -89,38 +108,85 @@ class DomStepElement {
 
   /**
    * The last HTML element.
-   *
-   * @returns {String}
    */
-  get htmlElement () {
+  get htmlElement (): HTMLElement {
     return this.htmlElements[this.htmlElements.length - 1]
   }
 
   /**
    * The text of last HTML element.
-   *
-   * @returns {String}
    */
-  get text () {
+  get text (): string | undefined {
     const lastElement = this.htmlElements[this.htmlElements.length - 1]
-    return lastElement.textContent
+    const result = lastElement.textContent
+    if (result != null) {
+      return result
+    }
   }
 
-  /**
-   * @private
-   */
-  getStyleValue_ (show) {
+  private getStyleValue_ (show: boolean) {
     return this.styleValues_[Number(show)][this.stylePropertyName_]
   }
 
-  /**
-   * @param {Boolean} isVisible
-   */
-  show (isVisible = true) {
+  show (isVisible: boolean = true): void {
     for (const element of this.htmlElements) {
       element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
     }
   }
+}
+
+interface DomStepOptions {
+  /**
+   * An array of HTML elements to use as steps.
+   */
+  elements?: any[]
+
+  /**
+   * String to feed `document.querySelectorAll()`
+   */
+  cssSelectors?: string
+
+  /**
+   * A HTML element to run `querySelectorAll()` against.
+   */
+  rootElement?: HTMLElement
+
+  /**
+   * Which specialized selector should be used. At the moment there are two:
+   * `words` or `sentences`.
+   */
+  mode?: 'words' | 'sentences'
+
+  sentencesSelector?: null
+
+  subsetSelector?: string
+
+  /**
+   * default `false`
+   */
+  useVisibliltyProp?: boolean
+
+  /**
+   * default `true`
+   */
+  hideAllElementsInitally?: boolean
+}
+
+interface DisplayOptions {
+  /**
+   * the previous step number.
+   */
+  oldStepNo?: number
+
+  /**
+   * The current step number.
+   */
+  stepNo: number
+
+  /**
+   *  Perform a full update.
+   */
+  full?: boolean
 }
 
 /**
@@ -128,43 +194,28 @@ class DomStepElement {
  */
 export class DomSteps {
   /**
-   *
-   * @param {Object} options
-   * @property {Array} elements - An array of HTML elements to use as steps.
-   * @property {String} cssSelectors - String to feed
-   *   `document.querySelectorAll()`
-   * @property {HTMLElement} rootElement - A HTML element to run
-   *   `querySelectorAll()` against.
-   * @property {String} mode - Which specialized selector should
-   *   be used. At the moment there are two: `words` or `sentences`.
-   * @property {module:@bldr/core-browser~subsetSelector} subsetSelector
-   * @property {String} useVisibliltyProp - default `false`
-   * @property {Boolean} hideAllElementsInitally - default `true`
+   * All elements obtained from `document.querySelectorAll()`.
    */
-  constructor (options) {
-    const optionsDefault = {
-      elements: null,
-      cssSelectors: null,
-      rootElement: null,
-      mode: null,
-      sentencesSelector: null,
-      subsetSelector: null,
+  elementsAll: DomStepElement[]
+
+  /**
+   * All elements or a subset of elements, if `subsetSelector` is specified.
+   */
+  elements: DomStepElement[]
+  constructor (options: DomStepOptions) {
+    const optionsDefault: DomStepOptions = {
       useVisibliltyProp: false,
       hideAllElementsInitally: true
     }
     const opts = Object.assign(optionsDefault, options)
 
-    /**
-     * All elements obtained from `document.querySelectorAll()`.
-     *
-     * @type {module:@bldr/lamp/steps~DomStepElement[]}
-     */
     this.elementsAll = []
 
-    let elements
+    let elements: HTMLElement[] | undefined
 
-    if (!opts.rootElement) {
-      opts.rootElement = document
+    if (opts.rootElement == null) {
+      const d = document as unknown
+      opts.rootElement = d as HTMLElement
     }
 
     if (opts.elements) {
@@ -180,27 +231,26 @@ export class DomSteps {
     } else if (opts.cssSelectors === 'none') {
       elements = []
     } else if (opts.cssSelectors) {
-      elements = opts.rootElement.querySelectorAll(opts.cssSelectors)
+      elements = Array.from(
+        opts.rootElement.querySelectorAll(opts.cssSelectors)
+      )
     } else {
       throw new Error('Specify elements or cssSelectors')
     }
 
-    if (elements) {
+    if (elements != null) {
       for (const element of elements) {
-        this.elementsAll.push(new DomStepElement(element, opts.useVisibliltyProp))
+        this.elementsAll.push(
+          new DomStepElement(element, opts.useVisibliltyProp)
+        )
       }
     }
 
-    /**
-     * All elements or a subset of elements, if `subsetSelector` is specified.
-     *
-     * @type {module:@bldr/lamp/steps~DomStepElement[]}
-     */
-    this.elements = null
     if (opts.subsetSelector) {
-      this.elements = selectSubset(opts.subsetSelector,
-        { elements: this.elementsAll, shiftSelector: -1 }
-      )
+      this.elements = selectSubset(opts.subsetSelector, {
+        elements: this.elementsAll,
+        shiftSelector: -1
+      })
     } else {
       this.elements = this.elementsAll
     }
@@ -212,19 +262,15 @@ export class DomSteps {
 
   /**
    * `elements` + 1
-   *
-   * @returns Number
    */
-  get count () {
+  get count (): number {
     return this.elements.length + 1
   }
 
   /**
    * `elementsAll` + 1
-   *
-   * @returns Number
    */
-  get countAll () {
+  get countAll (): number {
     return this.elementsAll.length + 1
   }
 
@@ -233,11 +279,11 @@ export class DomSteps {
    *
    * @returns {Array}
    */
-  get htmlElements () {
+  get htmlElements (): HTMLElement[] {
     const htmlElements = []
     for (const domStep of this.elements) {
       const elements = domStep.htmlElements
-      if (elements.length === 1) {
+      if (Array.isArray(elements)) {
         htmlElements.push(elements[0])
       } else {
         htmlElements.push(elements)
@@ -262,18 +308,25 @@ export class DomSteps {
    * A minimal update doesn’t loop through all elements, only the visibility
    * state of the next element is changed.
    *
-   * @param {options}
-   * @property {Number} oldStepNo - The previous step number.
-   * @property {Number} stepNo - The current step number.
-   * @property {Boolean} full - Perform a full update.
-   *
-   * @returns {Object} The element that is displayed by the new step number.
+   * @returns The element that is displayed by the new step number.
    */
-  displayByNo ({ stepNo, oldStepNo, full }) {
-    if (!this.elements || !this.elements.length) return
+  displayByNo ({
+    stepNo,
+    oldStepNo,
+    full
+  }: DisplayOptions): HTMLElement | undefined {
+    if (!this.elements || !this.elements.length) {
+      return
+    }
     // Loop through all elements. Set visibility state on all elements
     // Full update
-    if (!oldStepNo || full || store.getters['lamp/nav/fullStepUpdate'] || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
+    if (
+      !oldStepNo ||
+      full ||
+      store.getters['lamp/nav/fullStepUpdate'] ||
+      stepNo === 1 ||
+      (oldStepNo === 1 && stepNo === this.count)
+    ) {
       let count = 1
       for (const domStep of this.elements) {
         const showElement = stepNo > count
@@ -304,17 +357,18 @@ export class DomSteps {
 
   /**
    * TODO: Implement vuex support
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
    */
   shortcutsRegister () {
     for (const element of this.elements) {
       const shortcut = element.element.getAttribute('baldr-shortcut')
       const description = element.element.getAttribute('inkscape:label')
-      vue.$shortcuts.add(`q ${shortcut}`, () => {
-        element.show(true)
-      }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
+      vm.$shortcuts.add(
+        `q ${shortcut}`,
+        () => {
+          element.show(true)
+        },
+        `${description} (einblenden in SVG)`
+      )
     }
   }
 
@@ -327,21 +381,16 @@ export class DomSteps {
     if (!this.elements) return
     for (const element of this.elements) {
       const shortcut = element.element.getAttribute('baldr-shortcut')
-      vue.$shortcuts.remove(`q ${shortcut}`)
+      vm.$shortcuts.remove(`q ${shortcut}`)
     }
   }
 }
 
 /**
  * Wrap each word in a string into `<span class="word">…</span>`
- *
- * @param {String} text - A string
- *
  * @see {@link https://stackoverflow.com/a/26030835}
- *
- * @returns {String}
  */
-export function wrapWords (text) {
+export function wrapWords (text: string): string {
   if (Array.isArray(text)) {
     text = text.join(' ')
   }
@@ -349,17 +398,18 @@ export function wrapWords (text) {
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // First a simple implementation of recursive descent,
   // visit all nodes in the DOM and process it with a callback:
-  function walkDOM (node, callback) {
-    if (node.nodeName !== 'SCRIPT') { // ignore javascript
+  function walkDOM (node: HTMLElement, callback: (n: HTMLElement) => void) {
+    if (node.nodeName !== 'SCRIPT') {
+      // ignore javascript
       callback(node)
       for (let i = 0; i < node.childNodes.length; i++) {
-        walkDOM(node.childNodes[i], callback)
+        walkDOM(node.childNodes[i] as HTMLElement, callback)
       }
     }
   }
 
-  const textNodes = []
-  walkDOM(dom.body, function (n) {
+  const textNodes: Node[] = []
+  walkDOM(dom.body, function (n: Node) {
     if (n.nodeType === 3) {
       textNodes.push(n)
     }
@@ -372,8 +422,8 @@ export function wrapWords (text) {
    * @param {HtmlElement} newElement
    * @param {HtmlElement} element
    */
-  function insertBefore (newElement, element) {
-    element.parentNode.insertBefore(newElement, element)
+  function insertBefore (newElement: Node, element: Node) {
+    element.parentNode?.insertBefore(newElement, element)
   }
 
   /**
@@ -381,18 +431,14 @@ export function wrapWords (text) {
    *
    * @param {HtmlElement} element
    */
-  function removeElement (element) {
-    element.parentNode.removeChild(element)
+  function removeElement (element: Node) {
+    element.parentNode?.removeChild(element)
   }
 
   /**
    * Wrap a text string with `<span class="word">…</span>`
-   *
-   * @param {String} txt
-   *
-   * @returns {HTMLElement}
    */
-  function makeSpan (txt) {
+  function makeSpan (txt: string): Node {
     const span = document.createElement('span')
     span.classList.add('word')
     span.appendChild(makeText(txt))
@@ -401,12 +447,8 @@ export function wrapWords (text) {
 
   /**
    * Convert a text string into a text node.
-   *
-   * @param {String} txt
-   *
-   * @returns {TextNode}
    */
-  function makeText (txt) {
+  function makeText (txt: string): Node {
     return document.createTextNode(txt)
   }
 
@@ -414,7 +456,7 @@ export function wrapWords (text) {
     const node = textNodes[i]
     const txt = node.nodeValue
     // A avoid spaces surrounded by <span class="word"></span>
-    if (txt !== ' ') {
+    if (txt != null && txt !== ' ') {
       const words = txt.split(' ')
       // Insert span surrounded words:
       insertBefore(makeSpan(words[0]), node)
@@ -432,23 +474,23 @@ export function wrapWords (text) {
 
 /**
  * Select words which are surrounded by `span.word`.
- *
- * @returns {module:@bldr/lamp/steps~DomStepElement[]} An array of
- *   `DomStepElement`s.
  */
-function selectWords (rootElement) {
+function selectWords (rootElement: HTMLElement): DomStepElement[] {
+  const d = document as unknown
   if (!rootElement) {
-    rootElement = document
+    rootElement = d as HTMLElement
   }
-  const wordsRaw = rootElement.querySelectorAll('span.word')
+  const wordsRaw = rootElement.querySelectorAll<HTMLElement>('span.word')
   const words = []
   for (const word of wordsRaw) {
     if (!word.previousSibling) {
       const parent = word.parentElement
-      if (parent.tagName === 'LI') {
-        if (!parent.previousSibling) {
+      if (parent != null && parent.tagName === 'LI') {
+        if (!parent.previousSibling && parent.parentElement != null) {
           // <ul><li><span class="word">lol</span><li></ul>
-          words.push(new DomStepElement([parent.parentElement, parent, word], true))
+          words.push(
+            new DomStepElement([parent.parentElement, parent, word], true)
+          )
         } else {
           // Avoid to get divs. Parent has to be LI
           words.push(new DomStepElement([parent, word], true))
@@ -463,11 +505,7 @@ function selectWords (rootElement) {
   return words
 }
 
-/**
- *
- * @param {*} dom
- */
-function countWords (dom) {
+function countWords (dom: HTMLElement): number {
   return dom.querySelectorAll('span.word').length
 }
 
@@ -477,22 +515,19 @@ function countWords (dom) {
  * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
  * ordered or unordered lists, or a table row.
  *
- * @param {String} - A selector for `document.querySelector()` to find the
- *   parent HTML element, which contains child HTML element to use as steps.
- *
  * @returns {DomStepElement[]} An array of `DomStepElement`s.
  */
-function selectSentences (rootElement) {
+function selectSentences (rootElement: HTMLElement) {
   const sentences = []
   for (const element of rootElement.children) {
     if (['UL', 'OL'].includes(element.tagName)) {
       for (const li of element.children) {
         if (li.tagName === 'LI') {
-          sentences.push(new DomStepElement(li, true))
+          sentences.push(new DomStepElement(li as HTMLElement, true))
         }
       }
     } else {
-      sentences.push(new DomStepElement(element, true))
+      sentences.push(new DomStepElement(element as HTMLElement, true))
     }
   }
   return sentences
@@ -504,7 +539,7 @@ function selectSentences (rootElement) {
  *
  * @returns {Number}
  */
-function countSentences (parentElement) {
+function countSentences (parentElement: HTMLElement) {
   let count = 0
   for (const element of parentElement.children) {
     if (['UL', 'OL'].includes(element.tagName)) {
@@ -530,7 +565,11 @@ function countSentences (parentElement) {
  *
  * @returns {Number}
  */
-export function calculateStepCount (elements, props, shiftSelector = 0) {
+export function calculateStepCount (
+  elements: number | NodeList,
+  props: StepSubProps,
+  shiftSelector = 0
+) {
   let count
   if (elements instanceof NodeList || Array.isArray(elements)) {
     count = elements.length
@@ -548,33 +587,41 @@ export function calculateStepCount (elements, props, shiftSelector = 0) {
   }
 }
 
+interface StepSubProps {
+  stepMode?: 'words' | 'sentences'
+  stepSubset?: string
+}
+
 /**
  * Pre calculate the step count of a text.
- *
- * @param {String} text
- * @param {Object} props
- * @property {String} stepMode
- * @property {String} stepSubset
- *
- * @returns {Number}
  */
-export function calculateStepCountText (text, props, shiftSelector = 0) {
+export function calculateStepCountText (
+  text: string,
+  props: StepSubProps,
+  shiftSelector: number = 0
+): number {
   const dom = new DOMParser().parseFromString(text, 'text/html')
+  const d = dom as unknown
 
-  let allElementsCount
+  if (props.stepMode == null) {
+    throw Error('')
+  }
+
+  let allElementsCount: number = 0
   if (props.stepMode === 'words') {
-    allElementsCount = countWords(dom)
+    allElementsCount = countWords(d as HTMLElement)
   } else if (props.stepMode === 'sentences') {
-    allElementsCount = countSentences(dom)
+    allElementsCount = countSentences(d as HTMLElement)
   }
 
   return calculateStepCount(allElementsCount, props, shiftSelector)
 }
 
-export function generateSlideStepsFromText (text, props) {
+export function generateSlideStepsFromText (text: string, props: StepSubProps) {
   const dom = new DOMParser().parseFromString(text, 'text/html')
-  const options = {
-    rootElement: dom
+  const d = dom as unknown
+  const options: DomStepOptions = {
+    rootElement: d as HTMLElement
   }
 
   if (props.stepMode) {
@@ -593,43 +640,10 @@ export function generateSlideStepsFromText (text, props) {
   return slideSteps
 }
 
-/**
- * Map step support related props for the use as Vuejs props.
- *
- * @param {Array} selectors - At the moment: “selector”, “mode” and “subset”.
- *
- * @returns {Object}
- */
-export function mapProps (selectors) {
-  const props = {
-    selector: {
-      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
-      default: 'g[inkscape\\:groupmode="layer"]'
-    },
-    mode: {
-      type: String,
-      description: '„words“ oder „sentences“'
-    },
-    subset: {
-      type: String,
-      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
-    }
-  }
-
-  const result = {}
-  for (const selector of selectors) {
-    if (props[selector]) {
-      result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector]
-    }
-  }
-  return result
-}
-
 export default {
   calculateStepCount,
   calculateStepCountText,
   DomSteps,
   generateSlideStepsFromText,
-  mapProps,
   wrapWords
 }
