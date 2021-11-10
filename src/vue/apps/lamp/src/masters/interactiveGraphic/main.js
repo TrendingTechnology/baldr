@@ -91,7 +91,7 @@ export default validateMasterSpec({
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
 
-      // Dirty hack: Somehove querySelectorAll is not working with DOMParser
+      // Dirty hack: Somehow querySelectorAll is not working with DOMParser
       let groups
       if (props.stepSelector === 'g[inkscape\\:groupmode="layer"]') {
         groups = svgDom.querySelectorAll('g')
@@ -119,6 +119,7 @@ export default validateMasterSpec({
         subsetSelector: slide.props.stepSubset,
         hideAllElementsInitally: false
       })
+      console.log(this.$el)
       // this.domSteps.shortcutsRegister()
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {

@@ -5,26 +5,26 @@ slides:
   cloze: uuid:2fb3f933-bd29-4bd0-9d1a-017b115586bf#3,5,7
 
 - title: All (Zauberlehrling)
-  cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+  cloze: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
 
-- title: 'step_subset: 53- (Zauberlehrling)'
+- title: 'step_subset: 40- (Zauberlehrling)'
   cloze:
-    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
-    step_subset: 53-
+    src: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
+    step_subset: 52-
 
 - title: 'step_subset: -11 (Zauberlehrling)'
   cloze:
-    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    src: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
     step_subset: '-11'
 
 - title: 'step_subset: 16,35,53 (Zauberlehrling)'
   cloze:
-    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    src: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
     step_subset: 16,35,53
 
 - title: 'step_subset: 12-15 (Zauberlehrling)'
   cloze:
-    src: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+    src: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
     step_subset: 12-15
 
 - title: 'step_subset: 2,3,4 (Bachs vergebliche Reise)'

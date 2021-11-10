@@ -5,9 +5,10 @@
 /* globals DOMParser NodeList */
 
 import vue from '@/main'
-const vm = vue as any
 import { selectSubset } from '@bldr/core-browser'
 import store from '@/store/index.js'
+
+const vm = vue as any
 
 /**
  * Hold some meta data about a step of a slide. This class should not be
@@ -58,10 +59,9 @@ interface StyleValue {
  */
 class DomStepElement {
   htmlElements: HTMLElement[]
-  element: HTMLElement
-  private useVisibliltyProp_: boolean
-  private stylePropertyName_: 'visibility' | 'display'
-  styleValues_: StyleValue[]
+  private useVisiblilty: boolean
+  private stylePropertyName: 'visibility' | 'display'
+  private styleValues: StyleValue[]
   /**
    * @property Multiple HTML elements as an array or a
    *   single HTML element.
@@ -70,7 +70,7 @@ class DomStepElement {
    */
   constructor (
     elements: HTMLElement[] | HTMLElement,
-    useVisibliltyProp: boolean = false
+    useVisiblilty: boolean = false
   ) {
     if (Array.isArray(elements)) {
       this.htmlElements = elements
@@ -78,23 +78,15 @@ class DomStepElement {
       this.htmlElements = [elements]
     }
 
-    this.element = this.htmlElements[0]
+    this.useVisiblilty = useVisiblilty
 
-    /**
-     * @private
-     */
-    this.useVisibliltyProp_ = useVisibliltyProp
-
-    if (this.useVisibliltyProp_) {
-      this.stylePropertyName_ = 'visibility'
+    if (this.useVisiblilty) {
+      this.stylePropertyName = 'visibility'
     } else {
-      this.stylePropertyName_ = 'display'
+      this.stylePropertyName = 'display'
     }
 
-    /**
-     * @private
-     */
-    this.styleValues_ = [
+    this.styleValues = [
       {
         visibility: 'hidden',
         display: 'none'
@@ -125,12 +117,12 @@ class DomStepElement {
   }
 
   private getStyleValue_ (show: boolean) {
-    return this.styleValues_[Number(show)][this.stylePropertyName_]
+    return this.styleValues[Number(show)][this.stylePropertyName]
   }
 
   show (isVisible: boolean = true): void {
     for (const element of this.htmlElements) {
-      element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
+      element.style[this.stylePropertyName] = this.getStyleValue_(isVisible)
     }
   }
 }
@@ -202,6 +194,7 @@ export class DomSteps {
    * All elements or a subset of elements, if `subsetSelector` is specified.
    */
   elements: DomStepElement[]
+
   constructor (options: DomStepOptions) {
     const optionsDefault: DomStepOptions = {
       useVisibliltyProp: false,
@@ -209,25 +202,38 @@ export class DomSteps {
     }
     const opts = Object.assign(optionsDefault, options)
 
-    this.elementsAll = []
+    this.elementsAll = this.collectAllElements(opts)
 
-    let elements: HTMLElement[] | undefined
+    this.elements = this.collectionSubsetElements(
+      this.elementsAll,
+      opts.subsetSelector
+    )
 
+    if (opts.hideAllElementsInitally) {
+      this.hideAll()
+    }
+  }
+
+  private collectAllElements (opts: DomStepOptions): DomStepElement[] {
     if (opts.rootElement == null) {
       const d = document as unknown
       opts.rootElement = d as HTMLElement
     }
 
-    if (opts.elements) {
-      elements = opts.elements
-    } else if (opts.mode) {
+    if (opts.mode) {
       if (opts.mode === 'words') {
-        this.elementsAll = selectWords(opts.rootElement)
+        return selectWords(opts.rootElement)
       } else if (opts.mode === 'sentences') {
-        this.elementsAll = selectSentences(opts.rootElement)
+        return selectSentences(opts.rootElement)
       } else {
         throw new Error(`Unkown specialized selector: ${opts.mode}`)
       }
+    }
+
+    let elements: HTMLElement[] | undefined
+
+    if (opts.elements) {
+      elements = opts.elements
     } else if (opts.cssSelectors === 'none') {
       elements = []
     } else if (opts.cssSelectors) {
@@ -239,25 +245,27 @@ export class DomSteps {
     }
 
     if (elements != null) {
+      const all = []
       for (const element of elements) {
-        this.elementsAll.push(
-          new DomStepElement(element, opts.useVisibliltyProp)
-        )
+        all.push(new DomStepElement(element, opts.useVisibliltyProp))
       }
+      return all
     }
 
-    if (opts.subsetSelector) {
-      this.elements = selectSubset(opts.subsetSelector, {
-        elements: this.elementsAll,
+    throw new Error('No HTML elements were found')
+  }
+
+  private collectionSubsetElements (
+    elementsAll: DomStepElement[],
+    subsetSelector?: string | undefined
+  ) {
+    if (subsetSelector != null) {
+      return selectSubset(subsetSelector, {
+        elements: elementsAll,
         shiftSelector: -1
       })
-    } else {
-      this.elements = this.elementsAll
     }
-
-    if (opts.hideAllElementsInitally) {
-      this.hideAll()
-    }
+    return elementsAll
   }
 
   /**
@@ -276,8 +284,6 @@ export class DomSteps {
 
   /**
    * For debugging purposes.
-   *
-   * @returns {Array}
    */
   get htmlElements (): HTMLElement[] {
     const htmlElements = []
@@ -360,8 +366,8 @@ export class DomSteps {
    */
   shortcutsRegister () {
     for (const element of this.elements) {
-      const shortcut = element.element.getAttribute('baldr-shortcut')
-      const description = element.element.getAttribute('inkscape:label')
+      const shortcut = element.htmlElement.getAttribute('baldr-shortcut')
+      const description = element.htmlElement.getAttribute('inkscape:label')
       vm.$shortcuts.add(
         `q ${shortcut}`,
         () => {
@@ -372,15 +378,10 @@ export class DomSteps {
     }
   }
 
-  /**
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
-   */
   shortcutsUnregister () {
     if (!this.elements) return
     for (const element of this.elements) {
-      const shortcut = element.element.getAttribute('baldr-shortcut')
+      const shortcut = element.htmlElement.getAttribute('baldr-shortcut')
       vm.$shortcuts.remove(`q ${shortcut}`)
     }
   }
@@ -418,20 +419,15 @@ export function wrapWords (text: string): string {
   /**
    * Add a HTML element before the other element. Simple utility functions to
    * avoid a lot of typing.
-   *
-   * @param {HtmlElement} newElement
-   * @param {HtmlElement} element
    */
-  function insertBefore (newElement: Node, element: Node) {
+  function insertBefore (newElement: Node, element: Node): void {
     element.parentNode?.insertBefore(newElement, element)
   }
 
   /**
-   * Remote a HTML element.
-   *
-   * @param {HtmlElement} element
+   * Remove a HTML element.
    */
-  function removeElement (element: Node) {
+  function removeElement (element: Node): void {
     element.parentNode?.removeChild(element)
   }
 
@@ -514,10 +510,8 @@ function countWords (dom: HTMLElement): number {
  * should not be understood literally, but symbolic for a longer text unit.
  * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
  * ordered or unordered lists, or a table row.
- *
- * @returns {DomStepElement[]} An array of `DomStepElement`s.
  */
-function selectSentences (rootElement: HTMLElement) {
+function selectSentences (rootElement: HTMLElement): DomStepElement[] {
   const sentences = []
   for (const element of rootElement.children) {
     if (['UL', 'OL'].includes(element.tagName)) {
@@ -533,13 +527,7 @@ function selectSentences (rootElement: HTMLElement) {
   return sentences
 }
 
-/**
- *
- * @param {HTMLElement} parentElement
- *
- * @returns {Number}
- */
-function countSentences (parentElement: HTMLElement) {
+function countSentences (parentElement: HTMLElement): number {
   let count = 0
   for (const element of parentElement.children) {
     if (['UL', 'OL'].includes(element.tagName)) {
@@ -557,19 +545,12 @@ function countSentences (parentElement: HTMLElement) {
 
 /**
  * Assumes that all elements are hidden for the first step.
- *
- * @param {(Array|Number)} elements - An array of elements or the count of
- *   the elements.
- * @param {Object} props
- * @property {String} stepSubset
- *
- * @returns {Number}
  */
 export function calculateStepCount (
   elements: number | NodeList,
   props: StepSubProps,
   shiftSelector = 0
-) {
+): number {
   let count
   if (elements instanceof NodeList || Array.isArray(elements)) {
     count = elements.length
@@ -617,7 +598,10 @@ export function calculateStepCountText (
   return calculateStepCount(allElementsCount, props, shiftSelector)
 }
 
-export function generateSlideStepsFromText (text: string, props: StepSubProps) {
+export function generateSlideStepsFromText (
+  text: string,
+  props: StepSubProps
+): SlideStep[] {
   const dom = new DOMParser().parseFromString(text, 'text/html')
   const d = dom as unknown
   const options: DomStepOptions = {
