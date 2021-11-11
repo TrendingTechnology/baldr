@@ -10,6 +10,8 @@ import store from '@/store/index.js'
 
 const vm = vue as any
 
+const INKSCAPE_LEVEL_SELECTOR: string = 'g[inkscape\\:groupmode="layer"]'
+
 /**
  * Hold some meta data about a step of a slide. This class should not be
  * confused with the class `DomStepElement` which acts on the component level.
@@ -204,7 +206,7 @@ export class DomSteps {
 
     this.elementsAll = this.collectAllElements(opts)
 
-    this.elements = this.collectionSubsetElements(
+    this.elements = this.collectSubsetElements(
       this.elementsAll,
       opts.subsetSelector
     )
@@ -220,14 +222,8 @@ export class DomSteps {
       opts.rootElement = d as HTMLElement
     }
 
-    if (opts.mode) {
-      if (opts.mode === 'words') {
-        return selectWords(opts.rootElement)
-      } else if (opts.mode === 'sentences') {
-        return selectSentences(opts.rootElement)
-      } else {
-        throw new Error(`Unkown specialized selector: ${opts.mode}`)
-      }
+    if (opts.mode != null) {
+      return this.applySpecializedSelectors(opts.rootElement, opts.mode)
     }
 
     let elements: HTMLElement[] | undefined
@@ -255,7 +251,7 @@ export class DomSteps {
     throw new Error('No HTML elements were found')
   }
 
-  private collectionSubsetElements (
+  private collectSubsetElements (
     elementsAll: DomStepElement[],
     subsetSelector?: string | undefined
   ) {
@@ -266,6 +262,19 @@ export class DomSteps {
       })
     }
     return elementsAll
+  }
+
+  private applySpecializedSelectors (
+    rootElement: HTMLElement,
+    name: 'words' | 'sentences' | 'inkscape-levels' | 'inkscape-level-elements'
+  ): DomStepElement[] {
+    if (name === 'words') {
+      return selectWords(rootElement)
+    } else if (name === 'sentences') {
+      return selectSentences(rootElement)
+    } else {
+      throw new Error(`Unkown specialized selector: ${name}`)
+    }
   }
 
   /**
@@ -543,6 +552,30 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
+export function selectInkscapeLevels (rootElement: HTMLElement): DomStepElement[] {
+  const levels = rootElement.querySelectorAll<HTMLElement>(
+    INKSCAPE_LEVEL_SELECTOR
+  )
+  const result: DomStepElement[] = []
+  for (const level of levels) {
+    result.push(new DomStepElement(level, true))
+  }
+  return result
+}
+
+export function selectInkscapeLevelElements (
+  rootElement: HTMLElement
+): DomStepElement[] {
+  const levels = rootElement.querySelectorAll<HTMLElement>(
+    INKSCAPE_LEVEL_SELECTOR
+  )
+  const result: DomStepElement[] = []
+  for (const level of levels) {
+    result.push(new DomStepElement(level, true))
+  }
+  return result
+}
+
 /**
  * Assumes that all elements are hidden for the first step.
  */
@@ -574,7 +607,7 @@ interface StepSubProps {
 }
 
 /**
- * Pre calculate the step count of a text.
+ * Precalculate the step count of a text.
  */
 export function calculateStepCountText (
   text: string,
@@ -583,10 +616,6 @@ export function calculateStepCountText (
 ): number {
   const dom = new DOMParser().parseFromString(text, 'text/html')
   const d = dom as unknown
-
-  if (props.stepMode == null) {
-    throw Error('')
-  }
 
   let allElementsCount: number = 0
   if (props.stepMode === 'words') {

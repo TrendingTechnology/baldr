@@ -51,7 +51,6 @@ export default {
   mounted: function () {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
     // see preload.js
-    console.log(window)
     if (window.api != null) {
       window.api.ipcRendererOn('navigate', (route) => {
         this.$router.push(route)
