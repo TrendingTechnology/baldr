@@ -188,7 +188,7 @@ interface DisplayOptions {
 /**
  * Generate steps by hiding and showing some DOM elements.
  */
-export class DomSteps {
+export class DomStepController {
   /**
    * All elements obtained from `document.querySelectorAll()`.
    */
@@ -657,19 +657,11 @@ export function generateSlideStepsFromText (
   if (props.stepSubset != null) {
     options.subsetSelector = props.stepSubset
   }
-  const domSteps = new DomSteps(options)
+  const domSteps = new DomStepController(options)
   const slideSteps = []
   for (let i = 0; i < domSteps.elements.length; i++) {
     const domStep = domSteps.elements[i]
     slideSteps.push(new SlideStep({ no: i + 2, title: domStep.text }))
   }
   return slideSteps
-}
-
-export default {
-  calculateStepCount,
-  calculateStepCountText,
-  DomSteps,
-  generateSlideStepsFromText,
-  wrapWords
 }

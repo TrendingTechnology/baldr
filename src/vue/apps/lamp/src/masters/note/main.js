@@ -6,7 +6,7 @@ import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
-import steps from '@/steps'
+import * as steps from '@/steps'
 
 function scroll (element) {
   if (!element) return
@@ -103,7 +103,7 @@ export default validateMasterSpec({
       return convertHtmlToPlainText(props.markup)
     },
     afterSlideNoChangeOnComponent () {
-      this.domSteps = new steps.DomSteps({
+      this.domSteps = new steps.DomStepController({
         mode: 'words',
         rootElement: this.$el,
         hideAllElementsInitally: true
