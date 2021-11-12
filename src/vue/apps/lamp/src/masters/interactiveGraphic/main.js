@@ -5,7 +5,7 @@
 /* globals DOMParser */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import steps from '@/steps'
+import * as steps from '@/steps'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
@@ -113,7 +113,7 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight(this.svgPath)
-      this.domSteps = new steps.DomSteps({
+      this.domSteps = new steps.DomStepController({
         cssSelectors: slide.props.stepSelector,
         rootElement: this.$el,
         subsetSelector: slide.props.stepSubset,

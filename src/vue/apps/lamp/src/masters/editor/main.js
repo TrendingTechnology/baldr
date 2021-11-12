@@ -7,7 +7,7 @@ import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-import steps from '@/steps'
+import * as steps from '@/steps'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -74,7 +74,7 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       this.onSlideChange()
       if (this.stepMode) {
-        this.domSteps = new steps.DomSteps({
+        this.domSteps = new steps.DomStepController({
           subsetSelector: this.stepSubset,
           mode: this.stepMode,
           rootElement: this.$el,

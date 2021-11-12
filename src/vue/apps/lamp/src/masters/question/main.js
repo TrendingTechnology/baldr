@@ -6,7 +6,7 @@ import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { Question, generateTexMarkup } from '@bldr/master-question'
 
-import steps from '@/steps'
+import * as steps from '@/steps'
 
 /**
  * @param {Number} stepNo
@@ -103,7 +103,7 @@ export default validateMasterSpec({
       return generateTexMarkup(questions)
     },
     afterSlideNoChangeOnComponent () {
-      this.domSteps = new steps.DomSteps({
+      this.domSteps = new steps.DomStepController({
         elements: this.$el.querySelectorAll('.answer'),
         rootElement: this.$el
       })

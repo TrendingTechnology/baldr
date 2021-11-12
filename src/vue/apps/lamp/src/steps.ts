@@ -61,9 +61,9 @@ interface StyleValue {
  */
 class DomStepElement {
   htmlElements: HTMLElement[]
-  private useVisiblilty: boolean
+  private readonly useVisiblilty: boolean
   private stylePropertyName: 'visibility' | 'display'
-  private styleValues: StyleValue[]
+  private readonly styleValues: StyleValue[]
   /**
    * @property Multiple HTML elements as an array or a
    *   single HTML element.
@@ -118,7 +118,9 @@ class DomStepElement {
     }
   }
 
-  private getStyleValue_ (show: boolean) {
+  private getStyleValue_ (
+    show: boolean
+  ): 'hidden' | 'visible' | 'block' | 'none' {
     return this.styleValues[Number(show)][this.stylePropertyName]
   }
 
@@ -186,7 +188,7 @@ interface DisplayOptions {
 /**
  * Generate steps by hiding and showing some DOM elements.
  */
-export class DomSteps {
+export class DomStepController {
   /**
    * All elements obtained from `document.querySelectorAll()`.
    */
@@ -211,7 +213,7 @@ export class DomSteps {
       opts.subsetSelector
     )
 
-    if (opts.hideAllElementsInitally) {
+    if (opts.hideAllElementsInitally != null && opts.hideAllElementsInitally) {
       this.hideAll()
     }
   }
@@ -228,11 +230,11 @@ export class DomSteps {
 
     let elements: HTMLElement[] | undefined
 
-    if (opts.elements) {
+    if (opts.elements != null) {
       elements = opts.elements
     } else if (opts.cssSelectors === 'none') {
       elements = []
-    } else if (opts.cssSelectors) {
+    } else if (opts.cssSelectors != null) {
       elements = Array.from(
         opts.rootElement.querySelectorAll(opts.cssSelectors)
       )
@@ -254,7 +256,7 @@ export class DomSteps {
   private collectSubsetElements (
     elementsAll: DomStepElement[],
     subsetSelector?: string | undefined
-  ) {
+  ): DomStepElement[] {
     if (subsetSelector != null) {
       return selectSubset(subsetSelector, {
         elements: elementsAll,
@@ -310,7 +312,7 @@ export class DomSteps {
   /**
    * Hide all elements.
    */
-  hideAll () {
+  hideAll (): void {
     for (const element of this.elementsAll) {
       element.show(false)
     }
@@ -330,15 +332,15 @@ export class DomSteps {
     oldStepNo,
     full
   }: DisplayOptions): HTMLElement | undefined {
-    if (!this.elements || !this.elements.length) {
+    if (this.elements == null || this.elements.length == null) {
       return
     }
     // Loop through all elements. Set visibility state on all elements
     // Full update
     if (
-      !oldStepNo ||
-      full ||
-      store.getters['lamp/nav/fullStepUpdate'] ||
+      oldStepNo == null ||
+      (full != null && full) ||
+      store.getters['lamp/nav/fullStepUpdate'] === true ||
       stepNo === 1 ||
       (oldStepNo === 1 && stepNo === this.count)
     ) {
@@ -364,7 +366,7 @@ export class DomSteps {
       domStep = this.elements[stepNo - 1]
     }
     // Todo: displayByNo is called twice, Fix this.
-    if (domStep) {
+    if (domStep != null) {
       domStep.show(stepNo > oldStepNo)
       return domStep.htmlElement
     }
@@ -373,25 +375,31 @@ export class DomSteps {
   /**
    * TODO: Implement vuex support
    */
-  shortcutsRegister () {
+  shortcutsRegister (): void {
     for (const element of this.elements) {
       const shortcut = element.htmlElement.getAttribute('baldr-shortcut')
       const description = element.htmlElement.getAttribute('inkscape:label')
-      vm.$shortcuts.add(
-        `q ${shortcut}`,
-        () => {
-          element.show(true)
-        },
-        `${description} (einblenden in SVG)`
-      )
+      if (shortcut != null && description != null) {
+        vm.$shortcuts.add(
+          `q ${shortcut}`,
+          () => {
+            element.show(true)
+          },
+          `${description} (einblenden in SVG)`
+        )
+      }
     }
   }
 
-  shortcutsUnregister () {
-    if (!this.elements) return
+  shortcutsUnregister (): void {
+    if (this.elements == null) {
+      return
+    }
     for (const element of this.elements) {
       const shortcut = element.htmlElement.getAttribute('baldr-shortcut')
-      vm.$shortcuts.remove(`q ${shortcut}`)
+      if (shortcut != null) {
+        vm.$shortcuts.remove(`q ${shortcut}`)
+      }
     }
   }
 }
@@ -408,7 +416,10 @@ export function wrapWords (text: string): string {
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // First a simple implementation of recursive descent,
   // visit all nodes in the DOM and process it with a callback:
-  function walkDOM (node: HTMLElement, callback: (n: HTMLElement) => void) {
+  function walkDOM (
+    node: HTMLElement,
+    callback: (n: HTMLElement) => void
+  ): void {
     if (node.nodeName !== 'SCRIPT') {
       // ignore javascript
       callback(node)
@@ -482,16 +493,16 @@ export function wrapWords (text: string): string {
  */
 function selectWords (rootElement: HTMLElement): DomStepElement[] {
   const d = document as unknown
-  if (!rootElement) {
+  if (rootElement == null) {
     rootElement = d as HTMLElement
   }
   const wordsRaw = rootElement.querySelectorAll<HTMLElement>('span.word')
   const words = []
   for (const word of wordsRaw) {
-    if (!word.previousSibling) {
+    if (word.previousSibling == null) {
       const parent = word.parentElement
       if (parent != null && parent.tagName === 'LI') {
-        if (!parent.previousSibling && parent.parentElement != null) {
+        if (parent.previousSibling == null && parent.parentElement != null) {
           // <ul><li><span class="word">lol</span><li></ul>
           words.push(
             new DomStepElement([parent.parentElement, parent, word], true)
@@ -552,7 +563,9 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
-export function selectInkscapeLevels (rootElement: HTMLElement): DomStepElement[] {
+export function selectInkscapeLevels (
+  rootElement: HTMLElement
+): DomStepElement[] {
   const levels = rootElement.querySelectorAll<HTMLElement>(
     INKSCAPE_LEVEL_SELECTOR
   )
@@ -590,7 +603,7 @@ export function calculateStepCount (
   } else {
     count = elements
   }
-  if (props.stepSubset) {
+  if (props.stepSubset != null) {
     const elementsSubset = selectSubset(props.stepSubset, {
       elementsCount: count,
       shiftSelector
@@ -637,26 +650,18 @@ export function generateSlideStepsFromText (
     rootElement: d as HTMLElement
   }
 
-  if (props.stepMode) {
+  if (props.stepMode != null) {
     options.mode = props.stepMode
   }
 
-  if (props.stepSubset) {
+  if (props.stepSubset != null) {
     options.subsetSelector = props.stepSubset
   }
-  const domSteps = new DomSteps(options)
+  const domSteps = new DomStepController(options)
   const slideSteps = []
   for (let i = 0; i < domSteps.elements.length; i++) {
     const domStep = domSteps.elements[i]
     slideSteps.push(new SlideStep({ no: i + 2, title: domStep.text }))
   }
   return slideSteps
-}
-
-export default {
-  calculateStepCount,
-  calculateStepCountText,
-  DomSteps,
-  generateSlideStepsFromText,
-  wrapWords
 }

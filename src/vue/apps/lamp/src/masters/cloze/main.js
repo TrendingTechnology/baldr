@@ -8,7 +8,7 @@ import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-import steps from '@/steps'
+import * as steps from '@/steps'
 import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
 
@@ -139,7 +139,7 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight()
-      this.domSteps = new steps.DomSteps({
+      this.domSteps = new steps.DomStepController({
         elements: collectClozeGroups(this.$el),
         subsetSelector: slide.props.stepSubset
       })
