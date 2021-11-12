@@ -563,15 +563,144 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
+/**
+ * A wrapper class for a HTML element to be able to hide and show easily some
+ * HTML elements.
+ */
+class DomStepElementNg {
+  htmlElements: ElementCSSInlineStyle[]
+  private readonly useVisiblilty: boolean
+
+  /**
+   * @property Multiple HTML elements as an array or a
+   *   single HTML element.
+   * @property useVisiblilty - Set the visibility
+   *   `element.style.visibility` instead of the display state.
+   */
+  constructor (
+    elements: ElementCSSInlineStyle[] | ElementCSSInlineStyle,
+    useVisiblilty: boolean = false
+  ) {
+    if (Array.isArray(elements)) {
+      this.htmlElements = elements
+    } else {
+      this.htmlElements = [elements]
+    }
+
+    this.useVisiblilty = useVisiblilty
+  }
+
+  /**
+   * The last HTML element.
+   */
+  get htmlElement (): ElementCSSInlineStyle {
+    return this.htmlElements[this.htmlElements.length - 1]
+  }
+
+  private setDisplayState (isVisible: boolean = true): void {
+    for (const element of this.htmlElements) {
+      if (isVisible) {
+        if (this.useVisiblilty) {
+          element.style.visibility = 'visible'
+        } else {
+          element.style.display = 'none'
+        }
+      } else {
+        if (this.useVisiblilty) {
+          element.style.visibility = 'hidden'
+        } else {
+          element.style.display = 'block'
+        }
+      }
+    }
+  }
+
+  show () {
+    this.setDisplayState(true)
+  }
+
+  hide () {
+    this.setDisplayState(false)
+  }
+}
+
+class SVGSelectorBuilder {
+  rootElement?: ParentNode
+
+  setRootElement (element: ParentNode): SVGSelectorBuilder {
+    this.rootElement = element
+    return this
+  }
+
+  setRootFromString (svgString: string): SVGSelectorBuilder {
+    const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
+    this.rootElement = svgDom.body
+    return this
+  }
+
+  private getLayerElements (rootElement: ParentNode): SVGGElement[] {
+    const layers = rootElement.querySelectorAll<SVGGElement>('g')
+    const result: SVGGElement[] = []
+    for (const layer of layers) {
+      const attribute = layer.attributes.getNamedItem('inkscape:groupmode')
+      if (attribute != null && attribute.nodeValue === 'layer') {
+        result.push(layer)
+      }
+    }
+    return result
+  }
+
+  build (layersAndContainingElements: false): DomStepElementNg[] {
+    if (this.rootElement == null) {
+      throw new Error(
+        'First set a root element by calling .setRootElement() or .setRootElementFromSVGString()'
+      )
+    }
+
+    const layers = this.getLayerElements(this.rootElement)
+    const result = []
+    if (layersAndContainingElements) {
+      for (const layer of layers) {
+        for (let index = 0; index < layer.children.length; index++) {
+          const c = layer.children.item(index) as unknown
+          if (c == null) {
+            throw new Error('SVG child layer selection failed')
+          }
+          const child = c as ElementCSSInlineStyle
+          if (index === 0) {
+            result.push(new DomStepElementNg([layer, child], false))
+          } else {
+            result.push(new DomStepElementNg(child, false))
+          }
+        }
+      }
+      return result
+    }
+
+    for (const layer of layers) {
+      result.push(new DomStepElementNg(layer, false))
+    }
+    return result
+  }
+}
+
 export function selectInkscapeLevels (
   rootElement: HTMLElement
 ): DomStepElement[] {
-  const levels = rootElement.querySelectorAll<HTMLElement>(
-    INKSCAPE_LEVEL_SELECTOR
-  )
+  const levels = rootElement.querySelectorAll<HTMLElement>('g')
   const result: DomStepElement[] = []
-  for (const level of levels) {
-    result.push(new DomStepElement(level, true))
+  for (const group of levels) {
+    // SVGGElement
+    console.log(group.constructor.name)
+    const attribute = group.attributes.getNamedItem('inkscape:groupmode')
+    if (attribute != null && attribute.nodeValue === 'layer') {
+      console.log(attribute.name)
+      console.log(attribute)
+    }
+
+    // if ('inkscape:groupmode' in group.attributes && group.attributes['group.attributes']) {
+    //   result.push(new DomStepElement(group, true))
+    // }
   }
   return result
 }

@@ -90,8 +90,9 @@ export default validateMasterSpec({
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
+      steps.selectInkscapeLevels(svgDom)
 
-      // Dirty hack: Somehow querySelectorAll is not working with DOMParser
+      // Somehow querySelectorAll is not working with DOMParser
       let groups
       if (props.stepSelector === 'g[inkscape\\:groupmode="layer"]') {
         groups = svgDom.querySelectorAll('g')
