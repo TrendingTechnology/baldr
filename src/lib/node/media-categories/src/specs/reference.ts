@@ -134,6 +134,10 @@ export const reference: MediaCategoriesTypes.Category = {
         return getPdfPageCount(filePath)
       },
       overwriteByDerived: true
+    },
+    ocr: {
+      title: 'Texterkennung (OCR)',
+      description: 'Ergebnis der Texterkennung'
     }
   }
 }

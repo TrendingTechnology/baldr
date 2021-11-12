@@ -122,6 +122,10 @@ exports.reference = {
                 return core_node_1.getPdfPageCount(filePath);
             },
             overwriteByDerived: true
+        },
+        ocr: {
+            title: 'Texterkennung (OCR)',
+            description: 'Ergebnis der Texterkennung'
         }
     }
 };
