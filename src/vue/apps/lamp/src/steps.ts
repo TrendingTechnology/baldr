@@ -624,7 +624,7 @@ class DomStepElementNg {
   }
 }
 
-class SVGSelectorBuilder {
+export class SVGSelectorBuilder {
   rootElement?: ParentNode
 
   setRootElement (element: ParentNode): SVGSelectorBuilder {
@@ -634,7 +634,7 @@ class SVGSelectorBuilder {
 
   setRootFromString (svgString: string): SVGSelectorBuilder {
     const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-    this.rootElement = svgDom.body
+    this.rootElement = svgDom.documentElement
     return this
   }
 
@@ -650,7 +650,7 @@ class SVGSelectorBuilder {
     return result
   }
 
-  build (layersAndContainingElements: false): DomStepElementNg[] {
+  build (layersAndContainingElements: boolean = false): DomStepElementNg[] {
     if (this.rootElement == null) {
       throw new Error(
         'First set a root element by calling .setRootElement() or .setRootElementFromSVGString()'
