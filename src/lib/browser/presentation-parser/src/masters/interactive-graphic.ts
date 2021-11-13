@@ -2,6 +2,8 @@ import { Master, mapStepFieldDefintions } from '../master'
 
 type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized
 
+type InkscapeMode = 'layer' | 'layer+' | 'group'
+
 interface InteractiveGraphicFieldsNormalized {
   src: string
   stepSelector: string
@@ -25,6 +27,13 @@ export class InteractiveGraphicMaster implements Master {
       description: 'Den URI zu einer SVG-Datei.',
       assetUri: true
     },
+    mode: {
+      description: 'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
+      default: 'layer',
+      validate: (input: any) => {
+        return ['layer', 'layer+', 'group'].includes(input)
+      }
+    },
     ...mapStepFieldDefintions(['selector', 'subset'])
   }
 
@@ -33,9 +42,6 @@ export class InteractiveGraphicMaster implements Master {
   ): InteractiveGraphicFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields } as InteractiveGraphicFieldsNormalized
-    }
-    if (fields.stepSelector == null) {
-      fields.stepSelector = 'g[inkscape\\:groupmode="layer"]'
     }
     return fields
   }

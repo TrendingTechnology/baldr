@@ -15,7 +15,7 @@ function instaniateStepController(entry, props) {
   if (props.stepSelector != null) {
     selector = new ElementSelector(entry, props.stepSelector)
   } else {
-    selector = new InkscapeSelector(entry)
+    selector = new InkscapeSelector(entry, props.mode)
   }
   return new ControllerNg(selector.select(), props.stepSubset)
 }
@@ -29,6 +29,13 @@ export default validateMasterSpec({
       required: true,
       description: 'Den URI zu einer SVG-Datei.',
       assetUri: true
+    },
+    mode: {
+      description: 'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
+      default: 'layer',
+      validate: (input) => {
+        return ['layer', 'layer+', 'group'].includes(input)
+      }
     },
     ...mapStepFieldDefintions(['selector', 'subset'])
   },

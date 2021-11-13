@@ -1,32 +1,49 @@
 ---
+ref: interactive-graphic-test
+title: Master slide audio test
 slides:
-
+# 1
+- title: Kurzform (Ohne Ebenen, nichts zum Einblenden)
+  # ref:9-Symphonie_NB_Freude-schoener-Goetterfunken
+  interactive_graphic: uuid:e8a4d146-f54e-4949-b1c6-92c014fec2d3
+# 2
 - title: Shortcuts
   description: selector inkscape:groupmode="layer"
   interactive_graphic:
     # ref:Requiem_NB_Confutatis_1-Takt
     src: uuid:4d7c712e-8ce2-48e2-a7ec-9c8b13d78554
     step_subset: 3-
-
-- title: Kurzform (Ohne Ebenen, nichts zum Einblenden)
-  # ref:9-Symphonie_NB_Freude-schoener-Goetterfunken
-  interactive_graphic: uuid:e8a4d146-f54e-4949-b1c6-92c014fec2d3
-
+# 3
 - title: Langform
   interactive_graphic:
     # ref:9-Symphonie_NB_Freude-schoener-Goetterfunken_Anfang
     src: uuid:5639ef47-e583-4afc-b08f-69786de8a3e2
-
+# 4
 - title: g Element
   description: selector inkscape:groupmode="layer"
   interactive_graphic:
     # ref:NB_Dreiklaenge-Nationalhymnen_F-Dur
     src: uuid:a00d8fae-99db-4bd0-97fd-512f71fea1c8
     step_subset: 3-
-
+# 5
 - title: class
   description: .baldr-group
   interactive_graphic:
     # ref:Moses_Notationsweisen
-    src:  uuid:55d311fe-e967-4119-98c8-4d966832d331
+    src: uuid:55d311fe-e967-4119-98c8-4d966832d331
     step_selector: .baldr-group
+# 6
+- title: mode=layer ref:Invention_NB_Invention_C-Dur_Loesung
+  interactive_graphic:
+    src: uuid:98596212-21b7-4ebe-96fa-6ad4163bcaf7
+    mode: layer
+# 7
+- title: mode=layer+ ref:Invention_NB_Invention_C-Dur_Loesung
+  interactive_graphic:
+    src: uuid:98596212-21b7-4ebe-96fa-6ad4163bcaf7
+    mode: layer+
+# 8
+- title: mode=group ref:Invention_NB_Invention_C-Dur_Loesung
+  interactive_graphic:
+    src: uuid:98596212-21b7-4ebe-96fa-6ad4163bcaf7
+    mode: group

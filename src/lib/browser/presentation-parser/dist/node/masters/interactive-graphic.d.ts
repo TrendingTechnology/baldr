@@ -19,6 +19,11 @@ export declare class InteractiveGraphicMaster implements Master {
             description: string;
             assetUri: boolean;
         };
+        mode: {
+            description: string;
+            default: string;
+            validate: (input: any) => boolean;
+        };
     };
     normalizeFields(fields: InteractiveGraphicFieldsRaw): InteractiveGraphicFieldsNormalized;
     collectMediaUris(fields: InteractiveGraphicFieldsNormalized): string;

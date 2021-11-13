@@ -71,6 +71,11 @@ interface FieldDefinition {
    * The same as Vue `type`.
    */
   type?: object
+
+  /**
+   * A function to validate the input. Return false if the input is not valid.
+   */
+  validate?: (input: any) => boolean
 }
 
 type StepFieldNames = 'selector' | 'mode' | 'subset'

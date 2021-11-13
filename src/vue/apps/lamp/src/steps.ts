@@ -700,23 +700,29 @@ export class ElementSelector extends Selector {
   }
 }
 
-export class InkscapeSelector extends Selector {
-  layersAndContainingElements: boolean
+type InkscapeMode = 'layer' | 'layer+' | 'group'
 
-  constructor (
-    entry: string | StepElement,
-    layersAndContainingElements: boolean = false
-  ) {
+export class InkscapeSelector extends Selector {
+  mode: InkscapeMode
+
+  constructor (entry: string | StepElement, mode: InkscapeMode = 'layer') {
     super(entry)
-    this.layersAndContainingElements = layersAndContainingElements
+    this.mode = mode
   }
 
-  private getLayerElements (rootElement: ParentNode): SVGGElement[] {
+  private getLayerElements (
+    rootElement: ParentNode,
+    mode: InkscapeMode
+  ): SVGGElement[] {
     const layers = rootElement.querySelectorAll<SVGGElement>('g')
     const result: SVGGElement[] = []
     for (const layer of layers) {
-      const attribute = layer.attributes.getNamedItem('inkscape:groupmode')
-      if (attribute != null && attribute.nodeValue === 'layer') {
+      if (mode !== 'group') {
+        const attribute = layer.attributes.getNamedItem('inkscape:groupmode')
+        if (attribute != null && attribute.nodeValue === 'layer') {
+          result.push(layer)
+        }
+      } else {
         result.push(layer)
       }
     }
@@ -724,9 +730,9 @@ export class InkscapeSelector extends Selector {
   }
 
   selectAll (): DomStepElement[] {
-    const layers = this.getLayerElements(this.rootElement)
+    const layers = this.getLayerElements(this.rootElement, this.mode)
     const result = []
-    if (this.layersAndContainingElements) {
+    if (this.mode === 'layer+') {
       for (const layer of layers) {
         for (let index = 0; index < layer.children.length; index++) {
           const c = layer.children.item(index) as unknown
@@ -741,11 +747,10 @@ export class InkscapeSelector extends Selector {
           }
         }
       }
-      return result
-    }
-
-    for (const layer of layers) {
-      result.push(new DomStepElement(layer, false))
+    } else if (this.mode === 'layer' || this.mode === 'group') {
+      for (const layer of layers) {
+        result.push(new DomStepElement(layer, false))
+      }
     }
     return result
   }

@@ -13,14 +13,17 @@ export class InteractiveGraphicMaster {
                 required: true,
                 description: 'Den URI zu einer SVG-Datei.',
                 assetUri: true
+            }, mode: {
+                description: 'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
+                default: 'layer',
+                validate: (input) => {
+                    return ['layer', 'layer+', 'group'].includes(input);
+                }
             } }, mapStepFieldDefintions(['selector', 'subset']));
     }
     normalizeFields(fields) {
         if (typeof fields === 'string') {
             fields = { src: fields };
-        }
-        if (fields.stepSelector == null) {
-            fields.stepSelector = 'g[inkscape\\:groupmode="layer"]';
         }
         return fields;
     }
