@@ -43,6 +43,9 @@ class SubsetRange {
     }
 }
 function parseSubsetSpecifier(specifier) {
+    if (specifier.match(/[^\d\s,-]/) != null) {
+        throw new Error(`Only the following characters are allowed as subset specifiers: “0123456789-,” not “${specifier}”`);
+    }
     specifier = specifier.replace(/\s*/g, '');
     // 1-3,5-7
     const ranges = [];
@@ -79,7 +82,7 @@ function parseSubsetSpecifier(specifier) {
     }
     return ranges;
 }
-export function buildSubsetIndexes(specifier, elementCount, shiftIndexes = -1) {
+export function buildSubsetIndexes(specifier, elementCount, indexShift = -1) {
     const ranges = parseSubsetSpecifier(specifier);
     const indexes = new Set();
     for (const range of ranges) {
@@ -92,7 +95,11 @@ export function buildSubsetIndexes(specifier, elementCount, shiftIndexes = -1) {
     indexesArray.sort((a, b) => a - b);
     const shiftedArray = [];
     for (const index of indexesArray) {
-        shiftedArray.push(index + shiftIndexes);
+        const newIndex = index + indexShift;
+        if (newIndex < 0) {
+            throw new Error(`The index must be greater than 0: ${newIndex} (specifier: “${specifier}”, element count: ${elementCount}, index shift: ${indexShift})`);
+        }
+        shiftedArray.push(newIndex);
     }
     return shiftedArray;
 }

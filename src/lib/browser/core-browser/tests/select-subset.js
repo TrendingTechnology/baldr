@@ -139,48 +139,29 @@ describe('Function “buildSubsetIndexes()”', function () {
     assert.deepStrictEqual(buildSubsetIndexes('1-2,4-5', 20), [0, 1, 3, 4])
   })
 
-  it('shiftSelector: -1', function () {
-    const elements = selectSubset('3-', {
-      elementsCount: 5,
-      firstElementNo: 1,
-      shiftSelector: -1
-    })
-    assert.deepStrictEqual(elements, [2, 3, 4, 5])
+  it('too large number for the index shift', function () {
+    assert.throws(
+      () => {
+        buildSubsetIndexes('1', 1, -2)
+      },
+      {
+        message:
+          'The index must be greater than 0: -1 (specifier: “1”, element count: 1, index shift: -2)',
+        name: 'Error'
+      }
+    )
   })
 
-  it('shiftSelector: -1 (3-5)', function () {
-    const elements = selectSubset('3-5', {
-      elementsCount: 5,
-      firstElementNo: 1,
-      shiftSelector: -1
-    })
-    assert.deepStrictEqual(elements, [2, 3, 4])
-  })
-
-  it('shiftSelector: -1 (-4)', function () {
-    const elements = selectSubset('-4', {
-      elementsCount: 5,
-      firstElementNo: 1,
-      shiftSelector: -1
-    })
-    assert.deepStrictEqual(elements, [1, 2, 3])
-  })
-
-  it('shiftSelector: -1 (-4)', function () {
-    const elements = selectSubset('-4', {
-      elementsCount: 5,
-      shiftSelector: -1
-    })
-    assert.deepStrictEqual(elements, [0, 1, 2])
-  })
-
-  it('shiftSelector: -2', function () {
-    const elements = selectSubset('3-', {
-      elementsCount: 5,
-      firstElementNo: 1,
-      shiftSelector: -2
-    })
-
-    assert.deepStrictEqual(elements, [1, 2, 3, 4, 5])
+  it('Invalid characters', function () {
+    assert.throws(
+      () => {
+        buildSubsetIndexes('1x1', 1)
+      },
+      {
+        message:
+          'Only the following characters are allowed as subset specifiers: “0123456789-,” not “1x1”',
+        name: 'Error'
+      }
+    )
   })
 })

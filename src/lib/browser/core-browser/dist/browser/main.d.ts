@@ -45,7 +45,7 @@ interface SelectionSubsetOption {
      */
     shiftSelector?: number;
 }
-export declare function buildSubsetIndexes(specifier: string, elementCount: number, shiftIndexes?: number): number[];
+export declare function buildSubsetIndexes(specifier: string, elementCount: number, indexShift?: number): number[];
 /**
  * Select a subset of elements by a string (`subsetSelector`). `1` is the first
  * element of the `elements` array.
