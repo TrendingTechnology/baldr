@@ -88,11 +88,17 @@ export default validateMasterSpec({
       }
     },
     calculateStepCount ({ props, master }) {
+      console.log(props)
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-      const builder = new steps.SVGSelectorBuilder()
+      let selector
 
-      console.log(builder.setRootFromString(svgString).build(true))
+      if (props.stepSelector != null) {
+        selector = new steps.ElementSelector(svgString, props.stepSelector)
+      } else {
+        selector = new steps.InkscapeSelector(svgString)
+      }
+      const countNew = selector.count(props.stepSubset)
 
       // Somehow querySelectorAll is not working with DOMParser
       let groups
@@ -108,7 +114,10 @@ export default validateMasterSpec({
       } else {
         groups = svgDom.querySelectorAll(props.stepSelector)
       }
-      return steps.calculateStepCount(groups, props)
+
+      const count = steps.calculateStepCount(groups, props)
+      console.log(count, countNew)
+      return count
     },
     leaveSlide () {
       // this.domSteps.shortcutsUnregister()

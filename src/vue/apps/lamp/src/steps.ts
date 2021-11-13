@@ -548,7 +548,7 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
-abstract class ElementSelector {
+abstract class Selector {
   rootElement: ParentNode
 
   constructor (entry: string | StepElement) {
@@ -581,14 +581,23 @@ abstract class ElementSelector {
     }
   }
 
-  abstract select (): DomStepElement[]
+  select (subsetSpecifier?: string) {
+    if (subsetSpecifier == null) {
+      return this.selectAll()
+    }
 
-  count (): number {
-    return this.select().length
+    return selectSubset(subsetSpecifier, { elements: this.selectAll() })
+  }
+
+  abstract selectAll (): DomStepElement[]
+
+  count (subsetSpecifier?: string): number {
+    // Assumes that all elements are hidden for the first step.
+    return this.select(subsetSpecifier).length + 1
   }
 }
 
-class CssSelector extends ElementSelector {
+export class ElementSelector extends Selector {
   private readonly selectors: string
 
   constructor (entry: string | StepElement, selectors: string) {
@@ -596,7 +605,7 @@ class CssSelector extends ElementSelector {
     this.selectors = selectors
   }
 
-  select () {
+  selectAll () {
     const result: DomStepElement[] = []
     const nodeList = this.rootElement.querySelectorAll<StepElement>(
       this.selectors
@@ -608,18 +617,15 @@ class CssSelector extends ElementSelector {
   }
 }
 
-export class SVGSelectorBuilder {
-  rootElement?: ParentNode
+export class InkscapeSelector extends Selector {
+  layersAndContainingElements: boolean
 
-  setRootElement (element: ParentNode): SVGSelectorBuilder {
-    this.rootElement = element
-    return this
-  }
-
-  setRootFromString (svgString: string): SVGSelectorBuilder {
-    const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-    this.rootElement = svgDom.documentElement
-    return this
+  constructor (
+    entry: string | StepElement,
+    layersAndContainingElements: boolean = false
+  ) {
+    super(entry)
+    this.layersAndContainingElements = layersAndContainingElements
   }
 
   private getLayerElements (rootElement: ParentNode): SVGGElement[] {
@@ -634,16 +640,10 @@ export class SVGSelectorBuilder {
     return result
   }
 
-  build (layersAndContainingElements: boolean = false): DomStepElement[] {
-    if (this.rootElement == null) {
-      throw new Error(
-        'First set a root element by calling .setRootElement() or .setRootElementFromSVGString()'
-      )
-    }
-
+  selectAll (): DomStepElement[] {
     const layers = this.getLayerElements(this.rootElement)
     const result = []
-    if (layersAndContainingElements) {
+    if (this.layersAndContainingElements) {
       for (const layer of layers) {
         for (let index = 0; index < layer.children.length; index++) {
           const c = layer.children.item(index) as unknown
@@ -666,40 +666,6 @@ export class SVGSelectorBuilder {
     }
     return result
   }
-}
-
-export function selectInkscapeLevels (
-  rootElement: HTMLElement
-): DomStepElement[] {
-  const levels = rootElement.querySelectorAll<HTMLElement>('g')
-  const result: DomStepElement[] = []
-  for (const group of levels) {
-    // SVGGElement
-    console.log(group.constructor.name)
-    const attribute = group.attributes.getNamedItem('inkscape:groupmode')
-    if (attribute != null && attribute.nodeValue === 'layer') {
-      console.log(attribute.name)
-      console.log(attribute)
-    }
-
-    // if ('inkscape:groupmode' in group.attributes && group.attributes['group.attributes']) {
-    //   result.push(new DomStepElement(group, true))
-    // }
-  }
-  return result
-}
-
-export function selectInkscapeLevelElements (
-  rootElement: HTMLElement
-): DomStepElement[] {
-  const levels = rootElement.querySelectorAll<HTMLElement>(
-    INKSCAPE_LEVEL_SELECTOR
-  )
-  const result: DomStepElement[] = []
-  for (const level of levels) {
-    result.push(new DomStepElement(level, true))
-  }
-  return result
 }
 
 /**
