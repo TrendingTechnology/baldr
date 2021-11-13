@@ -1,12 +1,6 @@
 ---
 slides:
 
-- title: 'step_selector: none'
-  interactive_graphic:
-    # ref:Requiem_NB_Confutatis_1-Takt
-    src: uuid:4d7c712e-8ce2-48e2-a7ec-9c8b13d78554
-    step_selector: none
-
 - title: Shortcuts
   description: selector inkscape:groupmode="layer"
   interactive_graphic:

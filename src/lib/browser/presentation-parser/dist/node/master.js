@@ -5,8 +5,7 @@ const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 const stepFieldDefinitions = {
     selector: {
-        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
-        default: 'g[inkscape\\:groupmode="layer"]'
+        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     },
     mode: {
         type: String,

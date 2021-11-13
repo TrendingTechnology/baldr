@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.getExtension = void 0;
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = exports.getExtension = void 0;
 const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -51,6 +51,67 @@ function msleep(milliSeconds) {
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliSeconds);
 }
 exports.msleep = msleep;
+class SubsetRange {
+    constructor(from, to) {
+        this.from = from;
+        this.to = to;
+    }
+}
+function parseSubsetSpecifier(specifier) {
+    specifier = specifier.replace(/\s*/g, '');
+    // 1-3,5-7
+    const ranges = [];
+    const rangeSpecs = specifier.split(',');
+    for (const rangeSpec of rangeSpecs) {
+        // 7 -> 7-7
+        if (!rangeSpec.includes('-')) {
+            const both = parseInt(rangeSpec);
+            ranges.push(new SubsetRange(both, both));
+            // -7 -> 1-7
+        }
+        else if (rangeSpec.match(/^-\d+$/) != null) {
+            const to = parseInt(rangeSpec.replace('-', ''));
+            ranges.push(new SubsetRange(1, to));
+            // 7- -> 7-?
+        }
+        else if (rangeSpec.match(/^\d+-$/) != null) {
+            const from = parseInt(rangeSpec.replace('-', ''));
+            ranges.push(new SubsetRange(from));
+            // 7-8 or 7-7
+        }
+        else if (rangeSpec.match(/^\d+-\d+$/) != null) {
+            const rangeSplit = rangeSpec.split('-');
+            const from = parseInt(rangeSplit[0]);
+            const to = parseInt(rangeSplit[1]);
+            if (to < from) {
+                throw new Error(`Invalid range: ${from}-${to}`);
+            }
+            ranges.push(new SubsetRange(from, to));
+        }
+        else {
+            throw new Error('Invalid range specifier');
+        }
+    }
+    return ranges;
+}
+function buildSubsetIndexes(specifier, elementCount, shiftIndexes = -1) {
+    const ranges = parseSubsetSpecifier(specifier);
+    const indexes = new Set();
+    for (const range of ranges) {
+        const to = range.to == null ? elementCount : range.to;
+        for (let index = range.from; index <= to; index++) {
+            indexes.add(index);
+        }
+    }
+    const indexesArray = Array.from(indexes);
+    indexesArray.sort((a, b) => a - b);
+    const shiftedArray = [];
+    for (const index of indexesArray) {
+        shiftedArray.push(index + shiftIndexes);
+    }
+    return shiftedArray;
+}
+exports.buildSubsetIndexes = buildSubsetIndexes;
 /**
  * Select a subset of elements by a string (`subsetSelector`). `1` is the first
  * element of the `elements` array.

@@ -390,6 +390,194 @@ export class DomStepController {
 }
 
 /**
+ * Generate steps by hiding and showing some DOM elements.
+ */
+ export class ControllerNg {
+  /**
+   * All elements obtained from `document.querySelectorAll()`.
+   */
+  elementsAll: DomStepElement[]
+
+  /**
+   * All elements or a subset of elements, if `subsetSelector` is specified.
+   */
+  elements: DomStepElement[]
+
+  constructor (options: DomStepOptions) {
+    const optionsDefault: DomStepOptions = {
+      useVisibliltyProp: false,
+      hideAllElementsInitally: true
+    }
+    const opts = Object.assign(optionsDefault, options)
+
+    this.elementsAll = this.collectAllElements(opts)
+
+    this.elements = this.collectSubsetElements(
+      this.elementsAll,
+      opts.subsetSelector
+    )
+
+    if (opts.hideAllElementsInitally != null && opts.hideAllElementsInitally) {
+      this.hideAll()
+    }
+  }
+
+  private collectAllElements (opts: DomStepOptions): DomStepElement[] {
+    if (opts.rootElement == null) {
+      const d = document as unknown
+      opts.rootElement = d as HTMLElement
+    }
+
+    if (opts.mode != null) {
+      return this.applySpecializedSelectors(opts.rootElement, opts.mode)
+    }
+
+    let elements: HTMLElement[] | undefined
+
+    if (opts.elements != null) {
+      elements = opts.elements
+    } else if (opts.cssSelectors === 'none') {
+      elements = []
+    } else if (opts.cssSelectors != null) {
+      elements = Array.from(
+        opts.rootElement.querySelectorAll(opts.cssSelectors)
+      )
+    } else {
+      throw new Error('Specify elements or cssSelectors')
+    }
+
+    if (elements != null) {
+      const all = []
+      for (const element of elements) {
+        all.push(new DomStepElement(element, opts.useVisibliltyProp))
+      }
+      return all
+    }
+
+    throw new Error('No HTML elements were found')
+  }
+
+  private collectSubsetElements (
+    elementsAll: DomStepElement[],
+    subsetSelector?: string | undefined
+  ): DomStepElement[] {
+    if (subsetSelector != null) {
+      return selectSubset(subsetSelector, {
+        elements: elementsAll,
+        shiftSelector: -1
+      })
+    }
+    return elementsAll
+  }
+
+  private applySpecializedSelectors (
+    rootElement: HTMLElement,
+    name: 'words' | 'sentences' | 'inkscape-levels' | 'inkscape-level-elements'
+  ): DomStepElement[] {
+    if (name === 'words') {
+      return selectWords(rootElement)
+    } else if (name === 'sentences') {
+      return selectSentences(rootElement)
+    } else {
+      throw new Error(`Unkown specialized selector: ${name}`)
+    }
+  }
+
+  /**
+   * `elements` + 1
+   */
+  get count (): number {
+    return this.elements.length + 1
+  }
+
+  /**
+   * `elementsAll` + 1
+   */
+  get countAll (): number {
+    return this.elementsAll.length + 1
+  }
+
+  /**
+   * For debugging purposes.
+   */
+  get htmlElements (): StepElement[] {
+    const htmlElements = []
+    for (const domStep of this.elements) {
+      const elements = domStep.htmlElements
+      if (Array.isArray(elements)) {
+        htmlElements.push(elements[0])
+      } else {
+        htmlElements.push(elements)
+      }
+    }
+    return htmlElements
+  }
+
+  /**
+   * Hide all elements.
+   */
+  hideAll (): void {
+    for (const element of this.elementsAll) {
+      element.hide()
+    }
+  }
+
+  /**
+   * Set the display / visiblilty state on HTML elements. Loop through all
+   * elements or perform a minimal update. On the first step no elements are
+   * displayed. The number of steps is: number of elements + 1.
+   * A minimal update doesn’t loop through all elements, only the visibility
+   * state of the next element is changed.
+   *
+   * @returns The element that is displayed by the new step number.
+   */
+  displayByNo ({
+    stepNo,
+    oldStepNo,
+    full
+  }: DisplayOptions): StepElement | undefined {
+    if (this.elements == null || this.elements.length == null) {
+      return
+    }
+    // Loop through all elements. Set visibility state on all elements
+    // Full update
+    if (
+      oldStepNo == null ||
+      (full != null && full) ||
+      store.getters['lamp/nav/fullStepUpdate'] === true ||
+      stepNo === 1 ||
+      (oldStepNo === 1 && stepNo === this.count)
+    ) {
+      let count = 1
+      for (const domStep of this.elements) {
+        const showElement = stepNo > count
+        domStep.setState(showElement)
+        count += 1
+      }
+      if (stepNo === 1) {
+        return this.elements[0].htmlElement
+      }
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      return this.elements[stepNo - 2].htmlElement
+    }
+    let domStep
+    if (stepNo > oldStepNo) {
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      domStep = this.elements[stepNo - 2]
+    } else {
+      domStep = this.elements[stepNo - 1]
+    }
+    // Todo: displayByNo is called twice, Fix this.
+    if (domStep != null) {
+      domStep.show()
+      return domStep.htmlElement
+    }
+  }
+}
+
+/**
  * Wrap each word in a string into `<span class="word">…</span>`
  * @see {@link https://stackoverflow.com/a/26030835}
  */

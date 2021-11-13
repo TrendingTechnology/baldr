@@ -67,6 +67,78 @@ interface SelectionSubsetOption {
   shiftSelector?: number
 }
 
+class SubsetRange {
+  from: number
+  to?: number
+
+  constructor (from: number, to?: number) {
+    this.from = from
+    this.to = to
+  }
+}
+
+function parseSubsetSpecifier (specifier: string): SubsetRange[] {
+  specifier = specifier.replace(/\s*/g, '')
+  // 1-3,5-7
+  const ranges: SubsetRange[] = []
+  const rangeSpecs = specifier.split(',')
+  for (const rangeSpec of rangeSpecs) {
+    // 7 -> 7-7
+    if (!rangeSpec.includes('-')) {
+      const both = parseInt(rangeSpec)
+      ranges.push(new SubsetRange(both, both))
+
+      // -7 -> 1-7
+    } else if (rangeSpec.match(/^-\d+$/) != null) {
+      const to = parseInt(rangeSpec.replace('-', ''))
+      ranges.push(new SubsetRange(1, to))
+
+      // 7- -> 7-?
+    } else if (rangeSpec.match(/^\d+-$/) != null) {
+      const from = parseInt(rangeSpec.replace('-', ''))
+      ranges.push(new SubsetRange(from))
+
+      // 7-8 or 7-7
+    } else if (rangeSpec.match(/^\d+-\d+$/) != null) {
+      const rangeSplit: string[] = rangeSpec.split('-')
+      const from = parseInt(rangeSplit[0])
+      const to = parseInt(rangeSplit[1])
+      if (to < from) {
+        throw new Error(`Invalid range: ${from}-${to}`)
+      }
+      ranges.push(new SubsetRange(from, to))
+    } else {
+      throw new Error('Invalid range specifier')
+    }
+  }
+  return ranges
+}
+
+export function buildSubsetIndexes (
+  specifier: string,
+  elementCount: number,
+  shiftIndexes: number = -1
+): number[] {
+  const ranges = parseSubsetSpecifier(specifier)
+
+  const indexes = new Set<number>()
+
+  for (const range of ranges) {
+    const to = range.to == null ? elementCount : range.to
+    for (let index = range.from; index <= to; index++) {
+      indexes.add(index)
+    }
+  }
+
+  const indexesArray = Array.from(indexes)
+  indexesArray.sort((a, b) => a - b)
+  const shiftedArray: number[] = []
+  for (const index of indexesArray) {
+    shiftedArray.push(index + shiftIndexes)
+  }
+  return shiftedArray
+}
+
 /**
  * Select a subset of elements by a string (`subsetSelector`). `1` is the first
  * element of the `elements` array.

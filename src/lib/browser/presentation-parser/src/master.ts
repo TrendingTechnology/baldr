@@ -82,8 +82,7 @@ interface FieldDefinitionCollection {
 const stepFieldDefinitions: FieldDefinitionCollection = {
   selector: {
     description:
-      'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
-    default: 'g[inkscape\\:groupmode="layer"]'
+      'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
   },
   mode: {
     type: String,
