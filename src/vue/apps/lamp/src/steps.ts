@@ -47,31 +47,24 @@ class SlideStep implements SlideStepSpec {
   }
 }
 
-/**
- * The value of the CSS attributes `visibility` and `display`.
- */
-interface StyleValue {
-  visibility: 'hidden' | 'visible'
-  display: 'none' | 'block'
-}
+type StepElement = SVGElement | HTMLElement
 
 /**
  * A wrapper class for a HTML element to be able to hide and show easily some
  * HTML elements.
  */
 class DomStepElement {
-  htmlElements: HTMLElement[]
+  htmlElements: StepElement[]
   private readonly useVisiblilty: boolean
-  private stylePropertyName: 'visibility' | 'display'
-  private readonly styleValues: StyleValue[]
+
   /**
    * @property Multiple HTML elements as an array or a
    *   single HTML element.
-   * @property useVisibliltyProp - Set the visibility
+   * @property useVisiblilty - Set the visibility
    *   `element.style.visibility` instead of the display state.
    */
   constructor (
-    elements: HTMLElement[] | HTMLElement,
+    elements: StepElement[] | StepElement,
     useVisiblilty: boolean = false
   ) {
     if (Array.isArray(elements)) {
@@ -81,53 +74,45 @@ class DomStepElement {
     }
 
     this.useVisiblilty = useVisiblilty
-
-    if (this.useVisiblilty) {
-      this.stylePropertyName = 'visibility'
-    } else {
-      this.stylePropertyName = 'display'
-    }
-
-    this.styleValues = [
-      {
-        visibility: 'hidden',
-        display: 'none'
-      },
-      {
-        visibility: 'visible',
-        display: 'block'
-      }
-    ]
   }
 
   /**
    * The last HTML element.
    */
-  get htmlElement (): HTMLElement {
+  get htmlElement (): StepElement {
     return this.htmlElements[this.htmlElements.length - 1]
   }
 
-  /**
-   * The text of last HTML element.
-   */
   get text (): string | undefined {
-    const lastElement = this.htmlElements[this.htmlElements.length - 1]
-    const result = lastElement.textContent
-    if (result != null) {
-      return result
+    if (this.htmlElement.textContent != null) {
+      return this.htmlElement.textContent
     }
   }
 
-  private getStyleValue_ (
-    show: boolean
-  ): 'hidden' | 'visible' | 'block' | 'none' {
-    return this.styleValues[Number(show)][this.stylePropertyName]
-  }
-
-  show (isVisible: boolean = true): void {
+  public setState (isVisible: boolean): void {
     for (const element of this.htmlElements) {
-      element.style[this.stylePropertyName] = this.getStyleValue_(isVisible)
+      if (isVisible) {
+        if (this.useVisiblilty) {
+          element.style.visibility = 'visible'
+        } else {
+          element.style.display = 'block'
+        }
+      } else {
+        if (this.useVisiblilty) {
+          element.style.visibility = 'hidden'
+        } else {
+          element.style.display = 'none'
+        }
+      }
     }
+  }
+
+  public show () {
+    this.setState(true)
+  }
+
+  public hide () {
+    this.setState(false)
   }
 }
 
@@ -296,7 +281,7 @@ export class DomStepController {
   /**
    * For debugging purposes.
    */
-  get htmlElements (): HTMLElement[] {
+  get htmlElements (): StepElement[] {
     const htmlElements = []
     for (const domStep of this.elements) {
       const elements = domStep.htmlElements
@@ -314,7 +299,7 @@ export class DomStepController {
    */
   hideAll (): void {
     for (const element of this.elementsAll) {
-      element.show(false)
+      element.hide()
     }
   }
 
@@ -331,7 +316,7 @@ export class DomStepController {
     stepNo,
     oldStepNo,
     full
-  }: DisplayOptions): HTMLElement | undefined {
+  }: DisplayOptions): StepElement | undefined {
     if (this.elements == null || this.elements.length == null) {
       return
     }
@@ -347,7 +332,7 @@ export class DomStepController {
       let count = 1
       for (const domStep of this.elements) {
         const showElement = stepNo > count
-        domStep.show(showElement)
+        domStep.setState(showElement)
         count += 1
       }
       if (stepNo === 1) {
@@ -367,7 +352,7 @@ export class DomStepController {
     }
     // Todo: displayByNo is called twice, Fix this.
     if (domStep != null) {
-      domStep.show(stepNo > oldStepNo)
+      domStep.show()
       return domStep.htmlElement
     }
   }
@@ -383,7 +368,7 @@ export class DomStepController {
         vm.$shortcuts.add(
           `q ${shortcut}`,
           () => {
-            element.show(true)
+            element.show()
           },
           `${description} (einblenden in SVG)`
         )
@@ -563,67 +548,6 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
-/**
- * A wrapper class for a HTML element to be able to hide and show easily some
- * HTML elements.
- */
-class DomStepElementNg {
-  htmlElements: ElementCSSInlineStyle[]
-  private readonly useVisiblilty: boolean
-
-  /**
-   * @property Multiple HTML elements as an array or a
-   *   single HTML element.
-   * @property useVisiblilty - Set the visibility
-   *   `element.style.visibility` instead of the display state.
-   */
-  constructor (
-    elements: ElementCSSInlineStyle[] | ElementCSSInlineStyle,
-    useVisiblilty: boolean = false
-  ) {
-    if (Array.isArray(elements)) {
-      this.htmlElements = elements
-    } else {
-      this.htmlElements = [elements]
-    }
-
-    this.useVisiblilty = useVisiblilty
-  }
-
-  /**
-   * The last HTML element.
-   */
-  get htmlElement (): ElementCSSInlineStyle {
-    return this.htmlElements[this.htmlElements.length - 1]
-  }
-
-  private setDisplayState (isVisible: boolean = true): void {
-    for (const element of this.htmlElements) {
-      if (isVisible) {
-        if (this.useVisiblilty) {
-          element.style.visibility = 'visible'
-        } else {
-          element.style.display = 'none'
-        }
-      } else {
-        if (this.useVisiblilty) {
-          element.style.visibility = 'hidden'
-        } else {
-          element.style.display = 'block'
-        }
-      }
-    }
-  }
-
-  show () {
-    this.setDisplayState(true)
-  }
-
-  hide () {
-    this.setDisplayState(false)
-  }
-}
-
 export class SVGSelectorBuilder {
   rootElement?: ParentNode
 
@@ -650,7 +574,7 @@ export class SVGSelectorBuilder {
     return result
   }
 
-  build (layersAndContainingElements: boolean = false): DomStepElementNg[] {
+  build (layersAndContainingElements: boolean = false): DomStepElement[] {
     if (this.rootElement == null) {
       throw new Error(
         'First set a root element by calling .setRootElement() or .setRootElementFromSVGString()'
@@ -666,11 +590,11 @@ export class SVGSelectorBuilder {
           if (c == null) {
             throw new Error('SVG child layer selection failed')
           }
-          const child = c as ElementCSSInlineStyle
+          const child = c as StepElement
           if (index === 0) {
-            result.push(new DomStepElementNg([layer, child], false))
+            result.push(new DomStepElement([layer, child], false))
           } else {
-            result.push(new DomStepElementNg(child, false))
+            result.push(new DomStepElement(child, false))
           }
         }
       }
@@ -678,7 +602,7 @@ export class SVGSelectorBuilder {
     }
 
     for (const layer of layers) {
-      result.push(new DomStepElementNg(layer, false))
+      result.push(new DomStepElement(layer, false))
     }
     return result
   }
