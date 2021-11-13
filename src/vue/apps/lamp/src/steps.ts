@@ -10,8 +10,6 @@ import store from '@/store/index.js'
 
 const vm = vue as any
 
-const INKSCAPE_LEVEL_SELECTOR: string = 'g[inkscape\\:groupmode="layer"]'
-
 /**
  * Hold some meta data about a step of a slide. This class should not be
  * confused with the class `DomStepElement` which acts on the component level.
@@ -47,14 +45,14 @@ class SlideStep implements SlideStepSpec {
   }
 }
 
-type StepElement = SVGElement | HTMLElement
+type HTMLOrSVGElement = SVGElement | HTMLElement
 
 /**
  * A wrapper class for a HTML element to be able to hide and show easily some
  * HTML elements.
  */
 class DomStepElement {
-  htmlElements: StepElement[]
+  htmlElements: HTMLOrSVGElement[]
   private readonly useVisiblilty: boolean
 
   /**
@@ -64,7 +62,7 @@ class DomStepElement {
    *   `element.style.visibility` instead of the display state.
    */
   constructor (
-    elements: StepElement[] | StepElement,
+    elements: HTMLOrSVGElement[] | HTMLOrSVGElement,
     useVisiblilty: boolean = false
   ) {
     if (Array.isArray(elements)) {
@@ -79,7 +77,7 @@ class DomStepElement {
   /**
    * The last HTML element.
    */
-  get htmlElement (): StepElement {
+  get htmlElement (): HTMLOrSVGElement {
     return this.htmlElements[this.htmlElements.length - 1]
   }
 
@@ -281,7 +279,7 @@ export class DomStepController {
   /**
    * For debugging purposes.
    */
-  get htmlElements (): StepElement[] {
+  get htmlElements (): HTMLOrSVGElement[] {
     const htmlElements = []
     for (const domStep of this.elements) {
       const elements = domStep.htmlElements
@@ -316,7 +314,7 @@ export class DomStepController {
     stepNo,
     oldStepNo,
     full
-  }: DisplayOptions): StepElement | undefined {
+  }: DisplayOptions): HTMLOrSVGElement | undefined {
     if (this.elements == null || this.elements.length == null) {
       return
     }
@@ -430,6 +428,14 @@ export class ControllerNg {
     }
   }
 
+  getStep (no: number): DomStepElement {
+    let index: number = no - 1
+    if (this.subsetIndexes != null) {
+      index = this.subsetIndexes[index]
+    }
+    return this.stepElements[index]
+  }
+
   /**
    * Set the display / visiblilty state on HTML elements. Loop through all
    * elements or perform a minimal update. On the first step no elements are
@@ -442,8 +448,8 @@ export class ControllerNg {
    *
    * @returns The element that is displayed by the new step number.
    */
-  showUpTo (no: number): StepElement | undefined {
-    let currentStepElement: StepElement | undefined = undefined
+  showUpTo (no: number): HTMLOrSVGElement | undefined {
+    let currentStepElement: HTMLOrSVGElement | undefined = undefined
     if (this.subsetIndexes != null) {
       let count = 1
       for (const index of this.subsetIndexes) {
@@ -634,7 +640,7 @@ function countSentences (parentElement: HTMLElement): number {
 abstract class Selector {
   rootElement: ParentNode
 
-  constructor (entry: string | StepElement) {
+  constructor (entry: string | HTMLOrSVGElement) {
     if (typeof entry === 'string') {
       // Cloze-SVG:
       // <?xml version="1.0" encoding="UTF-8"?>
@@ -664,33 +670,25 @@ abstract class Selector {
     }
   }
 
-  select (subsetSpecifier?: string) {
-    if (subsetSpecifier == null) {
-      return this.selectAll()
-    }
+  abstract select (): DomStepElement[]
 
-    return selectSubset(subsetSpecifier, { elements: this.selectAll() })
-  }
-
-  abstract selectAll (): DomStepElement[]
-
-  count (subsetSpecifier?: string): number {
+  count (): number {
     // Assumes that all elements are hidden for the first step.
-    return this.select(subsetSpecifier).length + 1
+    return this.select().length + 1
   }
 }
 
 export class ElementSelector extends Selector {
   private readonly selectors: string
 
-  constructor (entry: string | StepElement, selectors: string) {
+  constructor (entry: string | HTMLOrSVGElement, selectors: string) {
     super(entry)
     this.selectors = selectors
   }
 
-  selectAll () {
+  select () {
     const result: DomStepElement[] = []
-    const nodeList = this.rootElement.querySelectorAll<StepElement>(
+    const nodeList = this.rootElement.querySelectorAll<HTMLOrSVGElement>(
       this.selectors
     )
     for (const element of nodeList) {
@@ -705,7 +703,7 @@ type InkscapeMode = 'layer' | 'layer+' | 'group'
 export class InkscapeSelector extends Selector {
   mode: InkscapeMode
 
-  constructor (entry: string | StepElement, mode: InkscapeMode = 'layer') {
+  constructor (entry: string | HTMLOrSVGElement, mode: InkscapeMode = 'layer') {
     super(entry)
     this.mode = mode
   }
@@ -729,7 +727,7 @@ export class InkscapeSelector extends Selector {
     return result
   }
 
-  selectAll (): DomStepElement[] {
+  select (): DomStepElement[] {
     const layers = this.getLayerElements(this.rootElement, this.mode)
     const result = []
     if (this.mode === 'layer+') {
@@ -739,7 +737,7 @@ export class InkscapeSelector extends Selector {
           if (c == null) {
             throw new Error('SVG child layer selection failed')
           }
-          const child = c as StepElement
+          const child = c as HTMLOrSVGElement
           if (index === 0) {
             result.push(new DomStepElement([layer, child], false))
           } else {
