@@ -5,7 +5,7 @@
 /* globals DOMParser NodeList */
 
 import vue from '@/main'
-import { selectSubset } from '@bldr/core-browser'
+import { selectSubset, buildSubsetIndexes } from '@bldr/core-browser'
 import store from '@/store/index.js'
 
 const vm = vue as any
@@ -392,133 +392,41 @@ export class DomStepController {
 /**
  * Generate steps by hiding and showing some DOM elements.
  */
- export class ControllerNg {
+export class ControllerNg {
   /**
-   * All elements obtained from `document.querySelectorAll()`.
+   * All elements
    */
-  elementsAll: DomStepElement[]
+  stepElements: DomStepElement[]
 
-  /**
-   * All elements or a subset of elements, if `subsetSelector` is specified.
-   */
-  elements: DomStepElement[]
+  subsetIndexes?: number[]
 
-  constructor (options: DomStepOptions) {
-    const optionsDefault: DomStepOptions = {
-      useVisibliltyProp: false,
-      hideAllElementsInitally: true
-    }
-    const opts = Object.assign(optionsDefault, options)
-
-    this.elementsAll = this.collectAllElements(opts)
-
-    this.elements = this.collectSubsetElements(
-      this.elementsAll,
-      opts.subsetSelector
-    )
-
-    if (opts.hideAllElementsInitally != null && opts.hideAllElementsInitally) {
-      this.hideAll()
-    }
-  }
-
-  private collectAllElements (opts: DomStepOptions): DomStepElement[] {
-    if (opts.rootElement == null) {
-      const d = document as unknown
-      opts.rootElement = d as HTMLElement
-    }
-
-    if (opts.mode != null) {
-      return this.applySpecializedSelectors(opts.rootElement, opts.mode)
-    }
-
-    let elements: HTMLElement[] | undefined
-
-    if (opts.elements != null) {
-      elements = opts.elements
-    } else if (opts.cssSelectors === 'none') {
-      elements = []
-    } else if (opts.cssSelectors != null) {
-      elements = Array.from(
-        opts.rootElement.querySelectorAll(opts.cssSelectors)
+  constructor (steps: DomStepElement[], subsetSpecifier?: string) {
+    this.stepElements = steps
+    if (subsetSpecifier != null) {
+      this.subsetIndexes = buildSubsetIndexes(
+        subsetSpecifier,
+        this.stepElements.length + 1,
+        -2
       )
-    } else {
-      throw new Error('Specify elements or cssSelectors')
-    }
-
-    if (elements != null) {
-      const all = []
-      for (const element of elements) {
-        all.push(new DomStepElement(element, opts.useVisibliltyProp))
-      }
-      return all
-    }
-
-    throw new Error('No HTML elements were found')
-  }
-
-  private collectSubsetElements (
-    elementsAll: DomStepElement[],
-    subsetSelector?: string | undefined
-  ): DomStepElement[] {
-    if (subsetSelector != null) {
-      return selectSubset(subsetSelector, {
-        elements: elementsAll,
-        shiftSelector: -1
-      })
-    }
-    return elementsAll
-  }
-
-  private applySpecializedSelectors (
-    rootElement: HTMLElement,
-    name: 'words' | 'sentences' | 'inkscape-levels' | 'inkscape-level-elements'
-  ): DomStepElement[] {
-    if (name === 'words') {
-      return selectWords(rootElement)
-    } else if (name === 'sentences') {
-      return selectSentences(rootElement)
-    } else {
-      throw new Error(`Unkown specialized selector: ${name}`)
     }
   }
 
   /**
-   * `elements` + 1
+   * The number of steps
    */
   get count (): number {
-    return this.elements.length + 1
-  }
-
-  /**
-   * `elementsAll` + 1
-   */
-  get countAll (): number {
-    return this.elementsAll.length + 1
-  }
-
-  /**
-   * For debugging purposes.
-   */
-  get htmlElements (): StepElement[] {
-    const htmlElements = []
-    for (const domStep of this.elements) {
-      const elements = domStep.htmlElements
-      if (Array.isArray(elements)) {
-        htmlElements.push(elements[0])
-      } else {
-        htmlElements.push(elements)
-      }
+    if (this.subsetIndexes != null) {
+      return this.subsetIndexes.length + 1
     }
-    return htmlElements
+    return this.stepElements.length + 1
   }
 
   /**
    * Hide all elements.
    */
   hideAll (): void {
-    for (const element of this.elementsAll) {
-      element.hide()
+    for (const step of this.stepElements) {
+      step.hide()
     }
   }
 
@@ -529,51 +437,38 @@ export class DomStepController {
    * A minimal update doesn’t loop through all elements, only the visibility
    * state of the next element is changed.
    *
+   * @param no - A consecutive number from 1 (all step elements are hidden) to
+   *   step element count + 1.
+   *
    * @returns The element that is displayed by the new step number.
    */
-  displayByNo ({
-    stepNo,
-    oldStepNo,
-    full
-  }: DisplayOptions): StepElement | undefined {
-    if (this.elements == null || this.elements.length == null) {
-      return
-    }
-    // Loop through all elements. Set visibility state on all elements
-    // Full update
-    if (
-      oldStepNo == null ||
-      (full != null && full) ||
-      store.getters['lamp/nav/fullStepUpdate'] === true ||
-      stepNo === 1 ||
-      (oldStepNo === 1 && stepNo === this.count)
-    ) {
+  showUpTo (no: number): StepElement | undefined {
+    let currentStepElement: StepElement | undefined = undefined
+    if (this.subsetIndexes != null) {
       let count = 1
-      for (const domStep of this.elements) {
-        const showElement = stepNo > count
-        domStep.setState(showElement)
-        count += 1
+      for (const index of this.subsetIndexes) {
+        const showElement = no > count
+
+        const stepElement = this.stepElements[index]
+        stepElement.setState(showElement)
+        if (no === count) {
+          currentStepElement = stepElement.htmlElement
+        }
+        count++
       }
-      if (stepNo === 1) {
-        return this.elements[0].htmlElement
+      return currentStepElement
+    }
+
+    let count = 1
+    for (const stepElement of this.stepElements) {
+      const showElement = no > count
+      stepElement.setState(showElement)
+      if (no === count) {
+        currentStepElement = stepElement.htmlElement
       }
-      // First step: No elements are displayed.
-      // The array index begins with 0, steps with 1.
-      return this.elements[stepNo - 2].htmlElement
+      count++
     }
-    let domStep
-    if (stepNo > oldStepNo) {
-      // First step: No elements are displayed.
-      // The array index begins with 0, steps with 1.
-      domStep = this.elements[stepNo - 2]
-    } else {
-      domStep = this.elements[stepNo - 1]
-    }
-    // Todo: displayByNo is called twice, Fix this.
-    if (domStep != null) {
-      domStep.show()
-      return domStep.htmlElement
-    }
+    return currentStepElement
   }
 }
 

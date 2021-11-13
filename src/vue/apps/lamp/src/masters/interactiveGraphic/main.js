@@ -5,10 +5,20 @@
 /* globals DOMParser */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import * as steps from '@/steps'
+import { ControllerNg, InkscapeSelector, ElementSelector } from '@/steps'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+
+function instaniateStepController(entry, props) {
+  let selector
+  if (props.stepSelector != null) {
+    selector = new ElementSelector(entry, props.stepSelector)
+  } else {
+    selector = new InkscapeSelector(entry)
+  }
+  return new ControllerNg(selector.select(), props.stepSubset)
+}
 
 export default validateMasterSpec({
   name: 'interactiveGraphic',
@@ -90,57 +100,16 @@ export default validateMasterSpec({
     calculateStepCount ({ props, master }) {
       console.log(props)
       const svgString = master.$get('svgByUri')(props.src)
-      const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-
-      // let selector
-      // if (props.stepSelector != null) {
-      //   selector = new steps.ElementSelector(svgString, props.stepSelector)
-      // } else {
-      //   selector = new steps.InkscapeSelector(svgString)
-      // }
-      // const countNew = selector.count(props.stepSubset)
-
-      // Somehow querySelectorAll is not working with DOMParser
-      let groups
-      if (props.stepSelector === 'g[inkscape\\:groupmode="layer"]') {
-        groups = svgDom.querySelectorAll('g')
-        const elements = []
-        for (const group of groups) {
-          if (group.attributes['inkscape:groupmode']) {
-            elements.push(group)
-          }
-        }
-        groups = elements
-      } else {
-        groups = svgDom.querySelectorAll(props.stepSelector)
-      }
-
-      const count = steps.calculateStepCount(groups, props)
-      //console.log(count, countNew)
-      return count
-    },
-    leaveSlide () {
-      // this.domSteps.shortcutsUnregister()
+      const controller = instaniateStepController(svgString, props)
+      return controller.count
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight(this.svgPath)
-      this.domSteps = new steps.DomStepController({
-        cssSelectors: slide.props.stepSelector,
-        rootElement: this.$el,
-        subsetSelector: slide.props.stepSubset,
-        hideAllElementsInitally: false
-      })
-      // this.domSteps.shortcutsRegister()
+      this.stepController = instaniateStepController(this.$el, slide.props)
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      const options = { stepNo: newStepNo }
-      if (slideNoChange) {
-        options.full = true
-      } else {
-        options.oldStepNo = oldStepNo
-      }
-      this.domSteps.displayByNo(options)
+      this.stepController.showUpTo(newStepNo)
     }
   }
 })
