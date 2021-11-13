@@ -548,6 +548,66 @@ function countSentences (parentElement: HTMLElement): number {
   return count
 }
 
+abstract class ElementSelector {
+  rootElement: ParentNode
+
+  constructor (entry: string | StepElement) {
+    if (typeof entry === 'string') {
+      // Cloze-SVG:
+      // <?xml version="1.0" encoding="UTF-8"?>
+      // <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 595.276 841.89" version="1.1">
+      // <defs>
+
+      // Inkscape-SVG:
+      // <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+      // <svg
+      //    xmlns:dc="http://purl.org/dc/elements/1.1/"
+      //    xmlns:cc="http://creativecommons.org/ns#"
+      //    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      //    xmlns:svg="http://www.w3.org/2000/svg"
+      //    xmlns="http://www.w3.org/2000/svg"
+      //    xmlns:xlink="http://www.w3.org/1999/xlink"
+      //    id="svg8"
+      //    version="1.1"
+      //    viewBox="0 0 169.17574 95.783676">
+      let type = 'text/html' as DOMParserSupportedType
+      if (entry.indexOf('<?xml') === 0) {
+        type = 'image/svg+xml'
+      }
+      const dom = new DOMParser().parseFromString(entry, type)
+      this.rootElement = dom.documentElement
+    } else {
+      this.rootElement = entry
+    }
+  }
+
+  abstract select (): DomStepElement[]
+
+  count (): number {
+    return this.select().length
+  }
+}
+
+class CssSelector extends ElementSelector {
+  private readonly selectors: string
+
+  constructor (entry: string | StepElement, selectors: string) {
+    super(entry)
+    this.selectors = selectors
+  }
+
+  select () {
+    const result: DomStepElement[] = []
+    const nodeList = this.rootElement.querySelectorAll<StepElement>(
+      this.selectors
+    )
+    for (const element of nodeList) {
+      result.push(new DomStepElement(element, true))
+    }
+    return result
+  }
+}
+
 export class SVGSelectorBuilder {
   rootElement?: ParentNode
 
