@@ -428,8 +428,8 @@ export class ControllerNg {
     }
   }
 
-  getStep (no: number): DomStepElement {
-    let index: number = no - 1
+  getStep (indexFromZero: number): DomStepElement {
+    let index = indexFromZero
     if (this.subsetIndexes != null) {
       index = this.subsetIndexes[index]
     }
@@ -440,41 +440,22 @@ export class ControllerNg {
    * Set the display / visiblilty state on HTML elements. Loop through all
    * elements or perform a minimal update. On the first step no elements are
    * displayed. The number of steps is: number of elements + 1.
-   * A minimal update doesn’t loop through all elements, only the visibility
-   * state of the next element is changed.
    *
-   * @param no - A consecutive number from 1 (all step elements are hidden) to
-   *   step element count + 1.
+   * @param stepNumber - A consecutive number from 1 (all step elements are
+   *   hidden) to step element count + 1.
    *
    * @returns The element that is displayed by the new step number.
    */
-  showUpTo (no: number): HTMLOrSVGElement | undefined {
-    let currentStepElement: HTMLOrSVGElement | undefined = undefined
-    if (this.subsetIndexes != null) {
-      let count = 1
-      for (const index of this.subsetIndexes) {
-        const showElement = no > count
-
-        const stepElement = this.stepElements[index]
-        stepElement.setState(showElement)
-        if (no === count) {
-          currentStepElement = stepElement.htmlElement
-        }
-        count++
+  showUpTo (stepNumber: number): HTMLOrSVGElement | undefined {
+    let currentElement: HTMLOrSVGElement | undefined = undefined
+    for (let index = 0; index < this.count - 1; index++) {
+      const step = this.getStep(index)
+      step.setState(stepNumber > index + 1)
+      if (stepNumber === index + 2) {
+        currentElement = step.htmlElement
       }
-      return currentStepElement
     }
-
-    let count = 1
-    for (const stepElement of this.stepElements) {
-      const showElement = no > count
-      stepElement.setState(showElement)
-      if (no === count) {
-        currentStepElement = stepElement.htmlElement
-      }
-      count++
-    }
-    return currentStepElement
+    return currentElement
   }
 }
 
@@ -751,6 +732,19 @@ export class InkscapeSelector extends Selector {
       }
     }
     return result
+  }
+}
+
+export class ClozeSelector extends Selector {
+  select () {
+    const groups = this.rootElement.querySelectorAll<SVGElement>('svg g')
+    const clozeGElements = []
+    for (const group of groups) {
+      if (group.style.fill === 'rgb(0, 0, 255)') {
+        clozeGElements.push(new DomStepElement(group))
+      }
+    }
+    return clozeGElements
   }
 }
 
