@@ -1,18 +1,29 @@
-import { Step, HTMLSVGElement } from './step';
+import { StepElement } from './step';
 /**
  * Generate steps by hiding and showing some DOM elements.
  */
-export declare class Controller {
+export declare class StepController {
     /**
-     * All elements
+     * All step elements. One element less than the total number of steps.
      */
-    steps: Step[];
+    steps: StepElement[];
+    /**
+     * The array indexes of the specified step subset.
+     *
+     * Example:
+     *
+     * ```md
+     * 1 2 3 4 5 (Step numbers)
+     *   0 1 2 3 (indexes of this.steps)
+     *     1 2   (values of this.subsetIndexes of subset specifier '3-4')
+     * ```
+     */
     subsetIndexes?: number[];
-    constructor(steps: Step[], subsetSpecifier?: string);
+    constructor(steps: StepElement[], subsetSpecifier?: string);
     /**
-     * The number of steps
+     * The number of steps is one greater then the number of step objects.
      */
-    get count(): number;
+    get stepCount(): number;
     private get subsetBeginIndex();
     /**
      * Hide all elements.
@@ -21,13 +32,13 @@ export declare class Controller {
     hideFromSubsetBegin(): void;
     private getStep;
     /**
-     * Set the display / visiblilty state on HTML elements. On the first step no
-     * elements are displayed. The number of steps is: number of elements + 1.
+     * Show all elements up to and including the element with the number
+     * `stepNummer`. The number of steps is: number of elements + 1.
      *
      * @param stepNumber - A consecutive number from 1 (all step elements are
      *   hidden) to step element count + 1.
      *
      * @returns The element that is displayed by the new step number.
      */
-    showUpTo(stepNumber: number): HTMLSVGElement | undefined;
+    showUpTo(stepNumber: number): StepElement | undefined;
 }

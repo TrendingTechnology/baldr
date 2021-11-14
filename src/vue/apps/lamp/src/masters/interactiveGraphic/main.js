@@ -6,7 +6,7 @@
 
 import { warnSvgWidthHeight } from '@/lib.js'
 import {
-  Controller,
+  StepController,
   InkscapeSelector,
   ElementSelector
 } from '@bldr/dom-manipulator'
@@ -21,7 +21,7 @@ function instaniateStepController (entry, props) {
   } else {
     selector = new InkscapeSelector(entry, props.mode)
   }
-  return new Controller(selector.select(), props.stepSubset)
+  return new StepController(selector.select(), props.stepSubset)
 }
 
 export default validateMasterSpec({
@@ -111,8 +111,7 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
-      const controller = instaniateStepController(svgString, props)
-      return controller.count
+      return instaniateStepController(svgString, props).stepCount
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)

@@ -1,12 +1,14 @@
 export type HTMLSVGElement = SVGElement | HTMLElement
 
 /**
- * A wrapper class for a HTML element to be able to hide and show easily some
- * HTML elements.
+ * A wrapper class around a HTML or a SVG element to be able to hide and show
+ * this element very easily.
  */
-export class Step {
+export class StepElement {
   htmlElements: HTMLSVGElement[]
   private readonly useVisiblilty: boolean
+
+  isVisible: boolean = true
 
   /**
    * @property Multiple HTML elements as an array or a
@@ -40,9 +42,13 @@ export class Step {
     }
   }
 
-  public setState (isVisible: boolean): void {
+  public setVisibilityStatus (show: boolean): void {
+    if (this.isVisible === show) {
+      return
+    }
+    this.isVisible = show
     for (const element of this.htmlElements) {
-      if (isVisible) {
+      if (show) {
         if (this.useVisiblilty) {
           element.style.visibility = 'visible'
         } else {
@@ -59,10 +65,10 @@ export class Step {
   }
 
   public show (): void {
-    this.setState(true)
+    this.setVisibilityStatus(true)
   }
 
   public hide (): void {
-    this.setState(false)
+    this.setVisibilityStatus(false)
   }
 }

@@ -1,8 +1,8 @@
 /**
- * A wrapper class for a HTML element to be able to hide and show easily some
- * HTML elements.
+ * A wrapper class around a HTML or a SVG element to be able to hide and show
+ * this element very easily.
  */
-export class Step {
+export class StepElement {
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.
@@ -10,6 +10,7 @@ export class Step {
      *   `element.style.visibility` instead of the display state.
      */
     constructor(elements, useVisiblilty = false) {
+        this.isVisible = true;
         if (Array.isArray(elements)) {
             this.htmlElements = elements;
         }
@@ -29,9 +30,13 @@ export class Step {
             return this.htmlElement.textContent;
         }
     }
-    setState(isVisible) {
+    setVisibilityStatus(show) {
+        if (this.isVisible === show) {
+            return;
+        }
+        this.isVisible = show;
         for (const element of this.htmlElements) {
-            if (isVisible) {
+            if (show) {
                 if (this.useVisiblilty) {
                     element.style.visibility = 'visible';
                 }
@@ -50,9 +55,9 @@ export class Step {
         }
     }
     show() {
-        this.setState(true);
+        this.setVisibilityStatus(true);
     }
     hide() {
-        this.setState(false);
+        this.setVisibilityStatus(false);
     }
 }

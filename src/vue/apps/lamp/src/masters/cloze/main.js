@@ -9,13 +9,13 @@ import Vue from 'vue'
 import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { Controller, ClozeSelector } from '@bldr/dom-manipulator'
+import { StepController, ClozeSelector } from '@bldr/dom-manipulator'
 
 import { warnSvgWidthHeight } from '@/lib.js'
 
 function instaniateStepController (entry, stepSubset) {
   const selector = new ClozeSelector(entry)
-  return new Controller(selector.select(), stepSubset)
+  return new StepController(selector.select(), stepSubset)
 }
 
 /**
@@ -122,7 +122,7 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
-      return instaniateStepController(svgString, props.stepSubset).count
+      return instaniateStepController(svgString, props.stepSubset).stepCount
     },
     titleFromProps ({ propsMain }) {
       if (propsMain.asset.yaml.title) {
@@ -132,19 +132,26 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight()
-      this.stepController = instaniateStepController(this.$el, slide.props.stepSubset)
+      this.stepController = instaniateStepController(
+        this.$el,
+        slide.props.stepSubset
+      )
       this.stepController.hideFromSubsetBegin()
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
       if (newStepNo === 1) {
         this.stepController.hideFromSubsetBegin()
       }
-      const newClozeGroup = this.stepController.showUpTo(newStepNo)
-      // <div class="vc_slide_main">
-      //   <div class="vc_master_renderer">
-      //     <div class="vc_cloze_master master-inner">
-      const scrollContainer = this.$el.parentElement.parentElement
-      scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
+      const step = this.stepController.showUpTo(newStepNo)
+      if (step != null) {
+        const newClozeGroup = step.htmlElement
+
+        // <div class="vc_slide_main">
+        //   <div class="vc_master_renderer">
+        //     <div class="vc_cloze_master master-inner">
+        const scrollContainer = this.$el.parentElement.parentElement
+        scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
+      }
     }
   }
 })

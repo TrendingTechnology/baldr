@@ -49,7 +49,7 @@ class ElementSelector extends Selector {
         const result = [];
         const nodeList = this.rootElement.querySelectorAll(this.selectors);
         for (const element of nodeList) {
-            result.push(new step_1.Step(element, true));
+            result.push(new step_1.StepElement(element, true));
         }
         return result;
     }
@@ -88,17 +88,17 @@ class InkscapeSelector extends Selector {
                     }
                     const child = c;
                     if (index === 0) {
-                        result.push(new step_1.Step([layer, child], false));
+                        result.push(new step_1.StepElement([layer, child], false));
                     }
                     else {
-                        result.push(new step_1.Step(child, false));
+                        result.push(new step_1.StepElement(child, false));
                     }
                 }
             }
         }
         else if (this.mode === 'layer' || this.mode === 'group') {
             for (const layer of layers) {
-                result.push(new step_1.Step(layer, false));
+                result.push(new step_1.StepElement(layer, false));
             }
         }
         return result;
@@ -111,7 +111,7 @@ class ClozeSelector extends Selector {
         const clozeGElements = [];
         for (const group of groups) {
             if (group.style.fill === 'rgb(0, 0, 255)') {
-                clozeGElements.push(new step_1.Step(group));
+                clozeGElements.push(new step_1.StepElement(group));
             }
         }
         return clozeGElements;

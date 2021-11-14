@@ -2,7 +2,7 @@
 // <- const { JSDOM } = require('jsdom')
 // <- const DOMParser = new JSDOM().window.DOMParser
 
-import { HTMLSVGElement, Step } from './step'
+import { HTMLSVGElement, StepElement } from './step'
 
 abstract class Selector {
   rootElement: ParentNode
@@ -37,7 +37,7 @@ abstract class Selector {
     }
   }
 
-  abstract select (): Step[]
+  abstract select (): StepElement[]
 
   count (): number {
     // Assumes that all elements are hidden for the first step.
@@ -53,13 +53,13 @@ export class ElementSelector extends Selector {
     this.selectors = selectors
   }
 
-  select (): Step[] {
-    const result: Step[] = []
+  select (): StepElement[] {
+    const result: StepElement[] = []
     const nodeList = this.rootElement.querySelectorAll<HTMLSVGElement>(
       this.selectors
     )
     for (const element of nodeList) {
-      result.push(new Step(element, true))
+      result.push(new StepElement(element, true))
     }
     return result
   }
@@ -94,7 +94,7 @@ export class InkscapeSelector extends Selector {
     return result
   }
 
-  select (): Step[] {
+  select (): StepElement[] {
     const layers = this.getLayerElements(this.rootElement, this.mode)
     const result = []
     if (this.mode === 'layer+') {
@@ -106,15 +106,15 @@ export class InkscapeSelector extends Selector {
           }
           const child = c as HTMLSVGElement
           if (index === 0) {
-            result.push(new Step([layer, child], false))
+            result.push(new StepElement([layer, child], false))
           } else {
-            result.push(new Step(child, false))
+            result.push(new StepElement(child, false))
           }
         }
       }
     } else if (this.mode === 'layer' || this.mode === 'group') {
       for (const layer of layers) {
-        result.push(new Step(layer, false))
+        result.push(new StepElement(layer, false))
       }
     }
     return result
@@ -122,12 +122,12 @@ export class InkscapeSelector extends Selector {
 }
 
 export class ClozeSelector extends Selector {
-  select (): Step[] {
+  select (): StepElement[] {
     const groups = this.rootElement.querySelectorAll<SVGElement>('svg g')
     const clozeGElements = []
     for (const group of groups) {
       if (group.style.fill === 'rgb(0, 0, 255)') {
-        clozeGElements.push(new Step(group))
+        clozeGElements.push(new StepElement(group))
       }
     }
     return clozeGElements

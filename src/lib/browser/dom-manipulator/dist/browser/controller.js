@@ -2,7 +2,7 @@ import { buildSubsetIndexes } from '@bldr/core-browser';
 /**
  * Generate steps by hiding and showing some DOM elements.
  */
-export class Controller {
+export class StepController {
     constructor(steps, subsetSpecifier) {
         this.steps = steps;
         if (subsetSpecifier != null) {
@@ -10,9 +10,9 @@ export class Controller {
         }
     }
     /**
-     * The number of steps
+     * The number of steps is one greater then the number of step objects.
      */
-    get count() {
+    get stepCount() {
         if (this.subsetIndexes != null) {
             return this.subsetIndexes.length + 1;
         }
@@ -48,8 +48,8 @@ export class Controller {
         return this.steps[index];
     }
     /**
-     * Set the display / visiblilty state on HTML elements. On the first step no
-     * elements are displayed. The number of steps is: number of elements + 1.
+     * Show all elements up to and including the element with the number
+     * `stepNummer`. The number of steps is: number of elements + 1.
      *
      * @param stepNumber - A consecutive number from 1 (all step elements are
      *   hidden) to step element count + 1.
@@ -57,14 +57,14 @@ export class Controller {
      * @returns The element that is displayed by the new step number.
      */
     showUpTo(stepNumber) {
-        let currentElement;
-        for (let index = 0; index < this.count - 1; index++) {
+        let currentStep;
+        for (let index = 0; index < this.stepCount - 1; index++) {
             const step = this.getStep(index);
-            step.setState(stepNumber > index + 1);
+            step.setVisibilityStatus(stepNumber > index + 1);
             if (stepNumber === index + 2) {
-                currentElement = step.htmlElement;
+                currentStep = step;
             }
         }
-        return currentElement;
+        return currentStep;
     }
 }

@@ -1,11 +1,12 @@
 export declare type HTMLSVGElement = SVGElement | HTMLElement;
 /**
- * A wrapper class for a HTML element to be able to hide and show easily some
- * HTML elements.
+ * A wrapper class around a HTML or a SVG element to be able to hide and show
+ * this element very easily.
  */
-export declare class Step {
+export declare class StepElement {
     htmlElements: HTMLSVGElement[];
     private readonly useVisiblilty;
+    isVisible: boolean;
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.
@@ -18,7 +19,7 @@ export declare class Step {
      */
     get htmlElement(): HTMLSVGElement;
     get text(): string | undefined;
-    setState(isVisible: boolean): void;
+    setVisibilityStatus(show: boolean): void;
     show(): void;
     hide(): void;
 }

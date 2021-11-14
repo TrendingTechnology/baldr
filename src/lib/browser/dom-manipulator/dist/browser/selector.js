@@ -1,7 +1,7 @@
 // Do not remove this lines. The comments are removed by the build script.
 // <- const { JSDOM } = require('jsdom')
 // <- const DOMParser = new JSDOM().window.DOMParser
-import { Step } from './step';
+import { StepElement } from './step';
 class Selector {
     constructor(entry) {
         if (typeof entry === 'string') {
@@ -46,7 +46,7 @@ export class ElementSelector extends Selector {
         const result = [];
         const nodeList = this.rootElement.querySelectorAll(this.selectors);
         for (const element of nodeList) {
-            result.push(new Step(element, true));
+            result.push(new StepElement(element, true));
         }
         return result;
     }
@@ -84,17 +84,17 @@ export class InkscapeSelector extends Selector {
                     }
                     const child = c;
                     if (index === 0) {
-                        result.push(new Step([layer, child], false));
+                        result.push(new StepElement([layer, child], false));
                     }
                     else {
-                        result.push(new Step(child, false));
+                        result.push(new StepElement(child, false));
                     }
                 }
             }
         }
         else if (this.mode === 'layer' || this.mode === 'group') {
             for (const layer of layers) {
-                result.push(new Step(layer, false));
+                result.push(new StepElement(layer, false));
             }
         }
         return result;
@@ -106,7 +106,7 @@ export class ClozeSelector extends Selector {
         const clozeGElements = [];
         for (const group of groups) {
             if (group.style.fill === 'rgb(0, 0, 255)') {
-                clozeGElements.push(new Step(group));
+                clozeGElements.push(new StepElement(group));
             }
         }
         return clozeGElements;

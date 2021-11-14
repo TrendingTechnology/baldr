@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Step = void 0;
+exports.StepElement = void 0;
 /**
- * A wrapper class for a HTML element to be able to hide and show easily some
- * HTML elements.
+ * A wrapper class around a HTML or a SVG element to be able to hide and show
+ * this element very easily.
  */
-class Step {
+class StepElement {
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.
@@ -13,6 +13,7 @@ class Step {
      *   `element.style.visibility` instead of the display state.
      */
     constructor(elements, useVisiblilty = false) {
+        this.isVisible = true;
         if (Array.isArray(elements)) {
             this.htmlElements = elements;
         }
@@ -32,9 +33,13 @@ class Step {
             return this.htmlElement.textContent;
         }
     }
-    setState(isVisible) {
+    setVisibilityStatus(show) {
+        if (this.isVisible === show) {
+            return;
+        }
+        this.isVisible = show;
         for (const element of this.htmlElements) {
-            if (isVisible) {
+            if (show) {
                 if (this.useVisiblilty) {
                     element.style.visibility = 'visible';
                 }
@@ -53,10 +58,10 @@ class Step {
         }
     }
     show() {
-        this.setState(true);
+        this.setVisibilityStatus(true);
     }
     hide() {
-        this.setState(false);
+        this.setVisibilityStatus(false);
     }
 }
-exports.Step = Step;
+exports.StepElement = StepElement;
