@@ -1,6 +1,4 @@
-// Do not remove this lines. The comments are removed by the build script.
-// <- const { JSDOM } = require('jsdom')
-// <- const DOMParser = new JSDOM().window.DOMParser
+import { DOMParserU } from '@bldr/universal-dom';
 import { StepElement } from './step';
 class Selector {
     constructor(entry) {
@@ -25,7 +23,7 @@ class Selector {
             if (entry.indexOf('<?xml') === 0) {
                 type = 'image/svg+xml';
             }
-            const dom = new DOMParser().parseFromString(entry, type);
+            const dom = new DOMParserU().parseFromString(entry, type);
             this.rootElement = dom.documentElement;
         }
         else {

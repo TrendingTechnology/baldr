@@ -1,9 +1,7 @@
 "use strict";
-// Do not remove this lines. The comments are removed by the build script.
-const { JSDOM } = require('jsdom')
-const DOMParser = new JSDOM().window.DOMParser
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClozeSelector = exports.InkscapeSelector = exports.ElementSelector = void 0;
+const universal_dom_1 = require("@bldr/universal-dom");
 const step_1 = require("./step");
 class Selector {
     constructor(entry) {
@@ -28,7 +26,7 @@ class Selector {
             if (entry.indexOf('<?xml') === 0) {
                 type = 'image/svg+xml';
             }
-            const dom = new DOMParser().parseFromString(entry, type);
+            const dom = new universal_dom_1.DOMParserU().parseFromString(entry, type);
             this.rootElement = dom.documentElement;
         }
         else {
