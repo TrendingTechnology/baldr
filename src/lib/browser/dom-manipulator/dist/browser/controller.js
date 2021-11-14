@@ -18,12 +18,26 @@ export class Controller {
         }
         return this.steps.length + 1;
     }
+    get subsetBeginIndex() {
+        if (this.subsetIndexes != null) {
+            return this.subsetIndexes[0];
+        }
+        return 0;
+    }
     /**
      * Hide all elements.
      */
     hideAll() {
         for (const step of this.steps) {
             step.hide();
+        }
+    }
+    hideFromSubsetBegin() {
+        for (let index = 0; index < this.subsetBeginIndex; index++) {
+            this.steps[index].show();
+        }
+        for (let index = this.subsetBeginIndex; index < this.steps.length; index++) {
+            this.steps[index].hide();
         }
     }
     getStep(indexFromZero) {
@@ -34,9 +48,8 @@ export class Controller {
         return this.steps[index];
     }
     /**
-     * Set the display / visiblilty state on HTML elements. Loop through all
-     * elements or perform a minimal update. On the first step no elements are
-     * displayed. The number of steps is: number of elements + 1.
+     * Set the display / visiblilty state on HTML elements. On the first step no
+     * elements are displayed. The number of steps is: number of elements + 1.
      *
      * @param stepNumber - A consecutive number from 1 (all step elements are
      *   hidden) to step element count + 1.

@@ -133,8 +133,12 @@ export default validateMasterSpec({
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight()
       this.stepController = instaniateStepController(this.$el, slide.props.stepSubset)
+      this.stepController.hideFromSubsetBegin()
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
+      if (newStepNo === 1) {
+        this.stepController.hideFromSubsetBegin()
+      }
       const newClozeGroup = this.stepController.showUpTo(newStepNo)
       // <div class="vc_slide_main">
       //   <div class="vc_master_renderer">
