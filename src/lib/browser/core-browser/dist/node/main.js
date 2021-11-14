@@ -111,10 +111,9 @@ function buildSubsetIndexes(specifier, elementCount, indexShift = -1) {
     const shiftedArray = [];
     for (const index of indexesArray) {
         const newIndex = index + indexShift;
-        if (newIndex < 0) {
-            throw new Error(`The index must be greater than 0: ${newIndex} (specifier: “${specifier}”, element count: ${elementCount}, index shift: ${indexShift})`);
+        if (newIndex >= 0) {
+            shiftedArray.push(newIndex);
         }
-        shiftedArray.push(newIndex);
     }
     return shiftedArray;
 }

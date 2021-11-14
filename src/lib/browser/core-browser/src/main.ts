@@ -79,7 +79,9 @@ class SubsetRange {
 
 function parseSubsetSpecifier (specifier: string): SubsetRange[] {
   if (specifier.match(/[^\d\s,-]/) != null) {
-    throw new Error(`Only the following characters are allowed as subset specifiers: “0123456789-,” not “${specifier}”`)
+    throw new Error(
+      `Only the following characters are allowed as subset specifiers: “0123456789-,” not “${specifier}”`
+    )
   }
   specifier = specifier.replace(/\s*/g, '')
   // 1-3,5-7
@@ -138,12 +140,9 @@ export function buildSubsetIndexes (
   const shiftedArray: number[] = []
   for (const index of indexesArray) {
     const newIndex = index + indexShift
-    if (newIndex < 0) {
-      throw new Error(
-        `The index must be greater than 0: ${newIndex} (specifier: “${specifier}”, element count: ${elementCount}, index shift: ${indexShift})`
-      )
+    if (newIndex >= 0) {
+      shiftedArray.push(newIndex)
     }
-    shiftedArray.push(newIndex)
   }
   return shiftedArray
 }

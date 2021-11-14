@@ -5,19 +5,23 @@
 /* globals DOMParser */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import { ControllerNg, InkscapeSelector, ElementSelector } from '@/steps'
+import {
+  Controller,
+  InkscapeSelector,
+  ElementSelector
+} from '@bldr/dom-manipulator'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 
-function instaniateStepController(entry, props) {
+function instaniateStepController (entry, props) {
   let selector
   if (props.stepSelector != null) {
     selector = new ElementSelector(entry, props.stepSelector)
   } else {
     selector = new InkscapeSelector(entry, props.mode)
   }
-  return new ControllerNg(selector.select(), props.stepSubset)
+  return new Controller(selector.select(), props.stepSubset)
 }
 
 export default validateMasterSpec({
@@ -31,9 +35,10 @@ export default validateMasterSpec({
       assetUri: true
     },
     mode: {
-      description: 'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
+      description:
+        'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
       default: 'layer',
-      validate: (input) => {
+      validate: input => {
         return ['layer', 'layer+', 'group'].includes(input)
       }
     },
@@ -105,7 +110,6 @@ export default validateMasterSpec({
       }
     },
     calculateStepCount ({ props, master }) {
-      console.log(props)
       const svgString = master.$get('svgByUri')(props.src)
       const controller = instaniateStepController(svgString, props)
       return controller.count
@@ -115,7 +119,7 @@ export default validateMasterSpec({
       warnSvgWidthHeight(this.svgPath)
       this.stepController = instaniateStepController(this.$el, slide.props)
     },
-    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
+    afterStepNoChangeOnComponent ({ newStepNo }) {
       this.stepController.showUpTo(newStepNo)
     }
   }

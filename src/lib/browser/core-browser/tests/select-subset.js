@@ -140,16 +140,7 @@ describe('Function “buildSubsetIndexes()”', function () {
   })
 
   it('too large number for the index shift', function () {
-    assert.throws(
-      () => {
-        buildSubsetIndexes('1', 1, -2)
-      },
-      {
-        message:
-          'The index must be greater than 0: -1 (specifier: “1”, element count: 1, index shift: -2)',
-        name: 'Error'
-      }
-    )
+    assert.deepStrictEqual(buildSubsetIndexes('1', 1, -2), [])
   })
 
   it('Invalid characters', function () {
