@@ -1,1 +1,2 @@
-export declare function embedSvgInline(url: string, id: string): Promise<void>;
+export { InkscapeSelector, ElementSelector, ClozeSelector } from './selector';
+export { Controller } from './controller';

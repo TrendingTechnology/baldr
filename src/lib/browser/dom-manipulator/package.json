@@ -18,22 +18,25 @@
   },
   "scripts": {
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#// <- ##' ./dist/node/selector.js",
     "build": "npm run build:browser && npm run build:node",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "google-chrome --disable-web-security --user-data-dir=/tmp tests/index.html"
+    "test": "npm run build && mocha 'tests/*' && npm run lint "
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@bldr/core-browser": "*",
+    "jsdom": "18.1.0"
+  },
   "devDependencies": {
     "@types/mocha": "9.0.0",
-    "chai": "4.3.4",
     "depcheck": "1.4.2",
     "mocha": "9.1.3",
     "ts-standard": "10.0.0",

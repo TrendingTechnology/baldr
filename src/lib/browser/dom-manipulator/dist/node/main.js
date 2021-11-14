@@ -1,28 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.embedSvgInline = void 0;
-function embedSvgInline(url, id) {
-    return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        request.open('GET', url, false);
-        // Following line is just to be on the safe side;
-        // not needed if your server delivers SVG with correct MIME type
-        request.overrideMimeType('image/svg+xml');
-        request.onload = function (e) {
-            var _a;
-            if (request.readyState !== 4) {
-                reject(`Not ready ${url}`);
-            }
-            if (request.status !== 200) {
-                reject(`Failed to load ${url}`);
-            }
-            if (request.responseXML != null) {
-                (_a = document
-                    .getElementById(id)) === null || _a === void 0 ? void 0 : _a.appendChild(request.responseXML.documentElement);
-                resolve();
-            }
-        };
-        request.send('');
-    });
-}
-exports.embedSvgInline = embedSvgInline;
+exports.Controller = exports.ClozeSelector = exports.ElementSelector = exports.InkscapeSelector = void 0;
+var selector_1 = require("./selector");
+Object.defineProperty(exports, "InkscapeSelector", { enumerable: true, get: function () { return selector_1.InkscapeSelector; } });
+Object.defineProperty(exports, "ElementSelector", { enumerable: true, get: function () { return selector_1.ElementSelector; } });
+Object.defineProperty(exports, "ClozeSelector", { enumerable: true, get: function () { return selector_1.ClozeSelector; } });
+var controller_1 = require("./controller");
+Object.defineProperty(exports, "Controller", { enumerable: true, get: function () { return controller_1.Controller; } });
