@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DOMParserU = void 0;
+exports.documentU = exports.DOMParserU = void 0;
 const jsdom_1 = require("jsdom");
-const DOMParser = new jsdom_1.JSDOM().window.DOMParser;
+const window = new jsdom_1.JSDOM().window;
+const DOMParser = window.DOMParser;
 exports.DOMParserU = DOMParser;
+exports.documentU = window.document;
