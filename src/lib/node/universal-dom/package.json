@@ -30,11 +30,13 @@
     "jsdom": "18.1.0"
   },
   "devDependencies": {
+    "@bldr/config-ng": "*",
+    "@bldr/file-reader-writer": "*",
     "@types/jsdom": "16.2.13",
-    "ts-standard": "10.0.0",
-    "typescript": "4.4.4",
+    "depcheck": "1.4.2",
     "mocha": "9.1.3",
-    "depcheck": "1.4.2"
+    "ts-standard": "10.0.0",
+    "typescript": "4.4.4"
   },
   "browser": "dist/browser/browser-main.js",
   "main": "dist/node/node-main.js",
