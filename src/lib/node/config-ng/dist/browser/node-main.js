@@ -18,3 +18,10 @@ export function getConfig() {
     }
     return config;
 }
+export const joinPath = path.join;
+export function getMediaPath(...relPath) {
+    if (config == null) {
+        getConfig();
+    }
+    return path.join(config.mediaServer.basePath, ...relPath);
+}

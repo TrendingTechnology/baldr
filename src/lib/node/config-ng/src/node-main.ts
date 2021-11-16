@@ -24,3 +24,12 @@ export function getConfig (): Configuration {
 
   return config
 }
+
+export const joinPath = path.join
+
+export function getMediaPath (...relPath: string[]): string {
+  if (config == null) {
+    getConfig()
+  }
+  return path.join(config.mediaServer.basePath, ...relPath)
+}

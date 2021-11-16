@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClozeSelector = exports.InkscapeSelector = exports.ElementSelector = void 0;
+exports.WordSelector = exports.ClozeSelector = exports.InkscapeSelector = exports.ElementSelector = void 0;
 const universal_dom_1 = require("@bldr/universal-dom");
 const step_1 = require("./step");
 class Selector {
@@ -37,8 +37,16 @@ class Selector {
         // Assumes that all elements are hidden for the first step.
         return this.select().length + 1;
     }
+    createStep(...htmlElements) {
+        return new step_1.StepElement(htmlElements, true);
+    }
 }
 class ElementSelector extends Selector {
+    /**
+     * @param entry - A string that can be translated to a DOM using the DOMParser
+     *   or a HTML element as an entry to the DOM.
+     * @param selectors - A string to feed `document.querySelectorAll()`.
+     */
     constructor(entry, selectors) {
         super(entry);
         this.selectors = selectors;
@@ -47,7 +55,7 @@ class ElementSelector extends Selector {
         const result = [];
         const nodeList = this.rootElement.querySelectorAll(this.selectors);
         for (const element of nodeList) {
-            result.push(new step_1.StepElement(element, true));
+            result.push(this.createStep(element));
         }
         return result;
     }
@@ -116,3 +124,35 @@ class ClozeSelector extends Selector {
     }
 }
 exports.ClozeSelector = ClozeSelector;
+/**
+ * Select words which are surrounded by `span.word`.
+ */
+class WordSelector extends Selector {
+    select() {
+        const wordsRaw = this.rootElement.querySelectorAll('span.word');
+        const words = [];
+        for (const word of wordsRaw) {
+            if (word.previousSibling == null) {
+                const parent = word.parentElement;
+                if (parent != null && parent.tagName === 'LI') {
+                    if (parent.previousSibling == null && parent.parentElement != null) {
+                        // <ul><li><span class="word">lol</span><li></ul>
+                        words.push(new step_1.StepElement([parent.parentElement, parent, word], true));
+                    }
+                    else {
+                        // Avoid to get divs. Parent has to be LI
+                        words.push(new step_1.StepElement([parent, word], true));
+                    }
+                }
+                else {
+                    words.push(new step_1.StepElement(word, true));
+                }
+            }
+            else {
+                words.push(new step_1.StepElement(word, true));
+            }
+        }
+        return words;
+    }
+}
+exports.WordSelector = WordSelector;

@@ -5,3 +5,5 @@ export declare type Configuration = ConfigurationType;
  * generate its configuration object.
  */
 export declare function getConfig(): Configuration;
+export declare const joinPath: (...paths: string[]) => string;
+export declare function getMediaPath(...relPath: string[]): string;

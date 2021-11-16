@@ -34,8 +34,16 @@ class Selector {
         // Assumes that all elements are hidden for the first step.
         return this.select().length + 1;
     }
+    createStep(...htmlElements) {
+        return new StepElement(htmlElements, true);
+    }
 }
 export class ElementSelector extends Selector {
+    /**
+     * @param entry - A string that can be translated to a DOM using the DOMParser
+     *   or a HTML element as an entry to the DOM.
+     * @param selectors - A string to feed `document.querySelectorAll()`.
+     */
     constructor(entry, selectors) {
         super(entry);
         this.selectors = selectors;
@@ -44,7 +52,7 @@ export class ElementSelector extends Selector {
         const result = [];
         const nodeList = this.rootElement.querySelectorAll(this.selectors);
         for (const element of nodeList) {
-            result.push(new StepElement(element, true));
+            result.push(this.createStep(element));
         }
         return result;
     }
@@ -108,5 +116,36 @@ export class ClozeSelector extends Selector {
             }
         }
         return clozeGElements;
+    }
+}
+/**
+ * Select words which are surrounded by `span.word`.
+ */
+export class WordSelector extends Selector {
+    select() {
+        const wordsRaw = this.rootElement.querySelectorAll('span.word');
+        const words = [];
+        for (const word of wordsRaw) {
+            if (word.previousSibling == null) {
+                const parent = word.parentElement;
+                if (parent != null && parent.tagName === 'LI') {
+                    if (parent.previousSibling == null && parent.parentElement != null) {
+                        // <ul><li><span class="word">lol</span><li></ul>
+                        words.push(new StepElement([parent.parentElement, parent, word], true));
+                    }
+                    else {
+                        // Avoid to get divs. Parent has to be LI
+                        words.push(new StepElement([parent, word], true));
+                    }
+                }
+                else {
+                    words.push(new StepElement(word, true));
+                }
+            }
+            else {
+                words.push(new StepElement(word, true));
+            }
+        }
+        return words;
     }
 }

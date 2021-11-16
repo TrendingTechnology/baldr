@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getConfig = void 0;
+exports.getMediaPath = exports.joinPath = exports.getConfig = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 let config;
@@ -25,3 +25,11 @@ function getConfig() {
     return config;
 }
 exports.getConfig = getConfig;
+exports.joinPath = path_1.default.join;
+function getMediaPath(...relPath) {
+    if (config == null) {
+        getConfig();
+    }
+    return path_1.default.join(config.mediaServer.basePath, ...relPath);
+}
+exports.getMediaPath = getMediaPath;

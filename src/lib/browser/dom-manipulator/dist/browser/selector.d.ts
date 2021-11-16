@@ -4,9 +4,15 @@ declare abstract class Selector {
     constructor(entry: string | HTMLSVGElement);
     abstract select(): StepElement[];
     count(): number;
+    protected createStep(...htmlElements: HTMLSVGElement[]): StepElement;
 }
 export declare class ElementSelector extends Selector {
     private readonly selectors;
+    /**
+     * @param entry - A string that can be translated to a DOM using the DOMParser
+     *   or a HTML element as an entry to the DOM.
+     * @param selectors - A string to feed `document.querySelectorAll()`.
+     */
     constructor(entry: string | HTMLSVGElement, selectors: string);
     select(): StepElement[];
 }
@@ -18,6 +24,12 @@ export declare class InkscapeSelector extends Selector {
     select(): StepElement[];
 }
 export declare class ClozeSelector extends Selector {
+    select(): StepElement[];
+}
+/**
+ * Select words which are surrounded by `span.word`.
+ */
+export declare class WordSelector extends Selector {
     select(): StepElement[];
 }
 export {};
