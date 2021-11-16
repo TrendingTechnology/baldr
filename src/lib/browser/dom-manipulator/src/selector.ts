@@ -45,6 +45,16 @@ abstract class Selector {
   protected createStep (...htmlElements: HTMLSVGElement[]): StepElement {
     return new StepElement(htmlElements, true)
   }
+
+  public static collectStepTexts (steps: StepElement[]): string[] {
+    const result: string[] = []
+    for (const step of steps) {
+      if (step.text != null) {
+        result.push(step.text)
+      }
+    }
+    return result
+  }
 }
 
 export class ElementSelector extends Selector {

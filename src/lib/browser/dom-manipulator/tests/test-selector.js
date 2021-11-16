@@ -5,8 +5,11 @@ const assert = require('assert')
 const {
   ElementSelector,
   InkscapeSelector,
-  ClozeSelector
+  ClozeSelector,
+  WordSelector
 } = require('../dist/node/selector.js')
+
+const { wrapWords } = require('../dist/node/manipulation.js')
 const { readFile } = require('@bldr/file-reader-writer')
 const { getMediaPath } = require('@bldr/config')
 
@@ -69,5 +72,22 @@ describe('Class “ClozeSelector()”', function () {
     )
     const selector = new ClozeSelector(svgString)
     assert.strictEqual(selector.count(), 23)
+  })
+})
+
+describe('Class “WordSelector()”', function () {
+  it('h1 ul li', function () {
+    const markup = wrapWords(
+      '<h1>heading</h1><ul><li>one</li><li>two</li><li>three</li></ul>'
+    )
+    const selector = new WordSelector(markup)
+    const steps = selector.select()
+    assert.strictEqual(selector.count(), 5)
+    assert.deepStrictEqual(WordSelector.collectStepTexts(steps), [
+      'heading',
+      'one',
+      'two',
+      'three'
+    ])
   })
 })

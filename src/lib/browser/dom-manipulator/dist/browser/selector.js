@@ -37,6 +37,15 @@ class Selector {
     createStep(...htmlElements) {
         return new StepElement(htmlElements, true);
     }
+    static collectStepTexts(steps) {
+        const result = [];
+        for (const step of steps) {
+            if (step.text != null) {
+                result.push(step.text);
+            }
+        }
+        return result;
+    }
 }
 export class ElementSelector extends Selector {
     /**

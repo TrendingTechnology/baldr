@@ -5,6 +5,7 @@ declare abstract class Selector {
     abstract select(): StepElement[];
     count(): number;
     protected createStep(...htmlElements: HTMLSVGElement[]): StepElement;
+    static collectStepTexts(steps: StepElement[]): string[];
 }
 export declare class ElementSelector extends Selector {
     private readonly selectors;

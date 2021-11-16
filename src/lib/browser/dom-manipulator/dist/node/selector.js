@@ -40,6 +40,15 @@ class Selector {
     createStep(...htmlElements) {
         return new step_1.StepElement(htmlElements, true);
     }
+    static collectStepTexts(steps) {
+        const result = [];
+        for (const step of steps) {
+            if (step.text != null) {
+                result.push(step.text);
+            }
+        }
+        return result;
+    }
 }
 class ElementSelector extends Selector {
     /**
