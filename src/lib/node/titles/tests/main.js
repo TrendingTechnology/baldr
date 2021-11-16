@@ -4,7 +4,7 @@ const path = require('path')
 const { DeepTitle } = require('../dist/node/deep-title.js')
 const { TreeFactory } = require('../dist/node/tree-factory.js')
 
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
 

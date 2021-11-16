@@ -2,7 +2,7 @@ import Sqlite3, { Database } from 'better-sqlite3'
 import * as crypto from 'crypto'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

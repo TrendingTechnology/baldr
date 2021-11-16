@@ -5,7 +5,7 @@ import {
   MediaCategoriesTypes,
   MediaResolverTypes
 } from '@bldr/type-definitions'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 interface InstrumentCategory extends MediaCategoriesTypes.Category {

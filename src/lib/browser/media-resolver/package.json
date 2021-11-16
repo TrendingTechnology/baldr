@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@bldr/client-media-models": "*",
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
     "@bldr/type-definitions": "*"

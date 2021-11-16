@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { walk } = require('../dist/node/directory-tree-walk')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 function getPath (relPath) {

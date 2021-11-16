@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = config_ng_1.getConfig();
 /**
  * Serve a Vue web app.

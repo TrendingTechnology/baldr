@@ -6,7 +6,7 @@ const fs = require('fs')
 
 const { collectAudioMetadata, extractCoverImage } = require('../dist/node/main.js')
 const { createTmpDir } = require('@bldr/core-node')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 function getPath (relPath) {

@@ -11,7 +11,7 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
 import { assetCache, ClientMediaAsset } from './internal';
-import { getConfig } from '@bldr/config-ng';
+import { getConfig } from '@bldr/config';
 const config = getConfig();
 export const httpRequest = makeHttpRequestInstance(config, 'automatic', '/api/media');
 /**

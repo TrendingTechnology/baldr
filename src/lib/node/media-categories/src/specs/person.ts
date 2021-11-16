@@ -5,7 +5,7 @@ import {
   MediaResolverTypes
 } from '@bldr/type-definitions'
 import { referencify } from '@bldr/core-browser'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

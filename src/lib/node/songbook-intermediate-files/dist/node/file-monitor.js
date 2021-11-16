@@ -27,7 +27,7 @@ const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
 const crypto = __importStar(require("crypto"));
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = config_ng_1.getConfig();
 /**
  * Sqlite database wrapper to store file contents hashes to detect

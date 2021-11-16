@@ -4,7 +4,7 @@ const path = require('path')
 
 const { DOMParserU, documentU } = require('../dist/node/node-main.js')
 const { readFile } = require('@bldr/file-reader-writer')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 describe('Package “@bldr/universal-dom”', function () {

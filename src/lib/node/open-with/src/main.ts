@@ -11,7 +11,7 @@ import fs from 'fs'
 import { StringIndexedObject } from '@bldr/type-definitions'
 
 // Project packages.
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

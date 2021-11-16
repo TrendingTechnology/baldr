@@ -30,7 +30,7 @@
   "main": "dist/node/main.js",
   "dependencies": {
     "@bldr/client-media-models": "*",
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/http-request": "*"
   },
   "devDependencies": {

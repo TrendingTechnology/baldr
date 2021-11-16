@@ -23,7 +23,7 @@ import {
 import { DeepTitle } from '@bldr/titles'
 import { categories } from './specs'
 import { checkTypeAbbreviations } from './two-letter-abbreviations'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

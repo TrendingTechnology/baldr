@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
 const config = config_ng_1.getConfig();

@@ -6,7 +6,7 @@
 
 import { Configuration } from '@bldr/type-definitions'
 
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

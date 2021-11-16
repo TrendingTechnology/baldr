@@ -30,7 +30,7 @@
     "jsdom": "18.1.0"
   },
   "devDependencies": {
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/file-reader-writer": "*",
     "@types/jsdom": "16.2.13",
     "depcheck": "1.4.2",

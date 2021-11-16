@@ -36,7 +36,7 @@
     "@bldr/universal-dom": "*"
   },
   "devDependencies": {
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/file-reader-writer": "*",
     "@types/mocha": "9.0.0",
     "depcheck": "1.4.2",

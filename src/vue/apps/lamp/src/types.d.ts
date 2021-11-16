@@ -1,6 +1,6 @@
 import Vue, { VNode } from 'vue'
 
-import { Configuration } from '@bldr/config-ng'
+import { Configuration } from '@bldr/config'
 
 /**
  * YAML files inside the folder

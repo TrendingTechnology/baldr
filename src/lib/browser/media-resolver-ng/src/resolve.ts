@@ -1,5 +1,5 @@
 import * as api from '@bldr/api-wrapper'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'

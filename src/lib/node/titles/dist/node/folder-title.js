@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FolderTitle = void 0;
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = config_ng_1.getConfig();
 class FolderTitle {
     /**

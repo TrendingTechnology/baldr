@@ -4,7 +4,7 @@ import {
   IntermediateLibrary,
   GenerationMode
 } from '@bldr/songbook-intermediate-files'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

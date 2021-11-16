@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { getConfig } from '@bldr/config-ng';
+import { getConfig } from '@bldr/config';
 import { makeHttpRequestInstance } from '@bldr/http-request';
 import { MediaUri } from '@bldr/client-media-models';
 const config = getConfig();

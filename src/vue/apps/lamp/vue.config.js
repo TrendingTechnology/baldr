@@ -9,7 +9,7 @@ const { DefinePlugin } = require('webpack')
 const { gitHead } = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 function stylePath (themeName) {

@@ -8,7 +8,7 @@ const {
   InkscapeSelector
 } = require('../dist/node/selector.js')
 const { readFile } = require('@bldr/file-reader-writer')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 function readMediaFile (relPath) {

@@ -38,6 +38,6 @@
   "devDependencies": {
     "@bldr/type-definitions": "*",
     "@bldr/core-node" : "*",
-    "@bldr/config-ng": "*"
+    "@bldr/config": "*"
   }
 }

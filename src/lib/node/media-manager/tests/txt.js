@@ -10,7 +10,7 @@ const {
 
 const { operations } = require('../dist/node/operations.js')
 
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 function getPath (relPath) {

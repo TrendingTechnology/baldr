@@ -71,7 +71,7 @@ import cors from 'cors'
 import express from 'express'
 
 // Project packages.
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 

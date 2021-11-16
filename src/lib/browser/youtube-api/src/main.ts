@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

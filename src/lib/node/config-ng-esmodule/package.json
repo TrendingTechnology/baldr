@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/config-ng-esmodule",
+  "name": "@bldr/config-esmodule",
   "version": "0.1.0",
   "description": "Load the configuration file /etc/baldr.json (node) or provide typings (browser)",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",

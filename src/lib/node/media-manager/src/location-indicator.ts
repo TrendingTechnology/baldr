@@ -9,7 +9,7 @@ import fs from 'fs'
 // Project packages.
 
 import { untildify, findParentFile } from '@bldr/core-node'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

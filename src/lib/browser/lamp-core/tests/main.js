@@ -1,7 +1,7 @@
 import path from 'path'
 
 import { readFile } from '@bldr/core-node'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

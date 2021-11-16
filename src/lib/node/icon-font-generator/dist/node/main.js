@@ -46,7 +46,7 @@ const cli_utils_1 = require("@bldr/cli-utils");
 const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = (0, config_ng_1.getConfig)();
 const cmd = new cli_utils_1.CommandRunner();
 /**

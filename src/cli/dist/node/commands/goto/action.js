@@ -28,7 +28,7 @@ const fs_1 = __importDefault(require("fs"));
 const media_manager_1 = require("@bldr/media-manager");
 const open_with_1 = require("@bldr/open-with");
 const log = __importStar(require("@bldr/log"));
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = config_ng_1.getConfig();
 function openShell(filePath) {
     child_process_1.default.spawn('zsh', ['-i'], {

@@ -1,7 +1,7 @@
 import { stripCategories, twoLetterAbbreviations } from '@bldr/media-categories'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

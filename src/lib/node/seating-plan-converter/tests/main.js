@@ -3,7 +3,7 @@
 const assert = require('assert')
 
 const { convertNotenmanagerMdbToJson } = require('../dist/node/main.js')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
 describe('Package “@bldr/seating-plan-converter”', function () {

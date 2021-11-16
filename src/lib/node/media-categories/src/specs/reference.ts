@@ -4,7 +4,7 @@ import { getPdfPageCount } from '@bldr/core-node'
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
 import { getBasename } from '@bldr/core-node'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

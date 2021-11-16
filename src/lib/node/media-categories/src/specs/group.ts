@@ -4,7 +4,7 @@ import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-defini
 import { referencify } from '@bldr/core-browser'
 
 import { validateDate } from '../main'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 import { locationIndicator } from '@bldr/media-manager'
 import { openWith, openInFileManager } from '@bldr/open-with'
 import { StringIndexedObject } from '@bldr/type-definitions'

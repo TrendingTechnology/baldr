@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 // Project packages.
 const log = __importStar(require("@bldr/log"));
 const songbook_intermediate_files_1 = require("@bldr/songbook-intermediate-files");
-const config_ng_1 = require("@bldr/config-ng");
+const config_ng_1 = require("@bldr/config");
 const config = config_ng_1.getConfig();
 /**
  * @param cmdObj - An object containing options as key-value pairs.

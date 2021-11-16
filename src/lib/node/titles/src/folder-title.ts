@@ -1,4 +1,4 @@
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 import type { TitlesTypes } from '@bldr/type-definitions'
 

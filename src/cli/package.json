@@ -32,7 +32,7 @@
     "@bldr/api-wrapper": "*",
     "@bldr/audio-metadata": "*",
     "@bldr/cli-utils": "*",
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",

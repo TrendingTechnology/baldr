@@ -6,7 +6,7 @@ import fs from 'fs'
 import { locationIndicator } from '@bldr/media-manager'
 import { openInFileManager } from '@bldr/open-with'
 import * as log from '@bldr/log'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

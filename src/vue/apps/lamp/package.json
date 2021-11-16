@@ -20,7 +20,7 @@
   "dependencies": {
     "@bldr/client-media-models": "*",
     "@bldr/components-collection": "*",
-    "@bldr/config-ng": "*",
+    "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/dom-manipulator": "*",
     "@bldr/dynamic-select": "*",

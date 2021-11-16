@@ -14,7 +14,7 @@
 import WebSocket from 'ws'
 
 // Globals.
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

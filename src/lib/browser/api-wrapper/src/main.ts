@@ -1,5 +1,5 @@
 import { ApiTypes } from '@bldr/type-definitions'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { MediaUri } from '@bldr/client-media-models'
 

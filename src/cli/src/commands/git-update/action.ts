@@ -1,6 +1,6 @@
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

@@ -44,7 +44,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = exports.getDatabaseWrapper = exports.connectDb = exports.MongoDbClient = void 0;
 var mongodb_1 = __importDefault(require("mongodb"));
-var config_ng_1 = require("@bldr/config-ng");
+var config_ng_1 = require("@bldr/config");
 var config = config_ng_1.getConfig();
 var MongoDbClient = /** @class */ (function () {
     function MongoDbClient() {

@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import axios from 'axios';
-import { getConfig } from '@bldr/config-ng';
+import { getConfig } from '@bldr/config';
 const config = getConfig();
 export function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {

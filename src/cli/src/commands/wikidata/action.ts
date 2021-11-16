@@ -8,7 +8,7 @@ import { MediaResolverTypes } from '@bldr/type-definitions'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
 import { writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

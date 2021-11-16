@@ -9,7 +9,7 @@ const { DefinePlugin } = require('webpack')
 // Project packages.
 const { gitHead } = require('@bldr/core-node')
 
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))

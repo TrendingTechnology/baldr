@@ -1,7 +1,7 @@
 /* globals describe it */
 const assert = require('assert')
 
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 const {

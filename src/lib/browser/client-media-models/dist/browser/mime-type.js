@@ -3,7 +3,7 @@
  *
  * @module @bldr/client-media-models/mime-type
  */
-import { getConfig } from '@bldr/config-ng';
+import { getConfig } from '@bldr/config';
 const config = getConfig();
 /**
  * Classifies some media asset file formats in this categories:

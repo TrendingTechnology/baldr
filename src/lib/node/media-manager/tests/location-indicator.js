@@ -3,7 +3,7 @@ const assert = require('assert')
 const path = require('path')
 
 const { locationIndicator } = require('../dist/node/location-indicator')
-const { getConfig } = require('@bldr/config-ng')
+const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 const testRelPath =

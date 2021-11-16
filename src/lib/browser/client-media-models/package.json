@@ -29,7 +29,7 @@
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "dependencies": {
-    "@bldr/config-ng": "*"
+    "@bldr/config": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

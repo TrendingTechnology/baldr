@@ -124,7 +124,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 // Project packages.
-var config_ng_1 = require("@bldr/config-ng");
+var config_ng_1 = require("@bldr/config");
 var core_browser_1 = require("@bldr/core-browser");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");

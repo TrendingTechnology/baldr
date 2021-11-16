@@ -12,7 +12,7 @@ import csv from 'csv-parser'
 import { CommandRunner } from '@bldr/cli-utils'
 import { writeFile } from '@bldr/file-reader-writer'
 import { getFormatedSchoolYear } from '@bldr/core-browser'
-import { getConfig } from '@bldr/config-ng'
+import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 
