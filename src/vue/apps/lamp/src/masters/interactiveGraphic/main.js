@@ -5,9 +5,7 @@
 /* globals DOMParser */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import {
-  buildSvgStepController
-} from '@bldr/dom-manipulator'
+import { buildSvgStepController } from '@bldr/dom-manipulator'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'

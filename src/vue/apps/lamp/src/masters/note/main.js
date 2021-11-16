@@ -6,7 +6,7 @@ import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
-import * as steps from '@/steps'
+import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 function scroll (element) {
   if (!element) return
@@ -87,37 +87,32 @@ export default validateMasterSpec({
         const segments = props.markup.split('<hr>')
         const prolog = segments.shift()
         let body = segments.join('<hr>')
-        body = '<span class="word-area">' + steps.wrapWords(body) + '</span>'
+        body = '<span class="word-area">' + wrapWords(body) + '</span>'
         props.markup = [prolog, body].join('')
-      // No hr tag provided
-      // Step through all words
+        // No hr tag provided
+        // Step through all words
       } else {
-        props.markup = steps.wrapWords(props.markup)
+        props.markup = wrapWords(props.markup)
       }
       return props
     },
     calculateStepCount ({ props }) {
-      return steps.generateSlideStepsFromText(props.markup, { stepMode: 'words' })
+      return buildTextStepController(props.markup, { stepMode: 'words' })
+        .stepCount
     },
     plainTextFromProps (props) {
       return convertHtmlToPlainText(props.markup)
     },
     afterSlideNoChangeOnComponent () {
-      this.domSteps = new steps.DomStepController({
-        mode: 'words',
-        rootElement: this.$el,
-        hideAllElementsInitally: true
+      this.stepController = buildTextStepController(this.$el, {
+        stepMode: 'words'
       })
     },
-    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      const options = { stepNo: newStepNo }
-      if (slideNoChange) {
-        options.full = true
-      } else {
-        options.oldStepNo = oldStepNo
+    afterStepNoChangeOnComponent ({ newStepNo }) {
+      const step = this.stepController.showUpTo(newStepNo)
+      if (step != null) {
+        scroll(step.htmlElement)
       }
-      const element = this.domSteps.displayByNo(options)
-      scroll(element)
     }
   }
 })

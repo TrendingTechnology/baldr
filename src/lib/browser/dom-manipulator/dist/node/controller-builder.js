@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildSvgStepController = exports.buildClozeStepController = void 0;
+exports.buildTextStepController = exports.buildSvgStepController = exports.buildClozeStepController = void 0;
 const selector_1 = require("./selector");
 const controller_1 = require("./controller");
 function buildClozeStepController(entry, stepSubset) {
@@ -19,3 +19,17 @@ function buildSvgStepController(entry, fields) {
     return new controller_1.StepController(selector.select(), fields.stepSubset);
 }
 exports.buildSvgStepController = buildSvgStepController;
+function buildTextStepController(entry, fields) {
+    let selector;
+    if (fields.stepMode == null) {
+        fields.stepMode = 'words';
+    }
+    if (fields.stepMode === 'words') {
+        selector = new selector_1.WordSelector(entry);
+    }
+    else {
+        selector = new selector_1.SentenceSelector(entry);
+    }
+    return new controller_1.StepController(selector.select(), fields.stepSubset);
+}
+exports.buildTextStepController = buildTextStepController;

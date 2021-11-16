@@ -2,6 +2,8 @@ import {
   ClozeSelector,
   ElementSelector,
   InkscapeSelector,
+  WordSelector,
+  SentenceSelector,
   DomEntry,
   InkscapeMode
 } from './selector'
@@ -31,6 +33,27 @@ export function buildSvgStepController (
     selector = new ElementSelector(entry, fields.stepSelector)
   } else {
     selector = new InkscapeSelector(entry, fields.mode)
+  }
+  return new StepController(selector.select(), fields.stepSubset)
+}
+
+interface TextFields {
+  stepMode?: 'words' | 'sentences'
+  stepSubset?: string
+}
+
+export function buildTextStepController (
+  entry: DomEntry,
+  fields: TextFields
+): StepController {
+  let selector
+  if (fields.stepMode == null) {
+    fields.stepMode = 'words'
+  }
+  if (fields.stepMode === 'words') {
+    selector = new WordSelector(entry)
+  } else {
+    selector = new SentenceSelector(entry)
   }
   return new StepController(selector.select(), fields.stepSubset)
 }
