@@ -12,7 +12,7 @@ class StepElement {
      * @property useVisiblilty - Set the visibility
      *   `element.style.visibility` instead of the display state.
      */
-    constructor(elements, useVisiblilty = false) {
+    constructor(elements) {
         this.isVisible = true;
         if (Array.isArray(elements)) {
             this.htmlElements = elements;
@@ -20,7 +20,6 @@ class StepElement {
         else {
             this.htmlElements = [elements];
         }
-        this.useVisiblilty = useVisiblilty;
     }
     /**
      * The last HTML element.
@@ -40,20 +39,10 @@ class StepElement {
         this.isVisible = show;
         for (const element of this.htmlElements) {
             if (show) {
-                if (this.useVisiblilty) {
-                    element.style.visibility = 'visible';
-                }
-                else {
-                    element.style.display = 'block';
-                }
+                element.style.visibility = 'visible';
             }
             else {
-                if (this.useVisiblilty) {
-                    element.style.visibility = 'hidden';
-                }
-                else {
-                    element.style.display = 'none';
-                }
+                element.style.visibility = 'hidden';
             }
         }
     }

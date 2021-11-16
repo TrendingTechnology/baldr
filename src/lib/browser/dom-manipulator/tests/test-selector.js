@@ -78,17 +78,28 @@ describe('Class “ClozeSelector()”', function () {
 describe('Class “WordSelector()”', function () {
   it('h1 ul li', function () {
     const markup = wrapWords(
-      '<h1>heading</h1><ul><li>one</li><li>two</li><li>three</li></ul>'
+      '<h1>heading</h1><ul><li>one</li><li>two</li><li>three four</li></ul>'
     )
     const selector = new WordSelector(markup)
     const steps = selector.select()
-    assert.strictEqual(selector.count(), 5)
+    assert.strictEqual(selector.count(), 6)
     assert.deepStrictEqual(WordSelector.collectStepTexts(steps), [
       'heading',
       'one',
       'two',
-      'three'
+      'three',
+      'four'
     ])
+    // heading
+    assert.strictEqual(steps[0].htmlElements.length, 1)
+    // one
+    assert.strictEqual(steps[1].htmlElements.length, 3)
+    // two
+    assert.strictEqual(steps[2].htmlElements.length, 2)
+    // three
+    assert.strictEqual(steps[3].htmlElements.length, 2)
+    // four
+    assert.strictEqual(steps[4].htmlElements.length, 1)
   })
 
   it('note heading underline', function () {

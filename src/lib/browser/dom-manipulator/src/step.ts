@@ -6,7 +6,6 @@ export type HTMLSVGElement = SVGElement | HTMLElement
  */
 export class StepElement {
   htmlElements: HTMLSVGElement[]
-  private readonly useVisiblilty: boolean
 
   isVisible: boolean = true
 
@@ -19,17 +18,12 @@ export class StepElement {
    * @property useVisiblilty - Set the visibility
    *   `element.style.visibility` instead of the display state.
    */
-  constructor (
-    elements: HTMLSVGElement[] | HTMLSVGElement,
-    useVisiblilty: boolean = false
-  ) {
+  constructor (elements: HTMLSVGElement[] | HTMLSVGElement) {
     if (Array.isArray(elements)) {
       this.htmlElements = elements
     } else {
       this.htmlElements = [elements]
     }
-
-    this.useVisiblilty = useVisiblilty
   }
 
   /**
@@ -52,17 +46,9 @@ export class StepElement {
     this.isVisible = show
     for (const element of this.htmlElements) {
       if (show) {
-        if (this.useVisiblilty) {
-          element.style.visibility = 'visible'
-        } else {
-          element.style.display = 'block'
-        }
+        element.style.visibility = 'visible'
       } else {
-        if (this.useVisiblilty) {
-          element.style.visibility = 'hidden'
-        } else {
-          element.style.display = 'none'
-        }
+        element.style.visibility = 'hidden'
       }
     }
   }

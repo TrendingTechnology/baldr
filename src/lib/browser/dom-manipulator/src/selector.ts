@@ -45,7 +45,7 @@ abstract class Selector {
   }
 
   protected createStep (...htmlElements: HTMLSVGElement[]): StepElement {
-    return new StepElement(htmlElements, true)
+    return new StepElement(htmlElements)
   }
 
   public static collectStepTexts (steps: StepElement[]): string[] {
@@ -125,15 +125,15 @@ export class InkscapeSelector extends Selector {
           }
           const child = c as HTMLSVGElement
           if (index === 0) {
-            result.push(new StepElement([layer, child], true))
+            result.push(new StepElement([layer, child]))
           } else {
-            result.push(new StepElement(child, true))
+            result.push(new StepElement(child))
           }
         }
       }
     } else if (this.mode === 'layer' || this.mode === 'group') {
       for (const layer of layers) {
-        result.push(new StepElement(layer, true))
+        result.push(new StepElement(layer))
       }
     }
     return result
@@ -170,10 +170,24 @@ export class WordSelector extends Selector {
       } else if (this.isFirstLiWord(word)) {
         steps.push(this.createStepWithDad(word))
       } else {
-        steps.push(new StepElement(word, true))
+        steps.push(new StepElement(word))
       }
     }
     return steps
+  }
+
+  private isUlOlWord (kid: HTMLElement): boolean {
+    const dad = kid.parentElement
+    const grandpa = dad != null ? dad.parentElement : null
+    if (
+      dad != null &&
+      grandpa != null &&
+      dad.tagName === 'LI' &&
+      (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')
+    ) {
+      return true
+    }
+    return false
   }
 
   /**
@@ -181,14 +195,10 @@ export class WordSelector extends Selector {
    */
   private isFirstUlOlWord (kid: HTMLElement): boolean {
     const dad = kid.parentElement
-    const grandpa = dad != null ? dad.parentElement : null
     if (
+      this.isUlOlWord(kid) &&
       kid.previousSibling == null &&
-      dad != null &&
-      grandpa != null &&
-      dad.tagName === 'LI' &&
-      dad.previousSibling == null &&
-      (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')
+      dad?.previousSibling == null
     ) {
       return true
     }
@@ -200,14 +210,10 @@ export class WordSelector extends Selector {
    */
   private isFirstLiWord (kid: HTMLElement): boolean {
     const dad = kid.parentElement
-    const grandpa = dad != null ? dad.parentElement : null
     if (
+      this.isUlOlWord(kid) &&
       kid.previousSibling == null &&
-      dad != null &&
-      grandpa != null &&
-      dad.tagName === 'LI' &&
-      dad.previousSibling != null &&
-      (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')
+      dad?.previousSibling != null
     ) {
       return true
     }
@@ -216,19 +222,20 @@ export class WordSelector extends Selector {
 
   private createStepWithGrandpa (kid: HTMLElement): StepElement {
     if (kid.parentElement == null || kid.parentElement.parentElement == null) {
-      throw new Error('kid element must have dad and grandpa element')
+      throw new Error('kid element must have a dad and grandpa element')
     }
-    return new StepElement(
-      [kid.parentElement.parentElement, kid.parentElement, kid],
-      true
-    )
+    return new StepElement([
+      kid.parentElement.parentElement,
+      kid.parentElement,
+      kid
+    ])
   }
 
   private createStepWithDad (kid: HTMLElement): StepElement {
     if (kid.parentElement == null) {
-      throw new Error('kid element must have dad and grandpa element')
+      throw new Error('kid element must have a dad element')
     }
-    return new StepElement([kid.parentElement, kid], true)
+    return new StepElement([kid.parentElement, kid])
   }
 }
 
@@ -245,11 +252,11 @@ export class SentenceSelector extends Selector {
       if (['UL', 'OL'].includes(element.tagName)) {
         for (const li of element.children) {
           if (li.tagName === 'LI') {
-            sentences.push(new StepElement(li as HTMLElement, true))
+            sentences.push(new StepElement(li as HTMLElement))
           }
         }
       } else {
-        sentences.push(new StepElement(element as HTMLElement, true))
+        sentences.push(new StepElement(element as HTMLElement))
       }
     }
     return sentences

@@ -5,7 +5,6 @@ export declare type HTMLSVGElement = SVGElement | HTMLElement;
  */
 export declare class StepElement {
     htmlElements: HTMLSVGElement[];
-    private readonly useVisiblilty;
     isVisible: boolean;
     onShow?: () => void;
     onHide?: () => void;
@@ -15,7 +14,7 @@ export declare class StepElement {
      * @property useVisiblilty - Set the visibility
      *   `element.style.visibility` instead of the display state.
      */
-    constructor(elements: HTMLSVGElement[] | HTMLSVGElement, useVisiblilty?: boolean);
+    constructor(elements: HTMLSVGElement[] | HTMLSVGElement);
     /**
      * The last HTML element.
      */

@@ -33,6 +33,7 @@ export declare class ClozeSelector extends Selector {
  */
 export declare class WordSelector extends Selector {
     select(): StepElement[];
+    private isUlOlWord;
     /**
      * `<ul><li><span class="word">First</span><li></ul>`
      */

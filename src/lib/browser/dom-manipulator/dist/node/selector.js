@@ -38,7 +38,7 @@ class Selector {
         return this.select().length + 1;
     }
     createStep(...htmlElements) {
-        return new step_1.StepElement(htmlElements, true);
+        return new step_1.StepElement(htmlElements);
     }
     static collectStepTexts(steps) {
         const result = [];
@@ -103,17 +103,17 @@ class InkscapeSelector extends Selector {
                     }
                     const child = c;
                     if (index === 0) {
-                        result.push(new step_1.StepElement([layer, child], true));
+                        result.push(new step_1.StepElement([layer, child]));
                     }
                     else {
-                        result.push(new step_1.StepElement(child, true));
+                        result.push(new step_1.StepElement(child));
                     }
                 }
             }
         }
         else if (this.mode === 'layer' || this.mode === 'group') {
             for (const layer of layers) {
-                result.push(new step_1.StepElement(layer, true));
+                result.push(new step_1.StepElement(layer));
             }
         }
         return result;
@@ -150,23 +150,30 @@ class WordSelector extends Selector {
                 steps.push(this.createStepWithDad(word));
             }
             else {
-                steps.push(new step_1.StepElement(word, true));
+                steps.push(new step_1.StepElement(word));
             }
         }
         return steps;
+    }
+    isUlOlWord(kid) {
+        const dad = kid.parentElement;
+        const grandpa = dad != null ? dad.parentElement : null;
+        if (dad != null &&
+            grandpa != null &&
+            dad.tagName === 'LI' &&
+            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
+            return true;
+        }
+        return false;
     }
     /**
      * `<ul><li><span class="word">First</span><li></ul>`
      */
     isFirstUlOlWord(kid) {
         const dad = kid.parentElement;
-        const grandpa = dad != null ? dad.parentElement : null;
-        if (kid.previousSibling == null &&
-            dad != null &&
-            grandpa != null &&
-            dad.tagName === 'LI' &&
-            dad.previousSibling == null &&
-            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
+        if (this.isUlOlWord(kid) &&
+            kid.previousSibling == null &&
+            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) == null) {
             return true;
         }
         return false;
@@ -176,28 +183,28 @@ class WordSelector extends Selector {
      */
     isFirstLiWord(kid) {
         const dad = kid.parentElement;
-        const grandpa = dad != null ? dad.parentElement : null;
-        if (kid.previousSibling == null &&
-            dad != null &&
-            grandpa != null &&
-            dad.tagName === 'LI' &&
-            dad.previousSibling != null &&
-            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
+        if (this.isUlOlWord(kid) &&
+            kid.previousSibling == null &&
+            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) != null) {
             return true;
         }
         return false;
     }
     createStepWithGrandpa(kid) {
         if (kid.parentElement == null || kid.parentElement.parentElement == null) {
-            throw new Error('kid element must have dad and grandpa element');
+            throw new Error('kid element must have a dad and grandpa element');
         }
-        return new step_1.StepElement([kid.parentElement.parentElement, kid.parentElement, kid], true);
+        return new step_1.StepElement([
+            kid.parentElement.parentElement,
+            kid.parentElement,
+            kid
+        ]);
     }
     createStepWithDad(kid) {
-        if (kid.parentElement == null || kid.parentElement.parentElement == null) {
-            throw new Error('kid element must have dad and grandpa element');
+        if (kid.parentElement == null) {
+            throw new Error('kid element must have a dad element');
         }
-        return new step_1.StepElement([kid.parentElement.parentElement, kid.parentElement, kid], true);
+        return new step_1.StepElement([kid.parentElement, kid]);
     }
 }
 exports.WordSelector = WordSelector;
@@ -214,12 +221,12 @@ class SentenceSelector extends Selector {
             if (['UL', 'OL'].includes(element.tagName)) {
                 for (const li of element.children) {
                     if (li.tagName === 'LI') {
-                        sentences.push(new step_1.StepElement(li, true));
+                        sentences.push(new step_1.StepElement(li));
                     }
                 }
             }
             else {
-                sentences.push(new step_1.StepElement(element, true));
+                sentences.push(new step_1.StepElement(element));
             }
         }
         return sentences;
