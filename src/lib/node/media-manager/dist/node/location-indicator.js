@@ -12,8 +12,8 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const core_node_1 = require("@bldr/core-node");
-const config_ng_1 = require("@bldr/config");
-const config = (0, config_ng_1.getConfig)();
+const config_1 = require("@bldr/config");
+const config = (0, config_1.getConfig)();
 /**
  * Indicates in which folder structure a file is located.
  *

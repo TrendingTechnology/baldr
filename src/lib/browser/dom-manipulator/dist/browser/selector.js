@@ -111,7 +111,9 @@ export class ClozeSelector extends Selector {
         const groups = this.rootElement.querySelectorAll('svg g');
         const clozeGElements = [];
         for (const group of groups) {
-            if (group.style.fill === 'rgb(0, 0, 255)') {
+            // JSDOM: rgb(0%,0%,100%)
+            if (group.style.fill === 'rgb(0, 0, 255)' ||
+                group.style.fill === 'rgb(0%,0%,100%)') {
                 clozeGElements.push(new StepElement(group));
             }
         }

@@ -1,18 +1,17 @@
 /* globals describe it */
 
 const assert = require('assert')
-const path = require('path')
 
 const {
   ElementSelector,
-  InkscapeSelector
+  InkscapeSelector,
+  ClozeSelector
 } = require('../dist/node/selector.js')
 const { readFile } = require('@bldr/file-reader-writer')
-const { getConfig } = require('@bldr/config')
-const config = getConfig()
+const { getMediaPath } = require('@bldr/config')
 
 function readMediaFile (relPath) {
-  return readFile(path.join(config.mediaServer.basePath, relPath))
+  return readFile(getMediaPath(relPath))
 }
 
 describe('Class “ElementSelector()”', function () {
@@ -60,5 +59,15 @@ describe('Class “InkscapeSelector()”', function () {
       'group'
     )
     assert.strictEqual(selector.count(), 5)
+  })
+})
+
+describe('Class “ClozeSelector()”', function () {
+  it('10_Mozart/30_Nachtmusik/LT/1.svg', function () {
+    const svgString = readMediaFile(
+      'Musik/05/20_Mensch-Zeit/10_Mozart/30_Nachtmusik/LT/1.svg'
+    )
+    const selector = new ClozeSelector(svgString)
+    assert.strictEqual(selector.count(), 23)
   })
 })
