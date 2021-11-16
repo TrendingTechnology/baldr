@@ -103,17 +103,17 @@ class InkscapeSelector extends Selector {
                     }
                     const child = c;
                     if (index === 0) {
-                        result.push(new step_1.StepElement([layer, child], false));
+                        result.push(new step_1.StepElement([layer, child], true));
                     }
                     else {
-                        result.push(new step_1.StepElement(child, false));
+                        result.push(new step_1.StepElement(child, true));
                     }
                 }
             }
         }
         else if (this.mode === 'layer' || this.mode === 'group') {
             for (const layer of layers) {
-                result.push(new step_1.StepElement(layer, false));
+                result.push(new step_1.StepElement(layer, true));
             }
         }
         return result;
@@ -140,30 +140,64 @@ exports.ClozeSelector = ClozeSelector;
  */
 class WordSelector extends Selector {
     select() {
-        const wordsRaw = this.rootElement.querySelectorAll('span.word');
-        const words = [];
-        for (const word of wordsRaw) {
-            if (word.previousSibling == null) {
-                const parent = word.parentElement;
-                if (parent != null && parent.tagName === 'LI') {
-                    if (parent.previousSibling == null && parent.parentElement != null) {
-                        // <ul><li><span class="word">lol</span><li></ul>
-                        words.push(new step_1.StepElement([parent.parentElement, parent, word], true));
-                    }
-                    else {
-                        // Avoid to get divs. Parent has to be LI
-                        words.push(new step_1.StepElement([parent, word], true));
-                    }
-                }
-                else {
-                    words.push(new step_1.StepElement(word, true));
-                }
+        const words = this.rootElement.querySelectorAll('span.word');
+        const steps = [];
+        for (const word of words) {
+            if (this.isFirstUlOlWord(word)) {
+                steps.push(this.createStepWithGrandpa(word));
+            }
+            else if (this.isFirstLiWord(word)) {
+                steps.push(this.createStepWithDad(word));
             }
             else {
-                words.push(new step_1.StepElement(word, true));
+                steps.push(new step_1.StepElement(word, true));
             }
         }
-        return words;
+        return steps;
+    }
+    /**
+     * `<ul><li><span class="word">First</span><li></ul>`
+     */
+    isFirstUlOlWord(kid) {
+        const dad = kid.parentElement;
+        const grandpa = dad != null ? dad.parentElement : null;
+        if (kid.previousSibling == null &&
+            dad != null &&
+            grandpa != null &&
+            dad.tagName === 'LI' &&
+            dad.previousSibling == null &&
+            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * `<li><span class="word">First</span><li>`
+     */
+    isFirstLiWord(kid) {
+        const dad = kid.parentElement;
+        const grandpa = dad != null ? dad.parentElement : null;
+        if (kid.previousSibling == null &&
+            dad != null &&
+            grandpa != null &&
+            dad.tagName === 'LI' &&
+            dad.previousSibling != null &&
+            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
+            return true;
+        }
+        return false;
+    }
+    createStepWithGrandpa(kid) {
+        if (kid.parentElement == null || kid.parentElement.parentElement == null) {
+            throw new Error('kid element must have dad and grandpa element');
+        }
+        return new step_1.StepElement([kid.parentElement.parentElement, kid.parentElement, kid], true);
+    }
+    createStepWithDad(kid) {
+        if (kid.parentElement == null || kid.parentElement.parentElement == null) {
+            throw new Error('kid element must have dad and grandpa element');
+        }
+        return new step_1.StepElement([kid.parentElement.parentElement, kid.parentElement, kid], true);
     }
 }
 exports.WordSelector = WordSelector;

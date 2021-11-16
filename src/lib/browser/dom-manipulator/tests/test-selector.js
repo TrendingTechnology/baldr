@@ -90,4 +90,22 @@ describe('Class “WordSelector()”', function () {
       'three'
     ])
   })
+
+  it('note heading underline', function () {
+    const markup =
+      '<h1 id="heading-1">heading 1</h1><span class="word-area"><p><span class="word">one</span></p> <h2 id="heading-2"><span class="word">heading</span> <span class="word">2</span></h2> <p><span class="word">two</span></p> <h3 id="heading-3"><span class="word">heading</span> <span class="word">3</span></h3> <p><span class="word">three</span>'
+
+    const selector = new WordSelector(markup)
+    const steps = selector.select()
+    assert.strictEqual(selector.count(), 8)
+    assert.deepStrictEqual(WordSelector.collectStepTexts(steps), [
+      'one',
+      'heading',
+      '2',
+      'two',
+      'heading',
+      '3',
+      'three'
+    ])
+  })
 })

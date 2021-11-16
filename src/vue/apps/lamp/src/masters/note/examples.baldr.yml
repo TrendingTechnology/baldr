@@ -28,3 +28,18 @@ slides:
     # No steps
 
     ---
+
+- note: |
+    # heading 1
+
+    ---
+
+    one
+
+    ## heading 2
+
+    two
+
+    ### heading 3
+
+    three
