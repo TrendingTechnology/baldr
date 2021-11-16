@@ -2,7 +2,8 @@
 
 const assert = require('assert')
 
-const { ElementSelector, StepController } = require('../dist/node/main.js')
+const { ElementSelector } = require('../dist/node/selector.js')
+const { StepController } = require('../dist/node/controller.js')
 
 function instantiateStepController (subset) {
   const selector = new ElementSelector(

@@ -7,6 +7,8 @@ export declare class StepElement {
     htmlElements: HTMLSVGElement[];
     private readonly useVisiblilty;
     isVisible: boolean;
+    onShow?: () => void;
+    onHide?: () => void;
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.

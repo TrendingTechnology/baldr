@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WordSelector = exports.ClozeSelector = exports.InkscapeSelector = exports.ElementSelector = void 0;
+exports.SentenceSelector = exports.WordSelector = exports.ClozeSelector = exports.InkscapeSelector = exports.ElementSelector = void 0;
 const universal_dom_1 = require("@bldr/universal-dom");
 const step_1 = require("./step");
 class Selector {
@@ -167,3 +167,28 @@ class WordSelector extends Selector {
     }
 }
 exports.WordSelector = WordSelector;
+/**
+ * Select more than a word. The meaning  of "sentences" in the function name
+ * should not be understood literally, but symbolic for a longer text unit.
+ * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+ * ordered or unordered lists, or a table row.
+ */
+class SentenceSelector extends Selector {
+    select() {
+        const sentences = [];
+        for (const element of this.rootElement.children) {
+            if (['UL', 'OL'].includes(element.tagName)) {
+                for (const li of element.children) {
+                    if (li.tagName === 'LI') {
+                        sentences.push(new step_1.StepElement(li, true));
+                    }
+                }
+            }
+            else {
+                sentences.push(new step_1.StepElement(element, true));
+            }
+        }
+        return sentences;
+    }
+}
+exports.SentenceSelector = SentenceSelector;

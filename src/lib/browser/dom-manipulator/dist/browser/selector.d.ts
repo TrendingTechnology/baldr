@@ -1,7 +1,8 @@
 import { HTMLSVGElement, StepElement } from './step';
+export declare type DomEntry = string | HTMLSVGElement;
 declare abstract class Selector {
     rootElement: ParentNode;
-    constructor(entry: string | HTMLSVGElement);
+    constructor(entry: DomEntry);
     abstract select(): StepElement[];
     count(): number;
     protected createStep(...htmlElements: HTMLSVGElement[]): StepElement;
@@ -17,7 +18,7 @@ export declare class ElementSelector extends Selector {
     constructor(entry: string | HTMLSVGElement, selectors: string);
     select(): StepElement[];
 }
-declare type InkscapeMode = 'layer' | 'layer+' | 'group';
+export declare type InkscapeMode = 'layer' | 'layer+' | 'group';
 export declare class InkscapeSelector extends Selector {
     mode: InkscapeMode;
     constructor(entry: string | HTMLSVGElement, mode?: InkscapeMode);
@@ -31,6 +32,15 @@ export declare class ClozeSelector extends Selector {
  * Select words which are surrounded by `span.word`.
  */
 export declare class WordSelector extends Selector {
+    select(): StepElement[];
+}
+/**
+ * Select more than a word. The meaning  of "sentences" in the function name
+ * should not be understood literally, but symbolic for a longer text unit.
+ * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+ * ordered or unordered lists, or a table row.
+ */
+export declare class SentenceSelector extends Selector {
     select(): StepElement[];
 }
 export {};

@@ -2,10 +2,12 @@ import { DOMParserU } from '@bldr/universal-dom'
 
 import { HTMLSVGElement, StepElement } from './step'
 
+export type DomEntry = string | HTMLSVGElement
+
 abstract class Selector {
   rootElement: ParentNode
 
-  constructor (entry: string | HTMLSVGElement) {
+  constructor (entry: DomEntry) {
     if (typeof entry === 'string') {
       // Cloze-SVG:
       // <?xml version="1.0" encoding="UTF-8"?>
@@ -82,7 +84,7 @@ export class ElementSelector extends Selector {
   }
 }
 
-type InkscapeMode = 'layer' | 'layer+' | 'group'
+export type InkscapeMode = 'layer' | 'layer+' | 'group'
 
 export class InkscapeSelector extends Selector {
   mode: InkscapeMode
@@ -183,5 +185,29 @@ export class WordSelector extends Selector {
       }
     }
     return words
+  }
+}
+
+/**
+ * Select more than a word. The meaning  of "sentences" in the function name
+ * should not be understood literally, but symbolic for a longer text unit.
+ * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+ * ordered or unordered lists, or a table row.
+ */
+export class SentenceSelector extends Selector {
+  select (): StepElement[] {
+    const sentences = []
+    for (const element of this.rootElement.children) {
+      if (['UL', 'OL'].includes(element.tagName)) {
+        for (const li of element.children) {
+          if (li.tagName === 'LI') {
+            sentences.push(new StepElement(li as HTMLElement, true))
+          }
+        }
+      } else {
+        sentences.push(new StepElement(element as HTMLElement, true))
+      }
+    }
+    return sentences
   }
 }

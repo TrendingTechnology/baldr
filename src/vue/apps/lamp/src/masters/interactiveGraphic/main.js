@@ -6,23 +6,11 @@
 
 import { warnSvgWidthHeight } from '@/lib.js'
 import {
-  StepController,
-  InkscapeSelector,
-  ElementSelector
+  buildSvgStepController
 } from '@bldr/dom-manipulator'
 import Vue from 'vue'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-
-function instaniateStepController (entry, props) {
-  let selector
-  if (props.stepSelector != null) {
-    selector = new ElementSelector(entry, props.stepSelector)
-  } else {
-    selector = new InkscapeSelector(entry, props.mode)
-  }
-  return new StepController(selector.select(), props.stepSubset)
-}
 
 export default validateMasterSpec({
   name: 'interactiveGraphic',
@@ -111,12 +99,12 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
-      return instaniateStepController(svgString, props).stepCount
+      return buildSvgStepController(svgString, props).stepCount
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight(this.svgPath)
-      this.stepController = instaniateStepController(this.$el, slide.props)
+      this.stepController = buildSvgStepController(this.$el, slide.props)
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
       this.stepController.showUpTo(newStepNo)

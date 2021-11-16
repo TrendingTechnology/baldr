@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wrapWords = exports.StepController = exports.ClozeSelector = exports.ElementSelector = exports.InkscapeSelector = void 0;
-var selector_1 = require("./selector");
-Object.defineProperty(exports, "InkscapeSelector", { enumerable: true, get: function () { return selector_1.InkscapeSelector; } });
-Object.defineProperty(exports, "ElementSelector", { enumerable: true, get: function () { return selector_1.ElementSelector; } });
-Object.defineProperty(exports, "ClozeSelector", { enumerable: true, get: function () { return selector_1.ClozeSelector; } });
+exports.buildSvgStepController = exports.buildClozeStepController = exports.wrapWords = exports.StepController = void 0;
 var controller_1 = require("./controller");
 Object.defineProperty(exports, "StepController", { enumerable: true, get: function () { return controller_1.StepController; } });
 var manipulation_1 = require("./manipulation");
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return manipulation_1.wrapWords; } });
+var controller_builder_1 = require("./controller-builder");
+Object.defineProperty(exports, "buildClozeStepController", { enumerable: true, get: function () { return controller_builder_1.buildClozeStepController; } });
+Object.defineProperty(exports, "buildSvgStepController", { enumerable: true, get: function () { return controller_builder_1.buildSvgStepController; } });

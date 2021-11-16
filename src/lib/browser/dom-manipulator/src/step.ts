@@ -10,6 +10,9 @@ export class StepElement {
 
   isVisible: boolean = true
 
+  public onShow?: () => void
+  public onHide?: () => void
+
   /**
    * @property Multiple HTML elements as an array or a
    *   single HTML element.

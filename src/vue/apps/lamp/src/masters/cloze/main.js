@@ -9,14 +9,9 @@ import Vue from 'vue'
 import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { StepController, ClozeSelector } from '@bldr/dom-manipulator'
+import { buildClozeStepController } from '@bldr/dom-manipulator'
 
 import { warnSvgWidthHeight } from '@/lib.js'
-
-function instaniateStepController (entry, stepSubset) {
-  const selector = new ClozeSelector(entry)
-  return new StepController(selector.select(), stepSubset)
-}
 
 /**
  * @param {HTMLElement} componentElement - The parent component element.
@@ -122,7 +117,7 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
-      return instaniateStepController(svgString, props.stepSubset).stepCount
+      return buildClozeStepController(svgString, props.stepSubset).stepCount
     },
     titleFromProps ({ propsMain }) {
       if (propsMain.asset.yaml.title) {
@@ -132,7 +127,7 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight()
-      this.stepController = instaniateStepController(
+      this.stepController = buildClozeStepController(
         this.$el,
         slide.props.stepSubset
       )
