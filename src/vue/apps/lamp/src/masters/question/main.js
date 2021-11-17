@@ -16,22 +16,28 @@ function setQuestionsByStepNo (stepNo) {
   // ['q1', 'a1', 'q2', 'q3']
   const sequence = slide.props.sequence
 
-  // Question with a question or answer. Only the heading.
-  if (!sequence.length) return
+  // Question without a question or answer. Only the heading.
+  if (sequence.length === 0) {
+    return
+  }
 
   // q1 or a1
   const curId = sequence[stepNo - 1]
 
   for (const id of sequence) {
     const element = this.$el.querySelector(`#${id}`)
-    if (element) element.classList.remove('active')
+    if (element != null) {
+      element.classList.remove('active')
+    }
   }
 
   const isAnswer = curId.match(/^a/)
   const element = this.$el.querySelector(`#${curId}`)
-  if (!element) return
+  if (element == null) {
+    return
+  }
   element.classList.add('active')
-  if (isAnswer) {
+  if (isAnswer != null) {
     const answerNo = parseInt(curId.substr(1))
     this.stepController.showUpTo(answerNo + 1)
   }
@@ -67,12 +73,14 @@ export default validateMasterSpec({
   propsDef: {
     questions: {
       type: Array,
-      description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
+      description:
+        'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
       required: true,
       markup: true
     },
     sequence: {
-      description: 'Wird automatisch erzeugt, z. B.: [\'q1\', \'a1\', \'q2\', \'q3\'] .',
+      description:
+        "Wird automatisch erzeugt, z. B.: ['q1', 'a1', 'q2', 'q3'] .",
       type: Array
     }
   },
@@ -103,6 +111,7 @@ export default validateMasterSpec({
     },
     afterSlideNoChangeOnComponent () {
       this.stepController = buildQuestionStepController(this.$el)
+      this.stepController.hideAll()
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
       setQuestionsByStepNo.call(this, newStepNo)

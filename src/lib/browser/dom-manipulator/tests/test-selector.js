@@ -66,7 +66,7 @@ describe('Class “InkscapeSelector()”', function () {
 })
 
 describe('Class “ClozeSelector()”', function () {
-  it.skip('10_Mozart/30_Nachtmusik/LT/1.svg', function () {
+  it('10_Mozart/30_Nachtmusik/LT/1.svg', function () {
     const svgString = readMediaFile(
       'Musik/05/20_Mensch-Zeit/10_Mozart/30_Nachtmusik/LT/1.svg'
     )

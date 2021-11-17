@@ -7,12 +7,11 @@ exports.HeadingStep = exports.ListStep = exports.StepElement = void 0;
  */
 class StepElement {
     /**
-     * @property Multiple HTML elements as an array or a
-     *   single HTML element.
-     * @property useVisibliltyStyleProperty - Set the visibility
-     *   `element.style.visibility` instead of the display state.
+     * @property Multiple HTML elements as an array or a single HTML element.
+     * @property vanish - Whether the element should vanish by using the CSS style
+     *   `display: none` instead of `visibility: hidden`
      */
-    constructor(elements, useVisibliltyStyleProperty = true) {
+    constructor(elements, vanishing = false) {
         this.isVisible = true;
         if (Array.isArray(elements)) {
             this.htmlElements = elements;
@@ -20,7 +19,7 @@ class StepElement {
         else {
             this.htmlElements = [elements];
         }
-        this.useVisiblilty = useVisibliltyStyleProperty;
+        this.vanishing = vanishing;
     }
     executeOnShowEvent() {
         if (this.onShow != null) {
@@ -56,7 +55,7 @@ class StepElement {
         }
         for (const element of this.htmlElements) {
             if (show) {
-                if (this.useVisiblilty) {
+                if (!this.vanishing) {
                     element.style.visibility = 'visible';
                 }
                 else {
@@ -64,7 +63,7 @@ class StepElement {
                 }
             }
             else {
-                if (this.useVisiblilty) {
+                if (!this.vanishing) {
                     element.style.visibility = 'hidden';
                 }
                 else {

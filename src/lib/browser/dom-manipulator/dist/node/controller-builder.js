@@ -37,7 +37,7 @@ function buildTextStepController(entry, fields) {
 }
 exports.buildTextStepController = buildTextStepController;
 function buildQuestionStepController(entry) {
-    const selector = new selector_1.ElementSelector(entry, '.answer');
+    const selector = new selector_1.ElementSelector(entry, '.answer', true);
     return new controller_1.StepController(selector.select());
 }
 exports.buildQuestionStepController = buildQuestionStepController;

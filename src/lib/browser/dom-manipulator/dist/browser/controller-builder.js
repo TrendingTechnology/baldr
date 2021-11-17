@@ -31,6 +31,6 @@ export function buildTextStepController(entry, fields) {
     return new StepController(selector.select(), fields.stepSubset);
 }
 export function buildQuestionStepController(entry) {
-    const selector = new ElementSelector(entry, '.answer');
+    const selector = new ElementSelector(entry, '.answer', true);
     return new StepController(selector.select());
 }

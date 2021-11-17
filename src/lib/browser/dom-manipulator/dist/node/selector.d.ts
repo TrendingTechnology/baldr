@@ -6,17 +6,18 @@ declare abstract class Selector {
     abstract select(): StepElement[];
     count(): number;
     protected createStep(...htmlElements: HTMLSVGElement[]): StepElement;
-    protected createVanishStep(...htmlElements: HTMLSVGElement[]): StepElement;
+    protected createVanishingStep(...htmlElements: HTMLSVGElement[]): StepElement;
     static collectStepTexts(steps: StepElement[]): string[];
 }
 export declare class ElementSelector extends Selector {
     private readonly selectors;
+    private readonly vanishing;
     /**
      * @param entry - A string that can be translated to a DOM using the DOMParser
      *   or a HTML element as an entry to the DOM.
      * @param selectors - A string to feed `document.querySelectorAll()`.
      */
-    constructor(entry: string | HTMLSVGElement, selectors: string);
+    constructor(entry: string | HTMLSVGElement, selectors: string, vanishing?: boolean);
     select(): StepElement[];
 }
 export declare type InkscapeMode = 'layer' | 'layer+' | 'group';

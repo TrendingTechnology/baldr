@@ -6,10 +6,10 @@ export type HTMLSVGElement = SVGElement | HTMLElement
  */
 export class StepElement {
   /**
-   * For example the master slide `question` uses `display = 'none'` to
-   * hide the answers.
+   * Whether the element should vanish by using the CSS style `display: none`
+   *   instead of `visibility: hidden`
    */
-  private readonly useVisiblilty: boolean
+  private readonly vanishing: boolean
   htmlElements: HTMLSVGElement[]
 
   isVisible: boolean = true
@@ -18,21 +18,20 @@ export class StepElement {
   public onHide?: () => void
 
   /**
-   * @property Multiple HTML elements as an array or a
-   *   single HTML element.
-   * @property useVisibliltyStyleProperty - Set the visibility
-   *   `element.style.visibility` instead of the display state.
+   * @property Multiple HTML elements as an array or a single HTML element.
+   * @property vanish - Whether the element should vanish by using the CSS style
+   *   `display: none` instead of `visibility: hidden`
    */
   constructor (
     elements: HTMLSVGElement[] | HTMLSVGElement,
-    useVisibliltyStyleProperty: boolean = true
+    vanishing: boolean = false
   ) {
     if (Array.isArray(elements)) {
       this.htmlElements = elements
     } else {
       this.htmlElements = [elements]
     }
-    this.useVisiblilty = useVisibliltyStyleProperty
+    this.vanishing = vanishing
   }
 
   private executeOnShowEvent (): void {
@@ -75,13 +74,13 @@ export class StepElement {
 
     for (const element of this.htmlElements) {
       if (show) {
-        if (this.useVisiblilty) {
+        if (!this.vanishing) {
           element.style.visibility = 'visible'
         } else {
           element.style.display = 'block'
         }
       } else {
-        if (this.useVisiblilty) {
+        if (!this.vanishing) {
           element.style.visibility = 'hidden'
         } else {
           element.style.display = 'none'

@@ -48,8 +48,10 @@ abstract class Selector {
     return new StepElement(htmlElements)
   }
 
-  protected createVanishStep (...htmlElements: HTMLSVGElement[]): StepElement {
-    return new StepElement(htmlElements, false)
+  protected createVanishingStep (
+    ...htmlElements: HTMLSVGElement[]
+  ): StepElement {
+    return new StepElement(htmlElements, true)
   }
 
   public static collectStepTexts (steps: StepElement[]): string[] {
@@ -65,15 +67,21 @@ abstract class Selector {
 
 export class ElementSelector extends Selector {
   private readonly selectors: string
+  private readonly vanishing: boolean
 
   /**
    * @param entry - A string that can be translated to a DOM using the DOMParser
    *   or a HTML element as an entry to the DOM.
    * @param selectors - A string to feed `document.querySelectorAll()`.
    */
-  constructor (entry: string | HTMLSVGElement, selectors: string) {
+  constructor (
+    entry: string | HTMLSVGElement,
+    selectors: string,
+    vanishing: boolean = false
+  ) {
     super(entry)
     this.selectors = selectors
+    this.vanishing = vanishing
   }
 
   select (): StepElement[] {
@@ -82,7 +90,11 @@ export class ElementSelector extends Selector {
       this.selectors
     )
     for (const element of nodeList) {
-      result.push(this.createStep(element))
+      if (this.vanishing) {
+        result.push(this.createVanishingStep(element))
+      } else {
+        result.push(this.createStep(element))
+      }
     }
     return result
   }

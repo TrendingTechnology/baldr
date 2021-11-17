@@ -64,6 +64,6 @@ export function buildTextStepController (
 export function buildQuestionStepController (
   entry: DomEntry
 ): StepController {
-  const selector = new ElementSelector(entry, '.answer')
+  const selector = new ElementSelector(entry, '.answer', true)
   return new StepController(selector.select())
 }

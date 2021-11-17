@@ -5,21 +5,20 @@ export declare type HTMLSVGElement = SVGElement | HTMLElement;
  */
 export declare class StepElement {
     /**
-     * For example the master slide `question` uses `display = 'none'` to
-     * hide the answers.
+     * Whether the element should vanish by using the CSS style `display: none`
+     *   instead of `visibility: hidden`
      */
-    private readonly useVisiblilty;
+    private readonly vanishing;
     htmlElements: HTMLSVGElement[];
     isVisible: boolean;
     onShow?: () => void;
     onHide?: () => void;
     /**
-     * @property Multiple HTML elements as an array or a
-     *   single HTML element.
-     * @property useVisibliltyStyleProperty - Set the visibility
-     *   `element.style.visibility` instead of the display state.
+     * @property Multiple HTML elements as an array or a single HTML element.
+     * @property vanish - Whether the element should vanish by using the CSS style
+     *   `display: none` instead of `visibility: hidden`
      */
-    constructor(elements: HTMLSVGElement[] | HTMLSVGElement, useVisibliltyStyleProperty?: boolean);
+    constructor(elements: HTMLSVGElement[] | HTMLSVGElement, vanishing?: boolean);
     private executeOnShowEvent;
     private executeOnHideEvent;
     /**

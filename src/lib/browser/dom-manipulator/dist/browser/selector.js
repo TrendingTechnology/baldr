@@ -37,8 +37,8 @@ class Selector {
     createStep(...htmlElements) {
         return new StepElement(htmlElements);
     }
-    createVanishStep(...htmlElements) {
-        return new StepElement(htmlElements, false);
+    createVanishingStep(...htmlElements) {
+        return new StepElement(htmlElements, true);
     }
     static collectStepTexts(steps) {
         const result = [];
@@ -56,15 +56,21 @@ export class ElementSelector extends Selector {
      *   or a HTML element as an entry to the DOM.
      * @param selectors - A string to feed `document.querySelectorAll()`.
      */
-    constructor(entry, selectors) {
+    constructor(entry, selectors, vanishing = false) {
         super(entry);
         this.selectors = selectors;
+        this.vanishing = vanishing;
     }
     select() {
         const result = [];
         const nodeList = this.rootElement.querySelectorAll(this.selectors);
         for (const element of nodeList) {
-            result.push(this.createStep(element));
+            if (this.vanishing) {
+                result.push(this.createVanishingStep(element));
+            }
+            else {
+                result.push(this.createStep(element));
+            }
         }
         return result;
     }
