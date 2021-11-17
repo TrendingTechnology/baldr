@@ -34,22 +34,6 @@ export declare class ClozeSelector extends Selector {
  */
 export declare class WordSelector extends Selector {
     select(): StepElement[];
-    /**
-     * `<ul><li><span class="word">First</span> <span class="word">Second</span> <li></ul>`
-     */
-    private isInList;
-    /**
-     * `<ul><li><span class="word">First</span><li></ul>`
-     */
-    private isFirstListWord;
-    /**
-     * `<li><span class="word">First</span><li>`
-     */
-    private isFirstListItemWord;
-    private isHeadingWord;
-    private createStepWithGrandpa;
-    private createStepWithDad;
-    private createHeadingStep;
 }
 /**
  * Select more than a word. The meaning  of "sentences" in the function name

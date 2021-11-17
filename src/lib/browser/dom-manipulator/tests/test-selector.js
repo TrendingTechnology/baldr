@@ -104,21 +104,35 @@ describe('Class “WordSelector()”', function () {
 
   it('note heading underline', function () {
     const markup =
-      '<h1 id="heading-1">heading 1</h1><span class="word-area"><p><span class="word">one</span></p> <h2 id="heading-2"><span class="word">heading</span> <span class="word">2</span></h2> <p><span class="word">two</span></p> <h3 id="heading-3"><span class="word">heading</span> <span class="word">3</span></h3> <p><span class="word">three</span>'
-
+      '<p><span class="word">no-heading</span></p> ' +
+      '<h2>' +
+      '<span class="word">first</span> ' +
+      '<span class="word">middle</span> ' +
+      '<span class="word">last</span>' +
+      '</h2>' +
+      '<p><span class="word">no-heading</span></p>'
     const selector = new WordSelector(markup)
     const steps = selector.select()
-    assert.strictEqual(selector.count(), 8)
+    assert.strictEqual(selector.count(), 6)
     assert.deepStrictEqual(WordSelector.collectStepTexts(steps), [
-      'one',
-      'heading',
-      '2',
-      'two',
-      'heading',
-      '3',
-      'three'
+      'no-heading',
+      'first',
+      'middle',
+      'last',
+      'no-heading'
     ])
 
+    // no-heading
     assert.strictEqual(steps[0].onShow, undefined)
+    // first
+    assert.strictEqual(typeof steps[1].onShow, 'function')
+    assert.strictEqual(steps[1].onHide, undefined)
+    // middle
+    assert.strictEqual(steps[2].onShow, undefined)
+    // last
+    assert.strictEqual(typeof steps[3].onShow, 'function')
+    assert.strictEqual(typeof steps[3].onHide, 'function')
+    // no-heading
+    assert.strictEqual(steps[4].onShow, undefined)
   })
 })

@@ -29,17 +29,18 @@ slides:
 
     ---
 
-- note: |
+- title: Test underlined when last word in heading appears
+  note: |
     # heading 1
 
     ---
 
     one
 
-    ## heading 2
+    ## heading 2 test underline
 
     two
 
-    ### heading 3
+    ### heading 3 test underline
 
     three

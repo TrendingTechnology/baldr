@@ -1,5 +1,5 @@
 import { DOMParserU } from '@bldr/universal-dom';
-import { StepElement } from './step';
+import { StepElement, HeadingStep, ListStep } from './step';
 class Selector {
     constructor(entry) {
         if (typeof entry === 'string') {
@@ -140,101 +140,17 @@ export class WordSelector extends Selector {
         const words = this.rootElement.querySelectorAll('span.word');
         const steps = [];
         for (const word of words) {
-            if (this.isFirstListWord(word)) {
-                steps.push(this.createStepWithGrandpa(word));
+            if (ListStep.is(word)) {
+                steps.push(new ListStep(word));
             }
-            else if (this.isFirstListItemWord(word)) {
-                steps.push(this.createStepWithDad(word));
-            }
-            else if (this.isHeadingWord(word)) {
-                steps.push(this.createHeadingStep(word));
+            else if (HeadingStep.is(word)) {
+                steps.push(new HeadingStep(word));
             }
             else {
                 steps.push(new StepElement(word));
             }
         }
         return steps;
-    }
-    /**
-     * `<ul><li><span class="word">First</span> <span class="word">Second</span> <li></ul>`
-     */
-    isInList(kid) {
-        const dad = kid.parentElement;
-        const grandpa = dad != null ? dad.parentElement : null;
-        return (dad != null &&
-            grandpa != null &&
-            dad.tagName === 'LI' &&
-            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL'));
-    }
-    /**
-     * `<ul><li><span class="word">First</span><li></ul>`
-     */
-    isFirstListWord(kid) {
-        const dad = kid.parentElement;
-        return (this.isInList(kid) &&
-            kid.previousSibling == null &&
-            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) == null);
-    }
-    /**
-     * `<li><span class="word">First</span><li>`
-     */
-    isFirstListItemWord(kid) {
-        const dad = kid.parentElement;
-        return (this.isInList(kid) &&
-            kid.previousSibling == null &&
-            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) != null);
-    }
-    isHeadingWord(kid) {
-        const dad = kid.parentElement;
-        if (dad == null) {
-            return false;
-        }
-        return (dad.tagName === 'H1' ||
-            dad.tagName === 'H2' ||
-            dad.tagName === 'H3' ||
-            dad.tagName === 'H4' ||
-            dad.tagName === 'H5' ||
-            dad.tagName === 'H6');
-    }
-    createStepWithGrandpa(kid) {
-        if (kid.parentElement == null || kid.parentElement.parentElement == null) {
-            throw new Error('kid element must have a dad and grandpa element');
-        }
-        return new StepElement([
-            kid.parentElement.parentElement,
-            kid.parentElement,
-            kid
-        ]);
-    }
-    createStepWithDad(kid) {
-        if (kid.parentElement == null) {
-            throw new Error('kid element must have a dad element');
-        }
-        return new StepElement([kid.parentElement, kid]);
-    }
-    createHeadingStep(kid) {
-        if (kid.parentElement == null) {
-            throw new Error('kid element must have a dad and grandpa element');
-        }
-        const dad = kid.parentElement;
-        const step = this.createStep(kid);
-        if (kid.previousSibling == null) {
-            step.onShow = () => {
-                dad.style.textDecoration = 'none';
-            };
-            step.onHide = () => {
-                dad.style.textDecoration = 'underline';
-            };
-        }
-        else if (kid.nextSibling == null) {
-            step.onShow = () => {
-                dad.style.textDecoration = 'underline';
-            };
-            step.onHide = () => {
-                dad.style.textDecoration = 'none';
-            };
-        }
-        return step;
     }
 }
 /**

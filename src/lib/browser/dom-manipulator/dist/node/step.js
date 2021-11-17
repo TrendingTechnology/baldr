@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StepElement = void 0;
+exports.HeadingStep = exports.ListStep = exports.StepElement = void 0;
 /**
  * A wrapper class around a HTML or a SVG element to be able to hide and show
  * this element very easily.
@@ -81,3 +81,68 @@ class StepElement {
     }
 }
 exports.StepElement = StepElement;
+class ListStep extends StepElement {
+    constructor(element) {
+        super(element);
+        const parent = element.parentElement;
+        const grandpa = parent != null ? parent.parentElement : null;
+        if (parent == null || grandpa == null) {
+            throw new Error('A list element must have a parent and a grandparent element!');
+        }
+        if (element.previousSibling == null) {
+            if (parent.previousSibling == null) {
+                this.htmlElements = [grandpa, parent, element];
+            }
+            else if (parent.previousSibling != null) {
+                this.htmlElements = [parent, element];
+            }
+        }
+    }
+    /**
+     * `<ul><li><span class="word">First</span> <span class="word">Second</span> <li></ul>`
+     */
+    static is(element) {
+        const parent = element.parentElement;
+        const grandpa = parent != null ? parent.parentElement : null;
+        return (parent != null &&
+            grandpa != null &&
+            parent.tagName === 'LI' &&
+            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL'));
+    }
+}
+exports.ListStep = ListStep;
+class HeadingStep extends StepElement {
+    constructor(element) {
+        super(element);
+        if (this.htmlElement.parentElement == null) {
+            throw new Error('A heading word must have a parent element!');
+        }
+        const parent = this.htmlElement.parentElement;
+        if (this.htmlElement.previousSibling == null) {
+            this.onShow = () => {
+                parent.style.textDecoration = 'none';
+            };
+        }
+        else if (this.htmlElement.nextSibling == null) {
+            this.onShow = () => {
+                parent.style.textDecoration = 'underline';
+            };
+            this.onHide = () => {
+                parent.style.textDecoration = 'none';
+            };
+        }
+    }
+    static is(element) {
+        const parent = element.parentElement;
+        if (parent == null) {
+            return false;
+        }
+        return (parent.tagName === 'H1' ||
+            parent.tagName === 'H2' ||
+            parent.tagName === 'H3' ||
+            parent.tagName === 'H4' ||
+            parent.tagName === 'H5' ||
+            parent.tagName === 'H6');
+    }
+}
+exports.HeadingStep = HeadingStep;

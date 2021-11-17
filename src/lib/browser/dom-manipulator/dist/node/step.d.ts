@@ -31,3 +31,14 @@ export declare class StepElement {
     show(): void;
     hide(): void;
 }
+export declare class ListStep extends StepElement {
+    constructor(element: HTMLSVGElement);
+    /**
+     * `<ul><li><span class="word">First</span> <span class="word">Second</span> <li></ul>`
+     */
+    static is(element: HTMLSVGElement): boolean;
+}
+export declare class HeadingStep extends StepElement {
+    constructor(element: HTMLSVGElement);
+    static is(element: HTMLElement): boolean;
+}
