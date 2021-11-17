@@ -3,9 +3,9 @@
  *
  * @param text - A string in the Markdown format.
  */
-export declare function convertMarkdownStringToHtml(text: string): string;
-declare type Any = string | string[] | {
-    [key: string]: Any;
+export declare function convertMarkdownToHtml(text: string): string;
+declare type NestedMarkdown = string | string[] | {
+    [key: string]: NestedMarkdown;
 };
 /**
  * Convert Markdown texts into HTML texts.
@@ -15,5 +15,5 @@ declare type Any = string | string[] | {
  *
  * @param input - Various input types
  */
-export declare function convertMarkdownToHtml(input: Any): Any;
+export declare function convertNestedMarkdownToHtml(input: NestedMarkdown): NestedMarkdown;
 export {};

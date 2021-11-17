@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertMarkdownToHtml = exports.convertMarkdownStringToHtml = void 0;
+exports.convertNestedMarkdownToHtml = exports.convertMarkdownToHtml = void 0;
 const marked_1 = require("marked");
 const universal_dom_1 = require("@bldr/universal-dom");
 /**
@@ -44,10 +44,10 @@ function convertMarkdownAutoInline(text) {
  *
  * @param text - A string in the Markdown format.
  */
-function convertMarkdownStringToHtml(text) {
+function convertMarkdownToHtml(text) {
     return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
-exports.convertMarkdownStringToHtml = convertMarkdownStringToHtml;
+exports.convertMarkdownToHtml = convertMarkdownToHtml;
 /**
  * Convert Markdown texts into HTML texts.
  *
@@ -56,20 +56,20 @@ exports.convertMarkdownStringToHtml = convertMarkdownStringToHtml;
  *
  * @param input - Various input types
  */
-function convertMarkdownToHtml(input) {
+function convertNestedMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdownStringToHtml(input);
+        return convertMarkdownToHtml(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdownStringToHtml(value);
+                input[index] = convertMarkdownToHtml(value);
             }
             else {
-                convertMarkdownToHtml(value);
+                convertNestedMarkdownToHtml(value);
             }
         }
         // object
@@ -78,13 +78,13 @@ function convertMarkdownToHtml(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdownStringToHtml(value);
+                input[key] = convertMarkdownToHtml(value);
             }
             else {
-                convertMarkdownToHtml(value);
+                convertNestedMarkdownToHtml(value);
             }
         }
     }
     return input;
 }
-exports.convertMarkdownToHtml = convertMarkdownToHtml;
+exports.convertNestedMarkdownToHtml = convertNestedMarkdownToHtml;

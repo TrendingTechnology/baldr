@@ -41,7 +41,7 @@ function convertMarkdownAutoInline(text) {
  *
  * @param text - A string in the Markdown format.
  */
-export function convertMarkdownStringToHtml(text) {
+export function convertMarkdownToHtml(text) {
     return convertMarkdownAutoInline(convertCustomMarkup(text));
 }
 /**
@@ -52,20 +52,20 @@ export function convertMarkdownStringToHtml(text) {
  *
  * @param input - Various input types
  */
-export function convertMarkdownToHtml(input) {
+export function convertNestedMarkdownToHtml(input) {
     // string
     if (typeof input === 'string') {
-        return convertMarkdownStringToHtml(input);
+        return convertMarkdownToHtml(input);
         // array
     }
     else if (Array.isArray(input)) {
         for (let index = 0; index < input.length; index++) {
             const value = input[index];
             if (typeof value === 'string') {
-                input[index] = convertMarkdownStringToHtml(value);
+                input[index] = convertMarkdownToHtml(value);
             }
             else {
-                convertMarkdownToHtml(value);
+                convertNestedMarkdownToHtml(value);
             }
         }
         // object
@@ -74,10 +74,10 @@ export function convertMarkdownToHtml(input) {
         for (const key in input) {
             const value = input[key];
             if (typeof value === 'string') {
-                input[key] = convertMarkdownStringToHtml(value);
+                input[key] = convertMarkdownToHtml(value);
             }
             else {
-                convertMarkdownToHtml(value);
+                convertNestedMarkdownToHtml(value);
             }
         }
     }

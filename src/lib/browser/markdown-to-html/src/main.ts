@@ -48,11 +48,11 @@ function convertMarkdownAutoInline (text: string): string {
  *
  * @param text - A string in the Markdown format.
  */
-export function convertMarkdownStringToHtml (text: string): string {
+export function convertMarkdownToHtml (text: string): string {
   return convertMarkdownAutoInline(convertCustomMarkup(text))
 }
 
-type Any = string | string[] | { [key: string]: Any }
+type NestedMarkdown = string | string[] | { [key: string]: NestedMarkdown }
 
 /**
  * Convert Markdown texts into HTML texts.
@@ -62,19 +62,19 @@ type Any = string | string[] | { [key: string]: Any }
  *
  * @param input - Various input types
  */
-export function convertMarkdownToHtml (input: Any): Any {
+export function convertNestedMarkdownToHtml (input: NestedMarkdown): NestedMarkdown {
   // string
   if (typeof input === 'string') {
-    return convertMarkdownStringToHtml(input)
+    return convertMarkdownToHtml(input)
 
     // array
   } else if (Array.isArray(input)) {
     for (let index = 0; index < input.length; index++) {
       const value = input[index]
       if (typeof value === 'string') {
-        input[index] = convertMarkdownStringToHtml(value)
+        input[index] = convertMarkdownToHtml(value)
       } else {
-        convertMarkdownToHtml(value)
+        convertNestedMarkdownToHtml(value)
       }
     }
 
@@ -83,9 +83,9 @@ export function convertMarkdownToHtml (input: Any): Any {
     for (const key in input) {
       const value = input[key]
       if (typeof value === 'string') {
-        input[key] = convertMarkdownStringToHtml(value)
+        input[key] = convertMarkdownToHtml(value)
       } else {
-        convertMarkdownToHtml(value)
+        convertNestedMarkdownToHtml(value)
       }
     }
   }
