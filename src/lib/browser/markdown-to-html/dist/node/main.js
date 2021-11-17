@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertMarkdownToHtml = exports.convertMarkdownStringToHtml = void 0;
-const marked = require("marked");
+const marked_1 = require("marked");
 const universal_dom_1 = require("@bldr/universal-dom");
 /**
  * Convert some custom markup like arrows.
@@ -28,7 +28,7 @@ function convertCustomMarkup(text) {
  * @param text - The raw input text coming directly from YAML.
  */
 function convertMarkdownAutoInline(text) {
-    text = marked(text);
+    text = marked_1.marked(text);
     const dom = new universal_dom_1.DOMParserU().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
     if (dom.body.childElementCount === 1 &&

@@ -34,9 +34,9 @@
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "dependencies": {
     "@bldr/universal-dom": "*",
-    "marked": "3.0.8"
+    "marked": "4.0.3"
   },
   "devDependencies": {
-    "@types/marked": "3.0.2"
+    "@types/marked": "4.0.0"
   }
 }
