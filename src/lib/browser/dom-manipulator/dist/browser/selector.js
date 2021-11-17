@@ -140,11 +140,14 @@ export class WordSelector extends Selector {
         const words = this.rootElement.querySelectorAll('span.word');
         const steps = [];
         for (const word of words) {
-            if (this.isFirstUlOlWord(word)) {
+            if (this.isFirstListWord(word)) {
                 steps.push(this.createStepWithGrandpa(word));
             }
-            else if (this.isFirstLiWord(word)) {
+            else if (this.isFirstListItemWord(word)) {
                 steps.push(this.createStepWithDad(word));
+            }
+            else if (this.isHeadingWord(word)) {
+                steps.push(this.createHeadingStep(word));
             }
             else {
                 steps.push(new StepElement(word));
@@ -152,40 +155,46 @@ export class WordSelector extends Selector {
         }
         return steps;
     }
-    isUlOlWord(kid) {
+    /**
+     * `<ul><li><span class="word">First</span> <span class="word">Second</span> <li></ul>`
+     */
+    isInList(kid) {
         const dad = kid.parentElement;
         const grandpa = dad != null ? dad.parentElement : null;
-        if (dad != null &&
+        return (dad != null &&
             grandpa != null &&
             dad.tagName === 'LI' &&
-            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL')) {
-            return true;
-        }
-        return false;
+            (grandpa.tagName === 'OL' || grandpa.tagName === 'UL'));
     }
     /**
      * `<ul><li><span class="word">First</span><li></ul>`
      */
-    isFirstUlOlWord(kid) {
+    isFirstListWord(kid) {
         const dad = kid.parentElement;
-        if (this.isUlOlWord(kid) &&
+        return (this.isInList(kid) &&
             kid.previousSibling == null &&
-            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) == null) {
-            return true;
-        }
-        return false;
+            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) == null);
     }
     /**
      * `<li><span class="word">First</span><li>`
      */
-    isFirstLiWord(kid) {
+    isFirstListItemWord(kid) {
         const dad = kid.parentElement;
-        if (this.isUlOlWord(kid) &&
+        return (this.isInList(kid) &&
             kid.previousSibling == null &&
-            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) != null) {
-            return true;
+            (dad === null || dad === void 0 ? void 0 : dad.previousSibling) != null);
+    }
+    isHeadingWord(kid) {
+        const dad = kid.parentElement;
+        if (dad == null) {
+            return false;
         }
-        return false;
+        return (dad.tagName === 'H1' ||
+            dad.tagName === 'H2' ||
+            dad.tagName === 'H3' ||
+            dad.tagName === 'H4' ||
+            dad.tagName === 'H5' ||
+            dad.tagName === 'H6');
     }
     createStepWithGrandpa(kid) {
         if (kid.parentElement == null || kid.parentElement.parentElement == null) {
@@ -202,6 +211,30 @@ export class WordSelector extends Selector {
             throw new Error('kid element must have a dad element');
         }
         return new StepElement([kid.parentElement, kid]);
+    }
+    createHeadingStep(kid) {
+        if (kid.parentElement == null) {
+            throw new Error('kid element must have a dad and grandpa element');
+        }
+        const dad = kid.parentElement;
+        const step = this.createStep(kid);
+        if (kid.previousSibling == null) {
+            step.onShow = () => {
+                dad.style.textDecoration = 'none';
+            };
+            step.onHide = () => {
+                dad.style.textDecoration = 'underline';
+            };
+        }
+        else if (kid.nextSibling == null) {
+            step.onShow = () => {
+                dad.style.textDecoration = 'underline';
+            };
+            step.onHide = () => {
+                dad.style.textDecoration = 'none';
+            };
+        }
+        return step;
     }
 }
 /**

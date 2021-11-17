@@ -22,6 +22,16 @@ class StepElement {
         }
         this.useVisiblilty = useVisibliltyStyleProperty;
     }
+    executeOnShowEvent() {
+        if (this.onShow != null) {
+            this.onShow();
+        }
+    }
+    executeOnHideEvent() {
+        if (this.onHide != null) {
+            this.onHide();
+        }
+    }
     /**
      * The last HTML element.
      */
@@ -38,6 +48,12 @@ class StepElement {
             return;
         }
         this.isVisible = show;
+        if (show) {
+            this.executeOnShowEvent();
+        }
+        else {
+            this.executeOnHideEvent();
+        }
         for (const element of this.htmlElements) {
             if (show) {
                 if (this.useVisiblilty) {

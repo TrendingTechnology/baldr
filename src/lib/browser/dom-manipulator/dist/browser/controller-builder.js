@@ -28,7 +28,6 @@ export function buildTextStepController(entry, fields) {
     else {
         selector = new SentenceSelector(entry);
     }
-    console.log(selector, entry);
     return new StepController(selector.select(), fields.stepSubset);
 }
 export function buildQuestionStepController(entry) {

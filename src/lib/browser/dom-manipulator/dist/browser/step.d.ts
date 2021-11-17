@@ -20,6 +20,8 @@ export declare class StepElement {
      *   `element.style.visibility` instead of the display state.
      */
     constructor(elements: HTMLSVGElement[] | HTMLSVGElement, useVisibliltyStyleProperty?: boolean);
+    private executeOnShowEvent;
+    private executeOnHideEvent;
     /**
      * The last HTML element.
      */

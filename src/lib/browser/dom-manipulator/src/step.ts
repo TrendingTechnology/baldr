@@ -35,6 +35,18 @@ export class StepElement {
     this.useVisiblilty = useVisibliltyStyleProperty
   }
 
+  private executeOnShowEvent (): void {
+    if (this.onShow != null) {
+      this.onShow()
+    }
+  }
+
+  private executeOnHideEvent (): void {
+    if (this.onHide != null) {
+      this.onHide()
+    }
+  }
+
   /**
    * The last HTML element.
    */
@@ -52,7 +64,15 @@ export class StepElement {
     if (this.isVisible === show) {
       return
     }
+
     this.isVisible = show
+
+    if (show) {
+      this.executeOnShowEvent()
+    } else {
+      this.executeOnHideEvent()
+    }
+
     for (const element of this.htmlElements) {
       if (show) {
         if (this.useVisiblilty) {

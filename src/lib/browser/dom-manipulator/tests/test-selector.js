@@ -118,5 +118,7 @@ describe('Class “WordSelector()”', function () {
       '3',
       'three'
     ])
+
+    assert.strictEqual(steps[0].onShow, undefined)
   })
 })

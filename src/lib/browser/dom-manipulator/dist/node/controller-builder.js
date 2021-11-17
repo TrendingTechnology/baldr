@@ -33,7 +33,6 @@ function buildTextStepController(entry, fields) {
     else {
         selector = new selector_1.SentenceSelector(entry);
     }
-    console.log(selector, entry);
     return new controller_1.StepController(selector.select(), fields.stepSubset);
 }
 exports.buildTextStepController = buildTextStepController;
