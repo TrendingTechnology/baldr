@@ -22,8 +22,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const media_categories_1 = require("@bldr/media-categories");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 function action() {
     media_categories_1.stripCategories();
     const configJson = file_reader_writer_1.readJsonFile(config.configurationFileLocations[1]);

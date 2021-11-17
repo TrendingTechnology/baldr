@@ -30,8 +30,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const log = __importStar(require("@bldr/log"));
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
  *

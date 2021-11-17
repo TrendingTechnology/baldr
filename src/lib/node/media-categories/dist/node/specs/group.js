@@ -7,8 +7,8 @@ exports.group = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const main_1 = require("../main");
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 function check(data) {
     if (data.name == null) {
         throw new Error('A group needs a name.');

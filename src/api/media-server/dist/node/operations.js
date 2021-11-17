@@ -44,11 +44,11 @@ exports.openParentFolder = exports.openEditor = exports.openArchivesInFileManage
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 // Project packages.
-var config_ng_1 = require("@bldr/config");
+var config_1 = require("@bldr/config");
 var media_manager_1 = require("@bldr/media-manager");
 var open_with_1 = require("@bldr/open-with");
 var main_1 = require("./main");
-var config = config_ng_1.getConfig();
+var config = config_1.getConfig();
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *

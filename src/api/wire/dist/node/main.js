@@ -16,8 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
 var ws_1 = __importDefault(require("ws"));
 // Globals.
-var config_ng_1 = require("@bldr/config");
-var config = config_ng_1.getConfig();
+var config_1 = require("@bldr/config");
+var config = config_1.getConfig();
 /**
  * Launch the web socket server.
  */

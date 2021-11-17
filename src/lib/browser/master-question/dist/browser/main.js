@@ -1,4 +1,4 @@
-import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html';
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 import * as tex from '@bldr/tex-templates';
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
@@ -7,7 +7,7 @@ import * as tex from '@bldr/tex-templates';
  * https://marked.js.org/#/USING_PRO.md may be better.
  */
 function convertMarkdownToHtmlNoLists(text) {
-    text = convertMarkdownStringToHtml(text);
+    text = convertMarkdownToHtml(text);
     // <ol start="2">
     text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '');
     return text.trim();
@@ -68,7 +68,7 @@ export class Question {
             this.questionNo = counter.question;
         }
         if (spec.answer != null) {
-            this.answer = convertMarkdownStringToHtml(spec.answer);
+            this.answer = convertMarkdownToHtml(spec.answer);
             counter.answer++;
             counter.sequence.push(`a${counter.answer}`);
             this.answerNo = counter.answer;

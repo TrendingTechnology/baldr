@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.person = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 const main_1 = require("../main");
 function check(data) {
     if (data.lastname == null && data.firstname == null) {

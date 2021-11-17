@@ -1,4 +1,4 @@
-import { convertMarkdownStringToHtml } from '@bldr/markdown-to-html'
+import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import * as tex from '@bldr/tex-templates'
 
 import { Master } from '../master'
@@ -10,7 +10,7 @@ import { Master } from '../master'
  * https://marked.js.org/#/USING_PRO.md may be better.
  */
 function convertMarkdownToHtmlNoLists (text: string): string {
-  text = convertMarkdownStringToHtml(text)
+  text = convertMarkdownToHtml(text)
   // <ol start="2">
   text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '')
   return text.trim()
@@ -122,7 +122,7 @@ class Question {
       this.questionNo = counter.question
     }
     if (spec.answer != null) {
-      this.answer = convertMarkdownStringToHtml(spec.answer)
+      this.answer = convertMarkdownToHtml(spec.answer)
       counter.answer++
       counter.sequence.push(`a${counter.answer}`)
       this.answerNo = counter.answer

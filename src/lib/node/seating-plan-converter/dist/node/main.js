@@ -24,8 +24,8 @@ const csv_parser_1 = __importDefault(require("csv-parser"));
 const cli_utils_1 = require("@bldr/cli-utils");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
-const config_ng_1 = require("@bldr/config");
-const config = (0, config_ng_1.getConfig)();
+const config_1 = require("@bldr/config");
+const config = (0, config_1.getConfig)();
 const documentTemplate = {
     grades: {},
     jobs: {

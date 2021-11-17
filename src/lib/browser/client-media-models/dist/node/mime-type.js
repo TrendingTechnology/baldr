@@ -6,8 +6,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mimeTypeManager = void 0;
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 /**
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.

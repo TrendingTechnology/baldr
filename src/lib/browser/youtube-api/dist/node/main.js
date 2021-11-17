@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkAvailability = exports.getSnippet = void 0;
 const axios_1 = require("axios");
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
         const snippet = yield axios_1.default.get('https://www.googleapis.com/youtube/v3/videos', {

@@ -124,7 +124,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 // Project packages.
-var config_ng_1 = require("@bldr/config");
+var config_1 = require("@bldr/config");
 var core_browser_1 = require("@bldr/core-browser");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
@@ -137,7 +137,7 @@ var client_media_models_1 = require("@bldr/client-media-models");
 var seating_plan_1 = require("./seating-plan");
 var operations_2 = require("./operations");
 Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return operations_2.openArchivesInFileManager; } });
-var config = config_ng_1.getConfig();
+var config = config_1.getConfig();
 /**
  * Base path of the media server file store.
  */
@@ -816,10 +816,12 @@ function registerMediaRestApi() {
                     if (query.ref == null) {
                         throw new Error('You have to specify an ID (?ref=myfile).');
                     }
-                    if (query.with == null)
+                    if (query.with == null) {
                         query.with = 'editor';
-                    if (query.type == null)
+                    }
+                    if (query.type == null) {
                         query.type = 'presentations';
+                    }
                     archive = 'archive' in query;
                     create = 'create' in query;
                     ref = extractString(query, 'ref');

@@ -10,7 +10,7 @@ const tex = require("@bldr/tex-templates");
  * https://marked.js.org/#/USING_PRO.md may be better.
  */
 function convertMarkdownToHtmlNoLists(text) {
-    text = markdown_to_html_1.convertMarkdownStringToHtml(text);
+    text = markdown_to_html_1.convertMarkdownToHtml(text);
     // <ol start="2">
     text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '');
     return text.trim();
@@ -71,7 +71,7 @@ class Question {
             this.questionNo = counter.question;
         }
         if (spec.answer != null) {
-            this.answer = markdown_to_html_1.convertMarkdownStringToHtml(spec.answer);
+            this.answer = markdown_to_html_1.convertMarkdownToHtml(spec.answer);
             counter.answer++;
             counter.sequence.push(`a${counter.answer}`);
             this.answerNo = counter.answer;

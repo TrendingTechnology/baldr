@@ -30,8 +30,8 @@ const yaml_1 = require("@bldr/yaml");
 const titles_1 = require("@bldr/titles");
 const specs_1 = require("./specs");
 const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
-const config_ng_1 = require("@bldr/config");
-const config = config_ng_1.getConfig();
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
 two_letter_abbreviations_1.checkTypeAbbreviations(specs_1.categories);
 /**
  * Check a file path against a regular expression to get the category name.
