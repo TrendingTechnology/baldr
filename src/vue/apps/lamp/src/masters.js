@@ -7,7 +7,7 @@
 /* globals rawYamlExamples */
 
 import { customStore } from '@/main'
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { convertMarkdownToHtml, convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib.js'
 import inlineMarkup from './inline-markup.js'
 import SlidePreviewPlayButton from './components/reusable/SlidesPreview/PlayButton.vue'
@@ -550,7 +550,7 @@ class Master {
     for (const propName in props) {
       const prop = this.propsDef[propName]
       if ('markup' in prop && prop.markup) {
-        props[propName] = convertMarkdownToHtml(props[propName])
+        props[propName] = convertNestedMarkdownToHtml(props[propName])
       }
     }
     return props
