@@ -4,6 +4,11 @@ export declare type HTMLSVGElement = SVGElement | HTMLElement;
  * this element very easily.
  */
 export declare class StepElement {
+    /**
+     * For example the master slide `question` uses `display = 'none'` to
+     * hide the answers.
+     */
+    private readonly useVisiblilty;
     htmlElements: HTMLSVGElement[];
     isVisible: boolean;
     onShow?: () => void;
@@ -11,10 +16,10 @@ export declare class StepElement {
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.
-     * @property useVisiblilty - Set the visibility
+     * @property useVisibliltyStyleProperty - Set the visibility
      *   `element.style.visibility` instead of the display state.
      */
-    constructor(elements: HTMLSVGElement[] | HTMLSVGElement);
+    constructor(elements: HTMLSVGElement[] | HTMLSVGElement, useVisibliltyStyleProperty?: boolean);
     /**
      * The last HTML element.
      */

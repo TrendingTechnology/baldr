@@ -44,9 +44,12 @@ interface TextFields {
 
 export function buildTextStepController (
   entry: DomEntry,
-  fields: TextFields
+  fields?: TextFields
 ): StepController {
   let selector
+  if (fields == null) {
+    fields = {}
+  }
   if (fields.stepMode == null) {
     fields.stepMode = 'words'
   }
@@ -56,4 +59,11 @@ export function buildTextStepController (
     selector = new SentenceSelector(entry)
   }
   return new StepController(selector.select(), fields.stepSubset)
+}
+
+export function buildQuestionStepController (
+  entry: DomEntry
+): StepController {
+  const selector = new ElementSelector(entry, '.answer')
+  return new StepController(selector.select())
 }

@@ -5,5 +5,6 @@ export { wrapWords } from './manipulation'
 export {
   buildClozeStepController,
   buildSvgStepController,
-  buildTextStepController
+  buildTextStepController,
+  buildQuestionStepController
 } from './controller-builder'

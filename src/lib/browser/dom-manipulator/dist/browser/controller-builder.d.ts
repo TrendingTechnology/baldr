@@ -11,5 +11,6 @@ interface TextFields {
     stepMode?: 'words' | 'sentences';
     stepSubset?: string;
 }
-export declare function buildTextStepController(entry: DomEntry, fields: TextFields): StepController;
+export declare function buildTextStepController(entry: DomEntry, fields?: TextFields): StepController;
+export declare function buildQuestionStepController(entry: DomEntry): StepController;
 export {};

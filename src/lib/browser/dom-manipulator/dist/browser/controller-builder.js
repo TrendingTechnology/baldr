@@ -16,6 +16,9 @@ export function buildSvgStepController(entry, fields) {
 }
 export function buildTextStepController(entry, fields) {
     let selector;
+    if (fields == null) {
+        fields = {};
+    }
     if (fields.stepMode == null) {
         fields.stepMode = 'words';
     }
@@ -25,5 +28,10 @@ export function buildTextStepController(entry, fields) {
     else {
         selector = new SentenceSelector(entry);
     }
+    console.log(selector, entry);
     return new StepController(selector.select(), fields.stepSubset);
+}
+export function buildQuestionStepController(entry) {
+    const selector = new ElementSelector(entry, '.answer');
+    return new StepController(selector.select());
 }

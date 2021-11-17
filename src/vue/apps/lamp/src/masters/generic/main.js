@@ -6,8 +6,7 @@ import { convertHtmlToPlainText, splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-
-import * as steps from '@/steps'
+import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -43,11 +42,13 @@ export default validateMasterSpec({
     },
     charactersOnSlide: {
       type: Number,
-      description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
+      description:
+        'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
     onOne: {
-      description: 'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
+      description:
+        'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
       type: Boolean,
       default: false
     },
@@ -106,7 +107,7 @@ export default validateMasterSpec({
       }
 
       if (props.stepMode && props.stepMode === 'words') {
-        props.markup = [steps.wrapWords(markup.join(' '))]
+        props.markup = [wrapWords(markup.join(' '))]
       } else {
         props.markup = markup
       }
@@ -119,7 +120,13 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props }) {
       if (props.stepMode) {
-        return steps.calculateStepCountText(props.markup, props)
+        let markup
+        if (Array.isArray(props.markup)) {
+          markup = props.markup.join('')
+        } else {
+          markup = props.markup
+        }
+        return buildTextStepController(markup, props).stepCount
       } else {
         return props.markup.length
       }
@@ -132,25 +139,20 @@ export default validateMasterSpec({
       return output.join(' | ')
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
+      const slide = this.$get('slide')
       // adjustSlideSize(this.$el, this.$refs.contentWrapper)
       if (this.stepMode) {
-        this.domSteps = new steps.DomStepController({
-          subsetSelector: this.stepSubset,
-          mode: this.stepMode,
-          rootElement: this.$el,
-          hideAllElementsInitally: false
-        })
+        this.stepController = buildTextStepController(this.$el, slide.props)
       }
     },
-    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      if (!this.domSteps) return
-      const options = { stepNo: newStepNo }
-      if (slideNoChange) {
-        options.full = true
-      } else {
-        options.oldStepNo = oldStepNo
+    afterStepNoChangeOnComponent ({ newStepNo }) {
+      if (this.stepController == null || this.stepMode == null) {
+        return
       }
-      this.domSteps.displayByNo(options)
+      const step = this.stepController.showUpTo(newStepNo)
+      if (step != null) {
+        scroll(step.htmlElement)
+      }
     }
   }
 })

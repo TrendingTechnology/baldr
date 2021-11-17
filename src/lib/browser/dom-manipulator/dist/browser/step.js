@@ -6,10 +6,10 @@ export class StepElement {
     /**
      * @property Multiple HTML elements as an array or a
      *   single HTML element.
-     * @property useVisiblilty - Set the visibility
+     * @property useVisibliltyStyleProperty - Set the visibility
      *   `element.style.visibility` instead of the display state.
      */
-    constructor(elements) {
+    constructor(elements, useVisibliltyStyleProperty = true) {
         this.isVisible = true;
         if (Array.isArray(elements)) {
             this.htmlElements = elements;
@@ -17,6 +17,7 @@ export class StepElement {
         else {
             this.htmlElements = [elements];
         }
+        this.useVisiblilty = useVisibliltyStyleProperty;
     }
     /**
      * The last HTML element.
@@ -36,10 +37,20 @@ export class StepElement {
         this.isVisible = show;
         for (const element of this.htmlElements) {
             if (show) {
-                element.style.visibility = 'visible';
+                if (this.useVisiblilty) {
+                    element.style.visibility = 'visible';
+                }
+                else {
+                    element.style.display = 'block';
+                }
             }
             else {
-                element.style.visibility = 'hidden';
+                if (this.useVisiblilty) {
+                    element.style.visibility = 'hidden';
+                }
+                else {
+                    element.style.display = 'none';
+                }
             }
         }
     }

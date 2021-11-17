@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildTextStepController = exports.buildSvgStepController = exports.buildClozeStepController = exports.wrapWords = exports.StepController = void 0;
+exports.buildQuestionStepController = exports.buildTextStepController = exports.buildSvgStepController = exports.buildClozeStepController = exports.wrapWords = exports.StepController = void 0;
 var controller_1 = require("./controller");
 Object.defineProperty(exports, "StepController", { enumerable: true, get: function () { return controller_1.StepController; } });
 var manipulation_1 = require("./manipulation");
@@ -9,3 +9,4 @@ var controller_builder_1 = require("./controller-builder");
 Object.defineProperty(exports, "buildClozeStepController", { enumerable: true, get: function () { return controller_builder_1.buildClozeStepController; } });
 Object.defineProperty(exports, "buildSvgStepController", { enumerable: true, get: function () { return controller_builder_1.buildSvgStepController; } });
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return controller_builder_1.buildTextStepController; } });
+Object.defineProperty(exports, "buildQuestionStepController", { enumerable: true, get: function () { return controller_builder_1.buildQuestionStepController; } });

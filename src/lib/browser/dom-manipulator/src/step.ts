@@ -5,6 +5,11 @@ export type HTMLSVGElement = SVGElement | HTMLElement
  * this element very easily.
  */
 export class StepElement {
+  /**
+   * For example the master slide `question` uses `display = 'none'` to
+   * hide the answers.
+   */
+  private readonly useVisiblilty: boolean
   htmlElements: HTMLSVGElement[]
 
   isVisible: boolean = true
@@ -15,15 +20,19 @@ export class StepElement {
   /**
    * @property Multiple HTML elements as an array or a
    *   single HTML element.
-   * @property useVisiblilty - Set the visibility
+   * @property useVisibliltyStyleProperty - Set the visibility
    *   `element.style.visibility` instead of the display state.
    */
-  constructor (elements: HTMLSVGElement[] | HTMLSVGElement) {
+  constructor (
+    elements: HTMLSVGElement[] | HTMLSVGElement,
+    useVisibliltyStyleProperty: boolean = true
+  ) {
     if (Array.isArray(elements)) {
       this.htmlElements = elements
     } else {
       this.htmlElements = [elements]
     }
+    this.useVisiblilty = useVisibliltyStyleProperty
   }
 
   /**
@@ -46,9 +55,17 @@ export class StepElement {
     this.isVisible = show
     for (const element of this.htmlElements) {
       if (show) {
-        element.style.visibility = 'visible'
+        if (this.useVisiblilty) {
+          element.style.visibility = 'visible'
+        } else {
+          element.style.display = 'block'
+        }
       } else {
-        element.style.visibility = 'hidden'
+        if (this.useVisiblilty) {
+          element.style.visibility = 'hidden'
+        } else {
+          element.style.display = 'none'
+        }
       }
     }
   }

@@ -40,6 +40,9 @@ class Selector {
     createStep(...htmlElements) {
         return new step_1.StepElement(htmlElements);
     }
+    createVanishStep(...htmlElements) {
+        return new step_1.StepElement(htmlElements, false);
+    }
     static collectStepTexts(steps) {
         const result = [];
         for (const step of steps) {

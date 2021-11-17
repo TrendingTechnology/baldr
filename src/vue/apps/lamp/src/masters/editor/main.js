@@ -6,8 +6,7 @@ import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-
-import * as steps from '@/steps'
+import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -26,7 +25,8 @@ export default validateMasterSpec({
     markup: {
       type: String,
       markup: true,
-      description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
+      description:
+        'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
     ...mapStepFieldDefintions(['mode', 'subset'])
   },
@@ -57,41 +57,36 @@ export default validateMasterSpec({
       )
 
       if (props.stepMode && props.stepMode === 'words') {
-        props.markup = steps.wrapWords(props.markup)
+        props.markup = wrapWords(props.markup)
       }
       return props
     },
     calculateStepCount ({ props }) {
-      return steps.calculateStepCountText(props.markup, props, -1)
+      return buildTextStepController(this.$el, props).stepCount
     },
     plainTextFromProps (props) {
       return convertHtmlToPlainText(props.markup)
     },
     leaveSlide ({ oldProps }) {
       const element = document.querySelector('.vc_editor_master')
-      if (element) oldProps.markup = element.innerHTML
+      if (element) {
+        oldProps.markup = element.innerHTML
+      }
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       this.onSlideChange()
       if (this.stepMode) {
-        this.domSteps = new steps.DomStepController({
-          subsetSelector: this.stepSubset,
-          mode: this.stepMode,
-          rootElement: this.$el,
-          hideAllElementsInitally: false
-        })
+        this.stepController = buildTextStepController(this.$el)
       }
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      if (!this.domSteps || !this.stepMode) return
-      const options = { stepNo: newStepNo }
-      if (slideNoChange) {
-        options.full = true
-      } else {
-        options.oldStepNo = oldStepNo
+      if (this.stepController == null || this.stepMode == null) {
+        return
       }
-      const element = this.domSteps.displayByNo(options)
-      scroll(element)
+      const step = this.stepController.showUpTo(newStepNo)
+      if (step != null) {
+        scroll(step.htmlElement)
+      }
     }
   }
 })

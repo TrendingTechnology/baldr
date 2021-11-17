@@ -48,6 +48,10 @@ abstract class Selector {
     return new StepElement(htmlElements)
   }
 
+  protected createVanishStep (...htmlElements: HTMLSVGElement[]): StepElement {
+    return new StepElement(htmlElements, false)
+  }
+
   public static collectStepTexts (steps: StepElement[]): string[] {
     const result: string[] = []
     for (const step of steps) {

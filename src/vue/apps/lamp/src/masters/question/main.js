@@ -5,8 +5,7 @@
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { Question, generateTexMarkup } from '@bldr/master-question'
-
-import * as steps from '@/steps'
+import { buildQuestionStepController } from '@bldr/dom-manipulator'
 
 /**
  * @param {Number} stepNo
@@ -34,7 +33,7 @@ function setQuestionsByStepNo (stepNo) {
   element.classList.add('active')
   if (isAnswer) {
     const answerNo = parseInt(curId.substr(1))
-    this.domSteps.displayByNo({ stepNo: answerNo + 1, full: true })
+    this.stepController.showUpTo(answerNo + 1)
   }
   if (stepNo === 1) {
     window.scrollTo(0, 0)
@@ -103,10 +102,7 @@ export default validateMasterSpec({
       return generateTexMarkup(questions)
     },
     afterSlideNoChangeOnComponent () {
-      this.domSteps = new steps.DomStepController({
-        elements: this.$el.querySelectorAll('.answer'),
-        rootElement: this.$el
-      })
+      this.stepController = buildQuestionStepController(this.$el)
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
       setQuestionsByStepNo.call(this, newStepNo)
