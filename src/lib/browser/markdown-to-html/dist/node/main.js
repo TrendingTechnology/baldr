@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertMarkdownToHtml = exports.convertMarkdownStringToHtml = void 0;
 const marked = require("marked");
-// Do not remove this lines. The comments are removed by the build script.
-const { JSDOM } = require('jsdom')
-const DOMParser = new JSDOM().window.DOMParser
+const universal_dom_1 = require("@bldr/universal-dom");
 /**
  * Convert some custom markup like arrows.
  *
@@ -31,7 +29,7 @@ function convertCustomMarkup(text) {
  */
 function convertMarkdownAutoInline(text) {
     text = marked(text);
-    const dom = new DOMParser().parseFromString(text, 'text/html');
+    const dom = new universal_dom_1.DOMParserU().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
     if (dom.body.childElementCount === 1 &&
         dom.body.children[0].tagName === 'P') {

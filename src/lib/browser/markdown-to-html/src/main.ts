@@ -1,8 +1,6 @@
 import * as marked from 'marked'
 
-// Do not remove this lines. The comments are removed by the build script.
-// <- const { JSDOM } = require('jsdom')
-// <- const DOMParser = new JSDOM().window.DOMParser
+import { DOMParserU } from '@bldr/universal-dom'
 
 /**
  * Convert some custom markup like arrows.
@@ -33,7 +31,7 @@ function convertCustomMarkup (text: string): string {
  */
 function convertMarkdownAutoInline (text: string): string {
   text = marked(text)
-  const dom = new DOMParser().parseFromString(text, 'text/html')
+  const dom = new DOMParserU().parseFromString(text, 'text/html')
   // Solution using the browser only implementation.
   if (
     dom.body.childElementCount === 1 &&

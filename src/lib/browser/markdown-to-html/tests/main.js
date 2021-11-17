@@ -24,11 +24,17 @@ describe('Package “@bldr/markdown-to-html”', function () {
   })
 
   it('Unordered list', function () {
-    assertEqual('# Section\n\n- one\n- two', '<h1 id="section">Section</h1>\n<ul>\n<li>one</li>\n<li>two</li>\n</ul>\n')
+    assertEqual(
+      '# Section\n\n- one\n- two',
+      '<h1 id="section">Section</h1>\n<ul>\n<li>one</li>\n<li>two</li>\n</ul>\n'
+    )
   })
 
   it('Ordered list', function () {
-    assertEqual('# Section\n\n1. one\n2. two', '<h1 id="section">Section</h1>\n<ol>\n<li>one</li>\n<li>two</li>\n</ol>\n')
+    assertEqual(
+      '# Section\n\n1. one\n2. two',
+      '<h1 id="section">Section</h1>\n<ol>\n<li>one</li>\n<li>two</li>\n</ol>\n'
+    )
   })
 
   it('Array', function () {

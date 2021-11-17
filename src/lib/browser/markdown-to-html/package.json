@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node && sed -i 's#// <- ##' ./dist/node/main.js",
+    "build:node": "tsc --module commonjs --outDir dist/node",
     "build": "npm run build:browser && npm run build:node",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
@@ -33,8 +33,8 @@
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "dependencies": {
-    "marked": "3.0.8",
-    "jsdom": "18.0.1"
+    "@bldr/universal-dom": "*",
+    "marked": "3.0.8"
   },
   "devDependencies": {
     "@types/marked": "3.0.2"
