@@ -29,10 +29,22 @@ describe('Class “SlideCollection()”', function () {
   it('Throws error: no slides', function () {
     assert.throws(
       () => {
-        parsePresentation('no-slides')
+        parsePresentation('slide-collection/no-slides')
       },
       {
         message: 'The property “slides” must not be null.',
+        name: 'Error'
+      }
+    )
+  })
+
+  it('Throws error: duplicate slide references', function () {
+    assert.throws(
+      () => {
+        parsePresentation('slide-collection/duplicate-slide-ref')
+      },
+      {
+        message: 'Duplicate slide reference: one',
         name: 'Error'
       }
     )

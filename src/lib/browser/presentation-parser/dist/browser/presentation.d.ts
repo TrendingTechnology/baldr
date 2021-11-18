@@ -94,6 +94,15 @@ export declare class Presentation {
      */
     getSlideByNo(no: number): Slide;
     /**
+     * @param ref - The slide reference.
+     *
+     * ```yml
+     * - ref: reference
+     *   generic: slide
+     * ```
+     */
+    getSlideByRef(ref: string): Slide | undefined;
+    /**
      * Log to the console.
      */
     log(): void;

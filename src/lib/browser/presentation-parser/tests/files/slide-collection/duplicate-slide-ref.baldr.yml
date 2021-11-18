@@ -1,0 +1,9 @@
+---
+ref: duplicate-slide-ref
+title: Duplicate slide reference
+
+slides:
+- ref: one
+  generic: one
+- ref: one
+  generic: two

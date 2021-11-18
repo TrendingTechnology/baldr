@@ -1,0 +1,9 @@
+---
+ref: get-slide-by-ref
+title: Get slide by ref
+
+slides:
+- ref: one
+  generic: one
+- ref: two
+  generic: two

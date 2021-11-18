@@ -22,12 +22,6 @@ export default validateMasterSpec({
       type: String,
       markup: true,
       description: 'Text im HTML- oder Markdown-Format oder als reiner Text.'
-    },
-    items: {
-      type: Array
-    },
-    sections: {
-      type: Array
     }
   },
   icon: {
@@ -45,39 +39,6 @@ export default validateMasterSpec({
           markup: props
         }
       }
-
-      let markupItems = ''
-      let markupSections = ''
-
-      if (!props) props = {}
-
-      if (!props.markup) {
-        props.markup = ''
-      }
-
-      if (props.sections) {
-        const h = []
-        let level = 2
-        for (const section of props.sections) {
-          h.push(`<h${level}>${section}</h${level}>`)
-          level++
-        }
-        markupSections = h.join('')
-      }
-
-      if (props.items) {
-        const li = []
-        for (const item of props.items) {
-          li.push(`<li>${item}</li>`)
-        }
-        markupItems = `<ul>${li.join('')}</ul>`
-      }
-
-      let hr = ''
-      if (markupSections && markupItems) {
-        hr = '<hr>'
-      }
-      props.markup = markupSections + hr + markupItems + props.markup
 
       props.markup = convertMarkdownToHtml(props.markup)
 

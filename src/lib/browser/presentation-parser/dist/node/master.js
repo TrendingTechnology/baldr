@@ -1,8 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
+var markdown_to_html_2 = require("@bldr/markdown-to-html");
+Object.defineProperty(exports, "convertMarkdownToHtml", { enumerable: true, get: function () { return markdown_to_html_2.convertMarkdownToHtml; } });
+var core_browser_1 = require("@bldr/core-browser");
+Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return core_browser_1.convertHtmlToPlainText; } });
+var dom_manipulator_1 = require("@bldr/dom-manipulator");
+Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
+Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -126,7 +133,7 @@ class MasterWrapper {
             }
             //  Convert the field marked as containing markup from markdown to HTML.
             if (def.markup != null && def.markup && fields[name] != null) {
-                fields[name] = markdown_to_html_1.convertMarkdownToHtml(fields[name]);
+                fields[name] = markdown_to_html_1.convertNestedMarkdownToHtml(fields[name]);
             }
         }
         return fields;

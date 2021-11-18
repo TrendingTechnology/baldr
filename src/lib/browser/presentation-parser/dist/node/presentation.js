@@ -132,6 +132,19 @@ class Presentation {
         return this.slides.flat[no - 1];
     }
     /**
+     * @param ref - The slide reference.
+     *
+     * ```yml
+     * - ref: reference
+     *   generic: slide
+     * ```
+     */
+    getSlideByRef(ref) {
+        if (this.slides.withRef[ref] != null) {
+            return this.slides.withRef[ref];
+        }
+    }
+    /**
      * Log to the console.
      */
     log() {

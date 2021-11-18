@@ -1,5 +1,8 @@
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
+import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html';
 import { MediaUri } from '@bldr/client-media-models';
+export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
+export { convertHtmlToPlainText } from '@bldr/core-browser';
+export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator';
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -122,7 +125,7 @@ export class MasterWrapper {
             }
             //  Convert the field marked as containing markup from markdown to HTML.
             if (def.markup != null && def.markup && fields[name] != null) {
-                fields[name] = convertMarkdownToHtml(fields[name]);
+                fields[name] = convertNestedMarkdownToHtml(fields[name]);
             }
         }
         return fields;

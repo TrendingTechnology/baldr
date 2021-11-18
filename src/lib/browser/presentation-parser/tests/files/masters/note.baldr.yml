@@ -1,7 +1,10 @@
 ---
+ref: note-test
+title: Master slide note test
 slides:
 
-- note: |
+- ref: with-steps
+  note: |
     # heading 1
 
     ---
@@ -11,20 +14,46 @@ slides:
 
     lorem ipsum
 
-- note: |
+-  ref: no-steps
+   note: |
     lorem ipsum
 
-- note:
-    sections:
-    - Heading 1
-    - Heading 2
-    - Heading 2
-    items:
-    - item 1
-    - item 2
-    - item 3
-
-- note: |
+- ref: no-steps-after-hr
+  note: |
     # No steps
 
     ---
+
+- title: Test underlined when last word in heading appears
+  ref: heading-underline
+  note: |
+    # heading 1
+
+    ---
+
+    one
+
+    ## heading 2 test underline
+
+    two
+
+    ### heading 3 test underline
+
+    three
+
+- title: Multiple horizontal rules
+  ref: multiple-horizonal-rules
+  note: |
+    # heading 1
+
+    ---
+
+    one
+
+    ---
+
+    two
+
+    ---
+
+    three

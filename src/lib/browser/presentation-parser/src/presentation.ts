@@ -196,6 +196,20 @@ export class Presentation {
   }
 
   /**
+   * @param ref - The slide reference.
+   *
+   * ```yml
+   * - ref: reference
+   *   generic: slide
+   * ```
+   */
+  public getSlideByRef (ref: string): Slide | undefined {
+    if (this.slides.withRef[ref] != null) {
+      return this.slides.withRef[ref]
+    }
+  }
+
+  /**
    * Log to the console.
    */
   public log (): void {

@@ -13,6 +13,9 @@ export declare class SlideCollection {
      * can be accessed under the `slides` property of each slide object.
      */
     tree: Slide[];
+    withRef: {
+        [ref: string]: Slide;
+    };
     mediaUris: Set<string>;
     optionalMediaUris: Set<string>;
     /**

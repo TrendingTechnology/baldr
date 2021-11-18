@@ -16,12 +16,6 @@ export declare class NoteMaster implements Master {
             markup: boolean;
             description: string;
         };
-        items: {
-            type: ArrayConstructor;
-        };
-        sections: {
-            type: ArrayConstructor;
-        };
     };
     normalizeFields(fields: NoteFieldsRaw): NoteFieldsNormalized;
 }

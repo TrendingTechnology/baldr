@@ -1,6 +1,9 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng';
 import { Slide } from './slide';
+export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 export { Asset, Sample } from '@bldr/media-resolver-ng';
+export { convertHtmlToPlainText } from '@bldr/core-browser';
+export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator';
 export declare type Resolver = ResolverType;
 /**
  * Some data indexed by strings

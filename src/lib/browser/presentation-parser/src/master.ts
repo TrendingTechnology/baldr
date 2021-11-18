@@ -1,9 +1,12 @@
 import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
+import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { MediaUri } from '@bldr/client-media-models'
-
 import { Slide } from './slide'
+
+export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 export { Asset, Sample } from '@bldr/media-resolver-ng'
+export { convertHtmlToPlainText } from '@bldr/core-browser'
+export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 export type Resolver = ResolverType
 
@@ -382,7 +385,7 @@ export class MasterWrapper {
 
       //  Convert the field marked as containing markup from markdown to HTML.
       if (def.markup != null && def.markup && fields[name] != null) {
-        fields[name] = convertMarkdownToHtml(fields[name])
+        fields[name] = convertNestedMarkdownToHtml(fields[name])
       }
     }
     return fields

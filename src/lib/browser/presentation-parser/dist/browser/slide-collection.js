@@ -17,6 +17,7 @@ export class SlideCollection {
          * can be accessed under the `slides` property of each slide object.
          */
         this.tree = [];
+        this.withRef = {};
         this.parse(raw, this.tree, 1);
         this.mediaUris = this.collectMediaUris();
         this.optionalMediaUris = this.collectOptionalMediaUris();
@@ -36,6 +37,12 @@ export class SlideCollection {
                 const childSlides = slideRaw.slides;
                 delete slideRaw.slides;
                 const slide = new Slide(slideRaw, this.flat.length + 1, level);
+                if (slide.meta.ref != null) {
+                    if (this.withRef[slide.meta.ref] != null) {
+                        throw new Error(`Duplicate slide reference: ${slide.meta.ref}`);
+                    }
+                    this.withRef[slide.meta.ref] = slide;
+                }
                 this.flat.push(slide);
                 slidesTree.push(slide);
                 if (childSlides != null && Array.isArray(childSlides)) {

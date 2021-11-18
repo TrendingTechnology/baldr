@@ -36,7 +36,9 @@ describe('Package “@bldr/presentation-parser”', function () {
     })
 
     it('“ref” and “title” not in “meta”', function () {
-      const presentation = parsePresentation('ref-title-not-in-meta')
+      const presentation = parsePresentation(
+        'presentation/ref-title-not-in-meta'
+      )
       assert.strictEqual(presentation.meta.title, 'Title')
       assert.strictEqual(presentation.meta.ref, 'Reference')
     })
@@ -73,16 +75,20 @@ describe('Package “@bldr/presentation-parser”', function () {
   })
 
   it('Irresolvable optional asset', async function () {
-    const presentation = parsePresentation(
-      'media-assets-irresolvable-optional'
-    )
+    const presentation = parsePresentation('media-assets-irresolvable-optional')
     const assets = await presentation.resolve()
     assert.strictEqual(assets.length, 0)
   })
 
+  it('Presentation: getSlideByRef()', async function () {
+    const presentation = parsePresentation('presentation/get-slide-by-ref')
+    const slide = presentation.getSlideByRef('one')
+    assert.strictEqual(slide.meta.ref, 'one')
+  })
+
   describe('Media URI reference abbreviation', function () {
     it('ok', function () {
-      const presentation = parsePresentation('ref-abbreviation-ok')
+      const presentation = parsePresentation('presentation/ref-abbreviation-ok')
       const rawString = presentation.rawYamlStringExpanded
       assert.ok(rawString != null)
       assert.ok(rawString.includes('ref:ref-abbreviation_file-1'))
@@ -92,7 +98,7 @@ describe('Package “@bldr/presentation-parser”', function () {
     it('error', function () {
       assert.throws(
         () => {
-          parsePresentation('ref-abbreviation-error')
+          parsePresentation('presentation/ref-abbreviation-error')
         },
         {
           message:
