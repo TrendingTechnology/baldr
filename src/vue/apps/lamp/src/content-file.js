@@ -6,8 +6,18 @@
 
 /* globals defaultThemeSassVars */
 
-import { convertToYamlRaw, convertFromYamlRaw, convertPropertiesSnakeToCamel } from '@bldr/yaml'
-import { convertToString, shortenText, escapeHtml, deepCopy, RawDataObject } from '@bldr/core-browser'
+import {
+  convertToYamlRaw,
+  convertFromYamlRaw,
+  convertPropertiesSnakeToCamel
+} from '@bldr/yaml'
+import {
+  convertToString,
+  shortenText,
+  escapeHtml,
+  deepCopy,
+  RawDataObject
+} from '@bldr/core-browser'
 import { mediaResolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
@@ -66,7 +76,7 @@ function getType (data) {
  * @return {array} The intersection as an array
  */
 function intersect (array1, array2) {
-  return array1.filter((n) => array2.includes(n))
+  return array1.filter(n => array2.includes(n))
 }
 
 /**
@@ -91,7 +101,11 @@ class RawSlideObject extends RawDataObject {
       rawData = raw
     }
     if (getType(rawData) !== 'object') {
-      throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${convertToString(rawData)}`)
+      throw Error(
+        `Unsupported input type “${getType(
+          rawData
+        )}” on input data: ${convertToString(rawData)}`
+      )
     }
     super(rawData)
   }
@@ -254,11 +268,17 @@ export class Slide {
     )
 
     if (intersection.length === 0) {
-      throw Error(`No master slide found: ${convertToString(rawSlideObject.raw)}`)
+      throw Error(
+        `No master slide found: ${convertToString(rawSlideObject.raw)}`
+      )
     }
 
     if (intersection.length > 1) {
-      throw Error(`Each slide must have only one master slide: ${convertToString(rawSlideObject.raw)}`)
+      throw Error(
+        `Each slide must have only one master slide: ${convertToString(
+          rawSlideObject.raw
+        )}`
+      )
     }
 
     /**
@@ -401,7 +421,9 @@ export class Slide {
     }
 
     if (!rawSlideObject.isEmpty()) {
-      throw Error(`Unknown slide properties: ${convertToString(rawSlideObject.raw)}`)
+      throw Error(
+        `Unknown slide properties: ${convertToString(rawSlideObject.raw)}`
+      )
     }
   }
 
@@ -601,7 +623,10 @@ export class Presentation {
     if (rawYamlString) {
       try {
         if (rawObject && rawObject.meta && rawObject.meta.ref) {
-          rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.ref)
+          rawYamlString = this.expandMediaUris(
+            rawYamlString,
+            rawObject.meta.ref
+          )
         }
         rawYamlObject = convertFromYamlRaw(rawYamlString)
       } catch (error) {
@@ -619,7 +644,11 @@ export class Presentation {
           ]
         }
       } else if (!rawYamlObject.slides) {
-        throw new Error(`No top level slides key found!\n\n---\nslides:\n- generic: etc.\n\nCan not parse this content:\n\n${JSON.stringify(rawYamlObject)}`)
+        throw new Error(
+          `No top level slides key found!\n\n---\nslides:\n- generic: etc.\n\nCan not parse this content:\n\n${JSON.stringify(
+            rawYamlObject
+          )}`
+        )
       }
     }
 
@@ -787,18 +816,24 @@ export class Presentation {
         },
         vmInternal
       )
-      slide.texMarkup = slide.master.generateTexMarkup({
-        props: slide.props,
-        propsMain: slide.propsMain,
-        propsPreview: slide.propsPreview
-      }, vmInternal)
-      const steps = slide.master.calculateStepCount({
-        props: slide.props,
-        propsMain: slide.propsMain,
-        propsPreview: slide.propsPreview,
-        slide,
-        master: slide.master
-      }, vmInternal)
+      slide.texMarkup = slide.master.generateTexMarkup(
+        {
+          props: slide.props,
+          propsMain: slide.propsMain,
+          propsPreview: slide.propsPreview
+        },
+        vmInternal
+      )
+      const steps = slide.master.calculateStepCount(
+        {
+          props: slide.props,
+          propsMain: slide.propsMain,
+          propsPreview: slide.propsPreview,
+          slide,
+          master: slide.master
+        },
+        vmInternal
+      )
       if (Number.isInteger(steps)) {
         slide.stepCount = steps
       } else if (Array.isArray(steps)) {

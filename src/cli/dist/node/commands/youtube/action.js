@@ -33,6 +33,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const child_process_1 = __importDefault(require("child_process"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const youtube_api_1 = require("@bldr/youtube-api");
@@ -50,6 +51,56 @@ function requestYoutubeApi(youtubeId) {
         }
     });
 }
+function parseYoutubeDlProgressStdOut(cmd, stdout) {
+    var _a, _b, _c, _d;
+    // [download]   2.9% of 118.39MiB at 82.11KiB/s ETA 23:53
+    // [download]  66.8% of 118.39MiB at 61.29KiB/s ETA 10:56
+    const regExp = /\[download\]\s*(?<progress>.*)\s+of\s+(?<size>.*)\s+at\s+(?<speed>.*)\s+ETA\s+(?<eta>.*)/gim;
+    const match = regExp.exec(stdout);
+    if (match != null) {
+        cmd.log(log.format('download %s of %s at %s ETA %s', [
+            (_a = match.groups) === null || _a === void 0 ? void 0 : _a.progress,
+            (_b = match.groups) === null || _b === void 0 ? void 0 : _b.size,
+            (_c = match.groups) === null || _c === void 0 ? void 0 : _c.speed,
+            (_d = match.groups) === null || _d === void 0 ? void 0 : _d.eta
+        ]));
+    }
+}
+function downloadVideo(cmd, youtubeId, parentDir) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield new Promise((resolve, reject) => {
+            const command = child_process_1.default.spawn('youtube-dl', [
+                '--format',
+                'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
+                '--output',
+                youtubeId,
+                '--write-thumbnail',
+                youtubeId
+            ], { cwd: parentDir });
+            let stdout = '';
+            let stderr = '';
+            command.stdout.on('data', (data) => {
+                parseYoutubeDlProgressStdOut(cmd, data.toString());
+                stdout = stdout + data.toString();
+            });
+            // somehow songbook build stays open without this event.
+            command.stderr.on('data', (data) => {
+                stderr = stderr + data.toString();
+            });
+            command.on('error', code => {
+                reject(new Error(stderr));
+            });
+            command.on('exit', code => {
+                if (code === 0) {
+                    resolve(youtubeId);
+                }
+                else {
+                    reject(new Error(stderr));
+                }
+            });
+        });
+    });
+}
 /**
  *
  */
@@ -57,7 +108,9 @@ function action(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
         const meta = (yield requestYoutubeApi(youtubeId));
         if (meta == null) {
-            log.error('Metadata of the YouTube video “%s” could not be fetched.', [youtubeId]);
+            log.error('Metadata of the YouTube video “%s” could not be fetched.', [
+                youtubeId
+            ]);
             return;
         }
         const metaData = meta;
@@ -70,20 +123,13 @@ function action(youtubeId) {
         if (!fs_1.default.existsSync(ytDir)) {
             fs_1.default.mkdirSync(ytDir);
         }
-        const cmd = new cli_utils_1.CommandRunner();
+        const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         cmd.startSpin();
         cmd.log('Updating youtube-dl using pip3.');
         yield cmd.exec(['pip3', 'install', '--upgrade', 'youtube-dl']);
         cmd.log('Downloading the YouTube video.');
-        yield cmd.exec([
-            'youtube-dl',
-            '--format',
-            'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
-            '--output',
-            youtubeId,
-            '--write-thumbnail',
-            youtubeId
-        ], { cwd: ytDir });
+        // [download]   2.9% of 118.39MiB at 82.11KiB/s ETA 23:53
+        yield downloadVideo(cmd, youtubeId, ytDir);
         const ytFile = path_1.default.resolve(ytDir, `${youtubeId}.mp4`);
         cmd.log('Creating the metadata file in the YAML format.');
         metaData.categories = 'youtube';
