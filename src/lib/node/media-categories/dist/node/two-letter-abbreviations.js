@@ -5,28 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkTypeAbbreviations = exports.checkForTwoLetterDir = exports.getTwoLetterRegExp = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = exports.abbreviations = void 0;
 const path_1 = __importDefault(require("path"));
-exports.abbreviations = {
-    AB: 'Arbeitsblatt',
-    BD: 'Bild',
-    BS: 'Bekanntes Stück',
-    EP: 'Example',
-    FT: 'Foto',
-    GN: 'Graphische Notation',
-    GR: 'Gruppe',
-    HB: 'Hörbeispiel',
-    IN: 'Instrument',
-    LD: 'Song / Lied',
-    LT: 'Lückentext',
-    NB: 'Notenbeispiel',
-    PR: 'Person',
-    PT: 'Partitur',
-    QL: 'Quelle',
-    SF: 'Schulfunk',
-    TB: 'Tabellenkalkulation',
-    TX: 'TeX-Dateien',
-    VD: 'Video-Datei',
-    YT: 'YouTube-Video'
-};
+const config_1 = require("@bldr/config");
+const config = config_1.getConfig();
+exports.abbreviations = config.twoLetterAbbreviations;
 function isValidTwoLetterAbbreviation(abbreviation) {
     return exports.abbreviations[abbreviation] != null;
 }

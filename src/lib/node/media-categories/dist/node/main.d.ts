@@ -2,7 +2,7 @@ export { getTwoLetterRegExp } from './two-letter-abbreviations';
 export * as categoriesManagement from './management';
 export * from './specs';
 export declare const twoLetterAbbreviations: {
-    [key: string]: string;
+    [abbreviation: string]: string;
 };
 /**
  * Validate a date string in the format `yyyy-mm-dd`.

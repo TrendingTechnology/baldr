@@ -1,29 +1,11 @@
 import path from 'path'
 
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { getConfig } from '@bldr/config'
 
-export const abbreviations: { [key: string]: string } = {
-  AB: 'Arbeitsblatt',
-  BD: 'Bild',
-  BS: 'Bekanntes Stück',
-  EP: 'Example',
-  FT: 'Foto',
-  GN: 'Graphische Notation',
-  GR: 'Gruppe',
-  HB: 'Hörbeispiel',
-  IN: 'Instrument',
-  LD: 'Song / Lied',
-  LT: 'Lückentext',
-  NB: 'Notenbeispiel',
-  PR: 'Person',
-  PT: 'Partitur',
-  QL: 'Quelle',
-  SF: 'Schulfunk',
-  TB: 'Tabellenkalkulation',
-  TX: 'TeX-Dateien',
-  VD: 'Video-Datei',
-  YT: 'YouTube-Video'
-}
+const config = getConfig()
+
+export const abbreviations = config.twoLetterAbbreviations
 
 export function isValidTwoLetterAbbreviation (abbreviation: string): boolean {
   return abbreviations[abbreviation] != null

@@ -1,6 +1,6 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions';
 export declare const abbreviations: {
-    [key: string]: string;
+    [abbreviation: string]: string;
 };
 export declare function isValidTwoLetterAbbreviation(abbreviation: string): boolean;
 export declare function getTwoLetterAbbreviations(): string[];
