@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const core_browser_1 = require("@bldr/core-browser");
-function action(videoFilePath, time1, time2, cmdObj) {
+function action(videoFilePath, time1, time2) {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         let startSec = 0;
@@ -24,7 +24,12 @@ function action(videoFilePath, time1, time2, cmdObj) {
             endSec = core_browser_1.convertDurationToSeconds(time2);
         }
         cmd.startSpin();
-        yield cmd.exec(['MP4Box', '-splitx', `${startSec}:${endSec}`, videoFilePath]);
+        yield cmd.exec([
+            'MP4Box',
+            '-splitx',
+            `${startSec}:${endSec}`,
+            '"' + videoFilePath + '"'
+        ]);
         cmd.stopSpin();
     });
 }

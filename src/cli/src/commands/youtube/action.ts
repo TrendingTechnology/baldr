@@ -33,7 +33,6 @@ function parseYoutubeDlProgressStdOut (cmd: CommandRunner, stdout: string): void
   // [download]   2.9% of 118.39MiB at 82.11KiB/s ETA 23:53
   // [download]  66.8% of 118.39MiB at 61.29KiB/s ETA 10:56
   const regExp = /\[download\]\s*(?<progress>.*)\s+of\s+(?<size>.*)\s+at\s+(?<speed>.*)\s+ETA\s+(?<eta>.*)/gim
-
   const match = regExp.exec(stdout)
   if (match != null) {
     cmd.log(

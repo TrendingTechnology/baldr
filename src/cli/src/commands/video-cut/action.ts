@@ -3,7 +3,11 @@ import { CommandRunner } from '@bldr/cli-utils'
 
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
-async function action (videoFilePath: string, time1: string, time2: string, cmdObj: { [key: string]: any }): Promise<void> {
+async function action (
+  videoFilePath: string,
+  time1: string,
+  time2: string
+): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
 
   let startSec = 0
@@ -16,7 +20,12 @@ async function action (videoFilePath: string, time1: string, time2: string, cmdO
   }
 
   cmd.startSpin()
-  await cmd.exec(['MP4Box', '-splitx', `${startSec}:${endSec}`, videoFilePath])
+  await cmd.exec([
+    'MP4Box',
+    '-splitx',
+    `${startSec}:${endSec}`,
+    '"' + videoFilePath + '"'
+  ])
   cmd.stopSpin()
 }
 
