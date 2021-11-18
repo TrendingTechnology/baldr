@@ -139,6 +139,14 @@ export const general: MediaCategoriesTypes.Category = {
     shortcut: {
       title: 'Tastenkürzel'
     },
+    public: {
+      title: 'Veröffentlichbar',
+      validate: (value: any): boolean => {
+        return typeof value === 'boolean'
+      },
+      description:
+        'Zeigt an, ob die Mediendatei frei im Internet veröffentlich werden kann'
+    },
     // tmp property needed to generate id prefix
     filePath: {
       title: 'Dateipfad',
