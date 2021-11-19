@@ -3,6 +3,7 @@ import { convertToString } from '@bldr/core-browser'
 import { masterCollection } from './master-collection'
 import { MasterWrapper, FieldData } from './master'
 import { WrappedUriList } from './fuzzy-uri'
+import { Step } from './step'
 import * as log from '@bldr/log'
 
 /**
@@ -56,6 +57,11 @@ export class Slide {
    */
   public slides?: Slide[]
 
+  /**
+   * If the slide has no steps, then the array remains empty.
+   */
+  public steps: Step[]
+
   public readonly meta: SlideMeta
 
   public readonly master: MasterWrapper
@@ -83,6 +89,7 @@ export class Slide {
     const data = new DataCutter(raw)
     this.meta = new SlideMeta(data)
     this.master = this.detectMaster(data)
+    this.steps = []
     this.fields = this.master.initializeFields(data.cutAny(this.master.name))
     this.mediaUris = this.master.processMediaUris(this.fields)
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)

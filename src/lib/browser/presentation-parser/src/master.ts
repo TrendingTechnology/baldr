@@ -2,11 +2,13 @@ import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { MediaUri } from '@bldr/client-media-models'
 import { Slide } from './slide'
+import { Step } from './step'
 
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 export { Asset, Sample } from '@bldr/media-resolver-ng'
 export { convertHtmlToPlainText } from '@bldr/core-browser'
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
+export { Step } from './step'
 
 export type Resolver = ResolverType
 
@@ -245,6 +247,13 @@ export interface Master {
   ) => string | string[] | Set<string> | undefined
 
   collectFields?: (fields: any, resolver: Resolver) => FieldData
+
+  collectSteps?: (fields: any) => Step[]
+
+  /**
+   * Collect the steps after the media resolution.
+   */
+  collectStepsLate?: (fields: any) => Step[]
 
   /**
    * Generate TeX markup from the current slide. See TeX package
