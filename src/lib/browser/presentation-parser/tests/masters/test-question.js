@@ -10,7 +10,7 @@ function getQuestions (no) {
   return presentation.getSlideByNo(no).fields.questions
 }
 
-describe('Master question', function () {
+describe('Master slide “question”', function () {
   it('Alias for sub_questions', function () {
     const questions = getQuestions(1)
     assert.strictEqual(

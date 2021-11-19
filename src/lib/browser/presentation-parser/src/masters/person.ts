@@ -1,6 +1,6 @@
 import { Master } from '../master'
 
-type PersonFieldsRaw = string | PersonFieldsNormalized
+export type PersonFieldsRaw = string | PersonFieldsNormalized
 
 interface PersonFieldsNormalized {
   personId: string
@@ -23,14 +23,7 @@ export class PersonMaster implements Master {
     }
   }
 
-  normalizeFields (fields: PersonFieldsRaw) {
-    if (typeof fields === 'string') {
-      return {
-        personId: fields
-      }
-    }
-    return fields
-  }
+  shortFormField = 'personId'
 
   collectMediaUris (fields: PersonFieldsNormalized): string {
     return this.convertPersonIdToMediaUri(fields.personId)

@@ -15,14 +15,7 @@ class PersonMaster {
                 description: 'Personen-ID (z. B. Beethoven_Ludwig-van).'
             }
         };
-    }
-    normalizeFields(fields) {
-        if (typeof fields === 'string') {
-            return {
-                personId: fields
-            };
-        }
-        return fields;
+        this.shortFormField = 'personId';
     }
     collectMediaUris(fields) {
         return this.convertPersonIdToMediaUri(fields.personId);

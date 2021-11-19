@@ -6,7 +6,7 @@ const { parsePresentation } = require('../_helper.js')
 
 const presentation = parsePresentation('masters/interactive-graphic')
 
-describe('Master interactive-graphic', function () {
+describe('Master slide “interactive-graphic”', function () {
   describe('Modes', function () {
     it('mode: layer', function () {
       const slide = presentation.getSlideByNo(6)

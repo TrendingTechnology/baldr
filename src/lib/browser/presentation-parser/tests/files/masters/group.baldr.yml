@@ -3,8 +3,10 @@ ref: group-test
 title: Master slide “group” test presentation
 slides:
 
-- group: Rolling-Stones_The
-- group: Belleville-Three_The
+- ref: short-form
+  group: Rolling-Stones_The
+- ref: long-form
+  group: Belleville-Three_The
 - group: Trio
 - group: Led-Zeppelin
 - group: Deep-Purple

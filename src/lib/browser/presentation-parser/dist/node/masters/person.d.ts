@@ -1,5 +1,5 @@
 import { Master } from '../master';
-declare type PersonFieldsRaw = string | PersonFieldsNormalized;
+export declare type PersonFieldsRaw = string | PersonFieldsNormalized;
 interface PersonFieldsNormalized {
     personId: string;
 }
@@ -16,7 +16,7 @@ export declare class PersonMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: PersonFieldsRaw): PersonFieldsNormalized;
+    shortFormField: string;
     collectMediaUris(fields: PersonFieldsNormalized): string;
     private convertPersonIdToMediaUri;
 }

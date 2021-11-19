@@ -3,10 +3,17 @@ ref: person-test
 title: Master slide “person” test presentation
 slides:
 
-- title: All external sites
+- ref: short-form
+  person: Adorno_Theodor-W
+
+- ref: long-form
+  person:
+    person_id: Bach_Carl-Philipp-Emanuel
+
+- ref: external-sites
+  title: All external sites
   person: Lennon_John
-- person: Adorno_Theodor-W
-- person: Bach_Carl-Philipp-Emanuel
+
 - person: Bach_Johann-Sebastian
 - person: Bach_Wilhelm-Friedemann
 - person: Beethoven_Ludwig-van

@@ -15,7 +15,7 @@ function getMarkup (ref) {
   return slide.fields.markup
 }
 
-describe('Master “note”', function () {
+describe('Master slide “note”', function () {
   it('with-steps', function () {
     const markup = getMarkup('with-steps')
     assert.strictEqual(
@@ -50,6 +50,9 @@ describe('Master “note”', function () {
 
   it('multiple-horizonal-rules', function () {
     const markup = getMarkup('multiple-horizonal-rules')
-    assert.strictEqual(markup, '<h1 id="heading-1">heading 1</h1>\n<span class="word-area"><p><span class="word">one</span></p> <hr> <p><span class="word">two</span></p> <hr> <p><span class="word">three</span></p> </span>')
+    assert.strictEqual(
+      markup,
+      '<h1 id="heading-1">heading 1</h1>\n<span class="word-area"><p><span class="word">one</span></p> <hr> <p><span class="word">two</span></p> <hr> <p><span class="word">three</span></p> </span>'
+    )
   })
 })

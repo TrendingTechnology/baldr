@@ -1,7 +1,6 @@
-/* globals describe it beforeAll */
+/* globals describe it */
 
 const assert = require('assert')
-
 const { parsePresentation } = require('../_helper.js')
 
 const presentation = parsePresentation('masters/audio')
@@ -15,7 +14,7 @@ function getFields (ref) {
   return slide.fields
 }
 
-describe('Master audio', function () {
+describe('Master slide “audio”', function () {
   this.beforeAll(async function () {
     await presentation.resolve()
   })
@@ -36,7 +35,7 @@ describe('Master audio', function () {
     assert.strictEqual(fields.sample.yaml.ref, 'complete')
   })
 
-  it('shortform', async function () {
+  it('short-form', async function () {
     const fields = getFields('short-form')
     assert.strictEqual(fields.src, 'uuid:96626fdb-4ece-47a5-9870-d89356e0f439')
   })
