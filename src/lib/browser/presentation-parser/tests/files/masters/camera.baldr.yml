@@ -1,4 +1,7 @@
 ---
+ref: camera-test
+title: Master slide “camera” test presentation
+
 slides:
   - title: Camera
     camera: yes

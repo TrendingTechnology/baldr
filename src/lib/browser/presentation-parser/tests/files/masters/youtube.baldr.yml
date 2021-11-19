@@ -1,4 +1,7 @@
 ---
+ref: youtube-test
+title: Master slide “youtube” test presentation
+
 slides:
 - title: Downloaded video
   youtube: J0Aulg2ePWA

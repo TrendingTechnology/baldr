@@ -3,7 +3,7 @@ export class SongMaster {
         this.name = 'song';
         this.displayName = 'Lied';
         this.icon = {
-            name: 'file-Song',
+            name: 'file-song',
             color: 'green'
         };
         this.fieldsDefintion = {

@@ -1,4 +1,7 @@
 ---
+ref: sample-list-test
+title: Master slide “sample-list” test presentation
+
 slides:
 - sample_list:
   - uuid:96626fdb-4ece-47a5-9870-d89356e0f439

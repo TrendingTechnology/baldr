@@ -12,7 +12,7 @@ export class SongMaster implements Master {
   displayName = 'Lied'
 
   icon = {
-    name: 'file-Song',
+    name: 'file-song',
     color: 'green'
   }
 
