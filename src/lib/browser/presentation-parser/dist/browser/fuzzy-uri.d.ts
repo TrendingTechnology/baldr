@@ -4,7 +4,7 @@
  * specification of the URIs.
  */
 declare type FuzzySpec = string | WrappedUri | string[] | WrappedUri[];
-interface WrappedUri {
+export interface WrappedUri {
     uri: string;
     title?: string;
 }
@@ -12,7 +12,7 @@ interface WrappedUri {
  * This class holds a list of wrapped URIs.
  */
 export declare class WrappedUriList {
-    specs: WrappedUri[];
+    list: WrappedUri[];
     constructor(spec: FuzzySpec);
     /**
      * Get all URIs (without sample fragment)

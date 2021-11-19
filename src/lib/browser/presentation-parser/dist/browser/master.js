@@ -3,6 +3,7 @@ import { MediaUri } from '@bldr/client-media-models';
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 export { convertHtmlToPlainText } from '@bldr/core-browser';
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator';
+export { extractUrisFromFuzzySpecs, WrappedUriList } from './fuzzy-uri';
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'

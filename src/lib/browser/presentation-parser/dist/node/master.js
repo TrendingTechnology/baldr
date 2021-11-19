@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
@@ -10,6 +10,9 @@ Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
+var fuzzy_uri_1 = require("./fuzzy-uri");
+Object.defineProperty(exports, "extractUrisFromFuzzySpecs", { enumerable: true, get: function () { return fuzzy_uri_1.extractUrisFromFuzzySpecs; } });
+Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'

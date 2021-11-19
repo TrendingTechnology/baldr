@@ -5,8 +5,8 @@ const assert = require('assert')
 const { WrappedUriList } = require('../dist/node/fuzzy-uri.js')
 
 function createWrappedUriList (input) {
-  const list = new WrappedUriList(input)
-  return list.specs
+  const wrappedUris = new WrappedUriList(input)
+  return wrappedUris.list
 }
 
 function getFirstWrappedUri (input) {

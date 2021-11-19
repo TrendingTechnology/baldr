@@ -3,13 +3,15 @@ ref: sample-list-test
 title: Master slide “sample-list” test presentation
 
 slides:
-- sample_list:
+- ref: short-form-array
+  sample_list:
   - uuid:96626fdb-4ece-47a5-9870-d89356e0f439
   - uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a
   - uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
   - uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
 
-- sample_list:
+- ref: fuzzy-uris
+  sample_list:
     not_numbered: true
     heading: Berühmte Pastoralen
     samples:
@@ -24,3 +26,7 @@ slides:
       ref:Schubert-Schaefer_HB_Corelli_Largo-Pastorale-ad-libitum <em
       class="person">Corelli</em>: Concerto grosso „Fatto per la notte
       di Natale“: Largo (Pastorale ad libitum)
+
+- title: Single asset (ref:Partitur-Mozart-A-Dur-Violinkonzert_HB_01-Allegro-aperto)
+  ref: single-asset
+  sample_list: uuid:a2af91d0-0451-413c-9d24-088bbde5a73b

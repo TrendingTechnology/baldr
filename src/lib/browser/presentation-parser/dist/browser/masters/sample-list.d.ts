@@ -1,7 +1,9 @@
-import { Master } from '../master';
-declare type SampleListFieldsRaw = string | SampleListFieldsNormalized;
+import { Master, WrappedUri, Resolver } from '../master';
+declare type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized;
 interface SampleListFieldsNormalized {
-    samples: string | string[];
+    samples: WrappedUri[];
+    heading?: string;
+    notNumbered?: boolean;
 }
 export declare class SampleListMaster implements Master {
     name: string;
@@ -12,7 +14,6 @@ export declare class SampleListMaster implements Master {
     };
     fieldsDefintion: {
         samples: {
-            type: ArrayConstructor;
             required: boolean;
             description: string;
         };
@@ -28,5 +29,7 @@ export declare class SampleListMaster implements Master {
         };
     };
     normalizeFields(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
+    collectFields(fields: SampleListFieldsNormalized, resolver: Resolver): SampleListFieldsNormalized;
+    collectMediaUris(fields: SampleListFieldsNormalized): Set<string>;
 }
 export {};

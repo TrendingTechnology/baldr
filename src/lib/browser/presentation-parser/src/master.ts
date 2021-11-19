@@ -9,6 +9,7 @@ export { Asset, Sample } from '@bldr/media-resolver-ng'
 export { convertHtmlToPlainText } from '@bldr/core-browser'
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 export { Step } from './step'
+export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from './fuzzy-uri'
 
 export type Resolver = ResolverType
 
@@ -246,6 +247,9 @@ export interface Master {
     fields: any
   ) => string | string[] | Set<string> | undefined
 
+  /**
+   * After media resolution
+   */
   collectFields?: (fields: any, resolver: Resolver) => FieldData
 
   collectSteps?: (fields: any) => Step[]

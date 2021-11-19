@@ -8,7 +8,7 @@ import { MediaUri } from '@bldr/client-media-models'
 
 type FuzzySpec = string | WrappedUri | string[] | WrappedUri[]
 
-interface WrappedUri {
+export interface WrappedUri {
   uri: string
   title?: string
 }
@@ -50,7 +50,7 @@ class WrappedUriCollector implements WrappedUri {
  * This class holds a list of wrapped URIs.
  */
 export class WrappedUriList {
-  specs: WrappedUri[]
+  public list: WrappedUri[]
 
   constructor (spec: FuzzySpec) {
     let specArray
@@ -60,9 +60,9 @@ export class WrappedUriList {
       specArray = spec
     }
 
-    this.specs = []
+    this.list = []
     for (const sampleSpec of specArray) {
-      this.specs.push(new WrappedUriCollector(sampleSpec))
+      this.list.push(new WrappedUriCollector(sampleSpec))
     }
   }
 
@@ -71,14 +71,14 @@ export class WrappedUriList {
    */
   get uris (): Set<string> {
     const uris = new Set<string>()
-    for (const spec of this.specs) {
+    for (const spec of this.list) {
       uris.add(MediaUri.removeFragment(spec.uri))
     }
     return uris
   }
 
   * [Symbol.iterator] (): Generator<WrappedUri, any, any> {
-    for (const spec of this.specs) {
+    for (const spec of this.list) {
       yield spec
     }
   }

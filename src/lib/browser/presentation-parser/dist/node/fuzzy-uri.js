@@ -49,9 +49,9 @@ class WrappedUriList {
         else {
             specArray = spec;
         }
-        this.specs = [];
+        this.list = [];
         for (const sampleSpec of specArray) {
-            this.specs.push(new WrappedUriCollector(sampleSpec));
+            this.list.push(new WrappedUriCollector(sampleSpec));
         }
     }
     /**
@@ -59,13 +59,13 @@ class WrappedUriList {
      */
     get uris() {
         const uris = new Set();
-        for (const spec of this.specs) {
+        for (const spec of this.list) {
             uris.add(client_media_models_1.MediaUri.removeFragment(spec.uri));
         }
         return uris;
     }
     *[Symbol.iterator]() {
-        for (const spec of this.specs) {
+        for (const spec of this.list) {
             yield spec;
         }
     }

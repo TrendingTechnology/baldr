@@ -1,3 +1,4 @@
+import { extractUrisFromFuzzySpecs, WrappedUriList } from '../master';
 export class SampleListMaster {
     constructor() {
         this.name = 'sampleList';
@@ -8,7 +9,6 @@ export class SampleListMaster {
         };
         this.fieldsDefintion = {
             samples: {
-                type: Array,
                 required: true,
                 description: 'Eine Liste von Audio-Ausschnitten.'
             },
@@ -23,14 +23,34 @@ export class SampleListMaster {
                 description: 'Nicht durchnummeriert'
             }
         };
-        // collectionMediaUris (fields: SampleListFieldsNormalized) {
-        //   return mediaResolver.getUrisFromWrappedSpecs(fields.samples)
-        // }
     }
     normalizeFields(fields) {
+        let samples;
         if (typeof fields === 'string' || Array.isArray(fields)) {
-            fields = { samples: fields };
+            samples = fields;
+            fields = { samples: [] };
+        }
+        else {
+            samples = fields.samples;
+        }
+        const wrappedUris = new WrappedUriList(samples);
+        fields.samples = wrappedUris.list;
+        return fields;
+    }
+    collectFields(fields, resolver) {
+        if (fields.samples.length === 1) {
+            const asset = resolver.getAsset(fields.samples[0].uri);
+            if (asset.samples != null) {
+                const uriList = [];
+                for (const sample of asset.samples.getAll()) {
+                    uriList.push({ uri: sample.ref, title: sample.titleSafe });
+                }
+                fields.samples = uriList;
+            }
         }
         return fields;
+    }
+    collectMediaUris(fields) {
+        return extractUrisFromFuzzySpecs(fields.samples);
     }
 }
