@@ -99,6 +99,11 @@ export class MasterWrapper {
      * Before resolving
      */
     initializeFields(fields) {
+        if (this.master.shortFormField != null && typeof fields === 'string') {
+            const shortform = fields;
+            fields = {};
+            fields[this.master.shortFormField] = shortform;
+        }
         if (this.master.normalizeFields != null) {
             fields = this.master.normalizeFields(fields);
         }

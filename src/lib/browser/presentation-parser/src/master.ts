@@ -182,6 +182,22 @@ export interface Master {
   }
 
   /**
+   * ```yml
+   * - audio: ref:./Fuer-Elise.jpg
+   * ```
+   *
+   * ```yml
+   * - audio:
+   *     src: ref:./Fuer-Elise.jpg
+   * ```
+   *
+   * ```js
+   * this.shortform = 'src'
+   * ```
+   */
+  shortFormField?: string
+
+  /**
    * The result must correspond to the fields definition.
    *
    * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
@@ -348,6 +364,11 @@ export class MasterWrapper {
    * Before resolving
    */
   public initializeFields (fields: FieldData): FieldData {
+    if (this.master.shortFormField != null && typeof fields === 'string') {
+      const shortform = fields
+      fields = {}
+      fields[this.master.shortFormField] = shortform
+    }
     if (this.master.normalizeFields != null) {
       fields = this.master.normalizeFields(fields)
     }

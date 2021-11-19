@@ -83,12 +83,7 @@ export class AudioMaster implements Master {
     }
   }
 
-  normalizeFields (fields: AudioFieldsRaw): AudioFieldsNormalized {
-    if (typeof fields === 'string') {
-      fields = { src: fields }
-    }
-    return fields
-  }
+  shortFormField = 'src'
 
   collectMediaUris (fields: AudioFieldsNormalized): Set<string> {
     const uris = new Set([fields.src])

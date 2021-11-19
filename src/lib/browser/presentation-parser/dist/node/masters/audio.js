@@ -57,12 +57,7 @@ class AudioMaster {
                 description: 'Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel.'
             }
         };
-    }
-    normalizeFields(fields) {
-        if (typeof fields === 'string') {
-            fields = { src: fields };
-        }
-        return fields;
+        this.shortFormField = 'src';
     }
     collectMediaUris(fields) {
         const uris = new Set([fields.src]);

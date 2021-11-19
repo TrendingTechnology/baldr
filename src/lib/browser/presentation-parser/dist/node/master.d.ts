@@ -127,6 +127,21 @@ export interface Master {
         [key: string]: FieldDefinition;
     };
     /**
+     * ```yml
+     * - audio: ref:./Fuer-Elise.jpg
+     * ```
+     *
+     * ```yml
+     * - audio:
+     *     src: ref:./Fuer-Elise.jpg
+     * ```
+     *
+     * ```js
+     * this.shortform = 'src'
+     * ```
+     */
+    shortFormField?: string;
+    /**
      * The result must correspond to the fields definition.
      *
      * Called during the parsing the YAML file (`Praesentation.baldr.yml`)

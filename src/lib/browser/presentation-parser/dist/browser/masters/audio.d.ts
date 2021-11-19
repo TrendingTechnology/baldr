@@ -1,5 +1,4 @@
 import { Master, Resolver, Asset, Sample } from '../master';
-declare type AudioFieldsRaw = string | AudioFieldsNormalized;
 interface AudioFieldsNormalized {
     src: string;
     title?: string;
@@ -72,7 +71,7 @@ export declare class AudioMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: AudioFieldsRaw): AudioFieldsNormalized;
+    shortFormField: string;
     collectMediaUris(fields: AudioFieldsNormalized): Set<string>;
     collectFields(fields: AudioFieldsNormalized, resolver: Resolver): AudioFieldsResolved;
 }
