@@ -1,14 +1,17 @@
 ---
 ref: instrument-test
 title: Master slide “instrument” test presentation
+
 slides:
 
-- title: Long form
+- ref: short-form
+  title: Short form
+  instrument: Floete
+
+- ref: long-form
+  title: Long form
   instrument:
      instrument_id: Fagott
-
-- title: Short form
-  instrument: Floete
 
 - instrument: Fagott
 - instrument: Floete

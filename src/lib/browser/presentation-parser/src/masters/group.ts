@@ -1,8 +1,8 @@
 import { Master } from '../master'
 
-type GroupFieldsRaw = string
+export type GroupFieldsRaw = string | GroupFieldsNormalized
 
-interface GroupFieldsNormalized {
+export interface GroupFieldsNormalized {
   groupId: string
 }
 
@@ -24,14 +24,7 @@ export class GroupMaster implements Master {
     }
   }
 
-  normalizeFields (fields: GroupFieldsRaw): GroupFieldsNormalized {
-    if (typeof fields === 'string') {
-      return {
-        groupId: fields
-      }
-    }
-    return fields
-  }
+  shortFormField = 'groupId'
 
   collectMediaUris (fields: GroupFieldsNormalized): string {
     return this.convertGroupIdToMediaId(fields.groupId)

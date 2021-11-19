@@ -1,6 +1,6 @@
 import { Master } from '../master';
-declare type GroupFieldsRaw = string;
-interface GroupFieldsNormalized {
+export declare type GroupFieldsRaw = string | GroupFieldsNormalized;
+export interface GroupFieldsNormalized {
     groupId: string;
 }
 export declare class GroupMaster implements Master {
@@ -17,8 +17,7 @@ export declare class GroupMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: GroupFieldsRaw): GroupFieldsNormalized;
+    shortFormField: string;
     collectMediaUris(fields: GroupFieldsNormalized): string;
     private convertGroupIdToMediaId;
 }
-export {};

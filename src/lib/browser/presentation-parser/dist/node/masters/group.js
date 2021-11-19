@@ -16,14 +16,7 @@ class GroupMaster {
                 description: 'Die ID der Gruppe (z. B. „Beatles_The“).'
             }
         };
-    }
-    normalizeFields(fields) {
-        if (typeof fields === 'string') {
-            return {
-                groupId: fields
-            };
-        }
-        return fields;
+        this.shortFormField = 'groupId';
     }
     collectMediaUris(fields) {
         return this.convertGroupIdToMediaId(fields.groupId);
