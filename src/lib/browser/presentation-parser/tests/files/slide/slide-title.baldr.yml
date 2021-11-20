@@ -1,0 +1,11 @@
+---
+ref: slide-title
+title: Slide title
+
+slides:
+- ref: from-metadata-title
+  title: From metadata
+  generic: test
+
+- ref: from-hook
+  section: From hook

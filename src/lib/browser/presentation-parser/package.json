@@ -38,6 +38,7 @@
     "@bldr/log": "*",
     "@bldr/markdown-to-html": "*",
     "@bldr/media-resolver-ng": "*",
+    "@bldr/string-format": "*",
     "@bldr/tex-templates": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*"

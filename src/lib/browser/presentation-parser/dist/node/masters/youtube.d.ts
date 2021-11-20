@@ -11,6 +11,12 @@ export declare class YoutubeMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F534
+         *
+         * @see https://emojipedia.org/large-red-circle/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         id: {

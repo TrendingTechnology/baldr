@@ -4,11 +4,14 @@ title: Master slide “section” test presentation
 
 slides:
 
-- title: Short form
+- ref: short-form
+  title: Short form
   section: A section
 
-- title: Long form
+- ref: long-form
+  title: Long form
   section:
     heading: Another section
 
-- section: '*Lorem* __ipsum__'
+- ref: markdown
+  section: '*Lorem* __ipsum__'

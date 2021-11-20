@@ -102,4 +102,21 @@ describe('Class “Slide()”', function () {
       assert.strictEqual(slide.fields.title, '1')
     })
   })
+
+  describe('Getter attribute “title”', function () {
+    const presentation = parsePresentation('slide/slide-title')
+
+    function getTitle (ref) {
+      const slide = presentation.getSlideByRef(ref)
+      return slide.title
+    }
+
+    it('from-metadata-title', function () {
+      assert.strictEqual(getTitle('from-metadata-title'), 'From metadata')
+    })
+
+    it('from-hook', function () {
+      assert.strictEqual(getTitle('from-hook'), 'From hook')
+    })
+  })
 })

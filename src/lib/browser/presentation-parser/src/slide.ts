@@ -1,10 +1,12 @@
-import { DataCutter } from './data-management'
 import { convertToString } from '@bldr/core-browser'
+import { shortenText } from '@bldr/string-format'
+import * as log from '@bldr/log'
+
+import { DataCutter } from './data-management'
 import { masterCollection } from './master-collection'
 import { MasterWrapper, FieldData } from './master'
-import { WrappedUriList } from './fuzzy-uri'
 import { Step, StepCollector } from './step'
-import * as log from '@bldr/log'
+import { WrappedUriList } from './fuzzy-uri'
 
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -129,6 +131,10 @@ export class Slide {
     return this.stepCollector.steps
   }
 
+  public get plainText (): string | undefined {
+    return this.master.derivePlainTextFromFields(this.fields)
+  }
+
   /**
    * The title of the slide.
    */
@@ -137,18 +143,18 @@ export class Slide {
       return this.meta.title
     }
 
+    const titleFromFields = this.master.deriveTitleFromFields(this.fields)
+
+    if (titleFromFields != null) {
+      return titleFromFields
+    }
+
+    const plainText = this.plainText
+    if (plainText != null) {
+      return shortenText(plainText)
+    }
+
     return this.master.name
-    // const titleFromProps = this.master.titleFromProps({
-    //   props: this.props,
-    //   propsMain: this.propsMain,
-    //   propsPreview: this.propsPreview
-    // })
-
-    // if (titleFromProps) return titleFromProps
-
-    // let plain = this.plainText
-    // plain = plain.replace(/\|/g, '')
-    // return shortenText(plain)
   }
 
   public get detailedTitle (): string {

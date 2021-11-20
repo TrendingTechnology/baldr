@@ -17,7 +17,14 @@ export class WikipediaMaster implements Master {
 
   icon = {
     name: 'wikipedia',
-    color: 'black'
+    color: 'black',
+
+    /**
+     * U+26AA
+     *
+     * @see https://emojipedia.org/white-circle/
+     */
+    unicodeSymbol: '⚪'
   }
 
   fieldsDefintion = {
@@ -44,7 +51,7 @@ export class WikipediaMaster implements Master {
       // de:Wolfgang_Amadeus_Mozart
       const regExp = new RegExp(/^([a-z]+):(.+)$/)
       const match = fields.match(regExp)
-      if (match) {
+      if (match != null) {
         fields = {
           title: match[2],
           language: match[1]

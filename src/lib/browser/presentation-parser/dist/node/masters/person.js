@@ -7,7 +7,13 @@ class PersonMaster {
         this.displayName = 'Porträt';
         this.icon = {
             name: 'person',
-            color: 'orange'
+            color: 'orange',
+            /**
+             *  U+1F9D1
+             *
+             * @see https://emojipedia.org/person/
+             */
+            unicodeSymbol: '🧑'
         };
         this.fieldsDefintion = {
             personId: {

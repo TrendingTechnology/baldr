@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Slide = void 0;
-const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
-const master_collection_1 = require("./master-collection");
-const fuzzy_uri_1 = require("./fuzzy-uri");
-const step_1 = require("./step");
+const string_format_1 = require("@bldr/string-format");
 const log = require("@bldr/log");
+const data_management_1 = require("./data-management");
+const master_collection_1 = require("./master-collection");
+const step_1 = require("./step");
+const fuzzy_uri_1 = require("./fuzzy-uri");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -59,6 +60,9 @@ class Slide {
     get steps() {
         return this.stepCollector.steps;
     }
+    get plainText() {
+        return this.master.derivePlainTextFromFields(this.fields);
+    }
     /**
      * The title of the slide.
      */
@@ -66,16 +70,15 @@ class Slide {
         if (this.meta.title != null) {
             return this.meta.title;
         }
+        const titleFromFields = this.master.deriveTitleFromFields(this.fields);
+        if (titleFromFields != null) {
+            return titleFromFields;
+        }
+        const plainText = this.plainText;
+        if (plainText != null) {
+            return string_format_1.shortenText(plainText);
+        }
         return this.master.name;
-        // const titleFromProps = this.master.titleFromProps({
-        //   props: this.props,
-        //   propsMain: this.propsMain,
-        //   propsPreview: this.propsPreview
-        // })
-        // if (titleFromProps) return titleFromProps
-        // let plain = this.plainText
-        // plain = plain.replace(/\|/g, '')
-        // return shortenText(plain)
     }
     get detailedTitle() {
         return `Nr. ${this.no} [${this.master.displayName}]: ${this.title}`;

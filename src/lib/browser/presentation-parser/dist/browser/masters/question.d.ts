@@ -56,6 +56,12 @@ export declare class QuestionMaster implements Master {
         name: string;
         color: string;
         size: "large";
+        /**
+         * U+2754
+         *
+         * @see https://emojipedia.org/white-question-mark/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         questions: {

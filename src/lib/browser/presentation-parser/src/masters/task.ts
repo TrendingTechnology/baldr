@@ -14,7 +14,14 @@ export class TaskMaster implements Master {
   icon = {
     name: 'task',
     color: 'yellow-dark',
-    size: 'large' as const
+    size: 'large' as const,
+
+    /**
+     * U+2757
+     *
+     * @see https://emojipedia.org/exclamation-mark/
+     */
+    unicodeSymbol: '❗'
   }
 
   fieldsDefintion = {

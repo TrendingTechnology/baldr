@@ -234,7 +234,14 @@ export class QuestionMaster implements Master {
   icon = {
     name: 'question',
     color: 'yellow',
-    size: 'large' as const
+    size: 'large' as const,
+
+    /**
+     * U+2754
+     *
+     * @see https://emojipedia.org/white-question-mark/
+     */
+     unicodeSymbol: '❔'
   }
 
   fieldsDefintion = {

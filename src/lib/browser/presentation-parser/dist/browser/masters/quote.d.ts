@@ -15,6 +15,12 @@ export declare class QuoteMaster implements Master {
         name: string;
         color: string;
         size: "large";
+        /**
+         * U+1F4AC
+         *
+         * @see https://emojipedia.org/speech-balloon/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         text: {

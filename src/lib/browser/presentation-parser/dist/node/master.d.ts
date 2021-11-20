@@ -9,6 +9,7 @@ export { StepCollector } from './step';
 export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from './fuzzy-uri';
 export { Resolver } from '@bldr/media-resolver-ng';
 export { Slide } from './slide';
+export { shortenText } from '@bldr/string-format';
 /**
  * Some data indexed by strings
  */
@@ -229,7 +230,7 @@ export interface Master {
      */
     collectStepsAfterResolution?: (fields: any, slide: Slide) => void;
     /**
-     * Determine a title from the properties. Getter on the slide object.
+     * Determine a title from the slide fields.
      *
      * ```ts
      * deriveTitleFromFields (fields: GenericFieldsResolved) {
@@ -238,6 +239,7 @@ export interface Master {
      *  ```
      */
     deriveTitleFromFields?: (fields: any) => string;
+    derivePlainTextFromFields?: (fields: any) => string;
     /**
      * Generate TeX markup from the current slide. See TeX package
      * `schule-baldr.dtx`.
@@ -296,4 +298,6 @@ export declare class MasterWrapper {
      * After the media resolution.
      */
     finalizeSlide(slide: Slide, resolver: Resolver): FieldData | undefined;
+    deriveTitleFromFields(fields: any): string | undefined;
+    derivePlainTextFromFields(fields: any): string | undefined;
 }

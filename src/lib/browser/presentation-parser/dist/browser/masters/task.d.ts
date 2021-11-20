@@ -10,6 +10,12 @@ export declare class TaskMaster implements Master {
         name: string;
         color: string;
         size: "large";
+        /**
+         * U+2757
+         *
+         * @see https://emojipedia.org/exclamation-mark/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         markup: {

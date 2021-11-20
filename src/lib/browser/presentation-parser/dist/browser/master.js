@@ -7,6 +7,7 @@ export { StepCollector } from './step';
 export { extractUrisFromFuzzySpecs, WrappedUriList } from './fuzzy-uri';
 export { Resolver } from '@bldr/media-resolver-ng';
 export { Slide } from './slide';
+export { shortenText } from '@bldr/string-format';
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -163,5 +164,27 @@ export class MasterWrapper {
             this.master.collectStepsAfterResolution(slide.fields, slide);
         }
         return slide.fields;
+    }
+    deriveTitleFromFields(fields) {
+        if (this.master.deriveTitleFromFields != null) {
+            return this.master.deriveTitleFromFields(fields);
+        }
+    }
+    derivePlainTextFromFields(fields) {
+        if (this.master.derivePlainTextFromFields != null) {
+            return this.master.derivePlainTextFromFields(fields);
+        }
+        const segments = [];
+        for (const fieldName in fields) {
+            if (Object.prototype.hasOwnProperty.call(fields, fieldName)) {
+                const value = fields[fieldName];
+                if (typeof value === 'string') {
+                    segments.push(value);
+                }
+            }
+        }
+        if (segments.length > 0) {
+            return segments.join('');
+        }
     }
 }

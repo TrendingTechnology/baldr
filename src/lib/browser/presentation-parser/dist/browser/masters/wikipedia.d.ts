@@ -11,6 +11,12 @@ export declare class WikipediaMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+26AA
+         *
+         * @see https://emojipedia.org/white-circle/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         title: {

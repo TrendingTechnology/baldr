@@ -1,5 +1,5 @@
 import { Master } from '../master';
-declare type SectionFieldsRaw = string | SectionFieldsNormalized;
+export declare type SectionFieldsRaw = string | SectionFieldsNormalized;
 interface SectionFieldsNormalized {
     heading: string;
 }
@@ -9,6 +9,12 @@ export declare class SectionMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+2796
+         *
+         * @see https://emojipedia.org/minus/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         heading: {
@@ -18,6 +24,7 @@ export declare class SectionMaster implements Master {
             description: string;
         };
     };
-    normalizeFieldsInput(fields: SectionFieldsRaw): SectionFieldsNormalized;
+    shortFormField: string;
+    deriveTitleFromFields(fields: SectionFieldsNormalized): string;
 }
 export {};

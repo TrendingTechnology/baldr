@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { Master, shortenText } from '../master'
 
-type SectionFieldsRaw = string | SectionFieldsNormalized
+export type SectionFieldsRaw = string | SectionFieldsNormalized
 
 interface SectionFieldsNormalized {
   heading: string
@@ -13,7 +13,14 @@ export class SectionMaster implements Master {
 
   icon = {
     name: 'file-tree',
-    color: 'orange-dark'
+    color: 'orange-dark',
+
+    /**
+     * U+2796
+     *
+     * @see https://emojipedia.org/minus/
+     */
+    unicodeSymbol: '➖'
   }
 
   fieldsDefintion = {
@@ -25,12 +32,9 @@ export class SectionMaster implements Master {
     }
   }
 
-  normalizeFieldsInput (fields: SectionFieldsRaw): SectionFieldsNormalized {
-    if (typeof fields === 'string') {
-      fields = {
-        heading: fields
-      }
-    }
-    return fields
+  shortFormField = 'heading'
+
+  deriveTitleFromFields (fields: SectionFieldsNormalized): string {
+    return shortenText(fields.heading)
   }
 }

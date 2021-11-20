@@ -10,9 +10,9 @@ export declare class DocumentMaster implements Master {
         name: string;
         color: string;
         /**
-         * U+1F5CB
+         * U+1F4D1
          *
-         * @see https://emojipedia.org/empty-document/
+         * @see https://emojipedia.org/bookmark-tabs/
          */
         unicodeSymbol: string;
     };

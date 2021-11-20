@@ -16,6 +16,7 @@ export {
 } from './fuzzy-uri'
 export { Resolver } from '@bldr/media-resolver-ng'
 export { Slide } from './slide'
+export { shortenText } from '@bldr/string-format'
 
 /**
  * Some data indexed by strings
@@ -303,7 +304,7 @@ export interface Master {
   collectStepsAfterResolution?: (fields: any, slide: Slide) => void
 
   /**
-   * Determine a title from the properties. Getter on the slide object.
+   * Determine a title from the slide fields.
    *
    * ```ts
    * deriveTitleFromFields (fields: GenericFieldsResolved) {
@@ -312,6 +313,8 @@ export interface Master {
    *  ```
    */
   deriveTitleFromFields?: (fields: any) => string
+
+  derivePlainTextFromFields?: (fields: any) => string
 
   /**
    * Generate TeX markup from the current slide. See TeX package
@@ -523,5 +526,29 @@ export class MasterWrapper {
       this.master.collectStepsAfterResolution(slide.fields, slide)
     }
     return slide.fields
+  }
+
+  public deriveTitleFromFields (fields: any): string | undefined {
+    if (this.master.deriveTitleFromFields != null) {
+      return this.master.deriveTitleFromFields(fields)
+    }
+  }
+
+  public derivePlainTextFromFields (fields: any): string | undefined {
+    if (this.master.derivePlainTextFromFields != null) {
+      return this.master.derivePlainTextFromFields(fields)
+    }
+    const segments = []
+    for (const fieldName in fields) {
+      if (Object.prototype.hasOwnProperty.call(fields, fieldName)) {
+        const value = fields[fieldName]
+        if (typeof value === 'string') {
+          segments.push(value)
+        }
+      }
+    }
+    if (segments.length > 0) {
+      return segments.join('')
+    }
   }
 }

@@ -19,7 +19,14 @@ export class QuoteMaster implements Master {
   icon = {
     name: 'quote',
     color: 'brown',
-    size: 'large' as const
+    size: 'large' as const,
+
+    /**
+     * U+1F4AC
+     *
+     * @see https://emojipedia.org/speech-balloon/
+     */
+    unicodeSymbol: '💬'
   }
 
   fieldsDefintion = {

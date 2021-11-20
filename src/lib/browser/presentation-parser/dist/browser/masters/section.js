@@ -1,10 +1,17 @@
+import { shortenText } from '../master';
 export class SectionMaster {
     constructor() {
         this.name = 'section';
         this.displayName = 'Abschnitt';
         this.icon = {
             name: 'file-tree',
-            color: 'orange-dark'
+            color: 'orange-dark',
+            /**
+             * U+2796
+             *
+             * @see https://emojipedia.org/minus/
+             */
+            unicodeSymbol: '➖'
         };
         this.fieldsDefintion = {
             heading: {
@@ -14,13 +21,9 @@ export class SectionMaster {
                 description: 'Die Überschrift / der Titel des Abschnitts.'
             }
         };
+        this.shortFormField = 'heading';
     }
-    normalizeFieldsInput(fields) {
-        if (typeof fields === 'string') {
-            fields = {
-                heading: fields
-            };
-        }
-        return fields;
+    deriveTitleFromFields(fields) {
+        return shortenText(fields.heading);
     }
 }

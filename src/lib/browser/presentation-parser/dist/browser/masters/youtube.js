@@ -4,7 +4,13 @@ export class YoutubeMaster {
         this.displayName = 'YouTube';
         this.icon = {
             name: 'youtube',
-            color: 'red'
+            color: 'red',
+            /**
+             * U+1F534
+             *
+             * @see https://emojipedia.org/large-red-circle/
+             */
+            unicodeSymbol: '🔴'
         };
         this.fieldsDefintion = {
             id: {

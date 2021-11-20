@@ -8,7 +8,13 @@ class QuoteMaster {
         this.icon = {
             name: 'quote',
             color: 'brown',
-            size: 'large'
+            size: 'large',
+            /**
+             * U+1F4AC
+             *
+             * @see https://emojipedia.org/speech-balloon/
+             */
+            unicodeSymbol: '💬'
         };
         this.fieldsDefintion = {
             text: {

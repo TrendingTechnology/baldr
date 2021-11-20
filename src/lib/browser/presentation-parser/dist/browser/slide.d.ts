@@ -1,7 +1,7 @@
 import { DataCutter } from './data-management';
 import { MasterWrapper, FieldData } from './master';
-import { WrappedUriList } from './fuzzy-uri';
 import { Step, StepCollector } from './step';
+import { WrappedUriList } from './fuzzy-uri';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -63,6 +63,7 @@ export declare class Slide {
      * If the slide has no steps, then the array remains empty.
      */
     get steps(): Step[];
+    get plainText(): string | undefined;
     /**
      * The title of the slide.
      */

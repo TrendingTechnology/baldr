@@ -9,6 +9,12 @@ export declare class PersonMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         *  U+1F9D1
+         *
+         * @see https://emojipedia.org/person/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         personId: {

@@ -167,7 +167,13 @@ class QuestionMaster {
         this.icon = {
             name: 'question',
             color: 'yellow',
-            size: 'large'
+            size: 'large',
+            /**
+             * U+2754
+             *
+             * @see https://emojipedia.org/white-question-mark/
+             */
+            unicodeSymbol: '❔'
         };
         this.fieldsDefintion = {
             questions: {

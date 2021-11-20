@@ -15,7 +15,14 @@ export class YoutubeMaster implements Master {
 
   icon = {
     name: 'youtube',
-    color: 'red'
+    color: 'red',
+
+    /**
+     * U+1F534
+     *
+     * @see https://emojipedia.org/large-red-circle/
+     */
+    unicodeSymbol: '🔴'
   }
 
   fieldsDefintion = {

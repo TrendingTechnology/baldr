@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
@@ -19,6 +19,8 @@ var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
+var string_format_1 = require("@bldr/string-format");
+Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_1.shortenText; } });
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -176,6 +178,28 @@ class MasterWrapper {
             this.master.collectStepsAfterResolution(slide.fields, slide);
         }
         return slide.fields;
+    }
+    deriveTitleFromFields(fields) {
+        if (this.master.deriveTitleFromFields != null) {
+            return this.master.deriveTitleFromFields(fields);
+        }
+    }
+    derivePlainTextFromFields(fields) {
+        if (this.master.derivePlainTextFromFields != null) {
+            return this.master.derivePlainTextFromFields(fields);
+        }
+        const segments = [];
+        for (const fieldName in fields) {
+            if (Object.prototype.hasOwnProperty.call(fields, fieldName)) {
+                const value = fields[fieldName];
+                if (typeof value === 'string') {
+                    segments.push(value);
+                }
+            }
+        }
+        if (segments.length > 0) {
+            return segments.join('');
+        }
     }
 }
 exports.MasterWrapper = MasterWrapper;

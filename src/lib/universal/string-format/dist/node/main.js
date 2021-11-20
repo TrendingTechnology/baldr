@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertHtmlToPlainText = exports.shortenText = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = void 0;
+var date_1 = require("./date");
+Object.defineProperty(exports, "convertDurationToSeconds", { enumerable: true, get: function () { return date_1.convertDurationToSeconds; } });
+Object.defineProperty(exports, "getCurrentSchoolYear", { enumerable: true, get: function () { return date_1.getCurrentSchoolYear; } });
+Object.defineProperty(exports, "getFormatedSchoolYear", { enumerable: true, get: function () { return date_1.getFormatedSchoolYear; } });
+var format_1 = require("./format");
+Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return format_1.shortenText; } });
+Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return format_1.convertHtmlToPlainText; } });

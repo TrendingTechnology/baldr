@@ -9,11 +9,11 @@ class DocumentMaster {
             name: 'file-outline',
             color: 'gray',
             /**
-             * U+1F5CB
+             * U+1F4D1
              *
-             * @see https://emojipedia.org/empty-document/
+             * @see https://emojipedia.org/bookmark-tabs/
              */
-            unicodeSymbol: '🗋'
+            unicodeSymbol: '📑'
         };
         this.fieldsDefintion = {
             src: {

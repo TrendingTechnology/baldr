@@ -8,7 +8,13 @@ class TaskMaster {
         this.icon = {
             name: 'task',
             color: 'yellow-dark',
-            size: 'large'
+            size: 'large',
+            /**
+             * U+2757
+             *
+             * @see https://emojipedia.org/exclamation-mark/
+             */
+            unicodeSymbol: '❗'
         };
         this.fieldsDefintion = {
             markup: {
