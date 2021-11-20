@@ -93,6 +93,9 @@ export class CounterMaster {
             format: {
                 default: 'arabic',
                 description: 'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
+            },
+            counterElements: {
+                description: 'Die formatieren Zählelemente'
             }
         };
     }
@@ -113,16 +116,21 @@ export class CounterMaster {
             format = 'arabic';
         }
         if (to == null) {
-            throw new Error('Counter master slide needs to.');
+            throw new Error('The master slide “counter” requires the field “to”!');
+        }
+        const counterElements = [];
+        for (let index = 1; index <= to; index++) {
+            counterElements.push(formatCounterNumber(index, format));
         }
         return {
             to,
+            counterElements,
             format
         };
     }
-    collectFields(fields) {
-        return Object.assign({
-            toFormatted: formatCounterNumber(fields.to, fields.format)
-        }, fields);
+    collectStepsEarly(fields, stepCollection) {
+        for (const counterElement of fields.counterElements) {
+            stepCollection.add(`Zähle „${counterElement}“`);
+        }
     }
 }

@@ -9,7 +9,11 @@ export { Asset, Sample } from '@bldr/media-resolver-ng'
 export { convertHtmlToPlainText } from '@bldr/core-browser'
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 export { StepCollector } from './step'
-export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from './fuzzy-uri'
+export {
+  extractUrisFromFuzzySpecs,
+  WrappedUri,
+  WrappedUriList
+} from './fuzzy-uri'
 export { Resolver } from '@bldr/media-resolver-ng'
 export { Slide } from './slide'
 
@@ -255,13 +259,18 @@ export interface Master {
   /**
    * Collect the steps before the media resolution.
    */
-  collectSteps?: (fields: any, stepCollector: StepCollector) => void
+  collectStepsEarly?: (fields: any, stepCollector: StepCollector) => void
 
   /**
    * Collect the steps after the media resolution.
    *
-   * ```js
-   * slide.stepCollector.add({title: 'Title', shortcut: 's 1'})
+   * ```ts
+   * collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+   *   for (const wrappedUri of fields.samples) {
+   *     const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
+   *     slide.stepCollector.add(title)
+   *   }
+   * }
    * ```
    */
   collectStepsLate?: (fields: any, slide: Slide) => void
@@ -372,6 +381,15 @@ export class MasterWrapper {
       )
     }
     return new Set<string>()
+  }
+
+  public collectStepsEarly (
+    fields: FieldData,
+    stepCollector: StepCollector
+  ): void {
+    if (this.master.collectStepsEarly != null) {
+      this.master.collectStepsEarly(fields, stepCollector)
+    }
   }
 
   generateTexMarkup (fields: FieldData): string | undefined {

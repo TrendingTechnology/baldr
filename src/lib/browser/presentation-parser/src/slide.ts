@@ -89,6 +89,7 @@ export class Slide {
     this.fields = this.master.initializeFields(data.cutAny(this.master.name))
     this.mediaUris = this.master.processMediaUris(this.fields)
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
+    this.master.collectStepsEarly(this.fields, this.stepCollector)
     this.audioOverlay = this.parseAudioOverlay(data)
     // data.checkEmpty()
   }

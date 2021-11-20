@@ -107,6 +107,11 @@ class MasterWrapper {
         }
         return new Set();
     }
+    collectStepsEarly(fields, stepCollector) {
+        if (this.master.collectStepsEarly != null) {
+            this.master.collectStepsEarly(fields, stepCollector);
+        }
+    }
     generateTexMarkup(fields) {
         if (this.master.generateTexMarkup != null) {
             return this.master.generateTexMarkup(fields);

@@ -90,7 +90,8 @@ describe('Class “Slide()”', function () {
           parseFirstSlide('fields/required')
         },
         {
-          message: 'A field named “src” is mandatory for the master slide “audio”.',
+          message:
+            'A field named “src” is mandatory for the master slide “audio”.',
           name: 'Error'
         }
       )

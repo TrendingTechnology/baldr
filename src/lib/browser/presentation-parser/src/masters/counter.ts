@@ -1,15 +1,10 @@
-import { Master } from '../master'
+import { Master, StepCollector } from '../master'
 
 type CounterFieldsRaw = string | number | CounterFieldsNormalized
 
 interface CounterFieldsNormalized {
   to: number
-  format: Format
-}
-
-interface CounterFieldsResolved extends CounterFieldsNormalized {
-  to: number
-  toFormatted: string
+  counterElements: string[]
   format: Format
 }
 
@@ -128,6 +123,9 @@ export class CounterMaster implements Master {
       default: 'arabic',
       description:
         'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
+    },
+    counterElements: {
+      description: 'Die formatieren Zählelemente'
     }
   }
 
@@ -148,21 +146,27 @@ export class CounterMaster implements Master {
     }
 
     if (to == null) {
-      throw new Error('Counter master slide needs to.')
+      throw new Error('The master slide “counter” requires the field “to”!')
+    }
+
+    const counterElements: string[] = []
+    for (let index = 1; index <= to; index++) {
+      counterElements.push(formatCounterNumber(index, format))
     }
 
     return {
       to,
+      counterElements,
       format
     }
   }
 
-  collectFields (fields: CounterFieldsNormalized) {
-    return Object.assign(
-      {
-        toFormatted: formatCounterNumber(fields.to, fields.format)
-      },
-      fields
-    )
+  collectStepsEarly (
+    fields: CounterFieldsNormalized,
+    stepCollection: StepCollector
+  ): void {
+    for (const counterElement of fields.counterElements) {
+      stepCollection.add(`Zähle „${counterElement}“`)
+    }
   }
 }

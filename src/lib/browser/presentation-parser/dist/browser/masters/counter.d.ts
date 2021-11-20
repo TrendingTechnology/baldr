@@ -1,7 +1,8 @@
-import { Master } from '../master';
+import { Master, StepCollector } from '../master';
 declare type CounterFieldsRaw = string | number | CounterFieldsNormalized;
 interface CounterFieldsNormalized {
     to: number;
+    counterElements: string[];
     format: Format;
 }
 /**
@@ -40,10 +41,11 @@ export declare class CounterMaster implements Master {
             default: string;
             description: string;
         };
+        counterElements: {
+            description: string;
+        };
     };
     normalizeFields(fields: CounterFieldsRaw): CounterFieldsNormalized;
-    collectFields(fields: CounterFieldsNormalized): {
-        toFormatted: string;
-    } & CounterFieldsNormalized;
+    collectStepsEarly(fields: CounterFieldsNormalized, stepCollection: StepCollector): void;
 }
 export {};

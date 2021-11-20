@@ -1,0 +1,18 @@
+---
+ref: step-support
+title: Step support
+
+slides:
+
+- ref: no-step-support
+  camera: true
+
+- ref: sample-list
+  title: Sample list (ref:Partitur-Mozart-A-Dur-Violinkonzert_HB_01-Allegro-aperto)
+  sample_list: uuid:a2af91d0-0451-413c-9d24-088bbde5a73b
+
+- ref: counter
+  title: 'Format: roman'
+  counter:
+    to: 3
+    format: roman

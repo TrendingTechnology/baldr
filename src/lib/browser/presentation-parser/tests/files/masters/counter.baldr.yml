@@ -3,33 +3,39 @@ ref: counter-test
 title: Master slide “counter” test presentation
 slides:
 
-- title: Short from
-  counter: 1
+- ref: short-form
+  title: Short form
+  counter: 7
 
-- title: Long form
-  counter:
-    to: 2
-
-- title: As string
+- ref: long-form
+  title: Long form
   counter:
     to: 3
 
-- title: 'Format: arabic'
+# - title: As string
+#   counter:
+#     to: 3
+
+- ref: format-arabic
+  title: 'Format: arabic'
   counter:
     to: 3
     format: arabic
 
-- title: 'Format: lower'
+- ref: format-lower
+  title: 'Format: lower'
   counter:
     to: 3
     format: lower
 
-- title: 'Format: upper'
+- ref: format-upper
+  title: 'Format: upper'
   counter:
     to: 3
     format: upper
 
-- title: 'Format: roman'
+- ref: format-roman
+  title: 'Format: roman'
   counter:
     to: 3
     format: roman

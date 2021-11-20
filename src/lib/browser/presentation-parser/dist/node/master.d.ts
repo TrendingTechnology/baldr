@@ -192,12 +192,17 @@ export interface Master {
     /**
      * Collect the steps before the media resolution.
      */
-    collectSteps?: (fields: any, stepCollector: StepCollector) => void;
+    collectStepsEarly?: (fields: any, stepCollector: StepCollector) => void;
     /**
      * Collect the steps after the media resolution.
      *
-     * ```js
-     * slide.stepCollector.add({title: 'Title', shortcut: 's 1'})
+     * ```ts
+     * collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+     *   for (const wrappedUri of fields.samples) {
+     *     const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
+     *     slide.stepCollector.add(title)
+     *   }
+     * }
      * ```
      */
     collectStepsLate?: (fields: any, slide: Slide) => void;
@@ -247,6 +252,7 @@ export declare class MasterWrapper {
     private static processMediaUris;
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
+    collectStepsEarly(fields: FieldData, stepCollector: StepCollector): void;
     generateTexMarkup(fields: FieldData): string | undefined;
     /**
      * Before resolving

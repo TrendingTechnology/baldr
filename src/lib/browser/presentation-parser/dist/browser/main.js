@@ -1,3 +1,20 @@
+/**
+ * ```
+ * presentation = new Presentation() [presentation.ts]
+ *   new SlideCollection() [slide-collection.ts]
+ *     new Slide(...) [slide.ts]
+ *       masterWrapper.initializeFields(...)
+ *       masterWrapper.processMediaUris(...)
+ *       masterWrapper.processOptionalMediaUris(...)
+ *       masterWrapper.collectStepsEarly(...)
+ *
+ * presentation.resolve()
+ *   masterWrapper.finalizeSlide(...) [master.ts]
+ *     master.collectFields(...)
+ *     master.collectStepsLate(...)
+ * ```
+ * @module @bldr/presentation-parser
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
