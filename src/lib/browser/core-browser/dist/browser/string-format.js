@@ -35,8 +35,9 @@ export function escapeHtml(htmlString) {
  */
 export function convertHtmlToPlainText(html) {
     var _a;
-    if (html == null)
+    if (html == null) {
         return '';
+    }
     // To get spaces between heading and paragraphs
     html = html.replace(/></g, '> <');
     const markup = new DOMParser().parseFromString(html, 'text/html');
@@ -173,8 +174,9 @@ export function shortenText(text, options) {
     if (options.stripTags) {
         text = convertHtmlToPlainText(text);
     }
-    if (text.length < options.maxLength)
+    if (text.length < options.maxLength) {
         return text;
+    }
     // https://stackoverflow.com/a/5454303
     // trim the string to the maximum length
     text = text.substr(0, options.maxLength);
@@ -195,7 +197,18 @@ export function formatToLocalDate(dateSpec) {
     if (isNaN(date.getDay()))
         return dateSpec;
     const months = [
-        'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember'
     ];
     // Not getDay()
     return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
@@ -258,7 +271,9 @@ export function convertDurationToSeconds(duration) {
     if (typeof duration === 'string' && duration.match(/:/) != null) {
         const segments = duration.split(':');
         if (segments.length === 3) {
-            return parseInt(segments[0]) * 3600 + parseInt(segments[1]) * 60 + parseInt(segments[2]);
+            return (parseInt(segments[0]) * 3600 +
+                parseInt(segments[1]) * 60 +
+                parseInt(segments[2]));
         }
         else if (segments.length === 2) {
             return parseInt(segments[0]) * 60 + parseInt(segments[1]);

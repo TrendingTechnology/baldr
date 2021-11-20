@@ -64,6 +64,11 @@ export declare class Slide {
      */
     get steps(): Step[];
     /**
+     * The title of the slide.
+     */
+    get title(): string;
+    get detailedTitle(): string;
+    /**
      * Log to the console.
      */
     log(): void;

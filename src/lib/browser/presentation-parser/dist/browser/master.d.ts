@@ -229,6 +229,16 @@ export interface Master {
      */
     collectStepsAfterResolution?: (fields: any, slide: Slide) => void;
     /**
+     * Determine a title from the properties. Getter on the slide object.
+     *
+     * ```ts
+     * deriveTitleFromFields (fields: GenericFieldsResolved) {
+     *
+     * }
+     *  ```
+     */
+    deriveTitleFromFields?: (fields: any) => string;
+    /**
      * Generate TeX markup from the current slide. See TeX package
      * `schule-baldr.dtx`.
      *
@@ -269,6 +279,7 @@ export declare class MasterWrapper {
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
     get name(): string;
+    get displayName(): string;
     /**
      * Convert to a set and remove sample fragments, e. g. `#complete`
      */

@@ -130,6 +130,32 @@ export class Slide {
   }
 
   /**
+   * The title of the slide.
+   */
+  public get title (): string {
+    if (this.meta.title != null) {
+      return this.meta.title
+    }
+
+    return this.master.name
+    // const titleFromProps = this.master.titleFromProps({
+    //   props: this.props,
+    //   propsMain: this.propsMain,
+    //   propsPreview: this.propsPreview
+    // })
+
+    // if (titleFromProps) return titleFromProps
+
+    // let plain = this.plainText
+    // plain = plain.replace(/\|/g, '')
+    // return shortenText(plain)
+  }
+
+  public get detailedTitle (): string {
+    return `Nr. ${this.no} [${this.master.displayName}]: ${this.title}`
+  }
+
+  /**
    * Log to the console.
    */
   public log (): void {
@@ -137,6 +163,6 @@ export class Slide {
       this.master.icon.unicodeSymbol != null
         ? this.master.icon.unicodeSymbol + '\t'
         : '\t'
-    log.always('%sSlide No. %s', [unicodeSymbol, this.no])
+    log.always('%s%s', [unicodeSymbol, this.detailedTitle])
   }
 }

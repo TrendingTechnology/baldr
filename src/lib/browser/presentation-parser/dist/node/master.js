@@ -80,6 +80,9 @@ class MasterWrapper {
     get name() {
         return this.master.name;
     }
+    get displayName() {
+        return this.master.displayName;
+    }
     /**
      * Convert to a set and remove sample fragments, e. g. `#complete`
      */

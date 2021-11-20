@@ -39,7 +39,9 @@ export function escapeHtml (htmlString: string): string {
  * @returns The plain text version.
  */
 export function convertHtmlToPlainText (html: string): string {
-  if (html == null) return ''
+  if (html == null) {
+    return ''
+  }
   // To get spaces between heading and paragraphs
   html = html.replace(/></g, '> <')
   const markup = new DOMParser().parseFromString(html, 'text/html')
@@ -61,13 +63,18 @@ export function convertHtmlToPlainText (html: string): string {
  * @param no - The number in the multipart asset list. The first element has the
  *   number 1.
  */
-export function formatMultiPartAssetFileName (firstFileName: string, no: string | number): string {
+export function formatMultiPartAssetFileName (
+  firstFileName: string,
+  no: string | number
+): string {
   if (!Number.isInteger(no)) {
     no = 1
   }
 
   if (no > 999) {
-    throw new Error(`${firstFileName}: The multipart asset number must not be greater than 999.`)
+    throw new Error(
+      `${firstFileName}: The multipart asset number must not be greater than 999.`
+    )
   }
 
   let suffix
@@ -173,7 +180,10 @@ interface ShortenTextOptions {
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.
  */
-export function shortenText (text: string, options?: ShortenTextOptions): string {
+export function shortenText (
+  text: string,
+  options?: ShortenTextOptions
+): string {
   const defaults = {
     stripTags: false,
     maxLength: 80
@@ -188,7 +198,9 @@ export function shortenText (text: string, options?: ShortenTextOptions): string
   if (options.stripTags) {
     text = convertHtmlToPlainText(text)
   }
-  if (text.length < options.maxLength) return text
+  if (text.length < options.maxLength) {
+    return text
+  }
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
   text = text.substr(0, options.maxLength)
@@ -209,7 +221,18 @@ export function formatToLocalDate (dateSpec: string): string {
   // Invalid date
   if (isNaN(date.getDay())) return dateSpec
   const months = [
-    'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+    'Januar',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember'
   ]
   // Not getDay()
   return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`
@@ -268,7 +291,11 @@ export function convertDurationToSeconds (duration: string | number): number {
   if (typeof duration === 'string' && duration.match(/:/) != null) {
     const segments = duration.split(':')
     if (segments.length === 3) {
-      return parseInt(segments[0]) * 3600 + parseInt(segments[1]) * 60 + parseInt(segments[2])
+      return (
+        parseInt(segments[0]) * 3600 +
+        parseInt(segments[1]) * 60 +
+        parseInt(segments[2])
+      )
     } else if (segments.length === 2) {
       return parseInt(segments[0]) * 60 + parseInt(segments[1])
     }

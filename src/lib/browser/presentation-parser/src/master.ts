@@ -303,6 +303,17 @@ export interface Master {
   collectStepsAfterResolution?: (fields: any, slide: Slide) => void
 
   /**
+   * Determine a title from the properties. Getter on the slide object.
+   *
+   * ```ts
+   * deriveTitleFromFields (fields: GenericFieldsResolved) {
+   *
+   * }
+   *  ```
+   */
+  deriveTitleFromFields?: (fields: any) => string
+
+  /**
    * Generate TeX markup from the current slide. See TeX package
    * `schule-baldr.dtx`.
    *
@@ -335,7 +346,13 @@ class MasterIcon implements MasterIconSpec {
   showOnSlides: boolean
   unicodeSymbol?: string
 
-  constructor ({ name, color, size, showOnSlides, unicodeSymbol }: MasterIconSpec) {
+  constructor ({
+    name,
+    color,
+    size,
+    showOnSlides,
+    unicodeSymbol
+  }: MasterIconSpec) {
     if (size != null && !['small', 'large'].includes(size)) {
       throw new Error(
         `The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`
@@ -373,6 +390,10 @@ export class MasterWrapper {
 
   public get name (): string {
     return this.master.name
+  }
+
+  public get displayName (): string {
+    return this.master.displayName
   }
 
   /**

@@ -36,7 +36,6 @@ export default class StartPage extends Vue {
   mounted () {
     styleConfigurator.reset()
   }
-
 }
 </script>
 

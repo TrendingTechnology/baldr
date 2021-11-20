@@ -57,12 +57,33 @@ export class Slide {
         return this.stepCollector.steps;
     }
     /**
+     * The title of the slide.
+     */
+    get title() {
+        if (this.meta.title != null) {
+            return this.meta.title;
+        }
+        return this.master.name;
+        // const titleFromProps = this.master.titleFromProps({
+        //   props: this.props,
+        //   propsMain: this.propsMain,
+        //   propsPreview: this.propsPreview
+        // })
+        // if (titleFromProps) return titleFromProps
+        // let plain = this.plainText
+        // plain = plain.replace(/\|/g, '')
+        // return shortenText(plain)
+    }
+    get detailedTitle() {
+        return `Nr. ${this.no} [${this.master.displayName}]: ${this.title}`;
+    }
+    /**
      * Log to the console.
      */
     log() {
         const unicodeSymbol = this.master.icon.unicodeSymbol != null
             ? this.master.icon.unicodeSymbol + '\t'
             : '\t';
-        log.always('%sSlide No. %s', [unicodeSymbol, this.no]);
+        log.always('%s%s', [unicodeSymbol, this.detailedTitle]);
     }
 }

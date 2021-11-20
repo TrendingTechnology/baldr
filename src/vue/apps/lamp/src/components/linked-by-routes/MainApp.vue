@@ -52,11 +52,11 @@ export default {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
     // see preload.js
     if (window.api != null) {
-      window.api.ipcRendererOn('navigate', (route) => {
+      window.api.ipcRendererOn('navigate', route => {
         this.$router.push(route)
       })
 
-      window.api.ipcRendererOn('action', (name) => {
+      window.api.ipcRendererOn('action', name => {
         if (actions[name] && typeof actions[name] === 'function') {
           actions[name]()
         } else {
