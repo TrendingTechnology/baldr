@@ -3,7 +3,10 @@ import { MediaUri } from '@bldr/client-media-models';
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 export { convertHtmlToPlainText } from '@bldr/core-browser';
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator';
+export { StepCollector } from './step';
 export { extractUrisFromFuzzySpecs, WrappedUriList } from './fuzzy-uri';
+export { Resolver } from '@bldr/media-resolver-ng';
+export { Slide } from './slide';
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -137,13 +140,16 @@ export class MasterWrapper {
         return fields;
     }
     /**
-     * After resolving
+     * After the media resolution.
      */
-    finalizeFields(slide, resolver) {
+    finalizeSlide(slide, resolver) {
         if (this.master.collectFields != null) {
             const fields = this.master.collectFields(slide.fields, resolver);
             slide.fields = fields;
-            return fields;
         }
+        if (this.master.collectStepsLate != null) {
+            this.master.collectStepsLate(slide.fields, slide);
+        }
+        return slide.fields;
     }
 }

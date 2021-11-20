@@ -5,6 +5,7 @@ const data_management_1 = require("./data-management");
 const core_browser_1 = require("@bldr/core-browser");
 const master_collection_1 = require("./master-collection");
 const fuzzy_uri_1 = require("./fuzzy-uri");
+const step_1 = require("./step");
 const log = require("@bldr/log");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -22,12 +23,12 @@ class SlideMeta {
 }
 class Slide {
     constructor(raw, no, level) {
+        this.stepCollector = new step_1.StepCollector();
         this.no = no;
         this.level = level;
         const data = new data_management_1.DataCutter(raw);
         this.meta = new SlideMeta(data);
         this.master = this.detectMaster(data);
-        this.steps = [];
         this.fields = this.master.initializeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);
         this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields);
@@ -50,6 +51,12 @@ class Slide {
         if (audioOverlay != null) {
             return new fuzzy_uri_1.WrappedUriList(audioOverlay);
         }
+    }
+    /**
+     * If the slide has no steps, then the array remains empty.
+     */
+    get steps() {
+        return this.stepCollector.steps;
     }
     /**
      * Log to the console.

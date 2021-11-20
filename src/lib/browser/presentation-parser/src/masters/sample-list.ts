@@ -3,7 +3,8 @@ import {
   extractUrisFromFuzzySpecs,
   WrappedUri,
   WrappedUriList,
-  Resolver
+  Resolver,
+  Slide
 } from '../master'
 
 type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized
@@ -69,6 +70,13 @@ export class SampleListMaster implements Master {
       }
     }
     return fields
+  }
+
+  collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+    for (const wrappedUri of fields.samples) {
+      const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
+      slide.stepCollector.add(title)
+    }
   }
 
   collectMediaUris (fields: SampleListFieldsNormalized) {

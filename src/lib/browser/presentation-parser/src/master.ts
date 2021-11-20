@@ -1,17 +1,17 @@
-import { Resolver as ResolverType } from '@bldr/media-resolver-ng'
+import { Resolver } from '@bldr/media-resolver-ng'
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { MediaUri } from '@bldr/client-media-models'
 import { Slide } from './slide'
-import { Step } from './step'
+import { StepCollector } from './step'
 
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 export { Asset, Sample } from '@bldr/media-resolver-ng'
 export { convertHtmlToPlainText } from '@bldr/core-browser'
 export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
-export { Step } from './step'
+export { StepCollector } from './step'
 export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from './fuzzy-uri'
-
-export type Resolver = ResolverType
+export { Resolver } from '@bldr/media-resolver-ng'
+export { Slide } from './slide'
 
 /**
  * Some data indexed by strings
@@ -252,12 +252,19 @@ export interface Master {
    */
   collectFields?: (fields: any, resolver: Resolver) => FieldData
 
-  collectSteps?: (fields: any) => Step[]
+  /**
+   * Collect the steps before the media resolution.
+   */
+  collectSteps?: (fields: any, stepCollector: StepCollector) => void
 
   /**
    * Collect the steps after the media resolution.
+   *
+   * ```js
+   * slide.stepCollector.add({title: 'Title', shortcut: 's 1'})
+   * ```
    */
-  collectStepsLate?: (fields: any) => Step[]
+  collectStepsLate?: (fields: any, slide: Slide) => void
 
   /**
    * Generate TeX markup from the current slide. See TeX package
@@ -426,16 +433,20 @@ export class MasterWrapper {
   }
 
   /**
-   * After resolving
+   * After the media resolution.
    */
-  public finalizeFields (
+  public finalizeSlide (
     slide: Slide,
     resolver: Resolver
   ): FieldData | undefined {
     if (this.master.collectFields != null) {
       const fields = this.master.collectFields(slide.fields, resolver)
       slide.fields = fields
-      return fields
     }
+
+    if (this.master.collectStepsLate != null) {
+      this.master.collectStepsLate(slide.fields, slide)
+    }
+    return slide.fields
   }
 }

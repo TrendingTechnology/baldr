@@ -46,6 +46,12 @@ describe('Master slide “sample-list”', function () {
   })
 
   it('single-asset', async function () {
+    const slide = getSlide('single-asset')
+    assert.strictEqual(slide.steps.length, 12)
+    assert.strictEqual(
+      slide.steps[0].title,
+      'Violinkonzert A-Dur KV 216: I. Satz Allegro aperto'
+    )
     const fields = getFields('single-asset')
     assert.strictEqual(fields.samples.length, 12)
   })

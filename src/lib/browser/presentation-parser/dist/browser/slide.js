@@ -2,6 +2,7 @@ import { DataCutter } from './data-management';
 import { convertToString } from '@bldr/core-browser';
 import { masterCollection } from './master-collection';
 import { WrappedUriList } from './fuzzy-uri';
+import { StepCollector } from './step';
 import * as log from '@bldr/log';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -19,12 +20,12 @@ class SlideMeta {
 }
 export class Slide {
     constructor(raw, no, level) {
+        this.stepCollector = new StepCollector();
         this.no = no;
         this.level = level;
         const data = new DataCutter(raw);
         this.meta = new SlideMeta(data);
         this.master = this.detectMaster(data);
-        this.steps = [];
         this.fields = this.master.initializeFields(data.cutAny(this.master.name));
         this.mediaUris = this.master.processMediaUris(this.fields);
         this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields);
@@ -47,6 +48,12 @@ export class Slide {
         if (audioOverlay != null) {
             return new WrappedUriList(audioOverlay);
         }
+    }
+    /**
+     * If the slide has no steps, then the array remains empty.
+     */
+    get steps() {
+        return this.stepCollector.steps;
     }
     /**
      * Log to the console.

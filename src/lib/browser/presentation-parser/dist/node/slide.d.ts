@@ -1,7 +1,7 @@
 import { DataCutter } from './data-management';
 import { MasterWrapper, FieldData } from './master';
 import { WrappedUriList } from './fuzzy-uri';
-import { Step } from './step';
+import { Step, StepCollector } from './step';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -40,10 +40,7 @@ export declare class Slide {
      * An array of child slide objects.
      */
     slides?: Slide[];
-    /**
-     * If the slide has no steps, then the array remains empty.
-     */
-    steps: Step[];
+    stepCollector: StepCollector;
     readonly meta: SlideMeta;
     readonly master: MasterWrapper;
     /**
@@ -62,6 +59,10 @@ export declare class Slide {
     constructor(raw: any, no: number, level: number);
     private detectMaster;
     private parseAudioOverlay;
+    /**
+     * If the slide has no steps, then the array remains empty.
+     */
+    get steps(): Step[];
     /**
      * Log to the console.
      */

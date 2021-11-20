@@ -1,4 +1,5 @@
 import { Master, Resolver, Asset, Sample } from '../master';
+export declare type AudioFieldsRaw = string | AudioFieldsNormalized;
 interface AudioFieldsNormalized {
     src: string;
     title?: string;

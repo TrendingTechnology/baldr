@@ -1,4 +1,4 @@
-import { Master, WrappedUri, Resolver } from '../master';
+import { Master, WrappedUri, Resolver, Slide } from '../master';
 declare type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized;
 interface SampleListFieldsNormalized {
     samples: WrappedUri[];
@@ -30,6 +30,7 @@ export declare class SampleListMaster implements Master {
     };
     normalizeFields(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
     collectFields(fields: SampleListFieldsNormalized, resolver: Resolver): SampleListFieldsNormalized;
+    collectStepsLate(fields: SampleListFieldsNormalized, slide: Slide): void;
     collectMediaUris(fields: SampleListFieldsNormalized): Set<string>;
 }
 export {};

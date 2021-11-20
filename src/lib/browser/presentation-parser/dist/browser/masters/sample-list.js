@@ -50,6 +50,12 @@ export class SampleListMaster {
         }
         return fields;
     }
+    collectStepsLate(fields, slide) {
+        for (const wrappedUri of fields.samples) {
+            const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri;
+            slide.stepCollector.add(title);
+        }
+    }
     collectMediaUris(fields) {
         return extractUrisFromFuzzySpecs(fields.samples);
     }

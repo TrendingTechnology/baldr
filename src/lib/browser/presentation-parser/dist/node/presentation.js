@@ -113,7 +113,7 @@ class Presentation {
             let assets = yield exports.resolver.resolve(this.slides.mediaUris, true);
             assets = assets.concat(yield exports.resolver.resolve(this.slides.optionalMediaUris, false));
             for (const slide of this.slides) {
-                slide.master.finalizeFields(slide, exports.resolver);
+                slide.master.finalizeSlide(slide, exports.resolver);
             }
             return assets;
         });

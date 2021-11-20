@@ -53,6 +53,12 @@ class SampleListMaster {
         }
         return fields;
     }
+    collectStepsLate(fields, slide) {
+        for (const wrappedUri of fields.samples) {
+            const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri;
+            slide.stepCollector.add(title);
+        }
+    }
     collectMediaUris(fields) {
         return master_1.extractUrisFromFuzzySpecs(fields.samples);
     }

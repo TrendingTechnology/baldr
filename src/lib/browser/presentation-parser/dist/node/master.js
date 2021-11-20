@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
@@ -10,9 +10,15 @@ Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
+var step_1 = require("./step");
+Object.defineProperty(exports, "StepCollector", { enumerable: true, get: function () { return step_1.StepCollector; } });
 var fuzzy_uri_1 = require("./fuzzy-uri");
 Object.defineProperty(exports, "extractUrisFromFuzzySpecs", { enumerable: true, get: function () { return fuzzy_uri_1.extractUrisFromFuzzySpecs; } });
 Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
+var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
+var slide_1 = require("./slide");
+Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
@@ -147,14 +153,17 @@ class MasterWrapper {
         return fields;
     }
     /**
-     * After resolving
+     * After the media resolution.
      */
-    finalizeFields(slide, resolver) {
+    finalizeSlide(slide, resolver) {
         if (this.master.collectFields != null) {
             const fields = this.master.collectFields(slide.fields, resolver);
             slide.fields = fields;
-            return fields;
         }
+        if (this.master.collectStepsLate != null) {
+            this.master.collectStepsLate(slide.fields, slide);
+        }
+        return slide.fields;
     }
 }
 exports.MasterWrapper = MasterWrapper;
