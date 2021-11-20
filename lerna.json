@@ -1,5 +1,6 @@
 {
   "packages": [
+    "./",
     "src/api/*",
     "src/lib/browser/*",
     "src/lib/node/*",
