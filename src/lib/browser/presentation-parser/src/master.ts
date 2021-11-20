@@ -258,6 +258,20 @@ export interface Master {
 
   /**
    * Collect the steps before the media resolution.
+   *
+   * ```ts
+   * collectStepsOnInstantiation (
+   *   fields: CounterInstantiated,
+   *   stepCollection: StepCollector
+   * ): void {
+   *   for (const counterElement of fields.counterElements) {
+   *     stepCollection.add(`Zähle „${counterElement}“`)
+   *   }
+   * }
+   * ```
+   *
+   * @param fields - Fields type: `..Instantiated`.
+   * @param stepCollector - Use `stepCollector.add()` to add one step.
    */
   collectStepsOnInstantiation?: (fields: any, stepCollector: StepCollector) => void
 

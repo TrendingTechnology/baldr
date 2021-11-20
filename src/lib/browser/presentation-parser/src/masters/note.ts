@@ -1,8 +1,9 @@
-import { Master, convertMarkdownToHtml, wrapWords } from '../master'
+import { Master, convertMarkdownToHtml, StepCollector } from '../master'
+import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
-type NoteFieldsRaw = string | NoteFieldsNormalized
+export type NoteFieldsRaw = string | NoteFieldsInstantiated
 
-interface NoteFieldsNormalized {
+interface NoteFieldsInstantiated {
   markup: string
 }
 
@@ -24,13 +25,11 @@ export class NoteMaster implements Master {
     }
   }
 
-  normalizeFieldsInput (fields: NoteFieldsRaw): NoteFieldsNormalized {
-    if (typeof fields === 'string') {
-      fields = {
-        markup: fields
-      }
-    }
+  shortFormField = 'markup'
 
+  normalizeFieldsInput (
+    fields: NoteFieldsInstantiated
+  ): NoteFieldsInstantiated {
     fields.markup = convertMarkdownToHtml(fields.markup)
 
     // hr tag
@@ -46,5 +45,22 @@ export class NoteMaster implements Master {
       fields.markup = wrapWords(fields.markup)
     }
     return fields
+  }
+
+  collectStepsOnInstantiation (
+    fields: NoteFieldsInstantiated,
+    stepCollector: StepCollector
+  ) {
+    const controller = buildTextStepController(fields.markup, {
+      stepMode: 'words'
+    })
+    stepCollector.add('Initiale Ansicht')
+
+    for (const stepElement of controller.steps) {
+      if (stepElement.text == null) {
+        throw new Error('A step in the master slide “note” needs text!')
+      }
+      stepCollector.add(stepElement.text)
+    }
   }
 }

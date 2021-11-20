@@ -1,6 +1,6 @@
-import { Master } from '../master';
-declare type NoteFieldsRaw = string | NoteFieldsNormalized;
-interface NoteFieldsNormalized {
+import { Master, StepCollector } from '../master';
+export declare type NoteFieldsRaw = string | NoteFieldsInstantiated;
+interface NoteFieldsInstantiated {
     markup: string;
 }
 export declare class NoteMaster implements Master {
@@ -17,6 +17,8 @@ export declare class NoteMaster implements Master {
             description: string;
         };
     };
-    normalizeFieldsInput(fields: NoteFieldsRaw): NoteFieldsNormalized;
+    shortFormField: string;
+    normalizeFieldsInput(fields: NoteFieldsInstantiated): NoteFieldsInstantiated;
+    collectStepsOnInstantiation(fields: NoteFieldsInstantiated, stepCollector: StepCollector): void;
 }
 export {};

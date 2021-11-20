@@ -55,4 +55,12 @@ describe('Master slide “note”', function () {
       '<h1 id="heading-1">heading 1</h1>\n<span class="word-area"><p><span class="word">one</span></p> <hr> <p><span class="word">two</span></p> <hr> <p><span class="word">three</span></p> </span>'
     )
   })
+
+  it('Steps', function () {
+    const slide = getSlide('with-steps')
+    assert.strictEqual(slide.steps[0].title, 'Initiale Ansicht')
+    assert.strictEqual(slide.steps[1].title, 'one')
+    assert.strictEqual(slide.steps.length, 9)
+
+  })
 })

@@ -140,7 +140,6 @@ class CounterMaster {
         };
     }
     collectStepsOnInstantiation(fields, stepCollection) {
-        console.log(fields);
         for (const counterElement of fields.counterElements) {
             stepCollection.add(`Zähle „${counterElement}“`);
         }
