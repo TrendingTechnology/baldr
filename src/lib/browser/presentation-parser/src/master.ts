@@ -166,6 +166,11 @@ interface MasterIconSpec {
    * Show the icon on the slide view.
    */
   showOnSlides?: boolean
+
+  /**
+   * A unicode symbol (emoji) to imitate the SVG icon in the text console.
+   */
+  unicodeSymbol?: string
 }
 
 export interface Master {
@@ -273,7 +278,10 @@ export interface Master {
    * @param fields - Fields type: `..Instantiated`.
    * @param stepCollector - Use `stepCollector.add()` to add one step.
    */
-  collectStepsOnInstantiation?: (fields: any, stepCollector: StepCollector) => void
+  collectStepsOnInstantiation?: (
+    fields: any,
+    stepCollector: StepCollector
+  ) => void
 
   /**
    * Collect the fields of a slide after the media resolution is completed.
@@ -325,8 +333,9 @@ class MasterIcon implements MasterIconSpec {
   color: string
   size: 'large' | 'small'
   showOnSlides: boolean
+  unicodeSymbol?: string
 
-  constructor ({ name, color, size, showOnSlides }: MasterIconSpec) {
+  constructor ({ name, color, size, showOnSlides, unicodeSymbol }: MasterIconSpec) {
     if (size != null && !['small', 'large'].includes(size)) {
       throw new Error(
         `The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`
@@ -345,6 +354,7 @@ class MasterIcon implements MasterIconSpec {
     this.color = color != null ? color : 'orange'
     this.showOnSlides = showOnSlides != null ? showOnSlides : false
     this.size = size != null ? size : 'small'
+    this.unicodeSymbol = unicodeSymbol
   }
 }
 

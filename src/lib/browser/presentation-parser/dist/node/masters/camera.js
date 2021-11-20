@@ -7,7 +7,11 @@ class CameraMaster {
         this.displayName = 'Dokumentenkamera';
         this.icon = {
             name: 'document-camera',
-            color: 'red'
+            color: 'red',
+            /**
+             * @see https://emojipedia.org/camera/
+             */
+            unicodeSymbol: '📷'
         };
         this.fieldsDefintion = {};
     }

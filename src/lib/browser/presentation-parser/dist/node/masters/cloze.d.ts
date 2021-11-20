@@ -10,6 +10,12 @@ export declare class ClozeMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F5DB
+         *
+         * @see https://emojipedia.org/decrease-font-size-symbol/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

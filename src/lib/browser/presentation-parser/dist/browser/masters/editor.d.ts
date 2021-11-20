@@ -9,6 +9,12 @@ export declare class EditorMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F4DD
+         *
+         * @see https://emojipedia.org/memo/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         markup: {

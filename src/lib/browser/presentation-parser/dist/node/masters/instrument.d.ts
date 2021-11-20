@@ -9,6 +9,12 @@ export declare class InstrumentMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F3BA
+         *
+         * @see https://emojipedia.org/trumpet/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         instrumentId: {

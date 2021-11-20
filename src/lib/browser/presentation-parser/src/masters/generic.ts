@@ -16,7 +16,14 @@ export class GenericMaster implements Master {
   icon = {
     name: 'file-presentation-box',
     color: 'gray',
-    showOnSlides: false
+    showOnSlides: false,
+
+    /**
+     * U+1F4C4
+     *
+     * @see https://emojipedia.org/page-facing-up/
+     */
+    unicodeSymbol: '📄'
   }
 
   fieldsDefintion = {

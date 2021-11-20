@@ -15,7 +15,14 @@ export class ClozeMaster implements Master {
 
   icon = {
     name: 'cloze',
-    color: 'blue'
+    color: 'blue',
+
+    /**
+     * U+1F5DB
+     *
+     * @see https://emojipedia.org/decrease-font-size-symbol/
+     */
+    unicodeSymbol: '🗛'
   }
 
   fieldsDefintion = {

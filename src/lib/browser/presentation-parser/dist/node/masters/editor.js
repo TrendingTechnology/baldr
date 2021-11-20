@@ -8,7 +8,13 @@ class EditorMaster {
         this.displayName = 'Hefteintrag';
         this.icon = {
             name: 'pencil',
-            color: 'blue'
+            color: 'blue',
+            /**
+             * U+1F4DD
+             *
+             * @see https://emojipedia.org/memo/
+             */
+            unicodeSymbol: '📝'
         };
         this.fieldsDefintion = Object.assign({ markup: {
                 type: String,

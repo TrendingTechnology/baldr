@@ -13,7 +13,14 @@ export class DocumentMaster implements Master {
 
   icon = {
     name: 'file-outline',
-    color: 'gray'
+    color: 'gray',
+
+    /**
+     * U+1F5CB
+     *
+     * @see https://emojipedia.org/empty-document/
+     */
+    unicodeSymbol: '🗋'
   }
 
   fieldsDefintion = {

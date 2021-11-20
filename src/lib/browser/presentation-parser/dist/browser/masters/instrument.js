@@ -4,7 +4,13 @@ export class InstrumentMaster {
         this.displayName = 'Instrument';
         this.icon = {
             name: 'instrument',
-            color: 'yellow'
+            color: 'yellow',
+            /**
+             * U+1F3BA
+             *
+             * @see https://emojipedia.org/trumpet/
+             */
+            unicodeSymbol: '🎺'
         };
         this.fieldsDefintion = {
             instrumentId: {

@@ -86,7 +86,13 @@ class CounterMaster {
         this.icon = {
             name: 'counter',
             color: 'black',
-            size: 'large'
+            size: 'large',
+            /**
+             * U+1F522
+             *
+             * @see https://emojipedia.org/input-numbers/
+             */
+            unicodeSymbol: '🔢'
         };
         this.fieldsDefintion = {
             to: {

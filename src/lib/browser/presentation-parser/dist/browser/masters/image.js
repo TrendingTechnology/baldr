@@ -4,7 +4,12 @@ export class ImageMaster {
         this.displayName = 'Bild';
         this.icon = {
             name: 'image',
-            color: 'green'
+            color: 'green',
+            /**
+             * U+1F5BC U+FE0F
+             * @see https://emojipedia.org/framed-picture/
+             */
+            unicodeSymbol: '🖼️'
         };
         this.fieldsDefintion = {
             src: {

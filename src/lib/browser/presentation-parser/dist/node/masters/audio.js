@@ -7,7 +7,11 @@ class AudioMaster {
         this.displayName = 'Hörbeispiel';
         this.icon = {
             name: 'music',
-            color: 'brown'
+            color: 'brown',
+            /**
+             * @see https://emojipedia.org/speaker-high-volume/
+             */
+            unicodeSymbol: '🔊'
         };
         this.fieldsDefintion = {
             src: {
@@ -19,7 +23,7 @@ class AudioMaster {
             title: {
                 type: String,
                 markup: true,
-                description: 'Der Titel des Audio-Ausschnitts.',
+                description: 'Der Titel des Audio-Ausschnitts.'
             },
             composer: {
                 type: String,

@@ -10,6 +10,12 @@ export declare class GenericMaster implements Master {
         name: string;
         color: string;
         showOnSlides: boolean;
+        /**
+         * U+1F4C4
+         *
+         * @see https://emojipedia.org/page-facing-up/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         markup: {

@@ -9,6 +9,10 @@ export declare class VideoMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * @see https://emojipedia.org/film-projector/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

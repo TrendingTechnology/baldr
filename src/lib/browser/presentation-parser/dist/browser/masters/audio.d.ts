@@ -23,6 +23,10 @@ export declare class AudioMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * @see https://emojipedia.org/speaker-high-volume/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

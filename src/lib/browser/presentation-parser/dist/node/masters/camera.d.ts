@@ -5,6 +5,10 @@ export declare class CameraMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * @see https://emojipedia.org/camera/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {};
     normalizeFieldsInput(fields: any): any;

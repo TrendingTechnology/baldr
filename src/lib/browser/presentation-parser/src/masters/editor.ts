@@ -13,7 +13,14 @@ export class EditorMaster implements Master {
 
   icon = {
     name: 'pencil',
-    color: 'blue'
+    color: 'blue',
+
+    /**
+     * U+1F4DD
+     *
+     * @see https://emojipedia.org/memo/
+     */
+    unicodeSymbol: '📝'
   }
 
   fieldsDefintion = {

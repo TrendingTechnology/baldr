@@ -7,7 +7,11 @@ class VideoMaster {
         this.displayName = 'Video';
         this.icon = {
             name: 'video-vintage',
-            color: 'purple'
+            color: 'purple',
+            /**
+             * @see https://emojipedia.org/film-projector/
+             */
+            unicodeSymbol: '📽️'
         };
         this.fieldsDefintion = {
             src: {

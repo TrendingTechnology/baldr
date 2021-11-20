@@ -7,7 +7,12 @@ export class CameraMaster implements Master {
 
   icon = {
     name: 'document-camera',
-    color: 'red'
+    color: 'red',
+
+    /**
+     * @see https://emojipedia.org/camera/
+     */
+    unicodeSymbol: '📷'
   }
 
   fieldsDefintion = {}

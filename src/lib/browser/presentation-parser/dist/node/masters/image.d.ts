@@ -12,6 +12,11 @@ export declare class ImageMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F5BC U+FE0F
+         * @see https://emojipedia.org/framed-picture/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

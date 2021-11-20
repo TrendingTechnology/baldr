@@ -133,6 +133,10 @@ export class Slide {
    * Log to the console.
    */
   public log (): void {
-    log.always('Slide No. %s', [this.no])
+    const unicodeSymbol =
+      this.master.icon.unicodeSymbol != null
+        ? this.master.icon.unicodeSymbol + '\t'
+        : '\t'
+    log.always('%sSlide No. %s', [unicodeSymbol, this.no])
   }
 }

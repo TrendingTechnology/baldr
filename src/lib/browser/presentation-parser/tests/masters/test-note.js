@@ -61,6 +61,5 @@ describe('Master slide “note”', function () {
     assert.strictEqual(slide.steps[0].title, 'Initiale Ansicht')
     assert.strictEqual(slide.steps[1].title, 'one')
     assert.strictEqual(slide.steps.length, 9)
-
   })
 })

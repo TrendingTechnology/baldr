@@ -28,7 +28,12 @@ export class AudioMaster implements Master {
 
   icon = {
     name: 'music',
-    color: 'brown'
+    color: 'brown',
+
+    /**
+     * @see https://emojipedia.org/speaker-high-volume/
+     */
+    unicodeSymbol: '🔊'
   }
 
   fieldsDefintion = {
@@ -42,7 +47,7 @@ export class AudioMaster implements Master {
     title: {
       type: String,
       markup: true,
-      description: 'Der Titel des Audio-Ausschnitts.',
+      description: 'Der Titel des Audio-Ausschnitts.'
     },
     composer: {
       type: String,

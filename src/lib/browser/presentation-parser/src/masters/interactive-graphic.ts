@@ -17,7 +17,13 @@ export class InteractiveGraphicMaster implements Master {
   icon = {
     name: 'image',
     color: 'blue',
-    showOnSlides: false
+    showOnSlides: false,
+    /**
+     * U+1F4CA
+     *
+     * @see https://emojipedia.org/bar-chart/
+     */
+    unicodeSymbol: '📊'
   }
 
   fieldsDefintion = {

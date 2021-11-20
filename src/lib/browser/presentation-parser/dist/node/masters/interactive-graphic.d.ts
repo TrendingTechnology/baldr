@@ -11,6 +11,12 @@ export declare class InteractiveGraphicMaster implements Master {
         name: string;
         color: string;
         showOnSlides: boolean;
+        /**
+         * U+1F4CA
+         *
+         * @see https://emojipedia.org/bar-chart/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

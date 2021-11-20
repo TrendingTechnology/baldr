@@ -9,7 +9,13 @@ class ClozeMaster {
         this.displayName = 'Lückentext';
         this.icon = {
             name: 'cloze',
-            color: 'blue'
+            color: 'blue',
+            /**
+             * U+1F5DB
+             *
+             * @see https://emojipedia.org/decrease-font-size-symbol/
+             */
+            unicodeSymbol: '🗛'
         };
         this.fieldsDefintion = Object.assign({ src: {
                 type: String,

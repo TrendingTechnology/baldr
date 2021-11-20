@@ -16,7 +16,13 @@ export class ImageMaster implements Master {
 
   icon = {
     name: 'image',
-    color: 'green'
+    color: 'green',
+
+    /**
+     * U+1F5BC U+FE0F
+     * @see https://emojipedia.org/framed-picture/
+     */
+    unicodeSymbol: '🖼️'
   }
 
   fieldsDefintion = {

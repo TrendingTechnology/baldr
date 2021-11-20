@@ -113,7 +113,14 @@ export class CounterMaster implements Master {
   icon = {
     name: 'counter',
     color: 'black',
-    size: 'large' as const
+    size: 'large' as const,
+
+    /**
+     * U+1F522
+     *
+     * @see https://emojipedia.org/input-numbers/
+     */
+    unicodeSymbol: '🔢'
   }
 
   fieldsDefintion = {

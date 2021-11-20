@@ -7,7 +7,13 @@ class GroupMaster {
         this.displayName = 'Gruppe';
         this.icon = {
             name: 'account-group',
-            color: 'orange'
+            color: 'orange',
+            /**
+             * U+1F93C
+             *
+             * @see https://emojipedia.org/people-wrestling/
+             */
+            unicodeSymbol: '🤼'
         };
         this.fieldsDefintion = {
             groupId: {

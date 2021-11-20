@@ -4,7 +4,13 @@ export class DocumentMaster {
         this.displayName = 'Dokument';
         this.icon = {
             name: 'file-outline',
-            color: 'gray'
+            color: 'gray',
+            /**
+             * U+1F5CB
+             *
+             * @see https://emojipedia.org/empty-document/
+             */
+            unicodeSymbol: '🗋'
         };
         this.fieldsDefintion = {
             src: {

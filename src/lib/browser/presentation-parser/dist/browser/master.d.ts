@@ -113,6 +113,10 @@ interface MasterIconSpec {
      * Show the icon on the slide view.
      */
     showOnSlides?: boolean;
+    /**
+     * A unicode symbol (emoji) to imitate the SVG icon in the text console.
+     */
+    unicodeSymbol?: string;
 }
 export interface Master {
     /**
@@ -253,7 +257,8 @@ declare class MasterIcon implements MasterIconSpec {
     color: string;
     size: 'large' | 'small';
     showOnSlides: boolean;
-    constructor({ name, color, size, showOnSlides }: MasterIconSpec);
+    unicodeSymbol?: string;
+    constructor({ name, color, size, showOnSlides, unicodeSymbol }: MasterIconSpec);
 }
 /**
  * Wraps a master object. Processes, hides, forwards the field data of the

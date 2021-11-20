@@ -9,7 +9,13 @@ class InteractiveGraphicMaster {
         this.icon = {
             name: 'image',
             color: 'blue',
-            showOnSlides: false
+            showOnSlides: false,
+            /**
+             * U+1F4CA
+             *
+             * @see https://emojipedia.org/bar-chart/
+             */
+            unicodeSymbol: '📊'
         };
         this.fieldsDefintion = Object.assign({ src: {
                 type: String,

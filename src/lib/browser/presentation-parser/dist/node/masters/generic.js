@@ -9,7 +9,13 @@ class GenericMaster {
         this.icon = {
             name: 'file-presentation-box',
             color: 'gray',
-            showOnSlides: false
+            showOnSlides: false,
+            /**
+             * U+1F4C4
+             *
+             * @see https://emojipedia.org/page-facing-up/
+             */
+            unicodeSymbol: '📄'
         };
         this.fieldsDefintion = {
             markup: {

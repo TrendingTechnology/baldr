@@ -9,6 +9,12 @@ export declare class DocumentMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F5CB
+         *
+         * @see https://emojipedia.org/empty-document/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         src: {

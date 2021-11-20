@@ -41,7 +41,7 @@ export function mapStepFieldDefintions(selectors) {
  * on the left corner of a slide.
  */
 class MasterIcon {
-    constructor({ name, color, size, showOnSlides }) {
+    constructor({ name, color, size, showOnSlides, unicodeSymbol }) {
         if (size != null && !['small', 'large'].includes(size)) {
             throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`);
         }
@@ -52,6 +52,7 @@ class MasterIcon {
         this.color = color != null ? color : 'orange';
         this.showOnSlides = showOnSlides != null ? showOnSlides : false;
         this.size = size != null ? size : 'small';
+        this.unicodeSymbol = unicodeSymbol;
     }
 }
 /**

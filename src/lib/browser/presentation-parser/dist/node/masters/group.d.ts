@@ -9,6 +9,12 @@ export declare class GroupMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F93C
+         *
+         * @see https://emojipedia.org/people-wrestling/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         groupId: {

@@ -13,7 +13,12 @@ export class VideoMaster implements Master {
 
   icon = {
     name: 'video-vintage',
-    color: 'purple'
+    color: 'purple',
+
+    /**
+     * @see https://emojipedia.org/film-projector/
+     */
+    unicodeSymbol: '📽️'
   }
 
   fieldsDefintion = {

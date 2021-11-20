@@ -32,6 +32,12 @@ export declare class CounterMaster implements Master {
         name: string;
         color: string;
         size: "large";
+        /**
+         * U+1F522
+         *
+         * @see https://emojipedia.org/input-numbers/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         to: {
