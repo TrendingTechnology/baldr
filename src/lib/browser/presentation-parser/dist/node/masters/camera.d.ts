@@ -7,5 +7,5 @@ export declare class CameraMaster implements Master {
         color: string;
     };
     fieldsDefintion: {};
-    normalizeFields(fields: any): any;
+    normalizeFieldsInput(fields: any): any;
 }

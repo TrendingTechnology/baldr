@@ -36,7 +36,7 @@ export class YoutubeMaster implements Master {
     }
   }
 
-  normalizeFields (fields: YoutubeFieldsRaw): YoutubeFieldNormalized {
+  normalizeFieldsInput (fields: YoutubeFieldsRaw): YoutubeFieldNormalized {
     if (typeof fields === 'string') {
       fields = { id: fields }
     } else if (typeof fields === 'number') {

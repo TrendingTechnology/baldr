@@ -16,7 +16,7 @@ class SongMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = { songId: fields };
         }

@@ -251,7 +251,7 @@ export class QuestionMaster implements Master {
     }
   }
 
-  normalizeFields (fields: RawSpec): QuestionFieldData {
+  normalizeFieldsInput (fields: RawSpec): QuestionFieldData {
     const questions = Question.parse(fields)
     return {
       questions,

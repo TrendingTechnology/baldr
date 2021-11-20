@@ -1,11 +1,14 @@
 import { Master, StepCollector } from '../master'
 
-type CounterFieldsRaw = string | number | CounterFieldsNormalized
+type CounterRawInput = string | number | CounterInput
 
-interface CounterFieldsNormalized {
+interface CounterInput {
   to: number
-  counterElements: string[]
   format: Format
+}
+
+interface CounterInstantiated extends CounterInput {
+  counterElements: string[]
 }
 
 const alphabet = [
@@ -123,13 +126,10 @@ export class CounterMaster implements Master {
       default: 'arabic',
       description:
         'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
-    },
-    counterElements: {
-      description: 'Die formatieren Zählelemente'
     }
   }
 
-  normalizeFields (fields: CounterFieldsRaw): CounterFieldsNormalized {
+  normalizeFieldsInput (fields: CounterRawInput): CounterInput {
     let to: number | undefined
     let format: Format | undefined
     if (typeof fields === 'string') {
@@ -156,13 +156,27 @@ export class CounterMaster implements Master {
 
     return {
       to,
-      counterElements,
       format
     }
   }
 
-  collectStepsEarly (
-    fields: CounterFieldsNormalized,
+  collectFieldsOnInstantiation (
+    fields: CounterInput
+  ): CounterInstantiated {
+    const counterElements: string[] = []
+    for (let index = 1; index <= fields.to; index++) {
+      counterElements.push(formatCounterNumber(index, fields.format))
+    }
+
+    return {
+      to: fields.to,
+      counterElements,
+      format: fields.format
+    }
+  }
+
+  collectStepsOnInstantiation (
+    fields: CounterInstantiated,
     stepCollection: StepCollector
   ): void {
     for (const counterElement of fields.counterElements) {

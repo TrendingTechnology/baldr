@@ -146,21 +146,25 @@ export interface Master {
      */
     shortFormField?: string;
     /**
-     * The result must correspond to the fields definition.
+     * Normalize the row input of each slide. The result must correspond to the
+     * fields definition.
      *
-     * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-     *
-     * ```js
-     * normalizeFields (fields) {
-     *   if (typeof fields === 'string') {
+     * ```ts
+     * normalizeFieldsInput (rawFieldsInput: MasterNameRawInput): MasterNameInput {
+     *   if (typeof rawFieldsInput === 'string') {
      *     return {
-     *       markup: fields
+     *       markup: rawFieldsInput
      *     }
      *   }
      * }
      * ```
      */
-    normalizeFields?: (fields: any) => FieldData;
+    normalizeFieldsInput?: (rawFieldsInput: any) => FieldData;
+    /**
+     * Collect the fields of a slide during the instantiation of the slide
+     * objects.
+     */
+    collectFieldsOnInstantiation?: (fieldsInput: any) => FieldData;
     /**
      * Retrieve the media URIs which have to be resolved.
      *
@@ -186,18 +190,18 @@ export interface Master {
      */
     collectOptionalMediaUris?: (fields: any) => string | string[] | Set<string> | undefined;
     /**
-     * After media resolution
-     */
-    collectFields?: (fields: any, resolver: Resolver) => FieldData;
-    /**
      * Collect the steps before the media resolution.
      */
-    collectStepsEarly?: (fields: any, stepCollector: StepCollector) => void;
+    collectStepsOnInstantiation?: (fields: any, stepCollector: StepCollector) => void;
+    /**
+     * Collect the fields of a slide after the media resolution is completed.
+     */
+    collectFieldsAfterResolution?: (fields: any, resolver: Resolver) => FieldData;
     /**
      * Collect the steps after the media resolution.
      *
      * ```ts
-     * collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+     * collectStepsAfterResolution (fields: SampleListFieldsNormalized, slide: Slide): void {
      *   for (const wrappedUri of fields.samples) {
      *     const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
      *     slide.stepCollector.add(title)
@@ -205,7 +209,7 @@ export interface Master {
      * }
      * ```
      */
-    collectStepsLate?: (fields: any, slide: Slide) => void;
+    collectStepsAfterResolution?: (fields: any, slide: Slide) => void;
     /**
      * Generate TeX markup from the current slide. See TeX package
      * `schule-baldr.dtx`.
@@ -252,7 +256,7 @@ export declare class MasterWrapper {
     private static processMediaUris;
     processMediaUris(fields?: FieldData): Set<string>;
     processOptionalMediaUris(fields?: FieldData): Set<string>;
-    collectStepsEarly(fields: FieldData, stepCollector: StepCollector): void;
+    collectStepsOnInstantiation(fields: FieldData, stepCollector: StepCollector): void;
     generateTexMarkup(fields: FieldData): string | undefined;
     /**
      * Before resolving

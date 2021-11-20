@@ -15,7 +15,7 @@ export class SectionMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = {
                 heading: fields

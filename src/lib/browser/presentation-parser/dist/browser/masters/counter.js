@@ -93,13 +93,10 @@ export class CounterMaster {
             format: {
                 default: 'arabic',
                 description: 'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
-            },
-            counterElements: {
-                description: 'Die formatieren Zählelemente'
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         let to;
         let format;
         if (typeof fields === 'string') {
@@ -124,11 +121,22 @@ export class CounterMaster {
         }
         return {
             to,
-            counterElements,
             format
         };
     }
-    collectStepsEarly(fields, stepCollection) {
+    collectFieldsOnInstantiation(fields) {
+        const counterElements = [];
+        for (let index = 1; index <= fields.to; index++) {
+            counterElements.push(formatCounterNumber(index, fields.format));
+        }
+        return {
+            to: fields.to,
+            counterElements,
+            format: fields.format
+        };
+    }
+    collectStepsOnInstantiation(fields, stepCollection) {
+        console.log(fields);
         for (const counterElement of fields.counterElements) {
             stepCollection.add(`Zähle „${counterElement}“`);
         }

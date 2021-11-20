@@ -17,6 +17,6 @@ export declare class EditorMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: EditorFieldsRaw): EditorFieldsNormalized;
+    normalizeFieldsInput(fields: EditorFieldsRaw): EditorFieldsNormalized;
 }
 export {};

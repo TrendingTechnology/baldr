@@ -44,7 +44,7 @@ export class ImageMaster implements Master {
     }
   }
 
-  normalizeFields (fields: MasterFieldsRaw): MasterFieldsNormalized {
+  normalizeFieldsInput (fields: MasterFieldsRaw): MasterFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }

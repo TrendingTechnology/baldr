@@ -36,7 +36,7 @@ export declare class ImageMaster implements Master {
             default: boolean;
         };
     };
-    normalizeFields(fields: MasterFieldsRaw): MasterFieldsNormalized;
+    normalizeFieldsInput(fields: MasterFieldsRaw): MasterFieldsNormalized;
     collectMediaUris(fields: MasterFieldsNormalized): string;
 }
 export {};

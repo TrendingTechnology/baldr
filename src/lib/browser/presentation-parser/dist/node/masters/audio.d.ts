@@ -74,6 +74,6 @@ export declare class AudioMaster implements Master {
     };
     shortFormField: string;
     collectMediaUris(fields: AudioFieldsNormalized): Set<string>;
-    collectFields(fields: AudioFieldsNormalized, resolver: Resolver): AudioFieldsResolved;
+    collectFieldsAfterResolution(fields: AudioFieldsNormalized, resolver: Resolver): AudioFieldsResolved;
 }
 export {};

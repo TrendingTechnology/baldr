@@ -42,7 +42,9 @@ export class SampleListMaster implements Master {
     }
   }
 
-  normalizeFields (fields: SampleListFieldsRaw): SampleListFieldsNormalized {
+  normalizeFieldsInput (
+    fields: SampleListFieldsRaw
+  ): SampleListFieldsNormalized {
     let samples
     if (typeof fields === 'string' || Array.isArray(fields)) {
       samples = fields
@@ -55,7 +57,11 @@ export class SampleListMaster implements Master {
     return fields
   }
 
-  collectFields (
+  collectMediaUris (fields: SampleListFieldsNormalized) {
+    return extractUrisFromFuzzySpecs(fields.samples)
+  }
+
+  collectFieldsAfterResolution (
     fields: SampleListFieldsNormalized,
     resolver: Resolver
   ): SampleListFieldsNormalized {
@@ -72,14 +78,13 @@ export class SampleListMaster implements Master {
     return fields
   }
 
-  collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+  collectStepsAfterResolution (
+    fields: SampleListFieldsNormalized,
+    slide: Slide
+  ): void {
     for (const wrappedUri of fields.samples) {
       const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
       slide.stepCollector.add(title)
     }
-  }
-
-  collectMediaUris (fields: SampleListFieldsNormalized) {
-    return extractUrisFromFuzzySpecs(fields.samples)
   }
 }

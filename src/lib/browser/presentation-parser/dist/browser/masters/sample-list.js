@@ -24,7 +24,7 @@ export class SampleListMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         let samples;
         if (typeof fields === 'string' || Array.isArray(fields)) {
             samples = fields;
@@ -37,7 +37,10 @@ export class SampleListMaster {
         fields.samples = wrappedUris.list;
         return fields;
     }
-    collectFields(fields, resolver) {
+    collectMediaUris(fields) {
+        return extractUrisFromFuzzySpecs(fields.samples);
+    }
+    collectFieldsAfterResolution(fields, resolver) {
         if (fields.samples.length === 1) {
             const asset = resolver.getAsset(fields.samples[0].uri);
             if (asset.samples != null) {
@@ -50,13 +53,10 @@ export class SampleListMaster {
         }
         return fields;
     }
-    collectStepsLate(fields, slide) {
+    collectStepsAfterResolution(fields, slide) {
         for (const wrappedUri of fields.samples) {
             const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri;
             slide.stepCollector.add(title);
         }
-    }
-    collectMediaUris(fields) {
-        return extractUrisFromFuzzySpecs(fields.samples);
     }
 }

@@ -18,6 +18,6 @@ export declare class SectionMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: SectionFieldsRaw): SectionFieldsNormalized;
+    normalizeFieldsInput(fields: SectionFieldsRaw): SectionFieldsNormalized;
 }
 export {};

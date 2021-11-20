@@ -17,6 +17,6 @@ export declare class NoteMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: NoteFieldsRaw): NoteFieldsNormalized;
+    normalizeFieldsInput(fields: NoteFieldsRaw): NoteFieldsNormalized;
 }
 export {};

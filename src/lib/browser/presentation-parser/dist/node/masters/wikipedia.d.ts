@@ -28,6 +28,6 @@ export declare class WikipediaMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: WikipediaFieldsRaw): WikipediaFieldsNormalized;
+    normalizeFieldsInput(fields: WikipediaFieldsRaw): WikipediaFieldsNormalized;
 }
 export {};

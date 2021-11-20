@@ -19,7 +19,7 @@ class TaskMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = {
                 markup: fields

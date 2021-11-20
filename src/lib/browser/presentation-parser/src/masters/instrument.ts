@@ -24,7 +24,7 @@ export class InstrumentMaster implements Master {
     }
   }
 
-  normalizeFields (fields: InstrumentFieldsRaw): InstrumentFieldsNormalized {
+  normalizeFieldsInput (fields: InstrumentFieldsRaw): InstrumentFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         instrumentId: fields

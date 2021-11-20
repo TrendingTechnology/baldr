@@ -29,6 +29,6 @@ export declare class GenericMaster implements Master {
             default: boolean;
         };
     };
-    normalizeFields(fields: GenericFieldsRaw): GenericFieldsNormalized;
+    normalizeFieldsInput(fields: GenericFieldsRaw): GenericFieldsNormalized;
 }
 export {};

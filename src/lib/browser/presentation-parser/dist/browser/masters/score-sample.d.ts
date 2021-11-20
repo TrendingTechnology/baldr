@@ -29,7 +29,7 @@ export declare class ScoreSampleMaster implements Master {
             assetUri: boolean;
         };
     };
-    normalizeFields(fields: ScoreSampleFieldsRaw): ScoreSampleFieldsNormalized;
+    normalizeFieldsInput(fields: ScoreSampleFieldsRaw): ScoreSampleFieldsNormalized;
     collectMediaUris(fields: ScoreSampleFieldsNormalized): Set<string>;
 }
 export {};

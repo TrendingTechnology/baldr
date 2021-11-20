@@ -24,7 +24,7 @@ export class NoteMaster implements Master {
     }
   }
 
-  normalizeFields (fields: NoteFieldsRaw): NoteFieldsNormalized {
+  normalizeFieldsInput (fields: NoteFieldsRaw): NoteFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         markup: fields

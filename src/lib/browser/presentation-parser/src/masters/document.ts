@@ -27,7 +27,7 @@ export class DocumentMaster implements Master {
     }
   }
 
-  normalizeFields (fields: DocumentFieldsRaw) {
+  normalizeFieldsInput (fields: DocumentFieldsRaw) {
     if (typeof fields === 'string') {
       fields = {
         src: fields

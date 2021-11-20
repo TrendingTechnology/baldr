@@ -16,7 +16,7 @@ class EditorMaster {
                 description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
             } }, master_1.mapStepFieldDefintions(['mode', 'subset']));
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = {
                 markup: fields

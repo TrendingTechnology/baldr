@@ -205,21 +205,26 @@ export interface Master {
   shortFormField?: string
 
   /**
-   * The result must correspond to the fields definition.
+   * Normalize the row input of each slide. The result must correspond to the
+   * fields definition.
    *
-   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
-   *
-   * ```js
-   * normalizeFields (fields) {
-   *   if (typeof fields === 'string') {
+   * ```ts
+   * normalizeFieldsInput (rawFieldsInput: MasterNameRawInput): MasterNameInput {
+   *   if (typeof rawFieldsInput === 'string') {
    *     return {
-   *       markup: fields
+   *       markup: rawFieldsInput
    *     }
    *   }
    * }
    * ```
    */
-  normalizeFields?: (fields: any) => FieldData
+  normalizeFieldsInput?: (rawFieldsInput: any) => FieldData
+
+  /**
+   * Collect the fields of a slide during the instantiation of the slide
+   * objects.
+   */
+  collectFieldsOnInstantiation?: (fieldsInput: any) => FieldData
 
   /**
    * Retrieve the media URIs which have to be resolved.
@@ -252,20 +257,20 @@ export interface Master {
   ) => string | string[] | Set<string> | undefined
 
   /**
-   * After media resolution
-   */
-  collectFields?: (fields: any, resolver: Resolver) => FieldData
-
-  /**
    * Collect the steps before the media resolution.
    */
-  collectStepsEarly?: (fields: any, stepCollector: StepCollector) => void
+  collectStepsOnInstantiation?: (fields: any, stepCollector: StepCollector) => void
+
+  /**
+   * Collect the fields of a slide after the media resolution is completed.
+   */
+  collectFieldsAfterResolution?: (fields: any, resolver: Resolver) => FieldData
 
   /**
    * Collect the steps after the media resolution.
    *
    * ```ts
-   * collectStepsLate (fields: SampleListFieldsNormalized, slide: Slide): void {
+   * collectStepsAfterResolution (fields: SampleListFieldsNormalized, slide: Slide): void {
    *   for (const wrappedUri of fields.samples) {
    *     const title = wrappedUri.title != null ? wrappedUri.title : wrappedUri.uri
    *     slide.stepCollector.add(title)
@@ -273,7 +278,7 @@ export interface Master {
    * }
    * ```
    */
-  collectStepsLate?: (fields: any, slide: Slide) => void
+  collectStepsAfterResolution?: (fields: any, slide: Slide) => void
 
   /**
    * Generate TeX markup from the current slide. See TeX package
@@ -383,12 +388,12 @@ export class MasterWrapper {
     return new Set<string>()
   }
 
-  public collectStepsEarly (
+  public collectStepsOnInstantiation (
     fields: FieldData,
     stepCollector: StepCollector
   ): void {
-    if (this.master.collectStepsEarly != null) {
-      this.master.collectStepsEarly(fields, stepCollector)
+    if (this.master.collectStepsOnInstantiation != null) {
+      this.master.collectStepsOnInstantiation(fields, stepCollector)
     }
   }
 
@@ -407,8 +412,8 @@ export class MasterWrapper {
       fields = {}
       fields[this.master.shortFormField] = shortform
     }
-    if (this.master.normalizeFields != null) {
-      fields = this.master.normalizeFields(fields)
+    if (this.master.normalizeFieldsInput != null) {
+      fields = this.master.normalizeFieldsInput(fields)
     }
     for (const name in fields) {
       // Raise an error if there is an unknown field.
@@ -447,6 +452,10 @@ export class MasterWrapper {
         fields[name] = convertNestedMarkdownToHtml(fields[name])
       }
     }
+
+    if (this.master.collectFieldsOnInstantiation != null) {
+      fields = this.master.collectFieldsOnInstantiation(fields)
+    }
     return fields
   }
 
@@ -457,13 +466,16 @@ export class MasterWrapper {
     slide: Slide,
     resolver: Resolver
   ): FieldData | undefined {
-    if (this.master.collectFields != null) {
-      const fields = this.master.collectFields(slide.fields, resolver)
+    if (this.master.collectFieldsAfterResolution != null) {
+      const fields = this.master.collectFieldsAfterResolution(
+        slide.fields,
+        resolver
+      )
       slide.fields = fields
     }
 
-    if (this.master.collectStepsLate != null) {
-      this.master.collectStepsLate(slide.fields, slide)
+    if (this.master.collectStepsAfterResolution != null) {
+      this.master.collectStepsAfterResolution(slide.fields, slide)
     }
     return slide.fields
   }

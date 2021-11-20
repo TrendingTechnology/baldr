@@ -18,7 +18,7 @@ class ClozeMaster {
                 assetUri: true
             } }, master_1.mapStepFieldDefintions(['subset']));
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = { src: fields };
         }

@@ -25,7 +25,7 @@ export declare class InteractiveGraphicMaster implements Master {
             validate: (input: any) => boolean;
         };
     };
-    normalizeFields(fields: InteractiveGraphicFieldsRaw): InteractiveGraphicFieldsNormalized;
+    normalizeFieldsInput(fields: InteractiveGraphicFieldsRaw): InteractiveGraphicFieldsNormalized;
     collectMediaUris(fields: InteractiveGraphicFieldsNormalized): string;
 }
 export {};

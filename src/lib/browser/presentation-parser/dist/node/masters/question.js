@@ -181,7 +181,7 @@ class QuestionMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         const questions = Question.parse(fields);
         return {
             questions,

@@ -93,7 +93,7 @@ export class AudioMaster implements Master {
     return uris
   }
 
-  collectFields (
+  collectFieldsAfterResolution (
     fields: AudioFieldsNormalized,
     resolver: Resolver
   ): AudioFieldsResolved {

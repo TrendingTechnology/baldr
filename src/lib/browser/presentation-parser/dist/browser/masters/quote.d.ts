@@ -47,6 +47,6 @@ export declare class QuoteMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: QuoteFieldsRaw): QuoteFieldsNormalized;
+    normalizeFieldsInput(fields: QuoteFieldsRaw): QuoteFieldsNormalized;
 }
 export {};

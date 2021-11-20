@@ -1,9 +1,11 @@
 import { Master, StepCollector } from '../master';
-declare type CounterFieldsRaw = string | number | CounterFieldsNormalized;
-interface CounterFieldsNormalized {
+declare type CounterRawInput = string | number | CounterInput;
+interface CounterInput {
     to: number;
-    counterElements: string[];
     format: Format;
+}
+interface CounterInstantiated extends CounterInput {
+    counterElements: string[];
 }
 /**
  * This formats are allowed:
@@ -41,11 +43,9 @@ export declare class CounterMaster implements Master {
             default: string;
             description: string;
         };
-        counterElements: {
-            description: string;
-        };
     };
-    normalizeFields(fields: CounterFieldsRaw): CounterFieldsNormalized;
-    collectStepsEarly(fields: CounterFieldsNormalized, stepCollection: StepCollector): void;
+    normalizeFieldsInput(fields: CounterRawInput): CounterInput;
+    collectFieldsOnInstantiation(fields: CounterInput): CounterInstantiated;
+    collectStepsOnInstantiation(fields: CounterInstantiated, stepCollection: StepCollector): void;
 }
 export {};

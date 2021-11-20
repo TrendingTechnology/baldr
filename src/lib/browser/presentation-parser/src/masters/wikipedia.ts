@@ -39,7 +39,7 @@ export class WikipediaMaster implements Master {
     }
   }
 
-  normalizeFields (fields: WikipediaFieldsRaw): WikipediaFieldsNormalized {
+  normalizeFieldsInput (fields: WikipediaFieldsRaw): WikipediaFieldsNormalized {
     if (typeof fields === 'string') {
       // de:Wolfgang_Amadeus_Mozart
       const regExp = new RegExp(/^([a-z]+):(.+)$/)

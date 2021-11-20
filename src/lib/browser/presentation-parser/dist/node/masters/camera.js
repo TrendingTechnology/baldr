@@ -11,7 +11,7 @@ class CameraMaster {
         };
         this.fieldsDefintion = {};
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         return {};
     }
 }

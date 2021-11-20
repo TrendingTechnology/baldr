@@ -13,7 +13,7 @@ export class InstrumentMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = {
                 instrumentId: fields

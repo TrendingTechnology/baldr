@@ -20,7 +20,7 @@ export declare class DocumentMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: DocumentFieldsRaw): DocumentFieldsNormalized;
+    normalizeFieldsInput(fields: DocumentFieldsRaw): DocumentFieldsNormalized;
     collectMediaUris(fields: DocumentFieldsNormalized): string;
 }
 export {};

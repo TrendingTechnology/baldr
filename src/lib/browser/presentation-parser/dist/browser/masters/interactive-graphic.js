@@ -21,7 +21,7 @@ export class InteractiveGraphicMaster {
                 }
             } }, mapStepFieldDefintions(['selector', 'subset']));
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = { src: fields };
         }

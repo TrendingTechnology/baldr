@@ -37,7 +37,7 @@ export class InteractiveGraphicMaster implements Master {
     ...mapStepFieldDefintions(['selector', 'subset'])
   }
 
-  normalizeFields (
+  normalizeFieldsInput (
     fields: InteractiveGraphicFieldsRaw
   ): InteractiveGraphicFieldsNormalized {
     if (typeof fields === 'string') {

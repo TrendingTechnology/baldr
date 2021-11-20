@@ -54,7 +54,7 @@ export class QuoteMaster implements Master {
     }
   }
 
-  normalizeFields (fields: QuoteFieldsRaw): QuoteFieldsNormalized {
+  normalizeFieldsInput (fields: QuoteFieldsRaw): QuoteFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         text: fields

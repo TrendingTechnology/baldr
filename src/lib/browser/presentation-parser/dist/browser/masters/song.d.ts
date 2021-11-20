@@ -16,7 +16,7 @@ export declare class SongMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: SongFieldsRaw): SongFieldsNormalized;
+    normalizeFieldsInput(fields: SongFieldsRaw): SongFieldsNormalized;
     collectMediaUris(fields: SongFieldsNormalized): string;
     private convertSongIdToRef;
 }

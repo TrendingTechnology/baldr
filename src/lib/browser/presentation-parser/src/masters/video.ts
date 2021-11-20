@@ -29,7 +29,7 @@ export class VideoMaster implements Master {
     }
   }
 
-  normalizeFields (fields: VideoFieldsRaw): VideoFieldsNormalized {
+  normalizeFieldsInput (fields: VideoFieldsRaw): VideoFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }

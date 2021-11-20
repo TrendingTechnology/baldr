@@ -27,7 +27,7 @@ class WikipediaMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             // de:Wolfgang_Amadeus_Mozart
             const regExp = new RegExp(/^([a-z]+):(.+)$/);

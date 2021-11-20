@@ -26,7 +26,7 @@ export class EditorMaster implements Master {
     ...mapStepFieldDefintions(['mode', 'subset'])
   }
 
-  normalizeFields (fields: EditorFieldsRaw): EditorFieldsNormalized {
+  normalizeFieldsInput (fields: EditorFieldsRaw): EditorFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         markup: fields

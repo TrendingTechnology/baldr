@@ -25,7 +25,7 @@ export class SectionMaster implements Master {
     }
   }
 
-  normalizeFields (fields: SectionFieldsRaw): SectionFieldsNormalized {
+  normalizeFieldsInput (fields: SectionFieldsRaw): SectionFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         heading: fields

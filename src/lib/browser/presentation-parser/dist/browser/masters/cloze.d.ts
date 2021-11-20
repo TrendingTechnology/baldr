@@ -19,7 +19,7 @@ export declare class ClozeMaster implements Master {
             assetUri: boolean;
         };
     };
-    normalizeFields(fields: ClozeFieldsRaw): ClozeFieldsNormalized;
+    normalizeFieldsInput(fields: ClozeFieldsRaw): ClozeFieldsNormalized;
     collectMediaUris(props: ClozeFieldsNormalized): string;
 }
 export {};

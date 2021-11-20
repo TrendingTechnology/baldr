@@ -24,7 +24,7 @@ export class YoutubeMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = { id: fields };
         }

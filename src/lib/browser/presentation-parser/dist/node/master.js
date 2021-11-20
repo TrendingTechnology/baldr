@@ -107,9 +107,9 @@ class MasterWrapper {
         }
         return new Set();
     }
-    collectStepsEarly(fields, stepCollector) {
-        if (this.master.collectStepsEarly != null) {
-            this.master.collectStepsEarly(fields, stepCollector);
+    collectStepsOnInstantiation(fields, stepCollector) {
+        if (this.master.collectStepsOnInstantiation != null) {
+            this.master.collectStepsOnInstantiation(fields, stepCollector);
         }
     }
     generateTexMarkup(fields) {
@@ -126,8 +126,8 @@ class MasterWrapper {
             fields = {};
             fields[this.master.shortFormField] = shortform;
         }
-        if (this.master.normalizeFields != null) {
-            fields = this.master.normalizeFields(fields);
+        if (this.master.normalizeFieldsInput != null) {
+            fields = this.master.normalizeFieldsInput(fields);
         }
         for (const name in fields) {
             // Raise an error if there is an unknown field.
@@ -155,18 +155,21 @@ class MasterWrapper {
                 fields[name] = markdown_to_html_1.convertNestedMarkdownToHtml(fields[name]);
             }
         }
+        if (this.master.collectFieldsOnInstantiation != null) {
+            fields = this.master.collectFieldsOnInstantiation(fields);
+        }
         return fields;
     }
     /**
      * After the media resolution.
      */
     finalizeSlide(slide, resolver) {
-        if (this.master.collectFields != null) {
-            const fields = this.master.collectFields(slide.fields, resolver);
+        if (this.master.collectFieldsAfterResolution != null) {
+            const fields = this.master.collectFieldsAfterResolution(slide.fields, resolver);
             slide.fields = fields;
         }
-        if (this.master.collectStepsLate != null) {
-            this.master.collectStepsLate(slide.fields, slide);
+        if (this.master.collectStepsAfterResolution != null) {
+            this.master.collectStepsAfterResolution(slide.fields, slide);
         }
         return slide.fields;
     }

@@ -28,7 +28,7 @@ export class ClozeMaster implements Master {
     ...mapStepFieldDefintions(['subset'])
   }
 
-  normalizeFields (fields: ClozeFieldsRaw): ClozeFieldsNormalized {
+  normalizeFieldsInput (fields: ClozeFieldsRaw): ClozeFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { src: fields }
     }

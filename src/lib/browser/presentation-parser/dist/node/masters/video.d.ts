@@ -22,7 +22,7 @@ export declare class VideoMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: VideoFieldsRaw): VideoFieldsNormalized;
+    normalizeFieldsInput(fields: VideoFieldsRaw): VideoFieldsNormalized;
     collectMediaUris(fields: VideoFieldsNormalized): string;
 }
 export {};

@@ -68,7 +68,7 @@ export declare class QuestionMaster implements Master {
             type: ArrayConstructor;
         };
     };
-    normalizeFields(fields: RawSpec): QuestionFieldData;
+    normalizeFieldsInput(fields: RawSpec): QuestionFieldData;
     generateTexMarkup(fields: QuestionFieldData): string;
 }
 export {};

@@ -28,7 +28,7 @@ class ScoreSampleMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = {
                 score: fields

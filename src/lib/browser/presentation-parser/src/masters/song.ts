@@ -23,7 +23,7 @@ export class SongMaster implements Master {
     }
   }
 
-  normalizeFields (fields: SongFieldsRaw): SongFieldsNormalized {
+  normalizeFieldsInput (fields: SongFieldsRaw): SongFieldsNormalized {
     if (typeof fields === 'string') {
       fields = { songId: fields }
     }

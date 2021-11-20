@@ -32,7 +32,7 @@ class GenericMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string' || Array.isArray(fields)) {
             fields = {
                 markup: fields

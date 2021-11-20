@@ -42,7 +42,7 @@ export class GenericMaster implements Master {
     }
   }
 
-  normalizeFields (fields: GenericFieldsRaw): GenericFieldsNormalized {
+  normalizeFieldsInput (fields: GenericFieldsRaw): GenericFieldsNormalized {
     if (typeof fields === 'string' || Array.isArray(fields)) {
       fields = {
         markup: fields

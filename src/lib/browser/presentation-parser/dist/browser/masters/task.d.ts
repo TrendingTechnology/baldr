@@ -19,6 +19,6 @@ export declare class TaskMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: TaskFieldsRaw): TaskFieldsNormalized;
+    normalizeFieldsInput(fields: TaskFieldsRaw): TaskFieldsNormalized;
 }
 export {};

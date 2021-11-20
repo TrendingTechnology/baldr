@@ -26,7 +26,7 @@ export class TaskMaster implements Master {
     }
   }
 
-  normalizeFields (fields: TaskFieldsRaw): TaskFieldsNormalized {
+  normalizeFieldsInput (fields: TaskFieldsRaw): TaskFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         markup: fields

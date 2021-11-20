@@ -30,7 +30,7 @@ export class ImageMaster {
             }
         };
     }
-    normalizeFields(fields) {
+    normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {
             fields = { src: fields };
         }

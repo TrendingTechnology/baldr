@@ -28,9 +28,9 @@ export declare class SampleListMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
-    collectFields(fields: SampleListFieldsNormalized, resolver: Resolver): SampleListFieldsNormalized;
-    collectStepsLate(fields: SampleListFieldsNormalized, slide: Slide): void;
+    normalizeFieldsInput(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
     collectMediaUris(fields: SampleListFieldsNormalized): Set<string>;
+    collectFieldsAfterResolution(fields: SampleListFieldsNormalized, resolver: Resolver): SampleListFieldsNormalized;
+    collectStepsAfterResolution(fields: SampleListFieldsNormalized, slide: Slide): void;
 }
 export {};

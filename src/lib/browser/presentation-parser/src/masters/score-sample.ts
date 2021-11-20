@@ -36,7 +36,7 @@ export class ScoreSampleMaster implements Master {
     }
   }
 
-  normalizeFields (fields: ScoreSampleFieldsRaw): ScoreSampleFieldsNormalized {
+  normalizeFieldsInput (fields: ScoreSampleFieldsRaw): ScoreSampleFieldsNormalized {
     if (typeof fields === 'string') {
       fields = {
         score: fields

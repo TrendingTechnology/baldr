@@ -16,7 +16,7 @@ export declare class InstrumentMaster implements Master {
             description: string;
         };
     };
-    normalizeFields(fields: InstrumentFieldsRaw): InstrumentFieldsNormalized;
+    normalizeFieldsInput(fields: InstrumentFieldsRaw): InstrumentFieldsNormalized;
     resolveMediaUris(fields: InstrumentFieldsNormalized): string;
     private convertInstrumentIdToMediaId;
 }

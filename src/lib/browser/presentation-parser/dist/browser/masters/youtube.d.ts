@@ -29,7 +29,7 @@ export declare class YoutubeMaster implements Master {
             markup: boolean;
         };
     };
-    normalizeFields(fields: YoutubeFieldsRaw): YoutubeFieldNormalized;
+    normalizeFieldsInput(fields: YoutubeFieldsRaw): YoutubeFieldNormalized;
     collectOptionalMediaUris(fields: YoutubeFieldNormalized): string | string[] | Set<string> | undefined;
     private convertYoutubeIdToUri;
 }

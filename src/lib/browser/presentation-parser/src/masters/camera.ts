@@ -12,7 +12,7 @@ export class CameraMaster implements Master {
 
   fieldsDefintion = {}
 
-  normalizeFields (fields: any): any {
+  normalizeFieldsInput (fields: any): any {
     return {}
   }
 }
