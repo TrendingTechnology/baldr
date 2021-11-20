@@ -4,6 +4,7 @@
     "src/api/*",
     "src/lib/browser/*",
     "src/lib/node/*",
+    "src/lib/universal/*",
     "src/cli",
     "src/masters/*",
     "src/vue/apps/*",
