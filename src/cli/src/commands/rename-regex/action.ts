@@ -13,9 +13,13 @@ function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   }
 }
 
-async function action (pattern: string, replacement: string, filePath: string): Promise<void> {
+async function action (
+  pattern: string,
+  replacement: string,
+  filePath: string
+): Promise<void> {
   await walk(renameByRegex, {
-    regex: new RegExp('.*'),
+    regex: /.*/,
     path: filePath,
     payload: { pattern, replacement }
   })

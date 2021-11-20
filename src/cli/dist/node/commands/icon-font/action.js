@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const icon_font_generator_1 = __importDefault(require("@bldr/icon-font-generator"));
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield icon_font_generator_1.default();
+        yield (0, icon_font_generator_1.default)();
     });
 }
 module.exports = action;

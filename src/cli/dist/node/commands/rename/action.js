@@ -18,7 +18,7 @@ const media_manager_1 = require("@bldr/media-manager");
  */
 function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk({
+        yield (0, media_manager_1.walk)({
             all(oldPath) {
                 media_manager_1.operations.renameMediaAsset(oldPath);
             }

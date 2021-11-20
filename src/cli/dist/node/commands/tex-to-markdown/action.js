@@ -50,11 +50,11 @@ function convertTexToMarkdown(input) {
     }
     else {
         log.info(chalk_1.default.green(media_manager_1.locationIndicator.getRelPath(input)));
-        content = file_reader_writer_1.readFile(input);
+        content = (0, file_reader_writer_1.readFile)(input);
     }
     log.info('\n' + chalk_1.default.yellow('Original:') + '\n');
     log.info(content);
-    content = tex_markdown_converter_1.convertTexToMd(content);
+    content = (0, tex_markdown_converter_1.convertTexToMd)(content);
     log.info(chalk_1.default.green('Converted:'));
     log.info(content);
     return content;
@@ -72,7 +72,7 @@ function action(filesOrText) {
             convertTexToMarkdown(filesOrText[0]);
         }
         else {
-            yield media_manager_1.walk(convertTexToMarkdown, {
+            yield (0, media_manager_1.walk)(convertTexToMarkdown, {
                 path: filesOrText,
                 regex: 'tex'
             });

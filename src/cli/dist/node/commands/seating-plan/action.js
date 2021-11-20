@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const seating_plan_converter_1 = require("@bldr/seating-plan-converter");
 function action(mdbFile) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield seating_plan_converter_1.convertNotenmanagerMdbToJson(mdbFile);
+        return yield (0, seating_plan_converter_1.convertNotenmanagerMdbToJson)(mdbFile);
     });
 }
 module.exports = action;

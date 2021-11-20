@@ -35,9 +35,6 @@
   "devDependencies": {
     "@bldr/config": "*",
     "@bldr/core-node": "*",
-    "@types/node": "16.10.3",
-    "depcheck": "1.4.2",
-    "ts-standard": "10.0.0",
-    "typescript": "4.4.3"
+    "@types/node": "16.10.3"
   }
 }

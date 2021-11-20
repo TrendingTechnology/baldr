@@ -37,10 +37,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@types/uuid": "8.3.1",
-    "depcheck": "1.4.2",
-    "ts-standard": "10.0.0",
-    "typescript": "4.4.3"
+    "@types/uuid": "8.3.1"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -41,7 +41,7 @@ const media_manager_1 = require("@bldr/media-manager");
 const log = __importStar(require("@bldr/log"));
 function requestYoutubeApi(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const snippet = yield youtube_api_1.getSnippet(youtubeId);
+        const snippet = yield (0, youtube_api_1.getSnippet)(youtubeId);
         if (snippet != null) {
             return {
                 youtubeId,

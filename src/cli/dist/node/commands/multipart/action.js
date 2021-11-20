@@ -56,14 +56,14 @@ function action(globPattern, prefix, cmdObj) {
         }
         files.sort(undefined);
         let no = 1;
-        const extension = core_browser_1.getExtension(files[0]);
+        const extension = (0, core_browser_1.getExtension)(files[0]);
         if (extension == null)
             throw Error('No extension');
         const firstNewFileName = `${prefix}.${extension}`;
         for (const oldFileName of files) {
             // Omit already existent info file by the renaming.
             if (oldFileName.match(/yml$/i) == null) {
-                const newFileName = core_browser_1.formatMultiPartAssetFileName(`${prefix}.${extension}`, no);
+                const newFileName = (0, core_browser_1.formatMultiPartAssetFileName)(`${prefix}.${extension}`, no);
                 log.info('%s -> %s', [oldFileName, newFileName]);
                 if (!cmdObj.dryRun)
                     fs_1.default.renameSync(oldFileName, newFileName);
@@ -71,7 +71,7 @@ function action(globPattern, prefix, cmdObj) {
             }
         }
         if (fs_1.default.existsSync(firstNewFileName) && !cmdObj.dryRun) {
-            yield media_manager_1.writeYamlMetaData(firstNewFileName);
+            yield (0, media_manager_1.writeYamlMetaData)(firstNewFileName);
             yield media_manager_1.operations.normalizeMediaAsset(firstNewFileName, { wikidata: false });
         }
     });

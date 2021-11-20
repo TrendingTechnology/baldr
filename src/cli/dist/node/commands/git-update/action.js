@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });

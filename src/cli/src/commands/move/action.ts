@@ -26,12 +26,9 @@ interface Options {
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
- *
- * @param {String} oldPath
- * @param {String} extension
  */
 function relocate (oldPath: string, extension: string, cmdObj: Options): void {
-  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
+  if (oldPath.match(/^.*\/[A-Z]{2,}\/[^/]*$/) != null) {
     return
   }
   let twoLetterFolder = ''

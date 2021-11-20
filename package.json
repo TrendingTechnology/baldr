@@ -17,12 +17,11 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "clean": "lerna clean; rm -rf dist; rm -rf src/electron-app/dist; rm -rf masters/songbook/src/electron-app/dist; rm -rf masters/camera/src/electron-app/dist",
     "code:vue": "code .vscode/vue.code-workspace"
   },
   "devDependencies": {
-    "ts-standard": "10.0.0",
-    "typescript": "4.4.4",
+    "ts-standard": "11.0.0",
+    "typescript": "4.5.2",
     "mocha": "9.1.3",
     "depcheck": "1.4.2"
   },

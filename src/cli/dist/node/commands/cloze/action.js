@@ -15,7 +15,7 @@ const media_manager_1 = require("@bldr/media-manager");
  */
 function action(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk(media_manager_1.operations.generateCloze, { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
+        yield (0, media_manager_1.walk)(media_manager_1.operations.generateCloze, { regex: new RegExp('.*.tex$'), path: filePath } // eslint-disable-line
         );
     });
 }

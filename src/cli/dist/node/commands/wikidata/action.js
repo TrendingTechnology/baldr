@@ -39,7 +39,7 @@ const wikidata_1 = require("@bldr/wikidata");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 /**
  * @param category - For example `group`, `instrument`, `person`,
  *   `song`
@@ -47,7 +47,7 @@ const config = config_1.getConfig();
  */
 function action(category, itemId, arg1, arg2, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        const rawData = yield wikidata_1.query(itemId, category, media_categories_1.categories);
+        const rawData = yield (0, wikidata_1.query)(itemId, category, media_categories_1.categories);
         if (arg1 != null) {
             if (category === 'person') {
                 rawData.firstname = arg1;
@@ -67,7 +67,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
             return;
         if (downloadWikicommons) {
             if (!cmdObj.dryRun && data.mainImage != null) {
-                yield wikidata_1.fetchCommonsFile(data.mainImage, dest);
+                yield (0, wikidata_1.fetchCommonsFile)(data.mainImage, dest);
             }
             else {
                 log.info('Dry run! Destination: %s', [dest]);
@@ -84,7 +84,7 @@ function action(category, itemId, arg1, arg2, cmdObj) {
         if (!fs_1.default.existsSync(yamlFile)) {
             if (!cmdObj.dryRun) {
                 log.info('Write YAML file: %s', [yamlFile]);
-                file_reader_writer_1.writeYamlFile(yamlFile, data);
+                (0, file_reader_writer_1.writeYamlFile)(yamlFile, data);
             }
         }
         else {

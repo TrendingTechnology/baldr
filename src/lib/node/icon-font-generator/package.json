@@ -26,10 +26,7 @@
   },
   "devDependencies": {
     "@bldr/type-definitions": "*",
-    "@types/node": "15.12.4",
-    "depcheck": "1.4.2",
-    "ts-standard": "10.0.0",
-    "typescript": "4.4.3"
+    "@types/node": "15.12.4"
   },
   "scripts": {
     "build:node": "tsc --module commonjs --outDir dist/node",

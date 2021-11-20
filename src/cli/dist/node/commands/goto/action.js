@@ -29,7 +29,7 @@ const media_manager_1 = require("@bldr/media-manager");
 const open_with_1 = require("@bldr/open-with");
 const log = __importStar(require("@bldr/log"));
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function openShell(filePath) {
     child_process_1.default.spawn('zsh', ['-i'], {
         cwd: filePath,
@@ -55,7 +55,7 @@ function action(cmdObj) {
     }
     log.info('Go to: %s', [mirroredPath]);
     if (cmdObj.fileManager) {
-        open_with_1.openInFileManager(mirroredPath, true);
+        (0, open_with_1.openInFileManager)(mirroredPath, true);
     }
     else {
         openShell(mirroredPath);

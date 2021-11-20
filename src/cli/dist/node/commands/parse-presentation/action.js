@@ -42,7 +42,7 @@ const log = __importStar(require("@bldr/log"));
 function action(filePaths, options) {
     return __awaiter(this, void 0, void 0, function* () {
         const errors = {};
-        const result = yield api_wrapper_1.updateMediaServer();
+        const result = yield (0, api_wrapper_1.updateMediaServer)();
         log.infoAny(result);
         let allUris;
         if ((options === null || options === void 0 ? void 0 : options.resolve) == null || !options.resolve) {
@@ -51,12 +51,12 @@ function action(filePaths, options) {
             allUris = yield database.getAllAssetUris();
             yield mongoDbClient.close();
         }
-        yield media_manager_1.walk({
+        yield (0, media_manager_1.walk)({
             presentation(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
                     log.info('Parse presentation %s', [filePath]);
                     try {
-                        const presentation = presentation_parser_1.parse(file_reader_writer_1.readFile(filePath));
+                        const presentation = (0, presentation_parser_1.parse)((0, file_reader_writer_1.readFile)(filePath));
                         if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {
                             yield presentation.resolve();
                         }

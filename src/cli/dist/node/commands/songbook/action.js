@@ -22,7 +22,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 const log = __importStar(require("@bldr/log"));
 const songbook_intermediate_files_1 = require("@bldr/songbook-intermediate-files");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 /**
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`

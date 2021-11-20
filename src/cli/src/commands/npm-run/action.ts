@@ -32,7 +32,9 @@ async function action (scriptName: string, filePath: string): Promise<void> {
       if (code === 0) {
         resolve()
       } else {
-        reject(new Error(log.format('The script % failed', [scriptName], 'none')))
+        reject(
+          new Error(log.format('The script % failed', [scriptName], 'none'))
+        )
       }
     })
   })

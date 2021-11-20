@@ -45,7 +45,7 @@ const WAVEFORM_DEFAULT_WIDTH = 1000;
 const WAVEFORM_WIDTH_FACTOR = 20;
 function createAudioWaveForm(srcPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const meta = yield audio_metadata_1.collectAudioMetadata(srcPath);
+        const meta = yield (0, audio_metadata_1.collectAudioMetadata)(srcPath);
         let width = `${WAVEFORM_DEFAULT_WIDTH}`;
         if ((meta === null || meta === void 0 ? void 0 : meta.duration) != null) {
             width = (meta.duration * WAVEFORM_WIDTH_FACTOR).toFixed(0);
@@ -69,7 +69,7 @@ function createAudioWaveForm(srcPath) {
 function downloadAudioCoverImage(metaData, destPath) {
     return __awaiter(this, void 0, void 0, function* () {
         if (metaData.coverSource != null) {
-            yield core_node_1.fetchFile(metaData.coverSource, destPath);
+            yield (0, core_node_1.fetchFile)(metaData.coverSource, destPath);
             log.verbose('Download preview image %s from %s.', [
                 destPath,
                 metaData.coverSource
@@ -83,7 +83,7 @@ function downloadAudioCoverImage(metaData, destPath) {
 function extractAudioCoverFromMetadata(srcPath, destPath) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!fs_1.default.existsSync(destPath)) {
-            yield audio_metadata_1.extractCoverImage(srcPath, destPath);
+            yield (0, audio_metadata_1.extractCoverImage)(srcPath, destPath);
         }
     });
 }
@@ -131,7 +131,7 @@ function convertFirstPdfPageToJpg(srcPath, destPath) {
 function createPreviewOneFile(srcPath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         log.info('Create preview files for %s', [srcPath]);
-        const mimeType = media_manager_1.filePathToMimeType(srcPath);
+        const mimeType = (0, media_manager_1.filePathToMimeType)(srcPath);
         log.debug('The MIME type of the file is %s', [mimeType]);
         const destPathPreview = `${srcPath}_preview.jpg`;
         const destPathWavefrom = `${srcPath}_waveform.png`;
@@ -150,7 +150,7 @@ function createPreviewOneFile(srcPath, options) {
         }
         else if (mimeType === 'audio') {
             const yamlFile = `${srcPath}.yml`;
-            const metaData = file_reader_writer_1.readYamlFile(yamlFile);
+            const metaData = (0, file_reader_writer_1.readYamlFile)(yamlFile);
             if (metaData.cover != null) {
                 return;
             }
@@ -169,7 +169,7 @@ function createPreviewOneFile(srcPath, options) {
  */
 function action(filePaths, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk({
+        yield (0, media_manager_1.walk)({
             asset(relPath) {
                 return __awaiter(this, void 0, void 0, function* () {
                     yield createPreviewOneFile(relPath, cmdObj);

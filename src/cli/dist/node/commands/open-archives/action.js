@@ -51,6 +51,6 @@ function action(filePath, cmdObj) {
         filePath = presParentDir;
         log.info('Open parent folder instead');
     }
-    media_server_1.openArchivesInFileManager(filePath, cmdObj.createDirs);
+    (0, media_server_1.openArchivesInFileManager)(filePath, cmdObj.createDirs);
 }
 module.exports = action;

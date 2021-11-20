@@ -35,7 +35,7 @@ const log = __importStar(require("@bldr/log"));
  */
 function action(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield audio_metadata_1.collectAudioMetadata(filePath);
+        const result = yield (0, audio_metadata_1.collectAudioMetadata)(filePath);
         log.infoAny(result);
     });
 }

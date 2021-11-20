@@ -85,7 +85,7 @@ function convertPathArgToParentPresDir(args) {
 function actionHandler(commandName, def) {
     return function (...args) {
         if (def.checkExecutable != null) {
-            core_node_1.checkExecutables(def.checkExecutable);
+            (0, core_node_1.checkExecutables)(def.checkExecutable);
         }
         // eslint-disable-next-line
         const action = require(path_1.default.join(commandsPath, commandName, 'action.js'));

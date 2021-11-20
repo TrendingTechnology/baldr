@@ -41,7 +41,7 @@ const core_node_1 = require("@bldr/core-node");
 function action(scriptName, filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         filePath = path_1.default.resolve(filePath);
-        const packageJson = core_node_1.findParentFile(path_1.default.resolve(filePath), 'package.json');
+        const packageJson = (0, core_node_1.findParentFile)(path_1.default.resolve(filePath), 'package.json');
         if (packageJson == null) {
             log.info('No package.json found on %s.', [filePath]);
             throw Error('No package.json found.');

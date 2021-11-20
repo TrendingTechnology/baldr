@@ -55,7 +55,7 @@ function buildOneFile(filePath) {
  */
 function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk(buildOneFile, {
+        yield (0, media_manager_1.walk)(buildOneFile, {
             path: filePaths,
             regex: 'tex'
         });

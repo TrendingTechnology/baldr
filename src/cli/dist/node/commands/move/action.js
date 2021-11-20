@@ -44,12 +44,9 @@ const log = __importStar(require("@bldr/log"));
 /**
  * Relocate a media asset inside the main media folder. Move some
  * media assets into two letter folders.
- *
- * @param {String} oldPath
- * @param {String} extension
  */
 function relocate(oldPath, extension, cmdObj) {
-    if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$')) != null) {
+    if (oldPath.match(/^.*\/[A-Z]{2,}\/[^/]*$/) != null) {
         return;
     }
     let twoLetterFolder = '';
@@ -78,11 +75,11 @@ function relocate(oldPath, extension, cmdObj) {
     const newPath = path_1.default.join(parentDir, twoLetterFolder, path_1.default.basename(oldPath));
     if (oldPath !== newPath) {
         if (extension === 'tex') {
-            const oldContent = file_reader_writer_1.readFile(oldPath);
+            const oldContent = (0, file_reader_writer_1.readFile)(oldPath);
             // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
             const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/');
             if (oldContent !== newContent) {
-                file_reader_writer_1.writeFile(oldPath, newContent);
+                (0, file_reader_writer_1.writeFile)(oldPath, newContent);
             }
         }
         media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
@@ -155,7 +152,7 @@ function moveTex(oldPath, newPath, cmdObj) {
     // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
     if (media_manager_1.locationIndicator.isInDeactivatedDir(oldPath))
         return;
-    const content = file_reader_writer_1.readFile(oldPath);
+    const content = (0, file_reader_writer_1.readFile)(oldPath);
     // \begin{grafikumlauf}{Inserat}
     // \grafik[0.8\linewidth]{Freight-Train-Blues}
     const matches = content.matchAll(/(\\grafik|\\begin\{grafikumlauf\}).*?\{(.+?)\}/g);
@@ -188,11 +185,11 @@ function moveTex(oldPath, newPath, cmdObj) {
     media_manager_1.operations.moveAsset(oldPath, newPath, cmdObj);
     // Maybe --dry-run is specified
     if (fs_1.default.existsSync(newPath)) {
-        let newContent = file_reader_writer_1.readFile(newPath);
+        let newContent = (0, file_reader_writer_1.readFile)(newPath);
         for (const replacement of replacements) {
             newContent = newContent.replace(replacement[0], replacement[1]);
         }
-        file_reader_writer_1.writeFile(newPath, newContent);
+        (0, file_reader_writer_1.writeFile)(newPath, newContent);
     }
 }
 function getMbrainzRecordingId(filePath) {
@@ -210,11 +207,11 @@ function moveMp3(oldPath, newPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Format dest file path.
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'HB');
-        newPath = core_browser_1.asciify(newPath);
+        newPath = (0, core_browser_1.asciify)(newPath);
         // a Earth, Wind & Fire - Shining Star.mp3
         let fileName = path_1.default.basename(newPath);
         fileName = fileName.replace(/\.mp3$/i, '');
-        fileName = core_browser_1.referencify(fileName);
+        fileName = (0, core_browser_1.referencify)(fileName);
         fileName = `${fileName}.mp3`;
         // a-Fletcher-Henderson_Aint-she-sweet.mp3
         fileName = fileName.replace(/^a-/, '');
@@ -225,7 +222,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         const convertedPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
         if (convertedPath == null)
             throw new Error('Error converting asset.');
-        const metaData = media_manager_1.readAssetYaml(convertedPath);
+        const metaData = (0, media_manager_1.readAssetYaml)(convertedPath);
         if (metaData == null)
             throw new Error('Error reading asset yaml');
         metaData.metaType = 'composition';
@@ -238,7 +235,7 @@ function moveMp3(oldPath, newPath, cmdObj) {
         // To get ID prefix
         metaData.filePath = newPath;
         const result = media_categories_1.categoriesManagement.process(metaData);
-        file_reader_writer_1.writeYamlFile(`${newPath}.yml`, result);
+        (0, file_reader_writer_1.writeYamlFile)(`${newPath}.yml`, result);
         // Delete MP3.
         fs_1.default.unlinkSync(tmpMp3Path);
     });
@@ -258,7 +255,7 @@ function moveReference(oldPath, cmdObj) {
         if (cmdObj.dryRun != null && cmdObj.dryRun)
             return;
         yield media_manager_1.operations.initializeMetaYaml(newPath);
-        const metaData = media_manager_1.readAssetYaml(newPath);
+        const metaData = (0, media_manager_1.readAssetYaml)(newPath);
         if (metaData == null)
             return;
         metaData.reference_title =
@@ -268,7 +265,7 @@ function moveReference(oldPath, cmdObj) {
         metaData.release_data = 2009;
         metaData.edition = 1;
         metaData.isbn = '978-3-85061-460-3';
-        file_reader_writer_1.writeYamlFile(`${newPath}.yml`, metaData);
+        (0, file_reader_writer_1.writeYamlFile)(`${newPath}.yml`, metaData);
     });
 }
 /**
@@ -309,7 +306,7 @@ function move(oldPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Had to be an absolute path (to check if its an inactive/archived folder)
         oldPath = path_1.default.resolve(oldPath);
-        const extension = core_browser_1.getExtension(oldPath);
+        const extension = (0, core_browser_1.getExtension)(oldPath);
         if (extension == null)
             return;
         if (!media_manager_1.locationIndicator.isInArchive(oldPath)) {
@@ -336,14 +333,14 @@ function action(filePaths, cmdObj) {
         };
         if (cmdObj.extension != null) {
             opts.regex = cmdObj.extension;
-            yield media_manager_1.walk(move, opts);
+            yield (0, media_manager_1.walk)(move, opts);
         }
         else if (cmdObj.regexp != null) {
             opts.regex = new RegExp(cmdObj.regexp);
-            yield media_manager_1.walk(move, opts);
+            yield (0, media_manager_1.walk)(move, opts);
         }
         else {
-            yield media_manager_1.walk({
+            yield (0, media_manager_1.walk)({
                 everyFile(relPath) {
                     return __awaiter(this, void 0, void 0, function* () {
                         yield move(relPath, {});

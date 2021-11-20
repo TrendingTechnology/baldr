@@ -44,8 +44,8 @@ function renameByRegex(filePath, { pattern, replacement }) {
 }
 function action(pattern, replacement, filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.walk(renameByRegex, {
-            regex: new RegExp('.*'),
+        yield (0, media_manager_1.walk)(renameByRegex, {
+            regex: /.*/,
             path: filePath,
             payload: { pattern, replacement }
         });

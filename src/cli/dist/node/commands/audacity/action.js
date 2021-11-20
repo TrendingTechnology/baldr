@@ -100,7 +100,7 @@ function extractSamples(audacityTextmarkFile) {
  *   file.
  */
 function action(filePath) {
-    const text = file_reader_writer_1.readFile(filePath);
+    const text = (0, file_reader_writer_1.readFile)(filePath);
     log.info('The content of the source file “%s”:\n', [filePath]);
     log.info(text);
     const rawSamples = extractSamples(text);
@@ -123,13 +123,13 @@ function action(filePath) {
         else {
             title = rawSample.title;
         }
-        const ref = core_browser_1.asciify(title);
+        const ref = (0, core_browser_1.asciify)(title);
         const timeText = [];
         if (rawSample.startTime != null) {
-            timeText.push(core_browser_1.formatDuration(rawSample.startTime, true));
+            timeText.push((0, core_browser_1.formatDuration)(rawSample.startTime, true));
         }
         if (rawSample.endTime != null) {
-            timeText.push(core_browser_1.formatDuration(rawSample.endTime, true));
+            timeText.push((0, core_browser_1.formatDuration)(rawSample.endTime, true));
         }
         if (timeText.length > 0) {
             title += ' (' + timeText.join('-') + ')';
@@ -149,6 +149,6 @@ function action(filePath) {
     }
     const dest = `${filePath}.yml`;
     log.info('The content of the destination file “%s”:\n', [dest]);
-    log.always(file_reader_writer_1.writeYamlFile(dest, { samples }));
+    log.always((0, file_reader_writer_1.writeYamlFile)(dest, { samples }));
 }
 module.exports = action;

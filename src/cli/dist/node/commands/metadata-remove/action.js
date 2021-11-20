@@ -17,7 +17,7 @@ function action(filePath) {
         const cmd = new cli_utils_1.CommandRunner({
             verbose: true
         });
-        const extension = core_browser_1.getExtension(filePath);
+        const extension = (0, core_browser_1.getExtension)(filePath);
         if (extension != null) {
             const dest = filePath.replace('.' + extension, '_no-metadata.' + extension);
             cmd.startSpin();

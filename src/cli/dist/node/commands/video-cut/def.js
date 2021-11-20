@@ -1,6 +1,6 @@
 "use strict";
 const main_js_1 = require("../../main.js");
-module.exports = main_js_1.validateDefintion({
+module.exports = (0, main_js_1.validateDefintion)({
     command: 'video-cut <video-file> <time-1> [time-2]',
     alias: 'vc',
     description: 'Cut a video file without reencoding using MP4box: ' +

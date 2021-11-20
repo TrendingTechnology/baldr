@@ -27,7 +27,7 @@ function action(url, id, extension) {
             id = id.replace(/\.\w+$/, '');
         }
         const destFile = `${id}.${extension}`;
-        yield core_node_1.fetchFile(url, destFile);
+        yield (0, core_node_1.fetchFile)(url, destFile);
         // Make images smaller.
         const convertedDestFile = yield media_manager_1.operations.convertAsset(destFile);
         if (convertedDestFile != null) {
