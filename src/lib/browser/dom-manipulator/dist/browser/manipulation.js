@@ -76,3 +76,59 @@ export function wrapWords(text) {
     }
     return dom.body.innerHTML;
 }
+/**
+ * Split a HTML text into smaller chunks by looping over the children.
+ *
+ * @param htmlString - A HTML string.
+ * @param charactersPerChunks - The maximum number of characters that may be
+ *   contained in a junk.
+ *
+ * @returns An array of HTML chunks.
+ */
+export function splitHtmlIntoChunks(htmlString, charactersPerChunks = 400) {
+    /**
+     * Add text to the chunks array. Add only text with real letters not with
+     * whitespaces.
+     *
+     * @param htmlChunks - The array to be filled with HTML chunks.
+     * @param htmlString - A HTML string to be added to the array.
+     */
+    function addHtml(htmlChunks, htmlString) {
+        if (htmlString != null && htmlString.match(/^\s*$/) == null) {
+            htmlChunks.push(htmlString);
+        }
+    }
+    // if (htmlString.length < charactersPerChunks) {
+    //   return [htmlString]
+    // }
+    const domParser = new DOMParserU();
+    let dom = domParser.parseFromString(htmlString, 'text/html');
+    // If htmlString is a text without tags
+    if (dom.body.children.length === 0) {
+        dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html');
+    }
+    let text = '';
+    const htmlChunks = [];
+    // childNodes not children!
+    for (const children of dom.body.childNodes) {
+        const element = children;
+        // If htmlString is a text with inner tags
+        if (children.nodeName === '#text') {
+            if (element.textContent != null) {
+                text += `${element.textContent}`;
+            }
+        }
+        else {
+            if (element.outerHTML != null) {
+                text += `${element.outerHTML}`;
+            }
+        }
+        if (text.length > charactersPerChunks) {
+            addHtml(htmlChunks, text);
+            text = '';
+        }
+    }
+    // Add last not full text
+    addHtml(htmlChunks, text);
+    return htmlChunks;
+}

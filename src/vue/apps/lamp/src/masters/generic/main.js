@@ -2,12 +2,15 @@
  * @module @bldr/lamp/masters/generic
  */
 
-import { splitHtmlIntoChunks } from '@bldr/core-browser'
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
+import {
+  buildTextStepController,
+  wrapWords,
+  splitHtmlIntoChunks
+} from '@bldr/dom-manipulator'
 
 const CHARACTERS_ON_SLIDE = 400
 

@@ -1,6 +1,6 @@
 export { StepController } from './controller'
 
-export { wrapWords } from './manipulation'
+export { wrapWords, splitHtmlIntoChunks } from './manipulation'
 
 export {
   buildClozeStepController,

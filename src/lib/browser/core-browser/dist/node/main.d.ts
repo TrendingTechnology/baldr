@@ -82,16 +82,6 @@ export declare function sortObjectsByProperty(property: string): (a: {
  */
 export declare function validateUri(uri: string): string;
 /**
- * Split a HTML text into smaller chunks by looping over the children.
- *
- * @param htmlString - A HTML string.
- * @param charactersOnSlide - The maximum number of characters that may be
- *   contained in a junk.
- *
- * @returns An array of HTML chunks.
- */
-export declare function splitHtmlIntoChunks(htmlString: string, charactersOnSlide: number): string[];
-/**
  * TODO: Remove -> use Set()
  *
  * Remove duplicates from an array. A new array is created and returned.

@@ -1,8 +1,8 @@
 /**
  * @module @bldr/lamp/masters/image
  */
-
-import { splitHtmlIntoChunks, ObjectPropertyPicker } from '@bldr/core-browser'
+import { splitHtmlIntoChunks } from '@bldr/dom-manipulator'
+import { ObjectPropertyPicker } from '@bldr/core-browser'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
 const DESCRIPTION_TEASER_LENGTH = 200
@@ -29,7 +29,8 @@ export default validateMasterSpec({
     },
     noMeta: {
       type: Boolean,
-      description: 'Beeinflusst, ob Metainformation wie z. B. Titel oder Beschreibung angezeigt werden sollen.',
+      description:
+        'Beeinflusst, ob Metainformation wie z. B. Titel oder Beschreibung angezeigt werden sollen.',
       default: false
     }
   },
@@ -64,7 +65,10 @@ export default validateMasterSpec({
       if (description) {
         let htmlChunks
         if (description.length > DESCRIPTION_TEASER_LENGTH) {
-          htmlChunks = splitHtmlIntoChunks(description, DESCRIPTION_TEASER_LENGTH)
+          htmlChunks = splitHtmlIntoChunks(
+            description,
+            DESCRIPTION_TEASER_LENGTH
+          )
           descriptionTeaser = htmlChunks[0]
           if (htmlChunks.length > 1) {
             isLongDescription = true
@@ -96,13 +100,16 @@ export default validateMasterSpec({
         return asset.yaml.title
       }
     },
-    afterSlideNoChangeOnComponent ({ }) {
+    afterSlideNoChangeOnComponent ({}) {
       // overlay
       const slide = this.$get('slide')
 
       // This variable indicates if in the prop description is a lot of text.
       let lotOfText = false
-      if (slide.propsMain.description && slide.propsMain.description.length > 400) {
+      if (
+        slide.propsMain.description &&
+        slide.propsMain.description.length > 400
+      ) {
         lotOfText = true
       }
 
@@ -141,13 +148,13 @@ export default validateMasterSpec({
           const width = this.$el.clientWidth - img.naturalWidth * scale
           resetMetadataStyle(metaStyle)
           metaStyle.width = `${width}px`
-        // horizontal
+          // horizontal
         } else if (freeSpaceRatio < 1 - overlayZone) {
           this.$el.setAttribute('b-metadata-position', 'horizontal')
           const height = this.$el.clientHeight - img.naturalHeight * scale
           resetMetadataStyle(metaStyle)
           metaStyle.height = `${height}px`
-        // overlay
+          // overlay
         } else {
           resetMetadataStyle(metaStyle)
           this.$el.setAttribute('b-metadata-position', 'overlay')

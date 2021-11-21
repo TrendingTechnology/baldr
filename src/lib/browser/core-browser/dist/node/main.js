@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.splitHtmlIntoChunks = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = exports.getExtension = void 0;
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = exports.getExtension = void 0;
 const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
@@ -239,60 +239,6 @@ function validateUri(uri) {
     return uri;
 }
 exports.validateUri = validateUri;
-/**
- * Split a HTML text into smaller chunks by looping over the children.
- *
- * @param htmlString - A HTML string.
- * @param charactersOnSlide - The maximum number of characters that may be
- *   contained in a junk.
- *
- * @returns An array of HTML chunks.
- */
-function splitHtmlIntoChunks(htmlString, charactersOnSlide) {
-    /**
-     * Add text to the chunks array. Add only text with real letters not with
-     * whitespaces.
-     *
-     * @param htmlChunks - The array to be filled with HTML chunks.
-     * @param htmlString - A HTML string to be added to the array.
-     */
-    function addHtml(htmlChunks, htmlString) {
-        if (htmlString != null && htmlString.match(/^\s*$/) == null) {
-            htmlChunks.push(htmlString);
-        }
-    }
-    if (htmlString.length < charactersOnSlide)
-        return [htmlString];
-    const domParser = new DOMParser();
-    let dom = domParser.parseFromString(htmlString, 'text/html');
-    // If htmlString is a text without tags
-    if (dom.body.children.length === 0) {
-        dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html');
-    }
-    let text = '';
-    const htmlChunks = [];
-    // childNodes not children!
-    for (const children of dom.body.childNodes) {
-        const element = children;
-        // If htmlString is a text with inner tags
-        if (children.nodeName === '#text') {
-            if (element.textContent != null)
-                text += `${element.textContent}`;
-        }
-        else {
-            if (element.outerHTML != null)
-                text += `${element.outerHTML}`;
-        }
-        if (text.length > charactersOnSlide) {
-            addHtml(htmlChunks, text);
-            text = '';
-        }
-    }
-    // Add last not full text
-    addHtml(htmlChunks, text);
-    return htmlChunks;
-}
-exports.splitHtmlIntoChunks = splitHtmlIntoChunks;
 /**
  * TODO: Remove -> use Set()
  *
