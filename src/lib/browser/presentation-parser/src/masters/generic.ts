@@ -1,11 +1,58 @@
-import { Master } from '../master'
+import { Master, convertMarkdownToHtml, splitHtmlIntoChunks } from '../master'
 
 const CHARACTERS_ON_SLIDE = 400
 
-type GenericFieldsRaw = string | GenericFieldsNormalized
+type GenericFieldsRawInput = string | string[] | GenericFieldsInput
 
-interface GenericFieldsNormalized {
+interface GenericFieldsInput {
   markup: string | string[]
+  charactersOnSlide?: number
+  onOne?: boolean
+}
+
+interface GenericFieldsInstantiated extends GenericFieldsInput {
+  markup: string[]
+  charactersOnSlide: number
+  onOne: boolean
+}
+
+export function splitMarkup (
+  rawMarkup: string | string[],
+  charactersOnSlide: number
+): string[] {
+  if (typeof rawMarkup === 'string') {
+    rawMarkup = [rawMarkup]
+  }
+
+  // Convert into HTML
+  const converted = []
+  for (const markup of rawMarkup) {
+    converted.push(convertMarkdownToHtml(markup))
+  }
+
+  // Split by <hr>
+  const splittedByHr = []
+  for (const html of converted) {
+    if (html.indexOf('<hr>') > -1) {
+      const chunks = html.split('<hr>')
+      for (const chunk of chunks) {
+        splittedByHr.push(chunk.trim())
+      }
+    } else {
+      splittedByHr.push(html)
+    }
+  }
+
+  // Split large texts into smaller chunks
+  let markup = []
+  for (const html of splittedByHr) {
+    const chunks = splitHtmlIntoChunks(html, charactersOnSlide)
+    for (const chunk of chunks) {
+      markup.push(chunk)
+    }
+  }
+
+  return markup
 }
 
 export class GenericMaster implements Master {
@@ -28,7 +75,6 @@ export class GenericMaster implements Master {
 
   fieldsDefintion = {
     markup: {
-      type: [String, Array],
       required: true,
       // It is complicated to convert to prop based markup conversion.
       // markup: true
@@ -49,12 +95,17 @@ export class GenericMaster implements Master {
     }
   }
 
-  normalizeFieldsInput (fields: GenericFieldsRaw): GenericFieldsNormalized {
+  normalizeFieldsInput (fields: GenericFieldsRawInput): GenericFieldsInput {
     if (typeof fields === 'string' || Array.isArray(fields)) {
-      fields = {
-        markup: fields
-      }
+      fields = { markup: fields }
     }
+    return fields
+  }
+
+  collectFieldsOnInstantiation (
+    fields: GenericFieldsInstantiated
+  ): GenericFieldsInstantiated {
+    fields.markup = splitMarkup(fields.markup, fields.charactersOnSlide)
     return fields
   }
 }

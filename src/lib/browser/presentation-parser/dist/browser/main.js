@@ -18,26 +18,25 @@
  *
  * The different states of the master slide field types.
  *
- * - `..RawInput`
- * - `..Input`
- * - `..Instantiated`
- * - `..Resolved`
+ * - `..FieldsRawInput`
+ * - `..FieldsInput`
+ * - `..FieldsInstantiated`
+ * - `..FieldsFinal`
  *
  * Master slide “generic”:
  *
- * - `GenericRawInput`
- * - `GenericInput`
- * - `GenericInstantiated`
- * - `GenericResolved`
+ * - `GenericFieldsRawInput`
+ * - `GenericFieldsInput`
+ * - `GenericFieldsInstantiated`
+ * - `GenericFieldsFinal`
  *
- *
- * `..RawInput` ->
+ * `..FieldsRawInput` ->
  * `master.normalizeFieldsInput(..)` ->
- * `..Input` ->
+ * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
- * `..Instantiated` ->
+ * `..FieldsInstantiated` ->
  * `master.collectFieldsAfterResolution(..)` ->
- * `..Resolved`
+ * `..FieldsFinal`
  *
  * @module @bldr/presentation-parser
  */
@@ -54,6 +53,8 @@ import { Presentation } from './presentation';
 export { mapStepFieldDefintions } from './master';
 import * as question_1 from './masters/question';
 export { question_1 as question };
+import * as generic_1 from './masters/generic';
+export { generic_1 as generic };
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

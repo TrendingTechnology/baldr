@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
@@ -10,6 +10,7 @@ Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
+Object.defineProperty(exports, "splitHtmlIntoChunks", { enumerable: true, get: function () { return dom_manipulator_1.splitHtmlIntoChunks; } });
 var step_1 = require("./step");
 Object.defineProperty(exports, "StepCollector", { enumerable: true, get: function () { return step_1.StepCollector; } });
 var fuzzy_uri_1 = require("./fuzzy-uri");

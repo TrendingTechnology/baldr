@@ -3,6 +3,13 @@ ref: generic-test
 title: Master slide “generic” test presentation
 slides:
 
+- ref: short-form
+  generic: Lorem
+
+- ref: long-form
+  generic:
+    markup: Lorem
+
 - title: Inline media
   generic: |
     Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
@@ -19,22 +26,8 @@ slides:
     [uuid:ad7b747f-fe50-49e3-a563-affdfddbdf80]
     [uuid:5fb62ea0-e2a7-42cd-b288-c0ffc1747a54]
 
-- title: Test step words
+- title: Link
   generic:
-    step_mode: 'words'
-    markup: |
-      # Heading 1
-
-      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
-
-      ## Adipisici elit, sed eiusmod
-
-      * Tempor incidunt ut labore.
-      * Veniam, quis nostrud.
-
-- title: Test step sentences
-  generic:
-    step_mode: 'sentences'
     markup: |
       # Heading 1
 
@@ -51,19 +44,25 @@ slides:
     * Rightwards Arrow: ->
     * Left Right Arrow: <->
 
-- title: hr to generate steps
+- ref: hr
+  title: hr to generate steps
   generic: |
-    step 1
+    Step 1
 
     ---
 
-    step 2
+    Step 2
+
+    ---
+
+    Step 3
 
 - title: Using props
   generic:
     markup: Using props
 
-- title: Step support
+- ref: input-as-array
+  title: Step support
   generic:
     markup:
     - Step 1
@@ -96,7 +95,8 @@ slides:
     non proident, sunt in culpa qui officia deserunt mollit anim id est
     laborum.
 
-- title: Long text (specified as Markdown)
+- ref: long-text-markdown
+  title: Long text (specified as Markdown)
   generic: |
     # Heading 1
 

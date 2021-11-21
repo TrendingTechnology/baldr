@@ -1,7 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenericMaster = void 0;
+exports.GenericMaster = exports.splitMarkup = void 0;
+const master_1 = require("../master");
 const CHARACTERS_ON_SLIDE = 400;
+function splitMarkup(rawMarkup, charactersOnSlide) {
+    if (typeof rawMarkup === 'string') {
+        rawMarkup = [rawMarkup];
+    }
+    // Convert into HTML
+    const converted = [];
+    for (const markup of rawMarkup) {
+        converted.push(master_1.convertMarkdownToHtml(markup));
+    }
+    // Split by <hr>
+    const splittedByHr = [];
+    for (const html of converted) {
+        if (html.indexOf('<hr>') > -1) {
+            const chunks = html.split('<hr>');
+            for (const chunk of chunks) {
+                splittedByHr.push(chunk.trim());
+            }
+        }
+        else {
+            splittedByHr.push(html);
+        }
+    }
+    // Split large texts into smaller chunks
+    let markup = [];
+    for (const html of splittedByHr) {
+        const chunks = master_1.splitHtmlIntoChunks(html, charactersOnSlide);
+        for (const chunk of chunks) {
+            markup.push(chunk);
+        }
+    }
+    return markup;
+}
+exports.splitMarkup = splitMarkup;
 class GenericMaster {
     constructor() {
         this.name = 'generic';
@@ -19,7 +53,6 @@ class GenericMaster {
         };
         this.fieldsDefintion = {
             markup: {
-                type: [String, Array],
                 required: true,
                 // It is complicated to convert to prop based markup conversion.
                 // markup: true
@@ -40,10 +73,12 @@ class GenericMaster {
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string' || Array.isArray(fields)) {
-            fields = {
-                markup: fields
-            };
+            fields = { markup: fields };
         }
+        return fields;
+    }
+    collectFieldsOnInstantiation(fields) {
+        fields.markup = splitMarkup(fields.markup, fields.charactersOnSlide);
         return fields;
     }
 }

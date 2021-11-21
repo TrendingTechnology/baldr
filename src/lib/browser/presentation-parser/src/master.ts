@@ -7,7 +7,11 @@ import { StepCollector } from './step'
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 export { Asset, Sample } from '@bldr/media-resolver-ng'
 export { convertHtmlToPlainText } from '@bldr/string-format'
-export { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
+export {
+  buildTextStepController,
+  wrapWords,
+  splitHtmlIntoChunks
+} from '@bldr/dom-manipulator'
 export { StepCollector } from './step'
 export {
   extractUrisFromFuzzySpecs,

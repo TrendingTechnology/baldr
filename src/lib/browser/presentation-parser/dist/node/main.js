@@ -19,26 +19,25 @@
  *
  * The different states of the master slide field types.
  *
- * - `..RawInput`
- * - `..Input`
- * - `..Instantiated`
- * - `..Resolved`
+ * - `..FieldsRawInput`
+ * - `..FieldsInput`
+ * - `..FieldsInstantiated`
+ * - `..FieldsFinal`
  *
  * Master slide “generic”:
  *
- * - `GenericRawInput`
- * - `GenericInput`
- * - `GenericInstantiated`
- * - `GenericResolved`
+ * - `GenericFieldsRawInput`
+ * - `GenericFieldsInput`
+ * - `GenericFieldsInstantiated`
+ * - `GenericFieldsFinal`
  *
- *
- * `..RawInput` ->
+ * `..FieldsRawInput` ->
  * `master.normalizeFieldsInput(..)` ->
- * `..Input` ->
+ * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
- * `..Instantiated` ->
+ * `..FieldsInstantiated` ->
  * `master.collectFieldsAfterResolution(..)` ->
- * `..Resolved`
+ * `..FieldsFinal`
  *
  * @module @bldr/presentation-parser
  */
@@ -52,11 +51,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.question = exports.mapStepFieldDefintions = void 0;
+exports.parseAndResolve = exports.parse = exports.generic = exports.question = exports.mapStepFieldDefintions = void 0;
 const presentation_1 = require("./presentation");
 var master_1 = require("./master");
 Object.defineProperty(exports, "mapStepFieldDefintions", { enumerable: true, get: function () { return master_1.mapStepFieldDefintions; } });
 exports.question = require("./masters/question");
+exports.generic = require("./masters/generic");
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

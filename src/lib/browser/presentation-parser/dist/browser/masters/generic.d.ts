@@ -1,8 +1,16 @@
 import { Master } from '../master';
-declare type GenericFieldsRaw = string | GenericFieldsNormalized;
-interface GenericFieldsNormalized {
+declare type GenericFieldsRawInput = string | string[] | GenericFieldsInput;
+interface GenericFieldsInput {
     markup: string | string[];
+    charactersOnSlide?: number;
+    onOne?: boolean;
 }
+interface GenericFieldsInstantiated extends GenericFieldsInput {
+    markup: string[];
+    charactersOnSlide: number;
+    onOne: boolean;
+}
+export declare function splitMarkup(rawMarkup: string | string[], charactersOnSlide: number): string[];
 export declare class GenericMaster implements Master {
     name: string;
     displayName: string;
@@ -19,7 +27,6 @@ export declare class GenericMaster implements Master {
     };
     fieldsDefintion: {
         markup: {
-            type: (StringConstructor | ArrayConstructor)[];
             required: boolean;
             inlineMarkup: boolean;
             description: string;
@@ -35,6 +42,7 @@ export declare class GenericMaster implements Master {
             default: boolean;
         };
     };
-    normalizeFieldsInput(fields: GenericFieldsRaw): GenericFieldsNormalized;
+    normalizeFieldsInput(fields: GenericFieldsRawInput): GenericFieldsInput;
+    collectFieldsOnInstantiation(fields: GenericFieldsInstantiated): GenericFieldsInstantiated;
 }
 export {};
