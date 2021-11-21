@@ -65,9 +65,15 @@ export declare class Slide {
     get steps(): Step[];
     get plainText(): string | undefined;
     /**
-     * The title of the slide.
+     * The title of the slide. The HTML tags are removed. First the metadata field
+     * `title` (`- title: Title`) is used, then a string obtained from the master
+     * hook `deriveTitleFromFields`, then the getter `this.plainText` and finally
+     * the master name.
      */
     get title(): string;
+    /**
+     *
+     */
     get detailedTitle(): string;
     /**
      * Log to the console.

@@ -44,32 +44,27 @@ export function convertHtmlToPlainText(html) {
     if (result == null) {
         return '';
     }
-    return result.replace(/\s\s+/g, ' ').trim();
+    return result.replace(/[ \t]+/g, ' ').trim();
 }
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length of 80 characters.
  */
 export function shortenText(text, options) {
-    const defaults = {
-        stripTags: false,
-        maxLength: 80
-    };
     if (options == null) {
-        options = defaults;
+        options = {};
     }
-    else {
-        options = Object.assign(defaults, options);
-    }
-    if (options.stripTags) {
+    text = text.replace(/\s+/g, ' ');
+    if (options.stripTags != null && options.stripTags) {
         text = convertHtmlToPlainText(text);
     }
-    if (text.length < options.maxLength) {
+    const maxLength = options.maxLength != null ? options.maxLength : 80;
+    if (text.length < maxLength) {
         return text;
     }
     // https://stackoverflow.com/a/5454303
     // trim the string to the maximum length
-    text = text.substr(0, options.maxLength);
+    text = text.substr(0, maxLength);
     // re-trim if we are in the middle of a word
     text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')));
     return `${text} …`;

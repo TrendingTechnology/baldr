@@ -1,10 +1,13 @@
 import { GenericError } from '@bldr/type-definitions'
+import { getConfig } from '@bldr/config'
+import { MongoDbClient } from '@bldr/mongodb-connector'
 import { parse } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/file-reader-writer'
 import { updateMediaServer } from '@bldr/api-wrapper'
 import { walk } from '@bldr/media-manager'
-import { MongoDbClient } from '@bldr/mongodb-connector'
 import * as log from '@bldr/log'
+
+const config = getConfig()
 
 interface Options {
   resolve?: boolean
@@ -20,6 +23,10 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
   const errors: { [filePath: string]: string } = {}
   const result = await updateMediaServer()
   log.infoAny(result)
+
+  if (filePaths == null) {
+    filePaths = config.mediaServer.basePath
+  }
 
   let allUris: string[] | undefined
 

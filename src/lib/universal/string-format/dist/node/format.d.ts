@@ -19,8 +19,8 @@ export declare function stripTags(text: string): string;
  */
 export declare function convertHtmlToPlainText(html: string): string;
 interface ShortenTextOptions {
-    stripTags: boolean;
-    maxLength: number;
+    stripTags?: boolean;
+    maxLength?: number;
 }
 /**
  * Shorten a text string. By default the string is shortend to the maximal

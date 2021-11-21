@@ -64,22 +64,28 @@ class Slide {
         return this.master.derivePlainTextFromFields(this.fields);
     }
     /**
-     * The title of the slide.
+     * The title of the slide. The HTML tags are removed. First the metadata field
+     * `title` (`- title: Title`) is used, then a string obtained from the master
+     * hook `deriveTitleFromFields`, then the getter `this.plainText` and finally
+     * the master name.
      */
     get title() {
         if (this.meta.title != null) {
-            return this.meta.title;
+            return string_format_1.shortenText(this.meta.title, { stripTags: true });
         }
         const titleFromFields = this.master.deriveTitleFromFields(this.fields);
         if (titleFromFields != null) {
-            return titleFromFields;
+            return string_format_1.shortenText(titleFromFields, { stripTags: true });
         }
         const plainText = this.plainText;
         if (plainText != null) {
-            return string_format_1.shortenText(plainText);
+            return string_format_1.shortenText(plainText, { stripTags: true });
         }
-        return this.master.name;
+        return this.master.displayName;
     }
+    /**
+     *
+     */
     get detailedTitle() {
         return `Nr. ${this.no} [${this.master.displayName}]: ${this.title}`;
     }

@@ -28,12 +28,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = require("@bldr/config");
+const mongodb_connector_1 = require("@bldr/mongodb-connector");
 const presentation_parser_1 = require("@bldr/presentation-parser");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const api_wrapper_1 = require("@bldr/api-wrapper");
 const media_manager_1 = require("@bldr/media-manager");
-const mongodb_connector_1 = require("@bldr/mongodb-connector");
 const log = __importStar(require("@bldr/log"));
+const config = (0, config_1.getConfig)();
 /**
  * @param filePath - A file path.
  * @param cmdObj - An object containing options as key-value pairs.
@@ -44,6 +46,9 @@ function action(filePaths, options) {
         const errors = {};
         const result = yield (0, api_wrapper_1.updateMediaServer)();
         log.infoAny(result);
+        if (filePaths == null) {
+            filePaths = config.mediaServer.basePath;
+        }
         let allUris;
         if ((options === null || options === void 0 ? void 0 : options.resolve) == null || !options.resolve) {
             const mongoDbClient = new mongodb_connector_1.MongoDbClient();

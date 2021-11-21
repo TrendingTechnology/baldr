@@ -548,7 +548,7 @@ export class MasterWrapper {
       }
     }
     if (segments.length > 0) {
-      return segments.join('')
+      return segments.join(' | ')
     }
   }
 }

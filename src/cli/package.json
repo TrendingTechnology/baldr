@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "tsc --version && npm run build:node && npm run lint",
+    "build": "npm run build:node && npm run lint",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/**/*.ts'",
     "lint": "npm run lint:ts-standard && npm run lint:depcheck",
