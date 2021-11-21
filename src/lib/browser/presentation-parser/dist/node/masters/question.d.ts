@@ -29,7 +29,7 @@ declare type QuestionSequence = string[];
 /**
  * A question with sub questions.
  */
-declare class Question {
+export declare class Question {
     level: number;
     heading?: string;
     question?: string;
@@ -49,6 +49,7 @@ declare class Question {
     private static initCounter;
     static parse(rawSpec: RawSpec): Question[];
 }
+export declare function generateTexMarkup(fields: QuestionFieldData): string;
 export declare class QuestionMaster implements Master {
     name: string;
     displayName: string;

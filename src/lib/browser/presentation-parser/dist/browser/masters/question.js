@@ -62,7 +62,7 @@ function normalizeMultipleSpecs(rawSpec) {
 /**
  * A question with sub questions.
  */
-class Question {
+export class Question {
     constructor(spec, counter, level) {
         this.counter = counter;
         if (spec.heading != null) {
@@ -157,6 +157,13 @@ function formatTexQuestion(question) {
     }
     return markup.join('\n\n') + '\n';
 }
+export function generateTexMarkup(fields) {
+    const markup = [];
+    for (const question of fields.questions) {
+        markup.push(formatTexQuestion(question));
+    }
+    return tex.environment('enumerate', markup.join('\n'));
+}
 export class QuestionMaster {
     constructor() {
         this.name = 'question';
@@ -192,10 +199,6 @@ export class QuestionMaster {
         };
     }
     generateTexMarkup(fields) {
-        const markup = [];
-        for (const question of fields.questions) {
-            markup.push(formatTexQuestion(question));
-        }
-        return tex.environment('enumerate', markup.join('\n'));
+        return generateTexMarkup(fields);
     }
 }

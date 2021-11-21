@@ -101,7 +101,7 @@ type QuestionSequence = string[]
 /**
  * A question with sub questions.
  */
-class Question {
+export class Question {
   level: number
   heading?: string
   question?: string
@@ -226,6 +226,14 @@ function formatTexQuestion (question: Question): string {
   return markup.join('\n\n') + '\n'
 }
 
+export function generateTexMarkup(fields: QuestionFieldData): string {
+  const markup: string[] = []
+  for (const question of fields.questions) {
+    markup.push(formatTexQuestion(question))
+  }
+  return tex.environment('enumerate', markup.join('\n'))
+}
+
 export class QuestionMaster implements Master {
   name = 'question'
 
@@ -267,10 +275,6 @@ export class QuestionMaster implements Master {
   }
 
   generateTexMarkup(fields: QuestionFieldData): string {
-    const markup: string[] = []
-    for (const question of fields.questions) {
-      markup.push(formatTexQuestion(question))
-    }
-    return tex.environment('enumerate', markup.join('\n'))
+    return generateTexMarkup(fields)
   }
 }

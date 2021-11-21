@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuestionMaster = void 0;
+exports.QuestionMaster = exports.generateTexMarkup = exports.Question = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const tex = require("@bldr/tex-templates");
 /**
@@ -137,6 +137,7 @@ class Question {
         return Question.parseRecursively(rawSpec, [], counter, 0);
     }
 }
+exports.Question = Question;
 function formatTexMultipleQuestions(questions) {
     const markup = [];
     for (const question of questions) {
@@ -160,6 +161,14 @@ function formatTexQuestion(question) {
     }
     return markup.join('\n\n') + '\n';
 }
+function generateTexMarkup(fields) {
+    const markup = [];
+    for (const question of fields.questions) {
+        markup.push(formatTexQuestion(question));
+    }
+    return tex.environment('enumerate', markup.join('\n'));
+}
+exports.generateTexMarkup = generateTexMarkup;
 class QuestionMaster {
     constructor() {
         this.name = 'question';
@@ -195,11 +204,7 @@ class QuestionMaster {
         };
     }
     generateTexMarkup(fields) {
-        const markup = [];
-        for (const question of fields.questions) {
-            markup.push(formatTexQuestion(question));
-        }
-        return tex.environment('enumerate', markup.join('\n'));
+        return generateTexMarkup(fields);
     }
 }
 exports.QuestionMaster = QuestionMaster;

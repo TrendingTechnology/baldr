@@ -28,7 +28,6 @@
     "@bldr/icons": "*",
     "@bldr/lamp-core": "*",
     "@bldr/markdown-to-html": "*",
-    "@bldr/master-question": "*",
     "@bldr/media-client": "*",
     "@bldr/menu-adapter": "*",
     "@bldr/menu-webapp": "*",
