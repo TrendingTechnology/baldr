@@ -175,6 +175,10 @@ export class Slide {
       this.master.icon.unicodeSymbol != null
         ? this.master.icon.unicodeSymbol + '\t'
         : '\t'
-    log.always('%s%s', [unicodeSymbol, this.detailedTitle])
+    log.info('%s%s', [unicodeSymbol, this.detailedTitle])
+
+    for (const step of this.steps) {
+      log.verbose('\t\tNr. %s: %s', [step.no, step.title])
+    }
   }
 }

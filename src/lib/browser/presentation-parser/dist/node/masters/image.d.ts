@@ -14,6 +14,7 @@ export declare class ImageMaster implements Master {
         color: string;
         /**
          * U+1F5BC U+FE0F
+         *
          * @see https://emojipedia.org/framed-picture/
          */
         unicodeSymbol: string;

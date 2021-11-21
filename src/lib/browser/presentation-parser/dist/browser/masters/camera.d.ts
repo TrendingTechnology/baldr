@@ -6,6 +6,8 @@ export declare class CameraMaster implements Master {
         name: string;
         color: string;
         /**
+         * U+1F4F7
+         *
          * @see https://emojipedia.org/camera/
          */
         unicodeSymbol: string;

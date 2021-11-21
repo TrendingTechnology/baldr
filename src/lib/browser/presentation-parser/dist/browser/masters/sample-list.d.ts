@@ -11,6 +11,12 @@ export declare class SampleListMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F501
+         *
+         * @see https://emojipedia.org/repeat-button/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         samples: {

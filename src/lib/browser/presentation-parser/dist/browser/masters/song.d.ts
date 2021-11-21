@@ -9,6 +9,12 @@ export declare class SongMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F3BC
+         *
+         * @see https://emojipedia.org/musical-score/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         songId: {

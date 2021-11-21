@@ -9,7 +9,13 @@ class NoteMaster {
         this.displayName = 'Hefteintrag';
         this.icon = {
             name: 'pencil',
-            color: 'blue'
+            color: 'blue',
+            /**
+             * U+1F58B U+FE0F
+             *
+             * @see https://emojipedia.org/fountain-pen/
+             */
+            unicodeSymbol: '🖋️'
         };
         this.fieldsDefintion = {
             markup: {

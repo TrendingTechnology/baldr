@@ -14,7 +14,14 @@ export class ScoreSampleMaster implements Master {
 
   icon = {
     name: 'file-audio',
-    color: 'black'
+    color: 'black',
+
+    /**
+     * U+1F3B5
+     *
+     * @see https://emojipedia.org/musical-note/
+     */
+    unicodeSymbol: '🎵'
   }
 
   fieldsDefintion = {

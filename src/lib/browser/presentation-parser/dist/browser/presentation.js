@@ -33,7 +33,7 @@ class Meta {
      * Log to the console.
      */
     log() {
-        console.log(log.formatObject(this, { indentation: 2 }));
+        log.infoAny(log.formatObject(this, { indentation: 2 }));
     }
 }
 export class Presentation {
@@ -151,7 +151,7 @@ export class Presentation {
         }
         const assets = resolver.exportAssets(this.slides.mediaUris);
         for (const asset of assets) {
-            console.log(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
+            log.verboseAny(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
         }
     }
 }

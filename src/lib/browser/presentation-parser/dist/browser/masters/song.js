@@ -4,7 +4,13 @@ export class SongMaster {
         this.displayName = 'Lied';
         this.icon = {
             name: 'file-song',
-            color: 'green'
+            color: 'green',
+            /**
+             * U+1F3BC
+             *
+             * @see https://emojipedia.org/musical-score/
+             */
+            unicodeSymbol: '🎼'
         };
         this.fieldsDefintion = {
             songId: {

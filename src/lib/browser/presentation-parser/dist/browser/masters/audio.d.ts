@@ -24,6 +24,8 @@ export declare class AudioMaster implements Master {
         name: string;
         color: string;
         /**
+         *  U+1F50A
+         *
          * @see https://emojipedia.org/speaker-high-volume/
          */
         unicodeSymbol: string;

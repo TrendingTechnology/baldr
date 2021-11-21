@@ -9,6 +9,8 @@ class AudioMaster {
             name: 'music',
             color: 'brown',
             /**
+             *  U+1F50A
+             *
              * @see https://emojipedia.org/speaker-high-volume/
              */
             unicodeSymbol: '🔊'

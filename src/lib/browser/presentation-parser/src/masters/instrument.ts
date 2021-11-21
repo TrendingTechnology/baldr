@@ -14,6 +14,7 @@ export class InstrumentMaster implements Master {
   icon = {
     name: 'instrument',
     color: 'yellow',
+
     /**
      * U+1F3BA
      *

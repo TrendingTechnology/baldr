@@ -10,6 +10,7 @@ class ImageMaster {
             color: 'green',
             /**
              * U+1F5BC U+FE0F
+             *
              * @see https://emojipedia.org/framed-picture/
              */
             unicodeSymbol: '🖼️'

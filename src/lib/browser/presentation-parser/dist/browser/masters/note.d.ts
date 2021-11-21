@@ -9,6 +9,12 @@ export declare class NoteMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F58B U+FE0F
+         *
+         * @see https://emojipedia.org/fountain-pen/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         markup: {

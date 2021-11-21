@@ -59,7 +59,7 @@ function action(filePaths, options) {
         yield (0, media_manager_1.walk)({
             presentation(filePath) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    log.info('Parse presentation %s', [filePath]);
+                    log.warn('\nParse presentation %s', [filePath]);
                     try {
                         const presentation = (0, presentation_parser_1.parse)((0, file_reader_writer_1.readFile)(filePath));
                         if ((options === null || options === void 0 ? void 0 : options.resolve) != null && options.resolve) {

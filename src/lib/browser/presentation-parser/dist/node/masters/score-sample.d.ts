@@ -10,6 +10,12 @@ export declare class ScoreSampleMaster implements Master {
     icon: {
         name: string;
         color: string;
+        /**
+         * U+1F3B5
+         *
+         * @see https://emojipedia.org/musical-note/
+         */
+        unicodeSymbol: string;
     };
     fieldsDefintion: {
         heading: {

@@ -6,6 +6,8 @@ export class CameraMaster {
             name: 'document-camera',
             color: 'red',
             /**
+             * U+1F4F7
+             *
              * @see https://emojipedia.org/camera/
              */
             unicodeSymbol: '📷'

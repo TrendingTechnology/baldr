@@ -40,7 +40,7 @@ async function action (filePaths?: string, options?: Options): Promise<void> {
   await walk(
     {
       async presentation (filePath) {
-        log.info('Parse presentation %s', [filePath])
+        log.warn('\nParse presentation %s', [filePath])
         try {
           const presentation = parse(readFile(filePath))
           if (options?.resolve != null && options.resolve) {

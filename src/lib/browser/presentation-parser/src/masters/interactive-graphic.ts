@@ -18,6 +18,7 @@ export class InteractiveGraphicMaster implements Master {
     name: 'image',
     color: 'blue',
     showOnSlides: false,
+
     /**
      * U+1F4CA
      *

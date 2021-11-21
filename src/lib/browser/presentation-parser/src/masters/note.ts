@@ -14,7 +14,14 @@ export class NoteMaster implements Master {
 
   icon = {
     name: 'pencil',
-    color: 'blue'
+    color: 'blue',
+
+    /**
+     * U+1F58B U+FE0F
+     *
+     * @see https://emojipedia.org/fountain-pen/
+     */
+     unicodeSymbol: '🖋️'
   }
 
   fieldsDefintion = {

@@ -8,7 +8,13 @@ class SampleListMaster {
         this.displayName = 'Audio-Ausschnitte';
         this.icon = {
             name: 'music',
-            color: 'red'
+            color: 'red',
+            /**
+             * U+1F501
+             *
+             * @see https://emojipedia.org/repeat-button/
+             */
+            unicodeSymbol: '🔁'
         };
         this.fieldsDefintion = {
             samples: {

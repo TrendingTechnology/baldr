@@ -22,7 +22,14 @@ export class SampleListMaster implements Master {
 
   icon = {
     name: 'music',
-    color: 'red'
+    color: 'red',
+
+    /**
+     * U+1F501
+     *
+     * @see https://emojipedia.org/repeat-button/
+     */
+     unicodeSymbol: '🔁'
   }
 
   fieldsDefintion = {
