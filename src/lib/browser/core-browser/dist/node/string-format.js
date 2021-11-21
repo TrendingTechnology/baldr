@@ -5,7 +5,7 @@
  * @module @bldr/core-browser/string-format
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deasciify = exports.referencify = exports.asciify = exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = void 0;
+exports.deasciify = exports.referencify = exports.asciify = exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.escapeHtml = void 0;
 const transliteration_1 = require("transliteration");
 /**
  * Escape some characters with HTML entities.
@@ -30,24 +30,6 @@ function escapeHtml(htmlString) {
     });
 }
 exports.escapeHtml = escapeHtml;
-/**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-function convertHtmlToPlainText(html) {
-    var _a;
-    if (html == null) {
-        return '';
-    }
-    // To get spaces between heading and paragraphs
-    html = html.replace(/></g, '> <');
-    const markup = new DOMParser().parseFromString(html, 'text/html');
-    return (_a = markup.body.textContent) !== null && _a !== void 0 ? _a : '';
-}
-exports.convertHtmlToPlainText = convertHtmlToPlainText;
 /**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
@@ -167,37 +149,6 @@ function formatWikicommonsUrl(fileName) {
     return `https://commons.wikimedia.org/wiki/File:${fileName}`;
 }
 exports.formatWikicommonsUrl = formatWikicommonsUrl;
-/**
- * Shorten a text string. By default the string is shortend to the maximal
- * length 80.
- */
-function shortenText(text, options) {
-    const defaults = {
-        stripTags: false,
-        maxLength: 80
-    };
-    if (options == null) {
-        options = defaults;
-    }
-    else {
-        options = Object.assign(defaults, options);
-    }
-    if (text == null)
-        return '';
-    if (options.stripTags) {
-        text = convertHtmlToPlainText(text);
-    }
-    if (text.length < options.maxLength) {
-        return text;
-    }
-    // https://stackoverflow.com/a/5454303
-    // trim the string to the maximum length
-    text = text.substr(0, options.maxLength);
-    // re-trim if we are in the middle of a word
-    text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')));
-    return `${text} …`;
-}
-exports.shortenText = shortenText;
 /**
  * Format a date specification string into a local date string, for
  * example `28. August 1749`

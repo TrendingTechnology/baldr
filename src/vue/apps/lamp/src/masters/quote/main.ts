@@ -4,7 +4,7 @@
 
 import type { LampTypes } from '@bldr/type-definitions'
 
-import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/string-format'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
 export default validateMasterSpec({

@@ -36,6 +36,7 @@
     "@bldr/notification": "*",
     "@bldr/presentation-parser": "*",
     "@bldr/shortcuts": "*",
+    "@bldr/string-format": "*",
     "@bldr/style-configurator": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/tex-templates": "*",

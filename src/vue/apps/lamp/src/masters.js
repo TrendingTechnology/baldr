@@ -7,7 +7,7 @@
 /* globals rawYamlExamples */
 
 import { customStore } from '@/main'
-import { convertMarkdownToHtml, convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
+import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib.js'
 import inlineMarkup from './inline-markup.js'
 import SlidePreviewPlayButton from './components/reusable/SlidesPreview/PlayButton.vue'
@@ -23,11 +23,15 @@ import { masterCollection } from '@bldr/lamp-core'
 class MasterIcon {
   constructor ({ name, color, size, showOnSlides }) {
     if (size && !['small', 'large'].includes(size)) {
-      throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
+      throw new Error(
+        `The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`
+      )
     }
 
     if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
-      throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`)
+      throw new Error(
+        `The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`
+      )
     }
     /**
      * For allowed icon names the materical icon font. The nasizeme of an icon
@@ -349,7 +353,7 @@ class Master {
       if (prop) {
         if (typeof prop === 'string') {
           extractUrisInText(prop)
-        // `markup` in `generic` is an array.
+          // `markup` in `generic` is an array.
         } else if (Array.isArray(prop)) {
           for (const item of prop) {
             extractUrisInText(item)
@@ -371,7 +375,9 @@ class Master {
      * @param {String} text
      */
     function renderOneMediaUri (text) {
-      return text.replace(new RegExp(inlineMarkup.regExp, 'g'), function (match) {
+      return text.replace(new RegExp(inlineMarkup.regExp, 'g'), function (
+        match
+      ) {
         const item = new inlineMarkup.Item(match)
         return inlineMarkup.render(item)
       })
@@ -382,7 +388,7 @@ class Master {
       if (prop) {
         if (typeof prop === 'string') {
           props[propName] = renderOneMediaUri(prop)
-        // `markup` in `generic` is an array.
+          // `markup` in `generic` is an array.
         } else if (Array.isArray(prop)) {
           for (let i = 0; i < prop.length; i++) {
             props[propName][i] = renderOneMediaUri(prop[i])
@@ -565,7 +571,9 @@ class Master {
   detectUnkownProps (props) {
     for (const propName in props) {
       if (this.propsDef && !(propName in this.propsDef)) {
-        throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
+        throw new Error(
+          `The master slide “${this.name}” has no property named “${propName}”.`
+        )
       }
     }
   }
@@ -642,7 +650,11 @@ class Master {
    *   the master function is called with.
    */
   async afterMediaResolution (props, thisArg) {
-    await this.callHookAsync_('afterMediaResolution', { props, master: this }, thisArg)
+    await this.callHookAsync_(
+      'afterMediaResolution',
+      { props, master: this },
+      thisArg
+    )
   }
 
   /**
@@ -698,36 +710,49 @@ const masterMixin = {
       this.$nextTick(() => {
         let slideNoChange = false
         if (newValue.slideNo !== oldValue.slideNo) {
-          this.master.afterSlideNoChangeOnComponent({
-            oldSlideNo: oldValue.slideNo,
-            newSlideNo: newValue.slideNo
-          }, this)
+          this.master.afterSlideNoChangeOnComponent(
+            {
+              oldSlideNo: oldValue.slideNo,
+              newSlideNo: newValue.slideNo
+            },
+            this
+          )
           slideNoChange = true
         }
         // Previous slide has only one step number
         // oldSlideNo 2 oldStepNo 1 newSlideNo 3 oldStepNo 1
         if (
           newValue.stepNo &&
-          `${newValue.slideNo}:${newValue.stepNo}` !== `${oldValue.slideNo}:${oldValue.stepNo}`
+          `${newValue.slideNo}:${newValue.stepNo}` !==
+            `${oldValue.slideNo}:${oldValue.stepNo}`
         ) {
-          this.master.afterStepNoChangeOnComponent({
-            oldStepNo: oldValue.stepNo,
-            newStepNo: newValue.stepNo,
-            slideNoChange
-          }, this)
+          this.master.afterStepNoChangeOnComponent(
+            {
+              oldStepNo: oldValue.stepNo,
+              newStepNo: newValue.stepNo,
+              slideNoChange
+            },
+            this
+          )
         }
       })
     }
   },
   mounted () {
-    this.master.afterSlideNoChangeOnComponent({
-      newSlideNo: this.navNos.slideNo
-    }, this)
+    this.master.afterSlideNoChangeOnComponent(
+      {
+        newSlideNo: this.navNos.slideNo
+      },
+      this
+    )
     if (this.navNos.stepNo) {
-      this.master.afterStepNoChangeOnComponent({
-        newStepNo: this.navNos.stepNo,
-        slideNoChange: true
-      }, this)
+      this.master.afterStepNoChangeOnComponent(
+        {
+          newStepNo: this.navNos.stepNo,
+          slideNoChange: true
+        },
+        this
+      )
     }
     if (this.isPublic) {
       customStore.vueMasterInstanceCurrent = this
@@ -769,7 +794,7 @@ function registerMasters () {
   }
 
   const requireMaster = require.context('./masters', true, /.+main\.(js|ts)$/)
-  requireMaster.keys().forEach((fileName) => {
+  requireMaster.keys().forEach(fileName => {
     // ./masterName/main.js
     const masterName = findMasterName(fileName)
     const masterObj = requireMaster(fileName)
@@ -780,8 +805,12 @@ function registerMasters () {
     masterCollection.add(master)
   })
 
-  const requireComponentMain = require.context('./masters', true, /.+main\.vue$/)
-  requireComponentMain.keys().forEach((fileName) => {
+  const requireComponentMain = require.context(
+    './masters',
+    true,
+    /.+main\.vue$/
+  )
+  requireComponentMain.keys().forEach(fileName => {
     // ./masterName/main.vue
     const masterName = findMasterName(fileName)
     const master = masterCollection.get(masterName)
@@ -799,8 +828,12 @@ function registerMasters () {
     master.componentMain = componentMain.default
   })
 
-  const requireComponentPreview = require.context('./masters', true, /.+preview\.vue$/)
-  requireComponentPreview.keys().forEach((fileName) => {
+  const requireComponentPreview = require.context(
+    './masters',
+    true,
+    /.+preview\.vue$/
+  )
+  requireComponentPreview.keys().forEach(fileName => {
     // ./masterName/preview.vue
     const masterName = findMasterName(fileName)
     const master = masterCollection.get(masterName)

@@ -10,14 +10,6 @@
  */
 export declare function escapeHtml(htmlString: string): string;
 /**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-export declare function convertHtmlToPlainText(html: string): string;
-/**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
  * extension (for example `.jpg`). The parameter `no` must be less then 1000.
@@ -85,15 +77,6 @@ export declare function formatImslpUrl(id: string): string;
  *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`
  */
 export declare function formatWikicommonsUrl(fileName: string): string;
-interface ShortenTextOptions {
-    stripTags: boolean;
-    maxLength: number;
-}
-/**
- * Shorten a text string. By default the string is shortend to the maximal
- * length 80.
- */
-export declare function shortenText(text: string, options?: ShortenTextOptions): string;
 /**
  * Format a date specification string into a local date string, for
  * example `28. August 1749`
@@ -146,4 +129,3 @@ export declare function referencify(input: string): string;
  * This function can be used to generate a title from an ID string.
  */
 export declare function deasciify(input: string): string;
-export {};

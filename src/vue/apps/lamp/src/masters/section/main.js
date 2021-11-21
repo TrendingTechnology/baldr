@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/section
  */
 
-import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/string-format'
 import { validateMasterSpec } from '@bldr/lamp-core'
 
 export default validateMasterSpec({

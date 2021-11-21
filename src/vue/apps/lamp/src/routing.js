@@ -41,7 +41,7 @@
  */
 
 import { masterCollection } from '@bldr/lamp-core'
-import { shortenText } from '@bldr/core-browser'
+import { shortenText } from '@bldr/string-format'
 
 import store from '@/store/index.js'
 import { router } from '@/routes'

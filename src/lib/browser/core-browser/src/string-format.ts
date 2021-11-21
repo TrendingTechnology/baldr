@@ -32,23 +32,6 @@ export function escapeHtml (htmlString: string): string {
 }
 
 /**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-export function convertHtmlToPlainText (html: string): string {
-  if (html == null) {
-    return ''
-  }
-  // To get spaces between heading and paragraphs
-  html = html.replace(/></g, '> <')
-  const markup = new DOMParser().parseFromString(html, 'text/html')
-  return markup.body.textContent ?? ''
-}
-
-/**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
  * extension (for example `.jpg`). The parameter `no` must be less then 1000.
@@ -169,44 +152,6 @@ export function formatImslpUrl (id: string): string {
  */
 export function formatWikicommonsUrl (fileName: string): string {
   return `https://commons.wikimedia.org/wiki/File:${fileName}`
-}
-
-interface ShortenTextOptions {
-  stripTags: boolean
-  maxLength: number
-}
-
-/**
- * Shorten a text string. By default the string is shortend to the maximal
- * length 80.
- */
-export function shortenText (
-  text: string,
-  options?: ShortenTextOptions
-): string {
-  const defaults = {
-    stripTags: false,
-    maxLength: 80
-  }
-  if (options == null) {
-    options = defaults
-  } else {
-    options = Object.assign(defaults, options) as ShortenTextOptions
-  }
-
-  if (text == null) return ''
-  if (options.stripTags) {
-    text = convertHtmlToPlainText(text)
-  }
-  if (text.length < options.maxLength) {
-    return text
-  }
-  // https://stackoverflow.com/a/5454303
-  // trim the string to the maximum length
-  text = text.substr(0, options.maxLength)
-  // re-trim if we are in the middle of a word
-  text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
-  return `${text} …`
 }
 
 /**

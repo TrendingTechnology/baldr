@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/editor
  */
 
-import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'

@@ -3,7 +3,7 @@
  */
 
 import { validateMasterSpec } from '@bldr/lamp-core'
-import { convertHtmlToPlainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/string-format'
 import { Question, generateTexMarkup } from '@bldr/master-question'
 import { buildQuestionStepController } from '@bldr/dom-manipulator'
 

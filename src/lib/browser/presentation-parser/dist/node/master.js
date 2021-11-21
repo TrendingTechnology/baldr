@@ -5,8 +5,8 @@ const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
 Object.defineProperty(exports, "convertMarkdownToHtml", { enumerable: true, get: function () { return markdown_to_html_2.convertMarkdownToHtml; } });
-var core_browser_1 = require("@bldr/core-browser");
-Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return core_browser_1.convertHtmlToPlainText; } });
+var string_format_1 = require("@bldr/string-format");
+Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return string_format_1.convertHtmlToPlainText; } });
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
@@ -19,8 +19,8 @@ var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
-var string_format_1 = require("@bldr/string-format");
-Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_1.shortenText; } });
+var string_format_2 = require("@bldr/string-format");
+Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_2.shortenText; } });
 const stepFieldDefinitions = {
     selector: {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
