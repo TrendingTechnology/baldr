@@ -1,11 +1,11 @@
-import { Master } from '../master';
+import { Master, StepCollector } from '../master';
 declare type GenericFieldsRawInput = string | string[] | GenericFieldsInput;
 interface GenericFieldsInput {
     markup: string | string[];
     charactersOnSlide?: number;
     onOne?: boolean;
 }
-interface GenericFieldsInstantiated extends GenericFieldsInput {
+interface GenericFieldsInputFinal extends GenericFieldsInput {
     markup: string[];
     charactersOnSlide: number;
     onOne: boolean;
@@ -43,6 +43,7 @@ export declare class GenericMaster implements Master {
         };
     };
     normalizeFieldsInput(fields: GenericFieldsRawInput): GenericFieldsInput;
-    collectFieldsOnInstantiation(fields: GenericFieldsInstantiated): GenericFieldsInstantiated;
+    collectFieldsOnInstantiation(fields: GenericFieldsInputFinal): GenericFieldsInputFinal;
+    collectStepsOnInstantiation(fields: GenericFieldsInputFinal, stepCollector: StepCollector): void;
 }
 export {};

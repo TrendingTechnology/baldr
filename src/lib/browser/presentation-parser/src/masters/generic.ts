@@ -1,4 +1,10 @@
-import { Master, convertMarkdownToHtml, splitHtmlIntoChunks } from '../master'
+import { shortenText } from '@bldr/string-format'
+import {
+  Master,
+  convertMarkdownToHtml,
+  splitHtmlIntoChunks,
+  StepCollector
+} from '../master'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -10,7 +16,7 @@ interface GenericFieldsInput {
   onOne?: boolean
 }
 
-interface GenericFieldsInstantiated extends GenericFieldsInput {
+interface GenericFieldsInputFinal extends GenericFieldsInput {
   markup: string[]
   charactersOnSlide: number
   onOne: boolean
@@ -103,9 +109,18 @@ export class GenericMaster implements Master {
   }
 
   collectFieldsOnInstantiation (
-    fields: GenericFieldsInstantiated
-  ): GenericFieldsInstantiated {
+    fields: GenericFieldsInputFinal
+  ): GenericFieldsInputFinal {
     fields.markup = splitMarkup(fields.markup, fields.charactersOnSlide)
     return fields
+  }
+
+  collectStepsOnInstantiation (
+    fields: GenericFieldsInputFinal,
+    stepCollector: StepCollector
+  ) {
+    for (const markup of fields.markup) {
+      stepCollector.add(shortenText(markup, { stripTags: true, maxLength: 40 }))
+    }
   }
 }

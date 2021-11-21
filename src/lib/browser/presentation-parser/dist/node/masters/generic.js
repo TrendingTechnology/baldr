@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GenericMaster = exports.splitMarkup = void 0;
+const string_format_1 = require("@bldr/string-format");
 const master_1 = require("../master");
 const CHARACTERS_ON_SLIDE = 400;
 function splitMarkup(rawMarkup, charactersOnSlide) {
@@ -80,6 +81,11 @@ class GenericMaster {
     collectFieldsOnInstantiation(fields) {
         fields.markup = splitMarkup(fields.markup, fields.charactersOnSlide);
         return fields;
+    }
+    collectStepsOnInstantiation(fields, stepCollector) {
+        for (const markup of fields.markup) {
+            stepCollector.add(string_format_1.shortenText(markup, { stripTags: true, maxLength: 40 }));
+        }
     }
 }
 exports.GenericMaster = GenericMaster;

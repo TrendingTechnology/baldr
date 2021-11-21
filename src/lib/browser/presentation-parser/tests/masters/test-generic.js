@@ -49,4 +49,37 @@ describe('Master slide “generic”', function () {
     assert.strictEqual(markup.length, 6)
     assert.ok(markup[0].indexOf('</h1>') > -1)
   })
+
+  it('Step support', function () {
+    const slide = getSlide('long-text-markdown')
+    assert.deepStrictEqual(
+      slide.steps,
+      [
+        {
+          no: 1,
+          title: 'Heading 1 Lorem ipsum dolor sit amet, …'
+        },
+        {
+          no: 2,
+          title: 'Heading 2 Duis autem vel eum iriure …'
+        },
+        {
+          no: 3,
+          title: 'Heading 3 Ut wisi enim ad minim veniam, …'
+        },
+        {
+          no: 4,
+          title: 'Nam liber tempor cum soluta nobis …'
+        },
+        {
+          no: 5,
+          title: 'Duis autem vel eum iriure dolor in …'
+        },
+        {
+          no: 6,
+          title: 'Consetetur sadipscing elitr, sed diam …'
+        }
+      ]
+    )
+  })
 })

@@ -1,3 +1,4 @@
+import { shortenText } from '@bldr/string-format';
 import { convertMarkdownToHtml, splitHtmlIntoChunks } from '../master';
 const CHARACTERS_ON_SLIDE = 400;
 export function splitMarkup(rawMarkup, charactersOnSlide) {
@@ -76,5 +77,10 @@ export class GenericMaster {
     collectFieldsOnInstantiation(fields) {
         fields.markup = splitMarkup(fields.markup, fields.charactersOnSlide);
         return fields;
+    }
+    collectStepsOnInstantiation(fields, stepCollector) {
+        for (const markup of fields.markup) {
+            stepCollector.add(shortenText(markup, { stripTags: true, maxLength: 40 }));
+        }
     }
 }

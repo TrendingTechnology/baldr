@@ -272,10 +272,10 @@ export interface Master {
    * ```ts
    * collectStepsOnInstantiation (
    *   fields: CounterInstantiated,
-   *   stepCollection: StepCollector
+   *   stepCollector: StepCollector
    * ): void {
    *   for (const counterElement of fields.counterElements) {
-   *     stepCollection.add(`Zähle „${counterElement}“`)
+   *     stepCollector.add(`Zähle „${counterElement}“`)
    *   }
    * }
    * ```

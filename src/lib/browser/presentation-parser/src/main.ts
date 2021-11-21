@@ -8,7 +8,7 @@
  *         master.collectFieldsOnInstantiation(..)
  *       masterWrapper.processMediaUris(..)
  *       masterWrapper.processOptionalMediaUris(..)
- *       masterWrapper.collectStepsEarly(..)
+ *       masterWrapper.collectStepsOnInstation(..)
  *
  * presentation.resolve()
  *   masterWrapper.finalizeSlide(..) [master.ts]
