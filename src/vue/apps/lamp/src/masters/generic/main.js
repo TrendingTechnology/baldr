@@ -3,14 +3,9 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import {
-  buildTextStepController,
-  wrapWords,
-  splitHtmlIntoChunks
-} from '@bldr/dom-manipulator'
+import { mapStepFieldDefintions, generic } from '@bldr/presentation-parser'
+import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -78,42 +73,18 @@ export default validateMasterSpec({
         props.markup = [props.markup]
       }
 
-      // Convert into HTML
-      const converted = []
-      for (const markup of props.markup) {
-        converted.push(convertMarkdownToHtml(markup))
-      }
-
-      // Split by <hr>
-      const splittedByHr = []
-      for (const html of converted) {
-        if (html.indexOf('<hr>') > -1) {
-          const chunks = html.split('<hr>')
-          for (const chunk of chunks) {
-            splittedByHr.push(chunk)
-          }
-        } else {
-          splittedByHr.push(html)
-        }
-      }
-
-      // Split large texts into smaller chunks
-      let markup = []
-      for (const html of splittedByHr) {
-        const chunks = splitHtmlIntoChunks(html, props.charactersOnSlide)
-        for (const chunk of chunks) {
-          markup.push(chunk)
-        }
-      }
+      const charactersOnSlide =
+        props.charactersOnSlide != null
+          ? props.charactersOnSlide
+          : CHARACTERS_ON_SLIDE
+      props.markup = generic.splitMarkup(props.markup, charactersOnSlide)
 
       if (props.onOne) {
-        markup = [markup.join(' ')]
+        props.markup = [props.markup.join(' ')]
       }
 
-      if (props.stepMode && props.stepMode === 'words') {
-        props.markup = [wrapWords(markup.join(' '))]
-      } else {
-        props.markup = markup
+      if (props.stepMode != null && props.stepMode === 'words') {
+        props.markup = [wrapWords(props.markup.join(' '))]
       }
       return props
     },
