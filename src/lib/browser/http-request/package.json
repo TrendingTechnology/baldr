@@ -32,12 +32,12 @@
     "test": "npm run build && npm run lint && mocha 'tests/*'"
   },
   "dependencies": {
-    "axios": "0.24.0"
+    "axios": "0.24.0",
+    "@bldr/universal-dom": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*",
-    "@bldr/config": "*",
-    "jsdom": "18.0.0"
+    "@bldr/config": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

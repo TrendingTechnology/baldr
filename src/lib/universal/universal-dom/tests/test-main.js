@@ -2,7 +2,11 @@
 const assert = require('assert')
 const path = require('path')
 
-const { DOMParserU, documentU } = require('../dist/node/node-main.js')
+const {
+  DOMParserU,
+  documentU,
+  locationU
+} = require('../dist/node/node-main.js')
 const { readFile } = require('@bldr/file-reader-writer')
 const { getConfig } = require('@bldr/config')
 const config = getConfig()
@@ -18,7 +22,10 @@ describe('Package “@bldr/universal-dom”', function () {
     it('svg', function () {
       const svgDom = new DOMParserU().parseFromString(
         readFile(
-          path.join(config.mediaServer.basePath, 'Musik/06/20_Mensch-Zeit/10_Bach/30_Invention/NB/Invention_C-Dur_Loesung.svg')
+          path.join(
+            config.mediaServer.basePath,
+            'Musik/06/20_Mensch-Zeit/10_Bach/30_Invention/NB/Invention_C-Dur_Loesung.svg'
+          )
         ),
         'image/svg+xml'
       )
@@ -30,5 +37,9 @@ describe('Package “@bldr/universal-dom”', function () {
   it('documentU', function () {
     const textNode = documentU.createTextNode('test')
     assert.strictEqual(textNode.textContent, 'test')
+  })
+
+  it('locationU', function () {
+    assert.strictEqual(locationU.hostname, 'localhost')
   })
 })

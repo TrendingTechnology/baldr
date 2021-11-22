@@ -7,4 +7,4 @@ slides:
   audio: ref:test#sample
 
 - title: Optional media URI
-  youtube: 12345678901
+  youtube: '12345678901'

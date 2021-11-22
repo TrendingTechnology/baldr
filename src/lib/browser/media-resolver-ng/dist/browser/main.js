@@ -8,3 +8,4 @@
  * ```
  */
 export { Resolver, updateMediaServer } from './resolve';
+export { get } from '@bldr/http-request';

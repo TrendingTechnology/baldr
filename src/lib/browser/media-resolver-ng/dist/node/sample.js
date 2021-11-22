@@ -46,7 +46,7 @@ class SampleData {
      * Convert strings to numbers, so we can use them as seconds.
      */
     convertToSeconds(timeIntervaleString) {
-        return core_browser_1.convertDurationToSeconds(timeIntervaleString);
+        return (0, core_browser_1.convertDurationToSeconds)(timeIntervaleString);
     }
     /**
      * @inheritdoc

@@ -17,7 +17,7 @@ const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const asset_1 = require("./asset");
 const cache_1 = require("./cache");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 class SampleCache extends cache_1.Cache {
     constructor(translator) {
         super();
@@ -103,7 +103,7 @@ class ShortcutManager {
  */
 class Resolver {
     constructor() {
-        this.httpRequest = http_request_1.makeHttpRequestInstance(config, 'automatic', '/api/media');
+        this.httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'automatic', '/api/media');
         this.cache = {};
         this.uriTranslator = new cache_1.UriTranslator();
         this.sampleCache = new SampleCache(this.uriTranslator);
@@ -188,7 +188,7 @@ class Resolver {
      */
     resolve(uris, throwException = true) {
         return __awaiter(this, void 0, void 0, function* () {
-            const mediaUris = core_browser_1.makeSet(uris);
+            const mediaUris = (0, core_browser_1.makeSet)(uris);
             const urisWithoutFragments = new Set();
             for (const uri of mediaUris) {
                 urisWithoutFragments.add(client_media_models_1.MediaUri.removeFragment(uri));
@@ -203,7 +203,7 @@ class Resolver {
                 }
                 for (const asset of yield Promise.all(promises)) {
                     if (asset != null) {
-                        client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragments);
+                        (0, client_media_models_1.findMediaUris)(asset.yaml, urisWithoutFragments);
                         assets.push(asset);
                         // In the set urisWithoutFragments can be both ref: and uuid: URIs.
                         urisWithoutFragments.delete(asset.ref);

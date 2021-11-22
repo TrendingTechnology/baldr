@@ -3,3 +3,4 @@ export declare const DOMParserU: {
     prototype: DOMParser;
 };
 export declare const documentU: Document;
+export declare const locationU: Location;

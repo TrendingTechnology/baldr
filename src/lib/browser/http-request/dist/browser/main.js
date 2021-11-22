@@ -16,12 +16,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-/* globals location */
 import axios from 'axios';
-// Do not remove this lines. The comments are removed by the build script.
-// <- const { JSDOM } = require('jsdom')
-// <- const { window } = new JSDOM('', { url: 'http://localhost' })
-// <- const location = window.location
+import { locationU } from '@bldr/universal-dom';
 /**
  * A wrapper around Axios.
  */
@@ -44,13 +40,13 @@ export class HttpRequest {
     constructor(config, restEndPoint, urlFillIn) {
         this.urlFillIn = urlFillIn;
         let isRemote = false;
-        // Electron (build version): location.hostname: '.'
-        // Electron (build version): location.protocol: 'app'
+        // Electron (build version): locationU.hostname: '.'
+        // Electron (build version): locationU.protocol: 'app'
         if (restEndPoint === 'remote' ||
             (restEndPoint === 'automatic' &&
-                location != null &&
-                location.hostname !== 'localhost' &&
-                location.hostname !== '.')) {
+                locationU != null &&
+                locationU.hostname !== 'localhost' &&
+                locationU.hostname !== '.')) {
             isRemote = true;
         }
         if (!isRemote) {
@@ -170,6 +166,11 @@ export function checkReachability(url) {
         return true;
     });
 }
-// export function get (url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
-//   return axios.get(url, requestConfig)
-// }
+/**
+ * `axios.get`
+ */
+export function get(url, requestConfig) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield axios.get(url, requestConfig);
+    });
+}

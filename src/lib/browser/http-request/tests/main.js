@@ -6,7 +6,8 @@ const config = getConfig()
 
 const {
   makeHttpRequestInstance,
-  checkReachability
+  checkReachability,
+  get
 } = require('../dist/node/main.js')
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
@@ -54,5 +55,10 @@ describe('Package “@bldr/media-resolver”', function () {
       'https://img.youtube.com/vi/5BBahdS6wu4/hqdefault.jpg'
     )
     assert.strictEqual(result, true)
+  })
+
+  it('forward: axios.get()', async function () {
+    const result = await get('http://tagesschau.de')
+    assert.strictEqual(result.status, 200)
   })
 })

@@ -8,18 +8,13 @@
  * @module @bldr/http-request
  */
 
-/* globals location */
-
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+
+import { locationU } from '@bldr/universal-dom'
 
 import { Configuration } from '@bldr/type-definitions'
 
 type RestEndPoint = 'local' | 'remote' | 'automatic'
-
-// Do not remove this lines. The comments are removed by the build script.
-// <- const { JSDOM } = require('jsdom')
-// <- const { window } = new JSDOM('', { url: 'http://localhost' })
-// <- const location = window.location
 
 /**
  * A wrapper around Axios.
@@ -74,14 +69,14 @@ export class HttpRequest {
 
     let isRemote: boolean = false
 
-    // Electron (build version): location.hostname: '.'
-    // Electron (build version): location.protocol: 'app'
+    // Electron (build version): locationU.hostname: '.'
+    // Electron (build version): locationU.protocol: 'app'
     if (
       restEndPoint === 'remote' ||
       (restEndPoint === 'automatic' &&
-        location != null &&
-          location.hostname !== 'localhost' &&
-          location.hostname !== '.')
+        locationU != null &&
+        locationU.hostname !== 'localhost' &&
+        locationU.hostname !== '.')
     ) {
       isRemote = true
     }
@@ -211,6 +206,12 @@ export async function checkReachability (url: string): Promise<boolean> {
   return true
 }
 
-// export function get (url: string, requestConfig?: AxiosRequestConfig): Promise<AxiosResponse<any>> {
-//   return axios.get(url, requestConfig)
-// }
+/**
+ * `axios.get`
+ */
+export async function get (
+  url: string,
+  requestConfig?: AxiosRequestConfig
+): Promise<AxiosResponse<any>> {
+  return await axios.get(url, requestConfig)
+}

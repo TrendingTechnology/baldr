@@ -9,3 +9,4 @@
  */
 export { Resolver, updateMediaServer } from './resolve';
 export { Asset, Sample } from './types';
+export { get } from '@bldr/http-request';

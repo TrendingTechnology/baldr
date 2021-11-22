@@ -6,16 +6,19 @@ slides:
 - title: Downloaded video
   youtube: J0Aulg2ePWA
 
-- title: Short form
+- ref: short-form
+  title: Short form
   youtube: 5BBahdS6wu4
 
-- title: Long form
+- ref: long-form
+  title: Long form
   youtube:
-    id: xtKavZG1KiM
+    youtube_id: xtKavZG1KiM
 
-- title: Heading
+- ref: heading
+  title: Heading
   youtube:
-    id: lTDrUzUUglA
+    youtube_id: lTDrUzUUglA
     heading: <em class="person">Chet Baker</em> Live
     info: <em class="person">Stan Getz</em> & <em class="person">Chet Baker</em> in Stockholm 1983
 

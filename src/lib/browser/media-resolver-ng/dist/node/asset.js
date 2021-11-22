@@ -98,7 +98,7 @@ class ClientMediaAsset {
         this.httpUrl = httpUrl;
         this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
-            const extension = core_browser_1.getExtension(this.yaml.filename);
+            const extension = (0, core_browser_1.getExtension)(this.yaml.filename);
             if (extension != null) {
                 this.yaml.extension = extension;
             }
@@ -189,7 +189,7 @@ class ClientMediaAsset {
         if (no > this.multiPartCount) {
             throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`);
         }
-        return core_browser_1.formatMultiPartAssetFileName(this.httpUrl, no);
+        return (0, core_browser_1.formatMultiPartAssetFileName)(this.httpUrl, no);
     }
 }
 exports.ClientMediaAsset = ClientMediaAsset;
