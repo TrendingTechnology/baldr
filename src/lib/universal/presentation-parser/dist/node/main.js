@@ -32,7 +32,7 @@
  * - `GenericFieldsFinal`
  *
  * `..FieldsRawInput` ->
- * `master.normalizeFieldsInput(..)` ->
+ * `master.normalizeFieldsInput(..)` -> (defaults) ->
  * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
  * `..FieldsInstantiated` ->
@@ -51,12 +51,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.generic = exports.question = exports.mapStepFieldDefintions = void 0;
+exports.parseAndResolve = exports.parse = exports.youtubeMaster = exports.questionMaster = exports.genericMaster = exports.mapStepFieldDefintions = void 0;
 const presentation_1 = require("./presentation");
 var master_1 = require("./master");
 Object.defineProperty(exports, "mapStepFieldDefintions", { enumerable: true, get: function () { return master_1.mapStepFieldDefintions; } });
-exports.question = require("./masters/question");
-exports.generic = require("./masters/generic");
+exports.genericMaster = require("./masters/generic");
+exports.questionMaster = require("./masters/question");
+exports.youtubeMaster = require("./masters/youtube");
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

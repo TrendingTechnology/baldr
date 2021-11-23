@@ -155,5 +155,5 @@ export async function resolve (
   uris: UrisSpec,
   throwException: boolean = true
 ): Promise<MediaResolverTypes.ClientMediaAsset[]> {
-  return await resolver.resolve(uris)
+  return await resolver.resolve(uris, throwException)
 }

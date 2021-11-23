@@ -91,7 +91,7 @@ exports.getPdfPageCount = getPdfPageCount;
  */
 function fetchFile(url, dest) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield node_fetch_1.default(new url_1.URL(url));
+        const response = yield (0, node_fetch_1.default)(new url_1.URL(url));
         fs_1.default.mkdirSync(path_1.default.dirname(dest), { recursive: true });
         fs_1.default.writeFileSync(dest, Buffer.from(yield response.arrayBuffer()));
     });

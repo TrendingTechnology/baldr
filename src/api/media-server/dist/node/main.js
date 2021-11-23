@@ -137,7 +137,7 @@ var client_media_models_1 = require("@bldr/client-media-models");
 var seating_plan_1 = require("./seating-plan");
 var operations_2 = require("./operations");
 Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return operations_2.openArchivesInFileManager; } });
-var config = config_1.getConfig();
+var config = (0, config_1.getConfig)();
 /**
  * Base path of the media server file store.
  */
@@ -161,9 +161,9 @@ var ServerMediaFile = /** @class */ (function () {
      * Add metadata from the file system, like file size or timeModifed.
      */
     ServerMediaFile.prototype.startBuild = function () {
-        this.extension = core_browser_1.getExtension(this.absPath_);
+        this.extension = (0, core_browser_1.getExtension)(this.absPath_);
         if (this.extension != null) {
-            this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
+            this.basename_ = path_1.default.basename(this.absPath_, ".".concat(this.extension));
         }
         else {
             this.basename_ = path_1.default.basename(this.absPath_);
@@ -192,7 +192,7 @@ var ServerMediaFile = /** @class */ (function () {
      */
     ServerMediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
-            properties = yaml_1.convertPropertiesSnakeToCamel(properties);
+            properties = (0, yaml_1.convertPropertiesSnakeToCamel)(properties);
             for (var property in properties) {
                 this[property] = properties[property];
             }
@@ -205,10 +205,10 @@ var ServerMediaFile = /** @class */ (function () {
     ServerMediaFile.prototype.build = function () {
         this.startBuild();
         if (this.id == null && this.basename_ != null) {
-            this.id = core_browser_1.asciify(this.basename_);
+            this.id = (0, core_browser_1.asciify)(this.basename_);
         }
         if (this.title == null && this.id != null) {
-            this.title = core_browser_1.deasciify(this.id);
+            this.title = (0, core_browser_1.deasciify)(this.id);
         }
         this.cleanTmpProperties();
         return this;
@@ -234,20 +234,20 @@ var ServerMediaAsset = /** @class */ (function (_super) {
          * Indicates wheter the media asset has a waveform image (`_waveform.png`).
          */
         _this.hasWaveform = false;
-        _this.infoFile_ = _this.absPath_ + ".yml";
-        var data = file_reader_writer_1.readYamlFile(_this.infoFile_);
+        _this.infoFile_ = "".concat(_this.absPath_, ".yml");
+        var data = (0, file_reader_writer_1.readYamlFile)(_this.infoFile_);
         _this.importProperties(data);
         return _this;
     }
     ServerMediaAsset.prototype.detectPreview = function () {
-        var previewImage = this.absPath_ + "_preview.jpg";
+        var previewImage = "".concat(this.absPath_, "_preview.jpg");
         if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;
         }
         return this;
     };
     ServerMediaAsset.prototype.detectWaveform = function () {
-        var waveformImage = this.absPath_ + "_waveform.png";
+        var waveformImage = "".concat(this.absPath_, "_waveform.png");
         if (fs_1.default.existsSync(waveformImage)) {
             this.hasWaveform = true;
         }
@@ -262,25 +262,25 @@ var ServerMediaAsset = /** @class */ (function (_super) {
         var nextAssetFileName = function (count) {
             var suffix;
             if (count < 10) {
-                suffix = "_no00" + count;
+                suffix = "_no00".concat(count);
             }
             else if (count < 100) {
-                suffix = "_no0" + count;
+                suffix = "_no0".concat(count);
             }
             else if (count < 1000) {
-                suffix = "_no" + count;
+                suffix = "_no".concat(count);
             }
             else {
-                throw new Error(_this.absPath_ + " multipart asset counts greater than 100 are not supported.");
+                throw new Error("".concat(_this.absPath_, " multipart asset counts greater than 100 are not supported."));
             }
             var basePath = _this.absPath_;
             var fileName;
             if (_this.extension != null) {
-                basePath = _this.absPath_.replace("." + _this.extension, '');
-                fileName = "" + basePath + suffix + "." + _this.extension;
+                basePath = _this.absPath_.replace(".".concat(_this.extension), '');
+                fileName = "".concat(basePath).concat(suffix, ".").concat(_this.extension);
             }
             else {
-                fileName = "" + basePath + suffix;
+                fileName = "".concat(basePath).concat(suffix);
             }
             return fileName;
         };
@@ -319,7 +319,7 @@ var ServerPresentation = /** @class */ (function (_super) {
     function ServerPresentation(filePath) {
         var _a, _b, _c, _d, _e;
         var _this = _super.call(this, filePath) || this;
-        var data = file_reader_writer_1.readYamlFile(filePath);
+        var data = (0, file_reader_writer_1.readYamlFile)(filePath);
         if (data != null)
             _this.importProperties(data);
         var deepTitle = titleTreeFactory.addTitleByPath(filePath);
@@ -342,7 +342,7 @@ var ServerPresentation = /** @class */ (function (_super) {
         if (((_e = _this.meta) === null || _e === void 0 ? void 0 : _e.grade) == null) {
             _this.meta.grade = deepTitle.grade;
         }
-        _this.title = core_browser_1.stripTags(_this.meta.title);
+        _this.title = (0, core_browser_1.stripTags)(_this.meta.title);
         _this.titleSubtitle = _this.titleSubtitle_();
         _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
         _this.ref = _this.meta.ref;
@@ -354,7 +354,7 @@ var ServerPresentation = /** @class */ (function (_super) {
     ServerPresentation.prototype.titleSubtitle_ = function () {
         var _a;
         if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
-            return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
+            return "".concat(this.title, " (").concat((0, core_browser_1.stripTags)(this.meta.subtitle), ")");
         }
         else {
             return this.title;
@@ -374,9 +374,9 @@ var ServerPresentation = /** @class */ (function (_super) {
         var _a;
         var all = folderTitles.allTitles;
         if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
-            all = all + " (" + this.meta.subtitle + ")";
+            all = "".concat(all, " (").concat(this.meta.subtitle, ")");
         }
-        return core_browser_1.stripTags(all);
+        return (0, core_browser_1.stripTags)(all);
     };
     return ServerPresentation;
 }(ServerMediaFile));
@@ -392,7 +392,7 @@ function insertObjectIntoDb(filePath, mediaType) {
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
-                        if (!fs_1.default.existsSync(filePath + ".yml"))
+                        if (!fs_1.default.existsSync("".concat(filePath, ".yml")))
                             return [2 /*return*/];
                         object = new ServerMediaAsset(filePath);
                     }
@@ -409,7 +409,7 @@ function insertObjectIntoDb(filePath, mediaType) {
                     console.log(error);
                     relPath = filePath.replace(config.mediaServer.basePath, '');
                     relPath = relPath.replace(new RegExp('^/'), '');
-                    msg = relPath + ": [" + error.name + "] " + error.message;
+                    msg = "".concat(relPath, ": [").concat(error.name, "] ").concat(error.message);
                     console.log(msg);
                     errors.push(msg);
                     return [3 /*break*/, 3];
@@ -470,7 +470,7 @@ function update(full) {
                     return [4 /*yield*/, exports.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
                 case 4:
                     _a.sent();
-                    return [4 /*yield*/, media_manager_1.walk({
+                    return [4 /*yield*/, (0, media_manager_1.walk)({
                             everyFile: function (filePath) {
                                 // Delete temporary files.
                                 if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null ||
@@ -529,7 +529,7 @@ function update(full) {
                         })];
                 case 7:
                     _a.sent();
-                    file_reader_writer_1.writeJsonFile(path_1.default.join(config.mediaServer.basePath, 'title-tree.json'), tree);
+                    (0, file_reader_writer_1.writeJsonFile)(path_1.default.join(config.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
                     return [4 /*yield*/, exports.database.db
                             .collection('updates')
@@ -622,7 +622,7 @@ function extractString(query, propertyName, defaultValue) {
             return defaultValue;
         }
         else {
-            throw new Error("No value for property " + propertyName + " in the query object.");
+            throw new Error("No value for property ".concat(propertyName, " in the query object."));
         }
     }
     return query[propertyName];
@@ -637,7 +637,7 @@ function registerMediaRestApi() {
     function escapeRegex(text) {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     }
-    var app = express_1.default();
+    var app = (0, express_1.default)();
     app.get('/', function (req, res) {
         res.json(helpMessages.navigation);
     });
@@ -660,7 +660,7 @@ function registerMediaRestApi() {
                     }
                     type = void 0;
                     if (query.type != null && typeof query.type === 'string') {
-                        type = operations_1.validateMediaType(query.type);
+                        type = (0, operations_1.validateMediaType)(query.type);
                     }
                     else {
                         type = 'assets';
@@ -668,7 +668,7 @@ function registerMediaRestApi() {
                     methods = ['exactMatch', 'substringSearch'];
                     method = extractString(query, 'method', 'substringSearch');
                     if (!methods.includes(method)) {
-                        throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods.join(', '));
+                        throw new Error("Unkown method \u201C".concat(method, "\u201D! Allowed methods: ").concat(methods.join(', ')));
                     }
                     field = extractString(query, 'field', 'ref');
                     // result
@@ -706,7 +706,7 @@ function registerMediaRestApi() {
                         $project = {
                             _id: false,
                             ref: true,
-                            name: "$" + field
+                            name: "$".concat(field)
                         };
                     }
                     find = collection.aggregate([{ $match: $match }, { $project: $project }]);
@@ -825,17 +825,17 @@ function registerMediaRestApi() {
                     archive = 'archive' in query;
                     create = 'create' in query;
                     ref = extractString(query, 'ref');
-                    type = operations_1.validateMediaType(extractString(query, 'type'));
+                    type = (0, operations_1.validateMediaType)(extractString(query, 'type'));
                     if (!(query.with === 'editor')) return [3 /*break*/, 2];
                     _b = (_a = res).json;
-                    return [4 /*yield*/, operations_1.openEditor(ref, type)];
+                    return [4 /*yield*/, (0, operations_1.openEditor)(ref, type)];
                 case 1:
                     _b.apply(_a, [_e.sent()]);
                     return [3 /*break*/, 4];
                 case 2:
                     if (!(query.with === 'folder')) return [3 /*break*/, 4];
                     _d = (_c = res).json;
-                    return [4 /*yield*/, operations_1.openParentFolder(ref, type, archive, create)];
+                    return [4 /*yield*/, (0, operations_1.openParentFolder)(ref, type, archive, create)];
                 case 3:
                     _d.apply(_c, [_e.sent()]);
                     _e.label = 4;
@@ -940,17 +940,17 @@ function runRestApi(port) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    app = express_1.default();
-                    return [4 /*yield*/, mongodb_connector_1.connectDb()];
+                    app = (0, express_1.default)();
+                    return [4 /*yield*/, (0, mongodb_connector_1.connectDb)()];
                 case 1:
                     mongoClient = _a.sent();
                     exports.database = new mongodb_connector_1.Database(mongoClient.db());
                     return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();
-                    app.use(cors_1.default());
+                    app.use((0, cors_1.default)());
                     app.use(express_1.default.json());
-                    app.use('/seating-plan', seating_plan_1.registerSeatingPlan(exports.database));
+                    app.use('/seating-plan', (0, seating_plan_1.registerSeatingPlan)(exports.database));
                     app.use('/media', registerMediaRestApi());
                     helpMessages = {};
                     app.get('/', function (req, res) {
@@ -967,7 +967,7 @@ function runRestApi(port) {
                         usedPort = port;
                     }
                     app.listen(usedPort, function () {
-                        console.log("The BALDR REST API is running on port " + usedPort + ".");
+                        console.log("The BALDR REST API is running on port ".concat(usedPort, "."));
                     });
                     return [2 /*return*/, app];
             }

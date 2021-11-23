@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkTypeAbbreviations = exports.checkForTwoLetterDir = exports.getTwoLetterRegExp = exports.getTwoLetterAbbreviations = exports.isValidTwoLetterAbbreviation = exports.abbreviations = void 0;
 const path_1 = __importDefault(require("path"));
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 exports.abbreviations = config.twoLetterAbbreviations;
 function isValidTwoLetterAbbreviation(abbreviation) {
     return exports.abbreviations[abbreviation] != null;

@@ -14,7 +14,7 @@ const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 /**
  * Open a file path with an executable.
  *

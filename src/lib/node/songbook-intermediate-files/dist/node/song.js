@@ -132,7 +132,7 @@ class ExtendedSongMetaData {
         if (!fs.existsSync(ymlFile)) {
             throw new Error(log.format('YAML file could not be found: %s', [ymlFile]));
         }
-        this.rawYaml = yaml_1.convertFromYamlRaw(fs.readFileSync(ymlFile, 'utf8'));
+        this.rawYaml = (0, yaml_1.convertFromYamlRaw)(fs.readFileSync(ymlFile, 'utf8'));
         for (const key in this.rawYaml) {
             if (!this.allowedProperties.includes(key)) {
                 throw new Error(log.format('Unsupported key: %s', [key]));
@@ -183,8 +183,8 @@ class ExtendedSong {
         this.folderIntermediateFiles = new Folder(this.folder, constants.intermediateFolder);
         this.mscxProjector = this.detectFile('projector.mscx');
         this.mscxPiano = this.detectFile('piano.mscx', 'lead.mscx');
-        this.pianoFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), constants.pianoRegExp);
-        this.slidesFiles = utils_1.listFiles(this.folderIntermediateFiles.get(), constants.slideRegExp);
+        this.pianoFiles = (0, utils_1.listFiles)(this.folderIntermediateFiles.get(), constants.pianoRegExp);
+        this.slidesFiles = (0, utils_1.listFiles)(this.folderIntermediateFiles.get(), constants.slideRegExp);
     }
     /**
      * Get the song folder.
@@ -337,36 +337,36 @@ class IntermediateSong extends ExtendedSong {
      * @returns An array of the renamed multipart files names.
      */
     renameMultipartFiles(folder, regExp, newMultipartFilename) {
-        const intermediateFiles = utils_1.listFiles(folder, regExp);
+        const intermediateFiles = (0, utils_1.listFiles)(folder, regExp);
         let no = 1;
         for (const oldName of intermediateFiles) {
-            const newName = core_browser_1.formatMultiPartAssetFileName(newMultipartFilename, no);
+            const newName = (0, core_browser_1.formatMultiPartAssetFileName)(newMultipartFilename, no);
             fs.renameSync(path.join(folder, oldName), path.join(folder, newName));
             no++;
         }
-        return utils_1.listFiles(folder, regExp);
+        return (0, utils_1.listFiles)(folder, regExp);
     }
     generateMetaDataForMediaServer() {
         const yamlFilePath = path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml');
-        const oldMetaData = file_reader_writer_1.readYamlFile(yamlFilePath);
+        const oldMetaData = (0, file_reader_writer_1.readYamlFile)(yamlFilePath);
         let uuid;
         if ((oldMetaData === null || oldMetaData === void 0 ? void 0 : oldMetaData.uuid) != null) {
             uuid = oldMetaData.uuid;
         }
         else {
-            uuid = core_browser_1.genUuid();
+            uuid = (0, core_browser_1.genUuid)();
         }
         const newMetaData = this.metaDataCombined.toJSON();
         newMetaData.uuid = uuid;
         const metaData = Object.assign({ ref: `LD_${this.songId}` }, newMetaData);
-        file_reader_writer_1.writeYamlFile(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
+        (0, file_reader_writer_1.writeYamlFile)(path.join(this.folderIntermediateFiles.get(), 'Projektor.svg.yml'), metaData);
     }
     /**
      * Generate SVG files in the slides subfolder.
      */
     generateSlides() {
         const subFolder = this.folderIntermediateFiles.get();
-        const oldSVGs = utils_1.listFiles(subFolder, constants.slideRegExp);
+        const oldSVGs = (0, utils_1.listFiles)(subFolder, constants.slideRegExp);
         for (const oldSVG of oldSVGs) {
             fs.unlinkSync(path.join(subFolder, oldSVG));
         }
@@ -393,7 +393,7 @@ class IntermediateSong extends ExtendedSong {
      */
     generatePiano() {
         const subFolder = this.folderIntermediateFiles.get();
-        utils_1.deleteFiles(subFolder, /\.eps$/i);
+        (0, utils_1.deleteFiles)(subFolder, /\.eps$/i);
         const pianoFile = path.join(subFolder, 'piano.mscx');
         fs.copySync(this.mscxPiano, pianoFile);
         childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile]);

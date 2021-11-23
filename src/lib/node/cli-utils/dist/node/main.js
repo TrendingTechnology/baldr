@@ -76,7 +76,7 @@ class ArgsParser {
 class CommandRunner {
     constructor(options) {
         this.verbose = (options === null || options === void 0 ? void 0 : options.verbose) != null && (options === null || options === void 0 ? void 0 : options.verbose);
-        this.spinner = ora_1.default({ spinner: 'line' });
+        this.spinner = (0, ora_1.default)({ spinner: 'line' });
         this.gauge = new gauge_1.default();
         this.gauge.setTheme('ASCII');
         this.message = '';

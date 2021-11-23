@@ -31,7 +31,7 @@
  * - `GenericFieldsFinal`
  *
  * `..FieldsRawInput` ->
- * `master.normalizeFieldsInput(..)` ->
+ * `master.normalizeFieldsInput(..)` -> (defaults) ->
  * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
  * `..FieldsInstantiated` ->
@@ -42,7 +42,8 @@
  */
 import { Presentation } from './presentation';
 export { mapStepFieldDefintions } from './master';
-export * as question from './masters/question';
-export * as generic from './masters/generic';
+export * as genericMaster from './masters/generic';
+export * as questionMaster from './masters/question';
+export * as youtubeMaster from './masters/youtube';
 export declare function parse(yamlString: string): Presentation;
 export declare function parseAndResolve(yamlString: string): Promise<Presentation>;

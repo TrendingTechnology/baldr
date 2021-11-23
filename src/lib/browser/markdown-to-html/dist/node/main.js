@@ -28,7 +28,7 @@ function convertCustomMarkup(text) {
  * @param text - The raw input text coming directly from YAML.
  */
 function convertMarkdownAutoInline(text) {
-    text = marked_1.marked(text);
+    text = (0, marked_1.marked)(text);
     const dom = new universal_dom_1.DOMParserU().parseFromString(text, 'text/html');
     // Solution using the browser only implementation.
     if (dom.body.childElementCount === 1 &&

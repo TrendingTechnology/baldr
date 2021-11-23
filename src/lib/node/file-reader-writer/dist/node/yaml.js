@@ -13,7 +13,7 @@ const txt_1 = require("./txt");
  * converted into the `camleCase` format.
  */
 function readYamlFile(filePath) {
-    return yaml_1.convertFromYaml(txt_1.readFile(filePath));
+    return (0, yaml_1.convertFromYaml)((0, txt_1.readFile)(filePath));
 }
 exports.readYamlFile = readYamlFile;
 /**
@@ -29,8 +29,8 @@ exports.readYamlFile = readYamlFile;
  * @returns The data converted to YAML as a string.
  */
 function writeYamlFile(filePath, data) {
-    const yaml = yaml_1.convertToYaml(data);
-    txt_1.writeFile(filePath, yaml);
+    const yaml = (0, yaml_1.convertToYaml)(data);
+    (0, txt_1.writeFile)(filePath, yaml);
     return yaml;
 }
 exports.writeYamlFile = writeYamlFile;

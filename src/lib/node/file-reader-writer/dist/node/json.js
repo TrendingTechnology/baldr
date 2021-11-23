@@ -10,7 +10,7 @@ const txt_1 = require("./txt");
  * @returns The parsed JSON object.
  */
 function readJsonFile(filePath) {
-    return JSON.parse(txt_1.readFile(filePath));
+    return JSON.parse((0, txt_1.readFile)(filePath));
 }
 exports.readJsonFile = readJsonFile;
 /**
@@ -22,6 +22,6 @@ exports.readJsonFile = readJsonFile;
  * @returns The stringifed JSON content that was writen to the text file.
  */
 function writeJsonFile(filePath, value) {
-    return txt_1.writeFile(filePath, JSON.stringify(value, null, 2));
+    return (0, txt_1.writeFile)(filePath, JSON.stringify(value, null, 2));
 }
 exports.writeJsonFile = writeJsonFile;

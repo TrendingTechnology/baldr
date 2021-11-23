@@ -383,7 +383,7 @@ exports.objectifyTexZitat = objectifyTexZitat;
 function convertTexZitat(content) {
     const zitate = objectifyTexZitat(content);
     if (zitate.length > 0) {
-        return yaml_1.convertToYaml(zitate);
+        return (0, yaml_1.convertToYaml)(zitate);
     }
     return content;
 }

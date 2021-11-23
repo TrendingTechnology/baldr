@@ -8,7 +8,7 @@
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
-import { checkAvailability } from '@bldr/youtube-api'
+import { youtubeMaster } from '@bldr/presentation-parser'
 
 function youtubeIdToUri (youtubeId) {
   return `ref:YT_${youtubeId}`
@@ -79,7 +79,7 @@ export default validateMasterSpec({
       const asset = this.$store.getters['media/assetByUri'](
         youtubeIdToUri(props.id)
       )
-      checkAvailability(props.id).then(result => {
+      youtubeMaster.checkAvailability(props.id).then(result => {
         if (!result) {
           this.$showMessage.error(
             `The YouTube video “${props.id}” is no longer available online.`

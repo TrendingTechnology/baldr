@@ -98,7 +98,7 @@ function pickFirst(values) {
 function getEntities(itemIds, props) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = wikibase.getEntities(itemIds, ['en', 'de'], props);
-        const response = yield node_fetch_1.default(url);
+        const response = yield (0, node_fetch_1.default)(url);
         const json = yield response.json();
         const entities = yield wikibase.parse.wd.entities(json);
         if (Array.isArray(itemIds))
@@ -108,7 +108,7 @@ function getEntities(itemIds, props) {
 }
 function fetchResizeFile(url, dest) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield core_node_1.fetchFile(url, dest);
+        yield (0, core_node_1.fetchFile)(url, dest);
         if (fs.existsSync(dest)) {
             const stat = fs.statSync(dest);
             if (stat.size > 500000) {

@@ -7,7 +7,7 @@ exports.person = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 const main_1 = require("../main");
 function check(data) {
     if (data.lastname == null && data.firstname == null) {
@@ -52,7 +52,7 @@ exports.person = {
             description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
             derive: function ({ data }) {
                 check(data);
-                return `${core_browser_1.referencify(data.lastname)}_${core_browser_1.referencify(data.firstname)}`;
+                return `${(0, core_browser_1.referencify)(data.lastname)}_${(0, core_browser_1.referencify)(data.firstname)}`;
             },
             overwriteByDerived: true
         },
@@ -61,7 +61,7 @@ exports.person = {
             description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
             derive: function ({ data, category }) {
                 const personCategory = category;
-                return `${personCategory.abbreviation}_${core_browser_1.referencify(data.lastname)}_${core_browser_1.referencify(data.firstname)}`;
+                return `${personCategory.abbreviation}_${(0, core_browser_1.referencify)(data.lastname)}_${(0, core_browser_1.referencify)(data.firstname)}`;
             },
             overwriteByDerived: true
         },

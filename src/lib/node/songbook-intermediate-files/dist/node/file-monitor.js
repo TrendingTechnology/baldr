@@ -28,7 +28,7 @@ const crypto = __importStar(require("crypto"));
 const fs = __importStar(require("fs-extra"));
 const path = __importStar(require("path"));
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 /**
  * Sqlite database wrapper to store file contents hashes to detect
  * file modifications.

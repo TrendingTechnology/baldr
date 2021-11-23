@@ -31,8 +31,8 @@ const titles_1 = require("@bldr/titles");
 const specs_1 = require("./specs");
 const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
-two_letter_abbreviations_1.checkTypeAbbreviations(specs_1.categories);
+const config = (0, config_1.getConfig)();
+(0, two_letter_abbreviations_1.checkTypeAbbreviations)(specs_1.categories);
 /**
  * Check a file path against a regular expression to get the category name.
  *
@@ -91,7 +91,7 @@ function formatFilePath(data, oldPath) {
         if (data.mainImage == null) {
             throw new Error('Your data needs a property named “mainImage”.');
         }
-        const extension = core_browser_1.getExtension(data.mainImage);
+        const extension = (0, core_browser_1.getExtension)(data.mainImage);
         if (extension == null) {
             throw new Error('Extension couldn’t be detected.');
         }
@@ -174,7 +174,7 @@ function isPropertyDerived(propSpec) {
 function sortAndDeriveProps(data, category, filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         // eslint-disable-next-line
-        const origData = core_browser_1.deepCopy(data);
+        const origData = (0, core_browser_1.deepCopy)(data);
         // eslint-disable-next-line
         const result = {};
         // eslint-disable-next-line
@@ -351,8 +351,8 @@ function generalizeCategoriesNames(categoriesNames) {
  * @returns An array of unknown props.
  */
 function searchUnknownProps(data) {
-    data = core_browser_1.deepCopy(data);
-    data = yaml_1.convertPropertiesSnakeToCamel(data);
+    data = (0, core_browser_1.deepCopy)(data);
+    data = (0, yaml_1.convertPropertiesSnakeToCamel)(data);
     data.categories = generalizeCategoriesNames(data.categories);
     for (const categoryName of data.categories.split(',')) {
         const category = specs_1.categories[categoryName];
@@ -380,7 +380,7 @@ function process(data, filePath) {
         }
         // The media category specification is in camel case. The meta data is
         // stored in the YAML format in snake case
-        data = yaml_1.convertPropertiesSnakeToCamel(data);
+        data = (0, yaml_1.convertPropertiesSnakeToCamel)(data);
         data.categories = generalizeCategoriesNames(data.categories);
         for (const name of data.categories.split(',')) {
             data = yield processByType(data, name, filePath);

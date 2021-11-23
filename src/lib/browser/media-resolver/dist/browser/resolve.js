@@ -133,6 +133,6 @@ export const resolver = new Resolver();
  */
 export function resolve(uris, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield resolver.resolve(uris);
+        return yield resolver.resolve(uris, throwException);
     });
 }

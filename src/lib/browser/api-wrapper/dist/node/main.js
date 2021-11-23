@@ -13,8 +13,8 @@ exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = export
 const config_1 = require("@bldr/config");
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
-const config = config_1.getConfig();
-const httpRequest = http_request_1.makeHttpRequestInstance(config, 'local', '/api/media');
+const config = (0, config_1.getConfig)();
+const httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'local', '/api/media');
 function callWithErrorMessage(path, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield httpRequest.request(path);

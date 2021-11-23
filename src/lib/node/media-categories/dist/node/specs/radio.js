@@ -24,7 +24,7 @@ exports.radio = {
             title: 'Titel',
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('title', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('title', filePath);
                 });
             }
         },

@@ -10,7 +10,7 @@ function readPersonYaml(filePath) {
     const match = filePath.match(/^.*\/Personen\/\w\/.*?\//);
     if (match != null) {
         const prefix = match[0];
-        return file_reader_writer_1.readYamlFile(path_1.default.join(prefix, 'main.jpg.yml'));
+        return (0, file_reader_writer_1.readYamlFile)(path_1.default.join(prefix, 'main.jpg.yml'));
     }
 }
 /**

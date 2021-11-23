@@ -36,7 +36,7 @@ exports.worksheet = {
             description: 'Die Seitenanzahl dieses PDFs',
             derive({ filePath }) {
                 if (filePath != null) {
-                    return core_node_1.getPdfPageCount(filePath);
+                    return (0, core_node_1.getPdfPageCount)(filePath);
                 }
             },
             overwriteByDerived: true

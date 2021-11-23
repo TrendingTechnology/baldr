@@ -29,7 +29,7 @@ exports.score = {
             description: 'Die Seitenanzahl dieses PDFs',
             derive({ filePath }) {
                 if (filePath != null && filePath.match(/\.pdf$/gi)) {
-                    return core_node_1.getPdfPageCount(filePath);
+                    return (0, core_node_1.getPdfPageCount)(filePath);
                 }
             },
             overwriteByDerived: true

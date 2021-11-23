@@ -7,7 +7,7 @@ exports.instrument = void 0;
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function check(data) {
     if (data.name == null) {
         throw new Error('A instrument needs a name.');
@@ -33,7 +33,7 @@ exports.instrument = {
         instrumentId: {
             title: 'Instrumenten-ID',
             derive: function ({ data }) {
-                return core_browser_1.referencify(data.name);
+                return (0, core_browser_1.referencify)(data.name);
             }
         },
         ref: {
@@ -43,7 +43,7 @@ exports.instrument = {
                 // IS: Instrument
                 const instrumentCategory = category;
                 const instrumentData = data;
-                return `${instrumentCategory.abbreviation}_${core_browser_1.referencify(instrumentData.name)}`;
+                return `${instrumentCategory.abbreviation}_${(0, core_browser_1.referencify)(instrumentData.name)}`;
             },
             overwriteByDerived: true
         },

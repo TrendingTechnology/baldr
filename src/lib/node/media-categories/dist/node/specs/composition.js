@@ -25,7 +25,7 @@ exports.composition = {
             removeByRegexp: /^.*CD.*Spur.*$/i,
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('title', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('title', filePath);
                 });
             }
         },
@@ -41,7 +41,7 @@ exports.composition = {
             },
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('composer', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('composer', filePath);
                 });
             }
         },
@@ -91,7 +91,7 @@ exports.composition = {
             },
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('musicbrainz_work_id', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('musicbrainz_work_id', filePath);
                 });
             }
         },

@@ -8,7 +8,7 @@ const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const main_1 = require("../main");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function check(data) {
     if (data.name == null) {
         throw new Error('A group needs a name.');
@@ -37,7 +37,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = core_browser_1.referencify(value);
+                value = (0, core_browser_1.referencify)(value);
                 return value;
             },
             overwriteByDerived: true
@@ -49,7 +49,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                return `GR_${core_browser_1.referencify(value)}`;
+                return `GR_${(0, core_browser_1.referencify)(value)}`;
             },
             overwriteByDerived: true
         },

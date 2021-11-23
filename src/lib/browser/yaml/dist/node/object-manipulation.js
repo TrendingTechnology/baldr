@@ -40,10 +40,10 @@ function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_C
         for (const oldProp in data) {
             let newProp;
             if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
-                newProp = string_format_1.convertCamelToSnake(oldProp);
+                newProp = (0, string_format_1.convertCamelToSnake)(oldProp);
             }
             else {
-                newProp = string_format_1.convertSnakeToCamel(oldProp);
+                newProp = (0, string_format_1.convertSnakeToCamel)(oldProp);
             }
             newObject[newProp] = data[oldProp];
             // Object or array

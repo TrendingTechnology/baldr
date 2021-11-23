@@ -37,7 +37,7 @@ class AlphabeticalSongsTree {
             this[song.abc].push(song);
         }
         for (const abc in this) {
-            this[abc].sort(core_browser_1.sortObjectsByProperty('songId'));
+            this[abc].sort((0, core_browser_1.sortObjectsByProperty)('songId'));
         }
     }
 }
@@ -159,7 +159,7 @@ class SongMetaDataCombined {
      */
     get wikidataUrl() {
         if (this.metaData.wikidata != null) {
-            return core_browser_1.formatWikidataUrl(this.metaData.wikidata);
+            return (0, core_browser_1.formatWikidataUrl)(this.metaData.wikidata);
         }
     }
     /**
@@ -167,7 +167,7 @@ class SongMetaDataCombined {
      */
     get wikipediaUrl() {
         if (this.metaData.wikipedia != null) {
-            return core_browser_1.formatWikipediaUrl(this.metaData.wikipedia);
+            return (0, core_browser_1.formatWikipediaUrl)(this.metaData.wikipedia);
         }
     }
     /**
@@ -175,7 +175,7 @@ class SongMetaDataCombined {
      */
     get youtubeUrl() {
         if (this.metaData.youtube != null) {
-            return core_browser_1.formatYoutubeUrl(this.metaData.youtube);
+            return (0, core_browser_1.formatYoutubeUrl)(this.metaData.youtube);
         }
     }
     toJSON() {

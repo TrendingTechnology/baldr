@@ -9,9 +9,9 @@ const core_node_1 = require("@bldr/core-node");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_node_2 = require("@bldr/core-node");
 const config_1 = require("@bldr/config");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function readReferencesYaml() {
-    const rawReferences = file_reader_writer_1.readYamlFile(path_1.default.join(config.mediaServer.basePath, 'Quellen.yml'));
+    const rawReferences = (0, file_reader_writer_1.readYamlFile)(path_1.default.join(config.mediaServer.basePath, 'Quellen.yml'));
     const result = {};
     for (const r of rawReferences) {
         const reference = r;
@@ -22,7 +22,7 @@ function readReferencesYaml() {
 const references = readReferencesYaml();
 function getPropertyFromReference(filePath, prop) {
     if (filePath != null) {
-        const ref = core_node_2.getBasename(filePath);
+        const ref = (0, core_node_2.getBasename)(filePath);
         if (references[ref] == null) {
             console.error(`References not found for ${ref} of ${filePath}`);
             return;
@@ -119,7 +119,7 @@ exports.reference = {
             derive({ filePath }) {
                 if (filePath == null)
                     return;
-                return core_node_1.getPdfPageCount(filePath);
+                return (0, core_node_1.getPdfPageCount)(filePath);
             },
             overwriteByDerived: true
         },

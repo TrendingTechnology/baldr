@@ -31,7 +31,7 @@
  * - `GenericFieldsFinal`
  *
  * `..FieldsRawInput` ->
- * `master.normalizeFieldsInput(..)` ->
+ * `master.normalizeFieldsInput(..)` -> (defaults) ->
  * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
  * `..FieldsInstantiated` ->
@@ -51,10 +51,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Presentation } from './presentation';
 export { mapStepFieldDefintions } from './master';
-import * as question_1 from './masters/question';
-export { question_1 as question };
-import * as generic_1 from './masters/generic';
-export { generic_1 as generic };
+import * as genericMaster_1 from './masters/generic';
+export { genericMaster_1 as genericMaster };
+import * as questionMaster_1 from './masters/question';
+export { questionMaster_1 as questionMaster };
+import * as youtubeMaster_1 from './masters/youtube';
+export { youtubeMaster_1 as youtubeMaster };
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

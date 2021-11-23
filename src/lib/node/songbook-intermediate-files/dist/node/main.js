@@ -91,7 +91,7 @@ class Library extends songbook_core_1.CoreLibrary {
      * @returns {object}
      */
     loadSongList(listFile) {
-        const songIds = utils_1.parseSongIDList(listFile);
+        const songIds = (0, utils_1.parseSongIDList)(listFile);
         const songs = {};
         for (const songId of songIds) {
             if ({}.hasOwnProperty.call(this.songs, songId)) {

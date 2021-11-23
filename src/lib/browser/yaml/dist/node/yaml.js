@@ -19,7 +19,7 @@ const jsYamlConfig = {
  * @returns A string in the YAML format (without `---` at the beginning).
  */
 function convertToYamlRaw(data) {
-    return js_yaml_1.dump(data, jsYamlConfig);
+    return (0, js_yaml_1.dump)(data, jsYamlConfig);
 }
 exports.convertToYamlRaw = convertToYamlRaw;
 /**
@@ -33,7 +33,7 @@ exports.convertToYamlRaw = convertToYamlRaw;
  *   The result string begins with `---`.
  */
 function convertToYaml(data) {
-    data = object_manipulation_1.convertPropertiesCamelToSnake(data);
+    data = (0, object_manipulation_1.convertPropertiesCamelToSnake)(data);
     const yamlMarkup = ['---', convertToYamlRaw(data)];
     return yamlMarkup.join('\n');
 }
@@ -46,7 +46,7 @@ exports.convertToYaml = convertToYaml;
  * @returns Wraps strings and numbers into an object.
  */
 function convertFromYamlRaw(yamlString) {
-    const result = js_yaml_1.load(yamlString);
+    const result = (0, js_yaml_1.load)(yamlString);
     if (result == null) {
         return;
     }
@@ -68,6 +68,6 @@ exports.convertFromYamlRaw = convertFromYamlRaw;
  */
 function convertFromYaml(yamlString) {
     const result = convertFromYamlRaw(yamlString);
-    return object_manipulation_1.convertPropertiesSnakeToCamel(result);
+    return (0, object_manipulation_1.convertPropertiesSnakeToCamel)(result);
 }
 exports.convertFromYaml = convertFromYaml;

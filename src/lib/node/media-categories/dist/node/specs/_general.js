@@ -18,12 +18,12 @@ exports.general = {
             },
             format: function (value, { data, filePath }) {
                 var _a;
-                let raw = core_browser_1.referencify(value);
+                let raw = (0, core_browser_1.referencify)(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
                 // eslint-disable-next-line
                 if (filePath != null && !((_a = data.categories) === null || _a === void 0 ? void 0 : _a.includes('youtube'))) {
-                    const idPrefix = main_1.generateIdPrefix(filePath);
+                    const idPrefix = (0, main_1.generateIdPrefix)(filePath);
                     if (idPrefix != null) {
                         if (!raw.includes(idPrefix)) {
                             raw = `${idPrefix}_${raw}`;
@@ -34,7 +34,7 @@ exports.general = {
                         // old prefix: Piazzolla-Adios-Nonino_NB
                         // updated prefix: Piazzolla-Nonino_NB
                         // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-                        const twoLetterRegExp = two_letter_abbreviations_1.getTwoLetterRegExp();
+                        const twoLetterRegExp = (0, two_letter_abbreviations_1.getTwoLetterRegExp)();
                         if (raw.match(new RegExp(`.*_${twoLetterRegExp}_.*`)) != null) {
                             raw = raw.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix);
                         }
@@ -51,7 +51,7 @@ exports.general = {
             title: 'UUID',
             description: 'UUID version 4.',
             derive() {
-                return core_browser_1.genUuid();
+                return (0, core_browser_1.genUuid)();
             },
             overwriteByDerived: false
         },
@@ -86,7 +86,7 @@ exports.general = {
                 return value;
             },
             derive: function ({ data }) {
-                return core_browser_1.deasciify(data.id);
+                return (0, core_browser_1.deasciify)(data.id);
             }
         },
         wikidata: {
@@ -152,7 +152,7 @@ exports.general = {
         }
     },
     initialize: function ({ data, filePath }) {
-        if (filePath != null && !two_letter_abbreviations_1.checkForTwoLetterDir(filePath)) {
+        if (filePath != null && !(0, two_letter_abbreviations_1.checkForTwoLetterDir)(filePath)) {
             console.log(`File path ${filePath} is not in a valid two letter directory.`);
             process.exit();
         }

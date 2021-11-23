@@ -30,7 +30,7 @@ exports.recording = {
             },
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('artist', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('artist', filePath);
                 });
             }
         },
@@ -43,7 +43,7 @@ exports.recording = {
             },
             derive: function ({ filePath }) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    return audio_metadata_1.getAudioMetadataValue('musicbrainz_recording_id', filePath);
+                    return (0, audio_metadata_1.getAudioMetadataValue)('musicbrainz_recording_id', filePath);
                 });
             }
         },

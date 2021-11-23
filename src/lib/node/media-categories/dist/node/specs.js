@@ -68,7 +68,7 @@ exports.categories = {
  */
 function stripCategories() {
     // { [category: string]: MediaCategoriesTypes.Category }
-    const cats = core_browser_1.deepCopy(exports.categories);
+    const cats = (0, core_browser_1.deepCopy)(exports.categories);
     for (const name in cats) {
         delete cats[name].detectCategoryByPath;
         const category = cats[name];

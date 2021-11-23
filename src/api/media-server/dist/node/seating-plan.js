@@ -48,7 +48,7 @@ exports.registerSeatingPlan = void 0;
 var express_1 = __importDefault(require("express"));
 function registerSeatingPlan(database) {
     var _this = this;
-    var app = express_1.default();
+    var app = (0, express_1.default)();
     app.post('/save-state', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
         var body, responseMessage;
         return __generator(this, function (_a) {

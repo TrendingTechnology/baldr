@@ -45,14 +45,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = exports.getDatabaseWrapper = exports.connectDb = exports.MongoDbClient = void 0;
 var mongodb_1 = __importDefault(require("mongodb"));
 var config_1 = require("@bldr/config");
-var config = config_1.getConfig();
+var config = (0, config_1.getConfig)();
 var MongoDbClient = /** @class */ (function () {
     function MongoDbClient() {
         var conf = config.databases.mongodb;
         var user = encodeURIComponent(conf.user);
         var password = encodeURIComponent(conf.password);
         var authMechanism = 'DEFAULT';
-        var url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
+        var url = "mongodb://".concat(user, ":").concat(password, "@").concat(conf.url, "/").concat(conf.dbName, "?authMechanism=").concat(authMechanism);
         this.client = new mongodb_1.default.MongoClient(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -112,7 +112,7 @@ function connectDb() {
                     user = encodeURIComponent(conf.user);
                     password = encodeURIComponent(conf.password);
                     authMechanism = 'DEFAULT';
-                    url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
+                    url = "mongodb://".concat(user, ":").concat(password, "@").concat(conf.url, "/").concat(conf.dbName, "?authMechanism=").concat(authMechanism);
                     mongoClient = new mongodb_1.default.MongoClient(url, {
                         useNewUrlParser: true,
                         useUnifiedTopology: true
@@ -292,7 +292,7 @@ var Database = /** @class */ (function () {
                             index = indexes_1[_h];
                             indexDefinition = index;
                             unique = indexDefinition.unique ? 'true' : 'false';
-                            result[collectionName].indexes[index.name] = "unique: " + unique;
+                            result[collectionName].indexes[index.name] = "unique: ".concat(unique);
                         }
                         _k.label = 12;
                     case 12:
@@ -509,11 +509,11 @@ var Database = /** @class */ (function () {
                         uris = [];
                         for (_i = 0, refs_1 = refs; _i < refs_1.length; _i++) {
                             ref = refs_1[_i];
-                            uris.push("ref:" + ref);
+                            uris.push("ref:".concat(ref));
                         }
                         for (_a = 0, uuids_1 = uuids; _a < uuids_1.length; _a++) {
                             uuid = uuids_1[_a];
-                            uris.push("uuid:" + uuid);
+                            uris.push("uuid:".concat(uuid));
                         }
                         return [2 /*return*/, uris];
                 }

@@ -48,7 +48,7 @@ var config_1 = require("@bldr/config");
 var media_manager_1 = require("@bldr/media-manager");
 var open_with_1 = require("@bldr/open-with");
 var main_1 = require("./main");
-var config = config_1.getConfig();
+var config = (0, config_1.getConfig)();
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
@@ -59,7 +59,7 @@ function validateMediaType(mediaType) {
     if (mediaType == null)
         return 'assets';
     if (!mediaTypes.includes(mediaType)) {
-        throw new Error("Unkown media type \u201C" + mediaType + "\u201D! Allowed media types are: " + mediaTypes.join(', '));
+        throw new Error("Unkown media type \u201C".concat(mediaType, "\u201D! Allowed media types are: ").concat(mediaTypes.join(', ')));
     }
     else {
         return mediaType;
@@ -88,11 +88,11 @@ function getAbsPathFromId(ref, mediaType) {
                 case 1:
                     result = _a.sent();
                     if (result.path == null && typeof result.path !== 'string') {
-                        throw new Error("Can not find media file with the type \u201C" + mediaType + "\u201D and the reference \u201C" + ref + "\u201D.");
+                        throw new Error("Can not find media file with the type \u201C".concat(mediaType, "\u201D and the reference \u201C").concat(ref, "\u201D."));
                     }
                     relPath = result.path;
                     if (mediaType === 'assets') {
-                        relPath = relPath + ".yml";
+                        relPath = "".concat(relPath, ".yml");
                     }
                     return [2 /*return*/, path_1.default.join(config.mediaServer.basePath, relPath)];
             }
@@ -117,10 +117,10 @@ function openArchivesInFileManager(currentPath, create) {
         var basePath = _a[_i];
         if (relPath != null) {
             var currentPath_1 = path_1.default.join(basePath, relPath);
-            result[currentPath_1] = open_with_1.openInFileManager(currentPath_1, create);
+            result[currentPath_1] = (0, open_with_1.openInFileManager)(currentPath_1, create);
         }
         else {
-            result[basePath] = open_with_1.openInFileManager(basePath, create);
+            result[basePath] = (0, open_with_1.openInFileManager)(basePath, create);
         }
     }
     return result;
@@ -145,10 +145,10 @@ function openEditor(ref, mediaType) {
                     editor = config.mediaServer.editor;
                     if (!fs_1.default.existsSync(editor)) {
                         return [2 /*return*/, {
-                                error: "Editor \u201C" + editor + "\u201D can\u2019t be found."
+                                error: "Editor \u201C".concat(editor, "\u201D can\u2019t be found.")
                             }];
                     }
-                    open_with_1.openWith(config.mediaServer.editor, parentFolder);
+                    (0, open_with_1.openWith)(config.mediaServer.editor, parentFolder);
                     return [2 /*return*/, {
                             ref: ref,
                             mediaType: mediaType,
@@ -185,7 +185,7 @@ function openParentFolder(ref, mediaType, archive, create) {
                         result = openArchivesInFileManager(parentFolder, create);
                     }
                     else {
-                        result = open_with_1.openInFileManager(parentFolder, create);
+                        result = (0, open_with_1.openInFileManager)(parentFolder, create);
                     }
                     return [2 /*return*/, {
                             ref: ref,
