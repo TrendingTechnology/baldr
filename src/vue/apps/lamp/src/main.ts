@@ -111,6 +111,9 @@ import Notification from '@bldr/notification'
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
 import './global-components'
 
+import { test } from '@bldr/player'
+console.log(test)
+
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification as any, Vue)

@@ -38,6 +38,7 @@
     "@bldr/string-format": "*",
     "@bldr/style-configurator": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/player": "*",
     "@bldr/tex-templates": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
