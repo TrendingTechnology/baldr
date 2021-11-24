@@ -1,7 +1,7 @@
 <script lang="ts">
 import { CreateElement, VNode } from 'vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { state } from './main.js'
+import { state } from './plugin.js'
 
 import icons from './icons.json'
 
