@@ -167,7 +167,8 @@ function patchTex(content) {
     return content
         .replace(/\\VerbergeLoesung/g, '')
         .replace(/\\ZeigeLoesung/g, '')
-        .replace('\\begin{document}', '\\begin{document}\n\\ZeigeLoesung');
+        .replace(/\\ZeigeNurLueckentextLoesung/g, '')
+        .replace('\\begin{document}', '\\begin{document}\n\\ZeigeNurLueckentextLoesung');
 }
 function compileTex(tmpTexFile) {
     const jobName = path_1.default.basename(tmpTexFile).replace('.tex', '');

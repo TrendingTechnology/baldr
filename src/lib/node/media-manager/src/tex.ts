@@ -164,7 +164,11 @@ function patchTex (content: string): string {
   return content
     .replace(/\\VerbergeLoesung/g, '')
     .replace(/\\ZeigeLoesung/g, '')
-    .replace('\\begin{document}', '\\begin{document}\n\\ZeigeLoesung')
+    .replace(/\\ZeigeNurLueckentextLoesung/g, '')
+    .replace(
+      '\\begin{document}',
+      '\\begin{document}\n\\ZeigeNurLueckentextLoesung'
+    )
 }
 
 function compileTex (tmpTexFile: string): string {
