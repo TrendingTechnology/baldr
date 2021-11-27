@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "src/main.js",
+  "main": "src/plugin.js",
   "style": "src/style.css",
   "dependencies": {
     "core-js": "3.7.0",
