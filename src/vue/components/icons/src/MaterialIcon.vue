@@ -38,7 +38,7 @@ export default class MaterialIcon extends ColorIcon {
   @Prop({ type: Boolean })
   vanish: boolean
 
-  get classes () {
+  get classes (): string[] {
     let classes = this.getBaseClasses()
     classes.push(`baldr-icon_outline_${this.outline}`)
     if (this.outline !== 'icon') {
@@ -61,7 +61,7 @@ export default class MaterialIcon extends ColorIcon {
   }
 
   get styleObject (): Record<string, unknown> {
-    const style: { [attr: string]: any } = {
+    const style: { [attr: string]: string | number } = {
       fontSize: this.size
     }
     if (this.display === 'disabled') {

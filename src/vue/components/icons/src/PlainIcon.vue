@@ -5,12 +5,14 @@ import { state } from './plugin.js'
 
 import icons from './icons.json'
 
+type State = { vanishIcons: boolean }
+
 @Component
 export default class PlainIcon extends Vue {
-  data () {
+  data (): { state: State } {
     return { state }
   }
-  state!: any
+  state!: State
 
   @Prop({
     type: String
@@ -21,7 +23,7 @@ export default class PlainIcon extends Vue {
     return this.getBaseClasses()
   }
 
-  getCssIconClassName () {
+  getCssIconClassName (): string {
     return `baldr-icon_${this.name}`
   }
 
