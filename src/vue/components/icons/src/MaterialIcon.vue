@@ -60,7 +60,7 @@ export default class MaterialIcon extends ColorIcon {
     return classes
   }
 
-  get styleObject (): object {
+  get styleObject (): Record<string, unknown> {
     const style: { [attr: string]: any } = {
       fontSize: this.size
     }

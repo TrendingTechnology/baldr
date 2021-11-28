@@ -29,12 +29,13 @@ export default class PlainIcon extends Vue {
     return ['baldr-icon', this.getCssIconClassName()]
   }
 
-  get warningText (): string | undefined {
+  get warningText (): string {
     if (!icons.includes(this.name)) {
       const message = `No icon named “${this.name}” found!`
       console.warn(message)
       return message
     }
+    return ''
   }
 
   render (createElement: CreateElement): VNode {
