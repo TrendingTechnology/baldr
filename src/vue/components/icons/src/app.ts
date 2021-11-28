@@ -5,6 +5,7 @@ import App from '@/components/app/App.vue'
 import Home from '@/components/app/Home.vue'
 import AllStyles from '@/components/app/AllStyles.vue'
 import AllIcons from '@/components/app/AllIcons.vue'
+import Link from '@/components/app/Link.vue'
 
 Vue.config.productionTip = false
 
@@ -25,6 +26,11 @@ const routes: Array<RouteConfig> = [
     path: '/styles',
     name: 'All Styles',
     component: AllStyles
+  },
+  {
+    path: '/link',
+    name: 'As a link',
+    component: Link
   }
 ]
 
