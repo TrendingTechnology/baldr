@@ -4,10 +4,13 @@
  *
  * @module @bldr/icons
  */
-import material from './MaterialIcon.vue'
-import plain from './PlainIcon.vue'
-import color from './ColorIcon.vue'
-import vanish from './VanishIcon.vue'
+
+/* eslint-disable */
+
+import material from './components/plugin/MaterialIcon.vue'
+import plain from './components/plugin/PlainIcon.vue'
+import color from './components/plugin/ColorIcon.vue'
+import vanish from './components/plugin/VanishIcon.vue'
 
 import iconsJson from './icons.json'
 

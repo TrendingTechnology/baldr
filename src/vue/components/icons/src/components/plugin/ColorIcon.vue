@@ -2,7 +2,7 @@
 import VueComponent from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 
-import { validateColorName } from './plugin.js'
+import { validateColorName } from '../../plugin.js'
 import PlainIcon from './PlainIcon.vue'
 
 @Component

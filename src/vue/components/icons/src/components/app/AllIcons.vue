@@ -12,9 +12,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
-import MaterialIcon from '@/MaterialIcon.vue'
+import MaterialIcon from '@/components/plugin/MaterialIcon.vue'
 
-import icons from '../icons.json'
+import icons from '@/icons.json'
 
 @Component({ components: { MaterialIcon } })
 export default class AllIcons extends Vue {

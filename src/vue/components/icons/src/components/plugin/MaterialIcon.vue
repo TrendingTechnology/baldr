@@ -89,7 +89,7 @@ export default class MaterialIcon extends ColorIcon {
 </script>
 
 <style lang="scss">
-@import './style.css';
+@import '../../style.css';
 
 a .baldr-icons {
   color: $black;

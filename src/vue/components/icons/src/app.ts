@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import App from '@/components/App.vue'
-import Home from '@/components/Home.vue'
-import AllStyles from '@/components/AllStyles.vue'
-import AllIcons from '@/components/AllIcons.vue'
+import App from '@/components/app/App.vue'
+import Home from '@/components/app/Home.vue'
+import AllStyles from '@/components/app/AllStyles.vue'
+import AllIcons from '@/components/app/AllIcons.vue'
 
 Vue.config.productionTip = false
 
