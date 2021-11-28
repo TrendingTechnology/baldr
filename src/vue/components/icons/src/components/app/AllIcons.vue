@@ -2,7 +2,7 @@
   <div>
     All Icons
 
-    <p v-for="icon in icons" :key="icon" :name="icon">
+    <p v-for="icon in iconNames" :key="icon" :name="icon">
       <material-icon :name="icon" />
       <span class="description">{{ icon }}</span>
     </p>
@@ -14,12 +14,12 @@ import { Component, Vue } from 'vue-property-decorator'
 
 import MaterialIcon from '@/components/plugin/MaterialIcon.vue'
 
-import icons from '@/icons.json'
+import iconNames from '@/icons.json'
 
 @Component({ components: { MaterialIcon } })
 export default class AllIcons extends Vue {
-  get icons (): string[] {
-    return icons
+  get iconNames (): string[] {
+    return iconNames
   }
 }
 </script>

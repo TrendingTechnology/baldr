@@ -3,7 +3,6 @@
     <h2>As a link</h2>
     <material-icon
       href="https://de.wikipedia.org/wiki/Cloud_Computing"
-      :size="size"
       name="cloud"
     />
   </div>

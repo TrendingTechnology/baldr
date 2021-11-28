@@ -6,6 +6,7 @@ import Home from '@/components/app/Home.vue'
 import AllStyles from '@/components/app/AllStyles.vue'
 import AllIcons from '@/components/app/AllIcons.vue'
 import Link from '@/components/app/Link.vue'
+import VanishDemonstration from '@/components/app/VanishDemonstration.vue'
 
 Vue.config.productionTip = false
 
@@ -14,23 +15,23 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
     component: Home
   },
   {
     path: '/icons',
-    name: 'All Icons',
     component: AllIcons
   },
   {
     path: '/styles',
-    name: 'All Styles',
     component: AllStyles
   },
   {
     path: '/link',
-    name: 'As a link',
     component: Link
+  },
+  {
+    path: '/vanish',
+    component: VanishDemonstration
   }
 ]
 
