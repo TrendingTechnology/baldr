@@ -19,5 +19,10 @@ module.exports = {
       preProcessor: 'scss',
       patterns: [stylePath('default'), stylePath('handwriting')]
     },
+  },
+  configureWebpack: {
+    entry: {
+      app: './src/app.ts'
+    }
   }
 }
