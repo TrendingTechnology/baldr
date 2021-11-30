@@ -305,6 +305,8 @@ export class Resolver {
    *   returned
    *
    * @returns A sample or undefined.
+   *
+   * @throws Error
    */
   public getSample (uri: string): Sample {
     const mediaUri = new MediaUri(uri)
