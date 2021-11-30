@@ -26,7 +26,7 @@ function createHtmlElement (
   }
 }
 
-class PlayableSample {
+class Playable {
   sample: Sample
   htmlElement: HTMLElement
   constructor (sample: Sample, htmlElement: HTMLElement) {
@@ -37,21 +37,27 @@ class PlayableSample {
 
 class HtmlElementCache extends Cache<HTMLElement> {}
 
-class PlayableSampleCache extends Cache<PlayableSample> {}
+class PlayableCache extends Cache<Playable> {}
 
 export class PlayerCache {
   htmlElements: HtmlElementCache
-  playableSamples: PlayableSampleCache
+  playables: PlayableCache
   resolver: Resolver
 
   constructor (resolver: Resolver) {
     this.htmlElements = new HtmlElementCache()
-    this.playableSamples = new PlayableSampleCache()
+    this.playables = new PlayableCache()
     this.resolver = resolver
   }
 
-  getPlayableSample (uri: string): PlayableSample {
+  getPlayable (uri: string): Playable {
     const sample = this.resolver.getSample(uri)
+
+    let playable = this.playables.get(sample.ref)
+    if (playable != null) {
+      return playable
+    }
+
     let htmlElement = this.htmlElements.get(sample.asset.ref)
     if (htmlElement == null) {
       htmlElement = createHtmlElement(
@@ -61,11 +67,8 @@ export class PlayerCache {
       this.htmlElements.add(sample.asset.ref, htmlElement)
     }
 
-    let playableSample = this.playableSamples.get(sample.ref)
-    if (playableSample == null) {
-      playableSample = new PlayableSample(sample, htmlElement)
-      this.playableSamples.add(sample.ref, playableSample)
-    }
-    return playableSample
+    playable = new Playable(sample, htmlElement)
+    this.playables.add(sample.ref, playable)
+    return playable
   }
 }

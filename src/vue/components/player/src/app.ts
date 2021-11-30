@@ -1,35 +1,45 @@
-import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import Vue from 'vue'
+import VueRouter, { RouteConfig } from 'vue-router'
 
-import App from "@/components/app/App.vue";
-import Home from "@/components/app/Home.vue";
-import AudioDemonstration from "@/components/app/AudioDemonstration.vue";
-import VideoDemonstration from "@/components/app/VideoDemonstration.vue";
+import { Resolver } from '@bldr/media-resolver-ng'
 
-Vue.config.productionTip = false;
+import App from '@/components/app/App.vue'
+import Home from '@/components/app/Home.vue'
+import AudioDemonstration from '@/components/app/AudioDemonstration.vue'
+import VideoDemonstration from '@/components/app/VideoDemonstration.vue'
 
-Vue.use(VueRouter);
+import { PlayerCache } from './main'
+
+Vue.config.productionTip = false
+
+Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/",
-    component: Home,
-  },  {
-    path: "/audio",
-    component: AudioDemonstration,
-  },  {
-    path: "/Video",
-    component: VideoDemonstration,
+    path: '/',
+    component: Home
   },
-];
+  {
+    path: '/audio',
+    component: AudioDemonstration
+  },
+  {
+    path: '/Video',
+    component: VideoDemonstration
+  }
+]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
-  routes,
-});
+  routes
+})
+
+export const resolver = new Resolver()
+
+export const playerCache = new PlayerCache(resolver)
 
 new Vue({
   router,
-  render: (h) => h(App),
-}).$mount("#app");
+  render: h => h(App)
+}).$mount('#app')

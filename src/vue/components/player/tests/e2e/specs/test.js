@@ -1,8 +1,15 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-describe("My First Test", () => {
-  it("Visits the app root url", () => {
-    cy.visit("/");
-    cy.contains("h1", "Welcome to Your Vue.js + TypeScript App");
-  });
-});
+describe('audio', () => {
+  it('Contains text', () => {
+    cy.visit('/audio')
+    cy.contains('Audio')
+  })
+})
+
+describe('video', () => {
+  it('Contains text', () => {
+    cy.visit('/video')
+    cy.contains('Video')
+  })
+})
