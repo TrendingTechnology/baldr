@@ -146,9 +146,9 @@ class Playable {
   sample: Sample
   htmlElement: HTMLMediaElement
 
-  currentTimeSec_?: number
-
   currentVolume: number = 1
+
+  public lastPositionSec?: number
 
   private readonly interval = new Interval()
 
@@ -164,14 +164,7 @@ class Playable {
   }
 
   get currentTimeSec (): number {
-    if (this.currentTimeSec_ != null) {
-      return this.currentTimeSec_
-    }
-    return this.sample.startTimeSec
-  }
-
-  set currentTimeSec (value: number) {
-    this.currentTimeSec_ = value
+    return this.htmlElement.currentTime
   }
 
   get durationSec (): number {
@@ -258,8 +251,8 @@ class Playable {
     // have on this.startTimeSec 0.
     if (startTimeSec != null || startTimeSec === 0) {
       this.htmlElement.currentTime = startTimeSec
-    } else if (this.currentTimeSec != null) {
-      this.htmlElement.currentTime = this.currentTimeSec
+    } else if (this.lastPositionSec != null) {
+      this.htmlElement.currentTime = this.lastPositionSec
     } else {
       this.htmlElement.currentTime = this.sample.startTimeSec
     }
@@ -358,7 +351,7 @@ class Playable {
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = '0'
     }
-    this.currentTimeSec = this.htmlElement.currentTime
+    this.lastPositionSec = this.htmlElement.currentTime
     this.currentVolume = this.htmlElement.volume
   }
 
@@ -381,17 +374,16 @@ class Playable {
     direction: JumpDirection = 'forward'
   ): void {
     let newPlayPosition
-    const cur = this.currentTimeSec
     if (direction === 'backward') {
-      if (cur - interval > 0) {
-        newPlayPosition = cur - interval
+      if (this.currentTimeSec - interval > 0) {
+        newPlayPosition = this.currentTimeSec - interval
       } else {
         newPlayPosition = 0
       }
     } else {
       newPlayPosition = this.currentTimeSec + interval
-      if (cur + interval < this.durationSec) {
-        newPlayPosition = cur + interval
+      if (this.currentTimeSec + interval < this.durationSec) {
+        newPlayPosition = this.currentTimeSec + interval
       } else {
         newPlayPosition = this.durationSec
       }
