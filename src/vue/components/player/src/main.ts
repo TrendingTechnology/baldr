@@ -67,7 +67,7 @@ class Timer {
 }
 
 /**
- * We have to clear the timeouts. A not yet finished playbook with a
+ * We have to clear the timeouts. A not yet finished playback with a
  * duration - stopped to early - cases that the next playback gets stopped
  * to early.
  */
