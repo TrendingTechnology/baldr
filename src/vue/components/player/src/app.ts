@@ -8,7 +8,7 @@ import Home from '@/components/app/Home.vue'
 import AudioDemonstration from '@/components/app/AudioDemonstration.vue'
 import VideoDemonstration from '@/components/app/VideoDemonstration.vue'
 
-import { PlayerCache } from './main'
+import { Player } from './main'
 
 Vue.config.productionTip = false
 
@@ -37,7 +37,7 @@ const router = new VueRouter({
 
 export const resolver = new Resolver()
 
-export const playerCache = new PlayerCache(resolver)
+export const player = new Player(resolver)
 
 new Vue({
   router,

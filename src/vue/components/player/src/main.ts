@@ -414,7 +414,7 @@ class HtmlElementCache extends Cache<HTMLMediaElement> {}
 
 class PlayableCache extends Cache<Playable> {}
 
-export class PlayerCache {
+class PlayerCache {
   htmlElements: HtmlElementCache
   playables: PlayableCache
   resolver: Resolver
@@ -452,15 +452,17 @@ export class PlayerCache {
  * A deeply with vuex coupled media player. Only one media file can be
  * played a the same time.
  */
-class Player {
+export class Player {
   playing?: Playable
   loaded?: Playable
   events: CustomEventsManager
   cache: PlayerCache
+
   /**
    * Global volume: from 0 - 1
    */
   globalVolume: number = 1
+
   constructor (resolver: Resolver) {
     this.events = new CustomEventsManager()
     this.cache = new PlayerCache(resolver)
@@ -477,7 +479,10 @@ class Player {
    * Play a loaded sample from the position `sample.startTimeSec` on. Stop the
    * currently playing sample.
    */
-  async start () {
+  async start (uri?: string) {
+    if (uri != null) {
+      this.load(uri)
+    }
     if (this.loaded == null) {
       throw new Error('First load a sample')
     }
@@ -486,6 +491,7 @@ class Player {
       await this.playing.stop()
     }
     this.loaded.start(this.globalVolume)
+    this.playing = this.loaded
   }
 
   /**
