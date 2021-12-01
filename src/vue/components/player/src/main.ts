@@ -8,7 +8,7 @@ type EventName = 'fadeinbegin' | 'fadeinend' | 'fadeoutbegin' | 'fadeoutend'
 
 /**
  * A simple wrapper class for a custom event system. Used in the classes
- * `Sample()` and `Player()`.
+ * `Playable()` and `Player()`.
  */
 export class CustomEventsManager {
   /**
@@ -28,10 +28,8 @@ export class CustomEventsManager {
    * @param args - One ore more additonal arguments to pass through
    *   the callbacks.
    */
-  trigger (name: EventName): void {
-    const args = Array.from(arguments)
-    args.shift()
-    if (!(name in this.callbacks)) {
+  trigger (name: EventName, ...args: any[]): void {
+    if (this.callbacks[name] == null) {
       this.callbacks[name] = []
     }
     for (const callback of this.callbacks[name]) {
@@ -48,7 +46,7 @@ export class CustomEventsManager {
    *   event is triggered.
    */
   on (name: EventName, callback: EventCallbackFunction): void {
-    if (!(name in this.callbacks)) {
+    if (this.callbacks[name] == null) {
       this.callbacks[name] = []
     }
     this.callbacks[name].push(callback)
@@ -116,7 +114,7 @@ function createHtmlElement (
   mimeType: string,
   httpUrl: string,
   previewHttpUrl?: string
-): HTMLElement {
+): HTMLMediaElement {
   if (mimeType === 'audio') {
     return new Audio(httpUrl)
   } else if (mimeType === 'video') {
@@ -127,10 +125,6 @@ function createHtmlElement (
       video.poster = previewHttpUrl
     }
     return video
-  } else if (mimeType === 'image') {
-    const image = new Image()
-    image.src = httpUrl
-    return image
   } else {
     throw new Error(`Not supported asset type “${mimeType}”.`)
   }
@@ -152,6 +146,10 @@ class Playable {
   sample: Sample
   htmlElement: HTMLMediaElement
 
+  currentTimeSec_?: number
+
+  currentVolume: number = 1
+
   private readonly interval = new Interval()
 
   private readonly timeOut = new TimeOut()
@@ -166,14 +164,29 @@ class Playable {
   }
 
   get currentTimeSec (): number {
-    return this.htmlElement.currentTime - this.sample.startTimeSec
+    if (this.currentTimeSec_ != null) {
+      return this.currentTimeSec_
+    }
+    return this.sample.startTimeSec
+  }
+
+  set currentTimeSec (value: number) {
+    this.currentTimeSec_ = value
+  }
+
+  get durationSec (): number {
+    if (this.sample.durationSec != null) {
+      return this.sample.durationSec
+    } else {
+      return this.htmlElement.duration
+    }
   }
 
   get progress (): number {
     // for example:
     // current time: 6s duration: 60s
     // 6 / 60 = 0.1
-    return this.currentTimeSec / this.sample.durationSec
+    return this.currentTimeSec / this.durationSec
   }
 
   get volume (): number {
@@ -191,12 +204,15 @@ class Playable {
     }
   }
 
-  async fadeIn (targetVolume: number = 1, duration?: number): Promise<void> {
-    let durationSafe: number
-    if (duration == null) {
-      durationSafe = defaultFadeInSec
+  async fadeIn (
+    targetVolume: number = 1,
+    fadeInDuration?: number
+  ): Promise<void> {
+    let fadeInSec: number
+    if (fadeInDuration == undefined) {
+      fadeInSec = this.sample.fadeInSec
     } else {
-      durationSafe = duration
+      fadeInSec = fadeInDuration
     }
     return await new Promise((resolve, reject) => {
       // Fade in can triggered when a fade out process is started and
@@ -214,7 +230,7 @@ class Playable {
       const steps = targetVolume / 100
       // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
-      const stepInterval = durationSafe * 10
+      const stepInterval = fadeInSec * 10
       this.interval.set(() => {
         actualVolume += steps
         if (actualVolume <= targetVolume) {
@@ -231,30 +247,43 @@ class Playable {
 
   start (targetVolume: number): void {
     this.playbackState = 'started'
-    this.play(targetVolume, this.startTimeSec)
+    this.play(targetVolume, this.sample.startTimeSec)
   }
 
   play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
-    if (fadeInSec == null) fadeInSec = this.fadeInSec
+    if (fadeInSec == null) {
+      fadeInSec = this.sample.fadeInSec
+    }
     // The start() triggers play with this.startTimeSec. “complete” samples
     // have on this.startTimeSec 0.
     if (startTimeSec != null || startTimeSec === 0) {
       this.htmlElement.currentTime = startTimeSec
-    } else if (this.htmlElementCurrentTimeSec != null) {
-      this.htmlElement.currentTime = this.htmlElementCurrentTimeSec
+    } else if (this.currentTimeSec != null) {
+      this.htmlElement.currentTime = this.currentTimeSec
     } else {
-      this.htmlElement.currentTime = this.startTimeSec
+      this.htmlElement.currentTime = this.sample.startTimeSec
     }
 
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     this.timeOut.set(() => {
-      this.fadeIn(targetVolume, this.fadeInSec).then(
+      this.fadeIn(targetVolume, this.sample.fadeInSec).then(
         () => {},
         () => {}
       )
       this.scheduleFadeOut()
-    }, defaultPlayDelayMsec)
+    }, 10)
+  }
+
+  /**
+   * In how many milliseconds we have to start a fade out process.
+   */
+  private get fadeOutStartTimeMsec (): number {
+    return (this.durationRemainingSec - this.sample.fadeOutSec) * 1000
+  }
+
+  get durationRemainingSec (): number {
+    return this.durationSec - this.currentTimeSec
   }
 
   /**
@@ -264,20 +293,21 @@ class Playable {
    */
   private scheduleFadeOut (): void {
     this.timeOut.set(() => {
-      this.fadeOut(this.fadeOutSec).then(
+      this.fadeOut(this.sample.fadeOutSec).then(
         () => {},
         () => {}
       )
     }, this.fadeOutStartTimeMsec)
   }
 
-  async fadeOut (duration?: number): Promise<void> {
-    let durationSafe: number
-    if (duration == null) {
-      durationSafe = defaultFadeOutSec
+  async fadeOut (fadeOutduration?: number): Promise<void> {
+    let fadeOutSec: number
+    if (fadeOutduration == null) {
+      fadeOutSec = this.sample.fadeOutSec
     } else {
-      durationSafe = duration
+      fadeOutSec = fadeOutduration
     }
+
     return await new Promise((resolve, reject) => {
       if (this.htmlElement.paused) resolve(undefined)
       // Fade out can triggered when a fade out process is started and
@@ -291,7 +321,7 @@ class Playable {
       const steps = actualVolume / 100
       // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
-      const stepInterval = durationSafe * 10
+      const stepInterval = fadeOutSec * 10
       this.interval.set(() => {
         actualVolume -= steps
         if (actualVolume >= 0) {
@@ -314,7 +344,7 @@ class Playable {
       return
     }
     await this.fadeOut(fadeOutSec)
-    this.htmlElement.currentTime = this.startTimeSec
+    this.htmlElement.currentTime = this.sample.startTimeSec
     this.timeOut.clear()
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.load()
@@ -325,11 +355,11 @@ class Playable {
   async pause (): Promise<void> {
     await this.fadeOut()
     this.timeOut.clear()
-    if (this.asset.mimeType === 'video') {
+    if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = '0'
     }
-    this.htmlElementCurrentTimeSec = this.htmlElement.currentTime
-    this.htmlElementCurrentVolume = this.htmlElement.volume
+    this.currentTimeSec = this.htmlElement.currentTime
+    this.currentVolume = this.htmlElement.volume
   }
 
   toggle (targetVolume: number = 1): void {
@@ -367,7 +397,7 @@ class Playable {
       }
     }
     this.timeOut.clear()
-    this.htmlElement.currentTime = this.startTimeSec + newPlayPosition
+    this.htmlElement.currentTime = this.sample.startTimeSec + newPlayPosition
     this.scheduleFadeOut()
   }
 
@@ -380,7 +410,7 @@ class Playable {
   }
 }
 
-class HtmlElementCache extends Cache<HTMLElement> {}
+class HtmlElementCache extends Cache<HTMLMediaElement> {}
 
 class PlayableCache extends Cache<Playable> {}
 
@@ -425,36 +455,22 @@ export class PlayerCache {
 class Player {
   playing?: Playable
   loaded?: Playable
+  events: CustomEventsManager
+  cache: PlayerCache
   /**
    * Global volume: from 0 - 1
    */
   globalVolume: number = 1
-  constructor () {
-    this.globalVolume = 1
-
-    /**
-     * @type {module:@bldr/media-client~CustomEvents}
-     */
-    this.events = new CustomEvents()
+  constructor (resolver: Resolver) {
+    this.events = new CustomEventsManager()
+    this.cache = new PlayerCache(resolver)
   }
 
   /**
    * Load a sample. Only loaded samples can be played.
-   *
-   * @param uriOrSample
    */
-  load (uriOrSample) {
-    let sample
-    if (typeof uriOrSample === 'object') {
-      sample = uriOrSample
-    } else {
-      let uri = uriOrSample
-      if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-      sample = store.getters['media/sampleByUri'](uri)
-    }
-    if (!sample)
-      throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
-    this.sampleLoaded = sample
+  load (uri: string) {
+    this.loaded = this.cache.getPlayable(uri)
   }
 
   /**
@@ -465,7 +481,7 @@ class Player {
     if (this.loaded == null) {
       throw new Error('First load a sample')
     }
-    this.events.trigger('start', loaded)
+    this.events.trigger('fadeinbegin', this.loaded)
     if (this.playing != null) {
       await this.playing.stop()
     }

@@ -267,6 +267,8 @@ class Resolver {
      *   returned
      *
      * @returns A sample or undefined.
+     *
+     * @throws Error
      */
     getSample(uri) {
         const mediaUri = new client_media_models_1.MediaUri(uri);

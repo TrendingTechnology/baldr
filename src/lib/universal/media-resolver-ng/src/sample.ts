@@ -15,7 +15,7 @@ export class SampleData implements Sample {
   /**
    * @inheritdoc
    */
-  asset: Asset
+  public asset: Asset
 
   /**
    * @inheritdoc
@@ -25,27 +25,27 @@ export class SampleData implements Sample {
   /**
    * @inheritdoc
    */
-  startTimeSec: number = 0
-
-  /**
-   * Use the getter function `sample.fadeInSec`
-   */
-  private readonly fadeInSec_?: number
-
-  /**
-   * Use the getter function `sample.fadeOutSec`
-   */
-  private readonly fadeOutSec_?: number
+  public shortcut?: string
 
   /**
    * @inheritdoc
    */
-  shortcut?: string
+  public durationSec?: number
 
   /**
    * @inheritdoc
    */
-  durationSec?: number
+  public startTimeSec: number = 0
+
+  /**
+   * @inheritdoc
+   */
+  public readonly fadeInSec: number
+
+  /**
+   * @inheritdoc
+   */
+  public readonly fadeOutSec: number
 
   constructor (asset: Asset, yaml: SampleYamlFormat) {
     this.asset = asset
@@ -74,11 +74,15 @@ export class SampleData implements Sample {
     }
 
     if (this.yaml.fadeIn != null) {
-      this.fadeInSec_ = this.convertToSeconds(this.yaml.fadeIn)
+      this.fadeInSec = this.convertToSeconds(this.yaml.fadeIn)
+    } else {
+      this.fadeInSec = defaultFadeInSec
     }
 
     if (this.yaml.fadeOut != null) {
-      this.fadeOutSec_ = this.convertToSeconds(this.yaml.fadeOut)
+      this.fadeOutSec = this.convertToSeconds(this.yaml.fadeOut)
+    } else {
+      this.fadeOutSec = defaultFadeOutSec
     }
 
     this.shortcut = this.yaml.shortcut
@@ -152,28 +156,6 @@ export class SampleData implements Sample {
       return this.asset.yaml.creationDate
     } else if (this.asset.yaml.year != null) {
       return this.asset.yaml.year
-    }
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public get fadeInSec (): number {
-    if (this.fadeInSec_ == null) {
-      return defaultFadeInSec
-    } else {
-      return this.fadeInSec_
-    }
-  }
-
-  /**
-   * @inheritdoc
-   */
-  get fadeOutSec (): number {
-    if (this.fadeOutSec_ == null) {
-      return defaultFadeOutSec
-    } else {
-      return this.fadeOutSec_
     }
   }
 }

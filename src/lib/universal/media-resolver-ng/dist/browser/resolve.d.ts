@@ -89,6 +89,8 @@ export declare class Resolver {
      *   returned
      *
      * @returns A sample or undefined.
+     *
+     * @throws Error
      */
     getSample(uri: string): Sample;
     /**

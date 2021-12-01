@@ -35,10 +35,16 @@ class SampleData {
                 this.convertToSeconds(this.yaml.endTime) - this.startTimeSec;
         }
         if (this.yaml.fadeIn != null) {
-            this.fadeInSec_ = this.convertToSeconds(this.yaml.fadeIn);
+            this.fadeInSec = this.convertToSeconds(this.yaml.fadeIn);
+        }
+        else {
+            this.fadeInSec = defaultFadeInSec;
         }
         if (this.yaml.fadeOut != null) {
-            this.fadeOutSec_ = this.convertToSeconds(this.yaml.fadeOut);
+            this.fadeOutSec = this.convertToSeconds(this.yaml.fadeOut);
+        }
+        else {
+            this.fadeOutSec = defaultFadeOutSec;
         }
         this.shortcut = this.yaml.shortcut;
     }
@@ -109,28 +115,6 @@ class SampleData {
         }
         else if (this.asset.yaml.year != null) {
             return this.asset.yaml.year;
-        }
-    }
-    /**
-     * @inheritdoc
-     */
-    get fadeInSec() {
-        if (this.fadeInSec_ == null) {
-            return defaultFadeInSec;
-        }
-        else {
-            return this.fadeInSec_;
-        }
-    }
-    /**
-     * @inheritdoc
-     */
-    get fadeOutSec() {
-        if (this.fadeOutSec_ == null) {
-            return defaultFadeOutSec;
-        }
-        else {
-            return this.fadeOutSec_;
         }
     }
 }

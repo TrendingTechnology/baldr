@@ -11,23 +11,23 @@ export declare class SampleData implements Sample {
     /**
      * @inheritdoc
      */
-    startTimeSec: number;
-    /**
-     * Use the getter function `sample.fadeInSec`
-     */
-    private readonly fadeInSec_?;
-    /**
-     * Use the getter function `sample.fadeOutSec`
-     */
-    private readonly fadeOutSec_?;
-    /**
-     * @inheritdoc
-     */
     shortcut?: string;
     /**
      * @inheritdoc
      */
     durationSec?: number;
+    /**
+     * @inheritdoc
+     */
+    startTimeSec: number;
+    /**
+     * @inheritdoc
+     */
+    readonly fadeInSec: number;
+    /**
+     * @inheritdoc
+     */
+    readonly fadeOutSec: number;
     constructor(asset: Asset, yaml: SampleYamlFormat);
     /**
      * Convert strings to numbers, so we can use them as seconds.
@@ -53,12 +53,4 @@ export declare class SampleData implements Sample {
      * @inheritdoc
      */
     get yearSafe(): string | undefined;
-    /**
-     * @inheritdoc
-     */
-    get fadeInSec(): number;
-    /**
-     * @inheritdoc
-     */
-    get fadeOutSec(): number;
 }
