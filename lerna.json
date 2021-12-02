@@ -8,7 +8,7 @@
     "src/cli",
     "src/masters/*",
     "src/vue/apps/*",
-    "src/vue/components/*"
+    "src/vue/plugins/*"
   ],
   "version": "independent",
   "command": {
