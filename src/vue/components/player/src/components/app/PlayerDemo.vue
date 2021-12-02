@@ -30,7 +30,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import { player, resolver } from '../../app'
 
 @Component
-export default class AudioDemonstration extends Vue {
+export default class PlayerDemo extends Vue {
   get player () {
     return player
   }

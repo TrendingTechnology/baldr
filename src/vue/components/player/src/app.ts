@@ -5,7 +5,8 @@ import { Resolver } from '@bldr/media-resolver-ng'
 
 import App from '@/components/app/App.vue'
 import Home from '@/components/app/Home.vue'
-import AudioDemonstration from '@/components/app/AudioDemonstration.vue'
+import PlayerDemo from '@/components/app/PlayerDemo.vue'
+import PlayableDemo from '@/components/app/PlayableDemo.vue'
 import VideoDemonstration from '@/components/app/VideoDemonstration.vue'
 
 import { Player } from './main'
@@ -20,8 +21,12 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
-    path: '/audio',
-    component: AudioDemonstration
+    path: '/player',
+    component: PlayerDemo
+  },
+  {
+    path: '/playable',
+    component: PlayableDemo
   },
   {
     path: '/Video',

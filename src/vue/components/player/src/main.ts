@@ -1,5 +1,3 @@
-// import { CustomEventsManager } from './events'
-// import { Interval, TimeOut } from './timer'
 import { Sample, Cache, Resolver } from '@bldr/media-resolver-ng'
 
 type EventCallbackFunction = (...args: any) => {}
@@ -142,7 +140,7 @@ export type PlaybackState =
 
 type JumpDirection = 'forward' | 'backward'
 
-class Playable {
+export class Playable {
   sample: Sample
   htmlElement: HTMLMediaElement
 
@@ -197,7 +195,7 @@ class Playable {
     }
   }
 
-  async fadeIn (
+  private async fadeIn (
     targetVolume: number = 1,
     fadeInDuration?: number
   ): Promise<void> {
@@ -238,12 +236,12 @@ class Playable {
     })
   }
 
-  start (targetVolume: number): void {
+  public start (targetVolume: number): void {
     this.playbackState = 'started'
     this.play(targetVolume, this.sample.startTimeSec)
   }
 
-  play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
+  private play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
     if (fadeInSec == null) {
       fadeInSec = this.sample.fadeInSec
     }
@@ -260,7 +258,7 @@ class Playable {
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     this.timeOut.set(() => {
-      this.fadeIn(targetVolume, this.sample.fadeInSec).then(
+      this.fadeIn(targetVolume, fadeInSec).then(
         () => {},
         () => {}
       )
@@ -275,7 +273,7 @@ class Playable {
     return (this.durationRemainingSec - this.sample.fadeOutSec) * 1000
   }
 
-  get durationRemainingSec (): number {
+  private get durationRemainingSec (): number {
     return this.durationSec - this.currentTimeSec
   }
 
@@ -293,7 +291,7 @@ class Playable {
     }, this.fadeOutStartTimeMsec)
   }
 
-  async fadeOut (fadeOutduration?: number): Promise<void> {
+  private async fadeOut (fadeOutduration?: number): Promise<void> {
     let fadeOutSec: number
     if (fadeOutduration == null) {
       fadeOutSec = this.sample.fadeOutSec
@@ -332,7 +330,7 @@ class Playable {
     })
   }
 
-  async stop (fadeOutSec?: number): Promise<void> {
+  public async stop (fadeOutSec?: number): Promise<void> {
     if (this.htmlElement.paused) {
       return
     }
@@ -345,7 +343,7 @@ class Playable {
     }
   }
 
-  async pause (): Promise<void> {
+  public async pause (): Promise<void> {
     await this.fadeOut()
     this.timeOut.clear()
     if (this.sample.asset.mimeType === 'video') {
@@ -355,7 +353,7 @@ class Playable {
     this.currentVolume = this.htmlElement.volume
   }
 
-  toggle (targetVolume: number = 1): void {
+  public toggle (targetVolume: number = 1): void {
     if (this.htmlElement.paused) {
       this.play(targetVolume)
     } else {
@@ -393,11 +391,11 @@ class Playable {
     this.scheduleFadeOut()
   }
 
-  forward (interval: number = 10): void {
+  public forward (interval: number = 10): void {
     this.jump(interval, 'forward')
   }
 
-  backward (interval: number = 10): void {
+  public backward (interval: number = 10): void {
     this.jump(interval, 'backward')
   }
 }
@@ -445,10 +443,10 @@ class PlayerCache {
  * played a the same time.
  */
 export class Player {
-  playing?: Playable
-  loaded?: Playable
-  events: CustomEventsManager
-  cache: PlayerCache
+  private playing?: Playable
+  private loaded?: Playable
+  private events: CustomEventsManager
+  private cache: PlayerCache
 
   /**
    * Global volume: from 0 - 1
@@ -460,10 +458,14 @@ export class Player {
     this.cache = new PlayerCache(resolver)
   }
 
+  public getPlayable(uri: string): Playable {
+    return this.cache.getPlayable(uri)
+  }
+
   /**
    * Load a sample. Only loaded samples can be played.
    */
-  load (uri: string) {
+  public load (uri: string) {
     this.loaded = this.cache.getPlayable(uri)
   }
 
@@ -471,7 +473,7 @@ export class Player {
    * Play a loaded sample from the position `sample.startTimeSec` on. Stop the
    * currently playing sample.
    */
-  async start (uri?: string) {
+  public async start (uri?: string) {
     if (uri != null) {
       this.load(uri)
     }
@@ -492,7 +494,7 @@ export class Player {
    *
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
-  async stop (fadeOutSec: number) {
+  public async stop (fadeOutSec: number) {
     if (this.playing == null) {
       return
     }
@@ -503,7 +505,7 @@ export class Player {
   /**
    * Pause a sample at the current position.
    */
-  async pause () {
+  public async pause () {
     if (this.playing != null) {
       await this.playing.pause()
     }
@@ -514,7 +516,7 @@ export class Player {
    *
    * @param interval - Time interval in seconds.
    */
-  forward (interval: number = 10): void {
+  public forward (interval: number = 10): void {
     if (this.playing != null) {
       this.playing.forward(interval)
     }
@@ -525,7 +527,7 @@ export class Player {
    *
    * @param interval - Time interval in seconds.
    */
-  backward (interval: number = 10) {
+  public backward (interval: number = 10) {
     if (this.playing != null) {
       this.playing.backward(interval)
     }
@@ -535,7 +537,7 @@ export class Player {
    * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
    * start this sample.
    */
-  toggle () {
+  public toggle () {
     if (this.playing != null) {
       this.playing.toggle(this.globalVolume)
     }
