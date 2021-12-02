@@ -53,7 +53,7 @@ export class CustomEventsManager {
 
 class Timer {
   /**
-   * An array of `setTimeout` IDs.
+   * An array of `setTimeout` or `setInterval` IDs.
    */
   protected ids: number[]
 
@@ -67,7 +67,7 @@ class Timer {
  * duration - stopped to early - cases that the next playback gets stopped
  * to early.
  */
-export class TimeOut extends Timer {
+export class TimeOutExecutor extends Timer {
   set (func: () => void, delay: number): void {
     this.ids.push(setTimeout(func, delay))
   }
@@ -83,7 +83,7 @@ export class TimeOut extends Timer {
  * Wrapper class around the function `setInterval` to store the `id`s returned
  * by the function to be able to clear the function.
  */
-export class Interval extends Timer {
+export class IntervalExecutor extends Timer {
   /**
    * Repeatedly call a function.
    *
@@ -148,9 +148,9 @@ export class Playable {
 
   public lastPositionSec?: number
 
-  private readonly interval = new Interval()
+  private readonly intervalExecutor = new IntervalExecutor()
 
-  private readonly timeOut = new TimeOut()
+  private readonly timeOutExecutor = new TimeOutExecutor()
 
   private readonly events = new CustomEventsManager()
 
@@ -208,7 +208,7 @@ export class Playable {
     return await new Promise((resolve, reject) => {
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
-      this.interval.clear()
+      this.intervalExecutor.clear()
       this.events.trigger('fadeinbegin')
       this.playbackState = 'fadein'
       let actualVolume = 0
@@ -222,12 +222,12 @@ export class Playable {
       // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
       const stepInterval = fadeInSec * 10
-      this.interval.set(() => {
+      this.intervalExecutor.set(() => {
         actualVolume += steps
         if (actualVolume <= targetVolume) {
           this.volume = actualVolume
         } else {
-          this.interval.clear()
+          this.intervalExecutor.clear()
           this.events.trigger('fadeinend')
           this.playbackState = 'playing'
           resolve()
@@ -257,7 +257,7 @@ export class Playable {
 
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
-    this.timeOut.set(() => {
+    this.timeOutExecutor.set(() => {
       this.fadeIn(targetVolume, fadeInSec).then(
         () => {},
         () => {}
@@ -283,7 +283,7 @@ export class Playable {
    * fade out.
    */
   private scheduleFadeOut (): void {
-    this.timeOut.set(() => {
+    this.timeOutExecutor.set(() => {
       this.fadeOut(this.sample.fadeOutSec).then(
         () => {},
         () => {}
@@ -303,7 +303,7 @@ export class Playable {
       if (this.htmlElement.paused) resolve(undefined)
       // Fade out can triggered when a fade out process is started and
       // not yet finished.
-      this.interval.clear()
+      this.intervalExecutor.clear()
       this.events.trigger('fadeoutbegin')
       this.playbackState = 'fadeout'
       // Number from 0 - 1
@@ -313,7 +313,7 @@ export class Playable {
       // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
       const stepInterval = fadeOutSec * 10
-      this.interval.set(() => {
+      this.intervalExecutor.set(() => {
         actualVolume -= steps
         if (actualVolume >= 0) {
           this.volume = actualVolume
@@ -321,7 +321,7 @@ export class Playable {
           // The video opacity must be set to zero.
           this.volume = 0
           if (this.htmlElement != null) this.htmlElement.pause()
-          this.interval.clear()
+          this.intervalExecutor.clear()
           this.events.trigger('fadeoutend')
           this.playbackState = 'stopped'
           resolve()
@@ -336,7 +336,7 @@ export class Playable {
     }
     await this.fadeOut(fadeOutSec)
     this.htmlElement.currentTime = this.sample.startTimeSec
-    this.timeOut.clear()
+    this.timeOutExecutor.clear()
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.load()
       this.htmlElement.style.opacity = '1'
@@ -345,7 +345,7 @@ export class Playable {
 
   public async pause (): Promise<void> {
     await this.fadeOut()
-    this.timeOut.clear()
+    this.timeOutExecutor.clear()
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = '0'
     }
@@ -386,7 +386,7 @@ export class Playable {
         newPlayPosition = this.durationSec
       }
     }
-    this.timeOut.clear()
+    this.timeOutExecutor.clear()
     this.htmlElement.currentTime = this.sample.startTimeSec + newPlayPosition
     this.scheduleFadeOut()
   }
