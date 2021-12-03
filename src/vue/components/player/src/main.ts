@@ -152,7 +152,7 @@ export class Playable {
 
   private readonly timeOut = new TimeOut()
 
-  private readonly events = new CustomEventsManager()
+  public readonly events = new CustomEventsManager()
 
   playbackState?: PlaybackState
 
@@ -445,7 +445,7 @@ class PlayerCache {
 export class Player {
   private playing?: Playable
   private loaded?: Playable
-  private events: CustomEventsManager
+  public events: CustomEventsManager
   private cache: PlayerCache
 
   /**
