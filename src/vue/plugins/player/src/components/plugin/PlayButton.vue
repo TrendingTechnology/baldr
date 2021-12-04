@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { MaterialIcon } from '@bldr/icons'
+import { PlainIcon } from '@bldr/icons'
 import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
 import { player } from '../../app'
 import { Playable } from '../../main'
@@ -57,7 +57,7 @@ const circumference = Math.PI * 2 * circleRadius
     }
   },
   components: {
-    MaterialIcon
+    PlainIcon
   }
 })
 export default class PlayButton extends Vue {
@@ -88,7 +88,10 @@ export default class PlayButton extends Vue {
     return this.playable.sample.titleSafe
   }
 
-  registerEvents () {
+  registerEvents (): void {
+    if (this.playable == null) {
+      return
+    }
     this.htmlElement = this.playable.htmlElement
     // Mount a playing media element.
     if (!this.htmlElement.paused) {
