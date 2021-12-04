@@ -1,12 +1,11 @@
 <script lang="ts">
-import VueComponent from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop } from '@bldr/vue-packages-bundler'
 
 import { validateColorName } from '../../plugin.js'
 import PlainIcon from './PlainIcon.vue'
 
 @Component
-export default class ColorIcon extends PlainIcon implements VueComponent {
+export default class ColorIcon extends PlainIcon {
   @Prop({
     type: String,
     default: 'black',

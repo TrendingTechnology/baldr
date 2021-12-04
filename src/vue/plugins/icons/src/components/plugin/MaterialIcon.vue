@@ -1,6 +1,5 @@
 <script lang="ts">
-import { CreateElement, VNode, VNodeData } from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { CreateElement, VNode, VNodeData, Component, Prop } from '@bldr/vue-packages-bundler'
 
 import ColorIcon from './ColorIcon.vue'
 

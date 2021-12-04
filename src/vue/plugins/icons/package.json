@@ -55,10 +55,7 @@
   "dependencies": {
     "@bldr/themes": "*",
     "core-js": "3.7.0",
-    "vue": "2.6.11",
-    "vue-class-component": "7.2.3",
-    "vue-property-decorator": "9.1.2",
-    "vue-router": "3.2.0"
+    "@bldr/vue-packages-bundler": "*"
   },
   "devDependencies": {
     "@types/chai": "4.2.11",

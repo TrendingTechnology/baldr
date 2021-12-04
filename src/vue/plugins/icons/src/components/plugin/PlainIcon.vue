@@ -1,6 +1,6 @@
 <script lang="ts">
-import { CreateElement, VNode } from 'vue'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { CreateElement, VNode, Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+
 import { state } from '../../plugin.js'
 
 import icons from '../../icons.json'

@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { Vue, VueRouter, RouteConfig } from '@bldr/vue-packages-bundler'
 
 import App from '@/components/app/App.vue'
 import Home from '@/components/app/Home.vue'

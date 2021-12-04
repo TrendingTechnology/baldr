@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
+import { Component } from '@bldr/vue-packages-bundler'
 
 import PlainIcon from './PlainIcon.vue'
 
