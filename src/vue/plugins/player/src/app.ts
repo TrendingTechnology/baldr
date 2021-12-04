@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { Vue, VueRouter, RouteConfig } from '@bldr/vue-packages-bundler'
 
 import { Resolver } from '@bldr/media-resolver-ng'
 

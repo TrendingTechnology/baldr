@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { MaterialIcon } from '@bldr/icons'
-import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
+import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
 import { player } from '../../app'
 import { Playable } from '../../main'
 
