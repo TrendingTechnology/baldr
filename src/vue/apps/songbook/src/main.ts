@@ -3,7 +3,7 @@
  *
  * @module @bldr/songbook
  */
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 import router from './router'
 import store from './store'
 

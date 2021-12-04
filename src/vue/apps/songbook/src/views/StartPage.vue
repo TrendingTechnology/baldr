@@ -26,8 +26,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, mapGetters } from '@bldr/vue-packages-bundler'
 
 import {
   CoreLibrary,

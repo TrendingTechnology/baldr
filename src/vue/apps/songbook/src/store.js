@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { Vue, Vuex } from '@bldr/vue-packages-bundler'
 import {
   AlphabeticalSongsTree,
   CoreLibrary,

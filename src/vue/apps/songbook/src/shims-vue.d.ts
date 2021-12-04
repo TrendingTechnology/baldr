@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 declare class DynamicSelect {
   /**
@@ -101,7 +101,6 @@ interface ShortcutsManager {
 
 interface MediaResolver {
   resolve(uri: string)
-
 }
 
 declare module 'vue/types/vue' {

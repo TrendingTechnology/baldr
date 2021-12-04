@@ -59,9 +59,14 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
-import { Route, NavigationGuardNext } from 'vue-router'
-import { Vue, Component } from 'vue-property-decorator'
+import {
+  Vue,
+  Component,
+  Route,
+  NavigationGuardNext,
+  mapGetters,
+  mapActions
+} from '@bldr/vue-packages-bundler'
 
 import { CoreLibrary, Song } from '@bldr/songbook-core'
 

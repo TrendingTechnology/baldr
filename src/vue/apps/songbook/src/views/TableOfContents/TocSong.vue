@@ -20,8 +20,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, mapGetters } from '@bldr/vue-packages-bundler'
 
 import { Song } from '@bldr/songbook-core'
 
