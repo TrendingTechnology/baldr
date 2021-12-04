@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>As a link</h2>
+    <h1>As a link</h1>
     <material-icon
       href="https://de.wikipedia.org/wiki/Cloud_Computing"
       name="cloud"

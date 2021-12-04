@@ -1,6 +1,6 @@
 <template>
   <div class="vc_vanish_demonstration">
-    <h2>VanishIcon</h2>
+    <h1>VanishIcon</h1>
     <vanish-icon name="baldr" />
 
     <span v-for="icon in iconNames" :key="icon" :name="icon">
