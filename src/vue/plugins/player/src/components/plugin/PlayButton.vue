@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { MaterialIcon } from '@bldr/icons'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
 import { player } from '../../app'
 import { Playable } from '../../main'
 
@@ -52,7 +52,7 @@ const circumference = Math.PI * 2 * circleRadius
 
 @Component({
   props: {
-    sample: {
+    playable: {
       type: Object
     }
   },
@@ -61,17 +61,21 @@ const circumference = Math.PI * 2 * circleRadius
   }
 })
 export default class PlayButton extends Vue {
-  status: 'starting' | 'fadein' | 'playing' | 'fadeout' | 'stopped' | 'stoppable'
-  playable: Playable
-  htmlElement: HTMLMediaElement
+  @Prop()
+  playable!: Playable
+
+  status:
+    | 'starting'
+    | 'fadein'
+    | 'playing'
+    | 'fadeout'
+    | 'stopped'
+    | 'stoppable' = 'stopped'
+
+  htmlElement!: HTMLMediaElement
+
   data () {
     return {
-      // starting
-      // fadein
-      // playing
-      // fadeout
-      // stopped
-      // stoppable
       status: 'stopped',
       htmlElement: null
     }
@@ -93,11 +97,10 @@ export default class PlayButton extends Vue {
       this.status = 'stopped'
     }
 
-    player.events.on('start', loadedSample => {
-      // TODO use only ref
+    player.events.on('fadeinbegin', (loadedPlayable: Playable) => {
       if (
-        (loadedSample.uri != null && loadedSample.uri === this.playable.sample.uri) ||
-        (loadedSample.ref != null && loadedSample.ref === this.playable.ref)
+        loadedPlayable.sample.ref != null &&
+        loadedPlayable.sample.ref === this.playable.sample.ref
       ) {
         this.status = 'starting'
       }
@@ -149,20 +152,23 @@ export default class PlayButton extends Vue {
    * Set the progress on the first visible circle.
    * Updates the stroke dash offset of the first visible circle
    *
-   * @param {Number} progress - From 0 to 1.
+   * @param progress - From 0 to 1.
    */
   setProgress (progress = 0.5) {
-    this.$refs.progress.style.strokeDashoffset = -(circumference * progress)
+    const htmlElement = this.$refs.progress as HTMLElement
+    htmlElement.style.strokeDashoffset = `${-(circumference * progress)}`
   }
+
   actByStatus () {
     if (!this.htmlElement.paused) {
-      this.$media.player.stop()
+      player.stop()
     } else if (this.status === 'stopped') {
       this.start()
     }
   }
 
-  sample () {
+  @Watch('playable')
+  onPlayableChange () {
     this.registerEvents()
   }
 

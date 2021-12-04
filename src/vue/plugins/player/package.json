@@ -14,12 +14,14 @@
   "dependencies": {
     "@bldr/icons": "*",
     "@bldr/media-resolver-ng": "*",
+    "@bldr/themes": "*",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
+    "@bldr/config": "*",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.4",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
@@ -32,11 +34,15 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^1.0.3",
     "chai": "^4.1.2",
-    "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "eslint": "^6.7.2",
+    "node-sass": "5.0.0",
+    "sass-loader": "10.1.0",
+    "sass": "1.29.0",
+    "style-resources-loader": "1.4.1",
     "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.11",
-    "@bldr/config": "*"
+    "vue-cli-plugin-style-resources-loader": "0.1.4",
+    "vue-template-compiler": "^2.6.11"
   },
   "main": "dist/src/install",
   "browser": "dist/src/install",

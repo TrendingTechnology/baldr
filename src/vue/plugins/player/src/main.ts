@@ -1,6 +1,6 @@
 import { Sample, Cache, Resolver } from '@bldr/media-resolver-ng'
 
-type EventCallbackFunction = (...args: any) => {}
+type EventCallbackFunction = (...args: any) => any
 
 type EventName = 'fadeinbegin' | 'fadeinend' | 'fadeoutbegin' | 'fadeoutend'
 
@@ -494,7 +494,7 @@ export class Player {
    *
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
-  public async stop (fadeOutSec: number) {
+  public async stop (fadeOutSec?: number) {
     if (this.playing == null) {
       return
     }
