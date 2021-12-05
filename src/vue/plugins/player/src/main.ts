@@ -131,13 +131,11 @@ function createHtmlElement (
 /**
  * The state of the current playback.
  */
-export type PlaybackState =
-  | 'fadein'
-  | 'playing'
-  | 'fadeout'
-  | 'stopped'
+export type PlaybackState = 'fadein' | 'playing' | 'fadeout' | 'stopped'
 
 type JumpDirection = 'forward' | 'backward'
+
+type PlaybackChangeCallback = (state: PlaybackState) => void
 
 export class Playable {
   sample: Sample
@@ -153,6 +151,10 @@ export class Playable {
 
   public readonly events = new CustomEventsManager()
 
+  private playbackState_: PlaybackState = 'stopped'
+
+  private playbackChangeListener: PlaybackChangeCallback[] = []
+
   /**
    * The playback states of a playable are:
    *
@@ -161,7 +163,20 @@ export class Playable {
    * - `fadeout`: during the fade out process.
    * - `stopped`: The playable is not played after the fade out process finishes.
    */
-  public playbackState: PlaybackState = 'stopped'
+  get playbackState (): PlaybackState {
+    return this.playbackState_
+  }
+
+  set playbackState (value: PlaybackState) {
+    this.playbackState_ = value
+    for (const listener of this.playbackChangeListener) {
+      listener(value)
+    }
+  }
+
+  public registerPlaybackChangeListener (callback: PlaybackChangeCallback): void {
+    this.playbackChangeListener.push(callback)
+  }
 
   constructor (sample: Sample, htmlElement: HTMLMediaElement) {
     this.sample = sample
@@ -238,6 +253,7 @@ export class Playable {
         } else {
           this.intervalExecutor.clear()
           this.events.trigger('fadeinend')
+          this.volume = targetVolume
           this.playbackState = 'playing'
           resolve()
         }

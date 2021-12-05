@@ -37,6 +37,14 @@ export default class PlayableDemo extends Vue {
     const uri = 'uuid:70028b77-b817-46e2-b6fa-fe3c6383d748'
     await resolver.resolve(uri)
     this.playable = player.getPlayable(uri)
+
+    this.playable.registerPlaybackChangeListener(state => {
+      if (this.playable == null) {
+        return
+      }
+      const playbackState = this.$refs.playbackState as HTMLElement
+      playbackState.textContent = state
+    })
     setInterval(() => {
       if (this.playable != null) {
         const volumeElement = this.$refs.volume as HTMLElement
@@ -44,9 +52,6 @@ export default class PlayableDemo extends Vue {
 
         const currentTimeElement = this.$refs.currentTime as HTMLElement
         currentTimeElement.textContent = this.playable.currentTimeSec.toString()
-
-        const playbackState = this.$refs.playbackState as HTMLElement
-        playbackState.textContent = this.playable.playbackState
       }
     }, 10)
   }
