@@ -15,8 +15,9 @@
     <button @click="playable.toggle()">toggle()</button>
     <button @click="playable.pause()">pause()</button>
 
-    <p ref="volume">Volume</p>
-    <p ref="currentTime">CurrentTime</p>
+    <p ref="volume">volume</p>
+    <p ref="currentTime">currentTime</p>
+    <p ref="playbackState">playbackState</p>
   </div>
 </template>
 
@@ -43,6 +44,9 @@ export default class PlayableDemo extends Vue {
 
         const currentTimeElement = this.$refs.currentTime as HTMLElement
         currentTimeElement.textContent = this.playable.currentTimeSec.toString()
+
+        const playbackState = this.$refs.playbackState as HTMLElement
+        playbackState.textContent = this.playable.playbackState
       }
     }, 10)
   }

@@ -132,7 +132,6 @@ function createHtmlElement (
  * The state of the current playback.
  */
 export type PlaybackState =
-  | 'started'
   | 'fadein'
   | 'playing'
   | 'fadeout'
@@ -154,7 +153,15 @@ export class Playable {
 
   public readonly events = new CustomEventsManager()
 
-  playbackState?: PlaybackState
+  /**
+   * The playback states of a playable are:
+   *
+   * - `fadein`: during the fade in process.
+   * - `playing`: The playable is being played at the target volume.
+   * - `fadeout`: during the fade out process.
+   * - `stopped`: The playable is not played after the fade out process finishes.
+   */
+  public playbackState: PlaybackState = 'stopped'
 
   constructor (sample: Sample, htmlElement: HTMLMediaElement) {
     this.sample = sample
@@ -173,10 +180,12 @@ export class Playable {
     }
   }
 
+  /**
+   * for example:
+   * current time: 6s duration: 60s
+   * 6 / 60 = 0.1
+   */
   get progress (): number {
-    // for example:
-    // current time: 6s duration: 60s
-    // 6 / 60 = 0.1
     return this.currentTimeSec / this.durationSec
   }
 
@@ -219,7 +228,7 @@ export class Playable {
       )
       // Normally 0.01 by volume = 1
       const steps = targetVolume / 100
-      // Interval: every X ms reduce volume by step
+      // Interval: every X ms increase volume by step
       // in milliseconds: duration * 1000 / 100
       const stepInterval = fadeInSec * 10
       this.intervalExecutor.set(() => {
@@ -237,11 +246,14 @@ export class Playable {
   }
 
   public start (targetVolume: number): void {
-    this.playbackState = 'started'
     this.play(targetVolume, this.sample.startTimeSec)
   }
 
-  private play (targetVolume: number, startTimeSec?: number, fadeInSec?: number): void {
+  private play (
+    targetVolume: number,
+    startTimeSec?: number,
+    fadeInSec?: number
+  ): void {
     if (fadeInSec == null) {
       fadeInSec = this.sample.fadeInSec
     }
@@ -291,16 +303,18 @@ export class Playable {
     }, this.fadeOutStartTimeMsec)
   }
 
-  private async fadeOut (fadeOutduration?: number): Promise<void> {
+  private async fadeOut (fadeOutDuration?: number): Promise<void> {
     let fadeOutSec: number
-    if (fadeOutduration == null) {
+    if (fadeOutDuration == null) {
       fadeOutSec = this.sample.fadeOutSec
     } else {
-      fadeOutSec = fadeOutduration
+      fadeOutSec = fadeOutDuration
     }
 
     return await new Promise((resolve, reject) => {
-      if (this.htmlElement.paused) resolve(undefined)
+      if (this.htmlElement.paused) {
+        resolve(undefined)
+      }
       // Fade out can triggered when a fade out process is started and
       // not yet finished.
       this.intervalExecutor.clear()
@@ -320,7 +334,9 @@ export class Playable {
         } else {
           // The video opacity must be set to zero.
           this.volume = 0
-          if (this.htmlElement != null) this.htmlElement.pause()
+          if (this.htmlElement != null) {
+            this.htmlElement.pause()
+          }
           this.intervalExecutor.clear()
           this.events.trigger('fadeoutend')
           this.playbackState = 'stopped'
@@ -458,7 +474,7 @@ export class Player {
     this.cache = new PlayerCache(resolver)
   }
 
-  public getPlayable(uri: string): Playable {
+  public getPlayable (uri: string): Playable {
     return this.cache.getPlayable(uri)
   }
 
