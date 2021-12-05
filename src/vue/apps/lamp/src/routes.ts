@@ -4,8 +4,7 @@
  * @module @bldr/lamp/routes
  */
 
-import Router, { RouteConfig } from 'vue-router'
-import Vue from 'vue'
+import { VueRouter, RouteConfig, Vue } from '@bldr/vue-packages-bundler'
 import { installDocumentTitleUpdater } from '@/routing.js'
 
 // Components.
@@ -25,7 +24,7 @@ import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TitlesTreePage from '@/components/linked-by-routes/TitlesTreePage/index.vue'
 import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
 const routes: RouteConfig[] = [
   {
@@ -154,7 +153,7 @@ const routes: RouteConfig[] = [
   }
 ]
 
-export const router = new Router({
+export const router = new VueRouter({
   routes
 })
 

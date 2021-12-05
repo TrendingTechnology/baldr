@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 import SlidePreview from '@/components/reusable/SlidesPreview/SlidePreview.vue'
 const { mapGetters } = createNamespacedHelpers('lamp/preview')
 const storePreview = createNamespacedHelpers('lamp/preview')

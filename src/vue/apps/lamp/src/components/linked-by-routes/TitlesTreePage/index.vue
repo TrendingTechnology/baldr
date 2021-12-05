@@ -16,16 +16,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-
 import { TitlesTypes } from '@bldr/type-definitions'
-import { Route, NavigationGuardNext } from 'vue-router'
+import {
+  Component,
+  Vue,
+  Route,
+  NavigationGuardNext,
+  createNamespacedHelpers
+} from '@bldr/vue-packages-bundler'
 
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
 
-import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp/titles')
 
 export function toRef (folderName: string): string {

@@ -44,7 +44,7 @@ import ListLayout from './ListLayout.vue'
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
 
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapGetters } = createNamespacedHelpers('lamp')
 const storePreview = createNamespacedHelpers('lamp/preview')
 const mapActionsPreview = storePreview.mapActions

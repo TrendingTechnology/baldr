@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 import actions from '@/actions.js'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 

@@ -10,7 +10,7 @@
 
 <script>
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 const CHARACTERS_ON_SLIDE = 400

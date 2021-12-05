@@ -26,9 +26,13 @@
 
 <script lang="ts">
 import { TitlesTypes, LampTypes } from '@bldr/type-definitions'
+import {
+  Vue,
+  Component,
+  Prop,
+  createNamespacedHelpers
+} from '@bldr/vue-packages-bundler'
 
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 interface ClassAttributeCollection {

@@ -106,8 +106,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masterCollection } from '@bldr/lamp-core'
 

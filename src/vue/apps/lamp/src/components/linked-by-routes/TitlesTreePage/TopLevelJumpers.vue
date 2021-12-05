@@ -10,11 +10,8 @@
 
 <script lang="ts">
 import { TitlesTypes } from '@bldr/type-definitions'
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
+import { Prop, Vue, Component, createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 
-import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp/titles')
 
 interface TopTitle {

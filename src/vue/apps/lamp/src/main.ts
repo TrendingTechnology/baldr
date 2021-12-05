@@ -93,7 +93,7 @@
 
 import './class-component'
 
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 import { registerMasterComponents } from '@/masters.js'
 
 // Vue plugins.
@@ -110,9 +110,6 @@ import Notification from '@bldr/notification'
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
 import './global-components'
-
-import { test } from '@bldr/player'
-console.log(test)
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)

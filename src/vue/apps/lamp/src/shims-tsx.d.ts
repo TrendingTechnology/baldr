@@ -1,4 +1,4 @@
-import Vue, { VNode } from 'vue'
+import { VNode, Vue } from '@bldr/vue-packages-bundler'
 
 declare global {
   namespace JSX {

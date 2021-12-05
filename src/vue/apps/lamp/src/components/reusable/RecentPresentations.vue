@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp/recent')
 
 export default {

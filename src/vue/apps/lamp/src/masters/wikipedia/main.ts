@@ -14,7 +14,7 @@ import {
   MasterProps
 } from '@bldr/wikipedia'
 
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 const defaultLanguage = 'de'
 

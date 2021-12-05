@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 

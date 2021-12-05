@@ -24,8 +24,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component
 export default class CommonExample extends Vue {

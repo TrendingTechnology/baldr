@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 

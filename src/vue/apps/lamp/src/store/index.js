@@ -6,8 +6,7 @@
 
 /* globals rawYamlExamples */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { Vue, Vuex } from '@bldr/vue-packages-bundler'
 import { Presentation } from '@/content-file.js'
 import vue, { customStore } from '@/main'
 import nav from './nav.js'
@@ -55,7 +54,8 @@ const getters = {
     return state.isSpeakerView
   },
   presentation: state => {
-    if (state.presentation && state.presentation.slides) return state.presentation
+    if (state.presentation && state.presentation.slides)
+      return state.presentation
   },
   slideNo: state => {
     return state.slideNo
@@ -65,7 +65,7 @@ const getters = {
       return getters.slideByNo(state.slideNo)
     }
   },
-  slideNoOld: (state) => {
+  slideNoOld: state => {
     return state.slideNoOld
   },
   slideOld: (state, getters) => {
@@ -85,7 +85,7 @@ const getters = {
     if (!getters.slides) return
     return getters.slides.length
   },
-  showMetaDataOverlay: (state) => {
+  showMetaDataOverlay: state => {
     return state.showMetaDataOverlay
   },
   stepNo: (state, getters) => {
@@ -97,9 +97,18 @@ const getters = {
 }
 
 const actions = {
-  async openPresentation ({ commit, dispatch }, { vm, rawYamlString, mongoDbObject }) {
-    const presentation = new Presentation({ rawYamlString, rawObject: mongoDbObject })
-    dispatch('recent/add', { presRef: presentation.ref, title: presentation.title })
+  async openPresentation (
+    { commit, dispatch },
+    { vm, rawYamlString, mongoDbObject }
+  ) {
+    const presentation = new Presentation({
+      rawYamlString,
+      rawObject: mongoDbObject
+    })
+    dispatch('recent/add', {
+      presRef: presentation.ref,
+      title: presentation.title
+    })
     await presentation.resolveMedia(vm)
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
@@ -138,7 +147,10 @@ const actions = {
   async reloadPresentation ({ dispatch, getters }) {
     const presentation = getters.presentation
     if (presentation && presentation.meta && presentation.meta.ref) {
-      await dispatch('openPresentationById', { vm: vue, presRef: presentation.meta.ref })
+      await dispatch('openPresentationById', {
+        vm: vue,
+        presRef: presentation.meta.ref
+      })
       dispatch('setSlideNoCurrent', getters.slide.no)
     }
   },

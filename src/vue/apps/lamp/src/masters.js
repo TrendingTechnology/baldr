@@ -12,7 +12,7 @@ import { validateUri } from './lib.js'
 import inlineMarkup from './inline-markup.js'
 import SlidePreviewPlayButton from './components/reusable/SlidesPreview/PlayButton.vue'
 import store from './store/index.js'
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 import { masterCollection } from '@bldr/lamp-core'
 

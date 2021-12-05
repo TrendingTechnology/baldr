@@ -12,7 +12,7 @@
 <script lang="ts">
 import type { Format } from './main'
 
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 import { formatCounterNumber } from './main'
 

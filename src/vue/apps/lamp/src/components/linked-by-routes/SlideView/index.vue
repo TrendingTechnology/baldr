@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 import { routerGuards } from '@/routing.js'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'

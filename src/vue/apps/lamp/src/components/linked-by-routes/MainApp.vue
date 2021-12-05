@@ -33,7 +33,7 @@ import { hideMouseAfterSec } from '@/lib.js'
 import { receiveSocketMessage } from '@/remote-control.js'
 import actions from '@/actions.js'
 
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {

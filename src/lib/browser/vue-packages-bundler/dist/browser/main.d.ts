@@ -1,6 +1,6 @@
 export { CreateElement, VNode, VNodeData } from 'vue';
 export { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-export { mapGetters, mapActions } from 'vuex';
+export { mapGetters, mapActions, createNamespacedHelpers } from 'vuex';
 export declare const Vuex: {
     Store: typeof import("vuex").Store;
     install: typeof import("vuex").install;

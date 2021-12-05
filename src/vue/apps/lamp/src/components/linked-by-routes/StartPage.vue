@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from '@bldr/vue-packages-bundler'
 
 import { styleConfigurator } from '@bldr/style-configurator'
 

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp/preview')
 
 export default {
