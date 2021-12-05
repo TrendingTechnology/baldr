@@ -3,8 +3,8 @@
     <h1>PlayButton</h1>
 
     <div class="buttons">
-      <play-button :playable="spanish" />
-      <play-button :playable="dutchmen" />
+      <play-button :playable="gate" />
+      <play-button :playable="chapel" />
     </div>
   </div>
 </template>
@@ -18,18 +18,28 @@ import PlayButton from '../plugin/PlayButton.vue'
 
 @Component({ components: { PlayButton } })
 export default class PlayButtonDemo extends Vue {
-  spanish: Playable | null = null
+  gate: Playable | null = null
 
-  dutchmen: Playable | null = null
+  chapel: Playable | null = null
+
+  chimes: Playable | null = null
+
+  people: Playable | null = null
 
   async mounted () {
     // ref:Egmont_HB_Egmont-Ouverture
     // uuid:70028b77-b817-46e2-b6fa-fe3c6383d748
+    // #Thema_Spanier
+    // #Thema_Niederlaender
 
-    const uri = 'uuid:70028b77-b817-46e2-b6fa-fe3c6383d748'
+    // ref:Grosses-Tor_HB_Orchester_Samples
+    // uuid:702ba259-349a-459f-bc58-cf1b0da37263
+    const uri = 'uuid:702ba259-349a-459f-bc58-cf1b0da37263'
     await resolver.resolve(uri)
-    this.spanish = player.getPlayable(uri + '#Thema_Spanier')
-    this.dutchmen = player.getPlayable(uri + '#Thema_Niederlaender')
+    this.gate = player.getPlayable(uri + '#tor')
+    this.chapel = player.getPlayable(uri + '#kapelle')
+    this.chimes = player.getPlayable(uri + '#glocken')
+    this.people = player.getPlayable(uri + '#menschen')
   }
 }
 </script>

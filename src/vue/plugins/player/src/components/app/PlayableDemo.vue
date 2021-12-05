@@ -15,9 +15,24 @@
     <button @click="playable.toggle()">toggle()</button>
     <button @click="playable.pause()">pause()</button>
 
-    <p ref="volume">volume</p>
-    <p ref="currentTime">currentTime</p>
-    <p ref="playbackState">playbackState</p>
+    <table>
+      <tr>
+        <td>volume</td>
+        <td ref="volume"></td>
+      </tr>
+      <tr>
+        <td>elapsedTimeSec</td>
+        <td ref="elapsedTimeSec"></td>
+      </tr>
+      <tr>
+        <td>remainingTimeSec</td>
+        <td ref="remainingTimeSec"></td>
+      </tr>
+      <tr>
+        <td>playbackState</td>
+        <td ref="playbackState"></td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -25,6 +40,14 @@
 import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { player, resolver } from '../../app'
 import { Playable } from '../../main'
+
+function setTextContent (
+  element: Vue | Element | Vue[] | Element[],
+  value: any
+): void {
+  const htmlElement = element as HTMLElement
+  htmlElement.textContent = value.toString()
+}
 
 @Component
 export default class PlayableDemo extends Vue {
@@ -47,12 +70,17 @@ export default class PlayableDemo extends Vue {
     })
 
     this.playable.registerTimeUpdateListener(playable => {
-      const volumeElement = this.$refs.volume as HTMLElement
-      volumeElement.textContent = playable.volume.toString()
-
-      const currentTimeElement = this.$refs.currentTime as HTMLElement
-      currentTimeElement.textContent = playable.currentTimeSec.toString()
+      setTextContent(this.$refs.volume, playable.volume)
+      setTextContent(this.$refs.elapsedTimeSec, playable.elapsedTimeSec)
+      setTextContent(this.$refs.remainingTimeSec, playable.remainingTimeSec)
     })
+  }
+
+  beforeDestroy () {
+    if (this.playable == null) {
+      return
+    }
+    this.playable.stall()
   }
 }
 </script>

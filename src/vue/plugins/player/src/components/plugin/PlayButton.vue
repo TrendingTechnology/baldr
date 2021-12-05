@@ -91,28 +91,19 @@ export default class PlayButton extends Vue {
       return
     }
 
-    player.events.on('fadeinbegin', (loadedPlayable: Playable) => {
-      if (
-        loadedPlayable.sample.ref != null &&
-        loadedPlayable.sample.ref === this.playable.sample.ref
-      ) {
-        this.status = 'starting'
-      }
-    })
+    // this.$el.addEventListener('mouseenter', () => {
+    //   if (this.status === 'playing') {
+    //     this.status = 'stoppable'
+    //   }
+    // })
 
-    this.$el.addEventListener('mouseenter', () => {
-      if (this.status === 'playing') {
-        this.status = 'stoppable'
-      }
-    })
-
-    this.$el.addEventListener('mouseleave', () => {
-      if (this.playable.playbackState === 'fadeout') {
-        this.status = 'fadeout'
-      } else {
-        this.status = 'playing'
-      }
-    })
+    // this.$el.addEventListener('mouseleave', () => {
+    //   if (this.playable.playbackState === 'fadeout') {
+    //     this.status = 'fadeout'
+    //   } else {
+    //     this.status = 'playing'
+    //   }
+    // })
 
     this.playable.registerTimeUpdateListener(playable => {
       if (!this.$refs.progress) {

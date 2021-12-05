@@ -238,15 +238,28 @@ export class Playable {
     this.htmlElement = htmlElement
   }
 
-  get currentTimeSec (): number {
-    return this.htmlElement.currentTime
+  /**
+   * The played time of the sample.
+   */
+  public get elapsedTimeSec (): number {
+    return this.htmlElement.currentTime - this.sample.startTimeSec
   }
 
-  get durationSec (): number {
+  /**
+   * The remaining time of the sample.
+   */
+  public get remainingTimeSec (): number {
+    return this.durationSec - this.elapsedTimeSec
+  }
+
+  /**
+   * The duration of the sample.
+   */
+  public get durationSec (): number {
     if (this.sample.durationSec != null) {
       return this.sample.durationSec
     } else {
-      return this.htmlElement.duration
+      return this.htmlElement.duration - this.sample.startTimeSec
     }
   }
 
@@ -255,11 +268,11 @@ export class Playable {
    * current time: 6s duration: 60s
    * 6 / 60 = 0.1
    */
-  get progress (): number {
-    return this.currentTimeSec / this.durationSec
+  public get progress (): number {
+    return this.elapsedTimeSec / this.durationSec
   }
 
-  get volume (): number {
+  public get volume (): number {
     return this.htmlElement.volume
   }
 
@@ -267,7 +280,7 @@ export class Playable {
    * Set the volume and simultaneously the opacity of a video element, to be
    * able to fade out or fade in a video and a audio file.
    */
-  set volume (value: number) {
+  public set volume (value: number) {
     this.htmlElement.volume = parseFloat(value.toFixed(2))
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = value.toFixed(2)
@@ -284,7 +297,8 @@ export class Playable {
     } else {
       fadeInSec = fadeInDuration
     }
-    return await new Promise((resolve, reject) => {
+
+    return await new Promise(async (resolve, reject) => {
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
       this.intervalExecutor.clear()
@@ -296,11 +310,7 @@ export class Playable {
           this.triggerTimeUpdateListener()
         }, 10)
       }
-
-      this.htmlElement.play().then(
-        () => {},
-        () => {}
-      )
+      await this.htmlElement.play()
       // Normally 0.01 by volume = 1
       const steps = targetVolume / 100
       // Interval: every X ms increase volume by step
@@ -342,26 +352,11 @@ export class Playable {
       this.htmlElement.currentTime = this.sample.startTimeSec
     }
 
-    // To prevent AbortError in Firefox, artefacts when switching through the
-    // audio files.
-    this.timeOutExecutor.set(() => {
-      this.fadeIn(targetVolume, fadeInSec).then(
-        () => {},
-        () => {}
-      )
-      this.scheduleFadeOut()
-    }, 10)
-  }
-
-  /**
-   * In how many milliseconds we have to start a fade out process.
-   */
-  private get fadeOutStartTimeMsec (): number {
-    return (this.durationRemainingSec - this.sample.fadeOutSec) * 1000
-  }
-
-  private get durationRemainingSec (): number {
-    return this.durationSec - this.currentTimeSec
+    this.fadeIn(targetVolume, fadeInSec).then(
+      () => {},
+      () => {}
+    )
+    this.scheduleFadeOut()
   }
 
   /**
@@ -375,7 +370,7 @@ export class Playable {
         () => {},
         () => {}
       )
-    }, this.fadeOutStartTimeMsec)
+    }, (this.remainingTimeSec - this.sample.fadeOutSec) * 1000)
   }
 
   private async fadeOut (fadeOutDuration?: number): Promise<void> {
@@ -463,15 +458,15 @@ export class Playable {
   ): void {
     let newPlayPosition
     if (direction === 'backward') {
-      if (this.currentTimeSec - interval > 0) {
-        newPlayPosition = this.currentTimeSec - interval
+      if (this.elapsedTimeSec - interval > 0) {
+        newPlayPosition = this.elapsedTimeSec - interval
       } else {
         newPlayPosition = 0
       }
     } else {
-      newPlayPosition = this.currentTimeSec + interval
-      if (this.currentTimeSec + interval < this.durationSec) {
-        newPlayPosition = this.currentTimeSec + interval
+      newPlayPosition = this.elapsedTimeSec + interval
+      if (this.elapsedTimeSec + interval < this.durationSec) {
+        newPlayPosition = this.elapsedTimeSec + interval
       } else {
         newPlayPosition = this.durationSec
       }
@@ -487,6 +482,17 @@ export class Playable {
 
   public backward (interval: number = 10): void {
     this.jump(interval, 'backward')
+  }
+
+  /**
+   * „abwürgen“
+   */
+  public stall () {
+    this.timeOutExecutor.clear()
+    this.intervalExecutor.clear()
+    clearInterval(this.timeUpdateIntervalId)
+    this.timeUpdateIntervalId = undefined
+    this.htmlElement.pause()
   }
 }
 
