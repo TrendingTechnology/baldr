@@ -51,6 +51,53 @@ export class CustomEventsManager {
   }
 }
 
+/**
+ * A simple wrapper class for a custom event system. Used in the classes
+ * `Playable()` and `Player()`.
+ */
+export class EventsListenerStore {
+  /**
+   * An object of callback functions
+   */
+  private callbacks: { [eventName: string]: Function[] }
+
+  constructor () {
+    this.callbacks = {}
+  }
+
+  /**
+   * Trigger a custom event.
+   *
+   * @param name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   * @param args - One ore more additonal arguments to pass through
+   *   the callbacks.
+   */
+  trigger (name: string, ...args: any[]): void {
+    if (this.callbacks[name] == null) {
+      this.callbacks[name] = []
+    }
+    for (const callback of this.callbacks[name]) {
+      callback.apply(null, args)
+    }
+  }
+
+  /**
+   * Register callbacks for specific custom event.
+   *
+   * @param name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   * @param callback - A function which gets called when the
+   *   event is triggered.
+   */
+  register (name: string, callback: Function): void {
+    if (this.callbacks[name] == null) {
+      this.callbacks[name] = []
+    }
+    this.callbacks[name].push(callback)
+  }
+}
+
 class Timer {
   /**
    * An array of `setTimeout` or `setInterval` IDs.
@@ -135,8 +182,6 @@ export type PlaybackState = 'fadein' | 'playing' | 'fadeout' | 'stopped'
 
 type JumpDirection = 'forward' | 'backward'
 
-type PlaybackChangeCallback = (state: PlaybackState) => void
-
 export class Playable {
   sample: Sample
   htmlElement: HTMLMediaElement
@@ -147,13 +192,13 @@ export class Playable {
 
   private readonly intervalExecutor = new IntervalExecutor()
 
+  private timeUpdateIntervalId?: number
+
   private readonly timeOutExecutor = new TimeOutExecutor()
 
-  public readonly events = new CustomEventsManager()
+  private readonly eventsListener = new EventsListenerStore()
 
   private playbackState_: PlaybackState = 'stopped'
-
-  private playbackChangeListener: PlaybackChangeCallback[] = []
 
   /**
    * The playback states of a playable are:
@@ -169,13 +214,23 @@ export class Playable {
 
   set playbackState (value: PlaybackState) {
     this.playbackState_ = value
-    for (const listener of this.playbackChangeListener) {
-      listener(value)
-    }
+    this.eventsListener.trigger('playback-change', value)
   }
 
-  public registerPlaybackChangeListener (callback: PlaybackChangeCallback): void {
-    this.playbackChangeListener.push(callback)
+  public registerPlaybackChangeListener (
+    callback: (state: PlaybackState) => void
+  ): void {
+    this.eventsListener.register('playback-change', callback)
+  }
+
+  public registerTimeUpdateListener (
+    callback: (playable: Playable) => void
+  ): void {
+    this.eventsListener.register('time-update', callback)
+  }
+
+  private triggerTimeUpdateListener (): void {
+    this.eventsListener.trigger('time-update', this)
   }
 
   constructor (sample: Sample, htmlElement: HTMLMediaElement) {
@@ -233,10 +288,15 @@ export class Playable {
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
       this.intervalExecutor.clear()
-      this.events.trigger('fadeinbegin')
       this.playbackState = 'fadein'
       let actualVolume = 0
       this.htmlElement.volume = 0
+      if (this.timeUpdateIntervalId == null) {
+        this.timeUpdateIntervalId = setInterval(() => {
+          this.triggerTimeUpdateListener()
+        }, 10)
+      }
+
       this.htmlElement.play().then(
         () => {},
         () => {}
@@ -252,7 +312,6 @@ export class Playable {
           this.volume = actualVolume
         } else {
           this.intervalExecutor.clear()
-          this.events.trigger('fadeinend')
           this.volume = targetVolume
           this.playbackState = 'playing'
           resolve()
@@ -334,7 +393,6 @@ export class Playable {
       // Fade out can triggered when a fade out process is started and
       // not yet finished.
       this.intervalExecutor.clear()
-      this.events.trigger('fadeoutbegin')
       this.playbackState = 'fadeout'
       // Number from 0 - 1
       let actualVolume = this.htmlElement.volume
@@ -350,11 +408,11 @@ export class Playable {
         } else {
           // The video opacity must be set to zero.
           this.volume = 0
-          if (this.htmlElement != null) {
-            this.htmlElement.pause()
-          }
+          clearInterval(this.timeUpdateIntervalId)
+          this.timeUpdateIntervalId = undefined
+          this.htmlElement.pause()
           this.intervalExecutor.clear()
-          this.events.trigger('fadeoutend')
+          this.triggerTimeUpdateListener()
           this.playbackState = 'stopped'
           resolve()
         }

@@ -72,8 +72,6 @@ export default class PlayButton extends Vue {
     | 'stopped'
     | 'stoppable' = 'stopped'
 
-  htmlElement!: HTMLMediaElement
-
   data () {
     return {
       status: 'stopped',
@@ -92,13 +90,6 @@ export default class PlayButton extends Vue {
     if (this.playable == null) {
       return
     }
-    this.htmlElement = this.playable.htmlElement
-    // Mount a playing media element.
-    if (!this.htmlElement.paused) {
-      this.status = 'playing'
-    } else {
-      this.status = 'stopped'
-    }
 
     player.events.on('fadeinbegin', (loadedPlayable: Playable) => {
       if (
@@ -116,34 +107,22 @@ export default class PlayButton extends Vue {
     })
 
     this.$el.addEventListener('mouseleave', () => {
-      if (!this.htmlElement.paused) {
-        if (this.playable.playbackState === 'fadeout') {
-          this.status = 'fadeout'
-        } else {
-          this.status = 'playing'
-        }
+      if (this.playable.playbackState === 'fadeout') {
+        this.status = 'fadeout'
+      } else {
+        this.status = 'playing'
       }
     })
 
-    this.htmlElement.addEventListener('timeupdate', event => {
-      if (!this.$refs.progress) return
+    this.playable.registerTimeUpdateListener(playable => {
+      if (!this.$refs.progress) {
+        return
+      }
       this.setProgress(this.playable.progress)
     })
 
-    this.playable.events.on('fadeinend', () => {
-      this.status = 'playing'
-    })
-
-    this.htmlElement.addEventListener('play', event => {
-      this.status = 'fadein'
-    })
-
-    this.htmlElement.addEventListener('pause', event => {
-      this.status = 'stopped'
-    })
-
-    this.playable.events.on('fadeoutbegin', () => {
-      this.status = 'fadeout'
+    this.playable.registerPlaybackChangeListener(state => {
+      this.status = state
     })
   }
 
@@ -163,9 +142,9 @@ export default class PlayButton extends Vue {
   }
 
   actByStatus () {
-    if (!this.htmlElement.paused) {
+    if (this.playable.playbackState !== 'stopped') {
       player.stop()
-    } else if (this.status === 'stopped') {
+    } else {
       this.start()
     }
   }
