@@ -2,10 +2,21 @@
   <div class="vc_play_button_demo">
     <h1>PlayButton</h1>
 
-    <div class="buttons">
-      <play-button :playable="gate" />
-      <play-button :playable="chapel" />
-    </div>
+    <h2>Das große Tor von Kiew</h2>
+    Das große Tor
+    <play-button :playable="gate" />
+    Kapelle
+    <play-button :playable="chapel" />
+    Glocken
+    <play-button :playable="chimes" />
+    Menschen laufen durch das Tor
+    <play-button :playable="people" />
+
+    <h2>Zwei mal das gleiche Sample</h2>
+    Glocken
+    <play-button :playable="chimes" />
+    glocken
+    <play-button :playable="chimes" />
   </div>
 </template>
 
@@ -46,8 +57,8 @@ export default class PlayButtonDemo extends Vue {
 
 <style lang="scss">
 .vc_play_button_demo {
-  .buttons {
-    font-size: 10em;
+  .vc_play_button {
+    font-size: 5em;
   }
 }
 </style>

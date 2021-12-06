@@ -79,7 +79,10 @@ export default class PlayButton extends Vue {
     }
   }
 
-  htmlTitle () {
+  get htmlTitle (): string {
+    if (this.playable == null) {
+      return ''
+    }
     if (this.playable.sample.shortcut) {
       return `${this.playable.sample.titleSafe} [${this.playable.sample.shortcut}]`
     }
@@ -87,23 +90,17 @@ export default class PlayButton extends Vue {
   }
 
   registerEvents (): void {
-    if (this.playable == null) {
-      return
-    }
+    this.$el.addEventListener('mouseenter', () => {
+      if (this.status === 'playing') {
+        this.status = 'stoppable'
+      }
+    })
 
-    // this.$el.addEventListener('mouseenter', () => {
-    //   if (this.status === 'playing') {
-    //     this.status = 'stoppable'
-    //   }
-    // })
-
-    // this.$el.addEventListener('mouseleave', () => {
-    //   if (this.playable.playbackState === 'fadeout') {
-    //     this.status = 'fadeout'
-    //   } else {
-    //     this.status = 'playing'
-    //   }
-    // })
+    this.$el.addEventListener('mouseleave', () => {
+      if (this.status !== 'starting') {
+        this.status = this.playable.playbackState
+      }
+    })
 
     this.playable.registerTimeUpdateListener(playable => {
       if (!this.$refs.progress) {
@@ -117,35 +114,28 @@ export default class PlayButton extends Vue {
     })
   }
 
-  async start (): Promise<void> {
-    await player.start(this.playable.sample.ref)
-  }
-
   /**
    * Set the progress on the first visible circle.
    * Updates the stroke dash offset of the first visible circle
    *
    * @param progress - From 0 to 1.
    */
-  setProgress (progress = 0.5) {
+  setProgress (progress = 0.5): void {
     const htmlElement = this.$refs.progress as HTMLElement
     htmlElement.style.strokeDashoffset = `${-(circumference * progress)}`
   }
 
-  actByStatus () {
+  async actByStatus (): Promise<void> {
     if (this.playable.playbackState !== 'stopped') {
       player.stop()
     } else {
-      this.start()
+      this.status = 'starting'
+      await player.start(this.playable.sample.ref)
     }
   }
 
   @Watch('playable')
-  onPlayableChange () {
-    this.registerEvents()
-  }
-
-  mounted () {
+  onPlayableChange (): void {
     this.registerEvents()
   }
 }
