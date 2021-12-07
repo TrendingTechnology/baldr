@@ -15,8 +15,12 @@
     <h2>Zwei mal das gleiche Sample</h2>
     Glocken
     <play-button :playable="chimes" />
-    glocken
-    <play-button :playable="chimes" />
+    Glocken
+    <play-button v-if="!isOnePlayButtonVisible" :playable="chimes" />
+
+    <p>
+      <button @click="hideOnePlayButton()">Verberge PlayButton</button>
+    </p>
   </div>
 </template>
 
@@ -29,6 +33,8 @@ import PlayButton from '../plugin/PlayButton.vue'
 
 @Component({ components: { PlayButton } })
 export default class PlayButtonDemo extends Vue {
+  isOnePlayButtonVisible: boolean = false
+
   gate: Playable | null = null
 
   chapel: Playable | null = null
@@ -51,6 +57,10 @@ export default class PlayButtonDemo extends Vue {
     this.chapel = player.getPlayable(uri + '#kapelle')
     this.chimes = player.getPlayable(uri + '#glocken')
     this.people = player.getPlayable(uri + '#menschen')
+  }
+
+  hideOnePlayButton (): void {
+    this.isOnePlayButtonVisible = !this.isOnePlayButtonVisible
   }
 }
 </script>

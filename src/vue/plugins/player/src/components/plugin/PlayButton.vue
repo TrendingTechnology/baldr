@@ -1,7 +1,7 @@
 <template>
   <div
     class="vc_play_button"
-    :class="status"
+    :class="playbackState"
     @click="actByStatus"
     :title="htmlTitle"
   >
@@ -15,24 +15,24 @@
     </svg>
     <div class="icons">
       <plain-icon
-        v-if="status === 'starting'"
+        v-if="playbackState === 'starting'"
         name="play-speed"
         class="baldr-icon-spin"
       />
       <plain-icon
-        v-if="status === 'fadein'"
+        v-if="playbackState === 'fadein'"
         name="fadeout"
         class="spin-clockwise"
       />
-      <plain-icon v-if="status === 'stopped'" name="play" />
-      <plain-icon v-if="status === 'stoppable'" name="pause" />
+      <plain-icon v-if="playbackState === 'stopped'" name="play" />
+      <plain-icon v-if="playbackState === 'stoppable'" name="pause" />
       <plain-icon
-        v-if="status === 'playing'"
+        v-if="playbackState === 'playing'"
         name="play"
         class="baldr-icon-spin"
       />
       <plain-icon
-        v-if="status === 'fadeout'"
+        v-if="playbackState === 'fadeout'"
         name="fadeout"
         class="spin-counter-clockwise"
       />
@@ -64,7 +64,14 @@ export default class PlayButton extends Vue {
   @Prop()
   playable!: Playable
 
-  status:
+  /**
+   * We add two more states to the playback states of a playable.
+   *
+   * - `starting`: We want until a already playing sample stops
+   * - `stoppable`: If the sample is fading in, playing or fading out,
+   *    it is stoppable.
+   */
+  playbackState:
     | 'starting'
     | 'fadein'
     | 'playing'
@@ -74,7 +81,7 @@ export default class PlayButton extends Vue {
 
   data () {
     return {
-      status: 'stopped',
+      playbackState: 'stopped',
       htmlElement: null
     }
   }
@@ -89,17 +96,27 @@ export default class PlayButton extends Vue {
     return this.playable.sample.titleSafe
   }
 
+  setPlaybackStateFromPlayable (): void {
+    if (this.playbackState !== 'starting') {
+      this.playbackState = this.playable.playbackState
+    }
+  }
+
   registerEvents (): void {
+    if (this.playable == null) {
+      return
+    }
+
+    this.setPlaybackStateFromPlayable()
+
     this.$el.addEventListener('mouseenter', () => {
-      if (this.status === 'playing') {
-        this.status = 'stoppable'
+      if (this.playbackState === 'playing') {
+        this.playbackState = 'stoppable'
       }
     })
 
     this.$el.addEventListener('mouseleave', () => {
-      if (this.status !== 'starting') {
-        this.status = this.playable.playbackState
-      }
+      this.setPlaybackStateFromPlayable()
     })
 
     this.playable.registerTimeUpdateListener(playable => {
@@ -110,7 +127,7 @@ export default class PlayButton extends Vue {
     })
 
     this.playable.registerPlaybackChangeListener(state => {
-      this.status = state
+      this.playbackState = state
     })
   }
 
@@ -120,7 +137,7 @@ export default class PlayButton extends Vue {
    *
    * @param progress - From 0 to 1.
    */
-  setProgress (progress = 0.5): void {
+  setProgress (progress: number): void {
     const htmlElement = this.$refs.progress as HTMLElement
     htmlElement.style.strokeDashoffset = `${-(circumference * progress)}`
   }
@@ -129,13 +146,18 @@ export default class PlayButton extends Vue {
     if (this.playable.playbackState !== 'stopped') {
       player.stop()
     } else {
-      this.status = 'starting'
+      this.playbackState = 'starting'
       await player.start(this.playable.sample.ref)
     }
   }
 
   @Watch('playable')
   onPlayableChange (): void {
+    this.registerEvents()
+  }
+
+  mounted () {
+    // Activate a play button, when a playable is already playing
     this.registerEvents()
   }
 }
