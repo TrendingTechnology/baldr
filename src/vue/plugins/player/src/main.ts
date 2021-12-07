@@ -57,7 +57,7 @@ export class CustomEventsManager {
  */
 export class EventsListenerStore {
   /**
-   * An object of callback functions
+   * An object of callback functions.
    */
   private callbacks: { [eventName: string]: Function[] }
 
@@ -68,16 +68,16 @@ export class EventsListenerStore {
   /**
    * Trigger a custom event.
    *
-   * @param name - The name of the event. Should be in lowercase, for
+   * @param eventName - The name of the event. Should be in lowercase, for
    *   example `fadeoutbegin`.
    * @param args - One ore more additonal arguments to pass through
    *   the callbacks.
    */
-  trigger (name: string, ...args: any[]): void {
-    if (this.callbacks[name] == null) {
-      this.callbacks[name] = []
+  public trigger (eventName: string, ...args: any[]): void {
+    if (this.callbacks[eventName] == null) {
+      this.callbacks[eventName] = []
     }
-    for (const callback of this.callbacks[name]) {
+    for (const callback of this.callbacks[eventName]) {
       callback.apply(null, args)
     }
   }
@@ -85,16 +85,34 @@ export class EventsListenerStore {
   /**
    * Register callbacks for specific custom event.
    *
-   * @param name - The name of the event. Should be in lowercase, for
+   * @param eventName - The name of the event. Should be in lowercase, for
    *   example `fadeoutbegin`.
    * @param callback - A function which gets called when the
    *   event is triggered.
    */
-  register (name: string, callback: Function): void {
-    if (this.callbacks[name] == null) {
-      this.callbacks[name] = []
+  public register (eventName: string, callback: Function): void {
+    if (this.callbacks[eventName] == null) {
+      this.callbacks[eventName] = []
     }
-    this.callbacks[name].push(callback)
+    this.callbacks[eventName].push(callback)
+    console.log(this.callbacks[eventName].length)
+  }
+
+  private removeCallbackInStore (callback: Function, store: Function[]): void {
+    for (let index = 0; index < store.length; index++) {
+      if (store[index] === callback) {
+        store.splice(index, 1)
+        return
+      }
+    }
+  }
+
+  public remove (callback: Function, eventName?: string): void {
+    const eventNames: string[] =
+      eventName != null ? [eventName] : Object.keys(this.callbacks)
+    for (const eventName of eventNames) {
+      this.removeCallbackInStore(callback, this.callbacks[eventName])
+    }
   }
 }
 
@@ -227,6 +245,10 @@ export class Playable {
     callback: (playable: Playable) => void
   ): void {
     this.eventsListener.register('time-update', callback)
+  }
+
+  public removeEventsListener (callback: Function) {
+    this.eventsListener.remove(callback)
   }
 
   private triggerTimeUpdateListener (): void {

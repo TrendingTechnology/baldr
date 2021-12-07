@@ -44,7 +44,7 @@
 import { PlainIcon } from '@bldr/icons'
 import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
 import { player } from '../../app'
-import { Playable } from '../../main'
+import { Playable, PlaybackState } from '../../main'
 
 const circleRadius = 100
 // 100%: 628.3185307179587
@@ -96,10 +96,21 @@ export default class PlayButton extends Vue {
     return this.playable.sample.titleSafe
   }
 
-  setPlaybackStateFromPlayable (): void {
+  private setPlaybackStateFromPlayable (): void {
     if (this.playbackState !== 'starting') {
       this.playbackState = this.playable.playbackState
     }
+  }
+
+  private updateProgress (playable: Playable) {
+    if (!this.$refs.progress) {
+      return
+    }
+    this.setProgress(this.playable.progress)
+  }
+
+  private updatePlaybackState (playbackState: PlaybackState) {
+    this.playbackState = playbackState
   }
 
   registerEvents (): void {
@@ -119,16 +130,8 @@ export default class PlayButton extends Vue {
       this.setPlaybackStateFromPlayable()
     })
 
-    this.playable.registerTimeUpdateListener(playable => {
-      if (!this.$refs.progress) {
-        return
-      }
-      this.setProgress(this.playable.progress)
-    })
-
-    this.playable.registerPlaybackChangeListener(state => {
-      this.playbackState = state
-    })
+    this.playable.registerTimeUpdateListener(this.updateProgress)
+    this.playable.registerPlaybackChangeListener(this.updatePlaybackState)
   }
 
   /**
@@ -159,6 +162,11 @@ export default class PlayButton extends Vue {
   mounted () {
     // Activate a play button, when a playable is already playing
     this.registerEvents()
+  }
+
+  beforeDestroy () {
+    this.playable.removeEventsListener(this.updateProgress)
+    this.playable.removeEventsListener(this.updatePlaybackState)
   }
 }
 </script>
