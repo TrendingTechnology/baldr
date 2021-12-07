@@ -1,56 +1,5 @@
 import { Sample, Cache, Resolver } from '@bldr/media-resolver-ng'
 
-type EventCallbackFunction = (...args: any) => any
-
-type EventName = 'fadeinbegin' | 'fadeinend' | 'fadeoutbegin' | 'fadeoutend'
-
-/**
- * A simple wrapper class for a custom event system. Used in the classes
- * `Playable()` and `Player()`.
- */
-export class CustomEventsManager {
-  /**
-   * An object of callback functions
-   */
-  private callbacks: { [key: string]: EventCallbackFunction[] }
-
-  constructor () {
-    this.callbacks = {}
-  }
-
-  /**
-   * Trigger a custom event.
-   *
-   * @param name - The name of the event. Should be in lowercase, for
-   *   example `fadeoutbegin`.
-   * @param args - One ore more additonal arguments to pass through
-   *   the callbacks.
-   */
-  trigger (name: EventName, ...args: any[]): void {
-    if (this.callbacks[name] == null) {
-      this.callbacks[name] = []
-    }
-    for (const callback of this.callbacks[name]) {
-      callback.apply(null, args)
-    }
-  }
-
-  /**
-   * Register callbacks for specific custom event.
-   *
-   * @param name - The name of the event. Should be in lowercase, for
-   *   example `fadeoutbegin`.
-   * @param callback - A function which gets called when the
-   *   event is triggered.
-   */
-  on (name: EventName, callback: EventCallbackFunction): void {
-    if (this.callbacks[name] == null) {
-      this.callbacks[name] = []
-    }
-    this.callbacks[name].push(callback)
-  }
-}
-
 /**
  * A simple wrapper class for a custom event system. Used in the classes
  * `Playable()` and `Player()`.
@@ -95,7 +44,6 @@ export class EventsListenerStore {
       this.callbacks[eventName] = []
     }
     this.callbacks[eventName].push(callback)
-    console.log(this.callbacks[eventName].length)
   }
 
   private removeCallbackInStore (callback: Function, store: Function[]): void {
@@ -563,7 +511,7 @@ class PlayerCache {
 export class Player {
   private playing?: Playable
   private loaded?: Playable
-  public events: CustomEventsManager
+  public events: EventsListenerStore
   private cache: PlayerCache
 
   /**
@@ -572,7 +520,7 @@ export class Player {
   globalVolume: number = 1
 
   constructor (resolver: Resolver) {
-    this.events = new CustomEventsManager()
+    this.events = new EventsListenerStore()
     this.cache = new PlayerCache(resolver)
   }
 
