@@ -23,7 +23,11 @@
         <tr>
           <th>Git-Version</th>
           <td>
-            <a :href="`https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`">
+            <a
+              :href="
+                `https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`
+              "
+            >
               {{ gitHead.short }}<span v-if="gitHead.isDirty">-dirty</span>
             </a>
           </td>
@@ -34,7 +38,6 @@
         </tr>
       </tbody>
     </table>
-
   </div>
 </template>
 
@@ -64,7 +67,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .vc_about_page {
-
-  }
+.vc_about_page {
+}
 </style>

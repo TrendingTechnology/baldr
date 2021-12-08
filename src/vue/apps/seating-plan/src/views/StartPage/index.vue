@@ -2,21 +2,21 @@
   <main class="vc_start_page">
     <section>
       <h2>Sitzpläne</h2>
-      <grades-overview/>
+      <grades-overview />
     </section>
 
     <section>
       <h2>Angaben</h2>
-      <meta-table/>
+      <meta-table />
     </section>
   </main>
 </template>
 
 <script lang="ts">
-// Components
+import { Component, Vue } from '@bldr/vue-packages-bundler'
+
 import GradesOverview from './GradesOverview.vue'
 import MetaTable from './MetaTable.vue'
-import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component({
   components: {
@@ -28,8 +28,8 @@ export default class StartPage extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_start_page {
-    display: flex;
-    justify-content: space-around;
-  }
+.vc_start_page {
+  display: flex;
+  justify-content: space-around;
+}
 </style>

@@ -4,17 +4,18 @@
 
     <span class="spacer"></span>
 
-
     <span class="important">Version:</span>
     <a :href="`https://www.npmjs.com/package/${packageName}`">
-     {{ packageName }} {{ version }}
+      {{ packageName }} {{ version }}
     </a>
 
     <span class="spacer"></span>
 
     <span class="important">Git revision:</span>
-    <a :href="`https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`">
-     {{ gitHead.short }}<span v-if="gitHead.isDirty">-dirty</span>
+    <a
+      :href="`https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`"
+    >
+      {{ gitHead.short }}<span v-if="gitHead.isDirty">-dirty</span>
     </a>
 
     <span class="spacer"></span>
@@ -22,11 +23,7 @@
     <span class="important">Compilation time:</span>
     {{ compilationTime }}
 
-    <material-icon
-      class="close"
-      name="close"
-      @click.native="toggle"
-    />
+    <material-icon class="close" name="close" @click.native="toggle" />
   </div>
 </template>
 
@@ -63,36 +60,42 @@ export default {
   },
   mounted: function () {
     // Show the app info.
-    this.$shortcuts.add('ctrl+,', () => { this.toggle() }, 'Zeige Hintergrundinformationen zur Applikation')
+    this.$shortcuts.add(
+      'ctrl+,',
+      () => {
+        this.toggle()
+      },
+      'Zeige Hintergrundinformationen zur Applikation'
+    )
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .vc_app_info {
-    background-color: $yellow;
-    bottom: 0;
-    box-sizing: border-box;
-    font-size: 1.1em;
-    left: 0;
-    padding: 0.4vw;
-    position: absolute;
-    text-align: left;
-    width: 100%;
+.vc_app_info {
+  background-color: $yellow;
+  bottom: 0;
+  box-sizing: border-box;
+  font-size: 1.1em;
+  left: 0;
+  padding: 0.4vw;
+  position: absolute;
+  text-align: left;
+  width: 100%;
 
-    .app-info {
-      text-transform: uppercase;
-    }
-
-    .spacer {
-      display: inline-block;
-      width: 1em;
-    }
-
-    .close {
-      position: absolute;
-      top: 0.5em;
-      right: 1em;
-    }
+  .app-info {
+    text-transform: uppercase;
   }
+
+  .spacer {
+    display: inline-block;
+    width: 1em;
+  }
+
+  .close {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+  }
+}
 </style>
