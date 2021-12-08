@@ -8,16 +8,14 @@
     >
       Klassenliste verwalten
     </router-link>
-    <persons-list/>
+    <persons-list />
   </aside>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
-// Components
 import PersonsList from './PersonsList.vue'
-import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -32,12 +30,12 @@ export default class PersonsSidebar extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_persons_sidebar {
-    display: block;
-    white-space: nowrap;
+.vc_persons_sidebar {
+  display: block;
+  white-space: nowrap;
 
-    @media print {
-      display: none;
-    }
+  @media print {
+    display: none;
   }
+}
 </style>

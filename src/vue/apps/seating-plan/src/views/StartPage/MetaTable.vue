@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { DOMEvent } from '../../types'
 
 @Component

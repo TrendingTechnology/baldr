@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { Vue, VueRouter } from '@bldr/vue-packages-bundler'
 
 // Page components
 import JobsManager from '@/views/JobsManager.vue'
@@ -10,9 +9,9 @@ import SpreadsheetImport from '@/views/SpreadsheetImport.vue'
 import StartPage from '@/views/StartPage/index.vue'
 import TimeTravel from '@/views/TimeTravel.vue'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+export default new VueRouter({
   routes: [
     {
       name: 'start-page',

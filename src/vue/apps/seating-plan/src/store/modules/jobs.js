@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 class Job {
   constructor (name, icon) {
@@ -16,14 +16,14 @@ class Job {
 const state = {}
 
 const getters = {
-  jobByName: (state) => (jobName) => {
+  jobByName: state => jobName => {
     return state[jobName]
   },
-  jobIconFromName: (state, getters) => (jobName) => {
+  jobIconFromName: (state, getters) => jobName => {
     const job = getters.jobByName(jobName)
     return job.icon
   },
-  jobsAsArray: (state) => {
+  jobsAsArray: state => {
     const names = Object.keys(state)
     const jobs = []
     for (const name of names) {
@@ -76,7 +76,7 @@ const mutations = {
   deleteJob: (state, jobName) => {
     Vue.delete(state, jobName)
   },
-  flushJobsState: (state) => {
+  flushJobsState: state => {
     for (const property of Object.keys(state)) {
       delete state[property]
     }

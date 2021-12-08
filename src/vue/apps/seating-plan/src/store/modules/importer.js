@@ -4,8 +4,16 @@
 import { formatToLocalDateTime } from '@bldr/core-browser'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
-const httpRequestLocal = makeHttpRequestInstance(config, 'local', '/api/seating-plan')
-const httpRequestRemote = makeHttpRequestInstance(config, 'remote', '/api/seating-plan')
+const httpRequestLocal = makeHttpRequestInstance(
+  config,
+  'local',
+  '/api/seating-plan'
+)
+const httpRequestRemote = makeHttpRequestInstance(
+  config,
+  'remote',
+  '/api/seating-plan'
+)
 
 class InitState {
   constructor () {
@@ -23,40 +31,40 @@ class InitState {
 const state = new InitState()
 
 const getters = {
-  apiVersion: (state) => {
+  apiVersion: state => {
     return state.apiVersion
   },
-  externalStateDates: (state) => {
+  externalStateDates: state => {
     return state.externalStateDates
   },
-  importInProgress: (state) => {
+  importInProgress: state => {
     return state.importInProgress
   },
-  latestExternalState: (state) => {
+  latestExternalState: state => {
     if (state.latestExternalState.timeStampMsec) {
       return state.latestExternalState
     }
     return { timeStampMsec: 0 }
   },
-  latestLocalState: (state) => {
+  latestLocalState: state => {
     if (state.latestLocalState.timeStampMsec) {
       return state.latestLocalState
     }
     return { timeStampMsec: 0 }
   },
-  localStateDates: (state) => {
+  localStateDates: state => {
     return state.localStateDates
   },
-  stateChanged: (state) => {
+  stateChanged: state => {
     return state.stateChanged
   },
-  stateDateCurrent: (state) => {
+  stateDateCurrent: state => {
     if (state.timeStampMsec) {
       return formatToLocalDateTime(state.timeStampMsec)
     }
     return ''
   },
-  timeStampMsec: (state) => {
+  timeStampMsec: state => {
     return state.timeStampMsec
   }
 }
@@ -70,38 +78,62 @@ const getters = {
  */
 const actions = {
   checkApi ({ commit }) {
-    return httpRequestLocal.request({ method: 'get', url: 'version' }).then((response) => {
-      commit('setApiVersion', response.data.version)
-    }).catch(() => {
-      commit('setApiVersion', null)
-    })
+    return httpRequestLocal
+      .request({ method: 'get', url: 'version' })
+      .then(response => {
+        commit('setApiVersion', response.data.version)
+      })
+      .catch(() => {
+        commit('setApiVersion', null)
+      })
   },
   deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return httpRequestRemote.request({ method: 'delete', url: `delete-state-by-time/${timeStampMsec}` }).then(() => {
-      dispatch('fetchExternalStateDates')
-    }).catch(() => true)
+    return httpRequestRemote
+      .request({
+        method: 'delete',
+        url: `delete-state-by-time/${timeStampMsec}`
+      })
+      .then(() => {
+        dispatch('fetchExternalStateDates')
+      })
+      .catch(() => true)
   },
   deleteFromLocalByTime ({ dispatch }, timeStampMsec) {
-    return httpRequestLocal.request({ method: 'delete', url: `delete-state-by-time/${timeStampMsec}` }).then(() => {
-      dispatch('fetchLocalStateDates')
-    }).catch(() => true)
+    return httpRequestLocal
+      .request({
+        method: 'delete',
+        url: `delete-state-by-time/${timeStampMsec}`
+      })
+      .then(() => {
+        dispatch('fetchLocalStateDates')
+      })
+      .catch(() => true)
   },
   fetchExternalStateDates ({ commit }) {
-    return httpRequestRemote.request({ method: 'get', url: 'get-states' }).then((response) => {
-      const dates = response.data.sort().reverse()
-      commit('fetchExternalStateDates', dates)
-    }).catch(() => true)
+    return httpRequestRemote
+      .request({ method: 'get', url: 'get-states' })
+      .then(response => {
+        const dates = response.data.sort().reverse()
+        commit('fetchExternalStateDates', dates)
+      })
+      .catch(() => true)
   },
   fetchLocalStateDates ({ commit }) {
-    return httpRequestLocal.request({ method: 'get', url: 'get-states' }).then((response) => {
-      const dates = response.data.sort().reverse()
-      commit('fetchLocalStateDates', dates)
-    }).catch(() => true)
+    return httpRequestLocal
+      .request({ method: 'get', url: 'get-states' })
+      .then(response => {
+        const dates = response.data.sort().reverse()
+        commit('fetchLocalStateDates', dates)
+      })
+      .catch(() => true)
   },
   importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return httpRequestRemote.request({ method: 'get', url: `get-state-by-time/${timeStampMsec}` }).then((response) => {
-      dispatch('importState', response.data)
-    }).catch(() => true)
+    return httpRequestRemote
+      .request({ method: 'get', url: `get-state-by-time/${timeStampMsec}` })
+      .then(response => {
+        dispatch('importState', response.data)
+      })
+      .catch(() => true)
   },
   importFromLocalByTime ({ dispatch }, timeStampMsec) {
     const state = localStorage.getItem(`state_${timeStampMsec}`)
@@ -115,20 +147,28 @@ const actions = {
         const lastName = match[1]
         const firstName = match[2]
         const grade = match[3]
-        console.log(`Import: first name: ${firstName} last name: ${lastName} grade: ${grade}`)
+        console.log(
+          `Import: first name: ${firstName} last name: ${lastName} grade: ${grade}`
+        )
         dispatch('createPerson', { firstName, lastName, grade })
       }
     }
   },
   importLatestExternalState ({ commit }) {
-    return httpRequestRemote.request({ method: 'get', url: 'latest' }).then((response) => {
-      commit('importLatestExternalState', response.data)
-    }).catch(() => true)
+    return httpRequestRemote
+      .request({ method: 'get', url: 'latest' })
+      .then(response => {
+        commit('importLatestExternalState', response.data)
+      })
+      .catch(() => true)
   },
   importLatestLocalState ({ commit }) {
-    return httpRequestLocal.request({ method: 'get', url: 'latest' }).then((response) => {
-      commit('importLatestLocalState', response.data)
-    }).catch(() => true)
+    return httpRequestLocal
+      .request({ method: 'get', url: 'latest' })
+      .then(response => {
+        commit('importLatestLocalState', response.data)
+      })
+      .catch(() => true)
   },
   async importLatestState ({ dispatch, getters }) {
     await dispatch('importLatestExternalState')
@@ -171,14 +211,26 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return httpRequestRemote.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
+    return httpRequestRemote
+      .request({
+        method: 'post',
+        url: 'save-state',
+        data: getters.exportStateObject
+      })
+      .catch(() => true)
   },
   saveToLocalStorage: async ({ commit, getters }) => {
     const state = getters.exportStateObject
     const stateString = JSON.stringify(state)
     localStorage.setItem('latest', state.timeStampMsec)
     localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
-    await httpRequestLocal.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
+    await httpRequestLocal
+      .request({
+        method: 'post',
+        url: 'save-state',
+        data: getters.exportStateObject
+      })
+      .catch(() => true)
     commit('setStateChanged', false)
   }
 }

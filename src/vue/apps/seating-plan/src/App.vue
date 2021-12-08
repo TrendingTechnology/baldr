@@ -10,7 +10,7 @@
 // Components
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component({
   components: {

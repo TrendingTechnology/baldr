@@ -5,25 +5,22 @@
       type="text"
       placeholder="Nachname"
       @keyup.enter="createPerson"
-    >
+    />
     <input
       v-model="firstName"
       type="text"
       placeholder="Vorname"
       @keyup.enter="createPerson"
-    >
+    />
     <button>hinzufügen</button>
   </form>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
 @Component({
-  computed: mapGetters([
-    'gradeNameCurrent'
-  ])
+  computed: mapGetters(['gradeNameCurrent'])
 })
 export default class FormAddPerson extends Vue {
   lastName = ''
@@ -45,11 +42,11 @@ export default class FormAddPerson extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_form_add_person {
-    padding-left: 1em;
+.vc_form_add_person {
+  padding-left: 1em;
 
-    input {
-      max-width: 5em;
-    }
+  input {
+    max-width: 5em;
   }
+}
 </style>

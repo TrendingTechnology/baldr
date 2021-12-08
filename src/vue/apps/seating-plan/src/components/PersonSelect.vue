@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { Person } from '../types'
 
 @Component
@@ -27,7 +27,10 @@ export default class PersonSelect extends Vue {
       const persons = []
       for (const person of personsOrig) {
         if (!person.seatNo) {
-          persons.push({ id: person.id, name: `${person.lastName}, ${person.firstName}` })
+          persons.push({
+            id: person.id,
+            name: `${person.lastName}, ${person.firstName}`
+          })
         }
       }
       return persons

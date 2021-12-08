@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component
 export default class JsonImport extends Vue {

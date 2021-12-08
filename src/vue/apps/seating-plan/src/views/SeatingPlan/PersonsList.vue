@@ -10,27 +10,23 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
-// Components
 import PersonsListItem from './PersonsListItem.vue'
-import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
     PersonsListItem
   },
-  computed: mapGetters([
-    'personsByGradeAsListSortedCurrent'
-  ])
+  computed: mapGetters(['personsByGradeAsListSortedCurrent'])
 })
 export default class PersonsTable extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_persons_list {
-    font-size: 1.2vw;
-    padding-left: 3vw;
-    padding-right: 1vw;
-  }
+.vc_persons_list {
+  font-size: 1.2vw;
+  padding-left: 3vw;
+  padding-right: 1vw;
+}
 </style>

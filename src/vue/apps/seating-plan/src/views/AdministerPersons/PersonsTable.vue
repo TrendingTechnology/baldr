@@ -10,20 +10,16 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import { mapGetters, Component, Prop, Vue } from '@bldr/vue-packages-bundler'
 
-// Components
 import PersonsTableRow from './PersonsTableRow.vue'
-import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Person } from '../../types'
 
 @Component({
   components: {
     PersonsTableRow
   },
-  computed: mapGetters([
-    'personsByGradeAsListSortedCurrent'
-  ])
+  computed: mapGetters(['personsByGradeAsListSortedCurrent'])
 })
 export default class PersonsTable extends Vue {
   @Prop({

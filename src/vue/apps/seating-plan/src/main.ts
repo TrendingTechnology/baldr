@@ -8,8 +8,7 @@
 import './class-component-hooks'
 
 import App from './App.vue'
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { VueRouter, Vue } from '@bldr/vue-packages-bundler'
 
 import store from './store/index.js'
 import router from './router'
@@ -33,5 +32,7 @@ Vue.prototype.$fullscreen = function () {
 new Vue({
   router,
   store,
-  render: function (h) { return h(App) }
+  render: function (h) {
+    return h(App)
+  }
 }).$mount('#app')

@@ -1,61 +1,68 @@
 <template>
   <ul class="vc_main_menu">
-
-    <li><grades-items inline/></li>
+    <li><grades-items inline /></li>
 
     <!-- save -->
     <li>
-      <save-link/>
+      <save-link />
     </li>
 
     <!-- jobs -->
     <li>
       <router-link :to="{ name: 'jobs-manager' }" title="Dienste verwalten">
-        <material-icon name="worker"/>
+        <material-icon name="worker" />
       </router-link>
     </li>
 
     <!-- spreadsheet import -->
     <li>
-      <router-link :to="{ name: 'spreadsheet-import' }" title="importieren (Str+c aus LibreOffice)">
-        <material-icon name="google-spreadsheet"/>
+      <router-link
+        :to="{ name: 'spreadsheet-import' }"
+        title="importieren (Str+c aus LibreOffice)"
+      >
+        <material-icon name="google-spreadsheet" />
       </router-link>
     </li>
 
     <!-- json export -->
     <li>
-      <export-link/>
+      <export-link />
     </li>
 
     <!-- json import -->
     <li>
-      <router-link :to="{ name: 'json-import' }" title="Daten importieren (als JSON)">
-        <material-icon name="import"/>
+      <router-link
+        :to="{ name: 'json-import' }"
+        title="Daten importieren (als JSON)"
+      >
+        <material-icon name="import" />
       </router-link>
     </li>
 
     <!-- cloud download -->
     <li>
       <router-link :to="{ name: 'time-travel' }" title="Zeitreise">
-        <material-icon name="timeline-text"/>
+        <material-icon name="timeline-text" />
       </router-link>
     </li>
 
     <li>
-      <material-icon @click.native="$fullscreen" name="fullscreen"/>
+      <material-icon @click.native="$fullscreen" name="fullscreen" />
     </li>
-
   </ul>
 </template>
 
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import {
+  mapActions,
+  mapGetters,
+  Component,
+  Vue
+} from '@bldr/vue-packages-bundler'
 
-// Components
 import ExportLink from './ExportLink.vue'
 import GradesItems from './GradesItems.vue'
 import SaveLink from './SaveLink.vue'
-import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -63,35 +70,31 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
     GradesItems,
     SaveLink
   },
-  computed: mapGetters([
-    'stateDateCurrent'
-  ]),
+  computed: mapGetters(['stateDateCurrent']),
   methods: {
-    ...mapActions([
-      'createTestData'
-    ])
+    ...mapActions(['createTestData'])
   }
 })
 export default class MainMenu extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_main_menu {
-      font-size: 0.8em;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
+.vc_main_menu {
+  font-size: 0.8em;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 
-    li {
-      float: left;
-      padding: 0.3em;
-    }
+  li {
+    float: left;
+    padding: 0.3em;
+  }
 
-    @media print {
-      .vc_main_menu {
-        display: none
-      }
+  @media print {
+    .vc_main_menu {
+      display: none;
     }
   }
+}
 </style>

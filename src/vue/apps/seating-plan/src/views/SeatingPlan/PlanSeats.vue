@@ -1,17 +1,12 @@
 <template>
   <div class="vc_plan_seats">
-    <one-seat
-      v-for="seat in seatPositions"
-      :seat="seat"
-      :key="seat.no"
-      />
+    <one-seat v-for="seat in seatPositions" :seat="seat" :key="seat.no" />
   </div>
 </template>
 
 <script lang="ts">
 import ResizeObserver from 'resize-observer-polyfill'
-import { mapGetters } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
 // Components
 import OneSeat from './OneSeat.vue'
@@ -30,13 +25,19 @@ const resizeObserver = new ResizeObserver(entries => {
     const printFooterHeight = elPrintFooter.clientHeight
     const windowHeight = window.innerHeight
     // To avoid scroll bars minus buffer
-    const maxHeight = windowHeight - headerHeight - footerHeight - printHeaderHeight - printFooterHeight - 10
+    const maxHeight =
+      windowHeight -
+      headerHeight -
+      footerHeight -
+      printHeaderHeight -
+      printFooterHeight -
+      10
     // DIN A 4 Landscape: width: 297 height: 210
     const aspectRatio = { width: 297, height: 210 }
     for (const entry of entries) {
-
-      const height = aspectRatio.height / aspectRatio.width * entry.contentRect.width
-      const element = <HTMLElement> entry.target
+      const height =
+        (aspectRatio.height / aspectRatio.width) * entry.contentRect.width
+      const element = <HTMLElement>entry.target
       if (height > maxHeight) {
         element.style.height = `${maxHeight}px`
       } else {
@@ -50,9 +51,7 @@ const resizeObserver = new ResizeObserver(entries => {
   components: {
     OneSeat
   },
-  computed: mapGetters([
-    'seatPositions'
-  ])
+  computed: mapGetters(['seatPositions'])
 })
 export default class PlanSeats extends Vue {
   mounted () {
@@ -62,16 +61,16 @@ export default class PlanSeats extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_plan_seats {
-    box-sizing: border-box;
-    margin: 0 auto;
-    position: relative;
-    width: 100%;
+.vc_plan_seats {
+  box-sizing: border-box;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
 
-    @media print {
-      width: 100% !important;
-      // Firefox
-      height: 50em !important;
-    }
+  @media print {
+    width: 100% !important;
+    // Firefox
+    height: 50em !important;
   }
+}
 </style>

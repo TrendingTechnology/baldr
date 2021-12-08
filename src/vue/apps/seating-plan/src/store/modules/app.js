@@ -8,16 +8,16 @@ class InitState {
 const state = new InitState()
 
 const getters = {
-  gradeNameCurrent: (state) => {
+  gradeNameCurrent: state => {
     return state.gradeNameCurrent
   },
-  seatNoCurrent: (state) => {
+  seatNoCurrent: state => {
     return state.seatNoCurrent
   }
 }
 
 const mutations = {
-  flushAppState: (state) => {
+  flushAppState: state => {
     const cleanState = new InitState()
     for (const property in cleanState) {
       state[property] = cleanState[property]

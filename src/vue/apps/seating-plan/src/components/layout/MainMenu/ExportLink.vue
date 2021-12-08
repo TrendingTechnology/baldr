@@ -10,14 +10,11 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
 @Component({
   computed: {
-    ...mapGetters([
-      'stateAsUriComponent'
-    ])
+    ...mapGetters(['stateAsUriComponent'])
   }
 })
 export default class ExportLink extends Vue {

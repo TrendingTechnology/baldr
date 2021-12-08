@@ -3,20 +3,21 @@
     <section>
       <h1>Klassenliste der Klasse „{{ gradeNameCurrent }}“ verwalten</h1>
       <div class="list">
-        <persons-table :start=1 :count=12 />
-        <persons-table :start=13 :count=12 />
-        <persons-table :start=25 :count=12 />
-        <form-add-person/>
+        <persons-table :start="1" :count="12" />
+        <persons-table :start="13" :count="12" />
+        <persons-table :start="25" :count="12" />
+        <form-add-person />
       </div>
     </section>
   </main>
 </template>
 
 <script lang="ts">
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
+
 import FormAddPerson from './FormAddPerson.vue'
 import PersonsTable from './PersonsTable.vue'
-import { mapGetters } from 'vuex'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+
 import { Person } from '../../types'
 
 @Component({
@@ -40,7 +41,7 @@ export default class AdministerPersons extends Vue {
   }
 
   rename (person: Person, property: string, event: Event) {
-    const element = <HTMLElement> event.target
+    const element = <HTMLElement>event.target
     const newValue = element.innerText
     const payload = {
       person: person,
@@ -58,11 +59,11 @@ export default class AdministerPersons extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_administer_persons {
-    padding: 0 3vw;
+.vc_administer_persons {
+  padding: 0 3vw;
 
-    .list {
-      column-count: 3;
-    }
+  .list {
+    column-count: 3;
   }
+}
 </style>
