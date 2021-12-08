@@ -5,14 +5,15 @@
     </h1>
     <div class="meta">
       <aside class="left">{{ metaLocation }}</aside>
-      <aside class="right"><strong>Stand:</strong> {{ stateDateCurrent }}</aside>
+      <aside class="right">
+        <strong>Stand:</strong> {{ stateDateCurrent }}
+      </aside>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
 @Component({
   computed: {
@@ -35,23 +36,23 @@ export default class PlanHeader extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_plan_header {
-    width: 100%;
-    h1 {
-      text-align: center;
-      margin: 0;
-    }
-
-    .meta {
-      display: flex;
-    }
-
-    .meta .left {
-      flex-grow: 1;
-    }
-
-    .meta .right {
-      text-align: right;
-    }
+.vc_plan_header {
+  width: 100%;
+  h1 {
+    text-align: center;
+    margin: 0;
   }
+
+  .meta {
+    display: flex;
+  }
+
+  .meta .left {
+    flex-grow: 1;
+  }
+
+  .meta .right {
+    text-align: right;
+  }
+}
 </style>

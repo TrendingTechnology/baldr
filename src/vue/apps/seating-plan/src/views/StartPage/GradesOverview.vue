@@ -1,6 +1,6 @@
 <template>
   <div class="vc_grades_overview">
-    <grades-table/>
+    <grades-table />
     <form @submit.prevent="createGrade">
       <input
         @keyup.enter="createGrade"
@@ -8,7 +8,7 @@
         type="text"
         size="8"
         v-model="gradeName"
-      >
+      />
       <button>hinzufügen</button>
     </form>
   </div>
@@ -17,7 +17,7 @@
 <script lang="ts">
 // Components
 import GradesTable from './GradesTable.vue'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component({
   components: {

@@ -1,17 +1,17 @@
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 declare class DynamicSelect {
   /**
    * Set the focus on the Dynamic Select input text field.
    */
-  focus(): void
+  focus (): void
 }
 
 interface ModalDialog {
-  hide (name: string): void
-  toggle (name: string): void
-  show (name: string): void
-  isOpen (): boolean
+  hide(name: string): void
+  toggle(name: string): void
+  show(name: string): void
+  isOpen(): boolean
 }
 
 interface ShortcutSpecification {
@@ -51,12 +51,17 @@ interface ShortcutsManager {
    * @param routeNames - A list of route names. Activate this
    *   shortcut only on this routes.
    */
-  add (keys: string, callback: Function, description: string, routeNames?: string[]): void
+  add(
+    keys: string,
+    callback: Function,
+    description: string,
+    routeNames?: string[]
+  ): void
 
   /**
    * Add multiple shortcuts
    */
-  addMultiple (shortcutSpecs: ShortcutSpecification[]): void
+  addMultiple(shortcutSpecs: ShortcutSpecification[]): void
 
   /**
    * Remove a shortcut.
@@ -64,40 +69,40 @@ interface ShortcutsManager {
    * @param keys - Mousetrap key specification, see the
    *   {@link https://craig.is/killing/mice documentation}.
    */
-  remove (keys: string): void
+  remove(keys: string): void
 
   /**
    * Remove multiple shortcuts at once.
    *
    * @param keysList - An array of Mousetrap key specification.
    */
-  removeMultiple (keysList: string[]): void
+  removeMultiple(keysList: string[]): void
 
   /**
    *
    * @param {Object} route
    */
-  addRoute (route): void
+  addRoute(route): void
 
   /**
    * @param {Object} route
    */
-  fromRoute (route): void
+  fromRoute(route): void
 
   /**
    * @param {object} router - The router object of the Vue router (this.$router)
    */
-  fromRoutes (): void
+  fromRoutes(): void
 
   /**
    *
    */
-  pause (): void
+  pause(): void
 
   /**
    *
    */
-  unpause (): void
+  unpause(): void
 }
 
 declare module 'vue/types/vue' {
@@ -107,7 +112,7 @@ declare module 'vue/types/vue' {
      * Global attribute for DynamicSelect
      */
     $dynamicSelect: DynamicSelect
-    $fullscreen: () => void;
+    $fullscreen: () => void
 
     $shortcuts: ShortcutsManager
   }

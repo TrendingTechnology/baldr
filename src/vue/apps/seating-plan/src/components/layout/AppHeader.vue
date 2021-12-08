@@ -1,20 +1,19 @@
 <template>
   <header class="vc_app_header">
-    <vue-headful :title="title"/>
-    <router-link v-if="isNotHome" to='/' class="back-link" title="zurück">
-      <material-icon name="arrow-left"/>
+    <vue-headful :title="title" />
+    <router-link v-if="isNotHome" to="/" class="back-link" title="zurück">
+      <material-icon name="arrow-left" />
     </router-link>
     <h1>{{ title }}</h1>
-    <main-menu/>
+    <main-menu />
   </header>
 </template>
 
 <script lang="ts">
+import { Component, Prop, Vue } from '@bldr/vue-packages-bundler'
 import vueHeadful from 'vue-headful'
 
-// Components
 import MainMenu from '@/components/layout/MainMenu/index.vue'
-import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -36,17 +35,17 @@ export default class AppHeader extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_app_header {
-    display: inline-flex;
-    width: 100%;
-    justify-content: space-between;
+.vc_app_header {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
 
-    h1 {
-      padding-left: 2em;
-    }
-
-    @media print {
-      display: none;
-    }
+  h1 {
+    padding-left: 2em;
   }
+
+  @media print {
+    display: none;
+  }
+}
 </style>

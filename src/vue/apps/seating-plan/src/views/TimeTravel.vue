@@ -3,12 +3,12 @@
     <section class="external">
       <h1>Extern</h1>
       <table>
-        <tr
-          v-for="timeStampMsec in externalStateDates"
-          :key="timeStampMsec"
-        >
+        <tr v-for="timeStampMsec in externalStateDates" :key="timeStampMsec">
           <td>
-            <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
+            <a
+              href="#"
+              @click.prevent="importFromExternalByTime(timeStampMsec)"
+            >
               {{ formatToLocalDateTime(timeStampMsec) }}
             </a>
           </td>
@@ -25,10 +25,7 @@
     <section class="local">
       <h1>Lokal</h1>
       <table>
-        <tr
-          v-for="timeStampMsec in localStateDates"
-          :key="timeStampMsec"
-        >
+        <tr v-for="timeStampMsec in localStateDates" :key="timeStampMsec">
           <td>
             <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
               {{ formatToLocalDateTime(timeStampMsec) }}
@@ -47,15 +44,16 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
 import { formatToLocalDateTime } from '@bldr/core-browser'
-import { Component, Vue } from 'vue-property-decorator'
+import {
+  Component,
+  Vue,
+  mapGetters,
+  mapActions
+} from '@bldr/vue-packages-bundler'
 
 @Component({
-  computed: mapGetters([
-    'externalStateDates',
-    'localStateDates'
-  ]),
+  computed: mapGetters(['externalStateDates', 'localStateDates']),
   methods: {
     ...mapActions([
       'deleteFromExternalByTime',
@@ -75,11 +73,11 @@ export default class TimeTravel extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_time_travel {
-    display: flex;
+.vc_time_travel {
+  display: flex;
 
-    section {
-      width: 100%;
-    }
+  section {
+    width: 100%;
   }
+}
 </style>

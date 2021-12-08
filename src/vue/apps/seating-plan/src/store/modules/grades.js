@@ -2,7 +2,7 @@
  * Sort alphabetically
  */
 
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 class Grade {
   constructor (name) {
@@ -62,7 +62,7 @@ function naturalSort (a, b) {
 const state = {}
 
 const getters = {
-  grade: (state) => (gradeName) => {
+  grade: state => gradeName => {
     if ({}.hasOwnProperty.call(state, gradeName)) {
       return state[gradeName]
     }
@@ -74,11 +74,11 @@ const getters = {
       return getters.grade(gradeName)
     }
   },
-  gradeNames: (state) => {
+  gradeNames: state => {
     const gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
   },
-  gradeOfPerson: (state, getters) => (person) => {
+  gradeOfPerson: (state, getters) => person => {
     return getters.grade(person.grade)
   },
   hasPersonJob: (state, getters) => (personId, jobName) => {
@@ -88,8 +88,10 @@ const getters = {
     const person = getters.personById(personId)
     return person.jobs.includes(jobName)
   },
-  isGradePlaced: (state, getters) => (gradeName) => {
-    if (getters.personsCount(gradeName) === getters.personsPlacedCount(gradeName)) {
+  isGradePlaced: (state, getters) => gradeName => {
+    if (
+      getters.personsCount(gradeName) === getters.personsPlacedCount(gradeName)
+    ) {
       return true
     }
     return false
@@ -97,7 +99,7 @@ const getters = {
   isGradePlacedCurrent: (state, getters) => {
     return getters.isGradePlaced(getters.gradeNameCurrent)
   },
-  jobsOfGrade: (state, getters) => (gradeName) => {
+  jobsOfGrade: (state, getters) => gradeName => {
     const persons = getters.personsByGrade(gradeName)
     const jobs = {}
     for (const [personName, person] of Object.entries(persons)) {
@@ -115,13 +117,15 @@ const getters = {
   jobsOfGradeCurrent: (state, getters) => {
     return getters.jobsOfGrade(getters.gradeNameCurrent)
   },
-  jobsOfPerson: (state, getters) => (person) => {
+  jobsOfPerson: (state, getters) => person => {
     return person.jobs
   },
-  person: (state) => ({ firstName, lastName, grade }) => {
+  person: state => ({ firstName, lastName, grade }) => {
     const name = `${lastName}, ${firstName}`
-    if ({}.hasOwnProperty.call(state, grade) &&
-        {}.hasOwnProperty.call(state[grade].persons, name)) {
+    if (
+      {}.hasOwnProperty.call(state, grade) &&
+      {}.hasOwnProperty.call(state[grade].persons, name)
+    ) {
       return state[grade].persons[name]
     }
     return false
@@ -134,11 +138,11 @@ const getters = {
     }
     return false
   },
-  personByGradeAndSeatNoCurrent: (state, getters) => (seatNo) => {
+  personByGradeAndSeatNoCurrent: (state, getters) => seatNo => {
     const gradeName = getters.gradeNameCurrent
     return getters.personByGradeAndSeatNo(gradeName, seatNo)
   },
-  personById: (state, getters) => (personId) => {
+  personById: (state, getters) => personId => {
     const match = personId.match(/(.+): (.+), (.+)/)
     return getters.person({
       firstName: match[3],
@@ -146,7 +150,7 @@ const getters = {
       grade: match[1]
     })
   },
-  personsByGrade: (state) => (gradeName) => {
+  personsByGrade: state => gradeName => {
     if ({}.hasOwnProperty.call(state, gradeName)) {
       return state[gradeName].persons
     }
@@ -166,14 +170,14 @@ const getters = {
   personsByGradeCurrent: (state, getters) => {
     return getters.personsByGrade(getters.gradeNameCurrent)
   },
-  personsCount: (state, getters) => (gradeName) => {
+  personsCount: (state, getters) => gradeName => {
     const persons = getters.personsByGrade(gradeName)
     return Object.keys(persons).length
   },
   personsCountCurrent: (state, getters) => {
     return getters.personsCount(getters.gradeNameCurrent)
   },
-  personsPlacedCount: (state, getters) => (gradeName) => {
+  personsPlacedCount: (state, getters) => gradeName => {
     const persons = getters.personsByGrade(gradeName)
     let count = 0
     for (const personName in persons) {
@@ -209,7 +213,10 @@ const actions = {
       commit('createGrade', grade)
     }
   },
-  createPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade, seatNo, jobs }) => {
+  createPerson: (
+    { commit, getters, dispatch },
+    { firstName, lastName, grade, seatNo, jobs }
+  ) => {
     if (!getters.person({ firstName, lastName, grade })) {
       const person = new Person(firstName, lastName, grade, seatNo, jobs)
       dispatch('createGrade', person.grade)
@@ -294,7 +301,7 @@ const mutations = {
   deletePerson: (state, person) => {
     Vue.delete(state[person.grade].persons, person.name)
   },
-  flushGradesState: (state) => {
+  flushGradesState: state => {
     for (const property of Object.keys(state)) {
       delete state[property]
     }

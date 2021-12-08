@@ -16,7 +16,7 @@
 // Components
 import GradesOverview from './GradesOverview.vue'
 import MetaTable from './MetaTable.vue'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component({
   components: {

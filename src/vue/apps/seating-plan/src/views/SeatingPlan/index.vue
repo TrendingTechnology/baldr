@@ -1,31 +1,34 @@
 <template>
   <main class="vc_seating_plan">
     <modal-dialog name="person-select">
-      <person-select/>
+      <person-select />
     </modal-dialog>
 
     <div class="container">
       <section id="print-area">
-        <plan-header/>
-        <plan-seats/>
-        <plan-footer/>
+        <plan-header />
+        <plan-seats />
+        <plan-footer />
       </section>
-      <persons-sidebar/>
+      <persons-sidebar />
     </div>
   </main>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
-import { Route, NavigationGuardNext } from 'vue-router'
+import {
+  mapGetters,
+  Component,
+  Vue,
+  Route,
+  NavigationGuardNext
+} from '@bldr/vue-packages-bundler'
 
-// Components
 import PersonSelect from '@/components/PersonSelect.vue'
 import PersonsSidebar from './PersonsSidebar.vue'
 import PlanFooter from './PlanFooter.vue'
 import PlanHeader from './PlanHeader.vue'
 import PlanSeats from './PlanSeats.vue'
-import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -35,9 +38,7 @@ import { Component, Vue } from 'vue-property-decorator'
     PlanHeader,
     PlanSeats
   },
-  computed: mapGetters([
-    'gradeNameCurrent'
-  ])
+  computed: mapGetters(['gradeNameCurrent'])
 })
 export default class SeatingPlanView extends Vue {
   beforeCreate () {
@@ -61,20 +62,20 @@ export default class SeatingPlanView extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_seating_plan {
-    .container {
-      display: flex;
-      align-items: stretch;
-      position: relative;
-      width: 100%;
-    }
-
-    .container > section {
-      width: 100%;
-    }
-
-    .vc_person_select {
-      flex-basis: content;
-    }
+.vc_seating_plan {
+  .container {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    width: 100%;
   }
+
+  .container > section {
+    width: 100%;
+  }
+
+  .vc_person_select {
+    flex-basis: content;
+  }
+}
 </style>

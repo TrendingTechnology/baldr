@@ -1,17 +1,24 @@
 <template>
   <footer class="vc_plan_footer">
-    <div class="count">
-    Schülerzahl: {{ personsCountCurrent }}
-    </div>
+    <div class="count">Schülerzahl: {{ personsCountCurrent }}</div>
     <div class="jobs">
-      <span class="job" v-for="(persons, jobName) in jobsOfGradeCurrent" :key="jobName">
-        <strong><material-icon disabled :name="getJobIconFromName(jobName)"/> {{ jobName }}:</strong>
+      <span
+        class="job"
+        v-for="(persons, jobName) in jobsOfGradeCurrent"
+        :key="jobName"
+      >
+        <strong
+          ><material-icon disabled :name="getJobIconFromName(jobName)" />
+          {{ jobName }}:</strong
+        >
         <span v-for="person in persons" :key="person.id">
-          {{ person.lastName }},
-          {{ person.firstName }}<!--
+          {{ person.lastName }}, {{ person.firstName
+          }}<!--
       --><material-icon
             name="delete"
-            @click.native="removeJobFromPerson({ personId: person.id, jobName: jobName })"
+            @click.native="
+              removeJobFromPerson({ personId: person.id, jobName: jobName })
+            "
           />
         </span>
       </span>
@@ -20,18 +27,17 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import {
+  Component,
+  Vue,
+  mapGetters,
+  mapActions
+} from '@bldr/vue-packages-bundler'
 
 @Component({
-  computed: mapGetters([
-    'jobsOfGradeCurrent',
-    'personsCountCurrent'
-  ]),
+  computed: mapGetters(['jobsOfGradeCurrent', 'personsCountCurrent']),
   methods: {
-    ...mapActions([
-      'removeJobFromPerson'
-    ])
+    ...mapActions(['removeJobFromPerson'])
   }
 })
 export default class PlanFooter extends Vue {
@@ -42,25 +48,25 @@ export default class PlanFooter extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_plan_footer {
-    display: flex;
+.vc_plan_footer {
+  display: flex;
 
-    .count {
-      padding-right: 3em;
-      flex-grow: 1;
-    }
-
-    .jobs {
-      text-align: right;
-    }
-
-    .job {
-      padding-left: 1em;
-      font-size: 0.9em
-    }
-
-    .mdi {
-      font-size: 0.8em;
-    }
+  .count {
+    padding-right: 3em;
+    flex-grow: 1;
   }
+
+  .jobs {
+    text-align: right;
+  }
+
+  .job {
+    padding-left: 1em;
+    font-size: 0.9em;
+  }
+
+  .mdi {
+    font-size: 0.8em;
+  }
+}
 </style>

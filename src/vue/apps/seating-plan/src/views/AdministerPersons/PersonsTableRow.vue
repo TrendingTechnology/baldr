@@ -1,47 +1,29 @@
 <template>
-  <tr
-    :title="person.id"
-    :key="person.id"
-    class="vc_persons_table_row"
-  >
-    <td>
-      {{ no }}.
-    </td>
+  <tr :title="person.id" :key="person.id" class="vc_persons_table_row">
+    <td>{{ no }}.</td>
 
-    <td
-      contenteditable
-      @blur="rename(person, 'lastName', $event)"
-    >
+    <td contenteditable @blur="rename(person, 'lastName', $event)">
       {{ person.lastName }}
     </td>
 
-    <td
-      contenteditable
-      @blur="rename(person, 'firstName', $event)"
-    >
+    <td contenteditable @blur="rename(person, 'firstName', $event)">
       {{ person.firstName }}
     </td>
 
     <td>
-      <persons-jobs :person="person"/>
+      <persons-jobs :person="person" />
     </td>
 
     <td>
-      <material-icon
-        name="delete"
-        @click.native="deletePerson(person)"
-      />
+      <material-icon name="delete" @click.native="deletePerson(person)" />
     </td>
-
   </tr>
 </template>
 
 <script lang="ts">
-import { mapActions } from 'vuex'
+import { mapActions, Component, Prop, Vue } from '@bldr/vue-packages-bundler'
 
-// Components
 import PersonsJobs from '@/components/PersonsJobs.vue'
-import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Person } from '../../types'
 
 @Component({
@@ -49,9 +31,7 @@ import { Person } from '../../types'
     PersonsJobs
   },
   methods: {
-    ...mapActions([
-      'deletePerson'
-    ])
+    ...mapActions(['deletePerson'])
   }
 })
 export default class PersonsTableRow extends Vue {
@@ -62,7 +42,7 @@ export default class PersonsTableRow extends Vue {
   no!: Number
 
   rename (person: Person, property: string, event: Event) {
-    const element = <HTMLElement> event.target
+    const element = <HTMLElement>event.target
     const newValue = element.innerText
     const payload = {
       person: person,

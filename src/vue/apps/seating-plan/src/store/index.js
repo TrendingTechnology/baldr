@@ -1,8 +1,7 @@
 // eslint-disable-next-line
 /* globals localStorage */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { Vue, Vuex } from '@bldr/vue-packages-bundler'
 
 import app from './modules/app'
 import grades from './modules/grades'
@@ -27,7 +26,7 @@ const getters = {
   exportStateString: (state, getters) => {
     return JSON.stringify(getters.exportStateObject)
   },
-  state: (state) => {
+  state: state => {
     return state
   },
   stateAsUriComponent: (state, getters) => {
@@ -115,7 +114,7 @@ const modules = {
   seats
 }
 
-const plugin = (store) => {
+const plugin = store => {
   store.subscribe((mutation, state) => {
     const blackList = [
       'fetchExternalStateDates',

@@ -5,25 +5,28 @@
         v-if="hasPersonJob(person.id, job.name)"
         :name="job.icon"
         :title="job.name"
-        @click.native="removeJobFromPerson({ personId: person.id, jobName: job.name })"
+        @click.native="
+          removeJobFromPerson({ personId: person.id, jobName: job.name })
+        "
       />
     </span>
   </div>
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import {
+  Component,
+  Prop,
+  Vue,
+  mapGetters,
+  mapActions
+} from '@bldr/vue-packages-bundler'
 import { Person } from '../types'
 
 @Component({
-  computed: mapGetters([
-    'jobsAsArray'
-  ]),
+  computed: mapGetters(['jobsAsArray']),
   methods: {
-    ...mapActions([
-      'removeJobFromPerson'
-    ]),
+    ...mapActions(['removeJobFromPerson']),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }
@@ -40,7 +43,7 @@ export default class PersonsJob extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_persons_jobs {
-    display: inline-block;
-  }
+.vc_persons_jobs {
+  display: inline-block;
+}
 </style>

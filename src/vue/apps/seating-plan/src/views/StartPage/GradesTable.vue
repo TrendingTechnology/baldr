@@ -1,10 +1,7 @@
 <template>
   <table class="vc_grades_table">
     <tr v-for="gradeName in gradeNames" :key="gradeName">
-      <td
-        contenteditable
-        @blur="rename(gradeName, $event)"
-      >
+      <td contenteditable @blur="rename(gradeName, $event)">
         {{ gradeName }}
       </td>
 
@@ -42,19 +39,18 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex'
-import { Component, Vue } from 'vue-property-decorator'
+import {
+  Component,
+  Vue,
+  mapGetters,
+  mapActions
+} from '@bldr/vue-packages-bundler'
 import { DOMEvent } from '../../types'
 
 @Component({
-  computed: mapGetters([
-    'gradeNames',
-    'isGradePlaced'
-  ]),
+  computed: mapGetters(['gradeNames', 'isGradePlaced']),
   methods: {
-    ...mapActions([
-      'deleteGrade'
-    ])
+    ...mapActions(['deleteGrade'])
   }
 })
 export default class GradesTable extends Vue {
@@ -69,10 +65,10 @@ export default class GradesTable extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_grades_table {
-    .placed {
-      text-decoration: line-through;
-      color: grey;
-    }
+.vc_grades_table {
+  .placed {
+    text-decoration: line-through;
+    color: grey;
   }
+}
 </style>
