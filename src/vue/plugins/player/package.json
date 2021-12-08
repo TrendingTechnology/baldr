@@ -15,6 +15,7 @@
     "@bldr/icons": "*",
     "@bldr/media-resolver-ng": "*",
     "@bldr/themes": "*",
+    "@bldr/string-format": "*",
     "@bldr/vue-packages-bundler": "*"
   },
   "devDependencies": {

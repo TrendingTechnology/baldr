@@ -1,7 +1,8 @@
 export {
   convertDurationToSeconds,
   getCurrentSchoolYear,
-  getFormatedSchoolYear
+  getFormatedSchoolYear,
+  formatDuration
 } from './date'
 
 export { shortenText, convertHtmlToPlainText } from './format'
