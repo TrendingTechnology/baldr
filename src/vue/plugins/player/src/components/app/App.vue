@@ -5,6 +5,7 @@
       <router-link to="/player">Player</router-link> |
       <router-link to="/playable">Playable</router-link> |
       <router-link to="/play-button">PlayButtonDemo</router-link> |
+      <router-link to="/media-player">MediaPlayerDemo</router-link> |
       <router-link to="/Video">Video</router-link>
     </div>
     <router-view />

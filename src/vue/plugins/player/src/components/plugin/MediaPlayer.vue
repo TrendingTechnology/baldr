@@ -83,7 +83,7 @@ import { Component, Vue, Watch } from '@bldr/vue-packages-bundler'
     MaterialIcon
   }
 })
-export default class Player extends Vue {
+export default class MediaPlayer extends Vue {
   currentTimeSec: number
   durationSec: number
   isCurTimeEnlarged: boolean
@@ -103,6 +103,11 @@ export default class Player extends Vue {
       videoFullscreen: false
     }
   }
+
+  $refs!: {
+    elapsed: HTMLElement
+  }
+
 
   get sample () {
     return this.$store.getters['media/samplePlayListCurrent']

@@ -6,6 +6,7 @@ import App from '@/components/app/App.vue'
 import Home from '@/components/app/Home.vue'
 import PlayerDemo from '@/components/app/PlayerDemo.vue'
 import PlayableDemo from '@/components/app/PlayableDemo.vue'
+import MediaPlayerDemo from '@/components/app/MediaPlayerDemo.vue'
 import VideoDemonstration from '@/components/app/VideoDemonstration.vue'
 import PlayButtonDemo from '@/components/app/PlayButtonDemo.vue'
 
@@ -31,6 +32,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/play-button',
     component: PlayButtonDemo
+  },
+  {
+    path: '/media-player',
+    component: MediaPlayerDemo
   },
   {
     path: '/Video',
