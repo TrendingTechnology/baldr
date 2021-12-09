@@ -43,8 +43,9 @@
 <script lang="ts">
 import { PlainIcon } from '@bldr/icons'
 import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
-import { player } from '../../app'
-import { Playable, PlaybackState } from '../../main'
+
+import { player } from '../../plugin'
+import { Playable, PlaybackState } from '../../playable'
 
 const circleRadius = 100
 // 100%: 628.3185307179587

@@ -26,12 +26,11 @@
 
 <script lang="ts">
 import { Component, Vue } from '@bldr/vue-packages-bundler'
-import { player, resolver } from '../../app'
-import { Playable } from '../../main'
+import { resolver } from '../../app'
+import { player } from '../../plugin'
+import { Playable } from '../../playable'
 
-import PlayButton from '../plugin/PlayButton.vue'
-
-@Component({ components: { PlayButton } })
+@Component
 export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible: boolean = false
 

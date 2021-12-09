@@ -10,7 +10,7 @@ import MediaPlayerDemo from '@/components/app/MediaPlayerDemo.vue'
 import VideoDemonstration from '@/components/app/VideoDemonstration.vue'
 import PlayButtonDemo from '@/components/app/PlayButtonDemo.vue'
 
-import { Player } from './main'
+import Plugin from './plugin'
 
 Vue.config.productionTip = false
 
@@ -51,7 +51,7 @@ const router = new VueRouter({
 
 export const resolver = new Resolver()
 
-export const player = new Player(resolver)
+Vue.use(Plugin, resolver)
 
 new Vue({
   router,

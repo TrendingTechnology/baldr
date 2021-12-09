@@ -27,7 +27,8 @@
 
 <script lang="ts">
 import { Component, Vue } from '@bldr/vue-packages-bundler'
-import { player, resolver } from '../../app'
+import { resolver } from '../../app'
+import { player } from '../../plugin'
 
 @Component
 export default class PlayerDemo extends Vue {

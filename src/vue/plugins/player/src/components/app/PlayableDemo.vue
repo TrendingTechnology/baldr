@@ -38,8 +38,9 @@
 
 <script lang="ts">
 import { Component, Vue } from '@bldr/vue-packages-bundler'
-import { player, resolver } from '../../app'
-import { Playable } from '../../main'
+import { resolver } from '../../app'
+import { player } from '../../plugin'
+import { Playable } from '../../playable'
 
 function setTextContent (
   element: Vue | Element | Vue[] | Element[],
