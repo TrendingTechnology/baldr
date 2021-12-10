@@ -15,6 +15,7 @@
     </button>
 
     <media-player-ng></media-player-ng>
+    <media-player-ng></media-player-ng>
   </div>
 </template>
 

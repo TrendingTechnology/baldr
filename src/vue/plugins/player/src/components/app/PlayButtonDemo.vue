@@ -33,14 +33,10 @@ import { Playable } from '../../playable'
 @Component
 export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible: boolean = false
-
-  gate: Playable | null = null
-
-  chapel: Playable | null = null
-
-  chimes: Playable | null = null
-
-  people: Playable | null = null
+  gate!: Playable
+  chapel!: Playable
+  chimes!: Playable
+  people!: Playable
 
   async mounted () {
     // ref:Egmont_HB_Egmont-Ouverture
