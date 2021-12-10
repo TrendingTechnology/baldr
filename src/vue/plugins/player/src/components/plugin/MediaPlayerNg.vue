@@ -3,22 +3,20 @@
 </template>
 
 <script lang="ts">
-import { formatDuration } from '@bldr/string-format'
-import { Component, Vue, Watch } from '@bldr/vue-packages-bundler'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { player } from '../../plugin'
 
 @Component
 export default class MediaPlayerNg extends Vue {
-  playerUris!: { loaded?: string; playing?: string }
+  loadedUri?: string
+  playingUri?: string
   data () {
-    return {
-      playerUris: player.uris
-    }
+    return player.uris
   }
 
   get playingTitel (): string | undefined {
-    if (this.playerUris.playing != null) {
-      const playable = player.getPlayable(this.playerUris.playing)
+    if (this.playingUri != null) {
+      const playable = player.getPlayable(this.playingUri)
       return playable.sample.titleSafe
     }
   }
