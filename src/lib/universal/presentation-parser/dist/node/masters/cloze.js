@@ -22,7 +22,7 @@ class ClozeMaster {
                 required: true,
                 description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
                 assetUri: true
-            } }, master_1.mapStepFieldDefintions(['subset']));
+            } }, (0, master_1.mapStepFieldDefintions)(['subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

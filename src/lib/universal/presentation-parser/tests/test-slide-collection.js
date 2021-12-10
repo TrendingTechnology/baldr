@@ -15,11 +15,11 @@ describe('Class “SlideCollection()”', function () {
     assert.strictEqual(slides.flat[0].no, 1)
     assert.strictEqual(slides.flat[0].level, 1)
 
-    assert.strictEqual(slides.flat[0].master.name, 'document')
+    assert.strictEqual(slides.flat[0].master.name, 'cloze')
 
     // section: Luigi Russolo
-    const slide = slides.tree[4]
-    assert.strictEqual(slide.no, 5)
+    const slide = slides.tree[5]
+    assert.strictEqual(slide.no, 6)
 
     assert.strictEqual(slide.slides[0].master.name, 'task')
     assert.strictEqual(slide.slides[0].level, 2)

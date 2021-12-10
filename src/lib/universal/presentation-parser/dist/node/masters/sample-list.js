@@ -47,7 +47,7 @@ class SampleListMaster {
         return fields;
     }
     collectMediaUris(fields) {
-        return master_1.extractUrisFromFuzzySpecs(fields.samples);
+        return (0, master_1.extractUrisFromFuzzySpecs)(fields.samples);
     }
     collectFieldsAfterResolution(fields, resolver) {
         if (fields.samples.length === 1) {

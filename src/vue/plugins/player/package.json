@@ -42,8 +42,8 @@
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-template-compiler": "^2.6.11"
   },
-  "main": "dist/src/plugin",
-  "browser": "dist/src/plugin",
+  "main": "src/plugin",
+  "browser": "src/plugin",
   "eslintConfig": {
     "root": true,
     "env": {

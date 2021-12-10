@@ -33,6 +33,7 @@
     "@bldr/menu-webapp": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/notification": "*",
+    "@bldr/player": "*",
     "@bldr/presentation-parser": "*",
     "@bldr/shortcuts": "*",
     "@bldr/string-format": "*",

@@ -20,7 +20,7 @@ class EditorMaster {
                 type: String,
                 markup: true,
                 description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
-            } }, master_1.mapStepFieldDefintions(['mode', 'subset']));
+            } }, (0, master_1.mapStepFieldDefintions)(['mode', 'subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

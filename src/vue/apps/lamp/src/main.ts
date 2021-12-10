@@ -106,6 +106,8 @@ import DynamicSelect from '@bldr/dynamic-select'
 import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 import Notification from '@bldr/notification'
+import Player from '@bldr/player'
+import { resolver } from '@bldr/presentation-parser'
 
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
@@ -124,6 +126,9 @@ Vue.use(Websocket, config.wire.localUri, {
   reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
   reconnectionDelay: 3000 // (Number) how long to initially wait before attempting a new (1000)
 })
+
+Vue.use(Player, resolver)
+
 Vue.config.productionTip = false
 
 /** props (with real world value) *********************************************/

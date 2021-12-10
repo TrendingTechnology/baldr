@@ -27,7 +27,7 @@ class SectionMaster {
         this.shortFormField = 'heading';
     }
     deriveTitleFromFields(fields) {
-        return master_1.shortenText(fields.heading);
+        return (0, master_1.shortenText)(fields.heading);
     }
 }
 exports.SectionMaster = SectionMaster;

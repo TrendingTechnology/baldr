@@ -12,10 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.YoutubeMaster = exports.checkAvailability = exports.getSnippet = void 0;
 const config_1 = require("@bldr/config");
 const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
-const config = config_1.getConfig();
+const config = (0, config_1.getConfig)();
 function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const snippet = yield media_resolver_ng_1.getHttp('https://www.googleapis.com/youtube/v3/videos', {
+        const snippet = yield (0, media_resolver_ng_1.getHttp)('https://www.googleapis.com/youtube/v3/videos', {
             params: {
                 part: 'snippet',
                 id: youtubeId,

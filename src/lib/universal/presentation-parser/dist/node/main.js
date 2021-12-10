@@ -51,8 +51,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.youtubeMaster = exports.questionMaster = exports.genericMaster = exports.mapStepFieldDefintions = void 0;
+exports.parseAndResolve = exports.parse = exports.youtubeMaster = exports.questionMaster = exports.genericMaster = exports.mapStepFieldDefintions = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
+var presentation_2 = require("./presentation");
+Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
 var master_1 = require("./master");
 Object.defineProperty(exports, "mapStepFieldDefintions", { enumerable: true, get: function () { return master_1.mapStepFieldDefintions; } });
 exports.genericMaster = require("./masters/generic");
