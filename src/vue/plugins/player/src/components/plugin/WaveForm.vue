@@ -97,6 +97,7 @@ export default class WaveForm extends Vue {
     height: 10vw;
     width: 100%;
     position: relative;
+    cursor: pointer;
   }
 
   .progress-indicator-overlay {
