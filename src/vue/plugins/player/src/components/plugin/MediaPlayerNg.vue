@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_player" v-show="show" b-ui-theme="default">
+  <div class="vc_media_player" b-ui-theme="default">
     <div class="player-container">
       <div class="preview-container">
         <img
@@ -7,43 +7,11 @@
           v-if="asset && asset.previewHttpUrl"
           :src="asset.previewHttpUrl"
         />
-        <div
-          :class="{ fullscreen: videoFullscreen }"
-          v-show="asset && asset.type === 'video'"
-          class="video-container"
-          ref="videoContainer"
-          @click="videoToggleFullscreen"
-        />
       </div>
       <div class="main-area" v-if="asset">
         <div class="progress-area">
           <div class="progress-bar">
             <div ref="elapsed" class="elapsed" />
-          </div>
-          <div class="times">
-            <div
-              v-if="currentTimeSec"
-              :class="{ 'current-time': true, enlarged: isCurTimeEnlarged }"
-              @click="toggleCurTimeSize"
-            >
-              {{ formatDuration(sample.currentTimeSec) }}
-            </div>
-            <div class="controls">
-              <material-icon
-                v-if="paused"
-                name="play"
-                @click.native="$media.player.start()"
-              />
-              <material-icon
-                v-if="!paused"
-                name="pause"
-                @click.native="$media.player.pause()"
-              />
-              <!-- <material-icon name="fullscreen" @click.native="videoToggleFullscreen" /> -->
-            </div>
-            <div v-if="durationSec" class="ahead-time">
-              -{{ formatDuration(sample.durationRemainingSec) }}
-            </div>
           </div>
         </div>
         <div class="meta-data">
@@ -61,7 +29,6 @@
       <p v-else>Es ist keine Medien-Datei geladen.</p>
       <div class="placeholder"></div>
     </div>
-    <material-icon class="close" name="close" @click.native="toggle" />
   </div>
 </template>
 
@@ -105,7 +72,7 @@ export default class MediaPlayerNg extends Vue {
   }
 
   get asset (): Asset | undefined {
-    if (this.sample != null ) {
+    if (this.sample != null) {
       return this.sample.asset
     }
   }
@@ -115,7 +82,6 @@ export default class MediaPlayerNg extends Vue {
   //     return this.sample.htmlElement
   //   }
   // }
-
 
   // @Watch('mediaElement')
   // onMediaElementChange () {
@@ -172,16 +138,12 @@ $preview-size: 4em;
 $padding: 0.2em;
 
 .vc_media_player {
-  background-color: $gray;
   bottom: 0;
   color: $black;
   font-size: 3vmin;
   left: 0;
   padding: $padding;
-  position: fixed;
   text-align: left;
-  width: 100%;
-  z-index: 1;
 
   .player-container {
     display: flex;

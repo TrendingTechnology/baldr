@@ -14,7 +14,12 @@
       ref:Mein-kleiner-gruener-Kaktus
     </button>
 
+    <h2>MediaPlayer Instanz 1</h2>
+
     <media-player-ng></media-player-ng>
+
+    <h2>MediaPlayer Instanz 2</h2>
+
     <media-player-ng></media-player-ng>
   </div>
 </template>
