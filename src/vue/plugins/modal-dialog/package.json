@@ -15,8 +15,7 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/icons": "*",
-    "core-js": "3.7.0",
-    "vue": "2.6.12"
+    "@bldr/vue-packages-bundler": "*"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "4.5.9",

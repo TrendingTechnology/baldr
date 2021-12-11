@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Plugin, { dialogsWatcher } from './main.js'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 // Components
 import { MaterialIcon } from '@bldr/icons'

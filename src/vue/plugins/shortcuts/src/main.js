@@ -9,7 +9,8 @@
  */
 
 import { Mousetrap } from '@bldr/mousetrap-wrapper'
-import Vue from 'vue'
+import { Vue } from '@bldr/vue-packages-bundler'
+
 import ShortcutsOverview from './ShortcutsOverview.vue'
 
 /**
@@ -26,7 +27,7 @@ import ShortcutsOverview from './ShortcutsOverview.vue'
 const state = {}
 
 const getters = {
-  all: (state) => {
+  all: state => {
     return state
   }
 }

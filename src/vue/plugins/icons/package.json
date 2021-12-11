@@ -54,7 +54,6 @@
   },
   "dependencies": {
     "@bldr/themes": "*",
-    "core-js": "3.7.0",
     "@bldr/vue-packages-bundler": "*"
   },
   "devDependencies": {

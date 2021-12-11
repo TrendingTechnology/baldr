@@ -15,7 +15,6 @@
   "main": "src/main.js",
   "types": "src/main.d.ts",
   "dependencies": {
-    "core-js": "3.7.0",
     "vue": "2.6.12"
   },
   "devDependencies": {

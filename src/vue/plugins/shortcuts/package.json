@@ -15,7 +15,7 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/mousetrap-wrapper": "*",
-    "vue": "2.6.12"
+    "@bldr/vue-packages-bundler": "*"
   },
   "publishConfig": {
     "access": "public"
