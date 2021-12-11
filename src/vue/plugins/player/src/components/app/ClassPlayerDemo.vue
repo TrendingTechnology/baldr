@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Stückauswahl</h1>
+    <h1>ClassPlayerDemo</h1>
+    <h2>Stückauswahl</h2>
 
     <button @click="player.start('uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64')">
       ref:Du-bist-als-Kind-zu-heiss-gebadet-worden
@@ -14,7 +15,7 @@
       ref:Mein-kleiner-gruener-Kaktus
     </button>
 
-    <h1>Steuerung</h1>
+    <h2>Steuerung</h2>
 
     <button @click="player.start()">start</button>
     <button @click="player.stop()">stop</button>
@@ -31,7 +32,7 @@ import { resolver } from '../../app'
 import { player } from '../../plugin'
 
 @Component
-export default class PlayerDemo extends Vue {
+export default class ClassPlayerDemo extends Vue {
   get player () {
     return player
   }

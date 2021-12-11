@@ -44,7 +44,7 @@ import { player } from '../../plugin'
     MaterialIcon
   }
 })
-export default class MediaPlayerNg extends Vue {
+export default class MediaPlayer extends Vue {
   // currentTimeSec: number
   // durationSec: number
   // isCurTimeEnlarged: boolean

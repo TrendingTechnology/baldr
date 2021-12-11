@@ -1,6 +1,6 @@
 <template>
   <div class="vc_play_button_demo">
-    <h1>PlayButton</h1>
+    <h1>ComponentPlayButtonDemo</h1>
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor
@@ -31,12 +31,22 @@ import { player } from '../../plugin'
 import { Playable } from '../../playable'
 
 @Component
-export default class PlayButtonDemo extends Vue {
-  isOnePlayButtonVisible: boolean = false
+export default class ComponentPlayButtonDemo extends Vue {
+  isOnePlayButtonVisible!: boolean
   gate!: Playable
   chapel!: Playable
   chimes!: Playable
   people!: Playable
+
+  data () {
+    return {
+      isOnePlayButtonVisible: false,
+      gate: undefined,
+      chapel: undefined,
+      chimes: undefined,
+      people: undefined
+    }
+  }
 
   async mounted () {
     // ref:Egmont_HB_Egmont-Ouverture

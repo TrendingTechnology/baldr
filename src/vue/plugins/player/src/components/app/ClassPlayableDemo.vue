@@ -51,7 +51,7 @@ function setTextContent (
 }
 
 @Component
-export default class PlayableDemo extends Vue {
+export default class ClassPlayableDemo extends Vue {
   playable: Playable | null = null
 
   async mounted () {

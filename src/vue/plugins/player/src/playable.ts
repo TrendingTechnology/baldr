@@ -3,6 +3,8 @@ import { Sample } from '@bldr/media-resolver-ng'
 import { TimeOutExecutor, IntervalExecutor } from './timer'
 import { EventsListenerStore } from './events'
 
+const TIME_UPDATE_INTERVAL: number = 10
+
 /**
  * The state of the current playback.
  */
@@ -140,7 +142,7 @@ export class Playable {
       if (this.timeUpdateIntervalId == null) {
         this.timeUpdateIntervalId = setInterval(() => {
           this.triggerTimeUpdateListener()
-        }, 10)
+        }, TIME_UPDATE_INTERVAL)
       }
       await this.htmlElement.play()
       // Normally 0.01 by volume = 1
