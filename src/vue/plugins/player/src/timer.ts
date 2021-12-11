@@ -2,7 +2,7 @@ class Timer {
   /**
    * An array of `setTimeout` or `setInterval` IDs.
    */
-  protected ids: ReturnType<typeof setTimeout | typeof setInterval>[]
+  protected ids: Array<ReturnType<typeof setTimeout | typeof setInterval>>
 
   constructor () {
     this.ids = []

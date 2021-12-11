@@ -69,13 +69,13 @@ export class Player {
   private playing?: Playable
   private loaded?: Playable
   public events: EventsListenerStore
-  private cache: PlayerCache
+  private readonly cache: PlayerCache
 
   /**
    * Can be used as data `data () { return player.uris }` in Vue components.
    * A puremans vuex store.
    */
-  public uris: { loadedUri?: string; playingUri?: string } = {
+  public uris: { loadedUri?: string, playingUri?: string } = {
     loadedUri: undefined,
     playingUri: undefined
   }
@@ -97,7 +97,7 @@ export class Player {
   /**
    * Load a sample. Only loaded samples can be played.
    */
-  public load (uri: string) {
+  public load (uri: string): void {
     this.loaded = this.cache.getPlayable(uri)
     this.uris.loadedUri = uri
   }
@@ -106,7 +106,7 @@ export class Player {
    * Play a loaded sample from the position `sample.startTimeSec` on. Stop the
    * currently playing sample.
    */
-  public async start (uri?: string) {
+  public async start (uri?: string): Promise<void> {
     if (uri != null) {
       this.load(uri)
     }
@@ -128,7 +128,7 @@ export class Player {
    *
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
-  public async stop (fadeOutSec?: number) {
+  public async stop (fadeOutSec?: number): Promise<void> {
     if (this.playing == null) {
       return
     }
@@ -140,7 +140,7 @@ export class Player {
   /**
    * Pause a sample at the current position.
    */
-  public async pause () {
+  public async pause (): Promise<void> {
     if (this.playing != null) {
       await this.playing.pause()
     }
@@ -162,7 +162,7 @@ export class Player {
    *
    * @param interval - Time interval in seconds.
    */
-  public backward (interval: number = 10) {
+  public backward (interval: number = 10): void {
     if (this.playing != null) {
       this.playing.backward(interval)
     }
@@ -172,7 +172,7 @@ export class Player {
    * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
    * start this sample.
    */
-  public toggle () {
+  public toggle (): void {
     if (this.playing != null) {
       this.playing.toggle(this.globalVolume)
     }

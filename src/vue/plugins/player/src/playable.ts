@@ -59,7 +59,7 @@ export class Playable {
     this.eventsListener.register('time-update', callback)
   }
 
-  public removeEventsListener (callback: Function) {
+  public removeEventsListener (callback: Function): void {
     this.eventsListener.remove(callback)
   }
 
@@ -106,6 +106,19 @@ export class Playable {
     return this.elapsedTimeSec / this.durationSec
   }
 
+  /**
+   * Set the value to 0 to start playing from the start. 1 set the position at
+   * the end.
+   */
+  public set progress (value: number) {
+    if (value < 0 || value > 1) {
+      throw new Error(
+        'The property “progress” of the class “Playable” can only be between 0 und 1!'
+      )
+    }
+    this.jumpTo(this.durationSec * value)
+  }
+
   public get volume (): number {
     return this.htmlElement.volume
   }
@@ -126,7 +139,7 @@ export class Playable {
     fadeInDuration?: number
   ): Promise<void> {
     let fadeInSec: number
-    if (fadeInDuration == undefined) {
+    if (fadeInDuration === undefined) {
       fadeInSec = this.sample.fadeInSec
     } else {
       fadeInSec = fadeInDuration
@@ -286,9 +299,20 @@ export class Playable {
   }
 
   /**
+   * Jump to a new position while the playable is playing.
+   *
+   * @param timeSec - Current time in seconds. O is `sample.startTimeSec`.
+   */
+  private jumpTo (timeSec: number): void {
+    this.timeOutExecutor.clear()
+    this.htmlElement.currentTime = this.sample.startTimeSec + timeSec
+    this.scheduleFadeOut()
+  }
+
+  /**
    * Jump to a new time position.
    */
-  private jump (
+  private jumpByInterval (
     interval: number = 10,
     direction: JumpDirection = 'forward'
   ): void {
@@ -307,23 +331,21 @@ export class Playable {
         newPlayPosition = this.durationSec
       }
     }
-    this.timeOutExecutor.clear()
-    this.htmlElement.currentTime = this.sample.startTimeSec + newPlayPosition
-    this.scheduleFadeOut()
+    this.jumpTo(newPlayPosition)
   }
 
   public forward (interval: number = 10): void {
-    this.jump(interval, 'forward')
+    this.jumpByInterval(interval, 'forward')
   }
 
   public backward (interval: number = 10): void {
-    this.jump(interval, 'backward')
+    this.jumpByInterval(interval, 'backward')
   }
 
   /**
    * „abwürgen“
    */
-  public stall () {
+  public stall (): void {
     this.timeOutExecutor.clear()
     this.intervalExecutor.clear()
     if (this.timeUpdateIntervalId != null) {

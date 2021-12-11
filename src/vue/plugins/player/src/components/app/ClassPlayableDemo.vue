@@ -6,6 +6,10 @@
     <button @click="playable.stop(1)">stop(1)</button>
     <button @click="playable.stop(5)">stop(5)</button>
     <button @click="playable.stop(10)">stop(10)</button>
+    <button @click="playable.progress = 0.1">progress = 0.1</button>
+    <button @click="playable.progress = 0.5">progress = 0.5</button>
+    <button @click="playable.progress = 0.9">progress = 0.9</button>
+    <button @click="playable.progress = 0.97">progress = 0.97</button>
     <button @click="playable.play(0.1)">play(0.1)</button>
     <button @click="playable.play(0.5)">play(0.5)</button>
     <button @click="playable.play(1)">play(1)</button>

@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 
-const routes: Array<RouteConfig> = [
+const routes: RouteConfig[] = [
   {
     path: '/',
     component: ComponentPlayButtonDemo

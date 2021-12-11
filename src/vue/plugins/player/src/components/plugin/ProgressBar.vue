@@ -7,7 +7,6 @@
 <script lang="ts">
 import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
 
-import { player } from '../../plugin'
 import { Playable } from '../../playable'
 
 @Component
@@ -28,7 +27,9 @@ export default class ProgressBar extends Vue {
   }
 
   seek (event: MouseEvent) {
-    console.log(event.offsetX / this.$refs.progress.clientWidth)
+    if (this.playable != null) {
+      this.playable.progress = event.offsetX / this.$refs.progress.clientWidth
+    }
   }
 
   registerEvents (): void {
