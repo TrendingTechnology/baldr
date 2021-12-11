@@ -8,7 +8,7 @@ const core_browser_1 = require("@bldr/core-browser");
  */
 class DataCutter {
     constructor(rawData) {
-        this.raw = core_browser_1.deepCopy(rawData);
+        this.raw = (0, core_browser_1.deepCopy)(rawData);
     }
     get keys() {
         return Object.keys(this.raw);
@@ -18,7 +18,7 @@ class DataCutter {
      */
     checkString(propertyName) {
         if (typeof this.raw[propertyName] !== 'string') {
-            throw new Error(`The value of the property “${propertyName}” is not a string: ${core_browser_1.convertToString(this.raw[propertyName])}.`);
+            throw new Error(`The value of the property “${propertyName}” is not a string: ${(0, core_browser_1.convertToString)(this.raw[propertyName])}.`);
         }
     }
     /**
@@ -26,7 +26,7 @@ class DataCutter {
      */
     checkNumber(propertyName) {
         if (typeof this.raw[propertyName] !== 'number') {
-            throw new Error(`The value of the property “${propertyName}” is not a number: ${core_browser_1.convertToString(this.raw[propertyName])}.`);
+            throw new Error(`The value of the property “${propertyName}” is not a number: ${(0, core_browser_1.convertToString)(this.raw[propertyName])}.`);
         }
     }
     /**
@@ -96,7 +96,7 @@ class DataCutter {
      */
     checkEmpty() {
         if (!this.isEmpty()) {
-            throw Error(`Unknown properties in raw object: ${core_browser_1.convertToString(this.raw)}`);
+            throw Error(`Unknown properties in raw object: ${(0, core_browser_1.convertToString)(this.raw)}`);
         }
     }
 }

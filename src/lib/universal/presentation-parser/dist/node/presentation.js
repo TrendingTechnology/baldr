@@ -90,7 +90,7 @@ class Presentation {
      */
     convertFromYaml(yamlString) {
         var _a;
-        let raw = yaml_1.convertFromYaml(yamlString);
+        let raw = (0, yaml_1.convertFromYaml)(yamlString);
         if (yamlString.includes('ref:./')) {
             let ref;
             if (raw.ref != null) {
@@ -104,7 +104,7 @@ class Presentation {
             }
             yamlString = this.expandMediaRefs(yamlString, ref);
             this.rawYamlStringExpanded = yamlString;
-            raw = yaml_1.convertFromYaml(yamlString);
+            raw = (0, yaml_1.convertFromYaml)(yamlString);
         }
         return new data_management_1.DataCutter(raw);
     }

@@ -28,7 +28,7 @@ class InteractiveGraphicMaster {
                 validate: (input) => {
                     return ['layer', 'layer+', 'group'].includes(input);
                 }
-            } }, master_1.mapStepFieldDefintions(['selector', 'subset']));
+            } }, (0, master_1.mapStepFieldDefintions)(['selector', 'subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

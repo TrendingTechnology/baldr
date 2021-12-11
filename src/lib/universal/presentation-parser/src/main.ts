@@ -43,6 +43,8 @@
 
 import { Presentation } from './presentation'
 
+export { resolver } from './presentation'
+
 export { mapStepFieldDefintions } from './master'
 
 export * as genericMaster from './masters/generic'

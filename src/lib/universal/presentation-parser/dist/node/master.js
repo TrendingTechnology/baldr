@@ -159,7 +159,7 @@ class MasterWrapper {
             }
             //  Convert the field marked as containing markup from markdown to HTML.
             if (def.markup != null && def.markup && fields[name] != null) {
-                fields[name] = markdown_to_html_1.convertNestedMarkdownToHtml(fields[name]);
+                fields[name] = (0, markdown_to_html_1.convertNestedMarkdownToHtml)(fields[name]);
             }
         }
         if (this.master.collectFieldsOnInstantiation != null) {

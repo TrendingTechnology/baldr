@@ -20,7 +20,7 @@ export class Playable {
 
   private readonly intervalExecutor = new IntervalExecutor()
 
-  private timeUpdateIntervalId?: number
+  private timeUpdateIntervalId?: ReturnType<typeof setInterval>
 
   private readonly timeOutExecutor = new TimeOutExecutor()
 
@@ -235,7 +235,9 @@ export class Playable {
         } else {
           // The video opacity must be set to zero.
           this.volume = 0
-          clearInterval(this.timeUpdateIntervalId)
+          if (this.timeUpdateIntervalId != null) {
+            clearInterval(this.timeUpdateIntervalId)
+          }
           this.timeUpdateIntervalId = undefined
           this.htmlElement.pause()
           this.intervalExecutor.clear()
@@ -322,7 +324,9 @@ export class Playable {
   public stall () {
     this.timeOutExecutor.clear()
     this.intervalExecutor.clear()
-    clearInterval(this.timeUpdateIntervalId)
+    if (this.timeUpdateIntervalId != null) {
+      clearInterval(this.timeUpdateIntervalId)
+    }
     this.timeUpdateIntervalId = undefined
     this.htmlElement.pause()
   }

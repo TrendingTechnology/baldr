@@ -4,19 +4,19 @@
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor
-    <play-button :playable="gate" />
+    <play-button-ng :playable="gate" />
     Kapelle
-    <play-button :playable="chapel" />
+    <play-button-ng :playable="chapel" />
     Glocken
-    <play-button :playable="chimes" />
+    <play-button-ng :playable="chimes" />
     Menschen laufen durch das Tor
-    <play-button :playable="people" />
+    <play-button-ng :playable="people" />
 
     <h2>Zwei mal das gleiche Sample</h2>
     Glocken
-    <play-button :playable="chimes" />
+    <play-button-ng :playable="chimes" />
     Glocken
-    <play-button v-if="!isOnePlayButtonVisible" :playable="chimes" />
+    <play-button-ng v-if="!isOnePlayButtonVisible" :playable="chimes" />
 
     <p>
       <button @click="hideOnePlayButton()">Verberge PlayButton</button>
@@ -33,14 +33,10 @@ import { Playable } from '../../playable'
 @Component
 export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible: boolean = false
-
-  gate: Playable | null = null
-
-  chapel: Playable | null = null
-
-  chimes: Playable | null = null
-
-  people: Playable | null = null
+  gate!: Playable
+  chapel!: Playable
+  chimes!: Playable
+  people!: Playable
 
   async mounted () {
     // ref:Egmont_HB_Egmont-Ouverture

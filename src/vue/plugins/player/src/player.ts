@@ -72,6 +72,15 @@ export class Player {
   private cache: PlayerCache
 
   /**
+   * Can be used as data `data () { return player.uris }` in Vue components.
+   * A puremans vuex store.
+   */
+  public uris: { loadedUri?: string; playingUri?: string } = {
+    loadedUri: undefined,
+    playingUri: undefined
+  }
+
+  /**
    * Global volume: from 0 - 1
    */
   globalVolume: number = 1
@@ -90,6 +99,7 @@ export class Player {
    */
   public load (uri: string) {
     this.loaded = this.cache.getPlayable(uri)
+    this.uris.loadedUri = uri
   }
 
   /**
@@ -109,6 +119,7 @@ export class Player {
     }
     this.loaded.start(this.globalVolume)
     this.playing = this.loaded
+    this.uris.playingUri = this.uris.loadedUri
   }
 
   /**
@@ -123,6 +134,7 @@ export class Player {
     }
     await this.playing.stop(fadeOutSec)
     this.playing = undefined
+    this.uris.playingUri = undefined
   }
 
   /**

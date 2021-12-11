@@ -11,7 +11,7 @@ function splitMarkup(rawMarkup, charactersOnSlide) {
     // Convert into HTML
     const converted = [];
     for (const markup of rawMarkup) {
-        converted.push(master_1.convertMarkdownToHtml(markup));
+        converted.push((0, master_1.convertMarkdownToHtml)(markup));
     }
     // Split by <hr>
     const splittedByHr = [];
@@ -29,7 +29,7 @@ function splitMarkup(rawMarkup, charactersOnSlide) {
     // Split large texts into smaller chunks
     let markup = [];
     for (const html of splittedByHr) {
-        const chunks = master_1.splitHtmlIntoChunks(html, charactersOnSlide);
+        const chunks = (0, master_1.splitHtmlIntoChunks)(html, charactersOnSlide);
         for (const chunk of chunks) {
             markup.push(chunk);
         }
@@ -84,7 +84,7 @@ class GenericMaster {
     }
     collectStepsOnInstantiation(fields, stepCollector) {
         for (const markup of fields.markup) {
-            stepCollector.add(string_format_1.shortenText(markup, { stripTags: true, maxLength: 40 }));
+            stepCollector.add((0, string_format_1.shortenText)(markup, { stripTags: true, maxLength: 40 }));
         }
     }
 }

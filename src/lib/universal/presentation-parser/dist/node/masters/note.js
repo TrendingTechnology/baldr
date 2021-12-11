@@ -27,24 +27,24 @@ class NoteMaster {
         this.shortFormField = 'markup';
     }
     normalizeFieldsInput(fields) {
-        fields.markup = master_1.convertMarkdownToHtml(fields.markup);
+        fields.markup = (0, master_1.convertMarkdownToHtml)(fields.markup);
         // hr tag
         if (fields.markup.indexOf('<hr>') > -1) {
             const segments = fields.markup.split('<hr>');
             const prolog = segments.shift();
             let body = segments.join('<hr>');
-            body = '<span class="word-area">' + dom_manipulator_1.wrapWords(body) + '</span>';
+            body = '<span class="word-area">' + (0, dom_manipulator_1.wrapWords)(body) + '</span>';
             fields.markup = [prolog, body].join('');
             // No hr tag provided
             // Step through all words
         }
         else {
-            fields.markup = dom_manipulator_1.wrapWords(fields.markup);
+            fields.markup = (0, dom_manipulator_1.wrapWords)(fields.markup);
         }
         return fields;
     }
     collectStepsOnInstantiation(fields, stepCollector) {
-        const controller = dom_manipulator_1.buildTextStepController(fields.markup, {
+        const controller = (0, dom_manipulator_1.buildTextStepController)(fields.markup, {
             stepMode: 'words'
         });
         stepCollector.add('Initiale Ansicht');

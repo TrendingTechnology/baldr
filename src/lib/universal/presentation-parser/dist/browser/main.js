@@ -50,6 +50,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Presentation } from './presentation';
+export { resolver } from './presentation';
 export { mapStepFieldDefintions } from './master';
 import * as genericMaster_1 from './masters/generic';
 export { genericMaster_1 as genericMaster };

@@ -41,10 +41,10 @@ class Slide {
         const masterNames = Object.keys(master_collection_1.masterCollection);
         const intersection = masterNames.filter(masterName => data.keys.includes(masterName));
         if (intersection.length === 0) {
-            throw new Error(`No master slide found: ${core_browser_1.convertToString(data.raw)}`);
+            throw new Error(`No master slide found: ${(0, core_browser_1.convertToString)(data.raw)}`);
         }
         if (intersection.length > 1) {
-            throw new Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data.raw)}`);
+            throw new Error(`Each slide must have only one master slide: ${(0, core_browser_1.convertToString)(data.raw)}`);
         }
         return master_collection_1.masterCollection[intersection[0]];
     }
@@ -71,15 +71,15 @@ class Slide {
      */
     get title() {
         if (this.meta.title != null) {
-            return string_format_1.shortenText(this.meta.title, { stripTags: true });
+            return (0, string_format_1.shortenText)(this.meta.title, { stripTags: true });
         }
         const titleFromFields = this.master.deriveTitleFromFields(this.fields);
         if (titleFromFields != null) {
-            return string_format_1.shortenText(titleFromFields, { stripTags: true });
+            return (0, string_format_1.shortenText)(titleFromFields, { stripTags: true });
         }
         const plainText = this.plainText;
         if (plainText != null) {
-            return string_format_1.shortenText(plainText, { stripTags: true });
+            return (0, string_format_1.shortenText)(plainText, { stripTags: true });
         }
         return this.master.displayName;
     }
