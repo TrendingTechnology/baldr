@@ -7,6 +7,8 @@
       <router-link to="/component-media-player-demo">ComponentMediaPlayerDemo</router-link> |
       <router-link to="/component-play-button-demo">ComponentPlayButtonDemo</router-link> |
       <router-link to="/component-progress-bar-demo">ComponentProgressBarDemo</router-link> |
+      <router-link to="/component-wave-form-demo">ComponentWaveFormDemo</router-link> |
+
     </div>
     <router-view />
   </div>

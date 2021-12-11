@@ -8,6 +8,7 @@ import ClassPlayerDemo from '@/components/app/ClassPlayerDemo.vue'
 import ComponentMediaPlayerDemo from '@/components/app/ComponentMediaPlayerDemo.vue'
 import ComponentPlayButtonDemo from '@/components/app/ComponentPlayButtonDemo.vue'
 import ComponentProgressBarDemo from '@/components/app/ComponentProgressBarDemo.vue'
+import ComponentWaveFormDemo from '@/components/app/ComponentWaveFormDemo.vue'
 
 import Plugin from './plugin'
 
@@ -39,6 +40,10 @@ const routes: RouteConfig[] = [
   {
     path: '/component-progress-bar-demo',
     component: ComponentProgressBarDemo
+  },
+  {
+    path: '/component-wave-form-demo',
+    component: ComponentWaveFormDemo
   }
 ]
 
