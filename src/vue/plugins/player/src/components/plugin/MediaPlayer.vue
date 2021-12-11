@@ -10,9 +10,7 @@
       </div>
       <div class="main-area" v-if="asset">
         <div class="progress-area">
-          <div class="progress-bar">
-            <div ref="elapsed" class="elapsed" />
-          </div>
+          <progress-bar :playable="playable" />
         </div>
         <div class="meta-data">
           <div
@@ -33,26 +31,18 @@
 </template>
 
 <script lang="ts">
-import { MaterialIcon } from '@bldr/icons'
-import { formatDuration } from '@bldr/string-format'
-import { Component, Vue, Watch } from '@bldr/vue-packages-bundler'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import { Sample, Asset } from '@bldr/media-resolver-ng'
+import ProgressBar from './ProgressBar.vue'
 import { player } from '../../plugin'
+import { Playable } from '../../playable'
 
 @Component({
   components: {
-    MaterialIcon
+    ProgressBar
   }
 })
 export default class MediaPlayer extends Vue {
-  // currentTimeSec: number
-  // durationSec: number
-  // isCurTimeEnlarged: boolean
-  // paused: boolean
-  // show: boolean
-  // videoElement: HTMLMediaElement
-  // videoFullscreen: boolean
-
   loadedUri?: string
   playingUri?: string
 
@@ -64,10 +54,15 @@ export default class MediaPlayer extends Vue {
     elapsed: HTMLElement
   }
 
-  get sample (): Sample | undefined {
+  get playable (): Playable | undefined {
     if (this.playingUri != null) {
-      const playable = player.getPlayable(this.playingUri)
-      return playable.sample
+      return player.getPlayable(this.playingUri)
+    }
+  }
+
+  get sample (): Sample | undefined {
+    if (this.playable != null) {
+      return this.playable.sample
     }
   }
 
@@ -76,60 +71,6 @@ export default class MediaPlayer extends Vue {
       return this.sample.asset
     }
   }
-
-  // get mediaElement () {
-  //   if (this.sample) {
-  //     return this.sample.htmlElement
-  //   }
-  // }
-
-  // @Watch('mediaElement')
-  // onMediaElementChange () {
-  //   if (!this.mediaElement) return
-  //   this.mediaElement.ontimeupdate = event => {
-  //     this.currentTimeSec = event.target.currentTime
-  //   }
-  //   this.mediaElement.oncanplaythrough = event => {
-  //     this.durationSec = event.target.duration
-  //   }
-  //   this.mediaElement.onplay = event => {
-  //     this.paused = false
-  //   }
-  //   this.mediaElement.onpause = event => {
-  //     this.paused = true
-  //   }
-  //   if (this.videoElement) this.videoElement.style.display = 'none'
-  //   if (this.asset.type === 'video') {
-  //     // Make a canvas clone see https://stackoverflow.com/a/24532111/10193818
-  //     //this.mediaElement.style.display = 'block'
-  //     //this.$refs.videoContainer.appendChild(this.mediaElement)
-  //     //this.videoElement = this.mediaElement
-  //   }
-  // }
-
-  // @Watch('currentTimeSec')
-  // onCurrentTimeSecChange () {
-  //   if (this.$refs.elapsed == null) {
-  //     return
-  //   }
-  //   this.$refs.elapsed.style.width = `${this.sample.progress * 100}%`
-  // }
-
-  // toggle () {
-  //   this.show = !this.show
-  // }
-
-  // videoToggleFullscreen () {
-  //   this.videoFullscreen = !this.videoFullscreen
-  // }
-
-  // toggleCurTimeSize () {
-  //   this.isCurTimeEnlarged = !this.isCurTimeEnlarged
-  // }
-
-  // formatDuration (sec) {
-  //   return formatDuration(sec)
-  // }
 }
 </script>
 
@@ -179,18 +120,6 @@ $padding: 0.2em;
       width: 100%;
 
       .progress-area {
-        .progress-bar {
-          background-color: $black;
-          height: 0.2em;
-          width: 100%;
-
-          .elapsed {
-            background: $orange;
-            width: 0%;
-            height: 100%;
-          }
-        }
-
         .times {
           display: flex;
           justify-content: space-between;

@@ -33,15 +33,17 @@ export default class ProgressBar extends Vue {
   }
 
   registerEvents (): void {
+    this.$refs.progress.addEventListener('click', this.seek)
     if (this.playable != null) {
-      this.$refs.progress.addEventListener('click', this.seek)
       this.playable.registerTimeUpdateListener(this.updateProgress)
     }
   }
 
   unregisterEvents (): void {
     this.$refs.progress.removeEventListener('click', this.seek)
-    this.playable.removeEventsListener(this.updateProgress)
+    if (this.playable != null) {
+      this.playable.removeEventsListener(this.updateProgress)
+    }
   }
 
   mounted (): void {
@@ -50,6 +52,7 @@ export default class ProgressBar extends Vue {
 
   @Watch('playable')
   onPlayableChange (): void {
+    this.unregisterEvents()
     this.registerEvents()
   }
 
@@ -64,6 +67,7 @@ export default class ProgressBar extends Vue {
   background-color: $black;
   height: 0.2em;
   width: 100%;
+  cursor: pointer;
 
   .elapsed {
     background: $orange;
