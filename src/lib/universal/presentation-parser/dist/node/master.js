@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.Sample = exports.Asset = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
 Object.defineProperty(exports, "convertMarkdownToHtml", { enumerable: true, get: function () { return markdown_to_html_2.convertMarkdownToHtml; } });
+var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
 var string_format_1 = require("@bldr/string-format");
 Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return string_format_1.convertHtmlToPlainText; } });
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
@@ -16,8 +19,8 @@ Object.defineProperty(exports, "StepCollector", { enumerable: true, get: functio
 var fuzzy_uri_1 = require("./fuzzy-uri");
 Object.defineProperty(exports, "extractUrisFromFuzzySpecs", { enumerable: true, get: function () { return fuzzy_uri_1.extractUrisFromFuzzySpecs; } });
 Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
-var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
-Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
+var media_resolver_ng_2 = require("@bldr/media-resolver-ng");
+Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_2.Resolver; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
 var string_format_2 = require("@bldr/string-format");

@@ -1,13 +1,10 @@
-import { Sample, SampleYamlFormat, Asset, YamlFormat, RestApiRaw } from './types'
+import { SampleYamlFormat, YamlFormat, RestApiRaw } from './types'
 
-import {
-  getExtension,
-  formatMultiPartAssetFileName
-} from '@bldr/core-browser'
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/core-browser'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
 import { Cache } from './cache'
-import { SampleData } from './sample'
+import { Sample } from './sample'
 
 export class SampleCollection extends Cache<Sample> {
   private readonly asset: Asset
@@ -22,11 +19,8 @@ export class SampleCollection extends Cache<Sample> {
     return this.get(this.asset.ref + '#complete')
   }
 
-  private addSample (
-    asset: Asset,
-    yamlFormat: SampleYamlFormat
-  ): void {
-    const sample = new SampleData(asset, yamlFormat)
+  private addSample (asset: Asset, yamlFormat: SampleYamlFormat): void {
+    const sample = new Sample(asset, yamlFormat)
     if (this.get(sample.ref) == null) {
       this.add(sample.ref, sample)
     }
@@ -105,9 +99,18 @@ export class SampleCollection extends Cache<Sample> {
   }
 }
 
-export class ClientMediaAsset implements Asset {
+/**
+ * Hold various data of a media file as class properties.
+ *
+ * If a media file has a property with the name `multiPartCount`, it is a
+ * multipart asset. A multipart asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+export class Asset {
   /**
-   * @inheritdoc
+   * A raw javascript object read from the YAML files
+   * (`*.extension.yml`)
    */
   yaml: RestApiRaw
   uri: MediaUri
@@ -121,23 +124,20 @@ export class ClientMediaAsset implements Asset {
   samples?: SampleCollection
 
   /**
-   * @inheritdoc
+   * The media type, for example `image`, `audio` or `video`.
    */
   mimeType: string
 
   /**
-   * @inheritdoc
+   * HTTP Uniform Resource Locator, for example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
    */
   httpUrl: string
 
   /**
    * @param yaml - A raw javascript object read from the Rest API
    */
-  constructor (
-    uri: string,
-    httpUrl: string,
-    yaml: RestApiRaw
-  ) {
+  constructor (uri: string, httpUrl: string, yaml: RestApiRaw) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
 
@@ -162,14 +162,16 @@ export class ClientMediaAsset implements Asset {
   }
 
   /**
-   * @inheritdoc
+   * The reference authority of the URI using the `ref` scheme. The returned
+   * string is prefixed with `ref:`.
    */
   get ref (): string {
     return 'ref:' + this.yaml.ref
   }
 
   /**
-   * @inheritdoc
+   * The UUID authority of the URI using the `uuid` scheme. The returned
+   * string is prefixed with `uuid:`.
    */
   get uuid (): string {
     return 'uuid:' + this.yaml.uuid
@@ -189,7 +191,9 @@ export class ClientMediaAsset implements Asset {
   }
 
   /**
-   * @inheritdoc
+   * Each media asset can have a preview image. The suffix `_preview.jpg`
+   * is appended on the path. For example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
    */
   get previewHttpUrl (): string | undefined {
     if (this.yaml.previewImage) {
@@ -198,7 +202,9 @@ export class ClientMediaAsset implements Asset {
   }
 
   /**
-   * @inheritdoc
+   * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+   * is appended on the HTTP URL. For example
+   * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
    */
   get waveformHttpUrl (): string | undefined {
     if (this.yaml.hasWaveform) {
@@ -217,21 +223,21 @@ export class ClientMediaAsset implements Asset {
   }
 
   /**
-   * @inheritdoc
+   * True if the media file is playable, for example an audio or a video file.
    */
   get isPlayable (): boolean {
     return ['audio', 'video'].includes(this.mimeType)
   }
 
   /**
-   * @inheritdoc
+   * True if the media file is visible, for example an image or a video file.
    */
   get isVisible (): boolean {
     return ['image', 'video'].includes(this.mimeType)
   }
 
   /**
-   * @inheritdoc
+   * The number of parts of a multipart media asset.
    */
   get multiPartCount (): number {
     if (this.yaml.multiPartCount == null) {
@@ -241,7 +247,9 @@ export class ClientMediaAsset implements Asset {
   }
 
   /**
-   * @inheritdoc
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param The part number starts with 1.
    */
   getMultiPartHttpUrlByNo (no: number): string {
     if (this.multiPartCount === 1) return this.httpUrl

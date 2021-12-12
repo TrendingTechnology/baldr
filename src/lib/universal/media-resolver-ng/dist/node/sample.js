@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SampleData = void 0;
+exports.Sample = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
@@ -10,10 +10,35 @@ const defaultFadeInSec = 0.3;
  * We never stop. Instead we fade out very short and smoothly.
  */
 const defaultFadeOutSec = 1;
-class SampleData {
+/**
+ * A sample (snippet, sprite) of a media asset which can be played. A sample
+ * has typically a start time and a duration. If the start time is missing, the
+ * media file gets played from the beginning. If the duration is missing, the
+ * whole media file gets played.
+ *
+ * ```
+ *                  currentTimeSec
+ *                  |
+ *  fadeIn          |        fadeOut
+ *         /|-------+------|\           <- mediaElementCurrentVolume_
+ *      /   |       |      |   \
+ *   /      |       |      |     \
+ * #|#######|#######|######|#####|#### <- mediaElement
+ *  ^                            ^
+ *  startTimeSec                 endTimeSec
+ *                         ^
+ *                         |
+ *                         fadeOutStartTime
+ *
+ *  | <-      durationSec      ->|
+ * ```
+ */
+class Sample {
     constructor(asset, yaml) {
         /**
-         * @inheritdoc
+         * The start time in seconds. The sample is played from this start time
+         * using the `mediaElement` of the `asset`. It is the “zero” second
+         * for the sample.
          */
         this.startTimeSec = 0;
         this.asset = asset;
@@ -55,14 +80,15 @@ class SampleData {
         return (0, core_browser_1.convertDurationToSeconds)(timeIntervaleString);
     }
     /**
-     * @inheritdoc
+     * The reference of the sample. The reference is used to build the URI of the
+     * sample, for example `uri#reference`: `ref:Beethoven#complete`
      */
     get ref() {
         const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
         return `${this.asset.ref}#${ref}`;
     }
     /**
-     * @inheritdoc
+     * The title of the sample. For example `komplett`, `Hook-Line`.
      */
     get title() {
         if (this.yaml.title != null) {
@@ -74,7 +100,8 @@ class SampleData {
         return 'komplett';
     }
     /**
-     * @inheritdoc
+     * If the sample is the complete media file get the title of the media file.
+     * For example `Glocken (Das große Tor von Kiew)`
      */
     get titleSafe() {
         if (this.yaml.ref === 'complete') {
@@ -85,7 +112,7 @@ class SampleData {
         }
     }
     /**
-     * @inheritdoc
+     * Combined value build from `this.asset.meta.artist` and `this.asset.meta.composer`.
      */
     get artistSafe() {
         let artist = null;
@@ -107,7 +134,8 @@ class SampleData {
         }
     }
     /**
-     * @inheritdoc
+     * Combined value build from `this.asset.yaml.creationDate` and
+     * `this.asset.yaml.year`.
      */
     get yearSafe() {
         if (this.asset.yaml.creationDate != null) {
@@ -118,4 +146,4 @@ class SampleData {
         }
     }
 }
-exports.SampleData = SampleData;
+exports.Sample = Sample;

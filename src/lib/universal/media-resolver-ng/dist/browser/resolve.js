@@ -12,7 +12,7 @@ import { getConfig } from '@bldr/config';
 import { makeHttpRequestInstance } from '@bldr/http-request';
 import { makeSet } from '@bldr/core-browser';
 import { MediaUri, findMediaUris } from '@bldr/client-media-models';
-import { ClientMediaAsset } from './asset';
+import { Asset } from './asset';
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache';
 const config = getConfig();
 class SampleCache extends Cache {
@@ -140,7 +140,7 @@ export class Resolver {
      */
     createAsset(uri, raw) {
         const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
-        const asset = new ClientMediaAsset(uri, httpUrl, raw);
+        const asset = new Asset(uri, httpUrl, raw);
         this.assetCache.add(asset.ref, asset);
         this.shortcutManager.setOnAsset(asset);
         if (asset.samples != null) {

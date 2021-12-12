@@ -1,6 +1,7 @@
-import { Sample, Asset, RestApiRaw } from './types';
+import { RestApiRaw } from './types';
 import { MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
+import { Sample } from './sample';
 export declare class SampleCollection extends Cache<Sample> {
     private readonly asset;
     constructor(asset: Asset);
@@ -12,9 +13,18 @@ export declare class SampleCollection extends Cache<Sample> {
     private gatherYamlFromRoot;
     private addFromAsset;
 }
-export declare class ClientMediaAsset implements Asset {
+/**
+ * Hold various data of a media file as class properties.
+ *
+ * If a media file has a property with the name `multiPartCount`, it is a
+ * multipart asset. A multipart asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+export declare class Asset {
     /**
-     * @inheritdoc
+     * A raw javascript object read from the YAML files
+     * (`*.extension.yml`)
      */
     yaml: RestApiRaw;
     uri: MediaUri;
@@ -25,11 +35,12 @@ export declare class ClientMediaAsset implements Asset {
     private shortcut_?;
     samples?: SampleCollection;
     /**
-     * @inheritdoc
+     * The media type, for example `image`, `audio` or `video`.
      */
     mimeType: string;
     /**
-     * @inheritdoc
+     * HTTP Uniform Resource Locator, for example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
      */
     httpUrl: string;
     /**
@@ -37,11 +48,13 @@ export declare class ClientMediaAsset implements Asset {
      */
     constructor(uri: string, httpUrl: string, yaml: RestApiRaw);
     /**
-     * @inheritdoc
+     * The reference authority of the URI using the `ref` scheme. The returned
+     * string is prefixed with `ref:`.
      */
     get ref(): string;
     /**
-     * @inheritdoc
+     * The UUID authority of the URI using the `uuid` scheme. The returned
+     * string is prefixed with `uuid:`.
      */
     get uuid(): string;
     set shortcut(value: string | undefined);
@@ -50,28 +63,34 @@ export declare class ClientMediaAsset implements Asset {
      */
     get shortcut(): string | undefined;
     /**
-     * @inheritdoc
+     * Each media asset can have a preview image. The suffix `_preview.jpg`
+     * is appended on the path. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl(): string | undefined;
     /**
-     * @inheritdoc
+     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+     * is appended on the HTTP URL. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
     get waveformHttpUrl(): string | undefined;
     get titleSafe(): string;
     /**
-     * @inheritdoc
+     * True if the media file is playable, for example an audio or a video file.
      */
     get isPlayable(): boolean;
     /**
-     * @inheritdoc
+     * True if the media file is visible, for example an image or a video file.
      */
     get isVisible(): boolean;
     /**
-     * @inheritdoc
+     * The number of parts of a multipart media asset.
      */
     get multiPartCount(): number;
     /**
-     * @inheritdoc
+     * Retrieve the HTTP URL of the multi part asset by the part number.
+     *
+     * @param The part number starts with 1.
      */
     getMultiPartHttpUrlByNo(no: number): string;
 }

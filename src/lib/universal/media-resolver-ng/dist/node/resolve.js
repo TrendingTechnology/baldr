@@ -143,7 +143,7 @@ class Resolver {
      */
     createAsset(uri, raw) {
         const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
-        const asset = new asset_1.ClientMediaAsset(uri, httpUrl, raw);
+        const asset = new asset_1.Asset(uri, httpUrl, raw);
         this.assetCache.add(asset.ref, asset);
         this.shortcutManager.setOnAsset(asset);
         if (asset.samples != null) {

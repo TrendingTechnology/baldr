@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHttp = exports.Cache = exports.updateMediaServer = exports.Resolver = void 0;
+exports.getHttp = exports.Cache = exports.Asset = exports.Sample = exports.updateMediaServer = exports.Resolver = void 0;
 /**
  * Submodule dependencies
  *
@@ -13,6 +13,10 @@ exports.getHttp = exports.Cache = exports.updateMediaServer = exports.Resolver =
 var resolve_1 = require("./resolve");
 Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return resolve_1.Resolver; } });
 Object.defineProperty(exports, "updateMediaServer", { enumerable: true, get: function () { return resolve_1.updateMediaServer; } });
+var sample_1 = require("./sample");
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return sample_1.Sample; } });
+var asset_1 = require("./asset");
+Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return asset_1.Asset; } });
 var cache_1 = require("./cache");
 Object.defineProperty(exports, "Cache", { enumerable: true, get: function () { return cache_1.Cache; } });
 var http_request_1 = require("@bldr/http-request");

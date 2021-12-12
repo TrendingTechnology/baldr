@@ -1,6 +1,7 @@
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html';
 import { MediaUri } from '@bldr/client-media-models';
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
+export { Asset, Sample } from '@bldr/media-resolver-ng';
 export { convertHtmlToPlainText } from '@bldr/string-format';
 export { buildTextStepController, wrapWords, splitHtmlIntoChunks } from '@bldr/dom-manipulator';
 export { StepCollector } from './step';

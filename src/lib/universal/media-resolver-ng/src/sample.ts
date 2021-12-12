@@ -1,4 +1,5 @@
-import { Sample, SampleYamlFormat, Asset } from './types'
+import { SampleYamlFormat } from './types'
+import { Asset } from './asset'
 import { convertDurationToSeconds } from '@bldr/core-browser'
 
 /**
@@ -11,39 +12,64 @@ const defaultFadeInSec: number = 0.3
  */
 const defaultFadeOutSec: number = 1
 
-export class SampleData implements Sample {
+/**
+ * A sample (snippet, sprite) of a media asset which can be played. A sample
+ * has typically a start time and a duration. If the start time is missing, the
+ * media file gets played from the beginning. If the duration is missing, the
+ * whole media file gets played.
+ *
+ * ```
+ *                  currentTimeSec
+ *                  |
+ *  fadeIn          |        fadeOut
+ *         /|-------+------|\           <- mediaElementCurrentVolume_
+ *      /   |       |      |   \
+ *   /      |       |      |     \
+ * #|#######|#######|######|#####|#### <- mediaElement
+ *  ^                            ^
+ *  startTimeSec                 endTimeSec
+ *                         ^
+ *                         |
+ *                         fadeOutStartTime
+ *
+ *  | <-      durationSec      ->|
+ * ```
+ */
+export class Sample {
   /**
-   * @inheritdoc
+   * The parent media asset.
    */
   public asset: Asset
 
   /**
-   * @inheritdoc
+   * Raw data coming from the YAML format.
    */
   yaml: SampleYamlFormat
 
   /**
-   * @inheritdoc
+   * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
    */
   public shortcut?: string
 
   /**
-   * @inheritdoc
+   * The duration of the sample in seconds.
    */
   public durationSec?: number
 
   /**
-   * @inheritdoc
+   * The start time in seconds. The sample is played from this start time
+   * using the `mediaElement` of the `asset`. It is the “zero” second
+   * for the sample.
    */
   public startTimeSec: number = 0
 
   /**
-   * @inheritdoc
+   * Time in seconds to fade in.
    */
   public readonly fadeInSec: number
 
   /**
-   * @inheritdoc
+   * Time in seconds to fade out.
    */
   public readonly fadeOutSec: number
 
@@ -96,7 +122,8 @@ export class SampleData implements Sample {
   }
 
   /**
-   * @inheritdoc
+   * The reference of the sample. The reference is used to build the URI of the
+   * sample, for example `uri#reference`: `ref:Beethoven#complete`
    */
   public get ref (): string {
     const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
@@ -104,7 +131,7 @@ export class SampleData implements Sample {
   }
 
   /**
-   * @inheritdoc
+   * The title of the sample. For example `komplett`, `Hook-Line`.
    */
   public get title (): string {
     if (this.yaml.title != null) {
@@ -117,7 +144,8 @@ export class SampleData implements Sample {
   }
 
   /**
-   * @inheritdoc
+   * If the sample is the complete media file get the title of the media file.
+   * For example `Glocken (Das große Tor von Kiew)`
    */
   public get titleSafe (): string {
     if (this.yaml.ref === 'complete') {
@@ -128,7 +156,7 @@ export class SampleData implements Sample {
   }
 
   /**
-   * @inheritdoc
+   * Combined value build from `this.asset.meta.artist` and `this.asset.meta.composer`.
    */
   public get artistSafe (): string | undefined {
     let artist: string | null = null
@@ -149,7 +177,8 @@ export class SampleData implements Sample {
   }
 
   /**
-   * @inheritdoc
+   * Combined value build from `this.asset.yaml.creationDate` and
+   * `this.asset.yaml.year`.
    */
   public get yearSafe (): string | undefined {
     if (this.asset.yaml.creationDate != null) {

@@ -4,9 +4,10 @@ import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
 
-import { ClientMediaAsset } from './asset'
+import { Asset } from './asset'
+import { Sample } from './sample'
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache'
-import { Sample, Asset, RestApiRaw } from './types'
+import { RestApiRaw } from './types'
 
 const config = getConfig()
 
@@ -173,7 +174,7 @@ export class Resolver {
    */
   private createAsset (uri: string, raw: RestApiRaw): Asset {
     const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-    const asset = new ClientMediaAsset(uri, httpUrl, raw)
+    const asset = new Asset(uri, httpUrl, raw)
     this.assetCache.add(asset.ref, asset)
     this.shortcutManager.setOnAsset(asset)
     if (asset.samples != null) {

@@ -1,4 +1,5 @@
-import { Sample, Asset } from './types';
+import { Asset } from './asset';
+import { Sample } from './sample';
 declare type UrisSpec = string | string[] | Set<string>;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media

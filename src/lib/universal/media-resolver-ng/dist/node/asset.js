@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClientMediaAsset = exports.SampleCollection = void 0;
+exports.Asset = exports.SampleCollection = void 0;
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const cache_1 = require("./cache");
@@ -15,7 +15,7 @@ class SampleCollection extends cache_1.Cache {
         return this.get(this.asset.ref + '#complete');
     }
     addSample(asset, yamlFormat) {
-        const sample = new sample_1.SampleData(asset, yamlFormat);
+        const sample = new sample_1.Sample(asset, yamlFormat);
         if (this.get(sample.ref) == null) {
             this.add(sample.ref, sample);
         }
@@ -89,7 +89,15 @@ class SampleCollection extends cache_1.Cache {
     }
 }
 exports.SampleCollection = SampleCollection;
-class ClientMediaAsset {
+/**
+ * Hold various data of a media file as class properties.
+ *
+ * If a media file has a property with the name `multiPartCount`, it is a
+ * multipart asset. A multipart asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+class Asset {
     /**
      * @param yaml - A raw javascript object read from the Rest API
      */
@@ -112,13 +120,15 @@ class ClientMediaAsset {
         }
     }
     /**
-     * @inheritdoc
+     * The reference authority of the URI using the `ref` scheme. The returned
+     * string is prefixed with `ref:`.
      */
     get ref() {
         return 'ref:' + this.yaml.ref;
     }
     /**
-     * @inheritdoc
+     * The UUID authority of the URI using the `uuid` scheme. The returned
+     * string is prefixed with `uuid:`.
      */
     get uuid() {
         return 'uuid:' + this.yaml.uuid;
@@ -135,7 +145,9 @@ class ClientMediaAsset {
         }
     }
     /**
-     * @inheritdoc
+     * Each media asset can have a preview image. The suffix `_preview.jpg`
+     * is appended on the path. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl() {
         if (this.yaml.previewImage) {
@@ -143,7 +155,9 @@ class ClientMediaAsset {
         }
     }
     /**
-     * @inheritdoc
+     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+     * is appended on the HTTP URL. For example
+     * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
     get waveformHttpUrl() {
         if (this.yaml.hasWaveform) {
@@ -160,19 +174,19 @@ class ClientMediaAsset {
         return this.uri.raw;
     }
     /**
-     * @inheritdoc
+     * True if the media file is playable, for example an audio or a video file.
      */
     get isPlayable() {
         return ['audio', 'video'].includes(this.mimeType);
     }
     /**
-     * @inheritdoc
+     * True if the media file is visible, for example an image or a video file.
      */
     get isVisible() {
         return ['image', 'video'].includes(this.mimeType);
     }
     /**
-     * @inheritdoc
+     * The number of parts of a multipart media asset.
      */
     get multiPartCount() {
         if (this.yaml.multiPartCount == null) {
@@ -181,7 +195,9 @@ class ClientMediaAsset {
         return this.yaml.multiPartCount;
     }
     /**
-     * @inheritdoc
+     * Retrieve the HTTP URL of the multi part asset by the part number.
+     *
+     * @param The part number starts with 1.
      */
     getMultiPartHttpUrlByNo(no) {
         if (this.multiPartCount === 1)
@@ -192,4 +208,4 @@ class ClientMediaAsset {
         return (0, core_browser_1.formatMultiPartAssetFileName)(this.httpUrl, no);
     }
 }
-exports.ClientMediaAsset = ClientMediaAsset;
+exports.Asset = Asset;
