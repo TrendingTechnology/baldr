@@ -1,0 +1,42 @@
+{
+  "name": "@bldr/media-data-collector",
+  "version": "0.1.0",
+  "description": "Collect data of the media files (assets and presentations) reading for the file system",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "npm run build:node",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/node/main.js",
+  "dependencies": {
+    "@bldr/config": "*",
+    "@bldr/string-format": "*",
+    "@bldr/core-node": "*",
+    "@bldr/file-reader-writer": "*",
+    "@bldr/titles": "*",
+    "@bldr/yaml": "*",
+    "@bldr/client-media-models": "*"
+  },
+  "devDependencies": {
+    "@bldr/type-definitions": "*",
+    "@types/node": "14.14.7"
+  }
+}

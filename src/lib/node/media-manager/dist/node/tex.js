@@ -110,7 +110,7 @@ function patchTexTitles(filePath) {
     let texFileContentPatched;
     if (texFileContent.includes('\\setzetitel{')) {
         // /s s (dotall) modifier, +? one or more (non-greedy)
-        const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
+        const regexp = /\\setzetitel\{.+?,?\n\}\n/s;
         texFileContentPatched = texFileContent.replace(regexp, patchedTitles);
     }
     else {

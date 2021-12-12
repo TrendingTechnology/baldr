@@ -486,8 +486,7 @@ export async function query (
         }
 
         // second query
-        if (value != null && propSpec.secondQuery != null)
-          value = await functions[propSpec.secondQuery](value)
+        if (value != null && propSpec.secondQuery != null) { value = await functions[propSpec.secondQuery](value) }
 
         // format
         if (value != null && propSpec.format != null) {

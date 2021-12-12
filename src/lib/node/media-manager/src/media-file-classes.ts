@@ -110,7 +110,7 @@ export function isAsset (filePath: string): boolean {
     return false
   }
   // see .gitignore of media folder
-  if (filePath.match(new RegExp('^.*/(TX|PT|QL)/.*.pdf$')) != null) {
+  if (filePath.match(/^.*\/(TX|PT|QL)\/.*.pdf$/) != null) {
     return true
   }
   return mimeTypeManager.isAsset(filePath)

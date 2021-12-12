@@ -410,8 +410,9 @@ function query(itemId, typeNames, categoryCollection) {
                         value = func(entity);
                     }
                     // second query
-                    if (value != null && propSpec.secondQuery != null)
+                    if (value != null && propSpec.secondQuery != null) {
                         value = yield functions[propSpec.secondQuery](value);
+                    }
                     // format
                     if (value != null && propSpec.format != null) {
                         if (typeof propSpec.format === 'function') {

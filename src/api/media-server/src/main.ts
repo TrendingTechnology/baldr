@@ -430,10 +430,10 @@ async function insertObjectIntoDb (
   mediaType: ServerMediaType
 ): Promise<void> {
   let object:
-    | ServerPresentation
-    | ServerMediaAsset
-    | ServerMediaFile
-    | undefined
+  | ServerPresentation
+  | ServerMediaAsset
+  | ServerMediaFile
+  | undefined
   try {
     if (mediaType === 'presentations') {
       object = new ServerPresentation(filePath)
@@ -449,7 +449,7 @@ async function insertObjectIntoDb (
     const error = e as GenericError
     console.log(error)
     let relPath = filePath.replace(config.mediaServer.basePath, '')
-    relPath = relPath.replace(new RegExp('^/'), '')
+    relPath = relPath.replace(/^\//, '')
     // eslint-disable-next-line
     const msg = `${relPath}: [${error.name}] ${error.message}`
     console.log(msg)

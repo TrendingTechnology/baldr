@@ -409,7 +409,7 @@ function insertObjectIntoDb(filePath, mediaType) {
                     error = e_1;
                     console.log(error);
                     relPath = filePath.replace(config.mediaServer.basePath, '');
-                    relPath = relPath.replace(new RegExp('^/'), '');
+                    relPath = relPath.replace(/^\//, '');
                     msg = "".concat(relPath, ": [").concat(error.name, "] ").concat(error.message);
                     console.log(msg);
                     errors.push(msg);
