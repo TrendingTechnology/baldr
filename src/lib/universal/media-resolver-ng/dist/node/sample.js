@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sample = void 0;
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */
@@ -77,7 +77,7 @@ class Sample {
      * Convert strings to numbers, so we can use them as seconds.
      */
     convertToSeconds(timeIntervaleString) {
-        return (0, core_browser_1.convertDurationToSeconds)(timeIntervaleString);
+        return (0, string_format_1.convertDurationToSeconds)(timeIntervaleString);
     }
     /**
      * The reference of the sample. The reference is used to build the URI of the

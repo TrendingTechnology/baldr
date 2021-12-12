@@ -1,4 +1,4 @@
-import { convertDurationToSeconds } from '@bldr/core-browser';
+import { convertDurationToSeconds } from '@bldr/string-format';
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */

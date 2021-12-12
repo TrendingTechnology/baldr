@@ -1,4 +1,7 @@
 /**
+ * Treat strings as if they were file paths.
+ */
+/**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
  * extension (for example `.jpg`). The parameter `no` must be less then 1000.
@@ -14,3 +17,13 @@
  *   number 1.
  */
 export declare function formatMultiPartAssetFileName(firstFileName: string, no: string | number): string;
+/**
+ * Get the extension from a file path.
+ *
+ * @param filePath - A file path or a single file name.
+ *
+ * @returns The extension in lower case characters.
+ *
+ * @throws Throws an exception if not file extension can be found.
+ */
+export declare function getExtension(filePath: string): string;

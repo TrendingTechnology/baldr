@@ -1,6 +1,9 @@
 "use strict";
+/**
+ * Treat strings as if they were file paths.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatMultiPartAssetFileName = void 0;
+exports.getExtension = exports.formatMultiPartAssetFileName = void 0;
 /**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
@@ -39,3 +42,20 @@ function formatMultiPartAssetFileName(firstFileName, no) {
     return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`);
 }
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
+/**
+ * Get the extension from a file path.
+ *
+ * @param filePath - A file path or a single file name.
+ *
+ * @returns The extension in lower case characters.
+ *
+ * @throws Throws an exception if not file extension can be found.
+ */
+function getExtension(filePath) {
+    const extension = filePath.split('.').pop();
+    if (extension == null) {
+        throw new Error(`The given string “${filePath}” has no file extension.`);
+    }
+    return extension.toLowerCase();
+}
+exports.getExtension = getExtension;

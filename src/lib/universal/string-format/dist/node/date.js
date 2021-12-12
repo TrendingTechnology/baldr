@@ -81,25 +81,46 @@ function formatToLocalDateTime(timeStampMsec) {
 }
 exports.formatToLocalDateTime = formatToLocalDateTime;
 /**
- * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
+ * Convert a duration string (`8:01` = 8 minutes 1 seconds or `1:33:12` = 1
  * hour 33 minutes 12 seconds) into seconds.
+ *
+ * @param duration - Possible formats are
+ *
+ * - number (integer or float)
+ * - Colon separated string with one colon: `01:00` == `mm:ss`
+ * - Colon separated string with two colon: `01:00:00` == `hh:mm:ss`
+ * - Colon separated string with float suffix: `01:00:00.23`
+ *
+ * @returns The duration in seconds as a number.
  */
 function convertDurationToSeconds(duration) {
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
     if (typeof duration === 'number') {
-        return duration;
+        seconds = duration;
     }
-    if (typeof duration === 'string' && duration.match(/:/) != null) {
+    else if (typeof duration === 'string' && duration.includes(':')) {
         const segments = duration.split(':');
-        if (segments.length === 3) {
-            return (parseInt(segments[0]) * 3600 +
-                parseInt(segments[1]) * 60 +
-                parseInt(segments[2]));
+        if (segments.length < 2 || segments.length > 3) {
+            throw new Error(`Invalid duration string ${duration}: Only one or two colons are allowed!`);
         }
-        else if (segments.length === 2) {
-            return parseInt(segments[0]) * 60 + parseInt(segments[1]);
+        if (segments.length === 3) {
+            hours = Number.parseFloat(segments[0]);
+        }
+        minutes = Number.parseFloat(segments[segments.length - 2]);
+        seconds = Number.parseFloat(segments[segments.length - 1]);
+        if (seconds >= 60) {
+            throw new Error(`Invalid duration string “${duration}”: The number of seconds must be less than 60!`);
         }
     }
-    return Number.parseFloat(duration);
+    else {
+        seconds = Number.parseFloat(duration);
+    }
+    if (minutes >= 60) {
+        throw new Error(`Invalid duration string “${duration}”: The number of minutes must be less than 60!`);
+    }
+    return hours * 3600 + minutes * 60 + seconds;
 }
 exports.convertDurationToSeconds = convertDurationToSeconds;
 /**

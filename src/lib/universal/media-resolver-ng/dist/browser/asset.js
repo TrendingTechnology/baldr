@@ -1,4 +1,4 @@
-import { getExtension, formatMultiPartAssetFileName } from '@bldr/core-browser';
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/string-format';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
 import { Sample } from './sample';
@@ -102,10 +102,7 @@ export class Asset {
         this.httpUrl = httpUrl;
         this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
-            const extension = getExtension(this.yaml.filename);
-            if (extension != null) {
-                this.yaml.extension = extension;
-            }
+            this.yaml.extension = getExtension(this.yaml.filename);
         }
         if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');

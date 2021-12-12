@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertHtmlToPlainText = exports.shortenText = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = void 0;
+exports.getExtension = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.shortenText = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = void 0;
 var date_1 = require("./date");
 Object.defineProperty(exports, "convertDurationToSeconds", { enumerable: true, get: function () { return date_1.convertDurationToSeconds; } });
 Object.defineProperty(exports, "getCurrentSchoolYear", { enumerable: true, get: function () { return date_1.getCurrentSchoolYear; } });
@@ -9,3 +9,6 @@ Object.defineProperty(exports, "formatDuration", { enumerable: true, get: functi
 var format_1 = require("./format");
 Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return format_1.shortenText; } });
 Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return format_1.convertHtmlToPlainText; } });
+var file_path_1 = require("./file-path");
+Object.defineProperty(exports, "formatMultiPartAssetFileName", { enumerable: true, get: function () { return file_path_1.formatMultiPartAssetFileName; } });
+Object.defineProperty(exports, "getExtension", { enumerable: true, get: function () { return file_path_1.getExtension; } });

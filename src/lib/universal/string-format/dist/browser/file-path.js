@@ -1,4 +1,7 @@
 /**
+ * Treat strings as if they were file paths.
+ */
+/**
  * Generate the n-th file name or the URL from a file name or a URL of the first
  * element of a multipart asset. The parameter `firstFileName` must have a
  * extension (for example `.jpg`). The parameter `no` must be less then 1000.
@@ -34,4 +37,20 @@ export function formatMultiPartAssetFileName(firstFileName, no) {
         suffix = `_no${no}`;
     }
     return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`);
+}
+/**
+ * Get the extension from a file path.
+ *
+ * @param filePath - A file path or a single file name.
+ *
+ * @returns The extension in lower case characters.
+ *
+ * @throws Throws an exception if not file extension can be found.
+ */
+export function getExtension(filePath) {
+    const extension = filePath.split('.').pop();
+    if (extension == null) {
+        throw new Error(`The given string “${filePath}” has no file extension.`);
+    }
+    return extension.toLowerCase();
 }

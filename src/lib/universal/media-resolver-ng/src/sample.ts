@@ -1,4 +1,4 @@
-import { convertDurationToSeconds } from '@bldr/core-browser'
+import { convertDurationToSeconds } from '@bldr/string-format'
 
 import { Asset } from './asset'
 import { SampleYamlFormat } from './types'

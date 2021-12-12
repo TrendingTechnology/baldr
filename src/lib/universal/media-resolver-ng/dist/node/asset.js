@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Asset = exports.SampleCollection = void 0;
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const client_media_models_1 = require("@bldr/client-media-models");
 const cache_1 = require("./cache");
 const sample_1 = require("./sample");
@@ -106,10 +106,7 @@ class Asset {
         this.httpUrl = httpUrl;
         this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
-            const extension = (0, core_browser_1.getExtension)(this.yaml.filename);
-            if (extension != null) {
-                this.yaml.extension = extension;
-            }
+            this.yaml.extension = (0, string_format_1.getExtension)(this.yaml.filename);
         }
         if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');
@@ -205,7 +202,7 @@ class Asset {
         if (no > this.multiPartCount) {
             throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`);
         }
-        return (0, core_browser_1.formatMultiPartAssetFileName)(this.httpUrl, no);
+        return (0, string_format_1.formatMultiPartAssetFileName)(this.httpUrl, no);
     }
 }
 exports.Asset = Asset;
