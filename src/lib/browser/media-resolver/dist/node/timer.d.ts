@@ -2,7 +2,7 @@ declare class Timer {
     /**
      * An array of `setTimeout` IDs.
      */
-    protected ids: number[];
+    protected ids: any[];
     constructor();
 }
 /**

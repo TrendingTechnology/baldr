@@ -5,7 +5,7 @@ import fs from 'fs'
 import glob from 'glob'
 
 // Project packages.
-import { formatMultiPartAssetFileName, getExtension } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, getExtension } from '@bldr/string-format'
 import { writeYamlMetaData, operations } from '@bldr/media-manager'
 import * as log from '@bldr/log'
 

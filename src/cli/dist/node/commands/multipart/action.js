@@ -36,7 +36,7 @@ const fs_1 = __importDefault(require("fs"));
 // Third party packages.
 const glob_1 = __importDefault(require("glob"));
 // Project packages.
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const media_manager_1 = require("@bldr/media-manager");
 const log = __importStar(require("@bldr/log"));
 /**
@@ -56,14 +56,14 @@ function action(globPattern, prefix, cmdObj) {
         }
         files.sort(undefined);
         let no = 1;
-        const extension = (0, core_browser_1.getExtension)(files[0]);
+        const extension = (0, string_format_1.getExtension)(files[0]);
         if (extension == null)
             throw Error('No extension');
         const firstNewFileName = `${prefix}.${extension}`;
         for (const oldFileName of files) {
             // Omit already existent info file by the renaming.
             if (oldFileName.match(/yml$/i) == null) {
-                const newFileName = (0, core_browser_1.formatMultiPartAssetFileName)(`${prefix}.${extension}`, no);
+                const newFileName = (0, string_format_1.formatMultiPartAssetFileName)(`${prefix}.${extension}`, no);
                 log.info('%s -> %s', [oldFileName, newFileName]);
                 if (!cmdObj.dryRun)
                     fs_1.default.renameSync(oldFileName, newFileName);

@@ -1,4 +1,4 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaResolverTypes } from '@bldr/type-definitions';
 import { MediaUri } from '@bldr/client-media-models';
 import { SampleCollection, MimeTypeShortcutCounter } from './internal';
 export declare const imageShortcutCounter: MimeTypeShortcutCounter;

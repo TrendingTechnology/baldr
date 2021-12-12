@@ -8,8 +8,7 @@
 
 <script lang="ts">
 import { Vue, Component, mapGetters } from '@bldr/vue-packages-bundler'
-
-import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName } from '@bldr/string-format'
 import { Song } from '@bldr/songbook-core'
 
 import MetaData from './MetaData.vue'

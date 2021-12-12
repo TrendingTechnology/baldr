@@ -15,7 +15,7 @@
   "main": "src/plugin.js",
   "style": "src/style.css",
   "scripts": {
-    "build": "vue-cli-service build",
+    "build:webapp": "vue-cli-service build",
     "build:browser": "tsc --module es2020 --outDir dist/",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
@@ -84,7 +84,8 @@
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-property-decorator": "9.1.2",
     "vue-template-compiler": "2.6.11",
-    "webfont": "9.0.0"
+    "webfont": "9.0.0",
+    "vue": "2.6.11"
   },
   "publishConfig": {
     "access": "public"

@@ -34,6 +34,7 @@ const fs = __importStar(require("fs-extra"));
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const yaml_1 = require("@bldr/yaml");
 const utils_1 = require("./utils");
@@ -340,7 +341,7 @@ class IntermediateSong extends ExtendedSong {
         const intermediateFiles = (0, utils_1.listFiles)(folder, regExp);
         let no = 1;
         for (const oldName of intermediateFiles) {
-            const newName = (0, core_browser_1.formatMultiPartAssetFileName)(newMultipartFilename, no);
+            const newName = (0, string_format_1.formatMultiPartAssetFileName)(newMultipartFilename, no);
             fs.renameSync(path.join(folder, oldName), path.join(folder, newName));
             no++;
         }

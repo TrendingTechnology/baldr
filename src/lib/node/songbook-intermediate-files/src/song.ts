@@ -19,7 +19,8 @@ import {
   songConstants
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
-import { formatMultiPartAssetFileName, genUuid } from '@bldr/core-browser'
+import { genUuid } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName } from '@bldr/string-format'
 import { writeYamlFile, readYamlFile } from '@bldr/file-reader-writer'
 import { convertFromYamlRaw } from '@bldr/yaml'
 

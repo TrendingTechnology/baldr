@@ -1,9 +1,16 @@
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaResolverTypes } from '@bldr/type-definitions'
 
-import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser'
+import { selectSubset } from '@bldr/core-browser'
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/string-format'
+
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
 
-import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal'
+import {
+  assetCache,
+  createHtmlElement,
+  SampleCollection,
+  MimeTypeShortcutCounter
+} from './internal'
 
 export const imageShortcutCounter = new MimeTypeShortcutCounter('i')
 
@@ -25,7 +32,11 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   /**
    * @param yaml - A raw javascript object read from the Rest API
    */
-  constructor (uri: string, httpUrl: string, yaml: MediaResolverTypes.RestApiRaw) {
+  constructor (
+    uri: string,
+    httpUrl: string,
+    yaml: MediaResolverTypes.RestApiRaw
+  ) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
     this.yaml = yaml
@@ -118,7 +129,9 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
   getMultiPartHttpUrlByNo (no: number): string {
     if (this.multiPartCount === 1) return this.httpUrl
     if (no > this.multiPartCount) {
-      throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`)
+      throw new Error(
+        `The asset has only ${this.multiPartCount} parts, not ${no}`
+      )
     }
     return formatMultiPartAssetFileName(this.httpUrl, no)
   }
@@ -147,7 +160,10 @@ export class MultiPartSelection {
    * @param selectionSpec - Can be a URI, everthing after `#`, for
    * example `ref:Song-2#2-5` -> `2-5`
    */
-  constructor (asset: MediaResolverTypes.ClientMediaAsset, selectionSpec: string) {
+  constructor (
+    asset: MediaResolverTypes.ClientMediaAsset,
+    selectionSpec: string
+  ) {
     this.selectionSpec = selectionSpec.replace(/^.*#/, '')
 
     this.asset = asset
@@ -158,9 +174,10 @@ export class MultiPartSelection {
       this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`
     }
 
-    this.partNos = selectSubset(this.selectionSpec,
-      { elementsCount: this.asset.multiPartCount, firstElementNo: 1 }
-    )
+    this.partNos = selectSubset(this.selectionSpec, {
+      elementsCount: this.asset.multiPartCount,
+      firstElementNo: 1
+    })
   }
 
   /**

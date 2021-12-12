@@ -1,4 +1,5 @@
-import { getExtension, formatMultiPartAssetFileName, selectSubset } from '@bldr/core-browser';
+import { selectSubset } from '@bldr/core-browser';
+import { getExtension, formatMultiPartAssetFileName } from '@bldr/string-format';
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models';
 import { assetCache, createHtmlElement, SampleCollection, MimeTypeShortcutCounter } from './internal';
 export const imageShortcutCounter = new MimeTypeShortcutCounter('i');
@@ -110,7 +111,10 @@ export class MultiPartSelection {
         else {
             this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`;
         }
-        this.partNos = selectSubset(this.selectionSpec, { elementsCount: this.asset.multiPartCount, firstElementNo: 1 });
+        this.partNos = selectSubset(this.selectionSpec, {
+            elementsCount: this.asset.multiPartCount,
+            firstElementNo: 1
+        });
     }
     /**
      * The URI using the `ref` authority.

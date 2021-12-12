@@ -13,9 +13,10 @@ exports.resolve = exports.resolver = exports.httpRequest = void 0;
 const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
-const config_1 = require("@bldr/config");
 const internal_1 = require("./internal");
-exports.httpRequest = http_request_1.makeHttpRequestInstance(config_1.default, 'automatic', '/api/media');
+const config_1 = require("@bldr/config");
+const config = (0, config_1.getConfig)();
+exports.httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'automatic', '/api/media');
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Create media elements for each media file. Create samples
@@ -80,7 +81,7 @@ class Resolver {
                 return cachedAsset;
             const raw = yield this.queryMediaServer(uri, throwException);
             if (raw != null) {
-                const httpUrl = `${exports.httpRequest.baseUrl}/${config_1.default.mediaServer.urlFillIn}/${raw.path}`;
+                const httpUrl = `${exports.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`;
                 return new internal_1.ClientMediaAsset(uri, httpUrl, raw);
             }
         });
@@ -96,7 +97,7 @@ class Resolver {
      */
     resolve(uris, throwException = true) {
         return __awaiter(this, void 0, void 0, function* () {
-            const mediaUris = core_browser_1.makeSet(uris);
+            const mediaUris = (0, core_browser_1.makeSet)(uris);
             const urisWithoutFragments = new Set();
             for (const uri of mediaUris) {
                 urisWithoutFragments.add(client_media_models_1.MediaUri.removeFragment(uri));
@@ -111,7 +112,7 @@ class Resolver {
                 }
                 for (const asset of yield Promise.all(promises)) {
                     if (asset != null) {
-                        client_media_models_1.findMediaUris(asset.yaml, urisWithoutFragments);
+                        (0, client_media_models_1.findMediaUris)(asset.yaml, urisWithoutFragments);
                         assets.push(asset);
                         // In the set urisWithoutFragments can be both ref: and uuid: URIs.
                         urisWithoutFragments.delete(asset.ref);
@@ -135,7 +136,7 @@ exports.resolver = new Resolver();
  */
 function resolve(uris, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.resolver.resolve(uris);
+        return yield exports.resolver.resolve(uris, throwException);
     });
 }
 exports.resolve = resolve;

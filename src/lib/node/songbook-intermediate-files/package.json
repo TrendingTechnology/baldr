@@ -20,6 +20,7 @@
     "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",
     "@bldr/songbook-core": "*",
+    "@bldr/string-format": "*",
     "@bldr/yaml": "*",
     "better-sqlite3": "7.1.2",
     "fs-extra": "9.1.0",

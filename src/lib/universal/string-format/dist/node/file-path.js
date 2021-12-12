@@ -18,13 +18,22 @@ exports.getExtension = exports.formatMultiPartAssetFileName = void 0;
  * @param firstFileName - A file name, a path or a URL.
  * @param no - The number in the multipart asset list. The first element has the
  *   number 1.
+ *
+ * @return The possibly changed file name, file path or URL with the suffix `_noXXX`.
+ *
+ * @throws if no is greater than 999.
+ * @throws if no is no integer.
+ * @throws if firstFileName includes no extension.
  */
 function formatMultiPartAssetFileName(firstFileName, no) {
     if (!Number.isInteger(no)) {
-        no = 1;
+        throw new Error(`${firstFileName}: The argument “no” has to be an integer, not “${no}”!`);
     }
     if (no > 999) {
-        throw new Error(`${firstFileName}: The multipart asset number must not be greater than 999.`);
+        throw new Error(`${firstFileName}: The multipart asset number must not be greater than 999, got the number “${no}”!`);
+    }
+    if (!firstFileName.includes('.')) {
+        throw new Error(`${firstFileName}: The multipart asset file name must contain a file extension.`);
     }
     let suffix;
     if (no === 1) {
@@ -47,14 +56,14 @@ exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
  *
  * @param filePath - A file path or a single file name.
  *
- * @returns The extension in lower case characters.
+ * @returns The file extension in lower case.
  *
  * @throws Throws an exception if not file extension can be found.
  */
 function getExtension(filePath) {
     const extension = filePath.split('.').pop();
-    if (extension == null) {
-        throw new Error(`The given string “${filePath}” has no file extension.`);
+    if (!filePath.includes('.') || extension == null) {
+        throw new Error(`The given file path “${filePath}” has no file extension!`);
     }
     return extension.toLowerCase();
 }

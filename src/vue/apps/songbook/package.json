@@ -26,6 +26,7 @@
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
     "@bldr/songbook-core": "*",
+    "@bldr/string-format": "*",
     "@bldr/themes": "*",
     "@bldr/vue-packages-bundler": "*"
   },

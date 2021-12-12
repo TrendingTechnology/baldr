@@ -45,6 +45,7 @@
     "@bldr/open-with": "*",
     "@bldr/presentation-parser": "*",
     "@bldr/seating-plan-converter": "*",
+    "@bldr/string-format": "*",
     "@bldr/songbook-intermediate-files": "*",
     "@bldr/tex-markdown-converter": "*",
     "@bldr/wikidata": "*",

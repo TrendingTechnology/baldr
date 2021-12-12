@@ -67,7 +67,7 @@ class Sample {
         if (this.yaml.ref == null) {
             this.yaml.ref = 'complete';
         }
-        this.htmlElement = internal_1.createHtmlElement(asset.mimeType, asset.httpUrl);
+        this.htmlElement = (0, internal_1.createHtmlElement)(asset.mimeType, asset.httpUrl);
         if (this.yaml.startTime != null) {
             this.startTimeSec = this.toSec(this.yaml.startTime);
         }
@@ -145,7 +145,7 @@ class Sample {
      * Convert strings to numbers, so we can use them as seconds.
      */
     toSec(timeIntervaleString) {
-        return core_browser_1.convertDurationToSeconds(timeIntervaleString);
+        return (0, core_browser_1.convertDurationToSeconds)(timeIntervaleString);
     }
     get currentTimeSec() {
         return this.htmlElement.currentTime - this.startTimeSec;

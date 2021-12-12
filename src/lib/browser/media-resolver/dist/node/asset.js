@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MultiPartSelection = exports.ClientMediaAsset = exports.imageShortcutCounter = void 0;
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const client_media_models_1 = require("@bldr/client-media-models");
 const internal_1 = require("./internal");
 exports.imageShortcutCounter = new internal_1.MimeTypeShortcutCounter('i');
@@ -14,7 +15,7 @@ class ClientMediaAsset {
         this.httpUrl = httpUrl;
         this.yaml = yaml;
         if (this.yaml.extension == null && this.yaml.filename != null) {
-            const extension = core_browser_1.getExtension(this.yaml.filename);
+            const extension = (0, string_format_1.getExtension)(this.yaml.filename);
             if (extension != null) {
                 this.yaml.extension = extension;
             }
@@ -27,7 +28,7 @@ class ClientMediaAsset {
             this.shortcut = exports.imageShortcutCounter.get();
         }
         if (this.mimeType !== 'document') {
-            this.htmlElement = internal_1.createHtmlElement(this.mimeType, this.httpUrl);
+            this.htmlElement = (0, internal_1.createHtmlElement)(this.mimeType, this.httpUrl);
         }
         if (this.isPlayable) {
             this.samples = new internal_1.SampleCollection(this);
@@ -89,7 +90,7 @@ class ClientMediaAsset {
         if (no > this.multiPartCount) {
             throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`);
         }
-        return core_browser_1.formatMultiPartAssetFileName(this.httpUrl, no);
+        return (0, string_format_1.formatMultiPartAssetFileName)(this.httpUrl, no);
     }
 }
 exports.ClientMediaAsset = ClientMediaAsset;
@@ -114,7 +115,10 @@ class MultiPartSelection {
         else {
             this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`;
         }
-        this.partNos = core_browser_1.selectSubset(this.selectionSpec, { elementsCount: this.asset.multiPartCount, firstElementNo: 1 });
+        this.partNos = (0, core_browser_1.selectSubset)(this.selectionSpec, {
+            elementsCount: this.asset.multiPartCount,
+            firstElementNo: 1
+        });
     }
     /**
      * The URI using the `ref` authority.
