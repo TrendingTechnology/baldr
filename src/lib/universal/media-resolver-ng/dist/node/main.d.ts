@@ -2,8 +2,10 @@
  * Submodule dependencies
  *
  * ```
- * cache.ts, sample.ts -> asset.ts
- * asset.ts, cache.ts -> resolve.ts
+ * - -> types.ts
+ * asset.ts!, types.ts -> sample.ts
+ * cache.ts, sample.ts, types.ts -> asset.ts
+ * asset.ts, sample.ts, types.ts, cache.ts -> resolve.ts
  * resolve.ts -> main.ts
  * ```
  */

@@ -1,5 +1,5 @@
-import { SampleYamlFormat } from './types';
 import { Asset } from './asset';
+import { SampleYamlFormat } from './types';
 /**
  * A sample (snippet, sprite) of a media asset which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the

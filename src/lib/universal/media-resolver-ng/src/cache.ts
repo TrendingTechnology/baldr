@@ -1,5 +1,6 @@
-import * as Types from './types'
 import { MediaUri } from '@bldr/client-media-models'
+
+import * as Types from './types'
 
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).

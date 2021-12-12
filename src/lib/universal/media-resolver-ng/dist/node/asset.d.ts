@@ -1,7 +1,7 @@
-import { RestApiRaw } from './types';
 import { MediaUri } from '@bldr/client-media-models';
 import { Cache } from './cache';
 import { Sample } from './sample';
+import { RestApiRaw } from './types';
 export declare class SampleCollection extends Cache<Sample> {
     private readonly asset;
     constructor(asset: Asset);

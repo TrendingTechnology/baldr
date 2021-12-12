@@ -1,6 +1,7 @@
-import { SampleYamlFormat } from './types'
-import { Asset } from './asset'
 import { convertDurationToSeconds } from '@bldr/core-browser'
+
+import { Asset } from './asset'
+import { SampleYamlFormat } from './types'
 
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
