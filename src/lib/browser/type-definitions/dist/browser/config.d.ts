@@ -73,6 +73,10 @@ interface MediaServerConfiguration {
      */
     examPath: string;
     /**
+     * Not encrypted exam collection.
+     */
+    examPathNotEncrypted: string;
+    /**
      * `serverway`
      */
     sshAliasRemote: string;
