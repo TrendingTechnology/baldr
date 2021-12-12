@@ -5,7 +5,7 @@ import fs from 'fs'
 
 import { convertFromYamlRaw } from '@bldr/yaml'
 import { GenericError } from '@bldr/type-definitions'
-import { getExtension } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 import * as log from '@bldr/log'
 import { parseAndResolve } from '@bldr/presentation-parser'
 import { readFile } from '@bldr/file-reader-writer'
@@ -49,7 +49,7 @@ async function normalizeAsset (filePath: string): Promise<void> {
 }
 
 function normalizeEveryFile (filePath: string): void {
-  const extension = getExtension(filePath)?.toLowerCase()
+  const extension = getExtension(filePath)
   if (extension != null && extension === 'txt') {
     txtOperations.fixTypography(filePath)
   }

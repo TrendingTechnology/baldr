@@ -11,13 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 function action(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner({
             verbose: true
         });
-        const extension = (0, core_browser_1.getExtension)(filePath);
+        const extension = (0, string_format_1.getExtension)(filePath);
         if (extension != null) {
             const dest = filePath.replace('.' + extension, '_no-metadata.' + extension);
             cmd.startSpin();

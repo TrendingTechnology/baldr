@@ -39,16 +39,17 @@ const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const client_media_models_1 = require("@bldr/client-media-models");
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const audio_metadata_1 = require("@bldr/audio-metadata");
-const media_file_classes_1 = require("./media-file-classes");
 const media_categories_1 = require("@bldr/media-categories");
-const location_indicator_1 = require("./location-indicator");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const main_1 = require("./main");
-const yaml_1 = require("./yaml");
 const log = __importStar(require("@bldr/log"));
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
-const yaml_2 = require("@bldr/yaml");
+const yaml_1 = require("@bldr/yaml");
+const media_file_classes_1 = require("./media-file-classes");
+const location_indicator_1 = require("./location-indicator");
+const main_1 = require("./main");
+const yaml_2 = require("./yaml");
 function move(oldPath, newPath, { copy, dryRun }) {
     if (oldPath === newPath) {
         return;
@@ -69,8 +70,10 @@ function move(oldPath, newPath, { copy, dryRun }) {
             catch (error) {
                 const e = error;
                 if (e.code === 'EXDEV') {
-                    log.debug('Move file by copying and deleting from %s to %s', [oldPath,
-                        newPath]);
+                    log.debug('Move file by copying and deleting from %s to %s', [
+                        oldPath,
+                        newPath
+                    ]);
                     fs_1.default.copyFileSync(oldPath, newPath);
                     fs_1.default.unlinkSync(oldPath);
                 }
@@ -91,8 +94,10 @@ function moveCorrespondingFiles(oldParentPath, newParentPath, search, replaces, 
         const oldCorrespondingPath = oldParentPath.replace(search, replace);
         if (fs_1.default.existsSync(oldCorrespondingPath)) {
             const newCorrespondingPath = newParentPath.replace(search, replace);
-            log.debug('Move corresponding file from %s to %s', [oldCorrespondingPath,
-                newCorrespondingPath]);
+            log.debug('Move corresponding file from %s to %s', [
+                oldCorrespondingPath,
+                newCorrespondingPath
+            ]);
             move(oldCorrespondingPath, newCorrespondingPath, opts);
         }
     }
@@ -112,7 +117,7 @@ function moveAsset(oldPath, newPath, opts = {}) {
         if (!(opts.dryRun != null && opts.dryRun)) {
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
         }
-        const extension = (0, core_browser_1.getExtension)(oldPath);
+        const extension = (0, string_format_1.getExtension)(oldPath);
         if (extension === 'eps' || extension === 'svg') {
             // Dippermouth-Blues.eps
             // Dippermouth-Blues.mscx
@@ -140,7 +145,7 @@ exports.moveAsset = moveAsset;
  *   extension `.yml`).
  */
 function readAssetYaml(filePath) {
-    const extension = (0, core_browser_1.getExtension)(filePath);
+    const extension = (0, string_format_1.getExtension)(filePath);
     if (extension !== 'yml') {
         filePath = `${filePath}.yml`;
     }
@@ -160,7 +165,7 @@ function renameMediaAsset(oldPath) {
     const metaData = readAssetYaml(oldPath);
     let newPath;
     if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
-        metaData.extension = (0, core_browser_1.getExtension)(oldPath);
+        metaData.extension = (0, string_format_1.getExtension)(oldPath);
         metaData.filePath = oldPath;
         const data = metaData;
         newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
@@ -216,9 +221,11 @@ function renameByRef(filePath) {
         if (ref === oldBaseName) {
             return;
         }
-        log.info('Rename the file %s by reference from %s to %s', [filePath,
+        log.info('Rename the file %s by reference from %s to %s', [
+            filePath,
             oldBaseName,
-            ref]);
+            ref
+        ]);
         newPath = path_1.default.join(path_1.default.dirname(oldPath), `${ref}${extension}`);
         moveAsset(oldPath, newPath);
     }
@@ -273,8 +280,8 @@ function normalizeMediaAsset(filePath, options) {
             const newMetaData = yield media_categories_1.categoriesManagement.process(metaData, filePath);
             const oldMetaData = origData;
             delete oldMetaData.filePath;
-            const oldYamlMarkup = (0, yaml_2.convertToYaml)(oldMetaData);
-            const newYamlMarkup = (0, yaml_2.convertToYaml)(newMetaData);
+            const oldYamlMarkup = (0, yaml_1.convertToYaml)(oldMetaData);
+            const newYamlMarkup = (0, yaml_1.convertToYaml)(newMetaData);
             if (oldYamlMarkup !== newYamlMarkup) {
                 logDiff(oldYamlMarkup, newYamlMarkup);
                 (0, file_reader_writer_1.writeYamlFile)(yamlFile, newMetaData);
@@ -294,7 +301,7 @@ exports.normalizeMediaAsset = normalizeMediaAsset;
 function initializeMetaYaml(filePath, metaData) {
     return __awaiter(this, void 0, void 0, function* () {
         const newPath = renameMediaAsset(filePath);
-        yield (0, yaml_1.writeYamlMetaData)(newPath, metaData);
+        yield (0, yaml_2.writeYamlMetaData)(newPath, metaData);
         yield normalizeMediaAsset(newPath, { wikidata: false });
     });
 }
@@ -427,7 +434,7 @@ function convertAsset(filePath, cmdObj = {}) {
                         log.errorAny(error);
                     }
                     if (metaData != null) {
-                        yield (0, yaml_1.writeYamlMetaData)(outputFile, metaData);
+                        yield (0, yaml_2.writeYamlMetaData)(outputFile, metaData);
                     }
                 }
                 converted.add(outputFile);

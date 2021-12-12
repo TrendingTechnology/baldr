@@ -10,23 +10,6 @@ import { v4 as uuidv4 } from 'uuid';
 export * from './object-manipulation';
 export * from './string-format';
 /**
- * Get the extension from a file path.
- *
- * @param filePath - A file path or a single file name.
- *
- * @returns The extension in lower case characters.
- */
-export function getExtension(filePath) {
-    if (filePath != null) {
-        const extension = String(filePath)
-            .split('.')
-            .pop();
-        if (extension != null) {
-            return extension.toLowerCase();
-        }
-    }
-}
-/**
  * Sleep some time
  *
  * @see {@link https://github.com/erikdubbelboer/node-sleep}

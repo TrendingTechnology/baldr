@@ -9,14 +9,6 @@
 export * from './object-manipulation';
 export * from './string-format';
 /**
- * Get the extension from a file path.
- *
- * @param filePath - A file path or a single file name.
- *
- * @returns The extension in lower case characters.
- */
-export declare function getExtension(filePath: string): string | undefined;
-/**
  * Sleep some time
  *
  * @see {@link https://github.com/erikdubbelboer/node-sleep}

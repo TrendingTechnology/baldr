@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isTex = exports.isPresentation = exports.isAsset = exports.filePathToMimeType = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const client_media_models_1 = require("@bldr/client-media-models");
 const asset_1 = require("./asset");
 /**
@@ -23,7 +23,7 @@ class MediaFile {
      * The file extension of the media file.
      */
     get extension() {
-        return (0, core_browser_1.getExtension)(this.absPath);
+        return (0, string_format_1.getExtension)(this.absPath);
     }
     /**
      * The basename (filename without extension) of the file.

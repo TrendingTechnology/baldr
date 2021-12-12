@@ -37,6 +37,7 @@ const path_1 = __importDefault(require("path"));
 const child_process_1 = __importDefault(require("child_process"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
@@ -306,7 +307,7 @@ function move(oldPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Had to be an absolute path (to check if its an inactive/archived folder)
         oldPath = path_1.default.resolve(oldPath);
-        const extension = (0, core_browser_1.getExtension)(oldPath);
+        const extension = (0, string_format_1.getExtension)(oldPath);
         if (extension == null)
             return;
         if (!media_manager_1.locationIndicator.isInArchive(oldPath)) {

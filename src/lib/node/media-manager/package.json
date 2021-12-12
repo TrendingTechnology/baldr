@@ -36,6 +36,7 @@
     "@bldr/media-categories": "*",
     "@bldr/presentation-parser": "*",
     "@bldr/tex-markdown-converter": "*",
+    "@bldr/string-format": "*",
     "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
     "@bldr/wikidata": "*",

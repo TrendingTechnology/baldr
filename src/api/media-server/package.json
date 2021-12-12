@@ -18,6 +18,7 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/media-manager": "*",
+    "@bldr/string-format": "*",
     "@bldr/mongodb-connector": "*",
     "@bldr/open-with": "*",
     "@bldr/file-reader-writer": "*",

@@ -2,7 +2,7 @@
 import path from 'path'
 
 import { MediaResolverTypes } from '@bldr/type-definitions'
-import { getExtension } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 import { mimeTypeManager } from '@bldr/client-media-models'
 
 import { readAssetYaml } from './asset'
@@ -26,7 +26,7 @@ class MediaFile {
   /**
    * The file extension of the media file.
    */
-  get extension (): string | undefined {
+  get extension (): string {
     return getExtension(this.absPath)
   }
 

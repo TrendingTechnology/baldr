@@ -5,23 +5,25 @@ import fs from 'fs'
 
 // Project packages.
 import { mimeTypeManager } from '@bldr/client-media-models'
-import { referencify, getExtension, asciify, deepCopy, msleep } from '@bldr/core-browser'
+import { referencify, asciify, deepCopy, msleep } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 import { collectAudioMetadata } from '@bldr/audio-metadata'
-import { makeAsset } from './media-file-classes'
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { locationIndicator } from './location-indicator'
+import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
+import * as log from '@bldr/log'
+import wikidata from '@bldr/wikidata'
 import {
   MediaResolverTypes,
   GenericError,
   MediaCategoriesTypes,
   StringIndexedObject
 } from '@bldr/type-definitions'
-import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
+import { convertToYaml } from '@bldr/yaml'
+
+import { makeAsset } from './media-file-classes'
+import { locationIndicator } from './location-indicator'
 import { readYamlMetaData } from './main'
 import { writeYamlMetaData } from './yaml'
-import * as log from '@bldr/log'
-import wikidata from '@bldr/wikidata'
-import { convertToYaml } from '@bldr/yaml'
 
 interface MoveAssetConfiguration {
   copy?: boolean
@@ -50,11 +52,10 @@ function move (
       } catch (error) {
         const e = error as GenericError
         if (e.code === 'EXDEV') {
-          log.debug(
-            'Move file by copying and deleting from %s to %s',
-            [oldPath,
-              newPath]
-          )
+          log.debug('Move file by copying and deleting from %s to %s', [
+            oldPath,
+            newPath
+          ])
           fs.copyFileSync(oldPath, newPath)
           fs.unlinkSync(oldPath)
         }
@@ -82,11 +83,10 @@ function moveCorrespondingFiles (
     const oldCorrespondingPath = oldParentPath.replace(search, replace)
     if (fs.existsSync(oldCorrespondingPath)) {
       const newCorrespondingPath = newParentPath.replace(search, replace)
-      log.debug(
-        'Move corresponding file from %s to %s',
-        [oldCorrespondingPath,
-          newCorrespondingPath]
-      )
+      log.debug('Move corresponding file from %s to %s', [
+        oldCorrespondingPath,
+        newCorrespondingPath
+      ])
       move(oldCorrespondingPath, newCorrespondingPath, opts)
     }
   }
@@ -231,12 +231,11 @@ export function renameByRef (filePath: string): void {
     if (ref === oldBaseName) {
       return
     }
-    log.info(
-      'Rename the file %s by reference from %s to %s',
-      [filePath,
-        oldBaseName,
-        ref]
-    )
+    log.info('Rename the file %s by reference from %s to %s', [
+      filePath,
+      oldBaseName,
+      ref
+    ])
     newPath = path.join(path.dirname(oldPath), `${ref}${extension}`)
     moveAsset(oldPath, newPath)
   }

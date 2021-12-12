@@ -72,19 +72,19 @@ import express from 'express'
 
 // Project packages.
 import { getConfig } from '@bldr/config'
-import { getExtension, stripTags, asciify, deasciify } from '@bldr/core-browser'
+import { stripTags, asciify, deasciify } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
-
 import { walk } from '@bldr/media-manager'
 import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory, DeepTitle } from '@bldr/titles'
-
 import {
   StringIndexedObject,
   LampTypes,
   GenericError,
   ApiTypes
 } from '@bldr/type-definitions'
+
 import {
   MediaType,
   openParentFolder,

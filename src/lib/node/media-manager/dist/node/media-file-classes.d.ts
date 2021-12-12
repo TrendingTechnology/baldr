@@ -13,7 +13,7 @@ declare class MediaFile {
     /**
      * The file extension of the media file.
      */
-    get extension(): string | undefined;
+    get extension(): string;
     /**
      * The basename (filename without extension) of the file.
      */

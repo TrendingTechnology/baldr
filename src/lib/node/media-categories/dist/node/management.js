@@ -26,6 +26,7 @@ exports.process = exports.searchUnknownProps = exports.mergeNames = exports.form
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const yaml_1 = require("@bldr/yaml");
 const titles_1 = require("@bldr/titles");
 const specs_1 = require("./specs");
@@ -91,7 +92,7 @@ function formatFilePath(data, oldPath) {
         if (data.mainImage == null) {
             throw new Error('Your data needs a property named “mainImage”.');
         }
-        const extension = (0, core_browser_1.getExtension)(data.mainImage);
+        const extension = (0, string_format_1.getExtension)(data.mainImage);
         if (extension == null) {
             throw new Error('Extension couldn’t be detected.');
         }

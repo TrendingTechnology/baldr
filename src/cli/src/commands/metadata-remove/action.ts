@@ -2,7 +2,7 @@
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import { getExtension } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 
 async function action (filePath: string): Promise<void> {
   const cmd = new CommandRunner({

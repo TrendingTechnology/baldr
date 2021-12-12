@@ -37,7 +37,7 @@ exports.normalize = void 0;
  */
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = require("@bldr/yaml");
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const log = __importStar(require("@bldr/log"));
 const presentation_parser_1 = require("@bldr/presentation-parser");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
@@ -80,8 +80,7 @@ function normalizeAsset(filePath) {
     });
 }
 function normalizeEveryFile(filePath) {
-    var _a;
-    const extension = (_a = (0, core_browser_1.getExtension)(filePath)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+    const extension = (0, string_format_1.getExtension)(filePath);
     if (extension != null && extension === 'txt') {
         txtOperations.fixTypography(filePath);
     }

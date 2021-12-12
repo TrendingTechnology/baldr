@@ -126,6 +126,7 @@ var express_1 = __importDefault(require("express"));
 // Project packages.
 var config_1 = require("@bldr/config");
 var core_browser_1 = require("@bldr/core-browser");
+var string_format_1 = require("@bldr/string-format");
 var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
 var file_reader_writer_1 = require("@bldr/file-reader-writer");
@@ -161,7 +162,7 @@ var ServerMediaFile = /** @class */ (function () {
      * Add metadata from the file system, like file size or timeModifed.
      */
     ServerMediaFile.prototype.startBuild = function () {
-        this.extension = (0, core_browser_1.getExtension)(this.absPath_);
+        this.extension = (0, string_format_1.getExtension)(this.absPath_);
         if (this.extension != null) {
             this.basename_ = path_1.default.basename(this.absPath_, ".".concat(this.extension));
         }

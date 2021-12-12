@@ -18,28 +18,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = exports.getExtension = void 0;
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = void 0;
 const uuid_1 = require("uuid");
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
-/**
- * Get the extension from a file path.
- *
- * @param filePath - A file path or a single file name.
- *
- * @returns The extension in lower case characters.
- */
-function getExtension(filePath) {
-    if (filePath != null) {
-        const extension = String(filePath)
-            .split('.')
-            .pop();
-        if (extension != null) {
-            return extension.toLowerCase();
-        }
-    }
-}
-exports.getExtension = getExtension;
 /**
  * Sleep some time
  *

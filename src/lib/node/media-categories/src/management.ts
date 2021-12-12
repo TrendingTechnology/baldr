@@ -12,7 +12,8 @@
 import path from 'path'
 
 // Project packages.
-import { deepCopy, getExtension } from '@bldr/core-browser'
+import { deepCopy } from '@bldr/core-browser'
+import { getExtension } from '@bldr/string-format'
 import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
 import {
