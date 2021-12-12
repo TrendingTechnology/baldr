@@ -87,23 +87,16 @@ describe('Package “@bldr/titles”', function () {
         )
       }
 
-      add('10_Bach-Thema-regium/Praesentation.baldr.yml')
-      add('20_Bach-Matthaus-Komm-suesses-Kreuz/Praesentation.baldr.yml')
+      add('10_Einfuehrung-Kaktus/Praesentation.baldr.yml')
+      add('20_Bach-Themen/Praesentation.baldr.yml')
       add('30_Intervalle-Bach-Inventionen/Praesentation.baldr.yml')
-      add('Praesentation.baldr.yml')
 
       const tree = factory.getTree()
 
       assert.ok(
         tree.Musik.sub['06'].sub['40_Grundlagen'].sub[
           '05_Intervalle-Feinbestimmung'
-        ].sub['10_Bach-Thema-regium'].folder.hasPresentation
-      )
-
-      assert.ok(
-        tree.Musik.sub['06'].sub['40_Grundlagen'].sub[
-          '05_Intervalle-Feinbestimmung'
-        ].sub['20_Bach-Matthaus-Komm-suesses-Kreuz'].folder.hasPresentation
+        ].sub['20_Bach-Themen'].folder.hasPresentation
       )
 
       assert.ok(

@@ -15,8 +15,7 @@
     "build": "npm run build:browser",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
-    "lint": "npm run lint:depcheck & npm run lint:ts-standard",
-    "test": "npm run build && mocha 'tests/*'"
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard"
   },
   "license": "MIT",
   "author": {

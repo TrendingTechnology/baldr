@@ -1,4 +1,4 @@
-/* globals describe it */
+/* globals describe it afterEach */
 const assert = require('assert')
 
 const sinon = require('sinon')
@@ -23,10 +23,11 @@ describe('Package “@bldr/log”', function () {
   it('log.info(): With replacements', function () {
     const spyInfo = sinon.spy(console, 'info')
 
-    log.info(
-      'string (default color): %s; string (colored): %s; float %.1f',
-      ['troll', log.colorize.red('red'), 123.456]
-    )
+    log.info('string (default color): %s; string (colored): %s; float %.1f', [
+      'troll',
+      log.colorize.red('red'),
+      123.456
+    ])
     assert(
       spyInfo.calledWith(
         '\u001b[32m█\u001b[39m string (default color): \u001b[32mtroll\u001b[39m; string (colored): \u001b[31mred\u001b[39m; float 123.5'
