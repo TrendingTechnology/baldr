@@ -42,29 +42,22 @@
 
 <script lang="ts">
 import { PlainIcon } from '@bldr/icons'
-import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
+import { Component } from '@bldr/vue-packages-bundler'
 
 import { player } from '../../plugin'
 import { Playable, PlaybackState } from '../../playable'
+import PlayableBase from './PlayableBase.vue'
 
 const circleRadius = 100
 // 100%: 628.3185307179587
 const circumference = Math.PI * 2 * circleRadius
 
 @Component({
-  props: {
-    playable: {
-      type: Object
-    }
-  },
   components: {
     PlainIcon
   }
 })
-export default class PlayButton extends Vue {
-  @Prop()
-  playable!: Playable
-
+export default class PlayButton extends PlayableBase {
   /**
    * We add two more states to the playback states of a playable.
    *
@@ -135,6 +128,11 @@ export default class PlayButton extends Vue {
     this.playable.registerPlaybackChangeListener(this.updatePlaybackState)
   }
 
+  unregisterEvents () {
+    this.playable.removeEventsListener(this.updateProgress)
+    this.playable.removeEventsListener(this.updatePlaybackState)
+  }
+
   /**
    * Set the progress on the first visible circle.
    * Updates the stroke dash offset of the first visible circle
@@ -153,21 +151,6 @@ export default class PlayButton extends Vue {
       this.playbackState = 'starting'
       await player.start(this.playable.sample.ref)
     }
-  }
-
-  @Watch('playable')
-  onPlayableChange (): void {
-    this.registerEvents()
-  }
-
-  mounted () {
-    // Activate a play button, when a playable is already playing
-    this.registerEvents()
-  }
-
-  beforeDestroy () {
-    this.playable.removeEventsListener(this.updateProgress)
-    this.playable.removeEventsListener(this.updatePlaybackState)
   }
 }
 </script>

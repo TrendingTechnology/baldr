@@ -1,6 +1,6 @@
 <template>
   <div class="vc_component_wave_form_demo">
-    <h1>ComponentProgressBarDemo</h1>
+    <h1>ComponentWaveFormDemo</h1>
     <wave-form :playable="playable"></wave-form>
   </div>
 </template>
@@ -14,7 +14,7 @@ import { Playable } from '../../playable'
 import WaveForm from '../plugin/WaveForm.vue'
 
 @Component({ components: { WaveForm } })
-export default class ComponentProgressBarDemo extends Vue {
+export default class ComponentWaveFormDemo extends Vue {
   playable!: Playable
 
   data () {

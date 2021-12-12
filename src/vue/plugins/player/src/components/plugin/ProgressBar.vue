@@ -5,15 +5,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
-
-import { Playable } from '../../playable'
+import { Component } from '@bldr/vue-packages-bundler'
+import PlayableBase from './PlayableBase.vue'
 
 @Component
-export default class ProgressBar extends Vue {
-  @Prop()
-  playable!: Playable
-
+export default class ProgressBar extends PlayableBase {
   $refs!: {
     progress: HTMLElement
     elapsed: HTMLElement
@@ -44,20 +40,6 @@ export default class ProgressBar extends Vue {
     if (this.playable != null) {
       this.playable.removeEventsListener(this.updateProgress)
     }
-  }
-
-  mounted (): void {
-    this.registerEvents()
-  }
-
-  @Watch('playable')
-  onPlayableChange (): void {
-    this.unregisterEvents()
-    this.registerEvents()
-  }
-
-  beforeDestroy () {
-    this.unregisterEvents()
   }
 }
 </script>

@@ -6,24 +6,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
-import { Asset } from '@bldr/media-resolver-ng'
-import { Playable } from '../../playable'
+import { Component } from '@bldr/vue-packages-bundler'
+import PlayableBase from './PlayableBase.vue'
 
 @Component
-export default class WaveForm extends Vue {
-  @Prop()
-  playable!: Playable
-
+export default class WaveForm extends PlayableBase {
   $refs!: {
     progressIndicatorOverlayDiv: HTMLElement
     waveformImg: HTMLElement
-  }
-
-  get asset (): Asset | undefined {
-    if (this.playable != null) {
-      return this.playable.sample.asset
-    }
   }
 
   updateProgress () {
@@ -68,20 +58,6 @@ export default class WaveForm extends Vue {
     if (this.playable != null) {
       this.playable.removeEventsListener(this.updateProgress)
     }
-  }
-
-  mounted (): void {
-    this.registerEvents()
-  }
-
-  @Watch('playable')
-  onPlayableChange (): void {
-    this.unregisterEvents()
-    this.registerEvents()
-  }
-
-  beforeDestroy () {
-    this.unregisterEvents()
   }
 }
 </script>
