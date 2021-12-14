@@ -54,11 +54,9 @@ class AssetBuilder extends builder_1.Builder {
                 throw new Error(`${this.absPath} multipart asset counts greater than 100 are not supported.`);
             }
             let basePath = this.absPath;
-            let fileName;
             const extension = (0, string_format_1.getExtension)(this.absPath);
             basePath = this.absPath.replace(`.${extension}`, '');
-            fileName = `${basePath}${suffix}.${extension}`;
-            return fileName;
+            return `${basePath}${suffix}.${extension}`;
         };
         let count = 2;
         while (fs_1.default.existsSync(nextAssetFileName(count))) {

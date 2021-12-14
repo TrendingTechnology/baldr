@@ -9,8 +9,8 @@ const path_1 = __importDefault(require("path"));
 const folder_title_1 = require("./folder-title");
 class DeepTitle {
     /**
-     * @param filePath - The path of a file in a folder with `title.txt`
-     *   files.
+     * @param filePath - The path of a file in a folder with a `title.txt`
+     *   file.
      */
     constructor(filePath) {
         this.titles = [];

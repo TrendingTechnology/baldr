@@ -11,8 +11,8 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
      */
     private readonly folderNames;
     /**
-     * @param filePath - The path of a file in a folder with `title.txt`
-     *   files.
+     * @param filePath - The path of a file in a folder with a `title.txt`
+     *   file.
      */
     constructor(filePath: string);
     shiftFolderName(): string | undefined;

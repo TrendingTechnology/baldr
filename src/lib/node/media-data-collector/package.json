@@ -29,10 +29,8 @@
   "dependencies": {
     "@bldr/config": "*",
     "@bldr/string-format": "*",
-    "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/titles": "*",
-    "@bldr/yaml": "*",
     "@bldr/client-media-models": "*"
   },
   "devDependencies": {

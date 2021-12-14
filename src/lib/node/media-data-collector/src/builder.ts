@@ -15,7 +15,7 @@ export interface MediaData {
  */
 export abstract class Builder {
   /**
-   * Absolute path ot the media file, not the metadata file.
+   * Absolute path of the media file, not the metadata file.
    */
   protected absPath: string
 

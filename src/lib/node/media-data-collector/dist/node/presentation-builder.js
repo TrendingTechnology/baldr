@@ -1,96 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PresentationBuilder = void 0;
+const titles_1 = require("@bldr/titles");
 const builder_1 = require("./builder");
 /**
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
  */
 class PresentationBuilder extends builder_1.Builder {
-    // meta?: LampTypes.PresentationMeta
-    /**
-     * The plain text version of `this.meta.title`.
-     */
-    // title: string
-    /**
-     * The plain text version of `this.meta.title (this.meta.subtitle)`
-     */
-    // titleSubtitle: string
-    /**
-     * The plain text version of `folderTitles.allTitles
-     * (this.meta.subtitle)`
-     *
-     * For example:
-     *
-     * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-     * Johann Sebastian Bach: Musik als Bekenntnis /
-     * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-     */
-    // allTitlesSubtitle: string
-    /**
-     * Value is the same as `meta.ref`
-     */
-    // ref: string
     constructor(filePath) {
         super(filePath);
+        const data = {};
+        this.importYamlFile(this.absPath, data);
+        if (data.slides == null) {
+            throw new Error('No slide property.');
+        }
         this.data = {
-            relPath: this.relPath
+            relPath: this.relPath,
+            slides: data.slides
         };
-        // const data = readYamlFile(filePath)
-        // if (data != null) this.importProperties(data)
-        // const deepTitle = titleTreeFactory.addTitleByPath(filePath)
-        // if (this.meta == null) {
-        //   // eslint-disable-next-line
-        //   this.meta = {} as LampTypes.PresentationMeta
-        // }
-        // if (this.meta?.ref == null) {
-        //   this.meta.ref = deepTitle.ref
-        // }
-        // if (this.meta?.title == null) {
-        //   this.meta.title = deepTitle.title
-        // }
-        // if (this.meta?.subtitle == null) {
-        //   this.meta.subtitle = deepTitle.subtitle
-        // }
-        // if (this.meta?.curriculum == null) {
-        //   this.meta.curriculum = deepTitle.curriculum
-        // }
-        // if (this.meta?.grade == null) {
-        //   this.meta.grade = deepTitle.grade
-        // }
-        // this.title = stripTags(this.meta.title)
-        // this.titleSubtitle = this.titleSubtitle_()
-        // this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle)
-        // this.ref = this.meta.ref
     }
-    // /**
-    //  * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
-    //  */
-    // private titleSubtitle_ (): string {
-    //   if (this.meta?.subtitle != null) {
-    //     return `${this.title} (${stripTags(this.meta.subtitle)})`
-    //   } else {
-    //     return this.title
-    //   }
-    // }
-    // /**
-    //  * Generate the plain text version of `folderTitles.allTitles
-    //  * (this.meta.subtitle)`
-    //  *
-    //  * For example:
-    //  *
-    //  * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-    //  * Johann Sebastian Bach: Musik als Bekenntnis /
-    //  * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-    //  */
-    // private allTitlesSubtitle_ (folderTitles: DeepTitle): string {
-    //   let all = folderTitles.allTitles
-    //   if (this.meta?.subtitle != null) {
-    //     all = `${all} (${this.meta.subtitle})`
-    //   }
-    //   return stripTags(all)
-    // }
+    enrichMetaProp() {
+        const title = new titles_1.DeepTitle(this.absPath);
+        const meta = title.generatePresetationMeta();
+        if (this.data.meta == null) {
+            this.data.meta = meta;
+        }
+        else {
+            if ((meta === null || meta === void 0 ? void 0 : meta.ref) == null) {
+                this.data.meta.ref = meta.ref;
+            }
+            if ((meta === null || meta === void 0 ? void 0 : meta.title) == null) {
+                this.data.meta.title = meta.title;
+            }
+            if ((meta === null || meta === void 0 ? void 0 : meta.subtitle) == null) {
+                this.data.meta.subtitle = meta.subtitle;
+            }
+            if ((meta === null || meta === void 0 ? void 0 : meta.curriculum) == null) {
+                this.data.meta.curriculum = meta.curriculum;
+            }
+            if ((meta === null || meta === void 0 ? void 0 : meta.grade) == null) {
+                this.data.meta.grade = meta.grade;
+            }
+        }
+        return this;
+    }
     buildAll() {
+        this.enrichMetaProp();
         return this;
     }
     export() {

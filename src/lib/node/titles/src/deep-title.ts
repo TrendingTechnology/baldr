@@ -18,8 +18,8 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
   private readonly folderNames: string[]
 
   /**
-   * @param filePath - The path of a file in a folder with `title.txt`
-   *   files.
+   * @param filePath - The path of a file in a folder with a `title.txt`
+   *   file.
    */
   constructor (filePath: string) {
     this.titles = []

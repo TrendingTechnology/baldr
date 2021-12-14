@@ -74,12 +74,9 @@ export class AssetBuilder extends Builder {
         )
       }
       let basePath = this.absPath
-      let fileName
-
       const extension = getExtension(this.absPath)
       basePath = this.absPath.replace(`.${extension}`, '')
-      fileName = `${basePath}${suffix}.${extension}`
-      return fileName
+      return `${basePath}${suffix}.${extension}`
     }
 
     let count = 2
