@@ -1,0 +1,43 @@
+import path from 'path'
+
+import { getConfig } from '@bldr/config'
+import { readYamlFile } from '@bldr/file-reader-writer'
+
+const config = getConfig()
+
+export interface MediaData {
+  relPath: string
+  [property: string]: any
+}
+
+/**
+ * Base class to be extended.
+ */
+export abstract class Builder {
+  /**
+   * Absolute path ot the media file, not the metadata file.
+   */
+  protected absPath: string
+
+  constructor (filePath: string) {
+    this.absPath = path.resolve(filePath)
+  }
+
+  protected get relPath (): string {
+    return this.absPath
+      .replace(config.mediaServer.basePath, '')
+      .replace(/^\//, '')
+  }
+
+  public importYamlFile (filePath: string, target: any): Builder {
+    const data = readYamlFile(filePath)
+    for (const property in data) {
+      target[property] = data[property]
+    }
+    return this
+  }
+
+  public abstract buildAll (): Builder
+
+  public abstract export (): MediaData
+}
