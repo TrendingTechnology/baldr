@@ -39,7 +39,7 @@ const path_1 = __importDefault(require("path"));
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const yaml_1 = require("@bldr/yaml");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const core_browser_1 = require("@bldr/core-browser");
+const uuid_1 = require("@bldr/uuid");
 const titles_1 = require("@bldr/titles");
 const log = __importStar(require("@bldr/log"));
 const media_file_classes_1 = require("./media-file-classes");
@@ -103,7 +103,7 @@ function normalizePresentationFile(filePath) {
         meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
     if (((_c = presentation === null || presentation === void 0 ? void 0 : presentation.meta) === null || _c === void 0 ? void 0 : _c.uuid) == null) {
-        meta.uuid = (0, core_browser_1.genUuid)();
+        meta.uuid = (0, uuid_1.generateUuid)();
     }
     else {
         meta.uuid = presentation.meta.uuid;
