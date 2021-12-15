@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.general = void 0;
 const core_browser_1 = require("@bldr/core-browser");
+const uuid_1 = require("@bldr/uuid");
 const two_letter_abbreviations_1 = require("../two-letter-abbreviations");
 const main_1 = require("../main");
 /**
@@ -51,7 +52,7 @@ exports.general = {
             title: 'UUID',
             description: 'UUID version 4.',
             derive() {
-                return (0, core_browser_1.genUuid)();
+                return (0, uuid_1.generateUuid)();
             },
             overwriteByDerived: false
         },

@@ -1,10 +1,11 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
-import { deasciify, referencify, genUuid } from '@bldr/core-browser'
+import { deasciify, referencify } from '@bldr/core-browser'
+import { generateUuid } from '@bldr/uuid'
+
 import {
   getTwoLetterRegExp,
   checkForTwoLetterDir
 } from '../two-letter-abbreviations'
-
 import { generateIdPrefix, validateYoutubeId } from '../main'
 
 /**
@@ -57,7 +58,7 @@ export const general: MediaCategoriesTypes.Category = {
       title: 'UUID',
       description: 'UUID version 4.',
       derive () {
-        return genUuid()
+        return generateUuid()
       },
       overwriteByDerived: false
     },

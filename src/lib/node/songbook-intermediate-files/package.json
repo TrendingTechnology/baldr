@@ -21,6 +21,7 @@
     "@bldr/log": "*",
     "@bldr/songbook-core": "*",
     "@bldr/string-format": "*",
+    "@bldr/uuid": "*",
     "@bldr/yaml": "*",
     "better-sqlite3": "7.1.2",
     "fs-extra": "9.1.0",

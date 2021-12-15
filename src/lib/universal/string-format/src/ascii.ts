@@ -24,6 +24,21 @@ export function asciify (input: string): string {
 }
 
 /**
+ * This function can be used to generate a title from an ID string.
+ */
+export function deasciify (input: string): string {
+  return String(input)
+    .replace(/_/g, ', ')
+    .replace(/-/g, ' ')
+    .replace(/Ae/g, 'Ä')
+    .replace(/ae/g, 'ä')
+    .replace(/Oe/g, 'Ö')
+    .replace(/oe/g, 'ö')
+    .replace(/Ue/g, 'Ü')
+    .replace(/ue/g, 'ü')
+}
+
+/**
  * This function can be used to generate IDs from different file names.
  *
  * It performes some addictional replacements which can not be done in `asciify`
@@ -41,19 +56,4 @@ export function referencify (input: string): string {
   // Finally remove all non ID characters.
   output = output.replace(/[^A-Za-z0-9-_]+/g, '')
   return output
-}
-
-/**
- * This function can be used to generate a title from an ID string.
- */
-export function deasciify (input: string): string {
-  return String(input)
-    .replace(/_/g, ', ')
-    .replace(/-/g, ' ')
-    .replace(/Ae/g, 'Ä')
-    .replace(/ae/g, 'ä')
-    .replace(/Oe/g, 'Ö')
-    .replace(/oe/g, 'ö')
-    .replace(/Ue/g, 'Ü')
-    .replace(/ue/g, 'ü')
 }

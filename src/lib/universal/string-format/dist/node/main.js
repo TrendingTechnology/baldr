@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getExtension = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.shortenText = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = void 0;
+exports.getExtension = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.shortenText = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = exports.referencify = exports.deasciify = exports.asciify = void 0;
+var ascii_1 = require("./ascii");
+Object.defineProperty(exports, "asciify", { enumerable: true, get: function () { return ascii_1.asciify; } });
+Object.defineProperty(exports, "deasciify", { enumerable: true, get: function () { return ascii_1.deasciify; } });
+Object.defineProperty(exports, "referencify", { enumerable: true, get: function () { return ascii_1.referencify; } });
 var date_1 = require("./date");
 Object.defineProperty(exports, "convertDurationToSeconds", { enumerable: true, get: function () { return date_1.convertDurationToSeconds; } });
 Object.defineProperty(exports, "getCurrentSchoolYear", { enumerable: true, get: function () { return date_1.getCurrentSchoolYear; } });

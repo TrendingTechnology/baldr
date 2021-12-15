@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/core-browser",
-  "version": "0.11.3",
-  "description": "Base core functionality for the code running in the browser without node (typescript version).",
+  "name": "@bldr/uuid",
+  "version": "0.1.0",
+  "description": "A wrapper around uuid.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -32,8 +32,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/type-definitions": "*",
-    "transliteration": "2.2.0"
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "8.3.3"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

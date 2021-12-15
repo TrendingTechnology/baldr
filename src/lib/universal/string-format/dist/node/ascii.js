@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deasciify = exports.referencify = exports.asciify = void 0;
+exports.referencify = exports.deasciify = exports.asciify = void 0;
 const transliteration_1 = require("transliteration");
 /**
  * Convert some unicode strings into the ASCII format.
@@ -26,6 +26,21 @@ function asciify(input) {
 }
 exports.asciify = asciify;
 /**
+ * This function can be used to generate a title from an ID string.
+ */
+function deasciify(input) {
+    return String(input)
+        .replace(/_/g, ', ')
+        .replace(/-/g, ' ')
+        .replace(/Ae/g, 'Ä')
+        .replace(/ae/g, 'ä')
+        .replace(/Oe/g, 'Ö')
+        .replace(/oe/g, 'ö')
+        .replace(/Ue/g, 'Ü')
+        .replace(/ue/g, 'ü');
+}
+exports.deasciify = deasciify;
+/**
  * This function can be used to generate IDs from different file names.
  *
  * It performes some addictional replacements which can not be done in `asciify`
@@ -43,18 +58,3 @@ function referencify(input) {
     return output;
 }
 exports.referencify = referencify;
-/**
- * This function can be used to generate a title from an ID string.
- */
-function deasciify(input) {
-    return String(input)
-        .replace(/_/g, ', ')
-        .replace(/-/g, ' ')
-        .replace(/Ae/g, 'Ä')
-        .replace(/ae/g, 'ä')
-        .replace(/Oe/g, 'Ö')
-        .replace(/oe/g, 'ö')
-        .replace(/Ue/g, 'Ü')
-        .replace(/ue/g, 'ü');
-}
-exports.deasciify = deasciify;

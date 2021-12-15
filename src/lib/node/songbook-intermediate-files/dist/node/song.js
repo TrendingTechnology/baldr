@@ -33,7 +33,7 @@ const fs = __importStar(require("fs-extra"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");
 const log = __importStar(require("@bldr/log"));
-const core_browser_1 = require("@bldr/core-browser");
+const uuid_1 = require("@bldr/uuid");
 const string_format_1 = require("@bldr/string-format");
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const yaml_1 = require("@bldr/yaml");
@@ -355,7 +355,7 @@ class IntermediateSong extends ExtendedSong {
             uuid = oldMetaData.uuid;
         }
         else {
-            uuid = (0, core_browser_1.genUuid)();
+            uuid = (0, uuid_1.generateUuid)();
         }
         const newMetaData = this.metaDataCombined.toJSON();
         newMetaData.uuid = uuid;

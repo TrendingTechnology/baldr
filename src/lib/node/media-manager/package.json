@@ -39,6 +39,7 @@
     "@bldr/string-format": "*",
     "@bldr/tex-templates": "*",
     "@bldr/titles": "*",
+    "@bldr/uuid": "*",
     "@bldr/wikidata": "*",
     "@bldr/yaml": "*"
   },
