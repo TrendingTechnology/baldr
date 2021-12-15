@@ -92,13 +92,6 @@ export declare function removeDuplicatesFromArray(input: string[]): string[];
  */
 export declare function makeSet(values: string | string[] | Set<string>): Set<string>;
 /**
- * Generate a UUID (Universally Unique Identifier) in version 4. A version 4
- * UUID is randomly generated. This is a small wrapper around `uuid.v4()`
- *
- * @returns An UUID version 4
- */
-export declare function genUuid(): string;
-/**
  * @param duration - in seconds
  *
  * @return `01:23`

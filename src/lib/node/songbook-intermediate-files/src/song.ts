@@ -19,7 +19,7 @@ import {
   songConstants
 } from '@bldr/songbook-core'
 import * as log from '@bldr/log'
-import { genUuid } from '@bldr/core-browser'
+import { generateUuid } from '@bldr/uuid'
 import { formatMultiPartAssetFileName } from '@bldr/string-format'
 import { writeYamlFile, readYamlFile } from '@bldr/file-reader-writer'
 import { convertFromYamlRaw } from '@bldr/yaml'
@@ -466,7 +466,7 @@ export class IntermediateSong extends ExtendedSong {
     if (oldMetaData?.uuid != null) {
       uuid = oldMetaData.uuid
     } else {
-      uuid = genUuid()
+      uuid = generateUuid()
     }
     const newMetaData = this.metaDataCombined.toJSON()
     newMetaData.uuid = uuid

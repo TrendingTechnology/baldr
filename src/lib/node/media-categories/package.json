@@ -31,10 +31,11 @@
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
-    "@bldr/string-format": "*",
     "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
+    "@bldr/string-format": "*",
     "@bldr/titles": "*",
+    "@bldr/uuid": "*",
     "@bldr/yaml": "*"
   },
   "devDependencies": {

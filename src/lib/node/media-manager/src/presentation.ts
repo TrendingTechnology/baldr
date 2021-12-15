@@ -10,7 +10,7 @@ import {
 import { convertToYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
-import { genUuid } from '@bldr/core-browser'
+import { generateUuid } from '@bldr/uuid'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
 
@@ -86,7 +86,7 @@ export function normalizePresentationFile (filePath: string): void {
     meta.curriculumUrl = presentation.meta.curriculumUrl
   }
   if (presentation?.meta?.uuid == null) {
-    meta.uuid = genUuid()
+    meta.uuid = generateUuid()
   } else {
     meta.uuid = presentation.meta.uuid
   }

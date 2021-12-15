@@ -18,8 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.genUuid = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = void 0;
-const uuid_1 = require("uuid");
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = void 0;
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**
@@ -257,16 +256,6 @@ function makeSet(values) {
     return values;
 }
 exports.makeSet = makeSet;
-/**
- * Generate a UUID (Universally Unique Identifier) in version 4. A version 4
- * UUID is randomly generated. This is a small wrapper around `uuid.v4()`
- *
- * @returns An UUID version 4
- */
-function genUuid() {
-    return (0, uuid_1.v4)();
-}
-exports.genUuid = genUuid;
 /**
  * @param duration - in seconds
  *
