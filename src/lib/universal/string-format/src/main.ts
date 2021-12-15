@@ -1,3 +1,5 @@
+export { asciify, deasciify, referencify } from './ascii'
+
 export {
   convertDurationToSeconds,
   getCurrentSchoolYear,
