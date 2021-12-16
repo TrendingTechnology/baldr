@@ -118,7 +118,7 @@ async function createPreviewOneFile (
   options: Options
 ): Promise<void> {
   log.info('Create preview files for %s', [srcPath])
-  const mimeType = mimeTypeManager.file(srcPath)
+  const mimeType = mimeTypeManager.filePathToType(srcPath)
   log.debug('The MIME type of the file is %s', [mimeType])
   const destPathPreview = `${srcPath}_preview.jpg`
   const destPathWavefrom = `${srcPath}_waveform.png`

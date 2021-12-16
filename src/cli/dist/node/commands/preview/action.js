@@ -131,7 +131,7 @@ function convertFirstPdfPageToJpg(srcPath, destPath) {
 function createPreviewOneFile(srcPath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         log.info('Create preview files for %s', [srcPath]);
-        const mimeType = (0, media_manager_1.filePathToMimeType)(srcPath);
+        const mimeType = media_manager_1.mimeTypeManager.filePathToType(srcPath);
         log.debug('The MIME type of the file is %s', [mimeType]);
         const destPathPreview = `${srcPath}_preview.jpg`;
         const destPathWavefrom = `${srcPath}_waveform.png`;
