@@ -15,13 +15,6 @@ interface MoveAssetConfiguration {
  */
 export declare function moveAsset(oldPath: string, newPath: string, opts?: MoveAssetConfiguration): string | undefined;
 /**
- * Read the corresponding YAML file of a media asset.
- *
- * @param filePath - The path of the media asset (without the
- *   extension `.yml`).
- */
-export declare function readAssetYaml(filePath: string): MediaResolverTypes.YamlFormat | undefined;
-/**
  * Rename a media asset and its meta data files.
  *
  * @param oldPath - The media file path.

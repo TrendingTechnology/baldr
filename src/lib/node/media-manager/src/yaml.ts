@@ -1,11 +1,12 @@
 import fs from 'fs'
+import path from 'path'
 
 import { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify } from '@bldr/core-browser'
-import { Asset } from './media-file-classes'
 import { categoriesManagement } from '@bldr/media-categories'
+import { getExtension } from '@bldr/string-format'
 
 /**
  * Load the metadata file in the YAML format of a media asset. This
@@ -36,17 +37,22 @@ export async function writeYamlMetaData (
   metaData?: MediaResolverTypes.YamlFormat,
   force?: boolean
 ): Promise<object | undefined> {
-  if (fs.lstatSync(filePath).isDirectory()) return
+  if (fs.lstatSync(filePath).isDirectory()) {
+    return
+  }
   const yamlFile = `${asciify(filePath)}.yml`
   if ((force != null && force) || !fs.existsSync(yamlFile)) {
-    // eslint-disable-next-line
-    if (metaData == null) metaData = {} as MediaResolverTypes.YamlFormat
-    const asset = new Asset(filePath)
+    if (metaData == null) {
+      // TODO use different type
+      // eslint-disable-next-line
+      metaData = {} as MediaResolverTypes.YamlFormat
+    }
+    const basename = path.basename(filePath, getExtension(filePath))
     if (metaData.ref == null) {
-      metaData.ref = asset.basename
+      metaData.ref = basename
     }
     if (metaData.title == null) {
-      metaData.title = deasciify(asset.basename)
+      metaData.title = deasciify(basename)
     }
 
     metaData.filePath = filePath

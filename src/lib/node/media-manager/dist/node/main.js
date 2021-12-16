@@ -29,17 +29,17 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.mimeTypeManager = exports.readAssetYaml = void 0;
+exports.setLogLevel = exports.mimeTypeManager = exports.readAssetFile = void 0;
 const log = __importStar(require("@bldr/log"));
+var media_data_collector_1 = require("@bldr/media-data-collector");
+Object.defineProperty(exports, "readAssetFile", { enumerable: true, get: function () { return media_data_collector_1.readAssetFile; } });
+var client_media_models_1 = require("@bldr/client-media-models");
+Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return client_media_models_1.mimeTypeManager; } });
 __exportStar(require("./operations"), exports);
 __exportStar(require("./directory-tree-walk"), exports);
 __exportStar(require("./location-indicator"), exports);
 __exportStar(require("./media-file-classes"), exports);
 __exportStar(require("./yaml"), exports);
-var asset_1 = require("./asset");
-Object.defineProperty(exports, "readAssetYaml", { enumerable: true, get: function () { return asset_1.readAssetYaml; } });
-var client_media_models_1 = require("@bldr/client-media-models");
-Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return client_media_models_1.mimeTypeManager; } });
 function setLogLevel(level) {
     log.setLogLevel(level);
 }

@@ -31,7 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertAsset = exports.initializeMetaYaml = exports.normalizeMediaAsset = exports.renameByRef = exports.renameMediaAsset = exports.readAssetYaml = exports.moveAsset = void 0;
+exports.convertAsset = exports.initializeMetaYaml = exports.normalizeMediaAsset = exports.renameByRef = exports.renameMediaAsset = exports.moveAsset = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const path_1 = __importDefault(require("path"));
@@ -139,22 +139,6 @@ function moveAsset(oldPath, newPath, opts = {}) {
 }
 exports.moveAsset = moveAsset;
 /**
- * Read the corresponding YAML file of a media asset.
- *
- * @param filePath - The path of the media asset (without the
- *   extension `.yml`).
- */
-function readAssetYaml(filePath) {
-    const extension = (0, string_format_1.getExtension)(filePath);
-    if (extension !== 'yml') {
-        filePath = `${filePath}.yml`;
-    }
-    if (fs_1.default.existsSync(filePath)) {
-        return (0, file_reader_writer_1.readYamlFile)(filePath);
-    }
-}
-exports.readAssetYaml = readAssetYaml;
-/**
  * Rename a media asset and its meta data files.
  *
  * @param oldPath - The media file path.
@@ -162,13 +146,12 @@ exports.readAssetYaml = readAssetYaml;
  * @returns The new file name.
  */
 function renameMediaAsset(oldPath) {
-    const metaData = readAssetYaml(oldPath);
+    const metaData = (0, media_data_collector_1.readAssetFile)(oldPath);
     let newPath;
     if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
         metaData.extension = (0, string_format_1.getExtension)(oldPath);
         metaData.filePath = oldPath;
-        const data = metaData;
-        newPath = media_categories_1.categoriesManagement.formatFilePath(data, oldPath);
+        newPath = media_categories_1.categoriesManagement.formatFilePath(metaData, oldPath);
     }
     if (newPath == null) {
         newPath = (0, core_browser_1.asciify)(oldPath);
@@ -257,7 +240,7 @@ function normalizeMediaAsset(filePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const yamlFile = `${filePath}.yml`;
-            const raw = readAssetYaml(filePath);
+            const raw = (0, media_data_collector_1.readAssetFile)(filePath);
             if (raw != null) {
                 raw.filePath = filePath;
             }

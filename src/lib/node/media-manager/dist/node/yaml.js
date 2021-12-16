@@ -14,10 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeYamlMetaData = exports.readYamlMetaData = void 0;
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
-const media_file_classes_1 = require("./media-file-classes");
 const media_categories_1 = require("@bldr/media-categories");
+const string_format_1 = require("@bldr/string-format");
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
@@ -44,19 +45,22 @@ exports.readYamlMetaData = readYamlMetaData;
  */
 function writeYamlMetaData(filePath, metaData, force) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (fs_1.default.lstatSync(filePath).isDirectory())
+        if (fs_1.default.lstatSync(filePath).isDirectory()) {
             return;
+        }
         const yamlFile = `${(0, core_browser_1.asciify)(filePath)}.yml`;
         if ((force != null && force) || !fs_1.default.existsSync(yamlFile)) {
-            // eslint-disable-next-line
-            if (metaData == null)
+            if (metaData == null) {
+                // TODO use different type
+                // eslint-disable-next-line
                 metaData = {};
-            const asset = new media_file_classes_1.Asset(filePath);
+            }
+            const basename = path_1.default.basename(filePath, (0, string_format_1.getExtension)(filePath));
             if (metaData.ref == null) {
-                metaData.ref = asset.basename;
+                metaData.ref = basename;
             }
             if (metaData.title == null) {
-                metaData.title = (0, core_browser_1.deasciify)(asset.basename);
+                metaData.title = (0, core_browser_1.deasciify)(basename);
             }
             metaData.filePath = filePath;
             metaData = yield media_categories_1.categoriesManagement.process(metaData);
