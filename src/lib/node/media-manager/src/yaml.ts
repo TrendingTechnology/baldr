@@ -40,6 +40,7 @@ export async function writeYamlMetaData (
   if (fs.lstatSync(filePath).isDirectory()) {
     return
   }
+
   const yamlFile = `${asciify(filePath)}.yml`
   if ((force != null && force) || !fs.existsSync(yamlFile)) {
     if (metaData == null) {
@@ -47,14 +48,13 @@ export async function writeYamlMetaData (
       // eslint-disable-next-line
       metaData = {} as MediaResolverTypes.YamlFormat
     }
-    const basename = path.basename(filePath, getExtension(filePath))
+    const basename = path.basename(filePath, '.' + getExtension(filePath))
     if (metaData.ref == null) {
       metaData.ref = basename
     }
     if (metaData.title == null) {
       metaData.title = deasciify(basename)
     }
-
     metaData.filePath = filePath
     metaData = await categoriesManagement.process(metaData)
     writeYamlFile(yamlFile, metaData)

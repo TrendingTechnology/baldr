@@ -148,7 +148,10 @@ export function moveAsset (
  * @returns The new file name.
  */
 export function renameMediaAsset (oldPath: string): string {
-  const metaData = readAssetFile(oldPath)
+  let metaData
+  if (fs.existsSync(`${oldPath}.yml`)) {
+    metaData = readAssetFile(oldPath)
+  }
   let newPath
   if (metaData?.categories != null) {
     metaData.extension = getExtension(oldPath)

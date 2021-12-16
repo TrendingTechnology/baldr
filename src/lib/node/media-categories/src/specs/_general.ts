@@ -157,6 +157,22 @@ export const general: MediaCategoriesTypes.Category = {
     extension: {
       title: 'Dateiendung',
       state: 'absent'
+    },
+    relPath: {
+      title: 'Relativer Pfad (wird nur für die Mongo-DB benötigt.)',
+      state: 'absent'
+    },
+    mimeType: {
+      title: 'MIME-Typ (wird nur für die Mongo-DB benötigt)',
+      state: 'absent'
+    },
+    hasWaveform: {
+      title: 'hasWaveform (wird nur für die Mongo-DB benötigt.)',
+      state: 'absent'
+    },
+    hasPreview: {
+      title: 'hasPreview (wird nur für die Mongo-DB benötigt)',
+      state: 'absent'
     }
   },
   initialize: function ({ data, filePath }) {

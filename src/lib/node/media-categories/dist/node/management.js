@@ -370,6 +370,8 @@ exports.searchUnknownProps = searchUnknownProps;
 /**
  * Bundle three operations: Sort and derive, format, validate.
  *
+ * @TODO Use different type for data (without mandatory uuid)
+ *
  * @param data - An object containing some meta data.
  * @param filePath - The path of media asset itself, not the metadata
  *   `*.extension.yml` file.

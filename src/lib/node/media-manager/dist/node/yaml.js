@@ -55,7 +55,7 @@ function writeYamlMetaData(filePath, metaData, force) {
                 // eslint-disable-next-line
                 metaData = {};
             }
-            const basename = path_1.default.basename(filePath, (0, string_format_1.getExtension)(filePath));
+            const basename = path_1.default.basename(filePath, '.' + (0, string_format_1.getExtension)(filePath));
             if (metaData.ref == null) {
                 metaData.ref = basename;
             }
