@@ -3,6 +3,7 @@
  *
  * @module @bldr/client-media-models/mime-type
  */
+import { getExtension } from '@bldr/string-format';
 import { getConfig } from '@bldr/config';
 const config = getConfig();
 /**
@@ -37,6 +38,13 @@ class MimeTypeManager {
             return this.allowedExtensions[extension];
         }
         throw new Error(`Unkown extension “${extension}”`);
+    }
+    /**
+     * @param filePath - The file path of the media asset.
+     */
+    filePathToType(filePath) {
+        const extension = getExtension(filePath);
+        return this.extensionToType(extension);
     }
     /**
      * Get the color of the media type.

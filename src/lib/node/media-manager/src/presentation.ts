@@ -13,8 +13,8 @@ import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { generateUuid } from '@bldr/uuid'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
+import { readAssetFile } from '@bldr/media-data-collector'
 
-import { makeAsset } from './media-file-classes'
 import { walk } from './directory-tree-walk'
 import { locationIndicator } from './location-indicator'
 
@@ -172,7 +172,7 @@ async function generatePresentation (filePath: string): Promise<void> {
   await walk(
     {
       asset (relPath) {
-        const asset = makeAsset(relPath)
+        const asset = readAssetFile(relPath)
         if (asset.ref == null) {
           return
         }
@@ -181,8 +181,8 @@ async function generatePresentation (filePath: string): Promise<void> {
           masterName = 'cloze'
         } else if (asset.ref.includes('NB')) {
           masterName = 'score_sample'
-        } else if (asset.mediaCategory != null) {
-          masterName = asset.mediaCategory
+        } else if (asset.mimeType != null) {
+          masterName = asset.mimeType
         }
         const slideData: SlideData = {
           [masterName]: `ref:${asset.ref}`

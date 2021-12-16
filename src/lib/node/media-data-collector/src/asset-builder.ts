@@ -5,7 +5,7 @@ import { mimeTypeManager } from '@bldr/client-media-models'
 
 import { Builder, MediaData } from './builder'
 
-export interface AssetData extends MediaData {
+interface AssetDataRaw extends MediaData {
   /**
    * Indicates whether the media asset has a preview image (`_preview.jpg`).
    */
@@ -24,12 +24,21 @@ export interface AssetData extends MediaData {
   mimeType?: string
 }
 
+export interface AssetData extends AssetDataRaw {
+  /**
+   * A reference string, for example `Haydn_Joseph`.
+   */
+  ref: string
+  uuid: string
+  title: string
+}
+
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
 export class AssetBuilder extends Builder {
-  data: AssetData
+  data: AssetDataRaw
 
   /**
    * @param filePath - The file path of the media file.
@@ -106,6 +115,13 @@ export class AssetBuilder extends Builder {
   }
 
   public export (): AssetData {
-    return this.data
+    if (
+      this.data.ref == null ||
+      this.data.uuid == null ||
+      this.data.title == null
+    ) {
+      throw new Error('The asset YAML file must have the properties “ref”, “uuid”, “title”')
+    }
+    return this.data as AssetData
   }
 }

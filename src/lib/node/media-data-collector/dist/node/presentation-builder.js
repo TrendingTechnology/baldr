@@ -3,10 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PresentationBuilder = void 0;
 const titles_1 = require("@bldr/titles");
 const builder_1 = require("./builder");
-/**
- * The whole presentation YAML file converted to an Javascript object. All
- * properties are in `camelCase`.
- */
 class PresentationBuilder extends builder_1.Builder {
     constructor(filePath) {
         super(filePath);

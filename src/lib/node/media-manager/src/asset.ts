@@ -9,7 +9,7 @@ import { referencify, asciify, deepCopy, msleep } from '@bldr/core-browser'
 import { getExtension } from '@bldr/string-format'
 import { collectAudioMetadata } from '@bldr/audio-metadata'
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
+import { writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 import wikidata from '@bldr/wikidata'
 import {
@@ -19,8 +19,8 @@ import {
   StringIndexedObject
 } from '@bldr/type-definitions'
 import { convertToYaml } from '@bldr/yaml'
+import { readAssetFile } from '@bldr/media-data-collector'
 
-import { makeAsset } from './media-file-classes'
 import { locationIndicator } from './location-indicator'
 import { readYamlMetaData } from './main'
 import { writeYamlMetaData } from './yaml'
@@ -141,24 +141,6 @@ export function moveAsset (
 }
 
 /**
- * Read the corresponding YAML file of a media asset.
- *
- * @param filePath - The path of the media asset (without the
- *   extension `.yml`).
- */
-export function readAssetYaml (
-  filePath: string
-): MediaResolverTypes.YamlFormat | undefined {
-  const extension = getExtension(filePath)
-  if (extension !== 'yml') {
-    filePath = `${filePath}.yml`
-  }
-  if (fs.existsSync(filePath)) {
-    return readYamlFile(filePath) as MediaResolverTypes.YamlFormat
-  }
-}
-
-/**
  * Rename a media asset and its meta data files.
  *
  * @param oldPath - The media file path.
@@ -166,13 +148,12 @@ export function readAssetYaml (
  * @returns The new file name.
  */
 export function renameMediaAsset (oldPath: string): string {
-  const metaData = readAssetYaml(oldPath)
+  const metaData = readAssetFile(oldPath)
   let newPath
   if (metaData?.categories != null) {
     metaData.extension = getExtension(oldPath)
     metaData.filePath = oldPath
-    const data = metaData
-    newPath = categoriesManagement.formatFilePath(data, oldPath)
+    newPath = categoriesManagement.formatFilePath(metaData, oldPath)
   }
 
   if (newPath == null) {
@@ -285,7 +266,7 @@ export async function normalizeMediaAsset (
 ): Promise<void> {
   try {
     const yamlFile = `${filePath}.yml`
-    const raw = readAssetYaml(filePath)
+    const raw = readAssetFile(filePath)
     if (raw != null) {
       raw.filePath = filePath
     }
@@ -369,19 +350,12 @@ export async function convertAsset (
   filePath: string,
   cmdObj: { [key: string]: any } = {}
 ): Promise<string | undefined> {
-  const asset = makeAsset(filePath)
+  const asset = readAssetFile(filePath)
 
-  if (asset.extension == null) {
+  if (asset.mimeType == null) {
     return
   }
-  let mimeType: string
-  try {
-    mimeType = mimeTypeManager.extensionToType(asset.extension)
-  } catch (error) {
-    log.error('Unsupported extension %s', [asset.extension])
-    return
-  }
-  const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
+  const outputExtension = mimeTypeManager.typeToTargetExtension(asset.mimeType)
   const outputFileName = `${referencify(asset.basename)}.${outputExtension}`
   let outputFile = path.join(path.dirname(filePath), outputFileName)
   if (converted.has(outputFile)) return
@@ -400,7 +374,7 @@ export async function convertAsset (
   // aac_he_v2
   // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
 
-  if (mimeType === 'audio') {
+  if (asset.mimeType === 'audio') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i',
       filePath,
@@ -419,7 +393,7 @@ export async function convertAsset (
     ])
 
     // image
-  } else if (mimeType === 'image') {
+  } else if (asset.mimeType === 'image') {
     let size = '2000x2000>'
     if (cmdObj.previewImage != null) {
       outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg')
@@ -436,7 +410,7 @@ export async function convertAsset (
     ])
 
     // videos
-  } else if (mimeType === 'video') {
+  } else if (asset.mimeType === 'video') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i',
       filePath,
@@ -450,7 +424,7 @@ export async function convertAsset (
   }
 
   if (process != null) {
-    if (process.status !== 0 && mimeType === 'audio') {
+    if (process.status !== 0 && asset.mimeType === 'audio') {
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
       process = childProcess.spawnSync('ffmpeg', [
@@ -471,7 +445,7 @@ export async function convertAsset (
     }
 
     if (process.status === 0) {
-      if (mimeType === 'audio') {
+      if (asset.mimeType === 'audio') {
         let metaData
         try {
           metaData = (await collectAudioMetadata(filePath)) as unknown

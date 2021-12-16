@@ -5,7 +5,7 @@ import * as log from '@bldr/log'
 import { readYamlFile } from '@bldr/file-reader-writer'
 import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
-import { filePathToMimeType, walk } from '@bldr/media-manager'
+import { mimeTypeManager, walk } from '@bldr/media-manager'
 import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
 import { StringIndexedObject } from '@bldr/type-definitions'
 
@@ -118,7 +118,7 @@ async function createPreviewOneFile (
   options: Options
 ): Promise<void> {
   log.info('Create preview files for %s', [srcPath])
-  const mimeType = filePathToMimeType(srcPath)
+  const mimeType = mimeTypeManager.file(srcPath)
   log.debug('The MIME type of the file is %s', [mimeType])
   const destPathPreview = `${srcPath}_preview.jpg`
   const destPathWavefrom = `${srcPath}_waveform.png`

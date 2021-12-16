@@ -23,6 +23,10 @@ declare class MimeTypeManager {
      */
     extensionToType(extension: string): string;
     /**
+     * @param filePath - The file path of the media asset.
+     */
+    filePathToType(filePath: string): string;
+    /**
      * Get the color of the media type.
      *
      * @param type - The asset type: for example `audio`, `image`,

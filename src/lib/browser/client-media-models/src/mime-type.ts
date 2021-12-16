@@ -5,7 +5,7 @@
  */
 
 import { Configuration } from '@bldr/type-definitions'
-
+import { getExtension } from '@bldr/string-format'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()
@@ -52,6 +52,14 @@ class MimeTypeManager {
       return this.allowedExtensions[extension]
     }
     throw new Error(`Unkown extension “${extension}”`)
+  }
+
+  /**
+   * @param filePath - The file path of the media asset.
+   */
+  filePathToType (filePath: string): string {
+    const extension = getExtension(filePath)
+    return this.extensionToType(extension)
   }
 
   /**

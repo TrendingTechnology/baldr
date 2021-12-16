@@ -42,7 +42,7 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const uuid_1 = require("@bldr/uuid");
 const titles_1 = require("@bldr/titles");
 const log = __importStar(require("@bldr/log"));
-const media_file_classes_1 = require("./media-file-classes");
+const media_data_collector_1 = require("@bldr/media-data-collector");
 const directory_tree_walk_1 = require("./directory-tree-walk");
 const location_indicator_1 = require("./location-indicator");
 const comment = `
@@ -174,7 +174,7 @@ function generatePresentation(filePath) {
         let slides = [];
         yield (0, directory_tree_walk_1.walk)({
             asset(relPath) {
-                const asset = (0, media_file_classes_1.makeAsset)(relPath);
+                const asset = (0, media_data_collector_1.readAssetFile)(relPath);
                 if (asset.ref == null) {
                     return;
                 }
@@ -185,8 +185,8 @@ function generatePresentation(filePath) {
                 else if (asset.ref.includes('NB')) {
                     masterName = 'score_sample';
                 }
-                else if (asset.mediaCategory != null) {
-                    masterName = asset.mediaCategory;
+                else if (asset.mimeType != null) {
+                    masterName = asset.mimeType;
                 }
                 const slideData = {
                     [masterName]: `ref:${asset.ref}`

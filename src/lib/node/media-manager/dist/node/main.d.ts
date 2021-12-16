@@ -11,4 +11,5 @@ export * from './location-indicator';
 export * from './media-file-classes';
 export * from './yaml';
 export { readAssetYaml } from './asset';
+export { mimeTypeManager } from '@bldr/client-media-models';
 export declare function setLogLevel(level: number): void;

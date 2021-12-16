@@ -82,6 +82,11 @@ class AssetBuilder extends builder_1.Builder {
         return this;
     }
     export() {
+        if (this.data.ref == null ||
+            this.data.uuid == null ||
+            this.data.title == null) {
+            throw new Error('The asset YAML file must have the properties “ref”, “uuid”, “title”');
+        }
         return this.data;
     }
 }

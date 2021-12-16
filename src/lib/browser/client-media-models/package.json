@@ -29,7 +29,8 @@
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
   "dependencies": {
-    "@bldr/config": "*"
+    "@bldr/config": "*",
+    "@bldr/string-format": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

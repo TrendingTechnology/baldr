@@ -46,7 +46,7 @@ const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const log = __importStar(require("@bldr/log"));
 const wikidata_1 = __importDefault(require("@bldr/wikidata"));
 const yaml_1 = require("@bldr/yaml");
-const media_file_classes_1 = require("./media-file-classes");
+const media_data_collector_1 = require("@bldr/media-data-collector");
 const location_indicator_1 = require("./location-indicator");
 const main_1 = require("./main");
 const yaml_2 = require("./yaml");
@@ -330,19 +330,11 @@ const converted = new Set();
  */
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const asset = (0, media_file_classes_1.makeAsset)(filePath);
-        if (asset.extension == null) {
+        const asset = (0, media_data_collector_1.readAssetFile)(filePath);
+        if (asset.mimeType == null) {
             return;
         }
-        let mimeType;
-        try {
-            mimeType = client_media_models_1.mimeTypeManager.extensionToType(asset.extension);
-        }
-        catch (error) {
-            log.error('Unsupported extension %s', [asset.extension]);
-            return;
-        }
-        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
+        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(asset.mimeType);
         const outputFileName = `${(0, core_browser_1.referencify)(asset.basename)}.${outputExtension}`;
         let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
         if (converted.has(outputFile))
@@ -356,7 +348,7 @@ function convertAsset(filePath, cmdObj = {}) {
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
         // aac_he_v2
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
-        if (mimeType === 'audio') {
+        if (asset.mimeType === 'audio') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i',
                 filePath,
@@ -375,7 +367,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // image
         }
-        else if (mimeType === 'image') {
+        else if (asset.mimeType === 'image') {
             let size = '2000x2000>';
             if (cmdObj.previewImage != null) {
                 outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg');
@@ -392,7 +384,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // videos
         }
-        else if (mimeType === 'video') {
+        else if (asset.mimeType === 'video') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i',
                 filePath,
@@ -405,7 +397,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
         }
         if (process != null) {
-            if (process.status !== 0 && mimeType === 'audio') {
+            if (process.status !== 0 && asset.mimeType === 'audio') {
                 // A second attempt for mono audio: HEv2 only makes sense with stereo.
                 // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
                 process = child_process_1.default.spawnSync('ffmpeg', [
@@ -425,7 +417,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 ]);
             }
             if (process.status === 0) {
-                if (mimeType === 'audio') {
+                if (asset.mimeType === 'audio') {
                     let metaData;
                     try {
                         metaData = (yield (0, audio_metadata_1.collectAudioMetadata)(filePath));

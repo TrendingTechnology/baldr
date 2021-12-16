@@ -1,5 +1,5 @@
 import { Builder, MediaData } from './builder';
-export interface AssetData extends MediaData {
+interface AssetDataRaw extends MediaData {
     /**
      * Indicates whether the media asset has a preview image (`_preview.jpg`).
      */
@@ -14,12 +14,20 @@ export interface AssetData extends MediaData {
     multiPartCount?: number;
     mimeType?: string;
 }
+export interface AssetData extends AssetDataRaw {
+    /**
+     * A reference string, for example `Haydn_Joseph`.
+     */
+    ref: string;
+    uuid: string;
+    title: string;
+}
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
 export declare class AssetBuilder extends Builder {
-    data: AssetData;
+    data: AssetDataRaw;
     /**
      * @param filePath - The file path of the media file.
      */
@@ -35,3 +43,4 @@ export declare class AssetBuilder extends Builder {
     buildAll(): AssetBuilder;
     export(): AssetData;
 }
+export {};

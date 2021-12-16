@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mimeTypeManager = void 0;
+const string_format_1 = require("@bldr/string-format");
 const config_1 = require("@bldr/config");
 const config = (0, config_1.getConfig)();
 /**
@@ -40,6 +41,13 @@ class MimeTypeManager {
             return this.allowedExtensions[extension];
         }
         throw new Error(`Unkown extension “${extension}”`);
+    }
+    /**
+     * @param filePath - The file path of the media asset.
+     */
+    filePathToType(filePath) {
+        const extension = (0, string_format_1.getExtension)(filePath);
+        return this.extensionToType(extension);
     }
     /**
      * Get the color of the media type.
