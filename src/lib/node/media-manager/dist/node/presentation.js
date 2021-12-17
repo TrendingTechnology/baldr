@@ -174,7 +174,7 @@ function generatePresentation(filePath) {
         let slides = [];
         yield (0, directory_tree_walk_1.walk)({
             asset(relPath) {
-                const asset = (0, media_data_collector_1.readAssetFile)(relPath);
+                const asset = (0, media_data_collector_1.buildMinimalAssetData)(relPath);
                 if (asset.ref == null) {
                     return;
                 }

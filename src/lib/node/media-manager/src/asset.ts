@@ -19,7 +19,7 @@ import {
   StringIndexedObject
 } from '@bldr/type-definitions'
 import { convertToYaml } from '@bldr/yaml'
-import { readAssetFile } from '@bldr/media-data-collector'
+import { buildMinimalAssetData } from '@bldr/media-data-collector'
 
 import { locationIndicator } from './location-indicator'
 import { readYamlMetaData } from './main'
@@ -150,7 +150,7 @@ export function moveAsset (
 export function renameMediaAsset (oldPath: string): string {
   let metaData
   if (fs.existsSync(`${oldPath}.yml`)) {
-    metaData = readAssetFile(oldPath)
+    metaData = buildMinimalAssetData(oldPath)
   }
   let newPath
   if (metaData?.categories != null) {
@@ -269,7 +269,7 @@ export async function normalizeMediaAsset (
 ): Promise<void> {
   try {
     const yamlFile = `${filePath}.yml`
-    const raw = readAssetFile(filePath)
+    const raw = buildMinimalAssetData(filePath)
     if (raw != null) {
       raw.filePath = filePath
     }
@@ -353,7 +353,7 @@ export async function convertAsset (
   filePath: string,
   cmdObj: { [key: string]: any } = {}
 ): Promise<string | undefined> {
-  const asset = readAssetFile(filePath)
+  const asset = buildMinimalAssetData(filePath)
 
   if (asset.mimeType == null) {
     return

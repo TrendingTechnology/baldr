@@ -73,15 +73,17 @@ class AssetBuilder extends builder_1.Builder {
         this.data.mimeType = client_media_models_1.mimeTypeManager.extensionToType(extension);
         return this;
     }
-    buildAll() {
+    buildMinimal() {
+        const data = {};
+        this.importYamlFile(`${this.absPath}.yml`, data);
+        return data;
+    }
+    buildForDb() {
         this.importYamlFile(`${this.absPath}.yml`, this.data);
         this.detectPreview();
         this.detectWaveform();
         this.detectMultiparts();
         this.detectMimeType();
-        return this;
-    }
-    export() {
         if (this.data.ref == null ||
             this.data.uuid == null ||
             this.data.title == null) {

@@ -13,7 +13,7 @@ import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { generateUuid } from '@bldr/uuid'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
-import { readAssetFile } from '@bldr/media-data-collector'
+import { buildMinimalAssetData } from '@bldr/media-data-collector'
 
 import { walk } from './directory-tree-walk'
 import { locationIndicator } from './location-indicator'
@@ -172,7 +172,7 @@ async function generatePresentation (filePath: string): Promise<void> {
   await walk(
     {
       asset (relPath) {
-        const asset = readAssetFile(relPath)
+        const asset = buildMinimalAssetData(relPath)
         if (asset.ref == null) {
           return
         }

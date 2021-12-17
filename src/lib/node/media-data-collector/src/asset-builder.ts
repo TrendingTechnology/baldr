@@ -5,6 +5,8 @@ import { mimeTypeManager } from '@bldr/client-media-models'
 
 import { Builder, MediaData } from './builder'
 
+export interface MinimalAssetData extends Omit<MediaData, 'relPath'> {}
+
 interface AssetDataRaw extends MediaData {
   /**
    * Indicates whether the media asset has a preview image (`_preview.jpg`).
@@ -24,7 +26,7 @@ interface AssetDataRaw extends MediaData {
   mimeType?: string
 }
 
-export interface AssetData extends AssetDataRaw {
+export interface DbAssetData extends AssetDataRaw {
   /**
    * A reference string, for example `Haydn_Joseph`.
    */
@@ -105,23 +107,28 @@ export class AssetBuilder extends Builder {
     return this
   }
 
-  public buildAll (): AssetBuilder {
+  public buildMinimal (): MinimalAssetData {
+    const data: MinimalAssetData = {}
+    this.importYamlFile(`${this.absPath}.yml`, data)
+    return data
+  }
+
+  public buildForDb (): DbAssetData {
     this.importYamlFile(`${this.absPath}.yml`, this.data)
     this.detectPreview()
     this.detectWaveform()
     this.detectMultiparts()
     this.detectMimeType()
-    return this
-  }
 
-  public export (): AssetData {
     if (
       this.data.ref == null ||
       this.data.uuid == null ||
       this.data.title == null
     ) {
-      throw new Error('The asset YAML file must have the properties “ref”, “uuid”, “title”')
+      throw new Error(
+        'The asset YAML file must have the properties “ref”, “uuid”, “title”'
+      )
     }
-    return this.data as AssetData
+    return this.data as DbAssetData
   }
 }

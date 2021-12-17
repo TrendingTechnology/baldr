@@ -29,10 +29,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.mimeTypeManager = exports.readAssetFile = void 0;
+exports.setLogLevel = exports.mimeTypeManager = exports.buildMinimalAssetData = void 0;
 const log = __importStar(require("@bldr/log"));
 var media_data_collector_1 = require("@bldr/media-data-collector");
-Object.defineProperty(exports, "readAssetFile", { enumerable: true, get: function () { return media_data_collector_1.readAssetFile; } });
+Object.defineProperty(exports, "buildMinimalAssetData", { enumerable: true, get: function () { return media_data_collector_1.buildMinimalAssetData; } });
 var client_media_models_1 = require("@bldr/client-media-models");
 Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return client_media_models_1.mimeTypeManager; } });
 __exportStar(require("./operations"), exports);

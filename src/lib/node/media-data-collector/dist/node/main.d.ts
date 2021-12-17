@@ -1,4 +1,5 @@
-import { AssetData } from './asset-builder';
+import { DbAssetData, MinimalAssetData } from './asset-builder';
 import { PresentationData } from './presentation-builder';
-export declare function readAssetFile(filePath: string): AssetData;
-export declare function readPresentationFile(filePath: string): PresentationData;
+export declare function buildDbAssetData(filePath: string): DbAssetData;
+export declare function buildMinimalAssetData(filePath: string): MinimalAssetData;
+export declare function buildPresentationData(filePath: string): PresentationData;

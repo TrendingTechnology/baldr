@@ -36,8 +36,4 @@ export abstract class Builder {
     }
     return this
   }
-
-  public abstract buildAll (): Builder
-
-  public abstract export (): MediaData
 }
