@@ -9,7 +9,7 @@ import { getExtension } from '@bldr/string-format'
 import {
   walk,
   operations,
-  readAssetYaml,
+  buildMinimalAssetData,
   locationIndicator
 } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
@@ -222,7 +222,7 @@ async function moveMp3 (
   const convertedPath = await operations.convertAsset(tmpMp3Path)
   if (convertedPath == null) throw new Error('Error converting asset.')
 
-  const metaData = readAssetYaml(convertedPath) as MediaResolverTypes.YamlFormat
+  const metaData = buildMinimalAssetData(convertedPath) as MediaResolverTypes.YamlFormat
   if (metaData == null) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 
@@ -254,7 +254,7 @@ async function moveReference (oldPath: string, cmdObj: Options): Promise<void> {
   operations.moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun != null && cmdObj.dryRun) return
   await operations.initializeMetaYaml(newPath)
-  const metaData = readAssetYaml(newPath)
+  const metaData = buildMinimalAssetData(newPath)
   if (metaData == null) return
   metaData.reference_title =
     'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
