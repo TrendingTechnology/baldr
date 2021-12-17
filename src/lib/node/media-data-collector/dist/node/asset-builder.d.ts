@@ -1,4 +1,6 @@
 import { Builder, MediaData } from './builder';
+export interface MinimalAssetData extends Omit<MediaData, 'relPath'> {
+}
 interface AssetDataRaw extends MediaData {
     /**
      * Indicates whether the media asset has a preview image (`_preview.jpg`).
@@ -14,7 +16,7 @@ interface AssetDataRaw extends MediaData {
     multiPartCount?: number;
     mimeType?: string;
 }
-export interface AssetData extends AssetDataRaw {
+export interface DbAssetData extends AssetDataRaw {
     /**
      * A reference string, for example `Haydn_Joseph`.
      */
@@ -40,7 +42,7 @@ export declare class AssetBuilder extends Builder {
      */
     detectMultiparts(): AssetBuilder;
     detectMimeType(): AssetBuilder;
-    buildAll(): AssetBuilder;
-    export(): AssetData;
+    buildMinimal(): MinimalAssetData;
+    buildForDb(): DbAssetData;
 }
 export {};

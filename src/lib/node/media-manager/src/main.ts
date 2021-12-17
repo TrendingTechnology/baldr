@@ -8,7 +8,7 @@
 
 import * as log from '@bldr/log'
 
-export { readAssetFile } from '@bldr/media-data-collector'
+export { buildMinimalAssetData } from '@bldr/media-data-collector'
 export { mimeTypeManager } from '@bldr/client-media-models'
 
 export * from './operations'

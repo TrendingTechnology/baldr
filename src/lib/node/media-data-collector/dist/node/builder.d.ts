@@ -13,6 +13,4 @@ export declare abstract class Builder {
     constructor(filePath: string);
     protected get relPath(): string;
     importYamlFile(filePath: string, target: any): Builder;
-    abstract buildAll(): Builder;
-    abstract export(): MediaData;
 }

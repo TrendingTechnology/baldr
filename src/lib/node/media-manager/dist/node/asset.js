@@ -148,13 +148,14 @@ exports.moveAsset = moveAsset;
 function renameMediaAsset(oldPath) {
     let metaData;
     if (fs_1.default.existsSync(`${oldPath}.yml`)) {
-        metaData = (0, media_data_collector_1.readAssetFile)(oldPath);
+        metaData = (0, media_data_collector_1.buildMinimalAssetData)(oldPath);
     }
     let newPath;
     if ((metaData === null || metaData === void 0 ? void 0 : metaData.categories) != null) {
         metaData.extension = (0, string_format_1.getExtension)(oldPath);
         metaData.filePath = oldPath;
-        newPath = media_categories_1.categoriesManagement.formatFilePath(metaData, oldPath);
+        const d = metaData;
+        newPath = media_categories_1.categoriesManagement.formatFilePath(d, oldPath);
     }
     if (newPath == null) {
         newPath = (0, core_browser_1.asciify)(oldPath);
@@ -243,7 +244,7 @@ function normalizeMediaAsset(filePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const yamlFile = `${filePath}.yml`;
-            const raw = (0, media_data_collector_1.readAssetFile)(filePath);
+            const raw = (0, media_data_collector_1.buildMinimalAssetData)(filePath);
             if (raw != null) {
                 raw.filePath = filePath;
             }
@@ -316,7 +317,7 @@ const converted = new Set();
  */
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const asset = (0, media_data_collector_1.readAssetFile)(filePath);
+        const asset = (0, media_data_collector_1.buildMinimalAssetData)(filePath);
         if (asset.mimeType == null) {
             return;
         }

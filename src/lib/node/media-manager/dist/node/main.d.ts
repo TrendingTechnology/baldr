@@ -5,7 +5,7 @@
  *
  * @module @bldr/media-manager
  */
-export { readAssetFile } from '@bldr/media-data-collector';
+export { buildMinimalAssetData } from '@bldr/media-data-collector';
 export { mimeTypeManager } from '@bldr/client-media-models';
 export * from './operations';
 export * from './directory-tree-walk';
