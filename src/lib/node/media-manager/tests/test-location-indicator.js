@@ -13,7 +13,7 @@ function getAbsPath (relPath) {
   return path.join(config.mediaServer.basePath, relPath)
 }
 
-describe('Package “@bldr/media-manager”: location-indicator', function () {
+describe('location-indicator.ts', function () {
   describe('Class “LocationIndicator”', function () {
     it('Method isInArchive()', function () {
       assert.strictEqual(

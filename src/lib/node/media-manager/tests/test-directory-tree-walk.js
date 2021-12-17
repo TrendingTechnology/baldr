@@ -11,7 +11,7 @@ function getPath (relPath) {
   return path.join(config.mediaServer.basePath, relPath)
 }
 
-describe('Package “@bldr/media-manager”: directory-walk', function () {
+describe('directory-walk.ts', function () {
   describe('Function “walk()”', function () {
     it('Called with a function bundle', async function () {
       const results = {

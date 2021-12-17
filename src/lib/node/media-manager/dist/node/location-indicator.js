@@ -228,4 +228,3 @@ class LocationIndicator {
     }
 }
 exports.locationIndicator = new LocationIndicator();
-exports.default = exports.locationIndicator;

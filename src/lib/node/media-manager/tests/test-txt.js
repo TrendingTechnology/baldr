@@ -17,7 +17,7 @@ function getPath (relPath) {
   return path.join(config.mediaServer.basePath, 'Musik', relPath)
 }
 
-describe('Package “@bldr/media-manager”: txt', function () {
+describe('txt.ts', function () {
   describe('Operation “patchTexTitles()”', function () {
     it('07_Hoer-Labyrinth/TX/Arbeitsblatt.tex', function () {
       const testFile = getPath(

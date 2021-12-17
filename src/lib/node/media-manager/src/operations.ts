@@ -1,5 +1,5 @@
 /**
- * Bundle all operations in an object
+ * Bundle all operations in an object.
  */
 
 import { generateCloze, patchTexTitles } from './tex'
@@ -19,7 +19,8 @@ import {
 import { normalize } from './normalization'
 
 /**
- * A collection of functions to manipulate the media assets and presentation files.
+ * A collection of functions to manipulate the media asset and presentation
+ * files.
  */
 export const operations = {
   convertAsset,

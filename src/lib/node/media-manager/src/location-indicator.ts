@@ -251,5 +251,3 @@ class LocationIndicator {
 }
 
 export const locationIndicator = new LocationIndicator()
-
-export default locationIndicator

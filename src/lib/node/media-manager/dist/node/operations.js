@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Bundle all operations in an object
+ * Bundle all operations in an object.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.operations = void 0;
@@ -10,7 +10,8 @@ const txt_1 = require("./txt");
 const asset_1 = require("./asset");
 const normalization_1 = require("./normalization");
 /**
- * A collection of functions to manipulate the media assets and presentation files.
+ * A collection of functions to manipulate the media asset and presentation
+ * files.
  */
 exports.operations = {
     convertAsset: asset_1.convertAsset,

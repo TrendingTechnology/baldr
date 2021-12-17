@@ -7,9 +7,9 @@
  */
 export { buildMinimalAssetData } from '@bldr/media-data-collector';
 export { mimeTypeManager } from '@bldr/client-media-models';
-export * from './operations';
-export * from './directory-tree-walk';
-export * from './location-indicator';
-export * from './media-file-classes';
-export * from './yaml';
+export { operations } from './operations';
+export { walk } from './directory-tree-walk';
+export { locationIndicator } from './location-indicator';
+export { isAsset, isPresentation, isTex } from './media-file-classes';
+export { readYamlMetaData, writeYamlMetaData } from './yaml';
 export declare function setLogLevel(level: number): void;

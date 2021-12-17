@@ -11,7 +11,7 @@ function getPath (relPath) {
   return path.join(config.mediaServer.basePath, 'Musik', relPath)
 }
 
-describe('Package “@bldr/media-manager”: asset', function () {
+describe('asset.ts', function () {
   it('Operation “renameByRef()”', function () {
     const testPath = getPath(
       '09/20_Kontext/20_Romantik/10_Programmmusik/35_Ausstellung/10_Ausstellung-Ueberblick/YT/sPg1qlLjUVQ.mp4'

@@ -1,5 +1,5 @@
 /**
- * Bundle all operations in an object
+ * Bundle all operations in an object.
  */
 import { generateCloze, patchTexTitles } from './tex';
 import { normalizePresentationFile, generateAutomaticPresentation } from './presentation';
@@ -7,7 +7,8 @@ import { removeWidthHeightInSvg, fixTypography } from './txt';
 import { renameMediaAsset, moveAsset, renameByRef, normalizeMediaAsset, initializeMetaYaml, convertAsset } from './asset';
 import { normalize } from './normalization';
 /**
- * A collection of functions to manipulate the media assets and presentation files.
+ * A collection of functions to manipulate the media asset and presentation
+ * files.
  */
 export declare const operations: {
     convertAsset: typeof convertAsset;

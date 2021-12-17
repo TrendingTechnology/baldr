@@ -25,21 +25,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setLogLevel = exports.mimeTypeManager = exports.buildMinimalAssetData = void 0;
+exports.setLogLevel = exports.writeYamlMetaData = exports.readYamlMetaData = exports.isTex = exports.isPresentation = exports.isAsset = exports.locationIndicator = exports.walk = exports.operations = exports.mimeTypeManager = exports.buildMinimalAssetData = void 0;
 const log = __importStar(require("@bldr/log"));
 var media_data_collector_1 = require("@bldr/media-data-collector");
 Object.defineProperty(exports, "buildMinimalAssetData", { enumerable: true, get: function () { return media_data_collector_1.buildMinimalAssetData; } });
 var client_media_models_1 = require("@bldr/client-media-models");
 Object.defineProperty(exports, "mimeTypeManager", { enumerable: true, get: function () { return client_media_models_1.mimeTypeManager; } });
-__exportStar(require("./operations"), exports);
-__exportStar(require("./directory-tree-walk"), exports);
-__exportStar(require("./location-indicator"), exports);
-__exportStar(require("./media-file-classes"), exports);
-__exportStar(require("./yaml"), exports);
+var operations_1 = require("./operations");
+Object.defineProperty(exports, "operations", { enumerable: true, get: function () { return operations_1.operations; } });
+var directory_tree_walk_1 = require("./directory-tree-walk");
+Object.defineProperty(exports, "walk", { enumerable: true, get: function () { return directory_tree_walk_1.walk; } });
+var location_indicator_1 = require("./location-indicator");
+Object.defineProperty(exports, "locationIndicator", { enumerable: true, get: function () { return location_indicator_1.locationIndicator; } });
+var media_file_classes_1 = require("./media-file-classes");
+Object.defineProperty(exports, "isAsset", { enumerable: true, get: function () { return media_file_classes_1.isAsset; } });
+Object.defineProperty(exports, "isPresentation", { enumerable: true, get: function () { return media_file_classes_1.isPresentation; } });
+Object.defineProperty(exports, "isTex", { enumerable: true, get: function () { return media_file_classes_1.isTex; } });
+var yaml_1 = require("./yaml");
+Object.defineProperty(exports, "readYamlMetaData", { enumerable: true, get: function () { return yaml_1.readYamlMetaData; } });
+Object.defineProperty(exports, "writeYamlMetaData", { enumerable: true, get: function () { return yaml_1.writeYamlMetaData; } });
 function setLogLevel(level) {
     log.setLogLevel(level);
 }
