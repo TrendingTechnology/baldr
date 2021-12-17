@@ -2,7 +2,7 @@
 const assert = require('assert')
 const path = require('path')
 
-const { buildPresentationData } = require('../dist/node/main.js')
+const { buildPresentationData, buildDbPresentationData } = require('../dist/node/main.js')
 const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
@@ -13,6 +13,18 @@ function getAbsPath (relPath) {
 describe('PresentationBuilder', function () {
   it('Property “.relPath”', async function () {
     const data = buildPresentationData(
+      getAbsPath(
+        'Musik/09/20_Kontext/20_Romantik/10_Programmmusik/20_Dukas-Zauberlehrling/Praesentation.baldr.yml'
+      )
+    )
+    assert.strictEqual(
+      data.relPath,
+      'Musik/09/20_Kontext/20_Romantik/10_Programmmusik/20_Dukas-Zauberlehrling/Praesentation.baldr.yml'
+    )
+  })
+
+  it('buildDbPresentationData', function () {
+    const data = buildDbPresentationData(
       getAbsPath(
         'Musik/09/20_Kontext/20_Romantik/10_Programmmusik/20_Dukas-Zauberlehrling/Praesentation.baldr.yml'
       )

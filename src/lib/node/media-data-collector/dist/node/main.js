@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildPresentationData = exports.buildMinimalAssetData = exports.buildDbAssetData = void 0;
+exports.buildDbPresentationData = exports.buildPresentationData = exports.buildMinimalAssetData = exports.buildDbAssetData = void 0;
 const asset_builder_1 = require("./asset-builder");
 const presentation_builder_1 = require("./presentation-builder");
 function buildDbAssetData(filePath) {
@@ -15,7 +15,11 @@ function buildMinimalAssetData(filePath) {
 exports.buildMinimalAssetData = buildMinimalAssetData;
 function buildPresentationData(filePath) {
     const builder = new presentation_builder_1.PresentationBuilder(filePath);
-    builder.buildAll();
-    return builder.export();
+    return builder.build();
 }
 exports.buildPresentationData = buildPresentationData;
+function buildDbPresentationData(filePath) {
+    const builder = new presentation_builder_1.PresentationBuilder(filePath);
+    return builder.buildForDb();
+}
+exports.buildDbPresentationData = buildDbPresentationData;

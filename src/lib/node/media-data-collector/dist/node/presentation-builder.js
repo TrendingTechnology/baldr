@@ -41,11 +41,12 @@ class PresentationBuilder extends builder_1.Builder {
         }
         return this;
     }
-    buildAll() {
+    build() {
         this.enrichMetaProp();
-        return this;
+        return this.data;
     }
-    export() {
+    buildForDb() {
+        this.enrichMetaProp();
         return this.data;
     }
 }

@@ -72,18 +72,19 @@ import express from 'express'
 
 // Project packages.
 import { getConfig } from '@bldr/config'
-import { stripTags, asciify, deasciify } from '@bldr/core-browser'
-import { getExtension } from '@bldr/string-format'
-import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 import { walk } from '@bldr/media-manager'
-import { readYamlFile, writeJsonFile } from '@bldr/file-reader-writer'
-import { TreeFactory, DeepTitle } from '@bldr/titles'
+import { writeJsonFile } from '@bldr/file-reader-writer'
+import { TreeFactory } from '@bldr/titles'
 import {
   StringIndexedObject,
-  LampTypes,
   GenericError,
   ApiTypes
 } from '@bldr/type-definitions'
+
+import {
+  buildDbPresentationData,
+  buildDbAssetData
+} from '@bldr/media-data-collector'
 
 import {
   MediaType,
@@ -92,7 +93,6 @@ import {
   validateMediaType
 } from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
-import { mimeTypeManager } from '@bldr/client-media-models'
 
 // Submodules.
 import { registerSeatingPlan } from './seating-plan'
@@ -117,333 +117,28 @@ export let database: Database
 
 let titleTreeFactory: TreeFactory
 
-/**
- * Base class to be extended.
- */
-class ServerMediaFile {
-  /**
-   * Absolute path ot the file.
-   */
-  protected absPath_: string
-
-  /**
-   * Relative path ot the file.
-   */
-  path: string
-
-  /**
-   * The basename (filename) of the file.
-   */
-  filename: string
-
-  /**
-   * The extension of the file.
-   */
-  extension?: string
-
-  /**
-   * The basename (filename without extension) of the file.
-   */
-  private basename_?: string
-  id?: string
-  title?: string;
-  [key: string]: any
-  constructor (filePath: string) {
-    this.absPath_ = path.resolve(filePath)
-    this.path = filePath.replace(basePath, '').replace(/^\//, '')
-    this.filename = path.basename(filePath)
-  }
-
-  /**
-   * Add metadata from the file system, like file size or timeModifed.
-   */
-  protected startBuild (): ServerMediaFile {
-    this.extension = getExtension(this.absPath_)
-    if (this.extension != null) {
-      this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
-    } else {
-      this.basename_ = path.basename(this.absPath_)
-    }
-    return this
-  }
-
-  /**
-   * Delete the temporary properties of the object. Temporary properties end
-   * with `_`.
-   */
-  protected cleanTmpProperties (): ServerMediaFile {
-    for (const property in this) {
-      if (property.match(/_$/) != null) {
-        // eslint-disable-next-line
-        delete this[property]
-      }
-    }
-    return this
-  }
-
-  /**
-   * Merge an object into the class object. Properties can be in the
-   * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
-   * recursive fashion.
-   *
-   * @param properties - Add an object to the class properties.
-   */
-  protected importProperties (properties: StringIndexedObject): void {
-    if (typeof properties === 'object') {
-      properties = convertPropertiesSnakeToCamel(properties)
-      for (const property in properties) {
-        this[property] = properties[property]
-      }
-    }
-  }
-
-  /**
-   * Prepare the object for the insert into the MongoDB database
-   * Generate `id` and `title` if this properties are not present.
-   */
-  public build (): ServerMediaFile {
-    this.startBuild()
-    if (this.id == null && this.basename_ != null) {
-      this.id = asciify(this.basename_)
-    }
-    if (this.title == null && this.id != null) {
-      this.title = deasciify(this.id)
-    }
-    this.cleanTmpProperties()
-    return this
-  }
-}
-
-/**
- * This class is used both for the entries in the MongoDB database as well for
- * the queries.
- */
-class ServerMediaAsset extends ServerMediaFile {
-  /**
-   * The absolute path of the info file in the YAML format. On the absolute
-   * media file path `.yml` is appended.
-   */
-  private readonly infoFile_: string
-
-  /**
-   * Indicates whether the media asset has a preview image (`_preview.jpg`).
-   */
-  public previewImage: boolean = false
-
-  /**
-   * Indicates wheter the media asset has a waveform image (`_waveform.png`).
-   */
-  public hasWaveform: boolean = false
-
-  /**
-   * The number of parts of a multipart media asset.
-   */
-  public multiPartCount?: number
-
-  /**
-   * @param filePath - The file path of the media file.
-   */
-  constructor (filePath: string) {
-    super(filePath)
-    this.infoFile_ = `${this.absPath_}.yml`
-    const data = readYamlFile(this.infoFile_)
-    this.importProperties(data)
-  }
-
-  private detectPreview (): ServerMediaAsset {
-    const previewImage = `${this.absPath_}_preview.jpg`
-    if (fs.existsSync(previewImage)) {
-      this.previewImage = true
-    }
-    return this
-  }
-
-  private detectWaveform (): ServerMediaAsset {
-    const waveformImage = `${this.absPath_}_waveform.png`
-    if (fs.existsSync(waveformImage)) {
-      this.hasWaveform = true
-    }
-    return this
-  }
-
-  /**
-   * Search for mutlipart assets. The naming scheme of multipart assets is:
-   * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
-   */
-  private detectMultiparts (): ServerMediaAsset {
-    const nextAssetFileName = (count: number): string => {
-      let suffix
-      if (count < 10) {
-        suffix = `_no00${count}`
-      } else if (count < 100) {
-        suffix = `_no0${count}`
-      } else if (count < 1000) {
-        suffix = `_no${count}`
-      } else {
-        throw new Error(
-          `${this.absPath_} multipart asset counts greater than 100 are not supported.`
-        )
-      }
-      let basePath = this.absPath_
-      let fileName
-      if (this.extension != null) {
-        basePath = this.absPath_.replace(`.${this.extension}`, '')
-        fileName = `${basePath}${suffix}.${this.extension}`
-      } else {
-        fileName = `${basePath}${suffix}`
-      }
-      return fileName
-    }
-
-    let count = 2
-    while (fs.existsSync(nextAssetFileName(count))) {
-      count += 1
-    }
-    count -= 1 // The counter is increased before the file system check.
-    if (count > 1) {
-      this.multiPartCount = count
-    }
-    return this
-  }
-
-  private detectMimeType (): ServerMediaAsset {
-    if (this.extension != null) {
-      this.mimeType = mimeTypeManager.extensionToType(this.extension)
-    }
-    return this
-  }
-
-  protected startBuild (): ServerMediaAsset {
-    super.startBuild()
-
-    this.detectMultiparts()
-      .detectPreview()
-      .detectWaveform()
-      .detectMimeType()
-    return this
-  }
-}
-
-/**
- * The whole presentation YAML file converted to an Javascript object. All
- * properties are in `camelCase`.
- */
-class ServerPresentation extends ServerMediaFile {
-  meta?: LampTypes.PresentationMeta
-
-  /**
-   * The plain text version of `this.meta.title`.
-   */
-  title: string
-
-  /**
-   * The plain text version of `this.meta.title (this.meta.subtitle)`
-   */
-  titleSubtitle: string
-
-  /**
-   * The plain text version of `folderTitles.allTitles
-   * (this.meta.subtitle)`
-   *
-   * For example:
-   *
-   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-   * Johann Sebastian Bach: Musik als Bekenntnis /
-   * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-   */
-  allTitlesSubtitle: string
-
-  /**
-   * Value is the same as `meta.ref`
-   */
-  ref: string
-
-  constructor (filePath: string) {
-    super(filePath)
-    const data = readYamlFile(filePath)
-    if (data != null) this.importProperties(data)
-
-    const deepTitle = titleTreeFactory.addTitleByPath(filePath)
-
-    if (this.meta == null) {
-      // eslint-disable-next-line
-      this.meta = {} as LampTypes.PresentationMeta
-    }
-
-    if (this.meta?.ref == null) {
-      this.meta.ref = deepTitle.ref
-    }
-    if (this.meta?.title == null) {
-      this.meta.title = deepTitle.title
-    }
-    if (this.meta?.subtitle == null) {
-      this.meta.subtitle = deepTitle.subtitle
-    }
-    if (this.meta?.curriculum == null) {
-      this.meta.curriculum = deepTitle.curriculum
-    }
-    if (this.meta?.grade == null) {
-      this.meta.grade = deepTitle.grade
-    }
-    this.title = stripTags(this.meta.title)
-    this.titleSubtitle = this.titleSubtitle_()
-    this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle)
-    this.ref = this.meta.ref
-  }
-
-  /**
-   * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
-   */
-  private titleSubtitle_ (): string {
-    if (this.meta?.subtitle != null) {
-      return `${this.title} (${stripTags(this.meta.subtitle)})`
-    } else {
-      return this.title
-    }
-  }
-
-  /**
-   * Generate the plain text version of `folderTitles.allTitles
-   * (this.meta.subtitle)`
-   *
-   * For example:
-   *
-   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-   * Johann Sebastian Bach: Musik als Bekenntnis /
-   * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-   */
-  private allTitlesSubtitle_ (folderTitles: DeepTitle): string {
-    let all = folderTitles.allTitles
-    if (this.meta?.subtitle != null) {
-      all = `${all} (${this.meta.subtitle})`
-    }
-    return stripTags(all)
-  }
-}
-
 /* Insert *********************************************************************/
 
 type ServerMediaType = 'presentations' | 'assets'
 
-async function insertObjectIntoDb (
+async function insertMediaFileIntoDb (
   filePath: string,
   mediaType: ServerMediaType
 ): Promise<void> {
-  let object:
-  | ServerPresentation
-  | ServerMediaAsset
-  | ServerMediaFile
-  | undefined
+  let object
   try {
     if (mediaType === 'presentations') {
-      object = new ServerPresentation(filePath)
+      object = buildDbPresentationData(filePath)
     } else if (mediaType === 'assets') {
       // Now only with meta data yml. Fix problems with PDF lying around.
-      if (!fs.existsSync(`${filePath}.yml`)) return
-      object = new ServerMediaAsset(filePath)
+      if (!fs.existsSync(`${filePath}.yml`)) {
+        return
+      }
+      object = buildDbAssetData(filePath)
     }
-    if (object == null) return
-    object = object.build()
+    if (object == null) {
+      return
+    }
     await database.db.collection(mediaType).insertOne(object)
   } catch (e) {
     const error = e as GenericError
@@ -517,11 +212,11 @@ async function update (full: boolean = false): Promise<ApiTypes.UpdateResult> {
         }
       },
       presentation: async filePath => {
-        await insertObjectIntoDb(filePath, 'presentations')
+        await insertMediaFileIntoDb(filePath, 'presentations')
         presentationCounter++
       },
       asset: async filePath => {
-        await insertObjectIntoDb(filePath, 'assets')
+        await insertMediaFileIntoDb(filePath, 'assets')
         assetCounter++
       }
     },

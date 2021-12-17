@@ -5,6 +5,10 @@ import { Builder, MediaData } from './builder'
 
 export interface PresentationData extends MediaData, LampTypes.FileFormat {}
 
+export interface DbPresentationData extends PresentationData {
+
+}
+
 export class PresentationBuilder extends Builder {
   data: PresentationData
 
@@ -51,12 +55,13 @@ export class PresentationBuilder extends Builder {
     return this
   }
 
-  public buildAll (): PresentationBuilder {
+  public build (): PresentationData {
     this.enrichMetaProp()
-    return this
+    return this.data
   }
 
-  public export (): PresentationData {
-    return this.data
+  public buildForDb (): DbPresentationData {
+    this.enrichMetaProp()
+    return this.data as DbPresentationData
   }
 }

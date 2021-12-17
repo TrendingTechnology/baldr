@@ -60,21 +60,6 @@
  *
  * @module @bldr/media-server
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -125,15 +110,12 @@ var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 // Project packages.
 var config_1 = require("@bldr/config");
-var core_browser_1 = require("@bldr/core-browser");
-var string_format_1 = require("@bldr/string-format");
-var yaml_1 = require("@bldr/yaml");
 var media_manager_1 = require("@bldr/media-manager");
 var file_reader_writer_1 = require("@bldr/file-reader-writer");
 var titles_1 = require("@bldr/titles");
+var media_data_collector_1 = require("@bldr/media-data-collector");
 var operations_1 = require("./operations");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
-var client_media_models_1 = require("@bldr/client-media-models");
 // Submodules.
 var seating_plan_1 = require("./seating-plan");
 var operations_2 = require("./operations");
@@ -149,239 +131,7 @@ var basePath = config.mediaServer.basePath;
 var errors = [];
 /* Media objects **************************************************************/
 var titleTreeFactory;
-/**
- * Base class to be extended.
- */
-var ServerMediaFile = /** @class */ (function () {
-    function ServerMediaFile(filePath) {
-        this.absPath_ = path_1.default.resolve(filePath);
-        this.path = filePath.replace(basePath, '').replace(/^\//, '');
-        this.filename = path_1.default.basename(filePath);
-    }
-    /**
-     * Add metadata from the file system, like file size or timeModifed.
-     */
-    ServerMediaFile.prototype.startBuild = function () {
-        this.extension = (0, string_format_1.getExtension)(this.absPath_);
-        if (this.extension != null) {
-            this.basename_ = path_1.default.basename(this.absPath_, ".".concat(this.extension));
-        }
-        else {
-            this.basename_ = path_1.default.basename(this.absPath_);
-        }
-        return this;
-    };
-    /**
-     * Delete the temporary properties of the object. Temporary properties end
-     * with `_`.
-     */
-    ServerMediaFile.prototype.cleanTmpProperties = function () {
-        for (var property in this) {
-            if (property.match(/_$/) != null) {
-                // eslint-disable-next-line
-                delete this[property];
-            }
-        }
-        return this;
-    };
-    /**
-     * Merge an object into the class object. Properties can be in the
-     * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
-     * recursive fashion.
-     *
-     * @param properties - Add an object to the class properties.
-     */
-    ServerMediaFile.prototype.importProperties = function (properties) {
-        if (typeof properties === 'object') {
-            properties = (0, yaml_1.convertPropertiesSnakeToCamel)(properties);
-            for (var property in properties) {
-                this[property] = properties[property];
-            }
-        }
-    };
-    /**
-     * Prepare the object for the insert into the MongoDB database
-     * Generate `id` and `title` if this properties are not present.
-     */
-    ServerMediaFile.prototype.build = function () {
-        this.startBuild();
-        if (this.id == null && this.basename_ != null) {
-            this.id = (0, core_browser_1.asciify)(this.basename_);
-        }
-        if (this.title == null && this.id != null) {
-            this.title = (0, core_browser_1.deasciify)(this.id);
-        }
-        this.cleanTmpProperties();
-        return this;
-    };
-    return ServerMediaFile;
-}());
-/**
- * This class is used both for the entries in the MongoDB database as well for
- * the queries.
- */
-var ServerMediaAsset = /** @class */ (function (_super) {
-    __extends(ServerMediaAsset, _super);
-    /**
-     * @param filePath - The file path of the media file.
-     */
-    function ServerMediaAsset(filePath) {
-        var _this = _super.call(this, filePath) || this;
-        /**
-         * Indicates whether the media asset has a preview image (`_preview.jpg`).
-         */
-        _this.previewImage = false;
-        /**
-         * Indicates wheter the media asset has a waveform image (`_waveform.png`).
-         */
-        _this.hasWaveform = false;
-        _this.infoFile_ = "".concat(_this.absPath_, ".yml");
-        var data = (0, file_reader_writer_1.readYamlFile)(_this.infoFile_);
-        _this.importProperties(data);
-        return _this;
-    }
-    ServerMediaAsset.prototype.detectPreview = function () {
-        var previewImage = "".concat(this.absPath_, "_preview.jpg");
-        if (fs_1.default.existsSync(previewImage)) {
-            this.previewImage = true;
-        }
-        return this;
-    };
-    ServerMediaAsset.prototype.detectWaveform = function () {
-        var waveformImage = "".concat(this.absPath_, "_waveform.png");
-        if (fs_1.default.existsSync(waveformImage)) {
-            this.hasWaveform = true;
-        }
-        return this;
-    };
-    /**
-     * Search for mutlipart assets. The naming scheme of multipart assets is:
-     * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
-     */
-    ServerMediaAsset.prototype.detectMultiparts = function () {
-        var _this = this;
-        var nextAssetFileName = function (count) {
-            var suffix;
-            if (count < 10) {
-                suffix = "_no00".concat(count);
-            }
-            else if (count < 100) {
-                suffix = "_no0".concat(count);
-            }
-            else if (count < 1000) {
-                suffix = "_no".concat(count);
-            }
-            else {
-                throw new Error("".concat(_this.absPath_, " multipart asset counts greater than 100 are not supported."));
-            }
-            var basePath = _this.absPath_;
-            var fileName;
-            if (_this.extension != null) {
-                basePath = _this.absPath_.replace(".".concat(_this.extension), '');
-                fileName = "".concat(basePath).concat(suffix, ".").concat(_this.extension);
-            }
-            else {
-                fileName = "".concat(basePath).concat(suffix);
-            }
-            return fileName;
-        };
-        var count = 2;
-        while (fs_1.default.existsSync(nextAssetFileName(count))) {
-            count += 1;
-        }
-        count -= 1; // The counter is increased before the file system check.
-        if (count > 1) {
-            this.multiPartCount = count;
-        }
-        return this;
-    };
-    ServerMediaAsset.prototype.detectMimeType = function () {
-        if (this.extension != null) {
-            this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.extension);
-        }
-        return this;
-    };
-    ServerMediaAsset.prototype.startBuild = function () {
-        _super.prototype.startBuild.call(this);
-        this.detectMultiparts()
-            .detectPreview()
-            .detectWaveform()
-            .detectMimeType();
-        return this;
-    };
-    return ServerMediaAsset;
-}(ServerMediaFile));
-/**
- * The whole presentation YAML file converted to an Javascript object. All
- * properties are in `camelCase`.
- */
-var ServerPresentation = /** @class */ (function (_super) {
-    __extends(ServerPresentation, _super);
-    function ServerPresentation(filePath) {
-        var _a, _b, _c, _d, _e;
-        var _this = _super.call(this, filePath) || this;
-        var data = (0, file_reader_writer_1.readYamlFile)(filePath);
-        if (data != null)
-            _this.importProperties(data);
-        var deepTitle = titleTreeFactory.addTitleByPath(filePath);
-        if (_this.meta == null) {
-            // eslint-disable-next-line
-            _this.meta = {};
-        }
-        if (((_a = _this.meta) === null || _a === void 0 ? void 0 : _a.ref) == null) {
-            _this.meta.ref = deepTitle.ref;
-        }
-        if (((_b = _this.meta) === null || _b === void 0 ? void 0 : _b.title) == null) {
-            _this.meta.title = deepTitle.title;
-        }
-        if (((_c = _this.meta) === null || _c === void 0 ? void 0 : _c.subtitle) == null) {
-            _this.meta.subtitle = deepTitle.subtitle;
-        }
-        if (((_d = _this.meta) === null || _d === void 0 ? void 0 : _d.curriculum) == null) {
-            _this.meta.curriculum = deepTitle.curriculum;
-        }
-        if (((_e = _this.meta) === null || _e === void 0 ? void 0 : _e.grade) == null) {
-            _this.meta.grade = deepTitle.grade;
-        }
-        _this.title = (0, core_browser_1.stripTags)(_this.meta.title);
-        _this.titleSubtitle = _this.titleSubtitle_();
-        _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
-        _this.ref = _this.meta.ref;
-        return _this;
-    }
-    /**
-     * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
-     */
-    ServerPresentation.prototype.titleSubtitle_ = function () {
-        var _a;
-        if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
-            return "".concat(this.title, " (").concat((0, core_browser_1.stripTags)(this.meta.subtitle), ")");
-        }
-        else {
-            return this.title;
-        }
-    };
-    /**
-     * Generate the plain text version of `folderTitles.allTitles
-     * (this.meta.subtitle)`
-     *
-     * For example:
-     *
-     * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
-     * Johann Sebastian Bach: Musik als Bekenntnis /
-     * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-     */
-    ServerPresentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
-        var _a;
-        var all = folderTitles.allTitles;
-        if (((_a = this.meta) === null || _a === void 0 ? void 0 : _a.subtitle) != null) {
-            all = "".concat(all, " (").concat(this.meta.subtitle, ")");
-        }
-        return (0, core_browser_1.stripTags)(all);
-    };
-    return ServerPresentation;
-}(ServerMediaFile));
-function insertObjectIntoDb(filePath, mediaType) {
+function insertMediaFileIntoDb(filePath, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
         var object, e_1, error, relPath, msg;
         return __generator(this, function (_a) {
@@ -389,17 +139,18 @@ function insertObjectIntoDb(filePath, mediaType) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
-                        object = new ServerPresentation(filePath);
+                        object = (0, media_data_collector_1.buildDbPresentationData)(filePath);
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
-                        if (!fs_1.default.existsSync("".concat(filePath, ".yml")))
+                        if (!fs_1.default.existsSync("".concat(filePath, ".yml"))) {
                             return [2 /*return*/];
-                        object = new ServerMediaAsset(filePath);
+                        }
+                        object = (0, media_data_collector_1.buildDbAssetData)(filePath);
                     }
-                    if (object == null)
+                    if (object == null) {
                         return [2 /*return*/];
-                    object = object.build();
+                    }
                     return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
                 case 1:
                     _a.sent();
@@ -492,7 +243,7 @@ function update(full) {
                             presentation: function (filePath) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'presentations')];
+                                        case 0: return [4 /*yield*/, insertMediaFileIntoDb(filePath, 'presentations')];
                                         case 1:
                                             _a.sent();
                                             presentationCounter++;
@@ -503,7 +254,7 @@ function update(full) {
                             asset: function (filePath) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'assets')];
+                                        case 0: return [4 /*yield*/, insertMediaFileIntoDb(filePath, 'assets')];
                                         case 1:
                                             _a.sent();
                                             assetCounter++;
