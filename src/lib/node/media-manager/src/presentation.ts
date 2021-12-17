@@ -172,8 +172,12 @@ async function generatePresentation (filePath: string): Promise<void> {
   await walk(
     {
       asset (relPath) {
-        const asset = readAssetFile(relPath)
-        if (asset.ref == null) {
+        let asset
+        if (fs.existsSync(`${relPath}.yml`)) {
+          asset = readAssetFile(relPath)
+        }
+
+        if (asset == null || asset.ref == null) {
           return
         }
         let masterName: string = 'generic'

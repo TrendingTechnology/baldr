@@ -174,8 +174,11 @@ function generatePresentation(filePath) {
         let slides = [];
         yield (0, directory_tree_walk_1.walk)({
             asset(relPath) {
-                const asset = (0, media_data_collector_1.readAssetFile)(relPath);
-                if (asset.ref == null) {
+                let asset;
+                if (fs_1.default.existsSync(`${relPath}.yml`)) {
+                    asset = (0, media_data_collector_1.readAssetFile)(relPath);
+                }
+                if (asset == null || asset.ref == null) {
                     return;
                 }
                 let masterName = 'generic';
