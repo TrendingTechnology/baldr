@@ -13,7 +13,7 @@ import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { generateUuid } from '@bldr/uuid'
 import { DeepTitle } from '@bldr/titles'
 import * as log from '@bldr/log'
-import { buildMinimalAssetData } from '@bldr/media-data-collector'
+import { buildDbAssetData } from '@bldr/media-data-collector'
 
 import { walk } from './directory-tree-walk'
 import { locationIndicator } from './location-indicator'
@@ -174,7 +174,7 @@ async function generatePresentation (filePath: string): Promise<void> {
       asset (relPath) {
         let asset
         if (fs.existsSync(`${relPath}.yml`)) {
-          asset = buildMinimalAssetData(relPath)
+          asset = buildDbAssetData(relPath)
         }
 
         if (asset == null || asset.ref == null) {

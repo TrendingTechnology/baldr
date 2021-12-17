@@ -25,6 +25,11 @@ import { locationIndicator } from './location-indicator'
 import { readYamlMetaData } from './main'
 import { writeYamlMetaData } from './yaml'
 
+function getReferenceFromFilePath (filePath: string): string {
+  const basename = path.basename(filePath, '.' + getExtension(filePath))
+  return referencify(basename)
+}
+
 interface MoveAssetConfiguration {
   copy?: boolean
   dryRun?: boolean
@@ -357,15 +362,15 @@ export async function convertAsset (
   filePath: string,
   cmdObj: { [key: string]: any } = {}
 ): Promise<string | undefined> {
-  const asset = buildMinimalAssetData(filePath)
-
-  if (asset.mimeType == null) {
+  const extension = getExtension(filePath)
+  const mimeType = mimeTypeManager.filePathToType(filePath)
+  const outputExtension = mimeTypeManager.typeToTargetExtension(mimeType)
+  const reference = getReferenceFromFilePath(filePath)
+  const outputFileName = `${reference}.${outputExtension}`
+  let outputFile = path.join(path.dirname(filePath), outputFileName)
+  if (converted.has(outputFile)) {
     return
   }
-  const outputExtension = mimeTypeManager.typeToTargetExtension(asset.mimeType)
-  const outputFileName = `${referencify(asset.basename)}.${outputExtension}`
-  let outputFile = path.join(path.dirname(filePath), outputFileName)
-  if (converted.has(outputFile)) return
 
   let process: childProcess.SpawnSyncReturns<string> | undefined
 
@@ -381,7 +386,7 @@ export async function convertAsset (
   // aac_he_v2
   // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
 
-  if (asset.mimeType === 'audio') {
+  if (mimeType === 'audio') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i',
       filePath,
@@ -400,10 +405,10 @@ export async function convertAsset (
     ])
 
     // image
-  } else if (asset.mimeType === 'image') {
+  } else if (mimeType === 'image') {
     let size = '2000x2000>'
     if (cmdObj.previewImage != null) {
-      outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg')
+      outputFile = filePath.replace(`.${extension}`, '_preview.jpg')
       size = '1000x1000>'
     }
     process = childProcess.spawnSync('magick', [
@@ -417,7 +422,7 @@ export async function convertAsset (
     ])
 
     // videos
-  } else if (asset.mimeType === 'video') {
+  } else if (mimeType === 'video') {
     process = childProcess.spawnSync('ffmpeg', [
       '-i',
       filePath,
@@ -431,7 +436,7 @@ export async function convertAsset (
   }
 
   if (process != null) {
-    if (process.status !== 0 && asset.mimeType === 'audio') {
+    if (process.status !== 0 && mimeType === 'audio') {
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
       process = childProcess.spawnSync('ffmpeg', [
@@ -452,7 +457,7 @@ export async function convertAsset (
     }
 
     if (process.status === 0) {
-      if (asset.mimeType === 'audio') {
+      if (mimeType === 'audio') {
         let metaData
         try {
           metaData = (await collectAudioMetadata(filePath)) as unknown

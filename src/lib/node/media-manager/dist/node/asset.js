@@ -50,6 +50,10 @@ const media_data_collector_1 = require("@bldr/media-data-collector");
 const location_indicator_1 = require("./location-indicator");
 const main_1 = require("./main");
 const yaml_2 = require("./yaml");
+function getReferenceFromFilePath(filePath) {
+    const basename = path_1.default.basename(filePath, '.' + (0, string_format_1.getExtension)(filePath));
+    return (0, core_browser_1.referencify)(basename);
+}
 function move(oldPath, newPath, { copy, dryRun }) {
     if (oldPath === newPath) {
         return;
@@ -317,15 +321,15 @@ const converted = new Set();
  */
 function convertAsset(filePath, cmdObj = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const asset = (0, media_data_collector_1.buildMinimalAssetData)(filePath);
-        if (asset.mimeType == null) {
+        const extension = (0, string_format_1.getExtension)(filePath);
+        const mimeType = client_media_models_1.mimeTypeManager.filePathToType(filePath);
+        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(mimeType);
+        const reference = getReferenceFromFilePath(filePath);
+        const outputFileName = `${reference}.${outputExtension}`;
+        let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
+        if (converted.has(outputFile)) {
             return;
         }
-        const outputExtension = client_media_models_1.mimeTypeManager.typeToTargetExtension(asset.mimeType);
-        const outputFileName = `${(0, core_browser_1.referencify)(asset.basename)}.${outputExtension}`;
-        let outputFile = path_1.default.join(path_1.default.dirname(filePath), outputFileName);
-        if (converted.has(outputFile))
-            return;
         let process;
         // audio
         // https://trac.ffmpeg.org/wiki/Encode/AAC
@@ -335,7 +339,7 @@ function convertAsset(filePath, cmdObj = {}) {
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
         // aac_he_v2
         // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
-        if (asset.mimeType === 'audio') {
+        if (mimeType === 'audio') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i',
                 filePath,
@@ -354,10 +358,10 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // image
         }
-        else if (asset.mimeType === 'image') {
+        else if (mimeType === 'image') {
             let size = '2000x2000>';
             if (cmdObj.previewImage != null) {
-                outputFile = filePath.replace(`.${asset.extension}`, '_preview.jpg');
+                outputFile = filePath.replace(`.${extension}`, '_preview.jpg');
                 size = '1000x1000>';
             }
             process = child_process_1.default.spawnSync('magick', [
@@ -371,7 +375,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
             // videos
         }
-        else if (asset.mimeType === 'video') {
+        else if (mimeType === 'video') {
             process = child_process_1.default.spawnSync('ffmpeg', [
                 '-i',
                 filePath,
@@ -384,7 +388,7 @@ function convertAsset(filePath, cmdObj = {}) {
             ]);
         }
         if (process != null) {
-            if (process.status !== 0 && asset.mimeType === 'audio') {
+            if (process.status !== 0 && mimeType === 'audio') {
                 // A second attempt for mono audio: HEv2 only makes sense with stereo.
                 // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
                 process = child_process_1.default.spawnSync('ffmpeg', [
@@ -404,7 +408,7 @@ function convertAsset(filePath, cmdObj = {}) {
                 ]);
             }
             if (process.status === 0) {
-                if (asset.mimeType === 'audio') {
+                if (mimeType === 'audio') {
                     let metaData;
                     try {
                         metaData = (yield (0, audio_metadata_1.collectAudioMetadata)(filePath));

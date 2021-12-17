@@ -176,7 +176,7 @@ function generatePresentation(filePath) {
             asset(relPath) {
                 let asset;
                 if (fs_1.default.existsSync(`${relPath}.yml`)) {
-                    asset = (0, media_data_collector_1.buildMinimalAssetData)(relPath);
+                    asset = (0, media_data_collector_1.buildDbAssetData)(relPath);
                 }
                 if (asset == null || asset.ref == null) {
                     return;
