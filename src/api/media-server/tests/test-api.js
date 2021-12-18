@@ -1,10 +1,11 @@
 /* globals describe it */
 
 const assert = require('assert')
+const childProcess = require('child_process')
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
-
 const { getConfig } = require('@bldr/config')
+const { msleep } = require('@bldr/core-browser')
 const config = getConfig()
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 // const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
@@ -14,6 +15,19 @@ const httpRequest = localHttpRequest
 function runTests () {
   it('/api/media/mgmt/update', async function () {
     this.timeout(10000)
+    const p = childProcess.spawnSync('systemctl', [
+      '--user',
+      'restart',
+      'baldr_api.service'
+    ])
+    if (p.status !== 0) {
+      throw new Error(
+        'The restart of the systemd service baldr_api.service failed!'
+      )
+    }
+
+    msleep(1500)
+
     const result = await httpRequest.request('mgmt/update')
     assert.strictEqual(result.data.finished, true)
     assert.ok(typeof result.data.begin === 'number')
@@ -55,35 +69,19 @@ function runTests () {
     assert.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
   })
 
-  it('/media/query?type=presentations&field=ref&method=exactMatch&search=Marmotte', async function () {
+  it('/media/get/presentation/by-ref?ref=Marmotte', async function () {
     const result = await httpRequest.request({
-      url: 'query',
+      url: 'get/presentation/by-ref',
       params: {
-        type: 'presentations',
-        field: 'ref',
-        method: 'exactMatch',
-        search: 'Marmotte'
+        ref: 'Marmotte'
       }
     })
     const data = result.data
     assert.strictEqual(data.meta.ref, 'Marmotte')
-    assert.ok(typeof data.path === 'string')
-    assert.ok(typeof data.filename === 'string')
-  })
-
-  it('/media/query?type=presentations&field=ref&method=exactMatch&search=Marmotte', async function () {
-    const result = await httpRequest.request({
-      url: 'query',
-      params: {
-        type: 'presentations',
-        field: 'ref',
-        method: 'exactMatch',
-        search: 'Marmotte'
-      }
-    })
-    assert.strictEqual(result.data.meta.ref, 'Marmotte')
-    assert.ok(typeof result.data.path === 'string')
-    assert.ok(typeof result.data.filename === 'string')
+    assert.strictEqual(
+      data.meta.path,
+      'Musik/07/20_Mensch-Zeit/10_Beethoven/50_Marmotte/Praesentation.baldr.yml'
+    )
   })
 
   it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', async function () {

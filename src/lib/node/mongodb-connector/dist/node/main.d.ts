@@ -83,6 +83,7 @@ export declare class Database implements DatabaseWrapper {
     get seatingPlan(): mongodb.Collection<any>;
     listUpdateTasks(): Promise<ApiTypes.Task[]>;
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
+    getPresentationByRef(ref: string): Promise<any>;
     getDocumentCounts(): Promise<ApiTypes.Count>;
     private getAllAssetRefs;
     private getAllAssetUuids;

@@ -296,6 +296,12 @@ export class Database implements DatabaseWrapper {
     return result.tree
   }
 
+  public async getPresentationByRef (ref: string): Promise<any> {
+    return this.presentations
+      .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
+      .next()
+  }
+
   public async getDocumentCounts (): Promise<ApiTypes.Count> {
     return {
       assets: await this.assets.countDocuments(),

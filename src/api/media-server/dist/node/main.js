@@ -125,45 +125,55 @@ var config = (0, config_1.getConfig)();
  * Base path of the media server file store.
  */
 var basePath = config.mediaServer.basePath;
-/**
- * A container array for all error messages send out via the REST API.
- */
-var errors = [];
 /* Media objects **************************************************************/
 var titleTreeFactory;
+var ErrorMessageCollector = /** @class */ (function () {
+    function ErrorMessageCollector() {
+        /**
+         * A container array for all error messages send out via the REST API.
+         */
+        this.messages = [];
+    }
+    ErrorMessageCollector.prototype.addError = function (filePath, error) {
+        var e = error;
+        console.log(error);
+        var relPath = filePath.replace(config.mediaServer.basePath, '');
+        relPath = relPath.replace(/^\//, '');
+        // eslint-disable-next-line
+        var msg = "".concat(relPath, ": [").concat(e.name, "] ").concat(e.message);
+        console.log(msg);
+        this.messages.push(msg);
+    };
+    return ErrorMessageCollector;
+}());
+var errors = new ErrorMessageCollector();
 function insertMediaFileIntoDb(filePath, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
-        var object, e_1, error, relPath, msg;
+        var media, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
-                        object = (0, media_data_collector_1.buildPresentationData)(filePath);
+                        media = (0, media_data_collector_1.buildPresentationData)(filePath);
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
                         if (!fs_1.default.existsSync("".concat(filePath, ".yml"))) {
                             return [2 /*return*/];
                         }
-                        object = (0, media_data_collector_1.buildDbAssetData)(filePath);
+                        media = (0, media_data_collector_1.buildDbAssetData)(filePath);
                     }
-                    if (object == null) {
+                    if (media == null) {
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
+                    return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(media)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
-                    e_1 = _a.sent();
-                    error = e_1;
-                    console.log(error);
-                    relPath = filePath.replace(config.mediaServer.basePath, '');
-                    relPath = relPath.replace(/^\//, '');
-                    msg = "".concat(relPath, ": [").concat(error.name, "] ").concat(error.message);
-                    console.log(msg);
-                    errors.push(msg);
+                    error_1 = _a.sent();
+                    errors.addError(filePath, error_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -246,6 +256,7 @@ function update(full) {
                                         case 0: return [4 /*yield*/, insertMediaFileIntoDb(filePath, 'presentations')];
                                         case 1:
                                             _a.sent();
+                                            titleTreeFactory.addTitleByPath(filePath);
                                             presentationCounter++;
                                             return [2 /*return*/];
                                     }
@@ -294,7 +305,7 @@ function update(full) {
                             end: end,
                             duration: end - begin,
                             lastCommitId: lastCommitId,
-                            errors: errors,
+                            errors: errors.messages,
                             count: {
                                 assets: assetCounter,
                                 presentations: presentationCounter
@@ -395,7 +406,7 @@ function registerMediaRestApi() {
     });
     /* query */
     app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_1;
+        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -424,8 +435,9 @@ function registerMediaRestApi() {
                     }
                     field = extractString(query, 'field', 'ref');
                     // result
-                    if (!('result' in query))
+                    if (!('result' in query)) {
                         query.result = 'fullObjects';
+                    }
                     collection = db.collection(type);
                     result = void 0;
                     find = void 0;
@@ -470,16 +482,42 @@ function registerMediaRestApi() {
                     res.json(result);
                     return [3 /*break*/, 6];
                 case 5:
-                    error_1 = _a.sent();
-                    next(error_1);
+                    error_2 = _a.sent();
+                    next(error_2);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
         });
     }); });
     /* get */
+    app.get('/get/presentation/by-ref', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var ref, _a, _b, error_3;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    if (req.query.ref == null) {
+                        throw new Error('You have to specify an reference (?ref=myfile).');
+                    }
+                    ref = req.query.ref;
+                    if (typeof ref !== 'string') {
+                        throw new Error('“ref” has to be a string.');
+                    }
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.getPresentationByRef(ref)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _c.sent();
+                    next(error_3);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_2;
+        var _a, _b, error_4;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -490,8 +528,8 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_2 = _c.sent();
-                    next(error_2);
+                    error_4 = _c.sent();
+                    next(error_4);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -521,7 +559,7 @@ function registerMediaRestApi() {
     }); });
     /* mgmt = management */
     app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_3;
+        var _a, _b, error_5;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -532,15 +570,15 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_3 = _c.sent();
-                    next(error_3);
+                    error_5 = _c.sent();
+                    next(error_5);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_4;
+        var _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -551,22 +589,22 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_4 = _c.sent();
-                    next(error_4);
+                    error_6 = _c.sent();
+                    next(error_6);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, ref, type, _a, _b, _c, _d, error_5;
+        var query, archive, create, ref, type, _a, _b, _c, _d, error_7;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
                     query = req.query;
                     if (query.ref == null) {
-                        throw new Error('You have to specify an ID (?ref=myfile).');
+                        throw new Error('You have to specify an reference (?ref=myfile).');
                     }
                     if (query.with == null) {
                         query.with = 'editor';
@@ -593,62 +631,21 @@ function registerMediaRestApi() {
                     _e.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_5 = _e.sent();
-                    next(error_5);
+                    error_7 = _e.sent();
+                    next(error_7);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/re-init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_6;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
-                    return [4 /*yield*/, exports.database.reInitialize()];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_6 = _c.sent();
-                    next(error_6);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
-    app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_7;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
-                    return [4 /*yield*/, update(false)];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    // Clear error message store.
-                    errors = [];
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_7 = _c.sent();
-                    next(error_7);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
-    /* stats = statistics */
-    app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_8;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, exports.database.getDocumentCounts()];
+                    return [4 /*yield*/, exports.database.reInitialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -660,8 +657,49 @@ function registerMediaRestApi() {
             }
         });
     }); });
-    app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_9;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, update(false)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    // Clear error message store.
+                    errors.messages = [];
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_9 = _c.sent();
+                    next(error_9);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    /* stats = statistics */
+    app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_10;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.getDocumentCounts()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_10 = _c.sent();
+                    next(error_10);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_11;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -672,8 +710,8 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_9 = _c.sent();
-                    next(error_9);
+                    error_11 = _c.sent();
+                    next(error_11);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

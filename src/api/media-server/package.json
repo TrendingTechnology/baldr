@@ -14,7 +14,6 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
-    "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/file-reader-writer": "*",
@@ -22,9 +21,7 @@
     "@bldr/media-manager": "*",
     "@bldr/mongodb-connector": "*",
     "@bldr/open-with": "*",
-    "@bldr/string-format": "*",
     "@bldr/titles": "*",
-    "@bldr/yaml": "*",
     "cors": "2.8.5",
     "express": "4.17.1"
   },

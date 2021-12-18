@@ -50,5 +50,10 @@ describe('Package “@bldr/mongodb-connector”', function () {
       assert.ok(uris.length > 0)
       assert.strictEqual(typeof uris[0], 'string')
     })
+
+    it('Getter methode “getPresentationByRef()”', async function () {
+      const presentation = await database.getPresentationByRef('Marmotte')
+      assert.strictEqual(presentation.meta.ref, 'Marmotte')
+    })
   })
 })

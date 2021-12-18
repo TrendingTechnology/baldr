@@ -106,11 +106,6 @@ const config = getConfig()
  */
 const basePath = config.mediaServer.basePath
 
-/**
- * A container array for all error messages send out via the REST API.
- */
-let errors: string[] = []
-
 export let database: Database
 
 /* Media objects **************************************************************/
@@ -121,34 +116,47 @@ let titleTreeFactory: TreeFactory
 
 type ServerMediaType = 'presentations' | 'assets'
 
+class ErrorMessageCollector {
+  /**
+   * A container array for all error messages send out via the REST API.
+   */
+  public messages: string[] = []
+
+  public addError (filePath: string, error: GenericError | unknown): void {
+    const e = error as GenericError
+    console.log(error)
+    let relPath = filePath.replace(config.mediaServer.basePath, '')
+    relPath = relPath.replace(/^\//, '')
+    // eslint-disable-next-line
+    const msg = `${relPath}: [${e.name}] ${e.message}`
+    console.log(msg)
+    this.messages.push(msg)
+  }
+}
+
+const errors = new ErrorMessageCollector()
+
 async function insertMediaFileIntoDb (
   filePath: string,
   mediaType: ServerMediaType
 ): Promise<void> {
-  let object
+  let media
   try {
     if (mediaType === 'presentations') {
-      object = buildPresentationData(filePath)
+      media = buildPresentationData(filePath)
     } else if (mediaType === 'assets') {
       // Now only with meta data yml. Fix problems with PDF lying around.
       if (!fs.existsSync(`${filePath}.yml`)) {
         return
       }
-      object = buildDbAssetData(filePath)
+      media = buildDbAssetData(filePath)
     }
-    if (object == null) {
+    if (media == null) {
       return
     }
-    await database.db.collection(mediaType).insertOne(object)
-  } catch (e) {
-    const error = e as GenericError
-    console.log(error)
-    let relPath = filePath.replace(config.mediaServer.basePath, '')
-    relPath = relPath.replace(/^\//, '')
-    // eslint-disable-next-line
-    const msg = `${relPath}: [${error.name}] ${error.message}`
-    console.log(msg)
-    errors.push(msg)
+    await database.db.collection(mediaType).insertOne(media)
+  } catch (error) {
+    errors.addError(filePath, error)
   }
 }
 
@@ -213,6 +221,7 @@ async function update (full: boolean = false): Promise<ApiTypes.UpdateResult> {
       },
       presentation: async filePath => {
         await insertMediaFileIntoDb(filePath, 'presentations')
+        titleTreeFactory.addTitleByPath(filePath)
         presentationCounter++
       },
       asset: async filePath => {
@@ -243,7 +252,7 @@ async function update (full: boolean = false): Promise<ApiTypes.UpdateResult> {
     end,
     duration: end - begin,
     lastCommitId,
-    errors,
+    errors: errors.messages,
     count: {
       assets: assetCounter,
       presentations: presentationCounter
@@ -396,7 +405,9 @@ function registerMediaRestApi (): express.Express {
       // field
       const field = extractString(query, 'field', 'ref')
       // result
-      if (!('result' in query)) query.result = 'fullObjects'
+      if (!('result' in query)) {
+        query.result = 'fullObjects'
+      }
 
       // await database.connect()
       const collection = db.collection(type)
@@ -442,6 +453,24 @@ function registerMediaRestApi (): express.Express {
   })
 
   /* get */
+
+  app.get('/get/presentation/by-ref', async (req, res, next) => {
+    try {
+      if (req.query.ref == null) {
+        throw new Error('You have to specify an reference (?ref=myfile).')
+      }
+
+      const ref = req.query.ref
+
+      if (typeof ref !== 'string') {
+        throw new Error('“ref” has to be a string.')
+      }
+
+      res.json(await database.getPresentationByRef(ref))
+    } catch (error) {
+      next(error)
+    }
+  })
 
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
@@ -489,7 +518,7 @@ function registerMediaRestApi (): express.Express {
     try {
       const query = req.query
       if (query.ref == null) {
-        throw new Error('You have to specify an ID (?ref=myfile).')
+        throw new Error('You have to specify an reference (?ref=myfile).')
       }
       if (query.with == null) {
         query.with = 'editor'
@@ -524,7 +553,7 @@ function registerMediaRestApi (): express.Express {
     try {
       res.json(await update(false))
       // Clear error message store.
-      errors = []
+      errors.messages = []
     } catch (error) {
       next(error)
     }

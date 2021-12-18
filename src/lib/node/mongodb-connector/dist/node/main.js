@@ -458,6 +458,15 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.getPresentationByRef = function (ref) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.presentations
+                        .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
+                        .next()];
+            });
+        });
+    };
     Database.prototype.getDocumentCounts = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
