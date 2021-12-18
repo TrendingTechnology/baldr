@@ -119,13 +119,10 @@ const actions = {
   async openPresentationById ({ dispatch }, { vm, presRef }) {
     // Get the path
     let response = await vm.$media.httpRequest.request({
-      url: 'query',
+      url: 'get/presentation/by-ref',
       method: 'get',
       params: {
-        type: 'presentations',
-        method: 'exactMatch',
-        field: 'ref',
-        search: presRef
+        ref: presRef
       }
     })
     if (!response.data) {
@@ -134,7 +131,7 @@ const actions = {
     const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.
     response = await vm.$media.httpRequest.request({
-      url: `/media/${mongoDbObject.path}`,
+      url: `/media/${mongoDbObject.meta.path}`,
       headers: { 'Cache-Control': 'no-cache' }
     })
     const rawYamlString = response.data

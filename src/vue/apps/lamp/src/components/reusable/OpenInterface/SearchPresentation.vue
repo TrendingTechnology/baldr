@@ -22,23 +22,24 @@ export default {
   },
   methods: {
     async onInput () {
-      router.push({ name: 'slides-preview', params: { presRef: this.presentation.ref } })
+      router.push({
+        name: 'slides-preview',
+        params: { presRef: this.presentation.ref }
+      })
     },
     search (title) {
       if (!title) return
-      this.$media.httpRequest.request({
-        url: 'query',
-        method: 'get',
-        params: {
-          type: 'presentations',
-          method: 'substringSearch',
-          field: 'allTitlesSubtitle',
-          search: title,
-          result: 'dynamicSelect'
-        }
-      }).then((response) => {
-        this.options = response.data
-      })
+      this.$media.httpRequest
+        .request({
+          url: 'get/presentations/by-substring',
+          method: 'get',
+          params: {
+            search: title
+          }
+        })
+        .then(response => {
+          this.options = response.data
+        })
     }
   },
   mounted () {
@@ -48,9 +49,9 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_search_presentation {
-    .result {
-      font-size: 0.7em;
-    }
+.vc_search_presentation {
+  .result {
+    font-size: 0.7em;
   }
+}
 </style>
