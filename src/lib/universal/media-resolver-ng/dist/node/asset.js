@@ -105,8 +105,8 @@ class Asset {
         this.uri = new client_media_models_1.MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
-        if (this.yaml.extension == null && this.yaml.filename != null) {
-            this.yaml.extension = (0, string_format_1.getExtension)(this.yaml.filename);
+        if (this.yaml.extension == null && this.yaml.path != null) {
+            this.yaml.extension = (0, string_format_1.getExtension)(this.yaml.path);
         }
         if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');
@@ -147,7 +147,7 @@ class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl() {
-        if (this.yaml.previewImage) {
+        if (this.yaml.hasPreview != null && this.yaml.hasPreview) {
             return `${this.httpUrl}_preview.jpg`;
         }
     }
@@ -157,7 +157,7 @@ class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
     get waveformHttpUrl() {
-        if (this.yaml.hasWaveform) {
+        if (this.yaml.hasWaveform != null && this.yaml.hasWaveform) {
             return `${this.httpUrl}_waveform.png`;
         }
     }

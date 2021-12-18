@@ -395,103 +395,13 @@ function extractString(query, propertyName, defaultValue) {
  */
 function registerMediaRestApi() {
     var _this = this;
-    var db = exports.database.db;
-    // https://stackoverflow.com/a/38427476/10193818
-    function escapeRegex(text) {
-        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-    }
     var app = (0, express_1.default)();
     app.get('/', function (req, res) {
         res.json(helpMessages.navigation);
     });
-    /* query */
-    app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    query = req.query;
-                    if (Object.keys(query).length === 0) {
-                        res.status(500).send({
-                            error: {
-                                msg: 'Missing query parameters!',
-                                navigationGuide: helpMessages.navigation.query
-                            }
-                        });
-                        return [2 /*return*/];
-                    }
-                    type = void 0;
-                    if (query.type != null && typeof query.type === 'string') {
-                        type = (0, operations_1.validateMediaType)(query.type);
-                    }
-                    else {
-                        type = 'assets';
-                    }
-                    methods = ['exactMatch', 'substringSearch'];
-                    method = extractString(query, 'method', 'substringSearch');
-                    if (!methods.includes(method)) {
-                        throw new Error("Unkown method \u201C".concat(method, "\u201D! Allowed methods: ").concat(methods.join(', ')));
-                    }
-                    field = extractString(query, 'field', 'ref');
-                    // result
-                    if (!('result' in query)) {
-                        query.result = 'fullObjects';
-                    }
-                    collection = db.collection(type);
-                    result = void 0;
-                    find = void 0;
-                    if (!(query.method === 'exactMatch')) return [3 /*break*/, 2];
-                    findObject = {};
-                    findObject[field] = query.search;
-                    find = collection.find(findObject, { projection: { _id: 0 } });
-                    return [4 /*yield*/, find.next()
-                        // substringSearch
-                    ];
-                case 1:
-                    result = _a.sent();
-                    return [3 /*break*/, 4];
-                case 2:
-                    if (!(query.method === 'substringSearch')) return [3 /*break*/, 4];
-                    search = '';
-                    if (query.search != null && typeof query.search === 'string') {
-                        search = query.search;
-                    }
-                    regex = new RegExp(escapeRegex(search), 'gi');
-                    $match = {};
-                    $match[field] = regex;
-                    $project = void 0;
-                    if (query.result === 'fullObjects') {
-                        $project = {
-                            _id: false
-                        };
-                    }
-                    else if (query.result === 'dynamicSelect') {
-                        $project = {
-                            _id: false,
-                            ref: true,
-                            name: "$".concat(field)
-                        };
-                    }
-                    find = collection.aggregate([{ $match: $match }, { $project: $project }]);
-                    return [4 /*yield*/, find.toArray()];
-                case 3:
-                    result = _a.sent();
-                    _a.label = 4;
-                case 4:
-                    res.json(result);
-                    return [3 /*break*/, 6];
-                case 5:
-                    error_2 = _a.sent();
-                    next(error_2);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
-    }); });
     /* get */
     app.get('/get/presentation/by-ref', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, _a, _b, error_3;
+        var ref, _a, _b, error_2;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -505,6 +415,32 @@ function registerMediaRestApi() {
                     }
                     _b = (_a = res).json;
                     return [4 /*yield*/, exports.database.getPresentationByRef(ref)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_2 = _c.sent();
+                    next(error_2);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/get/presentations/by-substring', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var search, _a, _b, error_3;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    if (req.query.search == null) {
+                        throw new Error('You have to specify an parameter named search');
+                    }
+                    search = req.query.search;
+                    if (typeof search !== 'string') {
+                        throw new Error('“search” has to be a string.');
+                    }
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.searchPresentationBySubstring(search)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];

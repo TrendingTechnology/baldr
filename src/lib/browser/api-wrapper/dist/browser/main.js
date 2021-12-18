@@ -42,13 +42,10 @@ export function getAssetByUri(uri, throwException = true) {
         const field = mediaUri.scheme;
         const search = mediaUri.authority;
         const response = yield httpRequest.request({
-            url: 'query',
+            url: 'get/asset',
             method: 'get',
             params: {
-                type: 'assets',
-                method: 'exactMatch',
-                field: field,
-                search: search
+                [mediaUri.scheme]: mediaUri.authority,
             }
         });
         if (response == null || response.status !== 200 || response.data == null) {

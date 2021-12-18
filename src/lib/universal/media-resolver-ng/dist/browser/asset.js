@@ -101,8 +101,8 @@ export class Asset {
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
-        if (this.yaml.extension == null && this.yaml.filename != null) {
-            this.yaml.extension = getExtension(this.yaml.filename);
+        if (this.yaml.extension == null && this.yaml.path != null) {
+            this.yaml.extension = getExtension(this.yaml.path);
         }
         if (this.yaml.extension == null) {
             throw Error('The client media assets needs a extension');
@@ -143,7 +143,7 @@ export class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl() {
-        if (this.yaml.previewImage) {
+        if (this.yaml.hasPreview != null && this.yaml.hasPreview) {
             return `${this.httpUrl}_preview.jpg`;
         }
     }
@@ -153,7 +153,7 @@ export class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
     get waveformHttpUrl() {
-        if (this.yaml.hasWaveform) {
+        if (this.yaml.hasWaveform != null && this.yaml.hasWaveform) {
             return `${this.httpUrl}_waveform.png`;
         }
     }

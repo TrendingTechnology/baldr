@@ -47,13 +47,10 @@ export async function getAssetByUri (
   const field = mediaUri.scheme
   const search = mediaUri.authority
   const response = await httpRequest.request({
-    url: 'query',
+    url: 'get/asset',
     method: 'get',
     params: {
-      type: 'assets',
-      method: 'exactMatch',
-      field: field,
-      search: search
+      [mediaUri.scheme]: mediaUri.authority
     }
   })
   if (response == null || response.status !== 200 || response.data == null) {

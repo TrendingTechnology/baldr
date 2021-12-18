@@ -156,7 +156,7 @@ export interface RestApiRaw extends YamlFormat {
   /**
    * Indicates whether the media asset has a preview image (`_preview.jpg`).
    */
-  previewImage: boolean
+  hasPreview: boolean
 
   /**
    * Indicates wheter the media asset has a waveform image (`_waveform.png`).

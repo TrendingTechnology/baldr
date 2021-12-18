@@ -78,29 +78,11 @@ function runTests () {
     )
   })
 
-  it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=fullObjects', async function () {
+  it('/media/get/presentations/by-substring?search=Ausstellung', async function () {
     const result = await httpRequest.request({
-      url: 'query',
+      url: 'get/presentations/by-substring',
       params: {
-        type: 'assets',
-        field: 'path',
-        method: 'substringSearch',
-        search: 'Ausstellung',
-        result: 'fullObjects'
-      }
-    })
-    assert.ok(typeof result.data[0].uuid === 'string')
-  })
-
-  it('/media/query?type=assets&field=path&method=substringSearch&search=Ausstellung&result=dynamicSelect', async function () {
-    const result = await httpRequest.request({
-      url: 'query',
-      params: {
-        type: 'assets',
-        field: 'path',
-        method: 'substringSearch',
-        search: 'Ausstellung',
-        result: 'dynamicSelect'
+        search: 'Ausstellung'
       }
     })
     assert.ok(!result.data[0].uuid)

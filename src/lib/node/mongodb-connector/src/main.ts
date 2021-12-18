@@ -111,6 +111,11 @@ export async function getDatabaseWrapper (): Promise<Database> {
   return database
 }
 
+interface DynamikSelectResult {
+  ref: string
+  name: string
+}
+
 /**
  * A wrapper around MongoDB.
  */
@@ -308,7 +313,9 @@ export class Database implements DatabaseWrapper {
       .next()
   }
 
-  public async searchPresentationBySubstring (substring: string): Promise<any> {
+  public async searchPresentationBySubstring (
+    substring: string
+  ): Promise<DynamikSelectResult[]> {
     substring = substring.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
     const regex = new RegExp(substring, 'gi')
 

@@ -33,6 +33,10 @@ export declare function connectDb(): Promise<mongodb.MongoClient>;
  * Connect and initialize the MongoDB database.
  */
 export declare function getDatabaseWrapper(): Promise<Database>;
+interface DynamikSelectResult {
+    ref: string;
+    name: string;
+}
 /**
  * A wrapper around MongoDB.
  */
@@ -85,7 +89,7 @@ export declare class Database implements DatabaseWrapper {
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
     getPresentationByRef(ref: string): Promise<any>;
     getAsset(scheme: 'ref' | 'uuid', uri: string): Promise<any>;
-    searchPresentationBySubstring(substring: string): Promise<any>;
+    searchPresentationBySubstring(substring: string): Promise<DynamikSelectResult[]>;
     getDocumentCounts(): Promise<ApiTypes.Count>;
     private getAllAssetRefs;
     private getAllAssetUuids;

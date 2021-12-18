@@ -87,7 +87,6 @@ import {
 } from '@bldr/media-data-collector'
 
 import {
-  MediaType,
   openParentFolder,
   openEditor,
   validateMediaType
@@ -357,99 +356,10 @@ function extractString (
  * Register the express js rest api in a giant function.
  */
 function registerMediaRestApi (): express.Express {
-  const db = database.db
-  // https://stackoverflow.com/a/38427476/10193818
-  function escapeRegex (text: string): string {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
-  }
-
   const app = express()
 
   app.get('/', (req, res) => {
     res.json(helpMessages.navigation)
-  })
-
-  /* query */
-
-  app.get('/query', async (req, res, next) => {
-    try {
-      const query = req.query
-      if (Object.keys(query).length === 0) {
-        res.status(500).send({
-          error: {
-            msg: 'Missing query parameters!',
-            navigationGuide: helpMessages.navigation.query
-          }
-        })
-        return
-      }
-
-      // type
-      let type: MediaType
-      if (query.type != null && typeof query.type === 'string') {
-        type = validateMediaType(query.type)
-      } else {
-        type = 'assets'
-      }
-
-      // method
-      const methods = ['exactMatch', 'substringSearch']
-      const method = extractString(query, 'method', 'substringSearch')
-
-      if (!methods.includes(method)) {
-        throw new Error(
-          `Unkown method “${method}”! Allowed methods: ${methods.join(', ')}`
-        )
-      }
-
-      // field
-      const field = extractString(query, 'field', 'ref')
-      // result
-      if (!('result' in query)) {
-        query.result = 'fullObjects'
-      }
-
-      // await database.connect()
-      const collection = db.collection(type)
-
-      // find
-      let result
-      let find
-      // exactMatch
-      if (query.method === 'exactMatch') {
-        const findObject: StringIndexedObject = {}
-        findObject[field] = query.search
-        find = collection.find(findObject, { projection: { _id: 0 } })
-        result = await find.next()
-        // substringSearch
-      } else if (query.method === 'substringSearch') {
-        // https://stackoverflow.com/a/38427476/10193818
-        let search: string = ''
-        if (query.search != null && typeof query.search === 'string') {
-          search = query.search
-        }
-        const regex = new RegExp(escapeRegex(search), 'gi')
-        const $match: StringIndexedObject = {}
-        $match[field] = regex
-        let $project
-        if (query.result === 'fullObjects') {
-          $project = {
-            _id: false
-          }
-        } else if (query.result === 'dynamicSelect') {
-          $project = {
-            _id: false,
-            ref: true,
-            name: `$${field}`
-          }
-        }
-        find = collection.aggregate([{ $match }, { $project }])
-        result = await find.toArray()
-      }
-      res.json(result)
-    } catch (error) {
-      next(error)
-    }
   })
 
   /* get */
@@ -467,6 +377,24 @@ function registerMediaRestApi (): express.Express {
       }
 
       res.json(await database.getPresentationByRef(ref))
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/get/presentations/by-substring', async (req, res, next) => {
+    try {
+      if (req.query.search == null) {
+        throw new Error('You have to specify an parameter named search')
+      }
+
+      const search = req.query.search
+
+      if (typeof search !== 'string') {
+        throw new Error('“search” has to be a string.')
+      }
+
+      res.json(await database.searchPresentationBySubstring(search))
     } catch (error) {
       next(error)
     }
