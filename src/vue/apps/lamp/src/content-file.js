@@ -673,15 +673,15 @@ export class Presentation {
      */
     this.meta = rawYamlObject.meta
 
-    if (rawObject && rawObject.path) {
+    if (rawObject && rawObject.meta && rawObject.meta.path) {
       /**
        * The relative path of the presentation, for example
        * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus/Praesentation.baldr.yml`.
        *
        * @type {String}
        */
-      this.path = rawObject.path
-      const fileName = rawObject.path.split('/').pop()
+      this.path = rawObject.meta.path
+      const fileName = rawObject.meta.path.split('/').pop()
 
       /**
        * The relative path of parent directory, for example
@@ -689,7 +689,7 @@ export class Presentation {
        *
        * @type {String}
        */
-      this.parentDir = rawObject.path.replace(`/${fileName}`, '')
+      this.parentDir = rawObject.meta.path.replace(`/${fileName}`, '')
     }
 
     if (rawObject && rawObject.meta) {
