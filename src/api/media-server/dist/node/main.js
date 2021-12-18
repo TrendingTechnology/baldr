@@ -139,7 +139,7 @@ function insertMediaFileIntoDb(filePath, mediaType) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
-                        object = (0, media_data_collector_1.buildDbPresentationData)(filePath);
+                        object = (0, media_data_collector_1.buildPresentationData)(filePath);
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.

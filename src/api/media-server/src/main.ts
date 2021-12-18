@@ -82,7 +82,7 @@ import {
 } from '@bldr/type-definitions'
 
 import {
-  buildDbPresentationData,
+  buildPresentationData,
   buildDbAssetData
 } from '@bldr/media-data-collector'
 
@@ -128,7 +128,7 @@ async function insertMediaFileIntoDb (
   let object
   try {
     if (mediaType === 'presentations') {
-      object = buildDbPresentationData(filePath)
+      object = buildPresentationData(filePath)
     } else if (mediaType === 'assets') {
       // Now only with meta data yml. Fix problems with PDF lying around.
       if (!fs.existsSync(`${filePath}.yml`)) {

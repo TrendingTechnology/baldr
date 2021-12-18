@@ -127,14 +127,14 @@ export class Database implements DatabaseWrapper {
     this.schema = {
       assets: {
         indexes: [
-          { field: 'relPath', unique: true },
+          { field: 'path', unique: true },
           { field: 'ref', unique: true },
           { field: 'uuid', unique: true }
         ],
         drop: true
       },
       presentations: {
-        indexes: [{ field: 'meta.ref', unique: true }, { field: 'relPath', unique: true }],
+        indexes: [{ field: 'meta.ref', unique: true }],
         drop: true
       },
       updates: {
