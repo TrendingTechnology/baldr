@@ -1,7 +1,10 @@
 const path = require('path')
 
 const { ClientMediaAsset } = require('../dist/node/asset.js')
-const { deepCopy, genUuid, getExtension } = require('@bldr/core-browser')
+const { deepCopy } = require('@bldr/core-browser')
+const { getExtension } = require('@bldr/string-format')
+const { generateUuid } = require('@bldr/uuid')
+
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 const { resolve } = require('../dist/node/resolve.js')
 const { getConfig } = require('@bldr/config')
@@ -23,11 +26,21 @@ function createAsset (spec = {}) {
     yaml[prop] = spec[prop]
   }
 
-  if (yaml.filename == null) yaml.filename = path.basename(yaml.path)
-  if (yaml.extension == null) yaml.extension = getExtension(yaml.path)
-  if (yaml.uuid == null) yaml.uuid = genUuid()
+  if (yaml.filename == null) {
+    yaml.filename = path.basename(yaml.path)
+  }
+  if (yaml.extension == null) {
+    yaml.extension = getExtension(yaml.path)
+  }
+  if (yaml.uuid == null) {
+    yaml.uuid = generateUuid()
+  }
 
-  return new ClientMediaAsset(`ref:${yaml.ref}`, `http://localhost/${yaml.path}`, yaml)
+  return new ClientMediaAsset(
+    `ref:${yaml.ref}`,
+    `http://localhost/${yaml.path}`,
+    yaml
+  )
 }
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')

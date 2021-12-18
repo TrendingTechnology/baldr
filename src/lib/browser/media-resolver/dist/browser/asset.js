@@ -11,8 +11,8 @@ export class ClientMediaAsset {
         this.uri = new MediaUri(uri);
         this.httpUrl = httpUrl;
         this.yaml = yaml;
-        if (this.yaml.extension == null && this.yaml.filename != null) {
-            const extension = getExtension(this.yaml.filename);
+        if (this.yaml.extension == null && this.yaml.path != null) {
+            const extension = getExtension(this.yaml.path);
             if (extension != null) {
                 this.yaml.extension = extension;
             }

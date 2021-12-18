@@ -52,13 +52,10 @@ class Resolver {
       return this.cache[cacheKey]
     }
     const response = await httpRequest.request({
-      url: 'query',
+      url: 'get/asset',
       method: 'get',
       params: {
-        type: 'assets',
-        method: 'exactMatch',
-        field: field,
-        search: search
+        [mediaUri.scheme]: mediaUri.authority
       }
     })
     if (response == null || response.status !== 200 || response.data == null) {
