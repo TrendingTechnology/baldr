@@ -4,10 +4,7 @@
     :class="['vc_master_icon', master.icon.size]"
     b-content-theme="default"
   >
-    <color-icon
-      :name="master.icon.name"
-      :color="master.icon.color"
-    />
+    <color-icon :name="master.icon.name" :color="master.icon.color" />
   </span>
 </template>
 
@@ -29,13 +26,13 @@ export default {
 </script>
 
 <style lang="scss">
-  // See styling:
-  // - components/reusable/SlideMain/MasterIcon.vue (Basic styling)
-  // - routes/SpeakerView/index.vue (Adjustments for the speaker view)
-  // - routes/SlideView/index.vue (Adjustments for the main slide view)
-  .vc_master_icon {
-    background: none !important;
-    position: absolute;
-    z-index: 2;
-  }
+// See styling:
+// - components/reusable/SlideMain/MasterIcon.vue (Basic styling)
+// - routes/SpeakerView/index.vue (Adjustments for the speaker view)
+// - routes/SlideView/index.vue (Adjustments for the main slide view)
+.vc_master_icon {
+  background: none !important;
+  position: absolute;
+  z-index: 2;
+}
 </style>
