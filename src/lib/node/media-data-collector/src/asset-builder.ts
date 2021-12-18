@@ -48,7 +48,7 @@ export class AssetBuilder extends Builder {
   constructor (filePath: string) {
     super(filePath)
     this.data = {
-      relPath: this.relPath
+      path: this.relPath
     }
   }
 

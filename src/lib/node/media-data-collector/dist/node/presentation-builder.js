@@ -11,41 +11,30 @@ class PresentationBuilder extends builder_1.Builder {
         if (data.slides == null) {
             throw new Error('No slide property.');
         }
+        if (data.meta == null) {
+            throw new Error('No meta property.');
+        }
         this.data = {
-            relPath: this.relPath,
-            slides: data.slides
+            slides: data.slides,
+            meta: data.meta
         };
+        this.data.meta.path = this.relPath;
     }
     enrichMetaProp() {
         const title = new titles_1.DeepTitle(this.absPath);
         const meta = title.generatePresetationMeta();
-        if (this.data.meta == null) {
-            this.data.meta = meta;
+        if (this.data.meta.subtitle == null && meta.subtitle != null) {
+            this.data.meta.subtitle = meta.subtitle;
         }
-        else {
-            if ((meta === null || meta === void 0 ? void 0 : meta.ref) == null) {
-                this.data.meta.ref = meta.ref;
-            }
-            if ((meta === null || meta === void 0 ? void 0 : meta.title) == null) {
-                this.data.meta.title = meta.title;
-            }
-            if ((meta === null || meta === void 0 ? void 0 : meta.subtitle) == null) {
-                this.data.meta.subtitle = meta.subtitle;
-            }
-            if ((meta === null || meta === void 0 ? void 0 : meta.curriculum) == null) {
-                this.data.meta.curriculum = meta.curriculum;
-            }
-            if ((meta === null || meta === void 0 ? void 0 : meta.grade) == null) {
-                this.data.meta.grade = meta.grade;
-            }
+        if (this.data.meta.curriculum == null && meta.curriculum != null) {
+            this.data.meta.curriculum = meta.curriculum;
+        }
+        if (this.data.meta.grade == null && meta.grade != null) {
+            this.data.meta.grade = meta.grade;
         }
         return this;
     }
     build() {
-        this.enrichMetaProp();
-        return this.data;
-    }
-    buildForDb() {
         this.enrichMetaProp();
         return this.data;
     }

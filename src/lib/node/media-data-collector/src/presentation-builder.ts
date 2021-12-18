@@ -1,12 +1,77 @@
 import { DeepTitle } from '@bldr/titles'
-import { LampTypes } from '@bldr/type-definitions'
 
-import { Builder, MediaData } from './builder'
+import { Builder } from './builder'
 
-export interface PresentationData extends MediaData, LampTypes.FileFormat {}
+/**
+ * The meta informations of a presentation file.
+ *
+ * ```yaml
+ * meta:
+ *   ref: An unique reference string
+ *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
+ *   relPath: path/to/Praesenation.baldr.yml
+ *   title: A title
+ *   subtitle: A subtitle
+ *   subject: Musik
+ *   grade: The grade the presentation belongs to.
+ *   curriculum: Relation to the curriculum.
+ *   curriculum_url: http://curriculum.com
+ * ```
+ */
+interface PresentationMetaData {
+  /**
+   * A reference string to identify the presentation (for example:
+   * `Wiener-Klassik`)
+   */
+  ref: string
 
-export interface DbPresentationData extends PresentationData {
+  /**
+   * A Universally Unique Identifier to identify the presentation.
+   */
+  uuid?: string
 
+  path?: string
+
+  /**
+   * The title of the presentation. (for example: `Das orchestrale Klangbild bei
+   * Beethoven`)
+   */
+  title: string
+
+  /**
+   * The subtitle of the presentation in the form: `<em
+   * class="person">Composer</em>: <em class="piece">Piece</em> (year)`. (for
+   * example: `<em class="person">Ludwig van Beethoven</em>: <em
+   * class="piece">Sinfonie Nr. 8 F-Dur op. 93</em> (1812)`)
+   */
+  subtitle?: string
+
+  /**
+   * The school subject, for example `Musik` or `Informatik`.
+   */
+  subject?: string
+
+  /**
+   * The grade the presentation belongs to. (for example: `11`)
+   */
+  grade?: number
+
+  /**
+   * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das
+   * Klangbild der Klassik`)
+   */
+  curriculum?: string
+
+  /**
+   * URL of the curriculum web page. (for example:
+   * `https://www.lehrplanplus.bayern.de/fachlehrplan/gymnasium/5/musik`)
+   */
+  curriculumUrl?: string
+}
+
+export interface PresentationData {
+  meta: PresentationMetaData
+  slides: any[]
 }
 
 export class PresentationBuilder extends Builder {
@@ -19,38 +84,34 @@ export class PresentationBuilder extends Builder {
 
     this.importYamlFile(this.absPath, data)
 
+    if (data.meta == null) {
+      throw new Error(`The presentation “${this.absPath}” needs a property “meta”.`)
+    }
+
     if (data.slides == null) {
-      throw new Error('No slide property.')
+      throw new Error(`The presentation “${this.absPath}” needs a property “slide”.`)
     }
 
     this.data = {
-      relPath: this.relPath,
+      meta: data.meta,
       slides: data.slides
     }
+
+    this.data.meta.path = this.relPath
   }
 
   public enrichMetaProp (): PresentationBuilder {
     const title = new DeepTitle(this.absPath)
     const meta = title.generatePresetationMeta()
 
-    if (this.data.meta == null) {
-      this.data.meta = meta
-    } else {
-      if (meta?.ref == null) {
-        this.data.meta.ref = meta.ref
-      }
-      if (meta?.title == null) {
-        this.data.meta.title = meta.title
-      }
-      if (meta?.subtitle == null) {
-        this.data.meta.subtitle = meta.subtitle
-      }
-      if (meta?.curriculum == null) {
-        this.data.meta.curriculum = meta.curriculum
-      }
-      if (meta?.grade == null) {
-        this.data.meta.grade = meta.grade
-      }
+    if (this.data.meta.subtitle == null && meta.subtitle != null) {
+      this.data.meta.subtitle = meta.subtitle
+    }
+    if (this.data.meta.curriculum == null && meta.curriculum != null) {
+      this.data.meta.curriculum = meta.curriculum
+    }
+    if (this.data.meta.grade == null && meta.grade != null) {
+      this.data.meta.grade = meta.grade
     }
     return this
   }
@@ -58,10 +119,5 @@ export class PresentationBuilder extends Builder {
   public build (): PresentationData {
     this.enrichMetaProp()
     return this.data
-  }
-
-  public buildForDb (): DbPresentationData {
-    this.enrichMetaProp()
-    return this.data as DbPresentationData
   }
 }

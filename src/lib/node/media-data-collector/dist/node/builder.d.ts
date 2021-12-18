@@ -1,5 +1,5 @@
 export interface MediaData {
-    relPath: string;
+    path: string;
     [property: string]: any;
 }
 /**

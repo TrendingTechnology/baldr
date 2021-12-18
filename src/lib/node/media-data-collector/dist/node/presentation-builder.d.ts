@@ -1,13 +1,70 @@
-import { LampTypes } from '@bldr/type-definitions';
-import { Builder, MediaData } from './builder';
-export interface PresentationData extends MediaData, LampTypes.FileFormat {
+import { Builder } from './builder';
+/**
+ * The meta informations of a presentation file.
+ *
+ * ```yaml
+ * meta:
+ *   ref: An unique reference string
+ *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
+ *   relPath: path/to/Praesenation.baldr.yml
+ *   title: A title
+ *   subtitle: A subtitle
+ *   subject: Musik
+ *   grade: The grade the presentation belongs to.
+ *   curriculum: Relation to the curriculum.
+ *   curriculum_url: http://curriculum.com
+ * ```
+ */
+interface PresentationMetaData {
+    /**
+     * A reference string to identify the presentation (for example:
+     * `Wiener-Klassik`)
+     */
+    ref: string;
+    /**
+     * A Universally Unique Identifier to identify the presentation.
+     */
+    uuid?: string;
+    path?: string;
+    /**
+     * The title of the presentation. (for example: `Das orchestrale Klangbild bei
+     * Beethoven`)
+     */
+    title: string;
+    /**
+     * The subtitle of the presentation in the form: `<em
+     * class="person">Composer</em>: <em class="piece">Piece</em> (year)`. (for
+     * example: `<em class="person">Ludwig van Beethoven</em>: <em
+     * class="piece">Sinfonie Nr. 8 F-Dur op. 93</em> (1812)`)
+     */
+    subtitle?: string;
+    /**
+     * The school subject, for example `Musik` or `Informatik`.
+     */
+    subject?: string;
+    /**
+     * The grade the presentation belongs to. (for example: `11`)
+     */
+    grade?: number;
+    /**
+     * Relation to the curriculum. (for example: `Klangkörper im Wandel / Das
+     * Klangbild der Klassik`)
+     */
+    curriculum?: string;
+    /**
+     * URL of the curriculum web page. (for example:
+     * `https://www.lehrplanplus.bayern.de/fachlehrplan/gymnasium/5/musik`)
+     */
+    curriculumUrl?: string;
 }
-export interface DbPresentationData extends PresentationData {
+export interface PresentationData {
+    meta: PresentationMetaData;
+    slides: any[];
 }
 export declare class PresentationBuilder extends Builder {
     data: PresentationData;
     constructor(filePath: string);
     enrichMetaProp(): PresentationBuilder;
     build(): PresentationData;
-    buildForDb(): DbPresentationData;
 }
+export {};

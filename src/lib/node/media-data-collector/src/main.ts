@@ -1,9 +1,5 @@
 import { AssetBuilder, DbAssetData, MinimalAssetData } from './asset-builder'
-import {
-  PresentationBuilder,
-  PresentationData,
-  DbPresentationData
-} from './presentation-builder'
+import { PresentationBuilder, PresentationData } from './presentation-builder'
 
 export function buildDbAssetData (filePath: string): DbAssetData {
   const builder = new AssetBuilder(filePath)
@@ -18,9 +14,4 @@ export function buildMinimalAssetData (filePath: string): MinimalAssetData {
 export function buildPresentationData (filePath: string): PresentationData {
   const builder = new PresentationBuilder(filePath)
   return builder.build()
-}
-
-export function buildDbPresentationData (filePath: string): DbPresentationData {
-  const builder = new PresentationBuilder(filePath)
-  return builder.buildForDb()
 }

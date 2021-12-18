@@ -6,7 +6,7 @@ import { readYamlFile } from '@bldr/file-reader-writer'
 const config = getConfig()
 
 export interface MediaData {
-  relPath: string
+  path: string
   [property: string]: any
 }
 

@@ -19,7 +19,7 @@ class AssetBuilder extends builder_1.Builder {
     constructor(filePath) {
         super(filePath);
         this.data = {
-            relPath: this.relPath
+            path: this.relPath
         };
     }
     detectPreview() {

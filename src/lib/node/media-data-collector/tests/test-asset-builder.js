@@ -22,7 +22,7 @@ describe('Build asset data', function () {
         )
       )
       assert.strictEqual(
-        assetData.relPath,
+        assetData.path,
         'Musik/06/20_Mensch-Zeit/10_Bach/20_Kantate/NB/Aufsteigende-Melodie.svg'
       )
       assert.strictEqual(assetData.ref, 'Kantate_NB_Aufsteigende-Melodie')
@@ -74,7 +74,7 @@ describe('Build asset data', function () {
         'Musik/11/20_Religion/30_Affektdarstellung/20_Schuetz-Freue/NB/Freue-IMSLP-Systeme.png'
       )
     )
-    assert.strictEqual(assetData.relPath, undefined)
+    assert.strictEqual(assetData.path, undefined)
     assert.strictEqual(assetData.uuid, 'a3fdc611-57e6-452b-9058-248836504048')
   })
 })
