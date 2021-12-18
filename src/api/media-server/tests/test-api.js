@@ -38,14 +38,11 @@ function runTests () {
     assert.strictEqual(result.data.errors.length, 0)
   })
 
-  it('/media/query?type=assets&field=ref&method=exactMatch&search=IN_Cembalo', async function () {
+  it('/media/get/asset?ref=IN_Cembalo', async function () {
     const result = await httpRequest.request({
-      url: 'query',
+      url: 'get/asset',
       params: {
-        type: 'assets',
-        field: 'ref',
-        method: 'exactMatch',
-        search: 'IN_Cembalo'
+        ref: 'IN_Cembalo'
       }
     })
     const data = result.data
@@ -54,14 +51,11 @@ function runTests () {
     assert.strictEqual(data.wikidata, 'Q81982')
   })
 
-  it('/media/query?type=assets&field=uuid&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53', async function () {
+  it('/media/get/asset?uuid=c64047d2-983d-4009-a35f-02c95534cb53', async function () {
     const result = await httpRequest.request({
-      url: 'query',
+      url: 'get/asset',
       params: {
-        type: 'assets',
-        field: 'uuid',
-        method: 'exactMatch',
-        search: 'c64047d2-983d-4009-a35f-02c95534cb53'
+        uuid: 'c64047d2-983d-4009-a35f-02c95534cb53'
       }
     })
     const data = result.data

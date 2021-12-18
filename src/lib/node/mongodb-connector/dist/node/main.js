@@ -461,9 +461,67 @@ var Database = /** @class */ (function () {
     Database.prototype.getPresentationByRef = function (ref) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.presentations
-                        .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
-                        .next()];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.presentations
+                            .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
+                            .next()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Database.prototype.getAsset = function (scheme, uri) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.assets
+                            .find((_a = {}, _a[scheme] = uri, _a), { projection: { _id: 0 } })
+                            .next()];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            });
+        });
+    };
+    Database.prototype.searchPresentationBySubstring = function (substring) {
+        return __awaiter(this, void 0, void 0, function () {
+            var regex;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        substring = substring.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+                        regex = new RegExp(substring, 'gi');
+                        return [4 /*yield*/, this.presentations
+                                .aggregate([
+                                {
+                                    $match: {
+                                        $or: [
+                                            {
+                                                'meta.title': regex
+                                            },
+                                            {
+                                                'meta.subtitle': regex
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    $project: {
+                                        _id: false,
+                                        ref: '$meta.ref',
+                                        name: {
+                                            $cond: {
+                                                if: '$meta.subtitle',
+                                                then: { $concat: ['$meta.title', ' - ', '$meta.subtitle'] },
+                                                else: '$meta.title'
+                                            }
+                                        }
+                                    }
+                                }
+                            ])
+                                .toArray()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
             });
         });
     };

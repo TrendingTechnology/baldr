@@ -26,7 +26,7 @@ describe('Package “@bldr/mongodb-connector”', function () {
       await client.close()
     })
 
-    it('Getter methode “listUpdateTasks()”', async function () {
+    it('Getter method “listUpdateTasks()”', async function () {
       const updates = await database.listUpdateTasks()
       const updateTask = updates[0]
       assert.strictEqual(typeof updateTask.begin, 'number')
@@ -34,26 +34,52 @@ describe('Package “@bldr/mongodb-connector”', function () {
       assert.strictEqual(typeof updateTask.lastCommitId, 'string')
     })
 
-    it('Getter methode “getFolderTitleTree()”', async function () {
+    it('Getter method “getFolderTitleTree()”', async function () {
       const tree = await database.getFolderTitleTree()
       assert.ok(tree.Musik != null)
     })
 
-    it('Getter methode “getDocumentCounts()”', async function () {
+    it('Getter method “getDocumentCounts()”', async function () {
       const counts = await database.getDocumentCounts()
       assert.ok(counts.assets > 0)
       assert.ok(counts.presentations > 0)
     })
 
-    it('Getter methode “getAllAssetUris()”', async function () {
+    it('Getter method “getAllAssetUris()”', async function () {
       const uris = await database.getAllAssetUris()
       assert.ok(uris.length > 0)
       assert.strictEqual(typeof uris[0], 'string')
     })
 
-    it('Getter methode “getPresentationByRef()”', async function () {
+    it('Getter method “getPresentationByRef()”', async function () {
       const presentation = await database.getPresentationByRef('Marmotte')
       assert.strictEqual(presentation.meta.ref, 'Marmotte')
+    })
+
+    describe('Getter method “getAsset()”', function () {
+      it('by ref', async function () {
+        const asset = await database.getAsset(
+          'ref',
+          'Marmotte_HB_Fischer-Dieskau_Marmotte'
+        )
+        assert.strictEqual(asset.uuid, '88ad5df3-d7f9-4e9e-9522-e205f51eedb3')
+      })
+
+      it('by uuid', async function () {
+        const asset = await database.getAsset(
+          'uuid',
+          '88ad5df3-d7f9-4e9e-9522-e205f51eedb3'
+        )
+        assert.strictEqual(asset.ref, 'Marmotte_HB_Fischer-Dieskau_Marmotte')
+      })
+    })
+
+    it('Getter method “searchPresentationBySubstring()”', async function () {
+      const results = await database.searchPresentationBySubstring(
+        'Beethoven'
+      )
+      assert.strictEqual(typeof results[0].ref, 'string')
+      assert.strictEqual(typeof results[0].name, 'string')
     })
   })
 })

@@ -516,8 +516,43 @@ function registerMediaRestApi() {
             }
         });
     }); });
+    app.get('/get/asset', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var scheme, uri, _a, _b, error_4;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    scheme = void 0;
+                    uri = void 0;
+                    if (req.query.ref == null && req.query.uuid != null) {
+                        scheme = 'uuid';
+                        uri = req.query.uuid;
+                    }
+                    else if (req.query.uuid == null && req.query.ref != null) {
+                        scheme = 'ref';
+                        uri = req.query.ref;
+                    }
+                    else {
+                        throw new Error('Use as query ref or uuid');
+                    }
+                    if (typeof uri !== 'string') {
+                        throw new Error('The value of the query has to be a string.');
+                    }
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.getAsset(scheme, uri)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_4 = _c.sent();
+                    next(error_4);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_4;
+        var _a, _b, error_5;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -528,8 +563,8 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_4 = _c.sent();
-                    next(error_4);
+                    error_5 = _c.sent();
+                    next(error_5);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -559,32 +594,13 @@ function registerMediaRestApi() {
     }); });
     /* mgmt = management */
     app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_5;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
-                    return [4 /*yield*/, exports.database.flushMediaFiles()];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_5 = _c.sent();
-                    next(error_5);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
-    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, exports.database.initialize()];
+                    return [4 /*yield*/, exports.database.flushMediaFiles()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -596,8 +612,27 @@ function registerMediaRestApi() {
             }
         });
     }); });
+    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_7;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.initialize()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_7 = _c.sent();
+                    next(error_7);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, ref, type, _a, _b, _c, _d, error_7;
+        var query, archive, create, ref, type, _a, _b, _c, _d, error_8;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -631,15 +666,15 @@ function registerMediaRestApi() {
                     _e.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
-                    error_7 = _e.sent();
-                    next(error_7);
+                    error_8 = _e.sent();
+                    next(error_8);
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/re-init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_8;
+        var _a, _b, error_9;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -650,15 +685,15 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_8 = _c.sent();
-                    next(error_8);
+                    error_9 = _c.sent();
+                    next(error_9);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_9;
+        var _a, _b, error_10;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -671,8 +706,8 @@ function registerMediaRestApi() {
                     errors.messages = [];
                     return [3 /*break*/, 3];
                 case 2:
-                    error_9 = _c.sent();
-                    next(error_9);
+                    error_10 = _c.sent();
+                    next(error_10);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -680,7 +715,7 @@ function registerMediaRestApi() {
     }); });
     /* stats = statistics */
     app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_10;
+        var _a, _b, error_11;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -691,15 +726,15 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_10 = _c.sent();
-                    next(error_10);
+                    error_11 = _c.sent();
+                    next(error_11);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_11;
+        var _a, _b, error_12;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -710,8 +745,8 @@ function registerMediaRestApi() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_11 = _c.sent();
-                    next(error_11);
+                    error_12 = _c.sent();
+                    next(error_12);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

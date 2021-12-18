@@ -84,6 +84,8 @@ export declare class Database implements DatabaseWrapper {
     listUpdateTasks(): Promise<ApiTypes.Task[]>;
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
     getPresentationByRef(ref: string): Promise<any>;
+    getAsset(scheme: 'ref' | 'uuid', uri: string): Promise<any>;
+    searchPresentationBySubstring(substring: string): Promise<any>;
     getDocumentCounts(): Promise<ApiTypes.Count>;
     private getAllAssetRefs;
     private getAllAssetUuids;

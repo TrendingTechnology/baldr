@@ -472,6 +472,30 @@ function registerMediaRestApi (): express.Express {
     }
   })
 
+  app.get('/get/asset', async (req, res, next) => {
+    try {
+      let scheme: 'ref' | 'uuid'
+      let uri
+      if (req.query.ref == null && req.query.uuid != null) {
+        scheme = 'uuid'
+        uri = req.query.uuid
+      } else if (req.query.uuid == null && req.query.ref != null) {
+        scheme = 'ref'
+        uri = req.query.ref
+      } else {
+        throw new Error('Use as query ref or uuid')
+      }
+
+      if (typeof uri !== 'string') {
+        throw new Error('The value of the query has to be a string.')
+      }
+
+      res.json(await database.getAsset(scheme, uri))
+    } catch (error) {
+      next(error)
+    }
+  })
+
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
       res.json(await database.getFolderTitleTree())

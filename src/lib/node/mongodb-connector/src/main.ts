@@ -297,9 +297,50 @@ export class Database implements DatabaseWrapper {
   }
 
   public async getPresentationByRef (ref: string): Promise<any> {
-    return this.presentations
+    return await this.presentations
       .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
       .next()
+  }
+
+  public async getAsset (scheme: 'ref' | 'uuid', uri: string): Promise<any> {
+    return await this.assets
+      .find({ [scheme]: uri }, { projection: { _id: 0 } })
+      .next()
+  }
+
+  public async searchPresentationBySubstring (substring: string): Promise<any> {
+    substring = substring.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+    const regex = new RegExp(substring, 'gi')
+
+    return await this.presentations
+      .aggregate([
+        {
+          $match: {
+            $or: [
+              {
+                'meta.title': regex
+              },
+              {
+                'meta.subtitle': regex
+              }
+            ]
+          }
+        },
+        {
+          $project: {
+            _id: false,
+            ref: '$meta.ref',
+            name: {
+              $cond: {
+                if: '$meta.subtitle',
+                then: { $concat: ['$meta.title', ' - ', '$meta.subtitle'] },
+                else: '$meta.title'
+              }
+            }
+          }
+        }
+      ])
+      .toArray()
   }
 
   public async getDocumentCounts (): Promise<ApiTypes.Count> {
