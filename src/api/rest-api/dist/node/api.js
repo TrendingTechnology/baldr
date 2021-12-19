@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startRestApi = exports.extractString = exports.helpMessages = exports.database = void 0;
+exports.startRestApi = exports.extractStringFromRequestQuery = exports.helpMessages = exports.database = void 0;
 // Third party packages.
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
@@ -110,22 +110,30 @@ exports.helpMessages = {
         }
     }
 };
-function extractString(query, propertyName, defaultValue) {
-    if (defaultValue === void 0) { defaultValue = null; }
-    if (query == null ||
-        typeof query !== 'object' ||
-        query[propertyName] == null ||
-        typeof query[propertyName] !== 'string') {
+/**
+ * Extract a string value from the parsed query string object.
+ *
+ * @param query - The parsed query string (`?param1=one&param2=two`) as an object.
+ * @param key - The name of the query key.
+ * @param defaultValue - A default value if the `query` is empty under the
+ *   property `propertyName`.
+ *
+ * @returns The found parameter string or a default value
+ *
+ * @throws If not result string can be found.
+ */
+function extractStringFromRequestQuery(query, key, defaultValue) {
+    if (query[key] == null || typeof query[key] !== 'string') {
         if (defaultValue != null) {
             return defaultValue;
         }
         else {
-            throw new Error("No value for property ".concat(propertyName, " in the query object."));
+            throw new Error("No value could be found for the query string parameter \u201C".concat(key, "\u201D in the parsed query object."));
         }
     }
-    return query[propertyName];
+    return query[key];
 }
-exports.extractString = extractString;
+exports.extractStringFromRequestQuery = extractStringFromRequestQuery;
 /**
  * Run the REST API. Listen to a TCP port.
  *
@@ -150,8 +158,8 @@ function startRestApi(port) {
                     app.use('/seating-plan', (0, seating_plan_1.default)());
                     app.use('/media', (0, media_1.default)());
                     helpMessages = {};
-                    app.get('/', function (req, res) {
-                        res.json({
+                    app.get('/', function (request, response) {
+                        response.json({
                             navigation: {
                                 media: helpMessages.navigation
                             }

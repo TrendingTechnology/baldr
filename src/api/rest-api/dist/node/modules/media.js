@@ -52,24 +52,17 @@ var api_1 = require("../api");
 function default_1() {
     var _this = this;
     var app = (0, express_1.default)();
-    app.get('/', function (req, res) {
-        res.json(api_1.helpMessages.navigation);
+    app.get('/', function (request, response) {
+        response.json(api_1.helpMessages.navigation);
     });
-    /* get */
-    app.get('/get/presentation/by-ref', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/presentation/by-ref', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var ref, _a, _b, error_1;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    if (req.query.ref == null) {
-                        throw new Error('You have to specify an reference (?ref=myfile).');
-                    }
-                    ref = req.query.ref;
-                    if (typeof ref !== 'string') {
-                        throw new Error('“ref” has to be a string.');
-                    }
-                    _b = (_a = res).json;
+                    ref = (0, api_1.extractStringFromRequestQuery)(request.query, 'ref');
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.getPresentationByRef(ref)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -82,20 +75,14 @@ function default_1() {
             }
         });
     }); });
-    app.get('/get/presentations/by-substring', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/presentations/by-substring', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var search, _a, _b, error_2;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    if (req.query.search == null) {
-                        throw new Error('You have to specify an parameter named search');
-                    }
-                    search = req.query.search;
-                    if (typeof search !== 'string') {
-                        throw new Error('“search” has to be a string.');
-                    }
-                    _b = (_a = res).json;
+                    search = (0, api_1.extractStringFromRequestQuery)(request.query, 'search');
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.searchPresentationBySubstring(search)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -108,7 +95,7 @@ function default_1() {
             }
         });
     }); });
-    app.get('/get/asset', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/asset', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var scheme, uri, _a, _b, error_3;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -116,13 +103,13 @@ function default_1() {
                     _c.trys.push([0, 2, , 3]);
                     scheme = void 0;
                     uri = void 0;
-                    if (req.query.ref == null && req.query.uuid != null) {
+                    if (request.query.ref == null && request.query.uuid != null) {
                         scheme = 'uuid';
-                        uri = req.query.uuid;
+                        uri = request.query.uuid;
                     }
-                    else if (req.query.uuid == null && req.query.ref != null) {
+                    else if (request.query.uuid == null && request.query.ref != null) {
                         scheme = 'ref';
-                        uri = req.query.ref;
+                        uri = request.query.ref;
                     }
                     else {
                         throw new Error('Use as query ref or uuid');
@@ -130,7 +117,7 @@ function default_1() {
                     if (typeof uri !== 'string') {
                         throw new Error('The value of the query has to be a string.');
                     }
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.getAsset(scheme, uri)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -143,13 +130,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/folder-title-tree', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_4;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.getFolderTitleTree()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -162,10 +149,10 @@ function default_1() {
             }
         });
     }); });
-    app.get('/get/all-asset-refs', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/all-asset-refs', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             try {
-                res.json({});
+                response.json({});
             }
             catch (error) {
                 next(error);
@@ -173,10 +160,10 @@ function default_1() {
             return [2 /*return*/];
         });
     }); });
-    app.get('/get/all-asset-uuids', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/get/all-asset-uuids', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             try {
-                res.json({});
+                response.json({});
             }
             catch (error) {
                 next(error);
@@ -185,13 +172,13 @@ function default_1() {
         });
     }); });
     /* mgmt = management */
-    app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/flush', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_5;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.flushMediaFiles()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -204,13 +191,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.initialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -223,13 +210,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/open', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var query, archive, create, ref, type, _a, _b, _c, _d, error_7;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
-                    query = req.query;
+                    query = request.query;
                     if (query.ref == null) {
                         throw new Error('You have to specify an reference (?ref=myfile).');
                     }
@@ -241,17 +228,17 @@ function default_1() {
                     }
                     archive = 'archive' in query;
                     create = 'create' in query;
-                    ref = (0, api_1.extractString)(query, 'ref');
-                    type = (0, utils_1.validateMediaType)((0, api_1.extractString)(query, 'type'));
+                    ref = (0, api_1.extractStringFromRequestQuery)(query, 'ref');
+                    type = (0, utils_1.validateMediaType)((0, api_1.extractStringFromRequestQuery)(query, 'type'));
                     if (!(query.with === 'editor')) return [3 /*break*/, 2];
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, (0, open_editor_1.default)(ref, type)];
                 case 1:
                     _b.apply(_a, [_e.sent()]);
                     return [3 /*break*/, 4];
                 case 2:
                     if (!(query.with === 'folder')) return [3 /*break*/, 4];
-                    _d = (_c = res).json;
+                    _d = (_c = response).json;
                     return [4 /*yield*/, (0, open_parent_folder_1.default)(ref, type, archive, create)];
                 case 3:
                     _d.apply(_c, [_e.sent()]);
@@ -265,13 +252,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/re-init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/re-init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_8;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.reInitialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -284,13 +271,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/update', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_9;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, (0, update_media_1.default)(false)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -304,13 +291,13 @@ function default_1() {
         });
     }); });
     /* stats = statistics */
-    app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/stats/count', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_10;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.getDocumentCounts()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
@@ -323,13 +310,13 @@ function default_1() {
             }
         });
     }); });
-    app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/stats/updates', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_11;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    _b = (_a = res).json;
+                    _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.listUpdateTasks()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);

@@ -49,14 +49,14 @@ var api_1 = require("../api");
 function default_1() {
     var _this = this;
     var app = (0, express_1.default)();
-    app.post('/save-state', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    app.post('/save-state', function (request, response) { return __awaiter(_this, void 0, void 0, function () {
         var body, responseMessage;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    body = req.body;
+                    body = request.body;
                     if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
-                        res.sendStatus(404);
+                        response.sendStatus(404);
                     }
                     return [4 /*yield*/, api_1.database.seatingPlan.insertOne(body)];
                 case 1:
@@ -65,68 +65,68 @@ function default_1() {
                         success: body.timeStampMsec,
                         storedObject: body
                     };
-                    res.json(responseMessage);
+                    response.json(responseMessage);
                     console.log(responseMessage);
                     return [2 /*return*/];
             }
         });
     }); });
-    app.get('/get-states', function (req, res) {
+    app.get('/get-states', function (request, response) {
         api_1.database.seatingPlan
             .aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }])
             .toArray(function (error, result) {
             if (error != null) {
-                return res.status(500).send(error);
+                return response.status(500).send(error);
             }
             var states = [];
             for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
                 var state = result_1[_i];
                 states.push(state.timeStampMsec);
             }
-            res.status(200).send(states);
+            response.status(200).send(states);
         });
     });
-    app.get('/latest', function (req, res) {
+    app.get('/latest', function (request, response) {
         api_1.database.seatingPlan
             .find()
             .sort({ timeStampMsec: -1 })
             .limit(1)
             .toArray(function (error, result) {
             if (error != null) {
-                return res.status(500).send(error);
+                return response.status(500).send(error);
             }
             if (result.length > 0) {
-                res.status(200).send(result[0]);
+                response.status(200).send(result[0]);
             }
             else {
-                res.status(200).send('');
+                response.status(200).send('');
             }
         });
     });
-    app.get('/get-state-by-time/:timeStampMsec', function (req, res) {
+    app.get('/get-state-by-time/:timeStampMsec', function (request, response) {
         api_1.database.seatingPlan
-            .find({ timeStampMsec: parseInt(req.params.timeStampMsec) })
+            .find({ timeStampMsec: parseInt(request.params.timeStampMsec) })
             .toArray(function (error, result) {
             if (error != null) {
-                return res.status(500).send(error);
+                return response.status(500).send(error);
             }
-            res.status(200).send(result);
+            response.status(200).send(result);
         });
     });
-    app.delete('/delete-state-by-time/:timeStampMsec', function (req, res) {
-        api_1.database.seatingPlan.deleteOne({ timeStampMsec: parseInt(req.params.timeStampMsec) }, {}, function (error, result) {
+    app.delete('/delete-state-by-time/:timeStampMsec', function (request, response) {
+        api_1.database.seatingPlan.deleteOne({ timeStampMsec: parseInt(request.params.timeStampMsec) }, {}, function (error, result) {
             if (error != null) {
-                return res.status(500).send(error);
+                return response.status(500).send(error);
             }
             var message = {
                 deletedCount: result.deletedCount,
-                timeStampMsec: parseInt(req.params.timeStampMsec)
+                timeStampMsec: parseInt(request.params.timeStampMsec)
             };
             if (result.deletedCount === 1) {
-                return res.status(200).send(message);
+                return response.status(200).send(message);
             }
             else {
-                return res.status(500).send(message);
+                return response.status(500).send(message);
             }
         });
     });

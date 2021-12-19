@@ -5,7 +5,7 @@ import { validateMediaType } from '../utils'
 import openParentFolder from '../operations/open-parent-folder'
 import openEditor from '../operations/open-editor'
 import updateMedia from '../operations/update-media'
-import { database, helpMessages, extractString } from '../api'
+import { database, helpMessages, extractStringFromRequestQuery } from '../api'
 
 /**
  * Register the express js rest api in a giant function.
@@ -13,58 +13,41 @@ import { database, helpMessages, extractString } from '../api'
 export default function (): express.Express {
   const app = express()
 
-  app.get('/', (req, res) => {
-    res.json(helpMessages.navigation)
+  app.get('/', (request, response) => {
+    response.json(helpMessages.navigation)
   })
 
-  /* get */
-
-  app.get('/get/presentation/by-ref', async (req, res, next) => {
+  app.get('/get/presentation/by-ref', async (request, response, next) => {
     try {
-      if (req.query.ref == null) {
-        throw new Error('You have to specify an reference (?ref=myfile).')
-      }
-
-      const ref = req.query.ref
-
-      if (typeof ref !== 'string') {
-        throw new Error('“ref” has to be a string.')
-      }
-
-      res.json(await database.getPresentationByRef(ref))
+      const ref = extractStringFromRequestQuery(request.query, 'ref')
+      response.json(await database.getPresentationByRef(ref))
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/get/presentations/by-substring', async (req, res, next) => {
-    try {
-      if (req.query.search == null) {
-        throw new Error('You have to specify an parameter named search')
+  app.get(
+    '/get/presentations/by-substring',
+    async (request, response, next) => {
+      try {
+        const search = extractStringFromRequestQuery(request.query, 'search')
+        response.json(await database.searchPresentationBySubstring(search))
+      } catch (error) {
+        next(error)
       }
-
-      const search = req.query.search
-
-      if (typeof search !== 'string') {
-        throw new Error('“search” has to be a string.')
-      }
-
-      res.json(await database.searchPresentationBySubstring(search))
-    } catch (error) {
-      next(error)
     }
-  })
+  )
 
-  app.get('/get/asset', async (req, res, next) => {
+  app.get('/get/asset', async (request, response, next) => {
     try {
       let scheme: 'ref' | 'uuid'
       let uri
-      if (req.query.ref == null && req.query.uuid != null) {
+      if (request.query.ref == null && request.query.uuid != null) {
         scheme = 'uuid'
-        uri = req.query.uuid
-      } else if (req.query.uuid == null && req.query.ref != null) {
+        uri = request.query.uuid
+      } else if (request.query.uuid == null && request.query.ref != null) {
         scheme = 'ref'
-        uri = req.query.ref
+        uri = request.query.ref
       } else {
         throw new Error('Use as query ref or uuid')
       }
@@ -73,31 +56,31 @@ export default function (): express.Express {
         throw new Error('The value of the query has to be a string.')
       }
 
-      res.json(await database.getAsset(scheme, uri))
+      response.json(await database.getAsset(scheme, uri))
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/get/folder-title-tree', async (req, res, next) => {
+  app.get('/get/folder-title-tree', async (request, response, next) => {
     try {
-      res.json(await database.getFolderTitleTree())
+      response.json(await database.getFolderTitleTree())
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/get/all-asset-refs', async (req, res, next) => {
+  app.get('/get/all-asset-refs', async (request, response, next) => {
     try {
-      res.json({})
+      response.json({})
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/get/all-asset-uuids', async (req, res, next) => {
+  app.get('/get/all-asset-uuids', async (request, response, next) => {
     try {
-      res.json({})
+      response.json({})
     } catch (error) {
       next(error)
     }
@@ -105,25 +88,25 @@ export default function (): express.Express {
 
   /* mgmt = management */
 
-  app.get('/mgmt/flush', async (req, res, next) => {
+  app.get('/mgmt/flush', async (request, response, next) => {
     try {
-      res.json(await database.flushMediaFiles())
+      response.json(await database.flushMediaFiles())
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/mgmt/init', async (req, res, next) => {
+  app.get('/mgmt/init', async (request, response, next) => {
     try {
-      res.json(await database.initialize())
+      response.json(await database.initialize())
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/mgmt/open', async (req, res, next) => {
+  app.get('/mgmt/open', async (request, response, next) => {
     try {
-      const query = req.query
+      const query = request.query
       if (query.ref == null) {
         throw new Error('You have to specify an reference (?ref=myfile).')
       }
@@ -136,29 +119,31 @@ export default function (): express.Express {
       const archive = 'archive' in query
       const create = 'create' in query
 
-      const ref = extractString(query, 'ref')
-      const type = validateMediaType(extractString(query, 'type'))
+      const ref = extractStringFromRequestQuery(query, 'ref')
+      const type = validateMediaType(
+        extractStringFromRequestQuery(query, 'type')
+      )
       if (query.with === 'editor') {
-        res.json(await openEditor(ref, type))
+        response.json(await openEditor(ref, type))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(ref, type, archive, create))
+        response.json(await openParentFolder(ref, type, archive, create))
       }
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/mgmt/re-init', async (req, res, next) => {
+  app.get('/mgmt/re-init', async (request, response, next) => {
     try {
-      res.json(await database.reInitialize())
+      response.json(await database.reInitialize())
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/mgmt/update', async (req, res, next) => {
+  app.get('/mgmt/update', async (request, response, next) => {
     try {
-      res.json(await updateMedia(false))
+      response.json(await updateMedia(false))
     } catch (error) {
       next(error)
     }
@@ -166,17 +151,17 @@ export default function (): express.Express {
 
   /* stats = statistics */
 
-  app.get('/stats/count', async (req, res, next) => {
+  app.get('/stats/count', async (request, response, next) => {
     try {
-      res.json(await database.getDocumentCounts())
+      response.json(await database.getDocumentCounts())
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/stats/updates', async (req, res, next) => {
+  app.get('/stats/updates', async (request, response, next) => {
     try {
-      res.json(await database.listUpdateTasks())
+      response.json(await database.listUpdateTasks())
     } catch (error) {
       next(error)
     }

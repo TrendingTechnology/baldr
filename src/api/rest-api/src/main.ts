@@ -1,5 +1,5 @@
 /**
- * The REST API and command line interface of the BALDR media server.
+ * The REST API and command line interface of the BALDR project.
  *
  * # Media types:
  *

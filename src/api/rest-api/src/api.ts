@@ -86,26 +86,33 @@ export const helpMessages: StringIndexedObject = {
   }
 }
 
-export function extractString (
-  query: any,
-  propertyName: string,
-  defaultValue: string | null = null
+/**
+ * Extract a string value from the parsed query string object.
+ *
+ * @param query - The parsed query string (`?param1=one&param2=two`) as an object.
+ * @param key - The name of the query key.
+ * @param defaultValue - A default value if the `query` is empty under the
+ *   property `propertyName`.
+ *
+ * @returns The found parameter string or a default value
+ *
+ * @throws If not result string can be found.
+ */
+export function extractStringFromRequestQuery (
+  query: Record<string, any>,
+  key: string,
+  defaultValue?: string
 ): string {
-  if (
-    query == null ||
-    typeof query !== 'object' ||
-    query[propertyName] == null ||
-    typeof query[propertyName] !== 'string'
-  ) {
+  if (query[key] == null || typeof query[key] !== 'string') {
     if (defaultValue != null) {
       return defaultValue
     } else {
       throw new Error(
-        `No value for property ${propertyName} in the query object.`
+        `No value could be found for the query string parameter “${key}” in the parsed query object.`
       )
     }
   }
-  return query[propertyName]
+  return query[key]
 }
 
 /**
@@ -128,8 +135,8 @@ export async function startRestApi (port?: number): Promise<express.Express> {
 
   const helpMessages: StringIndexedObject = {}
 
-  app.get('/', (req, res) => {
-    res.json({
+  app.get('/', (request, response) => {
+    response.json({
       navigation: {
         media: helpMessages.navigation
       }
