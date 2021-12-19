@@ -39,31 +39,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.restart = exports.openArchivesInFileManager = exports.start = void 0;
-var rest_api_1 = require("./rest-api");
-var rest_api_2 = require("./rest-api");
-Object.defineProperty(exports, "start", { enumerable: true, get: function () { return rest_api_2.startRestApi; } });
-var open_archives_in_file_manager_1 = require("./operations/open-archives-in-file-manager");
-Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return __importDefault(open_archives_in_file_manager_1).default; } });
-var restart_systemd_service_1 = require("./operations/restart-systemd-service");
-Object.defineProperty(exports, "restart", { enumerable: true, get: function () { return __importDefault(restart_systemd_service_1).default; } });
-function main() {
+var path_1 = __importDefault(require("path"));
+var open_with_1 = require("@bldr/open-with");
+var open_archives_in_file_manager_1 = __importDefault(require("./open-archives-in-file-manager"));
+var utils_1 = require("../utils");
+/**
+ * Open the parent folder of a presentation, a media asset in a file explorer
+ * GUI application.
+ *
+ * @param ref - The ref of the media type.
+ * @param mediaType - At the moment `assets` and `presentation`
+ * @param archive - Addtionaly open the corresponding archive
+ *   folder.
+ * @param create - Create the directory structure of
+ *   the relative path in the archive in a recursive manner.
+ */
+function default_1(ref, mediaType, archive, create) {
     return __awaiter(this, void 0, void 0, function () {
-        var port;
+        var absPath, parentFolder, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    if (process.argv.length === 3) {
-                        port = parseInt(process.argv[2]);
+                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromId)(ref, mediaType)];
+                case 1:
+                    absPath = _a.sent();
+                    parentFolder = path_1.default.dirname(absPath);
+                    if (archive) {
+                        result = (0, open_archives_in_file_manager_1.default)(parentFolder, create);
                     }
-                    return [4 /*yield*/, (0, rest_api_1.startRestApi)(port)];
-                case 1: return [2 /*return*/, _a.sent()];
+                    else {
+                        result = (0, open_with_1.openInFileManager)(parentFolder, create);
+                    }
+                    return [2 /*return*/, {
+                            ref: ref,
+                            parentFolder: parentFolder,
+                            mediaType: mediaType,
+                            archive: archive,
+                            create: create,
+                            result: result
+                        }];
             }
         });
     });
 }
-if (require.main === module) {
-    main()
-        .then()
-        .catch(function (reason) { return console.log(reason); });
-}
+exports.default = default_1;

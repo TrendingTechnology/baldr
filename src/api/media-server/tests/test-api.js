@@ -1,32 +1,21 @@
 /* globals describe it */
 
 const assert = require('assert')
-const childProcess = require('child_process')
 
 const { makeHttpRequestInstance } = require('@bldr/http-request')
 const { getConfig } = require('@bldr/config')
-const { msleep } = require('@bldr/core-browser')
 const config = getConfig()
 const localHttpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 // const remoteHttpRequest = makeHttpRequestInstance(config, 'remote', '/api/media')
+
+const { restart } = require('../dist/node/main')
 
 const httpRequest = localHttpRequest
 
 function runTests () {
   it('/api/media/mgmt/update', async function () {
     this.timeout(10000)
-    const p = childProcess.spawnSync('systemctl', [
-      '--user',
-      'restart',
-      'baldr_api.service'
-    ])
-    if (p.status !== 0) {
-      throw new Error(
-        'The restart of the systemd service baldr_api.service failed!'
-      )
-    }
-
-    msleep(1500)
+    restart()
 
     const result = await httpRequest.request('mgmt/update')
     assert.strictEqual(result.data.finished, true)

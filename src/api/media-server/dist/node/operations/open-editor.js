@@ -39,31 +39,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.restart = exports.openArchivesInFileManager = exports.start = void 0;
-var rest_api_1 = require("./rest-api");
-var rest_api_2 = require("./rest-api");
-Object.defineProperty(exports, "start", { enumerable: true, get: function () { return rest_api_2.startRestApi; } });
-var open_archives_in_file_manager_1 = require("./operations/open-archives-in-file-manager");
-Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return __importDefault(open_archives_in_file_manager_1).default; } });
-var restart_systemd_service_1 = require("./operations/restart-systemd-service");
-Object.defineProperty(exports, "restart", { enumerable: true, get: function () { return __importDefault(restart_systemd_service_1).default; } });
-function main() {
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
+var open_with_1 = require("@bldr/open-with");
+var config_1 = require("@bldr/config");
+var utils_1 = require("../utils");
+var config = (0, config_1.getConfig)();
+/**
+ * Open a media file specified by an ID with an editor specified in
+ *   `config.mediaServer.editor` (`/etc/baldr.json`).
+ *
+ * @param ref - The ref of the media type.
+ * @param mediaType - At the moment `assets` and `presentation`
+ */
+function default_1(ref, mediaType) {
     return __awaiter(this, void 0, void 0, function () {
-        var port;
+        var absPath, parentFolder, editor;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    if (process.argv.length === 3) {
-                        port = parseInt(process.argv[2]);
+                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromId)(ref, mediaType)];
+                case 1:
+                    absPath = _a.sent();
+                    parentFolder = path_1.default.dirname(absPath);
+                    editor = config.mediaServer.editor;
+                    if (!fs_1.default.existsSync(editor)) {
+                        return [2 /*return*/, {
+                                error: "Editor \u201C".concat(editor, "\u201D can\u2019t be found.")
+                            }];
                     }
-                    return [4 /*yield*/, (0, rest_api_1.startRestApi)(port)];
-                case 1: return [2 /*return*/, _a.sent()];
+                    (0, open_with_1.openWith)(config.mediaServer.editor, parentFolder);
+                    return [2 /*return*/, {
+                            ref: ref,
+                            mediaType: mediaType,
+                            absPath: absPath,
+                            parentFolder: parentFolder,
+                            editor: editor
+                        }];
             }
         });
     });
 }
-if (require.main === module) {
-    main()
-        .then()
-        .catch(function (reason) { return console.log(reason); });
-}
+exports.default = default_1;
