@@ -34,6 +34,7 @@ describe('Class “ElementSelector()”', function () {
 })
 
 describe('Class “InkscapeSelector()”', function () {
+  this.timeout(10000)
   const inventioString = readMediaFile(
     'Musik/06/20_Mensch-Zeit/10_Bach/30_Invention/NB/Invention_C-Dur_Loesung.svg'
   )
