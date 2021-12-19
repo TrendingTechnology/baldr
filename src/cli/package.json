@@ -40,7 +40,7 @@
     "@bldr/log": "*",
     "@bldr/media-categories": "*",
     "@bldr/media-manager": "*",
-    "@bldr/media-server": "*",
+    "@bldr/rest-api": "*",
     "@bldr/mongodb-connector": "*",
     "@bldr/open-with": "*",
     "@bldr/presentation-parser": "*",

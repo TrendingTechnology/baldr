@@ -1,18 +1,13 @@
 "use strict";
 /**
- * This module contains the specification of the meta data types.
+ * This module contains the specification of the meta data categories.
  *
- * A media asset can be attached to multiple meta data types (for example:
- * `meta_types: recording,composition`). All meta data types belong to the type
- * `general`.
- *
- * The corresponding module is called
- * {@link module:@bldr/media-server/meta-types}
+ * A media asset can be attached to multiple meta data categories (for example:
+ * `categories: recording,composition`). All meta data categories belong to the
+ * category `general`.
  *
  * Some meta data type properties can be enriched by using
  * {@link module:@bldr/wikidata wikidata}.
- *
- * @module @bldr/media-manager/meta-type-specs
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.stripCategories = exports.categories = void 0;

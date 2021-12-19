@@ -25,7 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
-const media_server_1 = require("@bldr/media-server");
+const media_server_1 = require("@bldr/rest-api");
 const log = __importStar(require("@bldr/log"));
 /**
  * Create a relative path in different base paths. Open this relative paths in

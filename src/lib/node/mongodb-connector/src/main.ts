@@ -1,7 +1,3 @@
-/**
- * @module @bldr/media-server/database
- */
-
 import mongodb from 'mongodb'
 
 import {

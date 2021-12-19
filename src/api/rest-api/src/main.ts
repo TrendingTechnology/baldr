@@ -56,7 +56,7 @@
  *     database.
  *   - `updates`: Journal of the update processes with timestamps.
  *
- * @module @bldr/media-server
+ * @module @bldr/rest-api
  */
 import express from 'express'
 

@@ -3,7 +3,7 @@ import path from 'path'
 
 // Project packages.
 import { locationIndicator } from '@bldr/media-manager'
-import { openArchivesInFileManager } from '@bldr/media-server'
+import { openArchivesInFileManager } from '@bldr/rest-api'
 import * as log from '@bldr/log'
 
 interface Options {

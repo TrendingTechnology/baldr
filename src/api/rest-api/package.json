@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/media-server",
-  "version": "0.2.3",
-  "description": "The REST API of the BALDR media server.",
+  "name": "@bldr/rest-api",
+  "version": "0.1.0",
+  "description": "The REST API of the BALDR project.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
@@ -39,7 +39,7 @@
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "npm run build && systemctl --user restart baldr_api.service && sleep 1 && mocha 'tests/*' && npm run lint"
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
   },
   "publishConfig": {
     "access": "public"

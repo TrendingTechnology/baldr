@@ -1,6 +1,3 @@
-/**
- * @module @bldr/media-server/database
- */
 import mongodb from 'mongodb';
 import { ApiTypes, TitlesTypes } from '@bldr/type-definitions';
 interface ClientWrapper {

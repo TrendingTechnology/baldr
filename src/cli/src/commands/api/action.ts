@@ -1,4 +1,4 @@
-import { start, restart } from '@bldr/media-server'
+import { start, restart } from '@bldr/rest-api'
 
 interface Options {
   restart?: boolean
