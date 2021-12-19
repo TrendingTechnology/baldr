@@ -39,13 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openParentFolder = exports.openEditor = exports.openArchivesInFileManager = exports.validateMediaType = void 0;
+exports.openParentFolder = exports.openEditor = exports.openArchivesInFileManager = exports.restartSystemdService = exports.validateMediaType = void 0;
 // Node packages.
+var child_process_1 = __importDefault(require("child_process"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 // Project packages.
 var config_1 = require("@bldr/config");
 var media_manager_1 = require("@bldr/media-manager");
+var core_browser_1 = require("@bldr/core-browser");
 var open_with_1 = require("@bldr/open-with");
 var main_1 = require("./main");
 var config = (0, config_1.getConfig)();
@@ -56,8 +58,9 @@ var config = (0, config_1.getConfig)();
  */
 function validateMediaType(mediaType) {
     var mediaTypes = ['assets', 'presentations'];
-    if (mediaType == null)
+    if (mediaType == null) {
         return 'assets';
+    }
     if (!mediaTypes.includes(mediaType)) {
         throw new Error("Unkown media type \u201C".concat(mediaType, "\u201D! Allowed media types are: ").concat(mediaTypes.join(', ')));
     }
@@ -66,6 +69,18 @@ function validateMediaType(mediaType) {
     }
 }
 exports.validateMediaType = validateMediaType;
+function restartSystemdService() {
+    var p = child_process_1.default.spawnSync('systemctl', [
+        '--user',
+        'restart',
+        'baldr_api.service'
+    ]);
+    if (p.status !== 0) {
+        throw new Error('The restart of the systemd service “baldr_api.service” failed!');
+    }
+    (0, core_browser_1.msleep)(1500);
+}
+exports.restartSystemdService = restartSystemdService;
 /**
  * Resolve a ID from a given media type (`assets`, `presentations`) to a
  * absolute path.

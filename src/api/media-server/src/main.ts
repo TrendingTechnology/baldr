@@ -80,23 +80,21 @@ import {
   GenericError,
   ApiTypes
 } from '@bldr/type-definitions'
-
 import {
   buildPresentationData,
   buildDbAssetData
 } from '@bldr/media-data-collector'
-
-import {
-  openParentFolder,
-  openEditor,
-  validateMediaType
-} from './operations'
 import { connectDb, Database } from '@bldr/mongodb-connector'
+
+import { openParentFolder, openEditor, validateMediaType } from './operations'
 
 // Submodules.
 import { registerSeatingPlan } from './seating-plan'
 
-export { openArchivesInFileManager } from './operations'
+export {
+  openArchivesInFileManager,
+  restartSystemdService as restart
+} from './operations'
 
 const config = getConfig()
 
@@ -107,11 +105,7 @@ const basePath = config.mediaServer.basePath
 
 export let database: Database
 
-/* Media objects **************************************************************/
-
 let titleTreeFactory: TreeFactory
-
-/* Insert *********************************************************************/
 
 type ServerMediaType = 'presentations' | 'assets'
 
@@ -537,7 +531,7 @@ function registerMediaRestApi (): express.Express {
  *
  * @param port - A TCP port.
  */
-async function runRestApi (port?: number): Promise<express.Express> {
+async function startRestApi (port?: number): Promise<express.Express> {
   const app = express()
 
   const mongoClient = await connectDb()
@@ -572,10 +566,14 @@ async function runRestApi (port?: number): Promise<express.Express> {
   return app
 }
 
-const main = async function (): Promise<express.Express> {
+export const start = startRestApi
+
+async function main (): Promise<express.Express> {
   let port
-  if (process.argv.length === 3) port = parseInt(process.argv[2])
-  return await runRestApi(port)
+  if (process.argv.length === 3) {
+    port = parseInt(process.argv[2])
+  }
+  return await startRestApi(port)
 }
 
 if (require.main === module) {

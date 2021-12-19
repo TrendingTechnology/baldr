@@ -59,6 +59,14 @@
  *
  * @module @bldr/media-server
  */
+import express from 'express';
 import { Database } from '@bldr/mongodb-connector';
-export { openArchivesInFileManager } from './operations';
+export { openArchivesInFileManager, restartSystemdService as restart } from './operations';
 export declare let database: Database;
+/**
+ * Run the REST API. Listen to a TCP port.
+ *
+ * @param port - A TCP port.
+ */
+declare function startRestApi(port?: number): Promise<express.Express>;
+export declare const start: typeof startRestApi;

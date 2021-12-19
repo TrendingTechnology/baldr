@@ -6,6 +6,7 @@ export declare type MediaType = 'assets' | 'presentations';
  * @param mediaType - At the moment `assets` and `presentation`
  */
 export declare function validateMediaType(mediaType: string): MediaType;
+export declare function restartSystemdService(): void;
 /**
  * Open the current path multiple times.
  *

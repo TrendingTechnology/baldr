@@ -100,7 +100,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.database = exports.openArchivesInFileManager = void 0;
+exports.start = exports.database = exports.restart = exports.openArchivesInFileManager = void 0;
 // Node packages.
 var child_process_1 = __importDefault(require("child_process"));
 var fs_1 = __importDefault(require("fs"));
@@ -114,18 +114,18 @@ var media_manager_1 = require("@bldr/media-manager");
 var file_reader_writer_1 = require("@bldr/file-reader-writer");
 var titles_1 = require("@bldr/titles");
 var media_data_collector_1 = require("@bldr/media-data-collector");
-var operations_1 = require("./operations");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
+var operations_1 = require("./operations");
 // Submodules.
 var seating_plan_1 = require("./seating-plan");
 var operations_2 = require("./operations");
 Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return operations_2.openArchivesInFileManager; } });
+Object.defineProperty(exports, "restart", { enumerable: true, get: function () { return operations_2.restartSystemdService; } });
 var config = (0, config_1.getConfig)();
 /**
  * Base path of the media server file store.
  */
 var basePath = config.mediaServer.basePath;
-/* Media objects **************************************************************/
 var titleTreeFactory;
 var ErrorMessageCollector = /** @class */ (function () {
     function ErrorMessageCollector() {
@@ -695,7 +695,7 @@ function registerMediaRestApi() {
  *
  * @param port - A TCP port.
  */
-function runRestApi(port) {
+function startRestApi(port) {
     return __awaiter(this, void 0, void 0, function () {
         var app, mongoClient, helpMessages, usedPort;
         return __generator(this, function (_a) {
@@ -735,20 +735,22 @@ function runRestApi(port) {
         });
     });
 }
-var main = function () {
+exports.start = startRestApi;
+function main() {
     return __awaiter(this, void 0, void 0, function () {
         var port;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (process.argv.length === 3)
+                    if (process.argv.length === 3) {
                         port = parseInt(process.argv[2]);
-                    return [4 /*yield*/, runRestApi(port)];
+                    }
+                    return [4 /*yield*/, startRestApi(port)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
-};
+}
 if (require.main === module) {
     main()
         .then()

@@ -1,10 +1,12 @@
 // Node packages.
+import childProcess from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
 // Project packages.
 import { getConfig } from '@bldr/config'
 import { locationIndicator } from '@bldr/media-manager'
+import { msleep } from '@bldr/core-browser'
 import { openWith, openInFileManager } from '@bldr/open-with'
 import { StringIndexedObject } from '@bldr/type-definitions'
 
@@ -21,7 +23,9 @@ const config = getConfig()
  */
 export function validateMediaType (mediaType: string): MediaType {
   const mediaTypes = ['assets', 'presentations']
-  if (mediaType == null) return 'assets'
+  if (mediaType == null) {
+    return 'assets'
+  }
   if (!mediaTypes.includes(mediaType)) {
     throw new Error(
       `Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes.join(
@@ -31,6 +35,20 @@ export function validateMediaType (mediaType: string): MediaType {
   } else {
     return mediaType as MediaType
   }
+}
+
+export function restartSystemdService (): void {
+  const p = childProcess.spawnSync('systemctl', [
+    '--user',
+    'restart',
+    'baldr_api.service'
+  ])
+  if (p.status !== 0) {
+    throw new Error(
+      'The restart of the systemd service “baldr_api.service” failed!'
+    )
+  }
+  msleep(1500)
 }
 
 /**
