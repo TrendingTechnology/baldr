@@ -1,7 +1,8 @@
 import { MediaType } from '../modules/media';
 interface OpenFileManagerResult {
     ref: string;
-    parentFolder: string;
+    absPath: string;
+    parentFolders: string[];
     mediaType: MediaType;
     openArchiveFolder: boolean;
     createParentDir: boolean;

@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
+exports.openFileManager = exports.openEditor = exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
 const config_1 = require("@bldr/config");
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
 const config = (0, config_1.getConfig)();
 const httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'local', '/api/media');
-function callWithErrorMessage(path, errorMessage) {
+function callWithErrorMessage(requestConfig, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield httpRequest.request(path);
+        const result = yield httpRequest.request(requestConfig);
         if (result.status !== 200) {
             throw new Error(errorMessage);
         }
@@ -65,3 +65,23 @@ function getAssetByUri(uri, throwException = true) {
     });
 }
 exports.getAssetByUri = getAssetByUri;
+function openEditor(params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({ url: 'open/editor', params }, 'Open Editor.');
+    });
+}
+exports.openEditor = openEditor;
+function openFileManager(params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({ url: 'open/file-manager', params }, 'Open Editor.');
+    });
+}
+exports.openFileManager = openFileManager;
+exports.default = {
+    media: {
+        open: {
+            editor: openEditor,
+            fileManager: openFileManager
+        }
+    }
+};

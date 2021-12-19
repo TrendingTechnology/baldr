@@ -11,8 +11,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { locationU } from '@bldr/universal-dom'
-
 import { Configuration } from '@bldr/type-definitions'
+
+export { AxiosRequestConfig } from 'axios'
 
 type RestEndPoint = 'local' | 'remote' | 'automatic'
 

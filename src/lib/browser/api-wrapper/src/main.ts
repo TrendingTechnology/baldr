@@ -1,6 +1,6 @@
 import { ApiTypes } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config'
-import { makeHttpRequestInstance } from '@bldr/http-request'
+import { makeHttpRequestInstance, AxiosRequestConfig } from '@bldr/http-request'
 import { MediaUri } from '@bldr/client-media-models'
 
 const config = getConfig()
@@ -8,10 +8,10 @@ const config = getConfig()
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
 async function callWithErrorMessage (
-  path: string,
+  requestConfig: string | AxiosRequestConfig,
   errorMessage: string
 ): Promise<any> {
-  const result = await httpRequest.request(path)
+  const result = await httpRequest.request(requestConfig)
   if (result.status !== 200) {
     throw new Error(errorMessage)
   }
@@ -61,5 +61,42 @@ export async function getAssetByUri (
     }
   } else {
     return response.data
+  }
+}
+
+interface OpenEditorParameters {
+  ref: string
+  type?: 'presentation' | 'asset'
+  dryRun?: boolean
+}
+
+export async function openEditor (params: OpenEditorParameters) {
+  return await callWithErrorMessage(
+    { url: 'open/editor', params },
+    'Open Editor.'
+  )
+}
+
+interface OpenFileManagerParameters {
+  ref: string
+  type?: 'presentation' | 'asset'
+  create?: boolean
+  archive?: boolean
+  dryRun?: boolean
+}
+
+export async function openFileManager (params: OpenFileManagerParameters) {
+  return await callWithErrorMessage(
+    { url: 'open/file-manager', params },
+    'Open Editor.'
+  )
+}
+
+export default {
+  media: {
+    open: {
+      editor: openEditor,
+      fileManager: openFileManager
+    }
   }
 }

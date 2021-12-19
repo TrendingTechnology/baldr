@@ -3,13 +3,13 @@ import path from 'path'
 import { openInFileManager } from '@bldr/open-with'
 
 import openArchivesInFileManager from './open-archives-in-file-manager'
-
 import { getAbsPathFromRef } from '../utils'
 import { MediaType } from '../modules/media'
 
 interface OpenFileManagerResult {
   ref: string
-  parentFolder: string
+  absPath: string
+  parentFolders: string[]
   mediaType: MediaType
   openArchiveFolder: boolean
   createParentDir: boolean
@@ -35,16 +35,22 @@ export default async function (
 ): Promise<OpenFileManagerResult> {
   const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
+  let parentFolders: string[] = []
   if (!dryRun) {
     if (openArchiveFolder) {
-      openArchivesInFileManager(parentFolder, createParentDir)
+      const results = openArchivesInFileManager(parentFolder, createParentDir)
+      parentFolders = results.map(results => {
+        return results.parentDir
+      })
     } else {
       openInFileManager(parentFolder, createParentDir)
+      parentFolders = [parentFolder]
     }
   }
   return {
     ref,
-    parentFolder,
+    absPath,
+    parentFolders,
     mediaType,
     openArchiveFolder,
     createParentDir

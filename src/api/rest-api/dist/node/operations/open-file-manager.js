@@ -57,24 +57,30 @@ var utils_1 = require("../utils");
 function default_1(ref, mediaType, openArchiveFolder, createParentDir, dryRun) {
     if (dryRun === void 0) { dryRun = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var absPath, parentFolder;
+        var absPath, parentFolder, parentFolders, results;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromRef)(ref, mediaType)];
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
+                    parentFolders = [];
                     if (!dryRun) {
                         if (openArchiveFolder) {
-                            (0, open_archives_in_file_manager_1.default)(parentFolder, createParentDir);
+                            results = (0, open_archives_in_file_manager_1.default)(parentFolder, createParentDir);
+                            parentFolders = results.map(function (results) {
+                                return results.parentDir;
+                            });
                         }
                         else {
                             (0, open_with_1.openInFileManager)(parentFolder, createParentDir);
+                            parentFolders = [parentFolder];
                         }
                     }
                     return [2 /*return*/, {
                             ref: ref,
-                            parentFolder: parentFolder,
+                            absPath: absPath,
+                            parentFolders: parentFolders,
                             mediaType: mediaType,
                             openArchiveFolder: openArchiveFolder,
                             createParentDir: createParentDir

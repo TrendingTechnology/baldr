@@ -9,6 +9,7 @@
  */
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Configuration } from '@bldr/type-definitions';
+export { AxiosRequestConfig } from 'axios';
 declare type RestEndPoint = 'local' | 'remote' | 'automatic';
 /**
  * A wrapper around Axios.
@@ -122,4 +123,3 @@ export declare function makeHttpRequestInstance(config: Configuration, restEndPo
  * @returns True if the URL is reachable, false else.
  */
 export declare function checkReachability(url: string): Promise<boolean>;
-export {};

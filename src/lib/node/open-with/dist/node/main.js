@@ -48,14 +48,14 @@ function openWith(executable, filePath) {
 }
 exports.openWith = openWith;
 /**
- * Open a file path with the in `config.mediaServer.fileManager`
+ * Open one file path with the in `config.mediaServer.fileManager`
  * specified file manager.
  *
  * @param filePath - The file path that should be opened in the file manager.
  * @param createParentDir - Create the directory structure of the given
  *   `filePath` in a recursive manner.
  */
-function openInFileManager(filePath, createParentDir = false) {
+function openSinglePathInFileManager(filePath, createParentDir = false) {
     let createdParentDir = false;
     let opened = false;
     let process;
@@ -64,7 +64,7 @@ function openInFileManager(filePath, createParentDir = false) {
         createdParentDir = true;
     }
     const stat = fs_1.default.statSync(filePath);
-    const parentDir = stat.isDirectory() ? path_1.default.dirname(filePath) : filePath;
+    const parentDir = stat.isDirectory() ? filePath : path_1.default.dirname(filePath);
     if (fs_1.default.existsSync(parentDir)) {
         // xdg-open opens a mounted root folder in vs code.
         process = openWith(config.mediaServer.fileManager, parentDir);
@@ -78,5 +78,23 @@ function openInFileManager(filePath, createParentDir = false) {
         createdParentDir,
         process
     };
+}
+/**
+ * Open a file path or multiple file paths with the in
+ * `config.mediaServer.fileManager` specified file manager.
+ *
+ * @param filePaths - The file paths that should be opened in the file manager.
+ * @param createParentDir - Create the directory structure of the given
+ *   `filePath` in a recursive manner.
+ */
+function openInFileManager(filePaths, createParentDir = false) {
+    const results = [];
+    if (!Array.isArray(filePaths)) {
+        filePaths = [filePaths];
+    }
+    for (const filePath of filePaths) {
+        results.push(openSinglePathInFileManager(filePath, createParentDir));
+    }
+    return results;
 }
 exports.openInFileManager = openInFileManager;

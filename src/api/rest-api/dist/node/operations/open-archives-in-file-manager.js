@@ -13,23 +13,21 @@ var open_with_1 = require("@bldr/open-with");
  * 2. In a archive directory structure.
  * 3. In a second archive directory structure ... and so on.
  *
- * @param currentPath
- * @param create - Create the directory structure of
+ * @param filePath
+ * @param createParentDir - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function default_1(currentPath, create) {
-    var result = {};
-    var relPath = media_manager_1.locationIndicator.getRelPath(currentPath);
+function default_1(filePath, createParentDir) {
+    var relPath = media_manager_1.locationIndicator.getRelPath(filePath);
+    var filePaths = [];
     for (var _i = 0, _a = media_manager_1.locationIndicator.basePaths; _i < _a.length; _i++) {
         var basePath = _a[_i];
-        if (relPath != null) {
-            var currentPath_1 = path_1.default.join(basePath, relPath);
-            result[currentPath_1] = (0, open_with_1.openInFileManager)(currentPath_1, create);
-        }
-        else {
-            result[basePath] = (0, open_with_1.openInFileManager)(basePath, create);
-        }
+        filePaths.push(relPath != null ? path_1.default.join(basePath, relPath) : basePath);
     }
-    return result;
+    var results = (0, open_with_1.openInFileManager)(filePaths, createParentDir);
+    results.map(function (result) {
+        delete result.process;
+    });
+    return results;
 }
 exports.default = default_1;

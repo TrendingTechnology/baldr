@@ -6,6 +6,7 @@
  */
 
 import { styleConfigurator } from '@bldr/style-configurator'
+import api from '@bldr/api-wrapper'
 
 import store from './store/index.js'
 import vm from './main'
@@ -50,16 +51,20 @@ function callOpenRestApi (openWith, archive = false, create = false) {
     )
     return
   }
-  vm.$media.httpRequest.request({
-    url: 'mgmt/open',
-    params: {
-      with: openWith,
-      type: 'presentations',
+
+  if (openWith === 'editor') {
+    api.media.open.editor({
       ref: presentation.meta.ref,
+      type: 'presentation'
+    })
+  } else {
+    api.media.open.fileManager({
+      ref: presentation.meta.ref,
+      type: 'presentation',
       archive,
       create
-    }
-  })
+    })
+  }
 }
 
 /**
@@ -111,7 +116,7 @@ function goToNextSlide (direction) {
   // next
   if (direction === 1 && slide.no === slidesCount) {
     params.slideNo = 1
-  // previous
+    // previous
   } else if (direction === -1 && slide.no === 1) {
     params.slideNo = slidesCount
   } else {
@@ -121,7 +126,7 @@ function goToNextSlide (direction) {
   // next
   if (direction === 1) {
     store.dispatch('lamp/highlightCursorArrow', 'right')
-  // previous
+    // previous
   } else if (direction === -1) {
     store.dispatch('lamp/highlightCursorArrow', 'left')
   }
@@ -157,7 +162,7 @@ function goToNextStep (direction) {
   // next
   if (direction === 1 && slide.stepNo === slide.stepCount) {
     params.stepNo = 1
-  // previous
+    // previous
   } else if (direction === -1 && slide.stepNo === 1) {
     params.stepNo = slide.stepCount
   } else {
@@ -167,7 +172,7 @@ function goToNextStep (direction) {
   // next
   if (direction === 1) {
     store.dispatch('lamp/highlightCursorArrow', 'down')
-  // previous
+    // previous
   } else if (direction === -1) {
     store.dispatch('lamp/highlightCursorArrow', 'up')
   }
@@ -195,9 +200,12 @@ function goToNextSlideOrStep (direction) {
     } else {
       store.dispatch('lamp/highlightCursorArrow', 'right')
     }
-  // previous
+    // previous
   } else if (direction === -1) {
-    if (params.stepNo && params.stepNo !== store.getters['lamp/slide'].stepCount) {
+    if (
+      params.stepNo &&
+      params.stepNo !== store.getters['lamp/slide'].stepCount
+    ) {
       store.dispatch('lamp/highlightCursorArrow', 'up')
     } else {
       store.dispatch('lamp/highlightCursorArrow', 'left')
@@ -229,7 +237,12 @@ export default {
           vm.$showMessage.error(errorMsg)
         }
       } else {
-        vm.$showMessage.success(`Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`)
+        vm.$showMessage.success(
+          `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(
+            0,
+            8
+          )}`
+        )
       }
     } catch (error) {
       vm.$showMessage.error(error)
@@ -242,16 +255,11 @@ export default {
     const slide = store.getters['lamp/slide']
     if (slide && slide.firstMediaUri) {
       const uri = slide.firstMediaUri.split(':')[1]
-      vm.$media.httpRequest.request({
-        url: 'mgmt/open',
-        params: {
-          with: 'editor',
-          type: 'assets',
-          ref: uri
-        }
-      })
+      api.media.open.editor({ref: uri, type: 'asset'})
     } else {
-      vm.$showMessage.error('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
+      vm.$showMessage.error(
+        'Die aktuelle Folie hat keine Mediendatei zum Öffnen.'
+      )
     }
   },
   openParent () {

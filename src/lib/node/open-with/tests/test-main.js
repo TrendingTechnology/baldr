@@ -15,7 +15,8 @@ describe('Package “@bldr/open-with”', function () {
 
   it('Function “openInFileManager()”', function (done) {
     this.timeout(2000)
-    const result = openInFileManager(config.mediaServer.basePath)
+    const results = openInFileManager(config.mediaServer.basePath)
+    const result = results[0]
     assert.strictEqual(result.fileManager, '/usr/bin/nautilus')
     assert.strictEqual(typeof result.filePath, 'string')
     assert.strictEqual(result.opened, true)
@@ -30,7 +31,8 @@ describe('Package “@bldr/open-with”', function () {
     this.timeout(2000)
     const tmpDir = createTmpDir()
     fs.rmdirSync(tmpDir)
-    const result = openInFileManager(tmpDir, true)
+    const results = openInFileManager(tmpDir, true)
+    const result = results[0]
     assert.strictEqual(result.fileManager, '/usr/bin/nautilus')
     assert.strictEqual(result.filePath, tmpDir)
     assert.strictEqual(result.createdParentDir, true)

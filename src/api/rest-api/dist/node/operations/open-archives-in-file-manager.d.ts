@@ -1,4 +1,10 @@
-import { StringIndexedObject } from '@bldr/type-definitions';
+interface OpenInFileManagerResult {
+    fileManager: string;
+    filePath: string;
+    parentDir: string;
+    opened: boolean;
+    createdParentDir: boolean;
+}
 /**
  * Open the current path multiple times.
  *
@@ -6,8 +12,9 @@ import { StringIndexedObject } from '@bldr/type-definitions';
  * 2. In a archive directory structure.
  * 3. In a second archive directory structure ... and so on.
  *
- * @param currentPath
- * @param create - Create the directory structure of
+ * @param filePath
+ * @param createParentDir - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-export default function (currentPath: string, create: boolean): StringIndexedObject;
+export default function (filePath: string, createParentDir: boolean): OpenInFileManagerResult[];
+export {};

@@ -12,9 +12,9 @@ import { makeHttpRequestInstance } from '@bldr/http-request';
 import { MediaUri } from '@bldr/client-media-models';
 const config = getConfig();
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media');
-function callWithErrorMessage(path, errorMessage) {
+function callWithErrorMessage(requestConfig, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield httpRequest.request(path);
+        const result = yield httpRequest.request(requestConfig);
         if (result.status !== 200) {
             throw new Error(errorMessage);
         }
@@ -58,3 +58,21 @@ export function getAssetByUri(uri, throwException = true) {
         }
     });
 }
+export function openEditor(params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({ url: 'open/editor', params }, 'Open Editor.');
+    });
+}
+export function openFileManager(params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({ url: 'open/file-manager', params }, 'Open Editor.');
+    });
+}
+export default {
+    media: {
+        open: {
+            editor: openEditor,
+            fileManager: openFileManager
+        }
+    }
+};

@@ -1,8 +1,15 @@
 import path from 'path'
 
 import { locationIndicator } from '@bldr/media-manager'
-import { StringIndexedObject } from '@bldr/type-definitions'
 import { openInFileManager } from '@bldr/open-with'
+
+interface OpenInFileManagerResult {
+  fileManager: string
+  filePath: string
+  parentDir: string
+  opened: boolean
+  createdParentDir: boolean
+}
 
 /**
  * Open the current path multiple times.
@@ -11,23 +18,24 @@ import { openInFileManager } from '@bldr/open-with'
  * 2. In a archive directory structure.
  * 3. In a second archive directory structure ... and so on.
  *
- * @param currentPath
- * @param create - Create the directory structure of
+ * @param filePath
+ * @param createParentDir - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
 export default function (
-  currentPath: string,
-  create: boolean
-): StringIndexedObject {
-  const result: StringIndexedObject = {}
-  const relPath = locationIndicator.getRelPath(currentPath)
+  filePath: string,
+  createParentDir: boolean
+): OpenInFileManagerResult[] {
+  const relPath = locationIndicator.getRelPath(filePath)
+  const filePaths: string[] = []
   for (const basePath of locationIndicator.basePaths) {
-    if (relPath != null) {
-      const currentPath = path.join(basePath, relPath)
-      result[currentPath] = openInFileManager(currentPath, create)
-    } else {
-      result[basePath] = openInFileManager(basePath, create)
-    }
+    filePaths.push(relPath != null ? path.join(basePath, relPath) : basePath)
   }
-  return result
+  const results = openInFileManager(filePaths, createParentDir)
+
+  results.map(result => {
+    delete result.process
+  })
+
+  return results
 }
