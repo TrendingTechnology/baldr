@@ -101,4 +101,49 @@ describe('media', function () {
       assert.strictEqual(typeof updateTask.lastCommitId, 'string')
     })
   })
+
+  describe('open', function () {
+    describe('editor', function () {
+      it('presentation', async function () {
+        const result = await httpRequest.request({
+          url: 'open/editor',
+          params: {
+            'dry-run': true,
+            ref: 'Marmotte',
+            type: 'presentations'
+          }
+        })
+
+        assert.strictEqual(result.data.ref, 'Marmotte')
+        assert.ok(
+          result.data.absPath.includes(
+            'Marmotte/Praesentation.baldr.yml'
+          )
+        )
+        assert.strictEqual(result.data.editor, '/usr/bin/code')
+      })
+
+      it('asset', async function () {
+        const result = await httpRequest.request({
+          url: 'open/editor',
+          params: {
+            'dry-run': true,
+            ref: 'IN_Cembalo',
+            type: 'assets'
+          }
+        })
+        assert.strictEqual(result.data.ref, 'IN_Cembalo')
+        assert.ok(
+          result.data.absPath.includes(
+            'Musik/Instrumente/c/Cembalo/main.jpg.yml'
+          )
+        )
+        assert.ok(
+          result.data.parentFolder.includes(
+            'Musik/Instrumente/c/Cembalo'
+          )
+        )
+      })
+    })
+  })
 })

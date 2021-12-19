@@ -13,5 +13,5 @@ interface OpenEditorResult {
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export default function (ref: string, mediaType: MediaType): Promise<OpenEditorResult>;
+export default function (ref: string, mediaType: MediaType, dryRun?: boolean): Promise<OpenEditorResult>;
 export {};

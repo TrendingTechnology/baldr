@@ -81,16 +81,18 @@ function getAbsPathFromRef(ref, mediaType) {
                     mediaType = validateMediaType(mediaType);
                     return [4 /*yield*/, api_1.database.db
                             .collection(mediaType)
-                            .find({ ref: ref })
+                            .find(mediaType === 'presentations' ? { 'meta.ref': ref } : { ref: ref })
                             .next()];
                 case 1:
                     result = _a.sent();
-                    if (result.path == null && typeof result.path !== 'string') {
-                        throw new Error("Can not find media file with the type \u201C".concat(mediaType, "\u201D and the reference \u201C").concat(ref, "\u201D."));
+                    if (mediaType === 'presentations' && typeof result.meta.path === 'string') {
+                        relPath = result.meta.path;
                     }
-                    relPath = result.path;
-                    if (mediaType === 'assets') {
-                        relPath = "".concat(relPath, ".yml");
+                    else if (typeof result.path === 'string') {
+                        relPath = String(result.path) + '.yml';
+                    }
+                    if (relPath == null) {
+                        throw new Error("Can not find media file with the type \u201C".concat(mediaType, "\u201D and the reference \u201C").concat(ref, "\u201D."));
                     }
                     return [2 /*return*/, path_1.default.join(config.mediaServer.basePath, relPath)];
             }

@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,6 +65,7 @@ var open_parent_folder_1 = __importDefault(require("../operations/open-parent-fo
 var open_editor_1 = __importDefault(require("../operations/open-editor"));
 var update_media_1 = __importDefault(require("../operations/update-media"));
 var api_1 = require("../api");
+var query = __importStar(require("../query"));
 /**
  * Register the express js rest api in a giant function.
  */
@@ -58,7 +78,7 @@ function default_1() {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    ref = (0, api_1.extractStringFromRequestQuery)(request.query, 'ref');
+                    ref = query.extractString(request.query, 'ref');
                     _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.getPresentationByRef(ref)];
                 case 1:
@@ -78,7 +98,7 @@ function default_1() {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    search = (0, api_1.extractStringFromRequestQuery)(request.query, 'search');
+                    search = query.extractString(request.query, 'search');
                     _b = (_a = response).json;
                     return [4 /*yield*/, api_1.database.searchPresentationBySubstring(search)];
                 case 1:
@@ -208,33 +228,29 @@ function default_1() {
         });
     }); });
     app.get('/mgmt/open', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, archive, create, ref, type, _a, _b, _c, _d, error_7;
+        var archive, create, ref, type, _a, _b, _c, _d, error_7;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, , 6]);
-                    query = request.query;
-                    if (query.ref == null) {
-                        throw new Error('You have to specify an reference (?ref=myfile).');
+                    if (request.query.with == null) {
+                        request.query.with = 'editor';
                     }
-                    if (query.with == null) {
-                        query.with = 'editor';
-                    }
-                    if (query.type == null) {
-                        query.type = 'presentations';
+                    if (request.query.type == null) {
+                        request.query.type = 'presentations';
                     }
                     archive = 'archive' in query;
                     create = 'create' in query;
-                    ref = (0, api_1.extractStringFromRequestQuery)(query, 'ref');
-                    type = (0, utils_1.validateMediaType)((0, api_1.extractStringFromRequestQuery)(query, 'type'));
-                    if (!(query.with === 'editor')) return [3 /*break*/, 2];
+                    ref = query.extractString(request.query, 'ref');
+                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type'));
+                    if (!(request.query.with === 'editor')) return [3 /*break*/, 2];
                     _b = (_a = response).json;
                     return [4 /*yield*/, (0, open_editor_1.default)(ref, type)];
                 case 1:
                     _b.apply(_a, [_e.sent()]);
                     return [3 /*break*/, 4];
                 case 2:
-                    if (!(query.with === 'folder')) return [3 /*break*/, 4];
+                    if (!(request.query.with === 'folder')) return [3 /*break*/, 4];
                     _d = (_c = response).json;
                     return [4 /*yield*/, (0, open_parent_folder_1.default)(ref, type, archive, create)];
                 case 3:
@@ -250,15 +266,16 @@ function default_1() {
         });
     }); });
     app.get('/open/editor', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, _a, _b, error_8;
+        var ref, type, dryRun, _a, _b, error_8;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    ref = (0, api_1.extractStringFromRequestQuery)(request.query, 'ref');
-                    type = (0, utils_1.validateMediaType)((0, api_1.extractStringFromRequestQuery)(request.query, 'type', 'presentations'));
+                    ref = query.extractString(request.query, 'ref');
+                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type', 'presentations'));
+                    dryRun = query.extractBoolean(request.query, 'dry-run', false);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, (0, open_editor_1.default)(ref, type)];
+                    return [4 /*yield*/, (0, open_editor_1.default)(ref, type, dryRun)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];

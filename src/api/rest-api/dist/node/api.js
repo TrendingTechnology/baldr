@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startRestApi = exports.extractStringFromRequestQuery = exports.database = void 0;
+exports.startRestApi = exports.database = void 0;
 // Third party packages.
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
@@ -51,30 +51,6 @@ var seating_plan_1 = __importDefault(require("./modules/seating-plan"));
 var media_1 = __importDefault(require("./modules/media"));
 var config = (0, config_1.getConfig)();
 /* Express Rest API ***********************************************************/
-/**
- * Extract a string value from the parsed query string object.
- *
- * @param query - The parsed query string (`?param1=one&param2=two`) as an object.
- * @param key - The name of the query key.
- * @param defaultValue - A default value if the `query` is empty under the
- *   property `propertyName`.
- *
- * @returns The found parameter string or a default value
- *
- * @throws If not result string can be found.
- */
-function extractStringFromRequestQuery(query, key, defaultValue) {
-    if (query[key] == null || typeof query[key] !== 'string') {
-        if (defaultValue != null) {
-            return defaultValue;
-        }
-        else {
-            throw new Error("No value could be found for the query string parameter \u201C".concat(key, "\u201D in the parsed query object."));
-        }
-    }
-    return query[key];
-}
-exports.extractStringFromRequestQuery = extractStringFromRequestQuery;
 /**
  * Run the REST API. Listen to a TCP port.
  *

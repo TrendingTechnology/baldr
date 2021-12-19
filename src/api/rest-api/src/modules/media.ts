@@ -5,7 +5,8 @@ import { validateMediaType } from '../utils'
 import openParentFolder from '../operations/open-parent-folder'
 import openEditor from '../operations/open-editor'
 import updateMedia from '../operations/update-media'
-import { database, extractStringFromRequestQuery } from '../api'
+import { database } from '../api'
+import * as query from '../query'
 
 /**
  * Register the express js rest api in a giant function.
@@ -15,7 +16,7 @@ export default function (): express.Express {
 
   app.get('/get/presentation/by-ref', async (request, response, next) => {
     try {
-      const ref = extractStringFromRequestQuery(request.query, 'ref')
+      const ref = query.extractString(request.query, 'ref')
       response.json(await database.getPresentationByRef(ref))
     } catch (error) {
       next(error)
@@ -26,7 +27,7 @@ export default function (): express.Express {
     '/get/presentations/by-substring',
     async (request, response, next) => {
       try {
-        const search = extractStringFromRequestQuery(request.query, 'search')
+        const search = query.extractString(request.query, 'search')
         response.json(await database.searchPresentationBySubstring(search))
       } catch (error) {
         next(error)
@@ -102,26 +103,23 @@ export default function (): express.Express {
 
   app.get('/mgmt/open', async (request, response, next) => {
     try {
-      const query = request.query
-      if (query.ref == null) {
-        throw new Error('You have to specify an reference (?ref=myfile).')
+
+      if (request.query.with == null) {
+        request.query.with = 'editor'
       }
-      if (query.with == null) {
-        query.with = 'editor'
-      }
-      if (query.type == null) {
-        query.type = 'presentations'
+      if (request.query.type == null) {
+        request.query.type = 'presentations'
       }
       const archive = 'archive' in query
       const create = 'create' in query
 
-      const ref = extractStringFromRequestQuery(query, 'ref')
+      const ref = query.extractString(request.query, 'ref')
       const type = validateMediaType(
-        extractStringFromRequestQuery(query, 'type')
+        query.extractString(request.query, 'type')
       )
-      if (query.with === 'editor') {
+      if (request.query.with === 'editor') {
         response.json(await openEditor(ref, type))
-      } else if (query.with === 'folder') {
+      } else if (request.query.with === 'folder') {
         response.json(await openParentFolder(ref, type, archive, create))
       }
     } catch (error) {
@@ -131,11 +129,12 @@ export default function (): express.Express {
 
   app.get('/open/editor', async (request, response, next) => {
     try {
-      const ref = extractStringFromRequestQuery(request.query, 'ref')
+      const ref = query.extractString(request.query, 'ref')
       const type = validateMediaType(
-        extractStringFromRequestQuery(request.query, 'type', 'presentations')
+        query.extractString(request.query, 'type', 'presentations')
       )
-      response.json(await openEditor(ref, type))
+      const dryRun = query.extractBoolean(request.query, 'dry-run', false)
+      response.json(await openEditor(ref, type, dryRun))
     } catch (error) {
       next(error)
     }

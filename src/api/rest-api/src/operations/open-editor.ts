@@ -25,7 +25,8 @@ interface OpenEditorResult {
  */
 export default async function (
   ref: string,
-  mediaType: MediaType
+  mediaType: MediaType,
+  dryRun: boolean = false
 ): Promise<OpenEditorResult> {
   const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
@@ -33,7 +34,9 @@ export default async function (
   if (!fs.existsSync(editor)) {
     throw new Error(`Editor “${editor}” can’t be found.`)
   }
-  openWith(editor, parentFolder)
+  if (!dryRun) {
+    openWith(editor, parentFolder)
+  }
   return {
     ref,
     mediaType,

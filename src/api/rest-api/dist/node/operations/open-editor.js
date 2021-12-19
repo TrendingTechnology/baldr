@@ -52,7 +52,8 @@ var config = (0, config_1.getConfig)();
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-function default_1(ref, mediaType) {
+function default_1(ref, mediaType, dryRun) {
+    if (dryRun === void 0) { dryRun = false; }
     return __awaiter(this, void 0, void 0, function () {
         var absPath, parentFolder, editor;
         return __generator(this, function (_a) {
@@ -65,7 +66,9 @@ function default_1(ref, mediaType) {
                     if (!fs_1.default.existsSync(editor)) {
                         throw new Error("Editor \u201C".concat(editor, "\u201D can\u2019t be found."));
                     }
-                    (0, open_with_1.openWith)(editor, parentFolder);
+                    if (!dryRun) {
+                        (0, open_with_1.openWith)(editor, parentFolder);
+                    }
                     return [2 /*return*/, {
                             ref: ref,
                             mediaType: mediaType,

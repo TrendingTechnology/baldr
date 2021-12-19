@@ -45,17 +45,19 @@ export async function getAbsPathFromRef (
   mediaType = validateMediaType(mediaType)
   const result = await database.db
     .collection(mediaType)
-    .find({ ref: ref })
+    .find(mediaType === 'presentations' ? { 'meta.ref': ref } : { ref: ref })
     .next()
-  if (result.path == null && typeof result.path !== 'string') {
+  let relPath: string | undefined
+  if (mediaType === 'presentations' && typeof result.meta.path === 'string') {
+    relPath = result.meta.path as string
+  } else if (typeof result.path === 'string') {
+    relPath = String(result.path) + '.yml'
+  }
+  if (relPath == null) {
     throw new Error(
       `Can not find media file with the type “${mediaType}” and the reference “${ref}”.`
     )
   }
 
-  let relPath: string = result.path
-  if (mediaType === 'assets') {
-    relPath = `${relPath}.yml`
-  }
   return path.join(config.mediaServer.basePath, relPath)
 }
