@@ -51,7 +51,7 @@ function getAssetByUri(uri, throwException = true) {
             url: 'get/asset',
             method: 'get',
             params: {
-                [mediaUri.scheme]: mediaUri.authority,
+                [mediaUri.scheme]: mediaUri.authority
             }
         });
         if (response == null || response.status !== 200 || response.data == null) {
