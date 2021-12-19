@@ -40,9 +40,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restart = exports.openArchivesInFileManager = exports.start = void 0;
-var rest_api_1 = require("./rest-api");
-var rest_api_2 = require("./rest-api");
-Object.defineProperty(exports, "start", { enumerable: true, get: function () { return rest_api_2.startRestApi; } });
+var api_1 = require("./api");
+var api_2 = require("./api");
+Object.defineProperty(exports, "start", { enumerable: true, get: function () { return api_2.startRestApi; } });
 var open_archives_in_file_manager_1 = require("./operations/open-archives-in-file-manager");
 Object.defineProperty(exports, "openArchivesInFileManager", { enumerable: true, get: function () { return __importDefault(open_archives_in_file_manager_1).default; } });
 var restart_systemd_service_1 = require("./operations/restart-systemd-service");
@@ -56,7 +56,7 @@ function main() {
                     if (process.argv.length === 3) {
                         port = parseInt(process.argv[2]);
                     }
-                    return [4 /*yield*/, (0, rest_api_1.startRestApi)(port)];
+                    return [4 /*yield*/, (0, api_1.startRestApi)(port)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

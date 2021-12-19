@@ -4,7 +4,7 @@ import path from 'path'
 // Project packages.
 import { getConfig } from '@bldr/config'
 
-import { database } from './rest-api'
+import { database } from './api'
 
 export type MediaType = 'assets' | 'presentations'
 

@@ -47,7 +47,7 @@ var file_reader_writer_1 = require("@bldr/file-reader-writer");
 var titles_1 = require("@bldr/titles");
 var config_1 = require("@bldr/config");
 var media_data_collector_1 = require("@bldr/media-data-collector");
-var rest_api_1 = require("../rest-api");
+var api_1 = require("../api");
 var config = (0, config_1.getConfig)();
 var ErrorMessageCollector = /** @class */ (function () {
     function ErrorMessageCollector() {
@@ -88,7 +88,7 @@ function insertMediaFileIntoDb(filePath, mediaType, errors) {
                     if (media == null) {
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, rest_api_1.database.db.collection(mediaType).insertOne(media)];
+                    return [4 /*yield*/, api_1.database.db.collection(mediaType).insertOne(media)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 3];
@@ -140,17 +140,17 @@ function default_1(full) {
                     assetCounter = 0;
                     presentationCounter = 0;
                     lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
-                    return [4 /*yield*/, rest_api_1.database.connect()];
+                    return [4 /*yield*/, api_1.database.connect()];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, rest_api_1.database.initialize()];
+                    return [4 /*yield*/, api_1.database.initialize()];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, rest_api_1.database.flushMediaFiles()];
+                    return [4 /*yield*/, api_1.database.flushMediaFiles()];
                 case 3:
                     _a.sent();
                     begin = new Date().getTime();
-                    return [4 /*yield*/, rest_api_1.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
+                    return [4 /*yield*/, api_1.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
                 case 4:
                     _a.sent();
                     return [4 /*yield*/, (0, media_manager_1.walk)({
@@ -202,12 +202,12 @@ function default_1(full) {
                 case 5:
                     _a.sent();
                     // .replaceOne and upsert: Problems with merged objects?
-                    return [4 /*yield*/, rest_api_1.database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })];
+                    return [4 /*yield*/, api_1.database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })];
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
                     tree = titleTreeFactory.getTree();
-                    return [4 /*yield*/, rest_api_1.database.db.collection('folderTitleTree').insertOne({
+                    return [4 /*yield*/, api_1.database.db.collection('folderTitleTree').insertOne({
                             ref: 'root',
                             tree: tree
                         })];
@@ -215,7 +215,7 @@ function default_1(full) {
                     _a.sent();
                     (0, file_reader_writer_1.writeJsonFile)(path_1.default.join(config.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
-                    return [4 /*yield*/, rest_api_1.database.db
+                    return [4 /*yield*/, api_1.database.db
                             .collection('updates')
                             .updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
                 case 8:

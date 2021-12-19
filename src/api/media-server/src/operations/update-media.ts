@@ -12,7 +12,7 @@ import {
   buildDbAssetData
 } from '@bldr/media-data-collector'
 
-import { database } from '../rest-api'
+import { database } from '../api'
 
 const config = getConfig()
 

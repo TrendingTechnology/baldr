@@ -13,7 +13,7 @@ const { restart } = require('../dist/node/main')
 const httpRequest = localHttpRequest
 
 function runTests () {
-  it('/api/media/mgmt/update', async function () {
+  it('/media/mgmt/update', async function () {
     this.timeout(10000)
     restart()
 

@@ -44,7 +44,7 @@ exports.getAbsPathFromId = exports.validateMediaType = void 0;
 var path_1 = __importDefault(require("path"));
 // Project packages.
 var config_1 = require("@bldr/config");
-var rest_api_1 = require("./rest-api");
+var api_1 = require("./api");
 var config = (0, config_1.getConfig)();
 /**
  * Throw an error if the media type is unkown. Provide a default value.
@@ -79,7 +79,7 @@ function getAbsPathFromId(ref, mediaType) {
             switch (_a.label) {
                 case 0:
                     mediaType = validateMediaType(mediaType);
-                    return [4 /*yield*/, rest_api_1.database.db
+                    return [4 /*yield*/, api_1.database.db
                             .collection(mediaType)
                             .find({ ref: ref })
                             .next()];
