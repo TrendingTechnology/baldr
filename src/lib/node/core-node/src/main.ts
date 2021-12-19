@@ -141,12 +141,22 @@ export function getBasename (filePath: string): string {
 }
 
 /**
+ * Create a path like `/tmp/baldr-`. The path does not exist yet. It has
+ * to be created.
+ *
+ * @returns A file path in the temporary OS directory containing `baldr`.
+ */
+export function getTmpDirPath (): string {
+  return path.join(os.tmpdir(), path.sep, 'baldr-')
+}
+
+/**
  * Create a temporary directory.
  *
  * @returns The path of the created temporary directory.
  */
 export function createTmpDir (): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), path.sep, 'baldr-'))
+  return fs.mkdtempSync(getTmpDirPath())
 }
 
 /**

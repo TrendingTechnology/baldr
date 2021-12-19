@@ -2,7 +2,7 @@
 import express from 'express'
 
 import { validateMediaType } from '../utils'
-import openParentFolder from '../operations/open-parent-folder'
+import openFileManager from '../operations/open-file-manager'
 import openEditor from '../operations/open-editor'
 import updateMedia from '../operations/update-media'
 import { database } from '../api'
@@ -103,40 +103,27 @@ export default function (): express.Express {
     }
   })
 
-  app.get('/mgmt/open', async (request, response, next) => {
+  app.get('/open/editor', async (request, response, next) => {
     try {
-
-      if (request.query.with == null) {
-        request.query.with = 'editor'
-      }
-      if (request.query.type == null) {
-        request.query.type = 'presentations'
-      }
-      const archive = 'archive' in query
-      const create = 'create' in query
-
       const ref = query.extractString(request.query, 'ref')
       const type = validateMediaType(
-        query.extractString(request.query, 'type')
+        query.extractString(request.query, 'type', 'presentation')
       )
-      if (request.query.with === 'editor') {
-        response.json(await openEditor(ref, type))
-      } else if (request.query.with === 'folder') {
-        response.json(await openParentFolder(ref, type, archive, create))
-      }
+      const dryRun = query.extractBoolean(request.query, 'dry-run', false)
+      response.json(await openEditor(ref, type, dryRun))
     } catch (error) {
       next(error)
     }
   })
 
-  app.get('/open/editor', async (request, response, next) => {
+  app.get('/open/file-manager', async (request, response, next) => {
     try {
       const ref = query.extractString(request.query, 'ref')
-      const type = validateMediaType(
-        query.extractString(request.query, 'type', 'presentations')
-      )
+      const type = validateMediaType(query.extractString(request.query, 'type'))
+      const create = query.extractBoolean(request.query, 'create', false)
+      const archive = query.extractBoolean(request.query, 'archive', false)
       const dryRun = query.extractBoolean(request.query, 'dry-run', false)
-      response.json(await openEditor(ref, type, dryRun))
+      response.json(await openFileManager(ref, type, archive, create, dryRun))
     } catch (error) {
       next(error)
     }

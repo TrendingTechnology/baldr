@@ -61,7 +61,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
 var express_1 = __importDefault(require("express"));
 var utils_1 = require("../utils");
-var open_parent_folder_1 = __importDefault(require("../operations/open-parent-folder"));
+var open_file_manager_1 = __importDefault(require("../operations/open-file-manager"));
 var open_editor_1 = __importDefault(require("../operations/open-editor"));
 var update_media_1 = __importDefault(require("../operations/update-media"));
 var api_1 = require("../api");
@@ -227,55 +227,41 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/open', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var archive, create, ref, type, _a, _b, _c, _d, error_7;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0:
-                    _e.trys.push([0, 5, , 6]);
-                    if (request.query.with == null) {
-                        request.query.with = 'editor';
-                    }
-                    if (request.query.type == null) {
-                        request.query.type = 'presentations';
-                    }
-                    archive = 'archive' in query;
-                    create = 'create' in query;
-                    ref = query.extractString(request.query, 'ref');
-                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type'));
-                    if (!(request.query.with === 'editor')) return [3 /*break*/, 2];
-                    _b = (_a = response).json;
-                    return [4 /*yield*/, (0, open_editor_1.default)(ref, type)];
-                case 1:
-                    _b.apply(_a, [_e.sent()]);
-                    return [3 /*break*/, 4];
-                case 2:
-                    if (!(request.query.with === 'folder')) return [3 /*break*/, 4];
-                    _d = (_c = response).json;
-                    return [4 /*yield*/, (0, open_parent_folder_1.default)(ref, type, archive, create)];
-                case 3:
-                    _d.apply(_c, [_e.sent()]);
-                    _e.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    error_7 = _e.sent();
-                    next(error_7);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
-    }); });
     app.get('/open/editor', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, dryRun, _a, _b, error_8;
+        var ref, type, dryRun, _a, _b, error_7;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     ref = query.extractString(request.query, 'ref');
-                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type', 'presentations'));
+                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type', 'presentation'));
                     dryRun = query.extractBoolean(request.query, 'dry-run', false);
                     _b = (_a = response).json;
                     return [4 /*yield*/, (0, open_editor_1.default)(ref, type, dryRun)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_7 = _c.sent();
+                    next(error_7);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/open/file-manager', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var ref, type, create, archive, dryRun, _a, _b, error_8;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    ref = query.extractString(request.query, 'ref');
+                    type = (0, utils_1.validateMediaType)(query.extractString(request.query, 'type'));
+                    create = query.extractBoolean(request.query, 'create', false);
+                    archive = query.extractBoolean(request.query, 'archive', false);
+                    dryRun = query.extractBoolean(request.query, 'dry-run', false);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, (0, open_file_manager_1.default)(ref, type, archive, create, dryRun)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];

@@ -8,10 +8,9 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 
-import { StringIndexedObject } from '@bldr/type-definitions'
-
 // Project packages.
 import { getConfig } from '@bldr/config'
+import path from 'path'
 
 const config = getConfig()
 
@@ -36,37 +35,61 @@ const config = getConfig()
  * @see node module on npmjs.org “open”
  * @see {@link https://unix.stackexchange.com/a/537848}
  */
-export function openWith (executable: string, filePath: string): void {
+export function openWith (
+  executable: string,
+  filePath: string
+): childProcess.ChildProcess {
   // See node module on npmjs.org “open”
   const subprocess = childProcess.spawn(executable, [filePath], {
     stdio: 'ignore',
     detached: true
   })
   subprocess.unref()
+  return subprocess
+}
+
+interface OpenInFileManagerResult {
+  fileManager: string
+  filePath: string
+  parentDir: string
+  process?: childProcess.ChildProcess
+  opened: boolean
+  createdParentDir: boolean
 }
 
 /**
- * Open a file path using using the in `config.mediaServer.fileManager`
+ * Open a file path with the in `config.mediaServer.fileManager`
  * specified file manager.
  *
- * @param currentPath - The current path that should be opened in the file
- *   manager.
- * @param create - Create the directory structure of the given `currentPath` in
- *   a recursive manner.
+ * @param filePath - The file path that should be opened in the file manager.
+ * @param createParentDir - Create the directory structure of the given
+ *   `filePath` in a recursive manner.
  */
 export function openInFileManager (
-  currentPath: string,
-  create: boolean
-): StringIndexedObject {
-  const result: StringIndexedObject = {}
-  if (create && !fs.existsSync(currentPath)) {
-    fs.mkdirSync(currentPath, { recursive: true })
-    result.create = true
+  filePath: string,
+  createParentDir: boolean = false
+): OpenInFileManagerResult {
+  let createdParentDir = false
+  let opened = false
+  let process
+  if (createParentDir && !fs.existsSync(filePath)) {
+    fs.mkdirSync(filePath, { recursive: true })
+    createdParentDir = true
   }
-  if (fs.existsSync(currentPath)) {
+  const stat = fs.statSync(filePath)
+  const parentDir = stat.isDirectory() ? path.dirname(filePath) : filePath
+
+  if (fs.existsSync(parentDir)) {
     // xdg-open opens a mounted root folder in vs code.
-    openWith(config.mediaServer.fileManager, currentPath)
-    result.open = true
+    process = openWith(config.mediaServer.fileManager, parentDir)
+    opened = true
   }
-  return result
+  return {
+    fileManager: config.mediaServer.fileManager,
+    filePath,
+    parentDir,
+    opened,
+    createdParentDir,
+    process
+  }
 }

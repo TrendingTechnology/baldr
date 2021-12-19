@@ -116,9 +116,7 @@ describe('media', function () {
 
         assert.strictEqual(result.data.ref, 'Marmotte')
         assert.ok(
-          result.data.absPath.includes(
-            'Marmotte/Praesentation.baldr.yml'
-          )
+          result.data.absPath.includes('Marmotte/Praesentation.baldr.yml')
         )
         assert.strictEqual(result.data.editor, '/usr/bin/code')
       })
@@ -139,9 +137,24 @@ describe('media', function () {
           )
         )
         assert.ok(
-          result.data.parentFolder.includes(
-            'Musik/Instrumente/c/Cembalo'
-          )
+          result.data.parentFolder.includes('Musik/Instrumente/c/Cembalo')
+        )
+      })
+    })
+
+    describe('file-manager', function () {
+      it('presentation', async function () {
+        const result = await httpRequest.request({
+          url: 'open/file-manager',
+          params: {
+            ref: 'Marmotte',
+            type: 'presentation',
+            'dry-run': true
+          }
+        })
+        assert.strictEqual(result.data.ref, 'Marmotte')
+        assert.ok(
+          result.data.parentFolder.includes('Marmotte')
         )
       })
     })

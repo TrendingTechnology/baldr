@@ -3,7 +3,8 @@
  *
  * @module @bldr/open-with
  */
-import { StringIndexedObject } from '@bldr/type-definitions';
+/// <reference types="node" />
+import childProcess from 'child_process';
 /**
  * Open a file path with an executable.
  *
@@ -25,14 +26,22 @@ import { StringIndexedObject } from '@bldr/type-definitions';
  * @see node module on npmjs.org “open”
  * @see {@link https://unix.stackexchange.com/a/537848}
  */
-export declare function openWith(executable: string, filePath: string): void;
+export declare function openWith(executable: string, filePath: string): childProcess.ChildProcess;
+interface OpenInFileManagerResult {
+    fileManager: string;
+    filePath: string;
+    parentDir: string;
+    process?: childProcess.ChildProcess;
+    opened: boolean;
+    createdParentDir: boolean;
+}
 /**
- * Open a file path using using the in `config.mediaServer.fileManager`
+ * Open a file path with the in `config.mediaServer.fileManager`
  * specified file manager.
  *
- * @param currentPath - The current path that should be opened in the file
- *   manager.
- * @param create - Create the directory structure of the given `currentPath` in
- *   a recursive manner.
+ * @param filePath - The file path that should be opened in the file manager.
+ * @param createParentDir - Create the directory structure of the given
+ *   `filePath` in a recursive manner.
  */
-export declare function openInFileManager(currentPath: string, create: boolean): StringIndexedObject;
+export declare function openInFileManager(filePath: string, createParentDir?: boolean): OpenInFileManagerResult;
+export {};

@@ -1,7 +1,7 @@
 {
   "name": "@bldr/open-with",
   "version": "0.1.0",
-  "description": "Open files and path in the shell, the file manager etc (using child_process.spawn)",
+  "description": "Open files and directories in the shell, the file manager etc (using child_process.spawn)",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -21,14 +21,15 @@
     "build:node": "tsc --module commonjs --outDir dist/node",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
-    "lint": "npm run lint:depcheck & npm run lint:ts-standard"
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard",
+    "test": "npm run build && mocha 'tests/test-*.js' && npm run lint"
   },
   "dependencies": {
     "@bldr/config": "*"
   },
   "devDependencies": {
     "@types/node": "14.14.7",
-    "@bldr/type-definitions": "*"
+    "@bldr/core-node": "*"
   },
   "main": "dist/node/main.js",
   "publishConfig": {

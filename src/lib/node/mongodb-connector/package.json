@@ -28,7 +28,7 @@
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "npm run build && mocha 'tests/*' && npm run lint"
+    "test": "npm run build && mocha 'tests/test-*.js' && npm run lint"
   },
   "publishConfig": {
     "access": "public"

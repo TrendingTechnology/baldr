@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.copyToTmp = exports.createTmpDir = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
+exports.copyToTmp = exports.createTmpDir = exports.getTmpDirPath = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -148,12 +148,22 @@ function getBasename(filePath) {
 }
 exports.getBasename = getBasename;
 /**
+ * Create a path like `/tmp/baldr-`. The path does not exist yet. It has
+ * to be created.
+ *
+ * @returns A file path in the temporary OS directory containing `baldr`.
+ */
+function getTmpDirPath() {
+    return path_1.default.join(os_1.default.tmpdir(), path_1.default.sep, 'baldr-');
+}
+exports.getTmpDirPath = getTmpDirPath;
+/**
  * Create a temporary directory.
  *
  * @returns The path of the created temporary directory.
  */
 function createTmpDir() {
-    return fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep, 'baldr-'));
+    return fs_1.default.mkdtempSync(getTmpDirPath());
 }
 exports.createTmpDir = createTmpDir;
 /**

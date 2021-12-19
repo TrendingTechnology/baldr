@@ -15,8 +15,6 @@ const config = getConfig()
 
 export let database: Database
 
-/* Express Rest API ***********************************************************/
-
 /**
  * Run the REST API. Listen to a TCP port.
  *

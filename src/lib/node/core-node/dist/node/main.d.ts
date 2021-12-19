@@ -62,6 +62,13 @@ export declare function findParentFile(filePath: string, fileName: string): stri
  */
 export declare function getBasename(filePath: string): string;
 /**
+ * Create a path like `/tmp/baldr-`. The path does not exist yet. It has
+ * to be created.
+ *
+ * @returns A file path in the temporary OS directory containing `baldr`.
+ */
+export declare function getTmpDirPath(): string;
+/**
  * Create a temporary directory.
  *
  * @returns The path of the created temporary directory.

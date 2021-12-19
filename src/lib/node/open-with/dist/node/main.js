@@ -14,6 +14,7 @@ const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const config_1 = require("@bldr/config");
+const path_1 = __importDefault(require("path"));
 const config = (0, config_1.getConfig)();
 /**
  * Open a file path with an executable.
@@ -43,28 +44,39 @@ function openWith(executable, filePath) {
         detached: true
     });
     subprocess.unref();
+    return subprocess;
 }
 exports.openWith = openWith;
 /**
- * Open a file path using using the in `config.mediaServer.fileManager`
+ * Open a file path with the in `config.mediaServer.fileManager`
  * specified file manager.
  *
- * @param currentPath - The current path that should be opened in the file
- *   manager.
- * @param create - Create the directory structure of the given `currentPath` in
- *   a recursive manner.
+ * @param filePath - The file path that should be opened in the file manager.
+ * @param createParentDir - Create the directory structure of the given
+ *   `filePath` in a recursive manner.
  */
-function openInFileManager(currentPath, create) {
-    const result = {};
-    if (create && !fs_1.default.existsSync(currentPath)) {
-        fs_1.default.mkdirSync(currentPath, { recursive: true });
-        result.create = true;
+function openInFileManager(filePath, createParentDir = false) {
+    let createdParentDir = false;
+    let opened = false;
+    let process;
+    if (createParentDir && !fs_1.default.existsSync(filePath)) {
+        fs_1.default.mkdirSync(filePath, { recursive: true });
+        createdParentDir = true;
     }
-    if (fs_1.default.existsSync(currentPath)) {
+    const stat = fs_1.default.statSync(filePath);
+    const parentDir = stat.isDirectory() ? path_1.default.dirname(filePath) : filePath;
+    if (fs_1.default.existsSync(parentDir)) {
         // xdg-open opens a mounted root folder in vs code.
-        openWith(config.mediaServer.fileManager, currentPath);
-        result.open = true;
+        process = openWith(config.mediaServer.fileManager, parentDir);
+        opened = true;
     }
-    return result;
+    return {
+        fileManager: config.mediaServer.fileManager,
+        filePath,
+        parentDir,
+        opened,
+        createdParentDir,
+        process
+    };
 }
 exports.openInFileManager = openInFileManager;

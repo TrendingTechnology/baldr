@@ -6,6 +6,7 @@ const fs = require('fs')
 const {
   findParentFile,
   getBasename,
+  getTmpDirPath,
   createTmpDir,
   copyToTmp
 } = require('../dist/node/main.js')
@@ -34,6 +35,10 @@ describe('Package “@bldr/core-node”', function () {
     )
   })
 
+  it('Function “getTmpDirPath()”', function () {
+    assert.ok(getTmpDirPath().includes('baldr'))
+  })
+
   it('Function “createTmpDir()”', function () {
     const dir = createTmpDir()
     const stat = fs.statSync(dir)
@@ -42,7 +47,6 @@ describe('Package “@bldr/core-node”', function () {
 
   it('Function “copyToTmp()”', function () {
     const dest = copyToTmp(__dirname, '..', 'package.json')
-    console.log(dest)
     const stat = fs.statSync(dest)
     assert.ok(fs.existsSync(dest))
     assert.ok(stat.isFile())

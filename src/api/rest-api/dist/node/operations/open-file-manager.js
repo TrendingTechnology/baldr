@@ -39,60 +39,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startRestApi = exports.database = void 0;
-// Third party packages.
-var cors_1 = __importDefault(require("cors"));
-var express_1 = __importDefault(require("express"));
-// Project packages.
-var config_1 = require("@bldr/config");
-var mongodb_connector_1 = require("@bldr/mongodb-connector");
-// Submodules.
-var seating_plan_1 = __importDefault(require("./modules/seating-plan"));
-var media_1 = __importDefault(require("./modules/media"));
-var config = (0, config_1.getConfig)();
+var path_1 = __importDefault(require("path"));
+var open_with_1 = require("@bldr/open-with");
+var open_archives_in_file_manager_1 = __importDefault(require("./open-archives-in-file-manager"));
+var utils_1 = require("../utils");
 /**
- * Run the REST API. Listen to a TCP port.
+ * Open the parent folder of a presentation, a media asset in a file explorer
+ * GUI application.
  *
- * @param port - A TCP port.
+ * @param ref - The ref of the media type.
+ * @param mediaType - At the moment `assets` and `presentation`
+ * @param openArchiveFolder - Addtionaly open the corresponding archive
+ *   folder.
+ * @param createParentDir - Create the directory structure of
+ *   the relative path in the archive in a recursive manner.
  */
-function startRestApi(port) {
+function default_1(ref, mediaType, openArchiveFolder, createParentDir, dryRun) {
+    if (dryRun === void 0) { dryRun = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var app, mongoClient, helpMessages, usedPort;
+        var absPath, parentFolder;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    app = (0, express_1.default)();
-                    return [4 /*yield*/, (0, mongodb_connector_1.connectDb)()];
+                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromRef)(ref, mediaType)];
                 case 1:
-                    mongoClient = _a.sent();
-                    exports.database = new mongodb_connector_1.Database(mongoClient.db());
-                    return [4 /*yield*/, exports.database.initialize()];
-                case 2:
-                    _a.sent();
-                    app.use((0, cors_1.default)());
-                    app.use(express_1.default.json());
-                    app.use('/seating-plan', (0, seating_plan_1.default)());
-                    app.use('/media', (0, media_1.default)());
-                    helpMessages = {};
-                    app.get('/', function (request, response) {
-                        response.json({
-                            navigation: {
-                                media: helpMessages.navigation
-                            }
-                        });
-                    });
-                    if (port == null) {
-                        usedPort = config.api.port;
+                    absPath = _a.sent();
+                    parentFolder = path_1.default.dirname(absPath);
+                    if (!dryRun) {
+                        if (openArchiveFolder) {
+                            (0, open_archives_in_file_manager_1.default)(parentFolder, createParentDir);
+                        }
+                        else {
+                            (0, open_with_1.openInFileManager)(parentFolder, createParentDir);
+                        }
                     }
-                    else {
-                        usedPort = port;
-                    }
-                    app.listen(usedPort, function () {
-                        console.log("The BALDR REST API is running on port ".concat(usedPort, "."));
-                    });
-                    return [2 /*return*/, app];
+                    return [2 /*return*/, {
+                            ref: ref,
+                            parentFolder: parentFolder,
+                            mediaType: mediaType,
+                            openArchiveFolder: openArchiveFolder,
+                            createParentDir: createParentDir
+                        }];
             }
         });
     });
 }
-exports.startRestApi = startRestApi;
+exports.default = default_1;
