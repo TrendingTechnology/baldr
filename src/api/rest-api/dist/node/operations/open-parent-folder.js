@@ -59,7 +59,7 @@ function default_1(ref, mediaType, archive, create) {
         var absPath, parentFolder, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromId)(ref, mediaType)];
+                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromRef)(ref, mediaType)];
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);

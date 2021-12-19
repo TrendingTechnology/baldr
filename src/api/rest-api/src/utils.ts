@@ -38,7 +38,7 @@ export function validateMediaType (mediaType: string): MediaType {
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export async function getAbsPathFromId (
+export async function getAbsPathFromRef (
   ref: string,
   mediaType: MediaType = 'presentations'
 ): Promise<string> {

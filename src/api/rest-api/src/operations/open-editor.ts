@@ -1,13 +1,20 @@
 import path from 'path'
 import fs from 'fs'
 
-import { StringIndexedObject } from '@bldr/type-definitions'
 import { openWith } from '@bldr/open-with'
 import { getConfig } from '@bldr/config'
 
-import { MediaType, getAbsPathFromId } from '../utils'
+import { MediaType, getAbsPathFromRef } from '../utils'
 
 const config = getConfig()
+
+interface OpenEditorResult {
+  ref: string
+  mediaType: MediaType
+  absPath: string
+  parentFolder: string
+  editor: string
+}
 
 /**
  * Open a media file specified by an ID with an editor specified in
@@ -19,16 +26,14 @@ const config = getConfig()
 export default async function (
   ref: string,
   mediaType: MediaType
-): Promise<StringIndexedObject> {
-  const absPath = await getAbsPathFromId(ref, mediaType)
+): Promise<OpenEditorResult> {
+  const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
-    return {
-      error: `Editor “${editor}” can’t be found.`
-    }
+    throw new Error(`Editor “${editor}” can’t be found.`)
   }
-  openWith(config.mediaServer.editor, parentFolder)
+  openWith(editor, parentFolder)
   return {
     ref,
     mediaType,

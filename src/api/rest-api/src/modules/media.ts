@@ -5,17 +5,13 @@ import { validateMediaType } from '../utils'
 import openParentFolder from '../operations/open-parent-folder'
 import openEditor from '../operations/open-editor'
 import updateMedia from '../operations/update-media'
-import { database, helpMessages, extractStringFromRequestQuery } from '../api'
+import { database, extractStringFromRequestQuery } from '../api'
 
 /**
  * Register the express js rest api in a giant function.
  */
 export default function (): express.Express {
   const app = express()
-
-  app.get('/', (request, response) => {
-    response.json(helpMessages.navigation)
-  })
 
   app.get('/get/presentation/by-ref', async (request, response, next) => {
     try {
@@ -128,6 +124,18 @@ export default function (): express.Express {
       } else if (query.with === 'folder') {
         response.json(await openParentFolder(ref, type, archive, create))
       }
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/open/editor', async (request, response, next) => {
+    try {
+      const ref = extractStringFromRequestQuery(request.query, 'ref')
+      const type = validateMediaType(
+        extractStringFromRequestQuery(request.query, 'type', 'presentations')
+      )
+      response.json(await openEditor(ref, type))
     } catch (error) {
       next(error)
     }

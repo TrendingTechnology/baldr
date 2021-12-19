@@ -57,17 +57,15 @@ function default_1(ref, mediaType) {
         var absPath, parentFolder, editor;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromId)(ref, mediaType)];
+                case 0: return [4 /*yield*/, (0, utils_1.getAbsPathFromRef)(ref, mediaType)];
                 case 1:
                     absPath = _a.sent();
                     parentFolder = path_1.default.dirname(absPath);
                     editor = config.mediaServer.editor;
                     if (!fs_1.default.existsSync(editor)) {
-                        return [2 /*return*/, {
-                                error: "Editor \u201C".concat(editor, "\u201D can\u2019t be found.")
-                            }];
+                        throw new Error("Editor \u201C".concat(editor, "\u201D can\u2019t be found."));
                     }
-                    (0, open_with_1.openWith)(config.mediaServer.editor, parentFolder);
+                    (0, open_with_1.openWith)(editor, parentFolder);
                     return [2 /*return*/, {
                             ref: ref,
                             mediaType: mediaType,

@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAbsPathFromId = exports.validateMediaType = void 0;
+exports.getAbsPathFromRef = exports.validateMediaType = void 0;
 // Node packages.
 var path_1 = __importDefault(require("path"));
 // Project packages.
@@ -71,7 +71,7 @@ exports.validateMediaType = validateMediaType;
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-function getAbsPathFromId(ref, mediaType) {
+function getAbsPathFromRef(ref, mediaType) {
     if (mediaType === void 0) { mediaType = 'presentations'; }
     return __awaiter(this, void 0, void 0, function () {
         var result, relPath;
@@ -97,4 +97,4 @@ function getAbsPathFromId(ref, mediaType) {
         });
     });
 }
-exports.getAbsPathFromId = getAbsPathFromId;
+exports.getAbsPathFromRef = getAbsPathFromRef;

@@ -5,7 +5,7 @@ import { StringIndexedObject } from '@bldr/type-definitions'
 
 import openArchivesInFileManager from './open-archives-in-file-manager'
 
-import { MediaType, getAbsPathFromId } from '../utils'
+import { MediaType, getAbsPathFromRef } from '../utils'
 
 /**
  * Open the parent folder of a presentation, a media asset in a file explorer
@@ -24,7 +24,7 @@ export default async function (
   archive: boolean,
   create: boolean
 ): Promise<StringIndexedObject> {
-  const absPath = await getAbsPathFromId(ref, mediaType)
+  const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
 
   let result: StringIndexedObject

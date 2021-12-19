@@ -52,9 +52,6 @@ var api_1 = require("../api");
 function default_1() {
     var _this = this;
     var app = (0, express_1.default)();
-    app.get('/', function (request, response) {
-        response.json(api_1.helpMessages.navigation);
-    });
     app.get('/get/presentation/by-ref', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var ref, _a, _b, error_1;
         return __generator(this, function (_c) {
@@ -252,14 +249,16 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/re-init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_8;
+    app.get('/open/editor', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var ref, type, _a, _b, error_8;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
+                    ref = (0, api_1.extractStringFromRequestQuery)(request.query, 'ref');
+                    type = (0, utils_1.validateMediaType)((0, api_1.extractStringFromRequestQuery)(request.query, 'type', 'presentations'));
                     _b = (_a = response).json;
-                    return [4 /*yield*/, api_1.database.reInitialize()];
+                    return [4 /*yield*/, (0, open_editor_1.default)(ref, type)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -271,14 +270,14 @@ function default_1() {
             }
         });
     }); });
-    app.get('/mgmt/update', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/re-init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_9;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, (0, update_media_1.default)(false)];
+                    return [4 /*yield*/, api_1.database.reInitialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -290,15 +289,14 @@ function default_1() {
             }
         });
     }); });
-    /* stats = statistics */
-    app.get('/stats/count', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/mgmt/update', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_10;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, api_1.database.getDocumentCounts()];
+                    return [4 /*yield*/, (0, update_media_1.default)(false)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -310,8 +308,28 @@ function default_1() {
             }
         });
     }); });
-    app.get('/stats/updates', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+    /* stats = statistics */
+    app.get('/stats/count', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_11;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, api_1.database.getDocumentCounts()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_11 = _c.sent();
+                    next(error_11);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/stats/updates', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_12;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -322,8 +340,8 @@ function default_1() {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_11 = _c.sent();
-                    next(error_11);
+                    error_12 = _c.sent();
+                    next(error_12);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

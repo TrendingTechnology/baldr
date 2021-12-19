@@ -1,14 +1,6 @@
 import express from 'express';
-import { StringIndexedObject } from '@bldr/type-definitions';
 import { Database } from '@bldr/mongodb-connector';
 export declare let database: Database;
-/**
- * This object hold jsons for displaying help messages in the browser on
- * some entry point urls.
- *
- * Update docs on the top of this file in the JSDoc block.
- */
-export declare const helpMessages: StringIndexedObject;
 /**
  * Extract a string value from the parsed query string object.
  *
