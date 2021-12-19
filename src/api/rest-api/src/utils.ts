@@ -5,20 +5,19 @@ import path from 'path'
 import { getConfig } from '@bldr/config'
 
 import { database } from './api'
-
-export type MediaType = 'assets' | 'presentations'
+import { MediaType } from './modules/media'
 
 const config = getConfig()
 
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
- * @param mediaType - At the moment `assets` and `presentation`
+ * @param mediaType - At the moment `asset` and `presentation`
  */
 export function validateMediaType (mediaType: string): MediaType {
-  const mediaTypes = ['assets', 'presentations']
+  const mediaTypes = ['asset', 'presentation']
   if (mediaType == null) {
-    return 'assets'
+    return 'asset'
   }
   if (!mediaTypes.includes(mediaType)) {
     throw new Error(
@@ -40,15 +39,15 @@ export function validateMediaType (mediaType: string): MediaType {
  */
 export async function getAbsPathFromRef (
   ref: string,
-  mediaType: MediaType = 'presentations'
+  mediaType: MediaType = 'presentation'
 ): Promise<string> {
   mediaType = validateMediaType(mediaType)
   const result = await database.db
-    .collection(mediaType)
-    .find(mediaType === 'presentations' ? { 'meta.ref': ref } : { ref: ref })
+    .collection(mediaType + 's')
+    .find(mediaType === 'presentation' ? { 'meta.ref': ref } : { ref: ref })
     .next()
   let relPath: string | undefined
-  if (mediaType === 'presentations' && typeof result.meta.path === 'string') {
+  if (mediaType === 'presentation' && typeof result.meta.path === 'string') {
     relPath = result.meta.path as string
   } else if (typeof result.path === 'string') {
     relPath = String(result.path) + '.yml'

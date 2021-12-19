@@ -8,6 +8,8 @@ import updateMedia from '../operations/update-media'
 import { database } from '../api'
 import * as query from '../query'
 
+export type MediaType = 'asset' | 'presentation'
+
 /**
  * Register the express js rest api in a giant function.
  */

@@ -1,5 +1,5 @@
 import { StringIndexedObject } from '@bldr/type-definitions';
-import { MediaType } from '../utils';
+import { MediaType } from '../modules/media';
 /**
  * Open the parent folder of a presentation, a media asset in a file explorer
  * GUI application.

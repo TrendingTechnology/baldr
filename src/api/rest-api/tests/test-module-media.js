@@ -110,7 +110,7 @@ describe('media', function () {
           params: {
             'dry-run': true,
             ref: 'Marmotte',
-            type: 'presentations'
+            type: 'presentation'
           }
         })
 
@@ -129,7 +129,7 @@ describe('media', function () {
           params: {
             'dry-run': true,
             ref: 'IN_Cembalo',
-            type: 'assets'
+            type: 'asset'
           }
         })
         assert.strictEqual(result.data.ref, 'IN_Cembalo')

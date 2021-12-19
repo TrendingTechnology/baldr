@@ -4,7 +4,8 @@ import fs from 'fs'
 import { openWith } from '@bldr/open-with'
 import { getConfig } from '@bldr/config'
 
-import { MediaType, getAbsPathFromRef } from '../utils'
+import { getAbsPathFromRef } from '../utils'
+import { MediaType } from '../modules/media'
 
 const config = getConfig()
 

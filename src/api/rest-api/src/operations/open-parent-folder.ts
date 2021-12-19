@@ -5,7 +5,8 @@ import { StringIndexedObject } from '@bldr/type-definitions'
 
 import openArchivesInFileManager from './open-archives-in-file-manager'
 
-import { MediaType, getAbsPathFromRef } from '../utils'
+import { getAbsPathFromRef } from '../utils'
+import { MediaType } from '../modules/media'
 
 /**
  * Open the parent folder of a presentation, a media asset in a file explorer

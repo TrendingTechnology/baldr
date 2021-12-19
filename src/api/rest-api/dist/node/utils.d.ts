@@ -1,8 +1,8 @@
-export declare type MediaType = 'assets' | 'presentations';
+import { MediaType } from './modules/media';
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
- * @param mediaType - At the moment `assets` and `presentation`
+ * @param mediaType - At the moment `asset` and `presentation`
  */
 export declare function validateMediaType(mediaType: string): MediaType;
 /**

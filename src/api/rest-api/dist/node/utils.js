@@ -49,12 +49,12 @@ var config = (0, config_1.getConfig)();
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
- * @param mediaType - At the moment `assets` and `presentation`
+ * @param mediaType - At the moment `asset` and `presentation`
  */
 function validateMediaType(mediaType) {
-    var mediaTypes = ['assets', 'presentations'];
+    var mediaTypes = ['asset', 'presentation'];
     if (mediaType == null) {
-        return 'assets';
+        return 'asset';
     }
     if (!mediaTypes.includes(mediaType)) {
         throw new Error("Unkown media type \u201C".concat(mediaType, "\u201D! Allowed media types are: ").concat(mediaTypes.join(', ')));
@@ -72,7 +72,7 @@ exports.validateMediaType = validateMediaType;
  * @param mediaType - At the moment `assets` and `presentation`
  */
 function getAbsPathFromRef(ref, mediaType) {
-    if (mediaType === void 0) { mediaType = 'presentations'; }
+    if (mediaType === void 0) { mediaType = 'presentation'; }
     return __awaiter(this, void 0, void 0, function () {
         var result, relPath;
         return __generator(this, function (_a) {
@@ -80,12 +80,12 @@ function getAbsPathFromRef(ref, mediaType) {
                 case 0:
                     mediaType = validateMediaType(mediaType);
                     return [4 /*yield*/, api_1.database.db
-                            .collection(mediaType)
-                            .find(mediaType === 'presentations' ? { 'meta.ref': ref } : { ref: ref })
+                            .collection(mediaType + 's')
+                            .find(mediaType === 'presentation' ? { 'meta.ref': ref } : { ref: ref })
                             .next()];
                 case 1:
                     result = _a.sent();
-                    if (mediaType === 'presentations' && typeof result.meta.path === 'string') {
+                    if (mediaType === 'presentation' && typeof result.meta.path === 'string') {
                         relPath = result.meta.path;
                     }
                     else if (typeof result.path === 'string') {

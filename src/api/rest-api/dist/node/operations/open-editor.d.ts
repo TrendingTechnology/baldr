@@ -1,4 +1,4 @@
-import { MediaType } from '../utils';
+import { MediaType } from '../modules/media';
 interface OpenEditorResult {
     ref: string;
     mediaType: MediaType;
