@@ -25,7 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
-const media_server_1 = require("@bldr/rest-api");
+const rest_api_1 = require("@bldr/rest-api");
 const log = __importStar(require("@bldr/log"));
 /**
  * Create a relative path in different base paths. Open this relative paths in
@@ -51,6 +51,6 @@ function action(filePath, cmdObj) {
         filePath = presParentDir;
         log.info('Open parent folder instead');
     }
-    (0, media_server_1.openArchivesInFileManager)(filePath, cmdObj.createDirs);
+    (0, rest_api_1.openArchivesInFileManager)(filePath, cmdObj.createDirs);
 }
 module.exports = action;

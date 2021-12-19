@@ -8,14 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const media_server_1 = require("@bldr/rest-api");
+const rest_api_1 = require("@bldr/rest-api");
 function action(port, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((opts === null || opts === void 0 ? void 0 : opts.restart) != null && (opts === null || opts === void 0 ? void 0 : opts.restart)) {
-            (0, media_server_1.restart)();
+            (0, rest_api_1.restart)();
         }
         else {
-            yield (0, media_server_1.start)(port);
+            yield (0, rest_api_1.start)(port);
         }
     });
 }
