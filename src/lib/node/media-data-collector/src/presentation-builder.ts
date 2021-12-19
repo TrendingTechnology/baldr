@@ -85,11 +85,15 @@ export class PresentationBuilder extends Builder {
     this.importYamlFile(this.absPath, data)
 
     if (data.meta == null) {
-      throw new Error(`The presentation “${this.absPath}” needs a property “meta”.`)
+      throw new Error(
+        `The presentation “${this.absPath}” needs a property named “meta”.`
+      )
     }
 
     if (data.slides == null) {
-      throw new Error(`The presentation “${this.absPath}” needs a property “slide”.`)
+      throw new Error(
+        `The presentation “${this.absPath}” needs a property named “slide”.`
+      )
     }
 
     this.data = {
@@ -103,15 +107,23 @@ export class PresentationBuilder extends Builder {
   public enrichMetaProp (): PresentationBuilder {
     const title = new DeepTitle(this.absPath)
     const meta = title.generatePresetationMeta()
-
+    if (this.data.meta.ref == null && meta.ref != null) {
+      this.data.meta.ref = meta.ref
+    }
+    if (this.data.meta.title == null && meta.title != null) {
+      this.data.meta.title = meta.title
+    }
     if (this.data.meta.subtitle == null && meta.subtitle != null) {
       this.data.meta.subtitle = meta.subtitle
     }
-    if (this.data.meta.curriculum == null && meta.curriculum != null) {
-      this.data.meta.curriculum = meta.curriculum
+    if (this.data.meta.subject == null && meta.subject != null) {
+      this.data.meta.subject = meta.subject
     }
     if (this.data.meta.grade == null && meta.grade != null) {
       this.data.meta.grade = meta.grade
+    }
+    if (this.data.meta.curriculum == null && meta.curriculum != null) {
+      this.data.meta.curriculum = meta.curriculum
     }
     return this
   }
