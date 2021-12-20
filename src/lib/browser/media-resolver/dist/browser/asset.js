@@ -51,7 +51,7 @@ export class ClientMediaAsset {
         }
     }
     get previewHttpUrl() {
-        if (this.yaml.previewImage) {
+        if (this.yaml.hasPreview) {
             return `${this.httpUrl}_preview.jpg`;
         }
     }

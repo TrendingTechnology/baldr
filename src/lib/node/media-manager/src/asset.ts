@@ -407,7 +407,7 @@ export async function convertAsset (
     // image
   } else if (mimeType === 'image') {
     let size = '2000x2000>'
-    if (cmdObj.previewImage != null) {
+    if (cmdObj.hasPreview != null) {
       outputFile = filePath.replace(`.${extension}`, '_preview.jpg')
       size = '1000x1000>'
     }

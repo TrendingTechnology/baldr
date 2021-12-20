@@ -25,7 +25,7 @@
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
     "patch:jsdom": "sed -i 's#// <- ##' ./dist/node/html-elements.js",
-    "test:all": "npm run build && mocha 'tests/*.js'"
+    "test": "npm run build && mocha 'tests/*.js'"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
