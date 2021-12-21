@@ -25,30 +25,55 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import {
+  Vue,
+  Component,
+  createNamespacedHelpers
+} from '@bldr/vue-packages-bundler'
 import { registerShortcuts } from '@bldr/menu-adapter'
 import { styleConfigurator } from '@bldr/style-configurator'
 
-import { hideMouseAfterSec } from '@/lib.js'
-import { receiveSocketMessage } from '@/remote-control.js'
-import actions from '@/actions.js'
+import { receiveSocketMessage } from '../../remote-control.js'
+import actions from '../../actions.js'
 
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
-export default {
-  name: 'MainApp',
-  computed: {
-    ...mapGetters(['slide', 'presentation'])
-  },
-  methods: {
-    ...mapActions([
-      'setSlideNextOrPrevious',
-      'setStepNextOrPrevious',
-      'setSlideOrStepNextOrPrevious'
-    ])
-  },
-  mounted: function () {
+/**
+ * Hide the mouse after x seconds of inactivity.
+ */
+export function hideMouseAfterSec (seconds: number = 5): void {
+  let mouseTimer = null
+  let cursorVisible = true
+
+  function disappearCursor () {
+    mouseTimer = null
+    document.body.style.cursor = 'none'
+    cursorVisible = false
+  }
+
+  document.onmousemove = function () {
+    if (mouseTimer) {
+      window.clearTimeout(mouseTimer)
+    }
+    if (!cursorVisible) {
+      document.body.style.cursor = 'default'
+      cursorVisible = true
+    }
+    mouseTimer = window.setTimeout(disappearCursor, seconds * 1000)
+  }
+}
+
+@Component({
+  computed: mapGetters(['slide', 'presentation']),
+  methods: mapActions([
+    'setSlideNextOrPrevious',
+    'setStepNextOrPrevious',
+    'setSlideOrStepNextOrPrevious'
+  ])
+})
+export default class MainApp extends Vue {
+  mounted () {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
     // see preload.js
     if (window.api != null) {

@@ -1,6 +1,6 @@
 <template>
   <div class="vc_recent_presentations">
-    <section  v-if="recent.length">
+    <section v-if="recent.length">
       <h1>Kürzlich geöffnete Präsentationen</h1>
       <ul>
         <li v-for="(presInfo, index) in recent" :key="index">
@@ -15,17 +15,21 @@
       </ul>
     </section>
   </div>
-
 </template>
 
-<script>
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
+<script lang="ts">
+import {
+  createNamespacedHelpers,
+  Vue,
+  Component
+} from '@bldr/vue-packages-bundler'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp/recent')
 
-export default {
-  name: 'RecentPresentations',
+@Component({
   computed: mapGetters(['recent']),
-  methods: mapActions(['readFromLocalStorage']),
+  methods: mapActions(['readFromLocalStorage'])
+})
+export default class RecentPresentations extends Vue {
   mounted () {
     if (!this.recent.length) {
       this.readFromLocalStorage()

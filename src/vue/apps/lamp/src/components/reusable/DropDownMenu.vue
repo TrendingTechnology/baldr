@@ -27,7 +27,7 @@ export default {
 
 <style lang="scss">
 :root {
-  --bar-font-family: "Alegreya Sans";
+  --bar-font-family: 'Alegreya Sans';
   --bar-menu-min-width: 400px;
 }
 </style>

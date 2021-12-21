@@ -84,24 +84,3 @@ export default class TitleLink extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-// .vc_title_link {
-//   &.level-1 .title {
-//     font-family: $font-family-sans;
-//     font-size: 1.6em;
-//     font-weight: bold;
-//   }
-
-//   &.level-2 .title {
-//     font-family: $font-family-sans;
-//     font-weight: bold;
-//     font-size: 1.4em;
-//   }
-
-//   &.level-3 .title {
-//     font-family: $font-family-sans;
-//     font-size: 1.2em;
-//   }
-// }
-</style>

@@ -5,23 +5,28 @@
       :rel-path="presentation.parentDir"
       :not-last="true"
     />
-    <h1 v-html="presentation.title"/>
-    <h2 v-if="presentation.subtitle" v-html="presentation.subtitle"/>
+    <h1 v-html="presentation.title" />
+    <h2 v-if="presentation.subtitle" v-html="presentation.subtitle" />
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
+import {
+  createNamespacedHelpers,
+  Vue,
+  Component
+} from '@bldr/vue-packages-bundler'
+
 const { mapGetters } = createNamespacedHelpers('lamp')
 
-export default {
-  name: 'PresentationTitle',
+@Component({
   components: {
     TitlesBreadCrumbs
   },
   computed: {
     ...mapGetters(['presentation'])
   }
-}
+})
+export default class PresentationTitle extends Vue {}
 </script>

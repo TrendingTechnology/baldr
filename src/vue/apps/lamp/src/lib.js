@@ -24,33 +24,6 @@ export function validateUri (uri) {
 }
 
 /**
- * Hide the mouse after x seconds of inactivity.
- *
- * @param {Number} seconds
- */
-export function hideMouseAfterSec (seconds = 5) {
-  let mouseTimer = null
-  let cursorVisible = true
-
-  function disappearCursor () {
-    mouseTimer = null
-    document.body.style.cursor = 'none'
-    cursorVisible = false
-  }
-
-  document.onmousemove = function () {
-    if (mouseTimer) {
-      window.clearTimeout(mouseTimer)
-    }
-    if (!cursorVisible) {
-      document.body.style.cursor = 'default'
-      cursorVisible = true
-    }
-    mouseTimer = window.setTimeout(disappearCursor, seconds * 1000)
-  }
-}
-
-/**
  * Search for SVG files in the HTML tree and warn if there are width and
  * height attributes set. With width and height attributes SVGs could
  * not resized easily in IMG tags. The slide preview depends on resizeable

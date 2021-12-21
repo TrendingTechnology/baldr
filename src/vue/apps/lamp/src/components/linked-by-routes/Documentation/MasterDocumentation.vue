@@ -6,12 +6,17 @@
       <h2>Props</h2>
 
       <ul class="content">
-        <li
-          v-for="(spec, name) in props"
-          :key="name"
-        >
+        <li v-for="(spec, name) in props" :key="name">
           <code>{{ name }}</code>
-          <span v-if="spec.description" v-html="': ' + convertMarkdownToHtml(spec.description) + formatPropSpec(spec)">:</span>
+          <span
+            v-if="spec.description"
+            v-html="
+              ': ' +
+                convertMarkdownToHtml(spec.description) +
+                formatPropSpec(spec)
+            "
+            >:</span
+          >
         </li>
       </ul>
     </section>
@@ -19,15 +24,20 @@
     <section v-if="master.example">
       <h2>
         Example
-        <router-link :to="{ name: 'slides-preview', params: { presRef: `EP_master_${masterName}` } }">
-          <material-icon name="presentation"/>
+        <router-link
+          :to="{
+            name: 'slides-preview',
+            params: { presRef: `EP_master_${masterName}` }
+          }"
+        >
+          <material-icon name="presentation" />
         </router-link>
       </h2>
 
       <pre><code>{{ master.exampleClean }}</code></pre>
     </section>
 
-    <section v-html="documentation"/>
+    <section v-html="documentation" />
   </div>
 </template>
 
@@ -84,7 +94,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_master_documentation {
-    font-size: 1.4vw;
-  }
+.vc_master_documentation {
+  font-size: 1.4vw;
+}
 </style>

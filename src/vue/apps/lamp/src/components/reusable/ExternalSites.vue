@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,
@@ -55,73 +55,76 @@ import {
   formatYoutubeUrl
 } from '@bldr/core-browser'
 
-export default {
-  name: 'ExternalSites',
-  props: {
-    asset: {
-      type: Object
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+
+@Component
+export default class ExternalSites extends Vue {
+  @Prop({
+    type: Object
+  })
+  asset: any
+
+  get yaml (): any {
+    if (this.asset.yaml != null) {
+      return this.asset.yaml
+    } else {
+      return this.asset
     }
-  },
-  computed: {
-    yaml () {
-      if (this.asset.yaml != null) {
-        return this.asset.yaml
-      } else {
-        return this.asset
-      }
-    },
-    imslp () {
-      if (this.yaml.imslp) {
-        return formatImslpUrl(this.yaml.imslp)
-      }
-      return null
-    },
-    musicbrainzRecordingId () {
-      if (this.yaml.musicbrainzRecordingId) {
-        return formatMusicbrainzRecordingUrl(this.yaml.musicbrainzRecordingId)
-      }
-      return null
-    },
-    musicbrainzWorkId () {
-      if (this.yaml.musicbrainzWorkId) {
-        return formatMusicbrainzWorkUrl(this.yaml.musicbrainzWorkId)
-      }
-      return null
-    },
-    wikicommons () {
-      if (this.yaml.wikicommons) {
-        return formatWikicommonsUrl(this.yaml.wikicommons)
-      }
-      for (const prop in this.yaml) {
-        const value = this.yaml[prop]
-        if (
-          value &&
-          typeof value === 'string' &&
-          value.match(/^wikicommons:/)
-        ) {
-          return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
-        }
-      }
-      return null
-    },
-    wikidata () {
-      if (this.yaml.wikidata) {
-        return formatWikidataUrl(this.yaml.wikidata)
-      }
-      return null
-    },
-    wikipedia () {
-      if (this.yaml.wikipedia) {
-        return formatWikipediaUrl(this.yaml.wikipedia)
-      }
-      return null
-    },
-    youtube () {
-      if (this.yaml.youtube) {
-        return formatYoutubeUrl(this.yaml.youtube)
-      }
-      return null
+  }
+
+  get imslp () {
+    if (this.yaml.imslp) {
+      return formatImslpUrl(this.yaml.imslp)
     }
+    return null
+  }
+
+  get musicbrainzRecordingId () {
+    if (this.yaml.musicbrainzRecordingId) {
+      return formatMusicbrainzRecordingUrl(this.yaml.musicbrainzRecordingId)
+    }
+    return null
+  }
+
+  get musicbrainzWorkId () {
+    if (this.yaml.musicbrainzWorkId) {
+      return formatMusicbrainzWorkUrl(this.yaml.musicbrainzWorkId)
+    }
+    return null
+  }
+
+  get wikicommons () {
+    if (this.yaml.wikicommons) {
+      return formatWikicommonsUrl(this.yaml.wikicommons)
+    }
+    for (const prop in this.yaml) {
+      const value = this.yaml[prop]
+      if (value && typeof value === 'string' && value.match(/^wikicommons:/)) {
+        return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
+      }
+    }
+    return null
+  }
+
+  get wikidata () {
+    if (this.yaml.wikidata) {
+      return formatWikidataUrl(this.yaml.wikidata)
+    }
+    return null
+  }
+
+  get wikipedia () {
+    if (this.yaml.wikipedia) {
+      return formatWikipediaUrl(this.yaml.wikipedia)
+    }
+    return null
+  }
+
+  get youtube () {
+    if (this.yaml.youtube) {
+      return formatYoutubeUrl(this.yaml.youtube)
+    }
+    return null
   }
 }
 </script>
