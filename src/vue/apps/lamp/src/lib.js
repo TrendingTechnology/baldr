@@ -23,15 +23,6 @@ export function validateUri (uri) {
   return uri
 }
 
-export async function openPresentationByRawYaml (rawYamlString) {
-  vue.$media.player.stop()
-  vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('lamp/openPresentation', { rawYamlString })
-  if (vue.$route.name !== 'slide') {
-    vue.$router.push({ name: 'slide' })
-  }
-}
-
 /**
  * Hide the mouse after x seconds of inactivity.
  *
