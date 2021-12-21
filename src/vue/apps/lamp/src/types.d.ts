@@ -22,6 +22,17 @@ declare global {
   const config: Configuration
 
   /**
+   * UNIX timestamp from `new Date().getTime()`
+   */
+  const compilationTime: number
+
+  const gitHead: {
+    short: string
+    long: string
+    isDirty: boolean
+  }
+
+  /**
    * Into string converted presentation examples.
    */
   const rawYamlExamples: {

@@ -42,7 +42,7 @@
 
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
-
+import { Route, VueRouter, NavigationGuardNext } from '@bldr/vue-packages-bundler'
 import store from '@/store/index.js'
 import { router } from '@/routes'
 
@@ -53,21 +53,25 @@ import { router } from '@/routes'
  *
  * @param {module:@bldr/lamp/routing/route} route
  */
-function setDocumentTitleByRoute (route) {
+function setDocumentTitleByRoute (route: Route) {
   const slide = store.getters['lamp/slide']
   const presentation = store.getters['lamp/presentation']
 
   const getBuildTimeTitle = function () {
     const buildTime = new Date(compilationTime).toLocaleString()
     let lastCommit = gitHead.short
-    if (gitHead.dirty) {
+    if (gitHead.isDirty) {
       lastCommit = `${lastCommit}-dirty`
     }
     return `Baldr Lamp (${buildTime} ${lastCommit})`
   }
 
   let title
-  if (slide && slide.title && (route.name === 'slide' || route.name === 'slide-step-no')) {
+  if (
+    slide &&
+    slide.title &&
+    (route.name === 'slide' || route.name === 'slide-step-no')
+  ) {
     title = `Nr. ${slide.no} [${slide.master.title}]: ${slide.title} (${presentation.title})`
   } else if (route.name === 'home') {
     title = getBuildTimeTitle()
@@ -83,16 +87,26 @@ function setDocumentTitleByRoute (route) {
 /**
  * @param {module:@bldr/lamp/routing~route} router
  */
-export function installDocumentTitleUpdater (router) {
-  router.afterEach((to, from) => {
+export function installDocumentTitleUpdater (router: VueRouter) {
+  router.afterEach((to: Route, from: Route) => {
     setDocumentTitleByRoute(to)
   })
+}
+
+interface RouterView {
+  slideNo: string
+  stepNo: string
+}
+
+interface RouterViews {
+  public: RouterView
+  speaker: RouterView
 }
 
 /**
  * @type {Object}
  */
-export const routerViews = {
+export const routerViews: RouterViews = {
   public: {
     slideNo: 'slide',
     stepNo: 'slide-step-no'
@@ -103,17 +117,21 @@ export const routerViews = {
   }
 }
 
+interface RouterViewsCounterParts {
+  [key: string]: string
+}
+
 /**
  *
  * @param {module:@bldr/lamp/routing.routerViews} routerViews
  */
-function generateCounterParts (routerViews) {
-  const counterParts = {}
+function generateCounterParts (routerViews: RouterViews) {
+  const counterParts: RouterViewsCounterParts = {}
   for (const viewName in routerViews) {
     if (viewName === 'public') {
       counterParts[routerViews[viewName].slideNo] = routerViews.speaker.slideNo
       counterParts[routerViews[viewName].stepNo] = routerViews.speaker.stepNo
-    } else {
+    } else if (viewName === 'speaker') {
       counterParts[routerViews[viewName].slideNo] = routerViews.public.slideNo
       counterParts[routerViews[viewName].stepNo] = routerViews.public.stepNo
     }
@@ -129,23 +147,25 @@ const counterParts = generateCounterParts(routerViews)
 /**
  * @param {module:@bldr/lamp/routing~route} route
  */
-function isSpeakerRoute (route) {
-  return speakerRouteNames.includes(route.name)
+function isSpeakerRoute (route: Route): boolean {
+  if (route.name != null) {
+    return speakerRouteNames.includes(route.name)
+  }
+  return false
 }
 
 /**
  * If the route is `public` turn it into `speaker` and vice versa.
  *
- * @param {module:@bldr/lamp/routing~route} route
- *
  * @returns {Object} A deep copy of the route object.
  */
-export function switchRouterView (route) {
-  const newRoute = {}
+export function switchRouterView (route: Route): Route | undefined {
+  if (route.name == null) return
+  const newRoute: any = {}
   newRoute.name = counterParts[route.name]
   newRoute.params = Object.assign({}, route.params)
   newRoute.query = Object.assign({}, route.query)
-  return newRoute
+  return newRoute as Route
 }
 
 /**
@@ -163,7 +183,8 @@ export function getViewFromRoute () {
  * @param {module:@bldr/lamp/routing~vm} vm
  * @param {String} presRef - Presentation ID.
  */
-async function loadPresentationById (vm, presRef) {
+async function loadPresentationById (vm: Vue, presRef: string) {
+  console.log(presRef)
   vm.$media.player.stop()
   vm.$store.dispatch('media/clear')
   vm.$store.commit('lamp/setPresentation', null)
@@ -175,7 +196,10 @@ async function loadPresentationById (vm, presRef) {
     if (masterMatch) {
       const masterName = masterMatch[1]
       const master = masterCollection.get(masterName)
-      await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString: master.example })
+      await vm.$store.dispatch('lamp/openPresentation', {
+        vm,
+        rawYamlString: master.example
+      })
       return
     }
 
@@ -185,7 +209,8 @@ async function loadPresentationById (vm, presRef) {
       const commonName = commonMatch[1]
       await vm.$store.dispatch('lamp/openPresentation', {
         vm,
-        rawYamlString: vm.$store.getters['lamp/rawYamlExamples'].common[commonName]
+        rawYamlString:
+          vm.$store.getters['lamp/rawYamlExamples'].common[commonName]
       })
       return
     }
@@ -200,15 +225,19 @@ async function loadPresentationById (vm, presRef) {
  * @param {module:@bldr/lamp/routing~vm} vm
  * @param {module:@bldr/lamp/routing~route} route
  */
-async function loadPresentationByRoute (vm, route) {
+async function loadPresentationByRoute (vm: Vue, route: Route) {
   try {
     if (route.params.presRef) {
       const presentation = vm.$store.getters['lamp/presentation']
-      if (!presentation || (presentation && presentation.ref !== route.params.presRef)) {
+      if (
+        !presentation ||
+        (presentation && presentation.ref !== route.params.presRef)
+      ) {
         await loadPresentationById(vm, route.params.presRef)
       }
       if (route.params.slideNo) {
-        if (route.params.stepNo) route.params.stepNo = parseInt(route.params.stepNo)
+        if (route.params.stepNo)
+          route.params.stepNo = parseInt(route.params.stepNo)
         vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)
       }
     }
@@ -217,11 +246,7 @@ async function loadPresentationByRoute (vm, route) {
   }
 }
 
-/**
- * @param {module:@bldr/lamp/routing~vm} vm
- * @param {module:@bldr/lamp/routing~route} route
- */
-async function actOnRouteChange (vm, route) {
+async function actOnRouteChange (vm: Vue, route: Route) {
   await loadPresentationByRoute(vm, route)
   if (isSpeakerRoute(route)) {
     const publicRoute = switchRouterView(route)
@@ -240,13 +265,13 @@ async function actOnRouteChange (vm, route) {
 export const routerGuards = {
   // To be able to enter a presentation per HTTP link on a certain slide.
   // Without this hook there are webpack errors.
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter (to: Route, from: Route, next: NavigationGuardNext) {
     next(vm => {
       actOnRouteChange(vm, to)
     })
   },
   // To be able to navigate throught the slide (only the params) are changing.
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
     actOnRouteChange(this, to)
     // To update the URL in the browser URL textbox.
     next()

@@ -1,4 +1,4 @@
-export { CreateElement, VNode, VNodeData } from 'vue';
+export { CreateElement, VNode, VNodeData, VueConstructor } from 'vue';
 export { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { Vue as VueAlias } from 'vue-property-decorator';
 export { VueAlias };

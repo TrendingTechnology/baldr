@@ -23,7 +23,7 @@ import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
 import { router } from '@/routes'
-import { routerViews } from '@/routing.js'
+import { routerViews } from '@/routing'
 import vm from '@/main'
 
 /**

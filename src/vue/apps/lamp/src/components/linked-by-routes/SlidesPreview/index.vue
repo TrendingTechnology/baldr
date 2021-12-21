@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { routerGuards } from '@/routing.js'
+import { routerGuards } from '@/routing'
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'

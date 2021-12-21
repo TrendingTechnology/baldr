@@ -17,7 +17,7 @@
 
 <script>
 import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
-import { getViewFromRoute } from '@/routing.js'
+import { getViewFromRoute } from '@/routing'
 
 export default {
   name: 'SlidePreview',

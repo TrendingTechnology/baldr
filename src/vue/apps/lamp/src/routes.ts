@@ -5,7 +5,7 @@
  */
 
 import { VueRouter, RouteConfig, Vue } from '@bldr/vue-packages-bundler'
-import { installDocumentTitleUpdater } from '@/routing.js'
+import { installDocumentTitleUpdater } from '@/routing'
 
 // Components.
 import AboutPage from '@/components/linked-by-routes/AboutPage.vue'

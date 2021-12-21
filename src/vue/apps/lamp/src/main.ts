@@ -232,6 +232,8 @@ const vm = new Vue({
 
 export default vm
 
+vm.$router
+
 // To be able to store Vue component instances. If we store a vue component
 // instance in a vuex store there were many errors raised.
 export const customStore = {}

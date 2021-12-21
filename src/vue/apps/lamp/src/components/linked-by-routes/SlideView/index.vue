@@ -13,7 +13,7 @@
 
 <script>
 import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
-import { routerGuards } from '@/routing.js'
+import { routerGuards } from '@/routing'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 
