@@ -34,8 +34,8 @@ async function clearCache () {
   if (win != null) {
     await win.webContents.session.clearCache()
     await win.webContents.session.clearStorageData()
-    // $HOME/.config/@bldr/lamp
     // console.log(win.webContents.session.getStoragePath())
+    // $HOME/.config/@bldr/lamp
   }
 }
 
