@@ -19,24 +19,57 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+/**
+ * Sometimes some images are not updated. We have to delete the HTTP cache.
+ *
+ * Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
+ *
+ * Tool to monitor file changes in a directory:
+ *
+ * ```
+ * inotifywait -m -r $HOME/.config/@bldr/lamp
+ * ```
+ */
+async function clearCache () {
+  if (win != null) {
+    await win.webContents.session.clearCache()
+    await win.webContents.session.clearStorageData()
+    // $HOME/.config/@bldr/lamp
+    // console.log(win.webContents.session.getStoragePath())
+  }
+}
+
 contextMenu({
-  prepend: (defaultActions, params, browserWindow) => [
-    {
-      label: 'Rainbow',
-      visible: params.mediaType === 'image'
-    },
-    {
-      label: 'Search Google for “{selection}”',
-      visible: params.selectionText.trim().length > 0,
-      click: () => {
-        shell.openExternal(
-          `https://google.com/search?q=${encodeURIComponent(
-            params.selectionText
-          )}`
-        )
+  prepend (defaultActions, params, browserWindow) {
+    console.log(defaultActions)
+    return [
+      {
+        label: 'Cache leeren',
+        click: () => {
+          clearCache()
+        }
+      },
+      {
+        label: 'App neu starten',
+        click: () => {
+          // https://www.electronjs.org/docs/latest/api/app#appexitexitcode
+          app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
+          app.exit(0)
+        }
+      },
+      {
+        label: 'Google-Suche nach “{selection}”',
+        visible: params.selectionText.trim().length > 0,
+        click: () => {
+          shell.openExternal(
+            `https://google.com/search?q=${encodeURIComponent(
+              params.selectionText
+            )}`
+          )
+        }
       }
-    }
-  ]
+    ]
+  }
 })
 
 const disposeContextMenu = contextMenu()
@@ -83,12 +116,17 @@ app.on('activate', () => {
   }
 })
 
+app.on('before-quit', () => {
+  clearCache()
+})
+
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     try {
       await installExtension(VUEJS_DEVTOOLS)
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+      const error = e as Error
+      console.error('Vue Devtools failed to install:', error.toString())
     }
   }
   createWindow()
