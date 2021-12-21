@@ -7,51 +7,17 @@
  * @module @bldr/lamp/routing
  */
 
-/**
- * The route object of the Vue Router package.
- *
- * @see {@link https://router.vuejs.org/api/#the-route-object Vue Router Api documentation}
- *
- * @typedef route
- */
-
-/**
- * An instance of the Vue Router.
- *
- * @see {@link https://router.vuejs.org/api/#router-construction-options Vue Router Api documentation}
- *
- * @typedef router
- */
-
-/**
- * A Vue instance. A Vue instance is essentially a ViewModel as defined in the
- * MVVM pattern, hence the variable name `vm` you will see throughout the docs.
- *
- * @see {@link https://v1.vuejs.org/guide/instance.html}
- *
- * @typedef vm
- */
-
-/**
- * Routes can be divided into two categories: A public route (visible for
- * the audience) and speaker router (visible only for the speaker). Possible
- * values: `public` or `speaker`.
- *
- * @typedef {string} view
- */
-
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
-import { Route, VueRouter, NavigationGuardNext } from '@bldr/vue-packages-bundler'
+import {
+  Route,
+  NavigationGuardNext
+} from '@bldr/vue-packages-bundler'
 import store from '@/store/index.js'
 import { router } from '@/routes'
 
-/* globals document gitHead compilationTime */
-
 /**
  * Set the document title by the current route.
- *
- * @param {module:@bldr/lamp/routing/route} route
  */
 function setDocumentTitleByRoute (route: Route) {
   const slide = store.getters['lamp/slide']
@@ -84,10 +50,7 @@ function setDocumentTitleByRoute (route: Route) {
   document.title = shortenText(title, { stripTags: true, maxLength: 125 })
 }
 
-/**
- * @param {module:@bldr/lamp/routing~route} router
- */
-export function installDocumentTitleUpdater (router: VueRouter) {
+export function installDocumentTitleUpdater (router: any) {
   router.afterEach((to: Route, from: Route) => {
     setDocumentTitleByRoute(to)
   })
@@ -103,9 +66,6 @@ interface RouterViews {
   speaker: RouterView
 }
 
-/**
- * @type {Object}
- */
 export const routerViews: RouterViews = {
   public: {
     slideNo: 'slide',
@@ -121,10 +81,6 @@ interface RouterViewsCounterParts {
   [key: string]: string
 }
 
-/**
- *
- * @param {module:@bldr/lamp/routing.routerViews} routerViews
- */
 function generateCounterParts (routerViews: RouterViews) {
   const counterParts: RouterViewsCounterParts = {}
   for (const viewName in routerViews) {
@@ -139,14 +95,10 @@ function generateCounterParts (routerViews: RouterViews) {
   return counterParts
 }
 
-// const publicRouteNames = Object.values(routerViews.public)
 const speakerRouteNames = Object.values(routerViews.speaker)
 
 const counterParts = generateCounterParts(routerViews)
 
-/**
- * @param {module:@bldr/lamp/routing~route} route
- */
 function isSpeakerRoute (route: Route): boolean {
   if (route.name != null) {
     return speakerRouteNames.includes(route.name)
@@ -157,7 +109,7 @@ function isSpeakerRoute (route: Route): boolean {
 /**
  * If the route is `public` turn it into `speaker` and vice versa.
  *
- * @returns {Object} A deep copy of the route object.
+ * @returns A deep copy of the route object.
  */
 export function switchRouterView (route: Route): Route | undefined {
   if (route.name == null) return
@@ -168,9 +120,6 @@ export function switchRouterView (route: Route): Route | undefined {
   return newRoute as Route
 }
 
-/**
- * @returns {module:@bldr/lamp/routing~view}
- */
 export function getViewFromRoute () {
   const name = router.currentRoute.name
   if (name === 'speaker-view' || name === 'speaker-view-step-no') {
@@ -179,11 +128,7 @@ export function getViewFromRoute () {
   return 'public'
 }
 
-/**
- * @param {module:@bldr/lamp/routing~vm} vm
- * @param {String} presRef - Presentation ID.
- */
-async function loadPresentationById (vm: Vue, presRef: string) {
+async function loadPresentationById (vm: any, presRef: string) {
   console.log(presRef)
   vm.$media.player.stop()
   vm.$store.dispatch('media/clear')
@@ -195,7 +140,7 @@ async function loadPresentationById (vm: Vue, presRef: string) {
     const masterMatch = presRef.match(/^EP_master_(.*)$/)
     if (masterMatch) {
       const masterName = masterMatch[1]
-      const master = masterCollection.get(masterName)
+      const master = masterCollection.get(masterName) as any
       await vm.$store.dispatch('lamp/openPresentation', {
         vm,
         rawYamlString: master.example
@@ -221,11 +166,8 @@ async function loadPresentationById (vm: Vue, presRef: string) {
 
 /**
  * Load presentation and set navigation list numbers.
- *
- * @param {module:@bldr/lamp/routing~vm} vm
- * @param {module:@bldr/lamp/routing~route} route
  */
-async function loadPresentationByRoute (vm: Vue, route: Route) {
+async function loadPresentationByRoute (vm: any, route: Route) {
   try {
     if (route.params.presRef) {
       const presentation = vm.$store.getters['lamp/presentation']
@@ -235,9 +177,10 @@ async function loadPresentationByRoute (vm: Vue, route: Route) {
       ) {
         await loadPresentationById(vm, route.params.presRef)
       }
-      if (route.params.slideNo) {
-        if (route.params.stepNo)
-          route.params.stepNo = parseInt(route.params.stepNo)
+      if (route.params.slideNo != null) {
+        if (route.params.stepNo != null) {
+          route.params.stepNo = route.params.stepNo
+        }
         vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)
       }
     }
@@ -246,7 +189,7 @@ async function loadPresentationByRoute (vm: Vue, route: Route) {
   }
 }
 
-async function actOnRouteChange (vm: Vue, route: Route) {
+async function actOnRouteChange (vm: any, route: Route) {
   await loadPresentationByRoute(vm, route)
   if (isSpeakerRoute(route)) {
     const publicRoute = switchRouterView(route)
