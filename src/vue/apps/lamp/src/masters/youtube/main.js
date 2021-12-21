@@ -41,7 +41,7 @@ export default validateMasterSpec({
   name: 'youtube',
   title: 'YouTube',
   propsDef: {
-    id: {
+    youtubeId: {
       type: String,
       required: true,
       description: 'Die Youtube-ID (z. B. xtKavZG1KiM).'
@@ -68,7 +68,7 @@ export default validateMasterSpec({
   hooks: {
     normalizeProps (props) {
       if (typeof props === 'string') {
-        props = { id: props }
+        props = { youtubeId: props }
       }
       return props
     },
@@ -77,12 +77,12 @@ export default validateMasterSpec({
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](
-        youtubeIdToUri(props.id)
+        youtubeIdToUri(props.youtubeId)
       )
-      youtubeMaster.checkAvailability(props.id).then(result => {
+      youtubeMaster.checkAvailability(props.youtubeId).then(result => {
         if (!result) {
           this.$showMessage.error(
-            `The YouTube video “${props.id}” is no longer available online.`
+            `The YouTube video “${props.youtubeId}” is no longer available online.`
           )
         }
       })
@@ -106,14 +106,14 @@ export default validateMasterSpec({
       return propsMain
     },
     plainTextFromProps (props) {
-      return props.id
+      return props.youtubeId
     },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {
       if (!this.isPublic) return
       const slide = this.$get('slide')
       if (slide.propsMain.asset) {
-        const uri = youtubeIdToUri(slide.props.id)
+        const uri = youtubeIdToUri(slide.props.youtubeId)
         const sample = this.$store.getters['media/sampleByUri'](uri)
         const videoWrapper = document.querySelector('#youtube-offline-video')
         videoWrapper.innerHTML = ''

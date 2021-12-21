@@ -3,7 +3,7 @@
     <div class="source smaller">
       <span class="important">Quelle:</span>
       <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">
-        youtu.be/{{ id }}
+        youtu.be/{{ youtubeId }}
       </a>
     </div>
 
@@ -27,7 +27,7 @@ export default {
     asset: {
       type: Object
     },
-    id: {
+    youtubeId: {
       type: String,
       required: true
     },

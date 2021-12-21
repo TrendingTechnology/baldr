@@ -25,7 +25,7 @@ export default {
     asset: {
       type: Object
     },
-    id: {
+    youtubeId: {
       type: String,
       required: true
     },
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     httpUrl () {
-      return findPreviewHttpUrl(this.id, this.asset)
+      return findPreviewHttpUrl(this.youtubeId, this.asset)
     }
   }
 }
