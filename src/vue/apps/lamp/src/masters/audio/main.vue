@@ -19,40 +19,57 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
-export default {
-  props: {
-    previewHttpUrl: {
-      type: String
-    },
-    sample: {
-      type: Object
-    },
-    mediaAsset: {
-      type: Object
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    composer: {
-      type: String
-    },
-    artist: {
-      type: String
-    },
-    partOf: {
-      type: String
-    },
-    description: {
-      type: String
-    }
-  },
+@Component({
   components: {
     ExternalSites
   }
+})
+export default class AudioMasterMain extends Vue {
+  @Prop({
+    type: String
+  })
+  previewHttpUrl: string
+
+  @Prop({
+    type: Object
+  })
+  sample: any
+
+  @Prop({
+    type: Object
+  })
+  mediaAsset: any
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  title: string
+
+  @Prop({
+    type: String
+  })
+  composer: string
+
+  @Prop({
+    type: String
+  })
+  artist: string
+
+  @Prop({
+    type: String
+  })
+  partOf: string
+
+  @Prop({
+    type: String
+  })
+  description: string
 }
 </script>
 
