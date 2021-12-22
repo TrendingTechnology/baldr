@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from '@bldr/vue-packages-bundler'
 import VanishIcon from '@/components/plugin/VanishIcon.vue'
-import iconNames from '@/icons.json'
-import { registerMouseMoveTimeout } from '@/plugin.js'
+import iconNames from '../../icons.json'
+import { registerMouseMoveTimeout } from '../../plugin.js'
 
 @Component({ components: { VanishIcon } })
 export default class VanishDemonstration extends Vue {

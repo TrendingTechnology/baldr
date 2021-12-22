@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator'
+import { Vue } from '@bldr/vue-packages-bundler'
 
 export default class Home extends Vue {}
 </script>
