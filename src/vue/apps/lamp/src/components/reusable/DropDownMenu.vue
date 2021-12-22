@@ -4,23 +4,23 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import VueFileToolbarMenu from 'vue-file-toolbar-menu'
 import BaldrMenu from '@bldr/menu-webapp'
 import { getWebappMenuDef } from '@bldr/menu-adapter'
+import { Vue, Component } from '@bldr/vue-packages-bundler'
 
 import actions from '@/actions.js'
 import router from '@/routes'
 
-export default {
-  name: 'DropDownMenu',
+@Component({
   components: {
     BaldrMenu
-  },
-  computed: {
-    menu () {
-      return getWebappMenuDef(router, actions)
-    }
+  }
+})
+export default class DropDownMenu extends Vue {
+  get menu () {
+    return getWebappMenuDef(router, actions)
   }
 }
 </script>

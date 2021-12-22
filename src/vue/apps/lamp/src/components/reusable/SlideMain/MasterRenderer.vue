@@ -1,27 +1,36 @@
-<script>
-import LoadingIcon from '@/components/reusable/LoadingIcon'
+<script lang="ts">
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
-export default {
-  name: 'MasterRenderer',
+import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
+
+@Component({
   components: {
     LoadingIcon
-  },
-  props: {
-    slide: {
-      type: Object,
-      required: true
-    },
-    // All main master components have a prop named `stepNo`. This
-    // prop is mixed in `masters.js`
-    stepNo: {
-      type: Number
-    },
-    isPublic: {
-      type: Boolean,
-      default: true
-    }
-  },
-  render: function (createElement) {
+  }
+})
+export default class MasterRenderer extends Vue {
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slide: any
+
+  /**
+   *  All main master components have a prop named `stepNo`. This
+   *  prop is mixed in `masters.js`
+   */
+  @Prop({
+    type: Number
+  })
+  stepNo: number
+
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  isPublic: boolean
+
+  render (createElement) {
     if (this.slide.masterName) {
       const masterElement = createElement(
         `${this.slide.masterName}-master-main`,
@@ -56,17 +65,17 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_master_renderer {
-    box-sizing: border-box;
-    display: table;
-    width: 100%;
-  }
+.vc_master_renderer {
+  box-sizing: border-box;
+  display: table;
+  width: 100%;
+}
 
-  [b-center-vertically="true"] {
-    .master-inner {
-      display: table-cell;
-      height: 100%;
-      vertical-align: middle;
-    }
+[b-center-vertically='true'] {
+  .master-inner {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
   }
+}
 </style>

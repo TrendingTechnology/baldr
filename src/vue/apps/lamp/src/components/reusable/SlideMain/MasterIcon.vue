@@ -8,19 +8,19 @@
   </span>
 </template>
 
-<script>
-export default {
-  name: 'MasterIcon',
-  props: {
-    slide: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    master () {
-      return this.slide.master
-    }
+<script lang="ts">
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+
+@Component
+export default class MasterIcon extends Vue {
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slide: any
+
+  get master () {
+    return this.slide.master
   }
 }
 </script>

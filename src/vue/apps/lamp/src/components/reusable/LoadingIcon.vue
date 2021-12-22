@@ -12,11 +12,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from '@bldr/vue-packages-bundler'
+
 // https://github.com/nguyenvanduocit/vue-loading-spinner/blob/master/src/components/Stretch.vue
-export default {
-  name: 'LoadingIcon'
-}
+@Component
+export default class LoadingIcon extends Vue {}
 </script>
 
 <style lang="scss">

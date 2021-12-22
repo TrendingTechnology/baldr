@@ -9,39 +9,46 @@
   />
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from '@bldr/vue-packages-bundler'
+
 import { router } from '@/routes'
 
-export default {
-  name: 'SearchPresentation',
-  data: function () {
+@Component
+export default class SearchPresentation extends Vue {
+  data () {
     return {
       presentation: {},
       options: []
     }
-  },
-  methods: {
-    async onInput () {
-      router.push({
-        name: 'slides-preview',
-        params: { presRef: this.presentation.ref }
+  }
+
+  presentation: any
+
+  options: any
+
+  async onInput () {
+    router.push({
+      name: 'slides-preview',
+      params: { presRef: this.presentation.ref }
+    })
+  }
+
+  search (title) {
+    if (!title) return
+    this.$media.httpRequest
+      .request({
+        url: 'get/presentations/by-substring',
+        method: 'get',
+        params: {
+          search: title
+        }
       })
-    },
-    search (title) {
-      if (!title) return
-      this.$media.httpRequest
-        .request({
-          url: 'get/presentations/by-substring',
-          method: 'get',
-          params: {
-            search: title
-          }
-        })
-        .then(response => {
-          this.options = response.data
-        })
-    }
-  },
+      .then(response => {
+        this.options = response.data
+      })
+  }
+
   mounted () {
     this.$dynamicSelect.focus()
   }

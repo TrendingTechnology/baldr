@@ -1,32 +1,34 @@
 <template>
   <div class="vc_open_interface">
     <div class="flex-container">
-      <search-presentation/>
+      <search-presentation />
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from '@bldr/vue-packages-bundler'
+
 import SearchPresentation from './SearchPresentation.vue'
 
-export default {
-  name: 'OpenInterface',
+@Component({
   components: {
     SearchPresentation
   }
-}
+})
+export default class OpenInterface extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_open_interface {
-    font-size: 2vw;
+.vc_open_interface {
+  font-size: 2vw;
 
-    .flex-container {
-      display: flex;
-    }
-
-    .vc_dynamic_select {
-      flex-grow: 1;
-    }
+  .flex-container {
+    display: flex;
   }
+
+  .vc_dynamic_select {
+    flex-grow: 1;
+  }
+}
 </style>

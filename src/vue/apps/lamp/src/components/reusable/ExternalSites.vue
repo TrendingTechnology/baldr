@@ -54,7 +54,6 @@ import {
   formatWikipediaUrl,
   formatYoutubeUrl
 } from '@bldr/core-browser'
-
 import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 @Component

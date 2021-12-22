@@ -7,35 +7,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'AudioOverlay',
-  props: {
-    slide: {
-      type: Object,
-      required: true
+<script lang="ts">
+import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+
+@Component
+export default class AudioOverlay extends Vue {
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slide: any
+
+  get audioOverlay () {
+    if (this.slide && this.slide.audioOverlay) {
+      return this.slide.audioOverlay
     }
-  },
-  computed: {
-    audioOverlay () {
-      if (this.slide && this.slide.audioOverlay) {
-        return this.slide.audioOverlay
-      }
-      return false
-    }
+    return false
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_audio_overlay {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background: none !important;
+.vc_audio_overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: none !important;
 
-    .vc_play_button {
-      font-size: 1.5em;
-    }
+  .vc_play_button {
+    font-size: 1.5em;
   }
+}
 </style>
