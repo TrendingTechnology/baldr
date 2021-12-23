@@ -7,7 +7,7 @@
  * @module @bldr/lamp/routing
  */
 
-import { Route, NavigationGuardNext } from 'vue-router'
+import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
@@ -49,8 +49,8 @@ function setDocumentTitleByRoute (route: Route) {
   document.title = shortenText(title, { stripTags: true, maxLength: 125 })
 }
 
-export function installDocumentTitleUpdater (router: any) {
-  router.afterEach((to: Route, from: Route) => {
+export function installDocumentTitleUpdater (router: VueRouter): void {
+  router.afterEach((to: Route) => {
     setDocumentTitleByRoute(to)
   })
 }
@@ -119,7 +119,7 @@ export function switchRouterView (route: Route): Route | undefined {
   return newRoute as Route
 }
 
-export function getViewFromRoute () {
+export function getViewFromRoute (): 'speaker' | 'public' {
   const name = router.currentRoute.name
   if (name === 'speaker-view' || name === 'speaker-view-step-no') {
     return 'speaker'
@@ -177,9 +177,6 @@ async function loadPresentationByRoute (vm: any, route: Route) {
         await loadPresentationById(vm, route.params.presRef)
       }
       if (route.params.slideNo != null) {
-        if (route.params.stepNo != null) {
-          route.params.stepNo = route.params.stepNo
-        }
         vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)
       }
     }
@@ -207,13 +204,13 @@ async function actOnRouteChange (vm: any, route: Route) {
 export const routerGuards = {
   // To be able to enter a presentation per HTTP link on a certain slide.
   // Without this hook there are webpack errors.
-  beforeRouteEnter (to: Route, from: Route, next: NavigationGuardNext) {
+  beforeRouteEnter (to: Route, from: Route, next: NavigationGuardNext): void {
     next(vm => {
       actOnRouteChange(vm, to)
     })
   },
   // To be able to navigate throught the slide (only the params) are changing.
-  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
+  beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext): void {
     actOnRouteChange(this, to)
     // To update the URL in the browser URL textbox.
     next()

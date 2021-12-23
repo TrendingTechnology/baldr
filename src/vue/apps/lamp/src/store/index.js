@@ -56,8 +56,9 @@ const getters = {
     return state.isSpeakerView
   },
   presentation: state => {
-    if (state.presentation && state.presentation.slides)
+    if (state.presentation && state.presentation.slides) {
       return state.presentation
+    }
   },
   slideNo: state => {
     return state.slideNo

@@ -255,7 +255,7 @@ export default {
     const slide = store.getters['lamp/slide']
     if (slide && slide.firstMediaUri) {
       const uri = slide.firstMediaUri.split(':')[1]
-      api.media.open.editor({ref: uri, type: 'asset'})
+      api.media.open.editor({ ref: uri, type: 'asset' })
     } else {
       vm.$showMessage.error(
         'Die aktuelle Folie hat keine Mediendatei zum Öffnen.'
