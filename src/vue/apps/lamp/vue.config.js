@@ -43,13 +43,25 @@ function readExamples () {
   return examples
 }
 
-// https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
-// https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
 module.exports = {
   chainWebpack: config => {
+    // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
+    // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
     config.resolve.symlinks(false)
   },
+
   configureWebpack: {
+    resolve: {
+      alias: {
+        // Avoid conflicting vue imports
+        // Strange errors: “$attrs is readonly”,“$listeners is readonly”
+        // https://forum.vuejs.org/t/bootstrapvue-table-attrs-is-readonly-listeners-is-readonly/73143/2
+        vue$: path.resolve(
+          __dirname,
+          'node_modules/vue/dist/vue.runtime.esm.js'
+        )
+      }
+    },
     plugins: [
       new DefinePlugin({
         // https://webpack.js.org/plugins/define-plugin/
