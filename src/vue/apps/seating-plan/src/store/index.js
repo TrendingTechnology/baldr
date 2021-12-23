@@ -1,7 +1,8 @@
 // eslint-disable-next-line
 /* globals localStorage */
 
-import { Vue, Vuex } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Vuex from 'vuex'
 
 import app from './modules/app'
 import grades from './modules/grades'

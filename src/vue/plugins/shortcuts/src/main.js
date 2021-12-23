@@ -8,8 +8,9 @@
  * @module @bldr/shortcuts
  */
 
+import Vue from 'vue'
+
 import { Mousetrap } from '@bldr/mousetrap-wrapper'
-import { Vue } from '@bldr/vue-packages-bundler'
 
 import ShortcutsOverview from './ShortcutsOverview.vue'
 

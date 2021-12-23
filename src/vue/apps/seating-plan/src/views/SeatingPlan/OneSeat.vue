@@ -45,7 +45,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, mapGetters } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { mapGetters } from 'vuex'
 
 // Components
 import AddJobIcons from '@/components/AddJobIcons.vue'

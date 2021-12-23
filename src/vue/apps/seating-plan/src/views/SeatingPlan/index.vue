@@ -16,13 +16,10 @@
 </template>
 
 <script lang="ts">
-import {
-  mapGetters,
-  Component,
-  Vue,
-  Route,
-  NavigationGuardNext
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters } from 'vuex'
+import { Route, NavigationGuardNext } from 'vue-router'
 
 import PersonSelect from '@/components/PersonSelect.vue'
 import PersonsSidebar from './PersonsSidebar.vue'

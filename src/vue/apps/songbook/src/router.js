@@ -1,4 +1,5 @@
-import { VueRouter, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
 // Components.
 import StartPage from './views/StartPage'

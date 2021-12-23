@@ -1,4 +1,6 @@
-import { Vue, VNode } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import { VNode } from 'vue'
+
 import { Configuration } from '@bldr/config'
 
 /**

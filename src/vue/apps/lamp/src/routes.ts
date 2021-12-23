@@ -4,7 +4,9 @@
  * @module @bldr/lamp/routes
  */
 
-import { VueRouter, RouteConfig, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import VueRouter, { RouteConfig } from 'vue-router'
+
 import { installDocumentTitleUpdater } from '@/routing'
 
 // Components.

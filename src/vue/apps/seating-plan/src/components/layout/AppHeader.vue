@@ -10,7 +10,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 import vueHeadful from 'vue-headful'
 
 import MainMenu from '@/components/layout/MainMenu/index.vue'

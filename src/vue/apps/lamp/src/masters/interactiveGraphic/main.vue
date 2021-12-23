@@ -5,8 +5,9 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {

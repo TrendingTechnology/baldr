@@ -1,5 +1,6 @@
 <script lang="ts">
-import { Component, Prop } from '@bldr/vue-packages-bundler'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
 import { validateColorName } from '../../plugin.js'
 import PlainIcon from './PlainIcon.vue'

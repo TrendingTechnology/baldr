@@ -13,7 +13,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters } from 'vuex'
 
 import PersonsList from './PersonsList.vue'
 

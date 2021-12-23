@@ -11,7 +11,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, mapGetters } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters } from 'vuex'
 
 import { AlphabeticalSongsTree } from '@bldr/songbook-core'
 

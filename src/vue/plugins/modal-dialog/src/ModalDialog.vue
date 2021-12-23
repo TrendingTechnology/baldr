@@ -15,8 +15,11 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
 import Plugin, { dialogsWatcher } from './main.js'
-import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 // Components
 import { MaterialIcon } from '@bldr/icons'

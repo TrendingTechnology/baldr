@@ -6,13 +6,14 @@
 
 /* globals rawYamlExamples */
 
+import Vue from 'vue'
+
 import { customStore } from '@/main'
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib.js'
 import inlineMarkup from './inline-markup.js'
 import SlidePreviewPlayButton from './components/reusable/SlidesPreview/SlidePreviewPlayButton.vue'
 import store from './store/index.js'
-import { Vue } from '@bldr/vue-packages-bundler'
 
 import { masterCollection } from '@bldr/lamp-core'
 

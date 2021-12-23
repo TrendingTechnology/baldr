@@ -5,8 +5,11 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters } from 'vuex'
+
 import ResizeObserver from 'resize-observer-polyfill'
-import { Component, Vue, mapGetters } from '@bldr/vue-packages-bundler'
 
 // Components
 import OneSeat from './OneSeat.vue'

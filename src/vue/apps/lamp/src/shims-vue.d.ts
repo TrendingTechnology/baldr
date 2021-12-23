@@ -1,4 +1,4 @@
 declare module '*.vue' {
-  import { Vue } from '@bldr/vue-packages-bundler'
+  import Vue from 'vue'
   export default Vue
 }

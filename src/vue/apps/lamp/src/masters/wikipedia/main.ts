@@ -4,8 +4,9 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import Vue from 'vue'
 
+import { validateMasterSpec } from '@bldr/lamp-core'
 import {
   getHtmlBody,
   formatId,
@@ -13,8 +14,6 @@ import {
   getFirstImage,
   MasterProps
 } from '@bldr/wikipedia'
-
-import { Vue } from '@bldr/vue-packages-bundler'
 
 const defaultLanguage = 'de'
 

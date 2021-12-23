@@ -6,7 +6,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
 import { resolver } from '../../app'
 import { player } from '../../plugin'
 import { Playable } from '../../playable'

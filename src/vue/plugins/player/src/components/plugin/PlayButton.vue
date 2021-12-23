@@ -41,8 +41,9 @@
 </template>
 
 <script lang="ts">
+import Component from 'vue-class-component'
+
 import { PlainIcon } from '@bldr/icons'
-import { Component } from '@bldr/vue-packages-bundler'
 
 import { player } from '../../plugin'
 import { Playable, PlaybackState } from '../../playable'

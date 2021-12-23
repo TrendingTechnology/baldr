@@ -1,16 +1,14 @@
 <template>
   <div class="vc_generic_master">
-    <span
-      ref="contentWrapper"
-      class="content-wrapper"
-      v-html="markupCurrent"
-    />
+    <span ref="contentWrapper" class="content-wrapper" v-html="markupCurrent" />
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
+
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 const CHARACTERS_ON_SLIDE = 400
@@ -26,7 +24,8 @@ export default {
     },
     charactersOnSlide: {
       type: [Number],
-      description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
+      description:
+        'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
     ...mapStepFieldDefintions(['mode', 'subset'])
@@ -53,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_generic_master {
-    padding: 0.5em 2em;
-  }
+.vc_generic_master {
+  padding: 0.5em 2em;
+}
 </style>

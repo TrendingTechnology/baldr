@@ -18,11 +18,10 @@
 </template>
 
 <script lang="ts">
-import {
-  createNamespacedHelpers,
-  Vue,
-  Component
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
+
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp/recent')
 
 @Component({

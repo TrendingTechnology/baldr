@@ -22,10 +22,7 @@
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
+  "browserslist": ["> 1%", "last 2 versions"],
   "eslintConfig": {
     "env": {
       "node": true
@@ -54,7 +51,11 @@
   },
   "dependencies": {
     "@bldr/themes": "*",
-    "@bldr/vue-packages-bundler": "*"
+    "vue-class-component": "7.2.3",
+    "vue-property-decorator": "9.1.2",
+    "vue-router": "3.2.0",
+    "vue": "2.6.11",
+    "vuex": "3.4.0"
   },
   "devDependencies": {
     "@types/chai": "4.2.11",

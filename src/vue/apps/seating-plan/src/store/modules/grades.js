@@ -2,7 +2,7 @@
  * Sort alphabetically
  */
 
-import { Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
 
 class Grade {
   constructor (name) {

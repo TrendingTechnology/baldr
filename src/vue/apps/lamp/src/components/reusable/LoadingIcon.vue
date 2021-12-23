@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 // https://github.com/nguyenvanduocit/vue-loading-spinner/blob/master/src/components/Stretch.vue
 @Component

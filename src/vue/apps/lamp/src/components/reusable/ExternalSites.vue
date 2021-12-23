@@ -45,6 +45,10 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
 import {
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,
@@ -54,7 +58,6 @@ import {
   formatWikipediaUrl,
   formatYoutubeUrl
 } from '@bldr/core-browser'
-import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
 
 @Component
 export default class ExternalSites extends Vue {

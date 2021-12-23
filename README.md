@@ -16,6 +16,32 @@ This repository contains some evaluation and research code.
 [Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
 
+```js
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { mapGetters, createNamespacedHelpers } from 'vuex'
+
+
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import Vuex from 'vuex'
+import { Prop } from 'vue-property-decorator'
+
+// vue
+import { CreateElement, VNode, VNodeData, VueConstructor } from 'vue'
+import { Prop, Watch } from 'vue-property-decorator'
+
+
+// vuex
+import { mapGetters, mapActions, createNamespacedHelpers } from 'vuex'
+import Vuex from 'vuex'
+
+// vue-router
+import { RouteConfig, Route, NavigationGuardNext } from 'vue-router'
+import VueRouter from 'vue-router'
+```
+
 ## Installation / Building
 
 ```

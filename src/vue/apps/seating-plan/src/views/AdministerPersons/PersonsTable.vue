@@ -10,7 +10,10 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, Component, Prop, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { mapGetters } from 'vuex'
 
 import PersonsTableRow from './PersonsTableRow.vue'
 import { Person } from '../../types'

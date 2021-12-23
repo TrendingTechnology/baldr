@@ -21,7 +21,10 @@
 </template>
 
 <script lang="ts">
-import { mapActions, Component, Prop, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { mapActions } from 'vuex'
 
 import PersonsJobs from '@/components/PersonsJobs.vue'
 import { Person } from '../../types'

@@ -1,4 +1,4 @@
-import { Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
 
 import vm from '@/main'
 

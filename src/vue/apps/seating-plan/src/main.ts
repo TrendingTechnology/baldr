@@ -7,8 +7,10 @@
 // Make sure to register before importing any components
 import './class-component-hooks'
 
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
 import App from './App.vue'
-import { VueRouter, Vue } from '@bldr/vue-packages-bundler'
 
 import store from './store/index.js'
 import router from './router'

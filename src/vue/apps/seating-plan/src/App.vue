@@ -1,16 +1,18 @@
 <template>
   <div id="app" class="vc_app">
-    <app-header :title="title"/>
+    <app-header :title="title" />
     <router-view></router-view>
-    <app-footer/>
+    <app-footer />
   </div>
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
 // Components
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import { Component, Vue } from '@bldr/vue-packages-bundler'
 
 @Component({
   components: {
@@ -36,21 +38,33 @@ export default class App extends Vue {
   }
 
   mounted () {
-    this.$shortcuts.add('ctrl+f', () => { this.$fullscreen() }, 'Fullscreen')
-    this.$shortcuts.add('ctrl+s', () => { this.$store.dispatch('save') }, 'save')
+    this.$shortcuts.add(
+      'ctrl+f',
+      () => {
+        this.$fullscreen()
+      },
+      'Fullscreen'
+    )
+    this.$shortcuts.add(
+      'ctrl+s',
+      () => {
+        this.$store.dispatch('save')
+      },
+      'save'
+    )
   }
 }
 </script>
 
 <style lang="scss">
-  body {
-    margin: 2px;
-    font-size: 1.2vw;
-    background-color: $white;
-  }
+body {
+  margin: 2px;
+  font-size: 1.2vw;
+  background-color: $white;
+}
 
-  @page {
-    size: A4 landscape;
-    margin: 1em;
-  }
+@page {
+  size: A4 landscape;
+  margin: 1em;
+}
 </style>

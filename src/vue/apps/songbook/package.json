@@ -28,7 +28,11 @@
     "@bldr/songbook-core": "*",
     "@bldr/string-format": "*",
     "@bldr/themes": "*",
-    "@bldr/vue-packages-bundler": "*"
+    "vue-class-component": "7.2.3",
+    "vue-property-decorator": "9.1.2",
+    "vue-router": "3.2.0",
+    "vue": "2.6.11",
+    "vuex": "3.4.0"
   },
   "devDependencies": {
     "@bldr/config": "*",
@@ -67,11 +71,7 @@
     },
     "rules": {}
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
+  "browserslist": ["> 1%", "last 2 versions", "not dead"],
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "publishConfig": {
     "access": "public"

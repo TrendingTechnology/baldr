@@ -2,7 +2,6 @@
   <tr class="vc_toc_song">
     <td class="main-column">
       <router-link :to="{ name: 'song', params: { songId: song.songId } }">
-
         <span class="title" v-if="meta.title">{{ meta.title }} </span>
         <span class="subtitle" v-if="meta.subtitle">{{ meta.subtitle }} </span>
         <span class="composer" v-if="meta.composer">{{ meta.composer }} </span>
@@ -20,7 +19,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, mapGetters } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { mapGetters } from 'vuex'
 
 import { Song } from '@bldr/songbook-core'
 

@@ -44,13 +44,11 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters, mapActions } from 'vuex'
+
 import { formatToLocalDateTime } from '@bldr/core-browser'
-import {
-  Component,
-  Vue,
-  mapGetters,
-  mapActions
-} from '@bldr/vue-packages-bundler'
 
 @Component({
   computed: mapGetters(['externalStateDates', 'localStateDates']),

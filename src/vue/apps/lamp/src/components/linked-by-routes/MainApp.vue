@@ -26,11 +26,10 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  createNamespacedHelpers
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
+
 import { registerShortcuts } from '@bldr/menu-adapter'
 import { styleConfigurator } from '@bldr/style-configurator'
 

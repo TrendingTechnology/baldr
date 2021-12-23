@@ -6,9 +6,11 @@
 </template>
 
 <script lang="ts">
-import { TitlesTypes } from '@bldr/type-definitions'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+import { TitlesTypes } from '@bldr/type-definitions'
 
 @Component
 export default class TreeTitle extends Vue {

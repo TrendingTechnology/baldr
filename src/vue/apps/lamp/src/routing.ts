@@ -7,12 +7,11 @@
  * @module @bldr/lamp/routing
  */
 
+import { Route, NavigationGuardNext } from 'vue-router'
+
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
-import {
-  Route,
-  NavigationGuardNext
-} from '@bldr/vue-packages-bundler'
+
 import store from '@/store/index.js'
 import { router } from '@/routes'
 

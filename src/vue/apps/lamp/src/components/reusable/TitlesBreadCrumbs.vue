@@ -31,8 +31,12 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+import { createNamespacedHelpers } from 'vuex'
+
 import type { TitlesTypes } from '@bldr/type-definitions'
-import { Vue, Component, Prop, createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 
 const mapLampGetters = createNamespacedHelpers('lamp').mapGetters
 const mapTitlesGetters = createNamespacedHelpers('lamp/titles').mapGetters

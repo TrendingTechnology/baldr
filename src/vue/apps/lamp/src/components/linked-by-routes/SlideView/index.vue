@@ -12,11 +12,10 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  createNamespacedHelpers
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
+
 import { routerGuards } from '@/routing'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'

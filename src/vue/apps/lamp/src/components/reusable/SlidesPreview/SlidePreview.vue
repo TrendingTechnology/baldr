@@ -16,7 +16,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
 import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
 import { getViewFromRoute } from '@/routing'

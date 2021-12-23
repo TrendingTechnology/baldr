@@ -14,17 +14,11 @@
   >
     <div v-if="presentation">
       <!-- <display-controller/> -->
-      <presentation-title/>
+      <presentation-title />
       <div v-if="slides">
         <span v-if="layoutCurrent.id === 'grid'">
-          <grid-layout
-            v-if="hierarchical"
-            :slides="presentation.slidesTree"
-          />
-          <grid-layout
-            v-if="!hierarchical"
-            :slides="presentation.slides"
-          />
+          <grid-layout v-if="hierarchical" :slides="presentation.slidesTree" />
+          <grid-layout v-if="!hierarchical" :slides="presentation.slides" />
         </span>
         <list-layout
           v-if="layoutCurrent.id === 'list'"
@@ -32,11 +26,13 @@
         />
       </div>
     </div>
-    <loading-icon v-else/>
+    <loading-icon v-else />
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+
 import { routerGuards } from '@/routing'
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
@@ -44,7 +40,6 @@ import ListLayout from './ListLayout.vue'
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
 
-import { createNamespacedHelpers } from '@bldr/vue-packages-bundler'
 const { mapGetters } = createNamespacedHelpers('lamp')
 const storePreview = createNamespacedHelpers('lamp/preview')
 const mapActionsPreview = storePreview.mapActions
@@ -75,7 +70,9 @@ export default {
       }
     ])
     // Show current slide in the center of the view.
-    const elCurrentSlide = document.querySelector('.vc_slide_preview.current-slide')
+    const elCurrentSlide = document.querySelector(
+      '.vc_slide_preview.current-slide'
+    )
     if (elCurrentSlide) {
       elCurrentSlide.scrollIntoView({ block: 'center' })
     }
@@ -84,54 +81,43 @@ export default {
     this.$shortcuts.removeMultiple(['+', '-'])
   },
   computed: {
-    ...mapGetters([
-      'presentation',
-      'slide',
-      'slides',
-      'slidesCount'
-    ]),
-    ...mapGettersPreview([
-      'size',
-      'layoutCurrent',
-      'hierarchical'
-    ])
+    ...mapGetters(['presentation', 'slide', 'slides', 'slidesCount']),
+    ...mapGettersPreview(['size', 'layoutCurrent', 'hierarchical'])
   },
-  methods: mapActionsPreview([
-    'increaseSize',
-    'decreaseSize'
-  ]),
+  methods: mapActionsPreview(['increaseSize', 'decreaseSize']),
   ...routerGuards
 }
 </script>
 
 <style lang="scss">
-  .vc_slides_preview {
-    font-size: 1.5vmin;
-    padding: 1vw;
+.vc_slides_preview {
+  font-size: 1.5vmin;
+  padding: 1vw;
 
-    .vc_presentation_title {
-      font-size: 2em;
+  .vc_presentation_title {
+    font-size: 2em;
 
-      header {
-        font-size: 0.7em;
-        text-align: center;
-        width: 100%;
-      }
+    header {
+      font-size: 0.7em;
+      text-align: center;
+      width: 100%;
+    }
 
-      h1, h2 {
-        margin-bottom: 0;
-        text-align: center;
-      }
+    h1,
+    h2 {
+      margin-bottom: 0;
+      text-align: center;
+    }
 
-      h1 {
-        font-size: 1.6em;
-      }
+    h1 {
+      font-size: 1.6em;
+    }
 
-      h2 {
-        font-size: 1.4em;
-        font-weight: normal;
-        margin-top: 0;
-      }
+    h2 {
+      font-size: 1.4em;
+      font-weight: normal;
+      margin-top: 0;
     }
   }
+}
 </style>

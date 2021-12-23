@@ -16,14 +16,12 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
+import { Route, NavigationGuardNext } from 'vue-router'
+
 import { TitlesTypes } from '@bldr/type-definitions'
-import {
-  Component,
-  Vue,
-  Route,
-  NavigationGuardNext,
-  createNamespacedHelpers
-} from '@bldr/vue-packages-bundler'
 
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'

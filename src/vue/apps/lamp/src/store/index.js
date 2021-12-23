@@ -6,7 +6,9 @@
 
 /* globals rawYamlExamples */
 
-import { Vue, Vuex } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Vuex from 'vuex'
+
 import { Presentation } from '@/content-file.js'
 import vue, { customStore } from '@/main'
 import nav from './nav.js'

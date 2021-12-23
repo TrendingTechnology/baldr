@@ -45,12 +45,16 @@
     "@bldr/tex-templates": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
-    "@bldr/vue-packages-bundler": "*",
     "@bldr/wikipedia": "*",
     "@bldr/yaml": "*",
     "electron-context-menu": "2.3.0",
+    "vue-class-component": "7.2.3",
     "vue-native-websocket": "2.0.14",
-    "vue-pdf": "4.2.0"
+    "vue-pdf": "4.2.0",
+    "vue-property-decorator": "9.1.2",
+    "vue-router": "3.2.0",
+    "vue": "2.6.11",
+    "vuex": "3.4.0"
   },
   "devDependencies": {
     "@bldr/core-node": "*",

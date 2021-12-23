@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from '@bldr/vue-packages-bundler'
+import { Component, Vue } from ''
 
 import GradesOverview from './GradesOverview.vue'
 import MetaTable from './MetaTable.vue'

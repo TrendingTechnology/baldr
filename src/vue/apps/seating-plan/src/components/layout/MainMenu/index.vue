@@ -53,12 +53,9 @@
 </template>
 
 <script lang="ts">
-import {
-  mapActions,
-  mapGetters,
-  Component,
-  Vue
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters } from 'vuex'
 
 import ExportLink from './ExportLink.vue'
 import GradesItems from './GradesItems.vue'

@@ -18,7 +18,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
+
 import { convertTexToMd, convertMdToTex } from '@bldr/tex-markdown-converter'
 
 @Component

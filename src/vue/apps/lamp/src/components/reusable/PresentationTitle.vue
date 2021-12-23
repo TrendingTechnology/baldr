@@ -11,12 +11,12 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
+
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
-import {
-  createNamespacedHelpers,
-  Vue,
-  Component
-} from '@bldr/vue-packages-bundler'
+
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 

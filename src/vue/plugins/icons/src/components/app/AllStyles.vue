@@ -39,7 +39,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 import MaterialIcon from '@/components/plugin/MaterialIcon.vue'
 

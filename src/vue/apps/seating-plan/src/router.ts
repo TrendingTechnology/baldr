@@ -1,4 +1,5 @@
-import { Vue, VueRouter } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
 // Page components
 import JobsManager from '@/views/JobsManager.vue'

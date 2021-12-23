@@ -1,4 +1,5 @@
-import { VueAlias } from '@bldr/vue-packages-bundler'
+import _Vue from 'vue'
+
 import { Resolver } from '@bldr/media-resolver-ng'
 
 import { Player } from './player'
@@ -9,7 +10,7 @@ export let player: Player
 
 // export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
-  install (Vue: typeof VueAlias, resolver: Resolver): void {
+  install (Vue: typeof _Vue, resolver: Resolver): void {
     player = new Player(resolver)
     Vue.component('play-button-ng', PlayButton)
     Vue.component('media-player-ng', MediaPlayer)

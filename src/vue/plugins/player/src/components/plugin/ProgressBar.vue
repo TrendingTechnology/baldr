@@ -5,7 +5,8 @@
 </template>
 
 <script lang="ts">
-import { Component } from '@bldr/vue-packages-bundler'
+import Component from 'vue-class-component'
+
 import PlayableBase from './PlayableBase.vue'
 
 @Component

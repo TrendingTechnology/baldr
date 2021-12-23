@@ -1,5 +1,8 @@
 <script lang="ts">
-import { Component, Vue, Watch, Prop } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop, Watch } from 'vue-property-decorator'
+
 import { Asset } from '@bldr/media-resolver-ng'
 import { Playable } from '../../playable'
 

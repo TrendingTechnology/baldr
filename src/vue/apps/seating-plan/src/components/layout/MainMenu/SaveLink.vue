@@ -9,12 +9,9 @@
 </template>
 
 <script lang="ts">
-import {
-  Component,
-  Vue,
-  mapGetters,
-  mapActions
-} from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { mapGetters, mapActions } from 'vuex'
 
 @Component({
   computed: mapGetters(['stateChanged']),

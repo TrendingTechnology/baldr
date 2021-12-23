@@ -1,20 +1,22 @@
 <template>
-  <div class="
+  <div
+    class="
     vc_counter_master_preview
     slide-preview-valign-center
     slide-preview-fullscreen
     sans
-  ">
+  "
+  >
     <div class="inner">{{ fromFormatted }} - {{ toFormatted }}</div>
   </div>
 </template>
 
 <script lang="ts">
-import type { Format } from './main'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-import { Vue, Component, Prop } from '@bldr/vue-packages-bundler'
-
-import { formatCounterNumber } from './main'
+import { formatCounterNumber, Format } from './main'
 
 @Component
 export default class CounterMasterPreview extends Vue {
@@ -41,7 +43,7 @@ export default class CounterMasterPreview extends Vue {
 </script>
 
 <style lang="scss">
-  .vc_counter_master_preview {
-    font-size: 7em;
-  }
+.vc_counter_master_preview {
+  font-size: 7em;
+}
 </style>

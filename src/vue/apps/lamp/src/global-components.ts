@@ -1,4 +1,4 @@
-import { Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
 
 // To avoid circual dependencies
 import TitleLink from '@/components/linked-by-routes/TitlesTreePage/TitleLink.vue'

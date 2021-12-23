@@ -4,7 +4,7 @@
 
 /* globals DOMParser */
 
-import { Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
 
 import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'

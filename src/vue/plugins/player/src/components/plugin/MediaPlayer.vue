@@ -31,7 +31,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
 import { Sample, Asset } from '@bldr/media-resolver-ng'
 import ProgressBar from './ProgressBar.vue'
 import { player } from '../../plugin'

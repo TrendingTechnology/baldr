@@ -8,7 +8,8 @@
 
 import './class-component'
 
-import { Vue } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+
 import { registerMasterComponents } from '@/masters.js'
 
 // Vue plugins.

@@ -7,7 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from '@bldr/vue-packages-bundler'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
 import SearchPresentation from './SearchPresentation.vue'
 
