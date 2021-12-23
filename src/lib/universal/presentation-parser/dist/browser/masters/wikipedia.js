@@ -59,6 +59,11 @@ export function formatUrl(fields) {
  * A little cache save some http calls.
  */
 const thumbnailUrls = {};
+const bodies = {};
+export const cache = {
+    bodies,
+    thumbnailUrls
+};
 /**
  * @param title - The title of a Wikipedia page (for example
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).
@@ -70,8 +75,8 @@ const thumbnailUrls = {};
 export function queryFirstImage(title, language = DEFAULT_LANGUAGE) {
     return __awaiter(this, void 0, void 0, function* () {
         const wikipediaId = formatWikipediaId(title, language);
-        if (thumbnailUrls[wikipediaId] != null) {
-            return thumbnailUrls[wikipediaId];
+        if (cache.thumbnailUrls[wikipediaId] != null) {
+            return cache.thumbnailUrls[wikipediaId];
         }
         const response = yield queryWiki(language, {
             action: 'query',
@@ -107,19 +112,18 @@ export function queryFirstImage(title, language = DEFAULT_LANGUAGE) {
             const page = response.query.pages[pageId];
             if (page.thumbnail != null) {
                 const url = page.thumbnail.source;
-                thumbnailUrls[wikipediaId] = url;
+                cache.thumbnailUrls[wikipediaId] = url;
                 return url;
             }
         }
     });
 }
 export function getFirstImage(wikipediaId) {
-    if (thumbnailUrls[wikipediaId] != null) {
-        return thumbnailUrls[wikipediaId];
+    if (cache.thumbnailUrls[wikipediaId] != null) {
+        return cache.thumbnailUrls[wikipediaId];
     }
     throw new Error(`No cached wikipedia preview image URL found for ${wikipediaId}`);
 }
-const bodies = {};
 /**
  * @param title - The title of a Wikipedia page (for example
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).
@@ -132,8 +136,8 @@ const bodies = {};
 export function queryHtmlBody(title, language, oldid) {
     return __awaiter(this, void 0, void 0, function* () {
         const wikipediaId = formatWikipediaId(title, language, oldid);
-        if (bodies[wikipediaId] != null) {
-            return bodies[wikipediaId];
+        if (cache.bodies[wikipediaId] != null) {
+            return cache.bodies[wikipediaId];
         }
         const params = {
             action: 'parse',
@@ -154,15 +158,15 @@ export function queryHtmlBody(title, language, oldid) {
             body = body
                 .replace(/href="\/wiki\//g, `href="https://${language}.wikipedia.org/wiki/`)
                 .replace(/src="\/\/upload.wikimedia.org/g, 'src="https://upload.wikimedia.org');
-            bodies[wikipediaId] = body;
+            cache.bodies[wikipediaId] = body;
             return body;
         }
     });
 }
 export function getHtmlBody(title, language, oldid) {
     const wikipediaId = formatWikipediaId(title, language, oldid);
-    if (bodies[wikipediaId] != null) {
-        return bodies[wikipediaId];
+    if (cache.bodies[wikipediaId] != null) {
+        return cache.bodies[wikipediaId];
     }
     throw new Error(`No cached wikipedia HTML body found for ${language}:${title}`);
 }

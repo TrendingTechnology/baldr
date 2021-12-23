@@ -6,6 +6,14 @@ export declare function formatWikipediaId(title: string, language: string, oldid
 export declare function formatTitleHumanReadable(title: string): string;
 export declare function formatTitleForLink(fields: WikipediaFieldsNormalized): string;
 export declare function formatUrl(fields: WikipediaFieldsNormalized): string;
+export declare const cache: {
+    bodies: {
+        [id: string]: string;
+    };
+    thumbnailUrls: {
+        [id: string]: string;
+    };
+};
 /**
  * @param title - The title of a Wikipedia page (for example
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).

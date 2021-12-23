@@ -19,6 +19,12 @@ import { wikipediaMaster } from '@bldr/presentation-parser'
 
 @Component
 export default class WikipediaMasterMain extends Vue {
+  data () {
+    return {
+      cache: wikipediaMaster.cache
+    }
+  }
+
   @Prop({
     type: String,
     required: true
@@ -47,6 +53,8 @@ export default class WikipediaMasterMain extends Vue {
   })
   httpUrl: string
 
+  cache: typeof wikipediaMaster.cache
+
   get titleWithoutUnderscores (): string {
     return wikipediaMaster.formatTitleHumanReadable(this.title)
   }
@@ -55,8 +63,10 @@ export default class WikipediaMasterMain extends Vue {
     return wikipediaMaster.formatTitleForLink(this)
   }
 
-  get body (): string {
-    return wikipediaMaster.getHtmlBody(this.title, this.language, this.oldid)
+  get body (): string | undefined {
+    if (this.cache.bodies[this.id] != null) {
+      return this.cache.bodies[this.id]
+    }
   }
 
   async mounted (): Promise<void> {

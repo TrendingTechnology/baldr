@@ -124,6 +124,15 @@ const thumbnailUrls: {
   [id: string]: string
 } = {}
 
+const bodies: {
+  [id: string]: string
+} = {}
+
+export const cache = {
+  bodies,
+  thumbnailUrls
+}
+
 /**
  * @param title - The title of a Wikipedia page (for example
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).
@@ -137,8 +146,8 @@ export async function queryFirstImage (
   language: string = DEFAULT_LANGUAGE
 ): Promise<string | undefined> {
   const wikipediaId = formatWikipediaId(title, language)
-  if (thumbnailUrls[wikipediaId] != null) {
-    return thumbnailUrls[wikipediaId]
+  if (cache.thumbnailUrls[wikipediaId] != null) {
+    return cache.thumbnailUrls[wikipediaId]
   }
   const response = await queryWiki(language, {
     action: 'query',
@@ -174,24 +183,20 @@ export async function queryFirstImage (
     const page = response.query.pages[pageId]
     if (page.thumbnail != null) {
       const url = page.thumbnail.source
-      thumbnailUrls[wikipediaId] = url
+      cache.thumbnailUrls[wikipediaId] = url
       return url
     }
   }
 }
 
 export function getFirstImage (wikipediaId: string): string {
-  if (thumbnailUrls[wikipediaId] != null) {
-    return thumbnailUrls[wikipediaId]
+  if (cache.thumbnailUrls[wikipediaId] != null) {
+    return cache.thumbnailUrls[wikipediaId]
   }
   throw new Error(
     `No cached wikipedia preview image URL found for ${wikipediaId}`
   )
 }
-
-const bodies: {
-  [id: string]: string
-} = {}
 
 /**
  * @param title - The title of a Wikipedia page (for example
@@ -208,8 +213,8 @@ export async function queryHtmlBody (
   oldid?: number
 ): Promise<string | undefined> {
   const wikipediaId = formatWikipediaId(title, language, oldid)
-  if (bodies[wikipediaId] != null) {
-    return bodies[wikipediaId]
+  if (cache.bodies[wikipediaId] != null) {
+    return cache.bodies[wikipediaId]
   }
 
   const params: UrlParameterCollection = {
@@ -239,7 +244,7 @@ export async function queryHtmlBody (
         'src="https://upload.wikimedia.org'
       )
 
-    bodies[wikipediaId] = body
+    cache.bodies[wikipediaId] = body
     return body
   }
 }
@@ -250,8 +255,8 @@ export function getHtmlBody (
   oldid?: number
 ): string {
   const wikipediaId = formatWikipediaId(title, language, oldid)
-  if (bodies[wikipediaId] != null) {
-    return bodies[wikipediaId]
+  if (cache.bodies[wikipediaId] != null) {
+    return cache.bodies[wikipediaId]
   }
   throw new Error(
     `No cached wikipedia HTML body found for ${language}:${title}`

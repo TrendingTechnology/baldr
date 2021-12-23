@@ -5,7 +5,6 @@
  */
 
 import { validateMasterSpec } from '@bldr/lamp-core'
-
 import { wikipediaMaster } from '@bldr/presentation-parser'
 
 const defaultLanguage = 'de'
@@ -67,7 +66,7 @@ export default validateMasterSpec({
       return {
         title: props.title,
         language: props.language,
-        id: wikipediaMaster.formatWikipediaId(props.language, props.title),
+        id: wikipediaMaster.formatWikipediaId(props.title, props.language, props.oldid),
         oldid: props.oldid,
         httpUrl: wikipediaMaster.formatUrl(p)
       }
@@ -75,7 +74,8 @@ export default validateMasterSpec({
     collectPropsPreview ({ propsMain }) {
       return {
         title: propsMain.title,
-        id: propsMain.id
+        id: propsMain.id,
+        language: propsMain.language
       }
     },
     plainTextFromProps (props) {
