@@ -15,8 +15,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { masterCollection } from '@bldr/lamp-core'
-import { getHtmlBody } from '@bldr/wikipedia'
+import { wikipediaMaster } from '@bldr/presentation-parser'
 
 @Component
 export default class WikipediaMasterMain extends Vue {
@@ -49,28 +48,19 @@ export default class WikipediaMasterMain extends Vue {
   httpUrl: string
 
   get titleWithoutUnderscores (): string {
-    return this.title.replace(/_/g, ' ')
+    return wikipediaMaster.formatTitleHumanReadable(this.title)
   }
 
   get linkTitle (): string {
-    let oldid = ''
-    if (this.oldid) oldid = ` (Version ${this.oldid})`
-    const title = this.title.replace(/ /g, '_')
-    return `${this.language}:${title}${oldid}`
+    return wikipediaMaster.formatTitleForLink(this)
   }
 
   get body (): string {
-    const master = masterCollection.get('wikipedia')
-    return master.$get('bodyById', this.id)
+    return wikipediaMaster.getHtmlBody(this.title, this.language, this.oldid)
   }
 
   async mounted (): Promise<void> {
-    const master = masterCollection.get('wikipedia')
-    const body = master.$get('bodyById', this.id)
-    if (!body) {
-      const body = await getHtmlBody(this.title, this.language)
-      master.$commit('addBody', { ref: this.id, body })
-    }
+    await wikipediaMaster.queryHtmlBody(this.title, this.language, this.oldid)
   }
 }
 </script>

@@ -56,6 +56,8 @@ import * as genericMaster_1 from './masters/generic';
 export { genericMaster_1 as genericMaster };
 import * as questionMaster_1 from './masters/question';
 export { questionMaster_1 as questionMaster };
+import * as wikipediaMaster_1 from './masters/wikipedia';
+export { wikipediaMaster_1 as wikipediaMaster };
 import * as youtubeMaster_1 from './masters/youtube';
 export { youtubeMaster_1 as youtubeMaster };
 export { Asset, Sample } from '@bldr/media-resolver-ng';

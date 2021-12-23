@@ -45,7 +45,6 @@
     "@bldr/tex-templates": "*",
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
-    "@bldr/wikipedia": "*",
     "@bldr/yaml": "*",
     "electron-context-menu": "2.3.0",
     "vue-class-component": "7.2.3",

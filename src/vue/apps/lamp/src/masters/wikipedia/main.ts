@@ -4,54 +4,11 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
-import Vue from 'vue'
-
 import { validateMasterSpec } from '@bldr/lamp-core'
-import {
-  getHtmlBody,
-  formatId,
-  formatUrl,
-  getFirstImage,
-  MasterProps
-} from '@bldr/wikipedia'
+
+import { wikipediaMaster } from '@bldr/presentation-parser'
 
 const defaultLanguage = 'de'
-
-interface State {
-  thumbnailUrls: {
-    [id: string]: string
-  }
-  bodies: {
-    [id: string]: string
-  }
-}
-
-const state: State = {
-  thumbnailUrls: {},
-  bodies: {}
-}
-
-const getters = {
-  bodyById: (state: State) => (id: string) => {
-    if (state.bodies[id]) {
-      return state.bodies[id]
-    }
-  },
-  thumbnailUrlById: (state: State) => (id: string) => {
-    if (state.thumbnailUrls[id]) {
-      return state.thumbnailUrls[id]
-    }
-  }
-}
-
-const mutations = {
-  addBody (state: State, { id, body }: any) {
-    Vue.set(state.bodies, id, body)
-  },
-  addThumbnailUrl (state: State, { id, thumbnailUrl }: any) {
-    Vue.set(state.thumbnailUrls, id, thumbnailUrl)
-  }
-}
 
 export default validateMasterSpec({
   name: 'wikipedia',
@@ -82,11 +39,6 @@ export default validateMasterSpec({
     centerVertically: true,
     darkMode: false
   },
-  store: {
-    state,
-    getters,
-    mutations
-  },
   hooks: {
     normalizeProps (props) {
       if (typeof props === 'string') {
@@ -106,25 +58,18 @@ export default validateMasterSpec({
       if (!props.language) props.language = defaultLanguage
       return props
     },
-    async afterLoading ({ props, master }) {
-      const id = formatId(props.language, props.title)
-      const body = await getHtmlBody(props.title, props.language, props.oldid)
-      if (body) {
-        master.$commit('addBody', { id, body })
-      }
-      const thumbnailUrl = await getFirstImage(props.title, props.language)
-      if (thumbnailUrl) {
-        master.$commit('addThumbnailUrl', { id, thumbnailUrl })
-      }
+    async afterLoading ({ props }) {
+      await wikipediaMaster.queryHtmlBody(props.title, props.language, props.oldid)
+      await wikipediaMaster.queryFirstImage(props.title, props.language)
     },
     collectPropsMain (props) {
-      const p = props as MasterProps
+      const p = props as wikipediaMaster.WikipediaFieldsNormalized
       return {
         title: props.title,
         language: props.language,
-        id: formatId(props.language, props.title),
+        id: wikipediaMaster.formatWikipediaId(props.language, props.title),
         oldid: props.oldid,
-        httpUrl: formatUrl(p)
+        httpUrl: wikipediaMaster.formatUrl(p)
       }
     },
     collectPropsPreview ({ propsMain }) {
