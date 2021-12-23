@@ -51,6 +51,8 @@ export * as genericMaster from './masters/generic'
 export * as questionMaster from './masters/question'
 export * as youtubeMaster from './masters/youtube'
 
+export { Asset, Sample } from '@bldr/media-resolver-ng'
+
 export function parse (yamlString: string): Presentation {
   return new Presentation(yamlString)
 }

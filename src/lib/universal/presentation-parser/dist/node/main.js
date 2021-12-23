@@ -51,7 +51,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.youtubeMaster = exports.questionMaster = exports.genericMaster = exports.mapStepFieldDefintions = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.Sample = exports.Asset = exports.youtubeMaster = exports.questionMaster = exports.genericMaster = exports.mapStepFieldDefintions = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
@@ -60,6 +60,9 @@ Object.defineProperty(exports, "mapStepFieldDefintions", { enumerable: true, get
 exports.genericMaster = require("./masters/generic");
 exports.questionMaster = require("./masters/question");
 exports.youtubeMaster = require("./masters/youtube");
+var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

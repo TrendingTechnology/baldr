@@ -10,48 +10,62 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
 import { masterCollection } from '@bldr/lamp-core'
 import { getHtmlBody } from '@bldr/wikipedia'
 
-export default {
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    language: {
-      type: String
-    },
-    oldid: {
-      type: Number
-    },
-    httpUrl: {
-      type: String,
-      required: true
-    }
-  },
-  computed: {
-    titleWithoutUnderscores () {
-      return this.title.replace(/_/g, ' ')
-    },
-    linkTitle () {
-      let oldid = ''
-      if (this.oldid) oldid = ` (Version ${this.oldid})`
-      const title = this.title.replace(/ /g, '_')
-      return `${this.language}:${title}${oldid}`
-    },
-    body () {
-      const master = masterCollection.get(this.masterName)
-      return master.$get('bodyById', this.id)
-    }
-  },
-  mounted: async function () {
-    const master = masterCollection.get(this.masterName)
+@Component
+export default class WikipediaMasterMain extends Vue {
+  @Prop({
+    type: String,
+    required: true
+  })
+  id: string
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  title: string
+
+  @Prop({
+    type: String
+  })
+  language: string
+
+  @Prop({
+    type: Number
+  })
+  oldid: number
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  httpUrl: string
+
+  get titleWithoutUnderscores (): string {
+    return this.title.replace(/_/g, ' ')
+  }
+
+  get linkTitle (): string {
+    let oldid = ''
+    if (this.oldid) oldid = ` (Version ${this.oldid})`
+    const title = this.title.replace(/ /g, '_')
+    return `${this.language}:${title}${oldid}`
+  }
+
+  get body (): string {
+    const master = masterCollection.get('wikipedia')
+    return master.$get('bodyById', this.id)
+  }
+
+  async mounted (): Promise<void> {
+    const master = masterCollection.get('wikipedia')
     const body = master.$get('bodyById', this.id)
     if (!body) {
       const body = await getHtmlBody(this.title, this.language)

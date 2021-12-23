@@ -58,6 +58,7 @@ import * as questionMaster_1 from './masters/question';
 export { questionMaster_1 as questionMaster };
 import * as youtubeMaster_1 from './masters/youtube';
 export { youtubeMaster_1 as youtubeMaster };
+export { Asset, Sample } from '@bldr/media-resolver-ng';
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }
