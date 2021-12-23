@@ -4,8 +4,16 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
+import Vue from 'vue'
+
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { wikipediaMaster } from '@bldr/presentation-parser'
+
+new Vue({
+  data: {
+    cache: wikipediaMaster.cache
+  }
+})
 
 const defaultLanguage = 'de'
 
@@ -58,7 +66,11 @@ export default validateMasterSpec({
       return props
     },
     async afterLoading ({ props }) {
-      await wikipediaMaster.queryHtmlBody(props.title, props.language, props.oldid)
+      await wikipediaMaster.queryHtmlBody(
+        props.title,
+        props.language,
+        props.oldid
+      )
       await wikipediaMaster.queryFirstImage(props.title, props.language)
     },
     collectPropsMain (props) {
@@ -66,7 +78,11 @@ export default validateMasterSpec({
       return {
         title: props.title,
         language: props.language,
-        id: wikipediaMaster.formatWikipediaId(props.title, props.language, props.oldid),
+        id: wikipediaMaster.formatWikipediaId(
+          props.title,
+          props.language,
+          props.oldid
+        ),
         oldid: props.oldid,
         httpUrl: wikipediaMaster.formatUrl(p)
       }

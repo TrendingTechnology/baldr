@@ -25,9 +25,7 @@ import { wikipediaMaster } from '@bldr/presentation-parser'
 @Component
 export default class WikipediaMasterPreview extends Vue {
   data () {
-    return {
-      cache: wikipediaMaster.cache
-    }
+    return wikipediaMaster.cache
   }
 
   @Prop({
@@ -42,10 +40,13 @@ export default class WikipediaMasterPreview extends Vue {
   })
   id: string
 
-    @Prop({
+  @Prop({
     type: String
   })
   language: string
+
+  bodies: { [key: string]: string }
+  thumbnailUrls: { [key: string]: string }
 
   cache: typeof wikipediaMaster.cache
 
@@ -54,12 +55,13 @@ export default class WikipediaMasterPreview extends Vue {
   }
 
   get thumbnailUrl (): string | undefined {
-    if (this.cache.thumbnailUrls[this.id] != null) {
-      return this.cache.thumbnailUrls[this.id]
+    if (this.thumbnailUrls[this.id] != null) {
+      return this.thumbnailUrls[this.id]
     }
   }
 
-  async mounted (): Promise<void> {
+  async created (): Promise<void> {
+    console.log(this.id)
     await wikipediaMaster.queryFirstImage(this.title, this.language)
   }
 }

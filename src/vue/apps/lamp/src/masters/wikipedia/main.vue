@@ -20,9 +20,7 @@ import { wikipediaMaster } from '@bldr/presentation-parser'
 @Component
 export default class WikipediaMasterMain extends Vue {
   data () {
-    return {
-      cache: wikipediaMaster.cache
-    }
+    return wikipediaMaster.cache
   }
 
   @Prop({
@@ -53,6 +51,9 @@ export default class WikipediaMasterMain extends Vue {
   })
   httpUrl: string
 
+  bodies: { [key: string]: string }
+  thumbnailUrls: { [key: string]: string }
+
   cache: typeof wikipediaMaster.cache
 
   get titleWithoutUnderscores (): string {
@@ -64,12 +65,12 @@ export default class WikipediaMasterMain extends Vue {
   }
 
   get body (): string | undefined {
-    if (this.cache.bodies[this.id] != null) {
-      return this.cache.bodies[this.id]
+    if (this.bodies[this.id] != null) {
+      return this.bodies[this.id]
     }
   }
 
-  async mounted (): Promise<void> {
+  async created (): Promise<void> {
     await wikipediaMaster.queryHtmlBody(this.title, this.language, this.oldid)
   }
 }
