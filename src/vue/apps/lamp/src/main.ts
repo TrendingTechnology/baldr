@@ -31,7 +31,7 @@ import './global-components'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
-Vue.use(Notification as any, Vue)
+Vue.use(Notification)
 
 Vue.use(DynamicSelect as any)
 Vue.use(ModalDialog)

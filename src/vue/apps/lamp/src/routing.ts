@@ -11,9 +11,12 @@ import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
+import { showMessage } from '@bldr/notification'
 
 import store from '@/store/index.js'
 import { router } from '@/routes'
+
+import Vm from './main'
 
 /**
  * Set the document title by the current route.
@@ -166,7 +169,7 @@ async function loadPresentationById (vm: any, presRef: string) {
 /**
  * Load presentation and set navigation list numbers.
  */
-async function loadPresentationByRoute (vm: any, route: Route) {
+async function loadPresentationByRoute (vm: typeof Vm, route: Route) {
   try {
     if (route.params.presRef) {
       const presentation = vm.$store.getters['lamp/presentation']
@@ -181,7 +184,7 @@ async function loadPresentationByRoute (vm: any, route: Route) {
       }
     }
   } catch (error) {
-    vm.$showMessage.error(error)
+    showMessage.error(error as Error)
   }
 }
 

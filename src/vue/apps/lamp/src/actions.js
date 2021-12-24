@@ -7,6 +7,7 @@
 
 import { styleConfigurator } from '@bldr/style-configurator'
 import api from '@bldr/api-wrapper'
+import { showMessage } from '@bldr/notification'
 
 import store from './store/index.js'
 import vm from './main'
@@ -234,10 +235,10 @@ export default {
       store.dispatch('lamp/titles/loadRootTreeList')
       if (result.data.errors.length) {
         for (const errorMsg of result.data.errors) {
-          vm.$showMessage.error(errorMsg)
+          showMessage.error(errorMsg)
         }
       } else {
-        vm.$showMessage.success(
+        showMessage.success(
           `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(
             0,
             8

@@ -63,9 +63,12 @@ declare module 'vue/types/vue' {
   }
 }
 
+export let showMessage: Notification
+
 // export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
-  install(Vue: typeof _Vue, options?: any): void {
-    Vue.prototype.$showMessage = new Notification(Vue)
+  install(Vue: typeof _Vue): void {
+    showMessage = new Notification(Vue)
+    Vue.prototype.$showMessage = showMessage
   }
 }

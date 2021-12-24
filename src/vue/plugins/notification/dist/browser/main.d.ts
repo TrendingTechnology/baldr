@@ -16,7 +16,8 @@ declare module 'vue/types/vue' {
         $showMessage: Notification;
     }
 }
+export declare let showMessage: Notification;
 declare const _default: {
-    install(Vue: typeof _Vue, options?: any): void;
+    install(Vue: typeof _Vue): void;
 };
 export default _default;

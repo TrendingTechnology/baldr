@@ -42,9 +42,11 @@ class Notification {
         this.Vue.prototype.$notify(notification);
     }
 }
+export let showMessage;
 // export type PluginFunction<T> = (Vue: typeof _Vue, options?: T) => void;
 export default {
-    install(Vue, options) {
-        Vue.prototype.$showMessage = new Notification(Vue);
+    install(Vue) {
+        showMessage = new Notification(Vue);
+        Vue.prototype.$showMessage = showMessage;
     }
 };
