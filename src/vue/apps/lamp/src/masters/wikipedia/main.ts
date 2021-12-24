@@ -4,16 +4,8 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
-import Vue from 'vue'
-
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { wikipediaMaster } from '@bldr/presentation-parser'
-
-new Vue({
-  data: {
-    cache: wikipediaMaster.cache
-  }
-})
 
 const defaultLanguage = 'de'
 
@@ -71,7 +63,7 @@ export default validateMasterSpec({
         props.language,
         props.oldid
       )
-      await wikipediaMaster.queryFirstImage(props.title, props.language)
+      // await wikipediaMaster.queryFirstImage(props.title, props.language)
     },
     collectPropsMain (props) {
       const p = props as wikipediaMaster.WikipediaFieldsNormalized

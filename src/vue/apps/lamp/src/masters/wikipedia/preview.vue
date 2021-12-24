@@ -24,8 +24,10 @@ import { wikipediaMaster } from '@bldr/presentation-parser'
 
 @Component
 export default class WikipediaMasterPreview extends Vue {
-  data () {
-    return wikipediaMaster.cache
+  data (): { thumbnailUrl: null | string } {
+    return {
+      thumbnailUrl: null
+    }
   }
 
   @Prop({
@@ -45,24 +47,21 @@ export default class WikipediaMasterPreview extends Vue {
   })
   language: string
 
-  bodies: { [key: string]: string }
-  thumbnailUrls: { [key: string]: string }
-
-  cache: typeof wikipediaMaster.cache
+  thumbnailUrl: string
 
   get titleNoUnderscores (): string {
-    return this.title.replace(/_/g, ' ')
+    return wikipediaMaster.formatTitleHumanReadable(this.title)
   }
 
-  get thumbnailUrl (): string | undefined {
-    if (this.thumbnailUrls[this.id] != null) {
-      return this.thumbnailUrls[this.id]
-    }
+  async setThumbnailUrl (): Promise<void> {
+    this.thumbnailUrl = await wikipediaMaster.queryFirstImage(
+      this.title,
+      this.language
+    )
   }
 
-  async created (): Promise<void> {
-    console.log(this.id)
-    await wikipediaMaster.queryFirstImage(this.title, this.language)
+  mounted (): void {
+    this.setThumbnailUrl()
   }
 }
 </script>

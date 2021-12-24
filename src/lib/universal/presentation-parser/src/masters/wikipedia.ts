@@ -216,7 +216,6 @@ export async function queryHtmlBody (
   if (cache.bodies[wikipediaId] != null) {
     return cache.bodies[wikipediaId]
   }
-
   const params: UrlParameterCollection = {
     action: 'parse',
     page: title,

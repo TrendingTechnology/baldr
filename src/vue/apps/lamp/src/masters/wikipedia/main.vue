@@ -13,14 +13,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
 
 import { wikipediaMaster } from '@bldr/presentation-parser'
 
 @Component
 export default class WikipediaMasterMain extends Vue {
-  data () {
-    return wikipediaMaster.cache
+  data (): { body: null | string } {
+    return {
+      body: null
+    }
   }
 
   @Prop({
@@ -51,10 +53,7 @@ export default class WikipediaMasterMain extends Vue {
   })
   httpUrl: string
 
-  bodies: { [key: string]: string }
-  thumbnailUrls: { [key: string]: string }
-
-  cache: typeof wikipediaMaster.cache
+  body: string
 
   get titleWithoutUnderscores (): string {
     return wikipediaMaster.formatTitleHumanReadable(this.title)
@@ -64,14 +63,25 @@ export default class WikipediaMasterMain extends Vue {
     return wikipediaMaster.formatTitleForLink(this)
   }
 
-  get body (): string | undefined {
-    if (this.bodies[this.id] != null) {
-      return this.bodies[this.id]
-    }
-  }
-
   async created (): Promise<void> {
     await wikipediaMaster.queryHtmlBody(this.title, this.language, this.oldid)
+  }
+
+  async setBody (): Promise<void> {
+    this.body = await wikipediaMaster.queryHtmlBody(
+      this.title,
+      this.language,
+      this.oldid
+    )
+  }
+
+  @Watch('id')
+  onBodyChange (): void {
+    this.setBody()
+  }
+
+  mounted (): void {
+    this.setBody()
   }
 }
 </script>
