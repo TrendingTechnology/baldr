@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,20 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
-var child_process_1 = __importDefault(require("child_process"));
-var fs_1 = __importDefault(require("fs"));
-var media_manager_1 = require("@bldr/media-manager");
-var file_reader_writer_1 = require("@bldr/file-reader-writer");
-var titles_1 = require("@bldr/titles");
-var config_1 = require("@bldr/config");
-var media_data_collector_1 = require("@bldr/media-data-collector");
-var api_1 = require("../api");
-var config = (0, config_1.getConfig)();
+import path from 'path';
+import childProcess from 'child_process';
+import fs from 'fs';
+import { walk } from '@bldr/media-manager';
+import { writeJsonFile } from '@bldr/file-reader-writer';
+import { TreeFactory } from '@bldr/titles';
+import { getConfig } from '@bldr/config';
+import { buildPresentationData, buildDbAssetData } from '@bldr/media-data-collector';
+import { database } from '../api';
+var config = getConfig();
 var ErrorMessageCollector = /** @class */ (function () {
     function ErrorMessageCollector() {
         /**
@@ -76,19 +71,19 @@ function insertMediaFileIntoDb(filePath, mediaType, errors) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     if (mediaType === 'presentations') {
-                        media = (0, media_data_collector_1.buildPresentationData)(filePath);
+                        media = buildPresentationData(filePath);
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
-                        if (!fs_1.default.existsSync("".concat(filePath, ".yml"))) {
+                        if (!fs.existsSync("".concat(filePath, ".yml"))) {
                             return [2 /*return*/];
                         }
-                        media = (0, media_data_collector_1.buildDbAssetData)(filePath);
+                        media = buildDbAssetData(filePath);
                     }
                     if (media == null) {
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, api_1.database.db.collection(mediaType).insertOne(media)];
+                    return [4 /*yield*/, database.db.collection(mediaType).insertOne(media)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 3];
@@ -105,7 +100,7 @@ function insertMediaFileIntoDb(filePath, mediaType, errors) {
  * Run git pull on the `basePath`
  */
 function gitPull() {
-    var gitPull = child_process_1.default.spawnSync('git', ['pull'], {
+    var gitPull = childProcess.spawnSync('git', ['pull'], {
         cwd: config.mediaServer.basePath,
         encoding: 'utf-8'
     });
@@ -120,7 +115,7 @@ function gitPull() {
  *
  * @returns {Promise.<Object>}
  */
-function default_1(full) {
+export default function (full) {
     if (full === void 0) { full = false; }
     return __awaiter(this, void 0, void 0, function () {
         var errors, titleTreeFactory, gitRevParse, assetCounter, presentationCounter, lastCommitId, begin, tree, end;
@@ -129,45 +124,45 @@ function default_1(full) {
             switch (_a.label) {
                 case 0:
                     errors = new ErrorMessageCollector();
-                    titleTreeFactory = new titles_1.TreeFactory();
+                    titleTreeFactory = new TreeFactory();
                     if (full) {
                         gitPull();
                     }
-                    gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
+                    gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
                         cwd: config.mediaServer.basePath,
                         encoding: 'utf-8'
                     });
                     assetCounter = 0;
                     presentationCounter = 0;
                     lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
-                    return [4 /*yield*/, api_1.database.connect()];
+                    return [4 /*yield*/, database.connect()];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, api_1.database.initialize()];
+                    return [4 /*yield*/, database.initialize()];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, api_1.database.flushMediaFiles()];
+                    return [4 /*yield*/, database.flushMediaFiles()];
                 case 3:
                     _a.sent();
                     begin = new Date().getTime();
-                    return [4 /*yield*/, api_1.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
+                    return [4 /*yield*/, database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
                 case 4:
                     _a.sent();
-                    return [4 /*yield*/, (0, media_manager_1.walk)({
+                    return [4 /*yield*/, walk({
                             everyFile: function (filePath) {
                                 // Delete temporary files.
                                 if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) != null ||
                                     filePath.includes('Praesentation_tmp.baldr.yml') ||
                                     filePath.includes('title_tmp.txt')) {
-                                    fs_1.default.unlinkSync(filePath);
+                                    fs.unlinkSync(filePath);
                                 }
                             },
                             directory: function (filePath) {
                                 // Delete empty directories.
-                                if (fs_1.default.existsSync(filePath) && fs_1.default.statSync(filePath).isDirectory()) {
-                                    var files = fs_1.default.readdirSync(filePath);
+                                if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+                                    var files = fs.readdirSync(filePath);
                                     if (files.length === 0) {
-                                        fs_1.default.rmdirSync(filePath);
+                                        fs.rmdirSync(filePath);
                                     }
                                 }
                             },
@@ -202,20 +197,20 @@ function default_1(full) {
                 case 5:
                     _a.sent();
                     // .replaceOne and upsert: Problems with merged objects?
-                    return [4 /*yield*/, api_1.database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })];
+                    return [4 /*yield*/, database.db.collection('folderTitleTree').deleteOne({ ref: 'root' })];
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
                     tree = titleTreeFactory.getTree();
-                    return [4 /*yield*/, api_1.database.db.collection('folderTitleTree').insertOne({
+                    return [4 /*yield*/, database.db.collection('folderTitleTree').insertOne({
                             ref: 'root',
                             tree: tree
                         })];
                 case 7:
                     _a.sent();
-                    (0, file_reader_writer_1.writeJsonFile)(path_1.default.join(config.mediaServer.basePath, 'title-tree.json'), tree);
+                    writeJsonFile(path.join(config.mediaServer.basePath, 'title-tree.json'), tree);
                     end = new Date().getTime();
-                    return [4 /*yield*/, api_1.database.db
+                    return [4 /*yield*/, database.db
                             .collection('updates')
                             .updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
                 case 8:
@@ -235,4 +230,3 @@ function default_1(full) {
         });
     });
 }
-exports.default = default_1;

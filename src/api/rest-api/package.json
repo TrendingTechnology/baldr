@@ -13,6 +13,7 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "main": "dist/node/main.js",
+  "browser": "dist/browser/browser-main.js",
   "dependencies": {
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
@@ -33,8 +34,9 @@
     "@types/node": "14.14.7"
   },
   "scripts": {
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
     "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "npm run build:node && npm run build:browser",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",

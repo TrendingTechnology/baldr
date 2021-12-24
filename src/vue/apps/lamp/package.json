@@ -46,6 +46,7 @@
     "@bldr/themes": "*",
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",
+    "@bldr/rest-api": "*",
     "electron-context-menu": "2.3.0",
     "vue-class-component": "7.2.3",
     "vue-native-websocket": "2.0.14",

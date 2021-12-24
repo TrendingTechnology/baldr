@@ -16,6 +16,15 @@ export type MediaType = 'asset' | 'presentation'
 export default function (): express.Express {
   const app = express()
 
+  // Update the media server
+  app.put('/', async (request, response, next) => {
+    try {
+      response.json(await updateMedia(false))
+    } catch (error) {
+      next(error)
+    }
+  })
+
   app.get('/get/presentation/by-ref', async (request, response, next) => {
     try {
       const ref = query.extractString(request.query, 'ref')

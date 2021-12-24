@@ -5,7 +5,7 @@ import fs from 'fs'
 import { walk } from '@bldr/media-manager'
 import { writeJsonFile } from '@bldr/file-reader-writer'
 import { TreeFactory } from '@bldr/titles'
-import { GenericError, ApiTypes } from '@bldr/type-definitions'
+import { GenericError } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config'
 import {
   buildPresentationData,
@@ -13,6 +13,7 @@ import {
 } from '@bldr/media-data-collector'
 
 import { database } from '../api'
+import { MediaManagementUpdateResult } from '../result-types'
 
 const config = getConfig()
 
@@ -83,7 +84,7 @@ function gitPull (): void {
  */
 export default async function (
   full: boolean = false
-): Promise<ApiTypes.UpdateResult> {
+): Promise<MediaManagementUpdateResult> {
   const errors = new ErrorMessageCollector()
 
   const titleTreeFactory = new TreeFactory()
@@ -151,7 +152,6 @@ export default async function (
     .collection('updates')
     .updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
-    finished: true,
     begin,
     end,
     duration: end - begin,

@@ -16,7 +16,6 @@ describe('media', function () {
     restart()
 
     const result = await httpRequest.request('mgmt/update')
-    assert.strictEqual(result.data.finished, true)
     assert.ok(typeof result.data.begin === 'number')
     assert.ok(typeof result.data.end === 'number')
     assert.ok(typeof result.data.duration === 'number')

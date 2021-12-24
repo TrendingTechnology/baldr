@@ -5,7 +5,8 @@
     "outDir": "./dist",
     "allowJs": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "moduleResolution": "node"
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*"]
 }
