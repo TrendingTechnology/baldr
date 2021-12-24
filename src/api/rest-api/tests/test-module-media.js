@@ -11,17 +11,30 @@ const { restart } = require('../dist/node/main')
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
 describe('media', function () {
-  it('mgmt/update', async function () {
+  it('PUT / (update)', async function () {
     this.timeout(10000)
     restart()
 
-    const result = await httpRequest.request('mgmt/update')
+    const result = await httpRequest.request({ url: '', method: 'PUT' })
     assert.ok(typeof result.data.begin === 'number')
     assert.ok(typeof result.data.end === 'number')
     assert.ok(typeof result.data.duration === 'number')
     assert.ok(typeof result.data.lastCommitId === 'string')
     assert.ok(Array.isArray(result.data.errors))
     assert.strictEqual(result.data.errors.length, 0)
+  })
+
+  it('GET / (statistics)', async function () {
+    const result = await httpRequest.request({ url: '' })
+    const data = result.data
+
+    assert.ok(data.count.assets > 0)
+    assert.ok(data.count.presentations > 0)
+
+    const updateTask = data.updateTasks[0]
+    assert.strictEqual(typeof updateTask.begin, 'number')
+    assert.strictEqual(typeof updateTask.end, 'number')
+    assert.strictEqual(typeof updateTask.lastCommitId, 'string')
   })
 
   describe('get', function () {
@@ -82,22 +95,6 @@ describe('media', function () {
     it('folder-title-tree', async function () {
       const result = await httpRequest.request('get/folder-title-tree')
       assert.ok(result.data.Musik != null)
-    })
-  })
-
-  describe('stats', function () {
-    it('count', async function () {
-      const result = await httpRequest.request('stats/count')
-      assert.ok(result.data.assets > 0)
-      assert.ok(result.data.presentations > 0)
-    })
-
-    it('updates', async function () {
-      const result = await httpRequest.request('stats/updates')
-      const updateTask = result.data[0]
-      assert.strictEqual(typeof updateTask.begin, 'number')
-      assert.strictEqual(typeof updateTask.end, 'number')
-      assert.strictEqual(typeof updateTask.lastCommitId, 'string')
     })
   })
 

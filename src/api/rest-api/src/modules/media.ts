@@ -25,6 +25,19 @@ export default function (): express.Express {
     }
   })
 
+  // Statistics
+  app.get('/', async (request, response, next) => {
+    try {
+      const result = {
+        count: await database.getDocumentCounts(),
+        updateTasks: await database.listUpdateTasks()
+      }
+      response.json(result)
+    } catch (error) {
+      next(error)
+    }
+  })
+
   app.get('/get/presentation/by-ref', async (request, response, next) => {
     try {
       const ref = query.extractString(request.query, 'ref')
@@ -141,32 +154,6 @@ export default function (): express.Express {
   app.get('/mgmt/re-init', async (request, response, next) => {
     try {
       response.json(await database.reInitialize())
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/mgmt/update', async (request, response, next) => {
-    try {
-      response.json(await updateMedia(false))
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  /* stats = statistics */
-
-  app.get('/stats/count', async (request, response, next) => {
-    try {
-      response.json(await database.getDocumentCounts())
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/stats/updates', async (request, response, next) => {
-    try {
-      response.json(await database.listUpdateTasks())
     } catch (error) {
       next(error)
     }
