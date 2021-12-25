@@ -8,7 +8,7 @@ import Master from './Master.vue'
 
 interface NavigationNumbers {
   slideNo: number
-  stepNo: number
+  stepNo?: number
 }
 
 @Component

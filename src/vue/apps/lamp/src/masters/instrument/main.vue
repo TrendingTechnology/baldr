@@ -17,18 +17,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
+import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component({
   components: {
     ExternalSites
   }
 })
-export default class InstrumentMasterMain extends Vue {
+export default class InstrumentMasterMain extends MasterMain {
+  masterName = 'instrument'
+
   @Prop(Object)
   readonly asset!: object
 }

@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import MasterMain from '../../components/reusable/MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
 @Component({
@@ -31,7 +31,8 @@ import ExternalSites from '@/components/reusable/ExternalSites.vue'
     ExternalSites
   }
 })
-export default class AudioMasterMain extends Vue {
+export default class AudioMasterMain extends MasterMain {
+  masterName = 'audio'
   @Prop({
     type: String
   })
