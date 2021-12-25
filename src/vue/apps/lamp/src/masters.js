@@ -691,12 +691,12 @@ class Master {
  */
 const masterMixin = {
   props: {
-    // navNos (navigation numbers): this.navNos = { slideNo: 1, stepNo: 1 }
+    // navigationNumbers (navigation numbers): this.navigationNumbers = { slideNo: 1, stepNo: 1 }
     // The properties `slideNo` and `stepNo` had to be bundle into one object,
     // to get a watcher that can execute the two hooks
     // `afterSlideNoChangeOnComponent` and `afterStepNoChangeOnComponent`
     // on demand.
-    navNos: {
+    navigationNumbers: {
       type: Object
     },
     // By default all master components are marked as main components.
@@ -707,7 +707,7 @@ const masterMixin = {
     }
   },
   watch: {
-    navNos (newValue, oldValue) {
+    navigationNumbers (newValue, oldValue) {
       this.$nextTick(() => {
         let slideNoChange = false
         if (newValue.slideNo !== oldValue.slideNo) {
@@ -742,14 +742,14 @@ const masterMixin = {
   mounted () {
     this.master.afterSlideNoChangeOnComponent(
       {
-        newSlideNo: this.navNos.slideNo
+        newSlideNo: this.navigationNumbers.slideNo
       },
       this
     )
-    if (this.navNos.stepNo) {
+    if (this.navigationNumbers.stepNo) {
       this.master.afterStepNoChangeOnComponent(
         {
-          newStepNo: this.navNos.stepNo,
+          newStepNo: this.navigationNumbers.stepNo,
           slideNoChange: true
         },
         this

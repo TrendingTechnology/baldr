@@ -28,7 +28,7 @@ export default {
       if (this.page != null) {
         return this.page
       }
-      return this.navNos.stepNo
+      return this.navigationNumbers.stepNo
     }
   }
 }

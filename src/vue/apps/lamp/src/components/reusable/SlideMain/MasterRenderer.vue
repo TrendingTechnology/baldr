@@ -39,7 +39,7 @@ export default class MasterRenderer extends Vue {
         {
           props: {
             ...this.slide.propsMain,
-            navNos: { stepNo: this.stepNo, slideNo: this.slide.no },
+            navigationNumbers: { stepNo: this.stepNo, slideNo: this.slide.no },
             isPublic: this.isPublic
           },
           class: {

@@ -36,8 +36,8 @@ export default class CounterMasterMain extends MasterMain {
 
   get currentFormatted () {
     let currentNumber: number
-    if (this.navNos.stepNo != null) {
-      currentNumber = this.navNos.stepNo
+    if (this.navigationNumbers.stepNo != null) {
+      currentNumber = this.navigationNumbers.stepNo
     } else {
       currentNumber = 1
     }

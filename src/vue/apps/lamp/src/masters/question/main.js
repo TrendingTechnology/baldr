@@ -12,7 +12,7 @@ import { buildQuestionStepController } from '@bldr/dom-manipulator'
  */
 function setQuestionsByStepNo (stepNo) {
   const slides = this.$get('slides')
-  const slide = slides[this.navNos.slideNo - 1]
+  const slide = slides[this.navigationNumbers.slideNo - 1]
   // ['q1', 'a1', 'q2', 'q3']
   const sequence = slide.props.sequence
 

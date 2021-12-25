@@ -1,25 +1,20 @@
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
-import { LampTypes } from '@bldr/type-definitions'
-
-import { masterCollection } from '@bldr/lamp-core'
-
 import inlineMarkup from '../../inline-markup.js'
 import { customStore } from '../../main'
+import Master from './Master.vue'
 
-interface NavNos {
+interface NavigationNumbers {
   slideNo: number
   stepNo: number
 }
 
 @Component
-export default class MasterMain extends Vue {
-
+export default class MasterMain extends Master {
   /**
-   * navNos (navigation numbers): this.navNos = { slideNo: 1, stepNo: 1
+   * navigationNumbers (navigation numbers): this.navigationNumbers = { slideNo: 1, stepNo: 1
    * } The properties `slideNo` and `stepNo` had to be bundle into one
    * object, to get a watcher that can execute the two hooks
    * `afterSlideNoChangeOnComponent` and `afterStepNoChangeOnComponent`
@@ -28,7 +23,7 @@ export default class MasterMain extends Vue {
   @Prop({
     type: Object
   })
-  navNos: NavNos
+  navigationNumbers: NavigationNumbers
 
   /**
    * By default all master components are marked as main components.
@@ -40,16 +35,12 @@ export default class MasterMain extends Vue {
   })
   isPublic: boolean = true
 
-  masterName: string
-
-  get master (): LampTypes.Master {
-    return masterCollection.get(this.masterName)
-  }
-
-  @Watch('navNos')
-  onNavNosChange (newValue: NavNos, oldValue: NavNos) {
+  @Watch('navigationNumbers')
+  onNavigationNumbersChange (
+    newValue: NavigationNumbers,
+    oldValue: NavigationNumbers
+  ) {
     this.$nextTick(() => {
-      console.log(this.master)
       let slideNoChange = false
       if (newValue.slideNo !== oldValue.slideNo) {
         this.master.afterSlideNoChangeOnComponent(
@@ -83,14 +74,14 @@ export default class MasterMain extends Vue {
   mounted () {
     this.master.afterSlideNoChangeOnComponent(
       {
-        newSlideNo: this.navNos.slideNo
+        newSlideNo: this.navigationNumbers.slideNo
       },
       this
     )
-    if (this.navNos.stepNo) {
+    if (this.navigationNumbers.stepNo) {
       this.master.afterStepNoChangeOnComponent(
         {
-          newStepNo: this.navNos.stepNo,
+          newStepNo: this.navigationNumbers.stepNo,
           slideNoChange: true
         },
         this
