@@ -42,13 +42,24 @@ export function getPresentationByRef(ref) {
         }, `The presentation with the reference “${ref}” couldn’t be resolved.`);
     });
 }
-export function getPresentationAsStringByPath(relPath) {
+export function getDynamicSelectPresentations(substring) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({
+            url: 'media/get/presentations/by-substring',
+            method: 'GET',
+            params: {
+                search: substring
+            }
+        }, `Dynamic select results with the substring “${substring}” couldn’t be resolved.`);
+    });
+}
+export function readMediaAsString(relPath) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield callWithErrorMessage({
             url: `/media/${relPath}`,
             method: 'GET',
             headers: { 'Cache-Control': 'no-cache' }
-        }, `The presentation with the path “${relPath}” couldn’t be read from the file system over HTTP.`);
+        }, `The media file with the path “${relPath}” couldn’t be read from the file system over HTTP.`);
     });
 }
 export function getAssetByUri(uri, throwException = true) {

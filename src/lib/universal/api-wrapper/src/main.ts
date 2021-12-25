@@ -49,16 +49,29 @@ export async function getPresentationByRef (
   )
 }
 
-export async function getPresentationAsStringByPath (
-  relPath: string
-): Promise<string> {
+export async function getDynamicSelectPresentations (
+  substring: string
+): Promise<ApiTypes.DynamikSelectResult[]> {
+  return await callWithErrorMessage(
+    {
+      url: 'media/get/presentations/by-substring',
+      method: 'GET',
+      params: {
+        search: substring
+      }
+    },
+    `Dynamic select results with the substring “${substring}” couldn’t be resolved.`
+  )
+}
+
+export async function readMediaAsString (relPath: string): Promise<string> {
   return await callWithErrorMessage(
     {
       url: `/media/${relPath}`,
       method: 'GET',
       headers: { 'Cache-Control': 'no-cache' }
     },
-    `The presentation with the path “${relPath}” couldn’t be read from the file system over HTTP.`
+    `The media file with the path “${relPath}” couldn’t be read from the file system over HTTP.`
   )
 }
 

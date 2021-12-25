@@ -103,11 +103,6 @@ export async function getDatabaseWrapper (): Promise<Database> {
   return database
 }
 
-interface DynamikSelectResult {
-  ref: string
-  name: string
-}
-
 export interface FlushMediaResult {
   numberOfDroppedAssets: number
   numberOfDroppedPresentations: number
@@ -315,7 +310,7 @@ export class Database implements DatabaseWrapper {
 
   public async searchPresentationBySubstring (
     substring: string
-  ): Promise<DynamikSelectResult[]> {
+  ): Promise<ApiTypes.DynamikSelectResult[]> {
     substring = substring.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
     const regex = new RegExp(substring, 'gi')
 

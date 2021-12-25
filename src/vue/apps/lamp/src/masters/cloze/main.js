@@ -10,6 +10,7 @@ import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
+import * as api from '@bldr/api-wrapper'
 
 import { warnSvgWidthHeight } from '@/lib.js'
 
@@ -92,12 +93,9 @@ export default validateMasterSpec({
       const svg = master.$get('svgByUri')(props.src)
       if (!svg) {
         const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
-        const response = await this.$media.httpRequest.request({
-          url: `/media/${mediaAsset.yaml.path}`,
-          method: 'get'
-        })
-        if (response.data) {
-          master.$commit('addSvg', { uri: props.src, markup: response.data })
+        const markup = await api.readMediaAsString(mediaAsset.yaml.path)
+        if (markup != null) {
+          master.$commit('addSvg', { uri: props.src, markup })
         }
       }
     },

@@ -27,11 +27,18 @@ describe('Package “@bldr/api-wrapper”', function () {
     assert.strictEqual(presentation.meta.ref, 'Biographie-Kindheit')
   })
 
-  it('Function “getPresentationAsStringByPath()”', async function () {
-    const presentation = await api.getPresentationAsStringByPath(
+  it('Function “readMediaAsString()”', async function () {
+    const presentation = await api.readMediaAsString(
       'Musik/05/20_Mensch-Zeit/10_Mozart/10_Biographie-Kindheit/Praesentation.baldr.yml'
     )
     assert.ok(presentation.includes('ref: Biographie-Kindheit'))
+  })
+
+  it('Function “getDynamicSelectPresentations()”', async function () {
+    const results = await api.getDynamicSelectPresentations('Mozart')
+    const result = results[0]
+    assert.strictEqual(typeof result.ref, 'string')
+    assert.strictEqual(typeof result.name, 'string')
   })
 
   it('Function “getAssetByUri()”', async function () {

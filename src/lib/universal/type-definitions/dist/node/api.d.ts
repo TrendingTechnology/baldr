@@ -38,3 +38,7 @@ export interface DbReInitResult {
     resultDrop: DbDroppedCollections;
     resultInit: DbInitResult;
 }
+export interface DynamikSelectResult {
+    ref: string;
+    name: string;
+}

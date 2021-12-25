@@ -231,7 +231,7 @@ export default {
   },
   async update () {
     try {
-      const result = await vm.$media.httpRequest.request('mgmt/update')
+      const result = await api.updateMediaServer()
       store.dispatch('lamp/titles/loadRootTreeList')
       if (result.data.errors.length) {
         for (const errorMsg of result.data.errors) {
@@ -246,7 +246,7 @@ export default {
         )
       }
     } catch (error) {
-      vm.$showMessage.error(error)
+      showMessage.error(error)
     }
   },
   openEditor () {

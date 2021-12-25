@@ -13,7 +13,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { router } from '@/routes'
+import * as api from '@bldr/api-wrapper'
+
+import { router } from '../../../routes'
 
 @Component
 export default class SearchPresentation extends Vue {
@@ -35,19 +37,13 @@ export default class SearchPresentation extends Vue {
     })
   }
 
-  search (title) {
-    if (!title) return
-    this.$media.httpRequest
-      .request({
-        url: 'get/presentations/by-substring',
-        method: 'get',
-        params: {
-          search: title
-        }
-      })
-      .then(response => {
-        this.options = response.data
-      })
+  search (title: string) {
+    if (title == null) {
+      return
+    }
+    api.getDynamicSelectPresentations(title).then(results => {
+      this.options = results
+    })
   }
 
   mounted () {

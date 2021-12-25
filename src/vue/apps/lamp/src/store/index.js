@@ -125,7 +125,7 @@ const actions = {
     const mongoDbObject = await api.getPresentationByRef(presRef)
 
     // Get the yaml content as a string of a presentation for quick refresh
-    const rawYamlString = await api.getPresentationAsStringByPath(
+    const rawYamlString = await api.readMediaAsString(
       mongoDbObject.meta.path
     )
     await dispatch('openPresentation', { vm, rawYamlString, mongoDbObject })
