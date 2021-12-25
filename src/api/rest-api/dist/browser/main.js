@@ -38,8 +38,6 @@ import { startRestApi } from './api';
 export { startRestApi as start } from './api';
 export { default as openArchivesInFileManager } from './operations/open-archives-in-file-manager';
 export { default as restart } from './operations/restart-systemd-service';
-import * as ApiResults_1 from './result-types';
-export { ApiResults_1 as ApiResults };
 function main() {
     return __awaiter(this, void 0, void 0, function () {
         var port;

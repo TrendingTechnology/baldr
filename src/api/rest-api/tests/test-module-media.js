@@ -51,6 +51,11 @@ describe('/media', function () {
     await httpRequest.request({ url: '', method: 'PUT' })
   })
 
+  it('GET /titles', async function () {
+    const result = await httpRequest.request('titles')
+    assert.ok(result.data.Musik != null)
+  })
+
   describe('get', function () {
     describe('asset', function () {
       it('?ref=IN_Cembalo', async function () {
@@ -104,11 +109,6 @@ describe('/media', function () {
       assert.ok(!result.data[0].uuid)
       assert.ok(result.data[0].ref)
       assert.ok(result.data[0].name)
-    })
-
-    it('folder-title-tree', async function () {
-      const result = await httpRequest.request('get/folder-title-tree')
-      assert.ok(result.data.Musik != null)
     })
   })
 

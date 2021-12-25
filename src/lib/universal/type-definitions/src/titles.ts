@@ -173,16 +173,31 @@ export interface FolderTitle {
 }
 
 /**
- * A list of sub trees.
+ * A title with sub trees lists.
+ *
+ * ```js
+ * {
+ *   "sub": {},
+ *   "folder": {
+ *     "title": "Personencharakterisierung in der Oper",
+ *     "subtitle": "<em class=\"person\">Georges Bizet</em>:...",
+ *     "folderName": "30_Habanera",
+ *     "relPath": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
+ *     "hasPresentation": true,
+ *     "level": 4
+ *   }
+ * }
+ * ```
  */
-export interface TreeTitleList {
-  [folderName: string]: TreeTitle
+export interface TreeTitle {
+  sub: TreeTitleList
+  folder: FolderTitle
 }
 
 /**
- * A tree of folder titles.
+ * A list of sub trees.
  *
- * ```json
+ * ```js
  * {
  *   "10": {
  *     "sub": {
@@ -194,11 +209,11 @@ export interface TreeTitleList {
  *                 "sub": {},
  *                 "folder": {
  *                   "title": "Personencharakterisierung in der Oper",
+ *                   "subtitle": "<em class=\"person\">Georges Bizet</em>:...",
  *                   "folderName": "30_Habanera",
- *                   "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
+ *                   "relPath": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
  *                   "hasPresentation": true,
- *                   "level": 4,
- *                   "subtitle": "<em class=\"person\">Georges Bizet</em>:..."
+ *                   "level": 4
  *                 }
  *               }
  *             }
@@ -210,7 +225,6 @@ export interface TreeTitleList {
  * }
  * ```
  */
-export interface TreeTitle {
-  sub: TreeTitleList
-  folder: FolderTitle
+export interface TreeTitleList {
+  [folderName: string]: TreeTitle
 }

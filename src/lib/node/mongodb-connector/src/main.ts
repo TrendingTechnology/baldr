@@ -1,10 +1,6 @@
 import mongodb from 'mongodb'
 
-import {
-  StringIndexedObject,
-  ApiTypes,
-  TitlesTypes
-} from '@bldr/type-definitions'
+import { ApiTypes, TitlesTypes } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()
@@ -17,9 +13,9 @@ interface ClientWrapper {
 
 interface DatabaseWrapper {
   initialize: () => Promise<any>
-  getDocumentCounts: () => Promise<ApiTypes.Count>
+  getDocumentCounts: () => Promise<ApiTypes.MediaCount>
   getFolderTitleTree: () => Promise<TitlesTypes.TreeTitleList>
-  listUpdateTasks: () => Promise<ApiTypes.Task[]>
+  listUpdateTasks: () => Promise<ApiTypes.MediaUpdateTask[]>
   getAllAssetUris: () => Promise<string[]>
 }
 
@@ -183,7 +179,7 @@ export class Database implements DatabaseWrapper {
   /**
    * Create the collections with indexes.
    */
-  public async initialize (): Promise<{ [key: string]: any }> {
+  public async initialize (): Promise<ApiTypes.DbInitResult> {
     if (!this.isInitialized) {
       const collectionNames = await this.listCollectionNames()
 
@@ -202,16 +198,19 @@ export class Database implements DatabaseWrapper {
       this.isInitialized = true
     }
 
-    const result: StringIndexedObject = {}
+    const result: ApiTypes.DbInitResult = {}
     for (const collectionName in this.schema) {
       const indexes = await this.db
         .collection(collectionName)
         .listIndexes()
         .toArray()
-      result[collectionName] = {
+
+      const collectionResult: ApiTypes.DbCollectionInitResult = {
         name: collectionName,
         indexes: {}
       }
+
+      result[collectionName] = collectionResult
       for (const index of indexes) {
         const indexDefinition = index as IndexDefinition
         const unique = indexDefinition.unique ? 'true' : 'false'
@@ -225,7 +224,7 @@ export class Database implements DatabaseWrapper {
    * Drop all collections except collection which defined `{drop: false}` in
    * `this.schema`
    */
-  async drop (): Promise<{ [key: string]: any }> {
+  async drop (): Promise<ApiTypes.DbDroppedCollections> {
     const droppedCollections = []
     for (const collectionName in this.schema) {
       if (this.schema[collectionName].drop) {
@@ -242,12 +241,12 @@ export class Database implements DatabaseWrapper {
   /**
    * Reinitialize the MongoDB database (Drop all collections and initialize).
    */
-  async reInitialize (): Promise<{ [key: string]: any }> {
-    const resultdropDb = await this.drop()
-    const resultInitializeDb = await this.initialize()
+  async reInitialize (): Promise<ApiTypes.DbReInitResult> {
+    const resultDrop = await this.drop()
+    const resultInit = await this.initialize()
     return {
-      resultdropDb,
-      resultInitializeDb
+      resultDrop,
+      resultInit
     }
   }
 
@@ -286,7 +285,7 @@ export class Database implements DatabaseWrapper {
     return this.db.collection('seatingPlan')
   }
 
-  public async listUpdateTasks (): Promise<ApiTypes.Task[]> {
+  public async listUpdateTasks (): Promise<ApiTypes.MediaUpdateTask[]> {
     return await this.db
       .collection('updates')
       .find({}, { projection: { _id: 0 } })
@@ -351,7 +350,7 @@ export class Database implements DatabaseWrapper {
       .toArray()
   }
 
-  public async getDocumentCounts (): Promise<ApiTypes.Count> {
+  public async getDocumentCounts (): Promise<ApiTypes.MediaCount> {
     return {
       assets: await this.assets.countDocuments(),
       presentations: await this.presentations.countDocuments()

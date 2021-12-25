@@ -7,8 +7,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import { MediaManagementUpdateResult } from '@bldr/rest-api'
-
 import { installDocumentTitleUpdater } from '@/routing'
 
 // Components.
@@ -27,8 +25,6 @@ import SpeakerView from '@/components/linked-by-routes/SpeakerView/index.vue'
 import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TitlesTreePage from '@/components/linked-by-routes/TitlesTreePage/index.vue'
 import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
-
-let lol: MediaManagementUpdateResult
 
 Vue.use(VueRouter)
 

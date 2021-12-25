@@ -1,11 +1,11 @@
-import { ApiTypes } from '@bldr/type-definitions'
+import { ApiTypes, TitlesTypes } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config'
 import { makeHttpRequestInstance, AxiosRequestConfig } from '@bldr/http-request'
 import { MediaUri } from '@bldr/client-media-models'
 
 const config = getConfig()
 
-const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
+const httpRequest = makeHttpRequestInstance(config, 'local', '/api')
 
 async function callWithErrorMessage (
   requestConfig: string | AxiosRequestConfig,
@@ -18,24 +18,47 @@ async function callWithErrorMessage (
   return result.data
 }
 
-export async function updateMediaServer (): Promise<ApiTypes.UpdateResult> {
+export async function updateMediaServer (): Promise<
+ApiTypes.MediaUpdateResult
+> {
   return await callWithErrorMessage(
-    'mgmt/update',
+    { url: 'media', method: 'PUT' },
     'Updating the media server failed.'
   )
 }
 
-export async function getStatsCount (): Promise<ApiTypes.Count> {
+export async function getMediaStatistics (): Promise<ApiTypes.MediaStatistics> {
   return await callWithErrorMessage(
-    'stats/count',
+    { url: 'media', method: 'GET' },
     'Fetching of statistical informations (stats/count) failed.'
   )
 }
 
-export async function getStatsUpdates (): Promise<ApiTypes.Task[]> {
+export async function getPresentationByRef (
+  ref: string
+): Promise<any | undefined> {
   return await callWithErrorMessage(
-    'stats/updates',
-    'Fetching of statistical informations (stats/updates) failed.'
+    {
+      url: 'media/get/presentation/by-ref',
+      method: 'GET',
+      params: {
+        ref
+      }
+    },
+    `The presentation with the reference “${ref}” couldn’t be resolved.`
+  )
+}
+
+export async function getPresentationAsStringByPath (
+  relPath: string
+): Promise<string> {
+  return await callWithErrorMessage(
+    {
+      url: `/media/${relPath}`,
+      method: 'GET',
+      headers: { 'Cache-Control': 'no-cache' }
+    },
+    `The presentation with the path “${relPath}” couldn’t be read from the file system over HTTP.`
   )
 }
 
@@ -47,8 +70,8 @@ export async function getAssetByUri (
   const field = mediaUri.scheme
   const search = mediaUri.authority
   const response = await httpRequest.request({
-    url: 'get/asset',
-    method: 'get',
+    url: 'media/get/asset',
+    method: 'GET',
     params: {
       [mediaUri.scheme]: mediaUri.authority
     }
@@ -64,6 +87,20 @@ export async function getAssetByUri (
   }
 }
 
+export async function getTitleTree (): Promise<TitlesTypes.TreeTitleList> {
+  return await callWithErrorMessage(
+    {
+      url: 'media/titles',
+      method: 'GET',
+      headers: { 'Cache-Control': 'no-cache' },
+      params: {
+        timestamp: new Date().getTime()
+      }
+    },
+    'The title tree couldn’t be resolved.'
+  )
+}
+
 interface OpenEditorParameters {
   ref: string
   type?: 'presentation' | 'asset'
@@ -72,7 +109,7 @@ interface OpenEditorParameters {
 
 export async function openEditor (params: OpenEditorParameters) {
   return await callWithErrorMessage(
-    { url: 'open/editor', params },
+    { url: 'media/open/editor', params },
     'Open Editor.'
   )
 }
@@ -87,16 +124,7 @@ interface OpenFileManagerParameters {
 
 export async function openFileManager (params: OpenFileManagerParameters) {
   return await callWithErrorMessage(
-    { url: 'open/file-manager', params },
+    { url: 'media/open/file-manager', params },
     'Open Editor.'
   )
-}
-
-export default {
-  media: {
-    open: {
-      editor: openEditor,
-      fileManager: openFileManager
-    }
-  }
 }

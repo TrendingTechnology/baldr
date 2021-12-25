@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import vm from '@/main'
+import * as api from '@bldr/api-wrapper'
 
 const state = {
   rootTreeList: null,
@@ -37,16 +37,9 @@ const getters = {
 
 const actions = {
   async loadRootTreeList ({ commit }) {
-    const response = await vm.$media.httpRequest.request({
-      url: 'get/folder-title-tree',
-      method: 'get',
-      headers: { 'Cache-Control': 'no-cache' },
-      params: {
-        timestamp: new Date().getTime()
-      }
-    })
-    commit('setRootTreeList', response.data)
-    commit('setSubTreeList', response.data)
+    const tree = await api.getTitleTree()
+    commit('setRootTreeList', tree)
+    commit('setSubTreeList', tree)
   },
   setSubTreeList ({ commit, getters }, relPath) {
     if (relPath == null) {

@@ -9,6 +9,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import * as api from '@bldr/api-wrapper'
+
 import { Presentation } from '@/content-file.js'
 import vue, { customStore } from '@/main'
 import nav from './nav.js'
@@ -120,24 +122,12 @@ const actions = {
     // dispatch('setSlideNoCurrent', 1)
   },
   async openPresentationById ({ dispatch }, { vm, presRef }) {
-    // Get the path
-    let response = await vm.$media.httpRequest.request({
-      url: 'get/presentation/by-ref',
-      method: 'get',
-      params: {
-        ref: presRef
-      }
-    })
-    if (!response.data) {
-      throw new Error(`Unkown presentation with the id “${presRef}”`)
-    }
-    const mongoDbObject = response.data
-    // Get yaml content as a string of the presentation.
-    response = await vm.$media.httpRequest.request({
-      url: `/media/${mongoDbObject.meta.path}`,
-      headers: { 'Cache-Control': 'no-cache' }
-    })
-    const rawYamlString = response.data
+    const mongoDbObject = await api.getPresentationByRef(presRef)
+
+    // Get the yaml content as a string of a presentation for quick refresh
+    const rawYamlString = await api.getPresentationAsStringByPath(
+      mongoDbObject.meta.path
+    )
     await dispatch('openPresentation', { vm, rawYamlString, mongoDbObject })
   },
   /**

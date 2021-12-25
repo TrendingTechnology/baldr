@@ -89,7 +89,7 @@ export default function (): express.Express {
     }
   })
 
-  app.get('/get/folder-title-tree', async (request, response, next) => {
+  app.get('/titles', async (request, response, next) => {
     try {
       response.json(await database.getFolderTitleTree())
     } catch (error) {
@@ -108,24 +108,6 @@ export default function (): express.Express {
   app.get('/get/all-asset-uuids', async (request, response, next) => {
     try {
       response.json({})
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  /* mgmt = management */
-
-  app.get('/mgmt/flush', async (request, response, next) => {
-    try {
-      response.json(await database.flushMediaFiles())
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/mgmt/init', async (request, response, next) => {
-    try {
-      response.json(await database.initialize())
     } catch (error) {
       next(error)
     }
@@ -152,14 +134,6 @@ export default function (): express.Express {
       const archive = query.extractBoolean(request.query, 'archive', false)
       const dryRun = query.extractBoolean(request.query, 'dry-run', false)
       response.json(await openFileManager(ref, type, archive, create, dryRun))
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/mgmt/re-init', async (request, response, next) => {
-    try {
-      response.json(await database.reInitialize())
     } catch (error) {
       next(error)
     }

@@ -9,7 +9,7 @@ import { Builder } from './builder'
  * meta:
  *   ref: An unique reference string
  *   uuid: 75bd3ec8-a322-477c-ad7a-5915513f9dd8
- *   relPath: path/to/Praesenation.baldr.yml
+ *   path: path/to/Praesenation.baldr.yml
  *   title: A title
  *   subtitle: A subtitle
  *   subject: Musik

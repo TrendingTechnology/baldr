@@ -5,10 +5,10 @@ import { database } from '../api'
 export default function (): express.Express {
   const app = express()
 
-  // initialize
+  // Re-initialize
   app.post('/', async (request, response, next) => {
     try {
-      response.json(await database.initialize())
+      response.json(await database.reInitialize())
     } catch (error) {
       next(error)
     }

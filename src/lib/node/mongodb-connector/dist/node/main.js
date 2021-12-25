@@ -224,7 +224,7 @@ var Database = /** @class */ (function () {
      */
     Database.prototype.initialize = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, result, _e, _f, _g, collectionName, indexes, _h, indexes_1, index, indexDefinition, unique;
+            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, result, _e, _f, _g, collectionName, indexes, collectionResult, _h, indexes_1, index, indexDefinition, unique;
             var _j;
             return __generator(this, function (_k) {
                 switch (_k.label) {
@@ -281,10 +281,11 @@ var Database = /** @class */ (function () {
                                 .toArray()];
                     case 11:
                         indexes = _k.sent();
-                        result[collectionName] = {
+                        collectionResult = {
                             name: collectionName,
                             indexes: {}
                         };
+                        result[collectionName] = collectionResult;
                         for (_h = 0, indexes_1 = indexes; _h < indexes_1.length; _h++) {
                             index = indexes_1[_h];
                             indexDefinition = index;
@@ -342,18 +343,18 @@ var Database = /** @class */ (function () {
      */
     Database.prototype.reInitialize = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var resultdropDb, resultInitializeDb;
+            var resultDrop, resultInit;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.drop()];
                     case 1:
-                        resultdropDb = _a.sent();
+                        resultDrop = _a.sent();
                         return [4 /*yield*/, this.initialize()];
                     case 2:
-                        resultInitializeDb = _a.sent();
+                        resultInit = _a.sent();
                         return [2 /*return*/, {
-                                resultdropDb: resultdropDb,
-                                resultInitializeDb: resultInitializeDb
+                                resultDrop: resultDrop,
+                                resultInit: resultInit
                             }];
                 }
             });

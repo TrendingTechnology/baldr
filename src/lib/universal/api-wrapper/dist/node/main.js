@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openFileManager = exports.openEditor = exports.getAssetByUri = exports.getStatsUpdates = exports.getStatsCount = exports.updateMediaServer = void 0;
+exports.openFileManager = exports.openEditor = exports.getTitleTree = exports.getAssetByUri = exports.getPresentationAsStringByPath = exports.getPresentationByRef = exports.getMediaStatistics = exports.updateMediaServer = void 0;
 const config_1 = require("@bldr/config");
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
 const config = (0, config_1.getConfig)();
-const httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'local', '/api/media');
+const httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'local', '/api');
 function callWithErrorMessage(requestConfig, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield httpRequest.request(requestConfig);
@@ -26,30 +26,46 @@ function callWithErrorMessage(requestConfig, errorMessage) {
 }
 function updateMediaServer() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('mgmt/update', 'Updating the media server failed.');
+        return yield callWithErrorMessage({ url: 'media', method: 'PUT' }, 'Updating the media server failed.');
     });
 }
 exports.updateMediaServer = updateMediaServer;
-function getStatsCount() {
+function getMediaStatistics() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('stats/count', 'Fetching of statistical informations (stats/count) failed.');
+        return yield callWithErrorMessage({ url: 'media', method: 'GET' }, 'Fetching of statistical informations (stats/count) failed.');
     });
 }
-exports.getStatsCount = getStatsCount;
-function getStatsUpdates() {
+exports.getMediaStatistics = getMediaStatistics;
+function getPresentationByRef(ref) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('stats/updates', 'Fetching of statistical informations (stats/updates) failed.');
+        return yield callWithErrorMessage({
+            url: 'media/get/presentation/by-ref',
+            method: 'GET',
+            params: {
+                ref
+            }
+        }, `The presentation with the reference “${ref}” couldn’t be resolved.`);
     });
 }
-exports.getStatsUpdates = getStatsUpdates;
+exports.getPresentationByRef = getPresentationByRef;
+function getPresentationAsStringByPath(relPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({
+            url: `/media/${relPath}`,
+            method: 'GET',
+            headers: { 'Cache-Control': 'no-cache' }
+        }, `The presentation with the path “${relPath}” couldn’t be read from the file system over HTTP.`);
+    });
+}
+exports.getPresentationAsStringByPath = getPresentationAsStringByPath;
 function getAssetByUri(uri, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
         const mediaUri = new client_media_models_1.MediaUri(uri);
         const field = mediaUri.scheme;
         const search = mediaUri.authority;
         const response = yield httpRequest.request({
-            url: 'get/asset',
-            method: 'get',
+            url: 'media/get/asset',
+            method: 'GET',
             params: {
                 [mediaUri.scheme]: mediaUri.authority
             }
@@ -65,23 +81,28 @@ function getAssetByUri(uri, throwException = true) {
     });
 }
 exports.getAssetByUri = getAssetByUri;
+function getTitleTree() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({
+            url: 'media/titles',
+            method: 'GET',
+            headers: { 'Cache-Control': 'no-cache' },
+            params: {
+                timestamp: new Date().getTime()
+            }
+        }, 'The title tree couldn’t be resolved.');
+    });
+}
+exports.getTitleTree = getTitleTree;
 function openEditor(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'open/editor', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/editor', params }, 'Open Editor.');
     });
 }
 exports.openEditor = openEditor;
 function openFileManager(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'open/file-manager', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/file-manager', params }, 'Open Editor.');
     });
 }
 exports.openFileManager = openFileManager;
-exports.default = {
-    media: {
-        open: {
-            editor: openEditor,
-            fileManager: openFileManager
-        }
-    }
-};

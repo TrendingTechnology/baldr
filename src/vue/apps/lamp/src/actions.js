@@ -6,7 +6,7 @@
  */
 
 import { styleConfigurator } from '@bldr/style-configurator'
-import api from '@bldr/api-wrapper'
+import * as api from '@bldr/api-wrapper'
 import { showMessage } from '@bldr/notification'
 
 import store from './store/index.js'
@@ -54,12 +54,12 @@ function callOpenRestApi (openWith, archive = false, create = false) {
   }
 
   if (openWith === 'editor') {
-    api.media.open.editor({
+    api.openEditor({
       ref: presentation.meta.ref,
       type: 'presentation'
     })
   } else {
-    api.media.open.fileManager({
+    api.openFileManager({
       ref: presentation.meta.ref,
       type: 'presentation',
       archive,
@@ -256,7 +256,7 @@ export default {
     const slide = store.getters['lamp/slide']
     if (slide && slide.firstMediaUri) {
       const uri = slide.firstMediaUri.split(':')[1]
-      api.media.open.editor({ ref: uri, type: 'asset' })
+      api.openEditor({ ref: uri, type: 'asset' })
     } else {
       vm.$showMessage.error(
         'Die aktuelle Folie hat keine Mediendatei zum Öffnen.'

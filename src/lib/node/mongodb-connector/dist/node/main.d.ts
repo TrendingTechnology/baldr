@@ -6,9 +6,9 @@ interface ClientWrapper {
 }
 interface DatabaseWrapper {
     initialize: () => Promise<any>;
-    getDocumentCounts: () => Promise<ApiTypes.Count>;
+    getDocumentCounts: () => Promise<ApiTypes.MediaCount>;
     getFolderTitleTree: () => Promise<TitlesTypes.TreeTitleList>;
-    listUpdateTasks: () => Promise<ApiTypes.Task[]>;
+    listUpdateTasks: () => Promise<ApiTypes.MediaUpdateTask[]>;
     getAllAssetUris: () => Promise<string[]>;
 }
 export declare class MongoDbClient implements ClientWrapper {
@@ -59,22 +59,16 @@ export declare class Database implements DatabaseWrapper {
     /**
      * Create the collections with indexes.
      */
-    initialize(): Promise<{
-        [key: string]: any;
-    }>;
+    initialize(): Promise<ApiTypes.DbInitResult>;
     /**
      * Drop all collections except collection which defined `{drop: false}` in
      * `this.schema`
      */
-    drop(): Promise<{
-        [key: string]: any;
-    }>;
+    drop(): Promise<ApiTypes.DbDroppedCollections>;
     /**
      * Reinitialize the MongoDB database (Drop all collections and initialize).
      */
-    reInitialize(): Promise<{
-        [key: string]: any;
-    }>;
+    reInitialize(): Promise<ApiTypes.DbReInitResult>;
     /**
      * Delete all media files (assets, presentations) from the database.
      */
@@ -84,12 +78,12 @@ export declare class Database implements DatabaseWrapper {
     get updates(): mongodb.Collection<any>;
     get folderTitleTree(): mongodb.Collection<any>;
     get seatingPlan(): mongodb.Collection<any>;
-    listUpdateTasks(): Promise<ApiTypes.Task[]>;
+    listUpdateTasks(): Promise<ApiTypes.MediaUpdateTask[]>;
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
     getPresentationByRef(ref: string): Promise<any>;
     getAsset(scheme: 'ref' | 'uuid', uri: string): Promise<any>;
     searchPresentationBySubstring(substring: string): Promise<DynamikSelectResult[]>;
-    getDocumentCounts(): Promise<ApiTypes.Count>;
+    getDocumentCounts(): Promise<ApiTypes.MediaCount>;
     private getAllAssetRefs;
     private getAllAssetUuids;
     getAllAssetUris(): Promise<string[]>;

@@ -6,14 +6,18 @@ const { makeHttpRequestInstance } = require('@bldr/http-request')
 const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
+const { restart } = require('../dist/node/main')
+
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/database')
 
 describe('/database', function () {
-  it('POST / (update)', async function () {
+  it('POST / (reinitalize)', async function () {
+    restart()
     const result = await httpRequest.request({
       url: '',
       method: 'POST'
     })
-    assert.strictEqual(result.data.assets.name, 'assets')
+    assert.ok(result.data.resultDrop.droppedCollections.includes('assets'))
+    assert.strictEqual(result.data.resultInit.assets.name, 'assets')
   })
 })

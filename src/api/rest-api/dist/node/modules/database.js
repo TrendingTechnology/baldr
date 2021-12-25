@@ -44,7 +44,7 @@ var api_1 = require("../api");
 function default_1() {
     var _this = this;
     var app = (0, express_1.default)();
-    // initialize
+    // Re-initialize
     app.post('/', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_1;
         return __generator(this, function (_c) {
@@ -52,7 +52,7 @@ function default_1() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, api_1.database.initialize()];
+                    return [4 /*yield*/, api_1.database.reInitialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];

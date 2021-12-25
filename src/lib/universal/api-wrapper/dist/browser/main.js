@@ -11,7 +11,7 @@ import { getConfig } from '@bldr/config';
 import { makeHttpRequestInstance } from '@bldr/http-request';
 import { MediaUri } from '@bldr/client-media-models';
 const config = getConfig();
-const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media');
+const httpRequest = makeHttpRequestInstance(config, 'local', '/api');
 function callWithErrorMessage(requestConfig, errorMessage) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield httpRequest.request(requestConfig);
@@ -23,17 +23,32 @@ function callWithErrorMessage(requestConfig, errorMessage) {
 }
 export function updateMediaServer() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('mgmt/update', 'Updating the media server failed.');
+        return yield callWithErrorMessage({ url: 'media', method: 'PUT' }, 'Updating the media server failed.');
     });
 }
-export function getStatsCount() {
+export function getMediaStatistics() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('stats/count', 'Fetching of statistical informations (stats/count) failed.');
+        return yield callWithErrorMessage({ url: 'media', method: 'GET' }, 'Fetching of statistical informations (stats/count) failed.');
     });
 }
-export function getStatsUpdates() {
+export function getPresentationByRef(ref) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage('stats/updates', 'Fetching of statistical informations (stats/updates) failed.');
+        return yield callWithErrorMessage({
+            url: 'media/get/presentation/by-ref',
+            method: 'GET',
+            params: {
+                ref
+            }
+        }, `The presentation with the reference “${ref}” couldn’t be resolved.`);
+    });
+}
+export function getPresentationAsStringByPath(relPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({
+            url: `/media/${relPath}`,
+            method: 'GET',
+            headers: { 'Cache-Control': 'no-cache' }
+        }, `The presentation with the path “${relPath}” couldn’t be read from the file system over HTTP.`);
     });
 }
 export function getAssetByUri(uri, throwException = true) {
@@ -42,8 +57,8 @@ export function getAssetByUri(uri, throwException = true) {
         const field = mediaUri.scheme;
         const search = mediaUri.authority;
         const response = yield httpRequest.request({
-            url: 'get/asset',
-            method: 'get',
+            url: 'media/get/asset',
+            method: 'GET',
             params: {
                 [mediaUri.scheme]: mediaUri.authority
             }
@@ -58,21 +73,25 @@ export function getAssetByUri(uri, throwException = true) {
         }
     });
 }
+export function getTitleTree() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage({
+            url: 'media/titles',
+            method: 'GET',
+            headers: { 'Cache-Control': 'no-cache' },
+            params: {
+                timestamp: new Date().getTime()
+            }
+        }, 'The title tree couldn’t be resolved.');
+    });
+}
 export function openEditor(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'open/editor', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/editor', params }, 'Open Editor.');
     });
 }
 export function openFileManager(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'open/file-manager', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/file-manager', params }, 'Open Editor.');
     });
 }
-export default {
-    media: {
-        open: {
-            editor: openEditor,
-            fileManager: openFileManager
-        }
-    }
-};

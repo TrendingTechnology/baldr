@@ -1,4 +1,4 @@
-import { MediaManagementUpdateResult } from '../result-types';
+import { ApiTypes } from '@bldr/type-definitions';
 /**
  * Update the media server.
  *
@@ -6,4 +6,4 @@ import { MediaManagementUpdateResult } from '../result-types';
  *
  * @returns {Promise.<Object>}
  */
-export default function (full?: boolean): Promise<MediaManagementUpdateResult>;
+export default function (full?: boolean): Promise<ApiTypes.MediaUpdateResult>;
