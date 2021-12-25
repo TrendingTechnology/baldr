@@ -112,6 +112,11 @@ interface DynamikSelectResult {
   name: string
 }
 
+export interface FlushMediaResult {
+  numberOfDroppedAssets: number
+  numberOfDroppedPresentations: number
+}
+
 /**
  * A wrapper around MongoDB.
  */
@@ -249,15 +254,15 @@ export class Database implements DatabaseWrapper {
   /**
    * Delete all media files (assets, presentations) from the database.
    */
-  async flushMediaFiles (): Promise<{ [key: string]: any }> {
-    const countDroppedAssets = await this.assets.countDocuments()
-    const countDroppedPresentations = await this.presentations.countDocuments()
+  async flushMediaFiles (): Promise<FlushMediaResult> {
+    const numberOfDroppedAssets = await this.assets.countDocuments()
+    const numberOfDroppedPresentations = await this.presentations.countDocuments()
     await this.assets.deleteMany({})
     await this.presentations.deleteMany({})
     await this.folderTitleTree.deleteMany({})
     return {
-      countDroppedAssets,
-      countDroppedPresentations
+      numberOfDroppedAssets,
+      numberOfDroppedPresentations
     }
   }
 

@@ -1,1 +1,1 @@
-export { MediaManagementUpdateResult } from './result-types'
+export * as ApiResults from './result-types'

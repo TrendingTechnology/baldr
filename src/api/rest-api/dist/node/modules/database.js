@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,61 +35,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// Third party packages.
-import cors from 'cors';
-import express from 'express';
-// Project packages.
-import { getConfig } from '@bldr/config';
-import { connectDb, Database } from '@bldr/mongodb-connector';
-// Submodules.
-import registerDatabase from './modules/database';
-import registerMedia from './modules/media';
-import registerSeatingPlan from './modules/seating-plan';
-var config = getConfig();
-export var database;
-/**
- * Run the REST API. Listen to a TCP port.
- *
- * @param port - A TCP port.
- */
-export function startRestApi(port) {
-    return __awaiter(this, void 0, void 0, function () {
-        var app, mongoClient, helpMessages, usedPort;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var api_1 = require("../api");
+function default_1() {
+    var _this = this;
+    var app = (0, express_1.default)();
+    // initialize
+    app.post('/', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    app = express();
-                    return [4 /*yield*/, connectDb()];
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, api_1.database.initialize()];
                 case 1:
-                    mongoClient = _a.sent();
-                    database = new Database(mongoClient.db());
-                    return [4 /*yield*/, database.initialize()];
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
                 case 2:
-                    _a.sent();
-                    app.use(cors());
-                    app.use(express.json());
-                    app.use('/database', registerDatabase());
-                    app.use('/media', registerMedia());
-                    app.use('/seating-plan', registerSeatingPlan());
-                    helpMessages = {};
-                    app.get('/', function (request, response) {
-                        response.json({
-                            navigation: {
-                                media: helpMessages.navigation
-                            }
-                        });
-                    });
-                    if (port == null) {
-                        usedPort = config.api.port;
-                    }
-                    else {
-                        usedPort = port;
-                    }
-                    app.listen(usedPort, function () {
-                        console.log("The BALDR REST API is running on port ".concat(usedPort, "."));
-                    });
-                    return [2 /*return*/, app];
+                    error_1 = _c.sent();
+                    next(error_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
-    });
+    }); });
+    return app;
 }
+exports.default = default_1;

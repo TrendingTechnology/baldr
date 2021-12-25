@@ -42,9 +42,6 @@ import openEditor from '../operations/open-editor';
 import updateMedia from '../operations/update-media';
 import { database } from '../api';
 import * as query from '../query';
-/**
- * Register the express js rest api in a giant function.
- */
 export default function () {
     var _this = this;
     var app = express();
@@ -94,15 +91,15 @@ export default function () {
             }
         });
     }); });
-    app.get('/get/presentation/by-ref', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, _a, _b, error_3;
+    // flush
+    app.delete('/', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_3;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    ref = query.extractString(request.query, 'ref');
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.getPresentationByRef(ref)];
+                    return [4 /*yield*/, database.flushMediaFiles()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -114,15 +111,15 @@ export default function () {
             }
         });
     }); });
-    app.get('/get/presentations/by-substring', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var search, _a, _b, error_4;
+    app.get('/get/presentation/by-ref', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var ref, _a, _b, error_4;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    search = query.extractString(request.query, 'search');
+                    ref = query.extractString(request.query, 'ref');
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.searchPresentationBySubstring(search)];
+                    return [4 /*yield*/, database.getPresentationByRef(ref)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -134,8 +131,28 @@ export default function () {
             }
         });
     }); });
+    app.get('/get/presentations/by-substring', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var search, _a, _b, error_5;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    search = query.extractString(request.query, 'search');
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, database.searchPresentationBySubstring(search)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_5 = _c.sent();
+                    next(error_5);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     app.get('/get/asset', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var scheme, uri, _a, _b, error_5;
+        var scheme, uri, _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -162,15 +179,15 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_5 = _c.sent();
-                    next(error_5);
+                    error_6 = _c.sent();
+                    next(error_6);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/get/folder-title-tree', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_6;
+        var _a, _b, error_7;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -181,8 +198,8 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_6 = _c.sent();
-                    next(error_6);
+                    error_7 = _c.sent();
+                    next(error_7);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -212,32 +229,13 @@ export default function () {
     }); });
     /* mgmt = management */
     app.get('/mgmt/flush', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_7;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _b = (_a = response).json;
-                    return [4 /*yield*/, database.flushMediaFiles()];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_7 = _c.sent();
-                    next(error_7);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); });
-    app.get('/mgmt/init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_8;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.initialize()];
+                    return [4 /*yield*/, database.flushMediaFiles()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -249,8 +247,27 @@ export default function () {
             }
         });
     }); });
+    app.get('/mgmt/init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_9;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, database.initialize()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_9 = _c.sent();
+                    next(error_9);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     app.get('/open/editor', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, dryRun, _a, _b, error_9;
+        var ref, type, dryRun, _a, _b, error_10;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -264,15 +281,15 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_9 = _c.sent();
-                    next(error_9);
+                    error_10 = _c.sent();
+                    next(error_10);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/open/file-manager', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, create, archive, dryRun, _a, _b, error_10;
+        var ref, type, create, archive, dryRun, _a, _b, error_11;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -288,15 +305,15 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_10 = _c.sent();
-                    next(error_10);
+                    error_11 = _c.sent();
+                    next(error_11);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/mgmt/re-init', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var _a, _b, error_11;
+        var _a, _b, error_12;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -307,8 +324,8 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_11 = _c.sent();
-                    next(error_11);
+                    error_12 = _c.sent();
+                    next(error_12);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

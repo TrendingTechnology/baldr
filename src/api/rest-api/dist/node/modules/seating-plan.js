@@ -1,7 +1,6 @@
 "use strict";
 /**
  * A REST API to save states of the seating plan app.
- *
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -43,7 +42,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Third party packages.
 var express_1 = __importDefault(require("express"));
 var api_1 = require("../api");
 function default_1() {

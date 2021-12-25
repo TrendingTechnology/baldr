@@ -1,6 +1,5 @@
 /**
  * A REST API to save states of the seating plan app.
- *
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// Third party packages.
 import express from 'express';
 import { database } from '../api';
 export default function () {

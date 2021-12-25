@@ -22,3 +22,5 @@ export interface MediaManagementUpdateResult extends UpdateTask {
   errors: string[]
   count: MediaCount
 }
+
+export { FlushMediaResult } from '@bldr/mongodb-connector'

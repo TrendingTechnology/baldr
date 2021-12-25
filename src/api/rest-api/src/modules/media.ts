@@ -10,9 +10,6 @@ import * as query from '../query'
 
 export type MediaType = 'asset' | 'presentation'
 
-/**
- * Register the express js rest api in a giant function.
- */
 export default function (): express.Express {
   const app = express()
 
@@ -33,6 +30,15 @@ export default function (): express.Express {
         updateTasks: await database.listUpdateTasks()
       }
       response.json(result)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  // flush
+  app.delete('/', async (request, response, next) => {
+    try {
+      response.json(await database.flushMediaFiles())
     } catch (error) {
       next(error)
     }

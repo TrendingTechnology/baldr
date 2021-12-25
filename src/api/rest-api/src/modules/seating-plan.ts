@@ -1,9 +1,7 @@
 /**
  * A REST API to save states of the seating plan app.
- *
  */
 
-// Third party packages.
 import express from 'express'
 
 import { database } from '../api'

@@ -34,6 +34,10 @@ interface DynamikSelectResult {
     ref: string;
     name: string;
 }
+export interface FlushMediaResult {
+    numberOfDroppedAssets: number;
+    numberOfDroppedPresentations: number;
+}
 /**
  * A wrapper around MongoDB.
  */
@@ -74,9 +78,7 @@ export declare class Database implements DatabaseWrapper {
     /**
      * Delete all media files (assets, presentations) from the database.
      */
-    flushMediaFiles(): Promise<{
-        [key: string]: any;
-    }>;
+    flushMediaFiles(): Promise<FlushMediaResult>;
     get assets(): mongodb.Collection<any>;
     get presentations(): mongodb.Collection<any>;
     get updates(): mongodb.Collection<any>;

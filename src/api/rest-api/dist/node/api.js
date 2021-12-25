@@ -47,8 +47,9 @@ var express_1 = __importDefault(require("express"));
 var config_1 = require("@bldr/config");
 var mongodb_connector_1 = require("@bldr/mongodb-connector");
 // Submodules.
-var seating_plan_1 = __importDefault(require("./modules/seating-plan"));
+var database_1 = __importDefault(require("./modules/database"));
 var media_1 = __importDefault(require("./modules/media"));
+var seating_plan_1 = __importDefault(require("./modules/seating-plan"));
 var config = (0, config_1.getConfig)();
 /**
  * Run the REST API. Listen to a TCP port.
@@ -71,8 +72,9 @@ function startRestApi(port) {
                     _a.sent();
                     app.use((0, cors_1.default)());
                     app.use(express_1.default.json());
-                    app.use('/seating-plan', (0, seating_plan_1.default)());
+                    app.use('/database', (0, database_1.default)());
                     app.use('/media', (0, media_1.default)());
+                    app.use('/seating-plan', (0, seating_plan_1.default)());
                     helpMessages = {};
                     app.get('/', function (request, response) {
                         response.json({

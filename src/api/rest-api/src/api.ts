@@ -8,8 +8,9 @@ import { StringIndexedObject } from '@bldr/type-definitions'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 
 // Submodules.
-import registerSeatingPlan from './modules/seating-plan'
+import registerDatabase from './modules/database'
 import registerMedia from './modules/media'
+import registerSeatingPlan from './modules/seating-plan'
 
 const config = getConfig()
 
@@ -30,8 +31,9 @@ export async function startRestApi (port?: number): Promise<express.Express> {
   app.use(cors())
   app.use(express.json())
 
-  app.use('/seating-plan', registerSeatingPlan())
+  app.use('/database', registerDatabase())
   app.use('/media', registerMedia())
+  app.use('/seating-plan', registerSeatingPlan())
 
   const helpMessages: StringIndexedObject = {}
 

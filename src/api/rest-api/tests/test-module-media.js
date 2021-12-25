@@ -10,7 +10,7 @@ const { restart } = require('../dist/node/main')
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
-describe('media', function () {
+describe('/media', function () {
   it('PUT / (update)', async function () {
     this.timeout(10000)
     restart()
@@ -35,6 +35,20 @@ describe('media', function () {
     assert.strictEqual(typeof updateTask.begin, 'number')
     assert.strictEqual(typeof updateTask.end, 'number')
     assert.strictEqual(typeof updateTask.lastCommitId, 'string')
+  })
+
+  it('DELETE / (flush media files)', async function () {
+    this.timeout(10000)
+
+    const result = await httpRequest.request({
+      url: '',
+      method: 'DELETE'
+    })
+    assert.ok(result.data.numberOfDroppedAssets > 0)
+    assert.ok(result.data.numberOfDroppedPresentations > 0)
+
+    // update
+    await httpRequest.request({ url: '', method: 'PUT' })
   })
 
   describe('get', function () {

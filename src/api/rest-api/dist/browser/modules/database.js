@@ -34,61 +34,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// Third party packages.
-import cors from 'cors';
 import express from 'express';
-// Project packages.
-import { getConfig } from '@bldr/config';
-import { connectDb, Database } from '@bldr/mongodb-connector';
-// Submodules.
-import registerDatabase from './modules/database';
-import registerMedia from './modules/media';
-import registerSeatingPlan from './modules/seating-plan';
-var config = getConfig();
-export var database;
-/**
- * Run the REST API. Listen to a TCP port.
- *
- * @param port - A TCP port.
- */
-export function startRestApi(port) {
-    return __awaiter(this, void 0, void 0, function () {
-        var app, mongoClient, helpMessages, usedPort;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+import { database } from '../api';
+export default function () {
+    var _this = this;
+    var app = express();
+    // initialize
+    app.post('/', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    app = express();
-                    return [4 /*yield*/, connectDb()];
-                case 1:
-                    mongoClient = _a.sent();
-                    database = new Database(mongoClient.db());
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
                     return [4 /*yield*/, database.initialize()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
                 case 2:
-                    _a.sent();
-                    app.use(cors());
-                    app.use(express.json());
-                    app.use('/database', registerDatabase());
-                    app.use('/media', registerMedia());
-                    app.use('/seating-plan', registerSeatingPlan());
-                    helpMessages = {};
-                    app.get('/', function (request, response) {
-                        response.json({
-                            navigation: {
-                                media: helpMessages.navigation
-                            }
-                        });
-                    });
-                    if (port == null) {
-                        usedPort = config.api.port;
-                    }
-                    else {
-                        usedPort = port;
-                    }
-                    app.listen(usedPort, function () {
-                        console.log("The BALDR REST API is running on port ".concat(usedPort, "."));
-                    });
-                    return [2 /*return*/, app];
+                    error_1 = _c.sent();
+                    next(error_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
-    });
+    }); });
+    return app;
 }

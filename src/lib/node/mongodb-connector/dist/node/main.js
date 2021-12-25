@@ -364,15 +364,15 @@ var Database = /** @class */ (function () {
      */
     Database.prototype.flushMediaFiles = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var countDroppedAssets, countDroppedPresentations;
+            var numberOfDroppedAssets, numberOfDroppedPresentations;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.assets.countDocuments()];
                     case 1:
-                        countDroppedAssets = _a.sent();
+                        numberOfDroppedAssets = _a.sent();
                         return [4 /*yield*/, this.presentations.countDocuments()];
                     case 2:
-                        countDroppedPresentations = _a.sent();
+                        numberOfDroppedPresentations = _a.sent();
                         return [4 /*yield*/, this.assets.deleteMany({})];
                     case 3:
                         _a.sent();
@@ -383,8 +383,8 @@ var Database = /** @class */ (function () {
                     case 5:
                         _a.sent();
                         return [2 /*return*/, {
-                                countDroppedAssets: countDroppedAssets,
-                                countDroppedPresentations: countDroppedPresentations
+                                numberOfDroppedAssets: numberOfDroppedAssets,
+                                numberOfDroppedPresentations: numberOfDroppedPresentations
                             }];
                 }
             });

@@ -27,7 +27,7 @@ import { startRestApi } from './api'
 export { startRestApi as start } from './api'
 export { default as openArchivesInFileManager } from './operations/open-archives-in-file-manager'
 export { default as restart } from './operations/restart-systemd-service'
-export { MediaManagementUpdateResult } from './result-types'
+export * as ApiResults from './result-types'
 
 async function main (): Promise<express.Express> {
   let port
