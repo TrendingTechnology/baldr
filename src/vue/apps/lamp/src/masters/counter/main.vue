@@ -3,56 +3,62 @@
     <div class="counter-current">
       {{ currentFormatted }}
     </div>
-    <div class="counter-to">
-      / {{ toFormatted }}
-    </div>
-    </div>
+    <div class="counter-to">/ {{ toFormatted }}</div>
+  </div>
 </template>
 
-<script>
-import { formatCounterNumber } from './main'
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-export default {
-  props: {
-    to: {
-      type: Number,
-      required: true
-    },
-    toFormatted: {
-      type: String
-    },
-    format: {
-      type: String,
+import { formatCounterNumber, Format } from './main'
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class CounterMasterMain extends MasterMain {
+  masterName = 'counter'
+
+  @Prop({
+    type: Number,
+    required: true
+  })
+  to: number
+
+  @Prop({
+    type: String
+  })
+  toFormatted: string
+
+  @Prop({
+    type: String
+  })
+  format: Format
+
+  get currentFormatted () {
+    let currentNumber: number
+    if (this.navNos.stepNo != null) {
+      currentNumber = this.navNos.stepNo
+    } else {
+      currentNumber = 1
     }
-  },
-  computed: {
-    currentFormatted () {
-      let currentNumber
-      if (this.navNos.stepNo != null) {
-        currentNumber = this.navNos.stepNo
-      } else {
-        currentNumber = 1
-      }
-      return formatCounterNumber(currentNumber, this.format)
-    }
+    return formatCounterNumber(currentNumber, this.format)
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_counter_master {
+.vc_counter_master {
+  text-align: center;
 
-    text-align: center;
-
-    .counter-current {
-      font-size: 2000%;
-      font-weight: bold;
-    }
-
-    .counter-to {
-      position: absolute;
-      right: 10%;
-      bottom: 10%;
-    }
+  .counter-current {
+    font-size: 2000%;
+    font-weight: bold;
   }
+
+  .counter-to {
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+  }
+}
 </style>

@@ -41,8 +41,13 @@ export interface OldAndNewPropsAndSlide {
   newProps: StringIndexedData
 }
 
+export interface OldAndNewSlideNos {
+  oldSlideNo?: number
+  newSlideNo: number
+}
+
 export interface OldAndNewStepNo {
-  oldStepNo: number
+  oldStepNo?: number
   newStepNo: number
 }
 
@@ -346,7 +351,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  afterSlideNoChangeOnComponent?: (payload: OldAndNewPropsAndSlide) => void
+  afterSlideNoChangeOnComponent?: (payload: OldAndNewSlideNos) => void
 
   /**
    * Called when leaving a step. This hook is only called on the public master
@@ -766,7 +771,7 @@ export interface Master {
    * - called from the master component mixin in the file `masters.js`.
    */
   afterSlideNoChangeOnComponent: (
-    payload: OldAndNewPropsAndSlide,
+    payload: OldAndNewSlideNos,
     thisArg: ThisArg
   ) => void
 

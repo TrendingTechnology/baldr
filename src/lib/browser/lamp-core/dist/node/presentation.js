@@ -24,7 +24,7 @@ class Presentation {
      *   `Praesentation.baldr.yml`
      */
     constructor(rawYamlString) {
-        const rawPresentationData = yaml_1.convertFromYaml(rawYamlString);
+        const rawPresentationData = (0, yaml_1.convertFromYaml)(rawYamlString);
         this.meta = new Meta(rawPresentationData.meta);
         this.slides = [];
         this.slidesTree = [];

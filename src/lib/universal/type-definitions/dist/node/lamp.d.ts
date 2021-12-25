@@ -34,8 +34,12 @@ export interface OldAndNewPropsAndSlide {
     newSlide: object;
     newProps: StringIndexedData;
 }
+export interface OldAndNewSlideNos {
+    oldSlideNo?: number;
+    newSlideNo: number;
+}
 export interface OldAndNewStepNo {
-    oldStepNo: number;
+    oldStepNo?: number;
     newStepNo: number;
 }
 export interface OldAndNewStepNoAndSlideNoChange extends OldAndNewStepNo {
@@ -322,7 +326,7 @@ interface MasterHooks {
      * }
      * ```
      */
-    afterSlideNoChangeOnComponent?: (payload: OldAndNewPropsAndSlide) => void;
+    afterSlideNoChangeOnComponent?: (payload: OldAndNewSlideNos) => void;
     /**
      * Called when leaving a step. This hook is only called on the public master
      * component (the one that is visible for the audience), not on further
@@ -679,7 +683,7 @@ export interface Master {
      * - `this`: is the Vue instance of the current main master component.
      * - called from the master component mixin in the file `masters.js`.
      */
-    afterSlideNoChangeOnComponent: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
+    afterSlideNoChangeOnComponent: (payload: OldAndNewSlideNos, thisArg: ThisArg) => void;
     /**
      * Called when leaving a step. This hook is only called on the public master
      * component (the one that is visible for the audience), not on further

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.masterCollection = exports.MasterCollection = void 0;
-const master_1 = require("./master");
 const core_browser_1 = require("@bldr/core-browser");
 /**
  * Container for all registered master slides.
@@ -19,9 +18,6 @@ class MasterCollection {
     add(master) {
         this.masters[master.name] = master;
     }
-    createMasterBySpec(masterSpec) {
-        this.add(new master_1.Master(masterSpec));
-    }
     /**
      * Get a master object by the master name.
      *
@@ -31,7 +27,8 @@ class MasterCollection {
         if (this.masters[name] == null) {
             throw new Error(`Class Masters.get(): No master named “${name}”`);
         }
-        return this.masters[name];
+        const m = this.masters[name];
+        return m;
     }
     /**
      * Get all master objects as an object with the master name as properties.
@@ -71,12 +68,12 @@ class MasterCollection {
      */
     findMaster(data) {
         const rawProperties = Object.keys(data);
-        const intersection = this.allNames.filter((masterName) => rawProperties.includes(masterName));
+        const intersection = this.allNames.filter(masterName => rawProperties.includes(masterName));
         if (intersection.length === 0) {
-            throw Error(`No master slide found: ${core_browser_1.convertToString(data)}`);
+            throw Error(`No master slide found: ${(0, core_browser_1.convertToString)(data)}`);
         }
         if (intersection.length > 1) {
-            throw Error(`Each slide must have only one master slide: ${core_browser_1.convertToString(data)}`);
+            throw Error(`Each slide must have only one master slide: ${(0, core_browser_1.convertToString)(data)}`);
         }
         return this.get(intersection[0]);
     }

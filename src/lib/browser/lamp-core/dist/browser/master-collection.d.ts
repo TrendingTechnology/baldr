@@ -1,5 +1,4 @@
-import type { LampTypes, StringIndexedObject } from '@bldr/type-definitions';
-import { Master } from './master';
+import { LampTypes, StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Container for all registered master slides.
  */
@@ -12,21 +11,20 @@ export declare class MasterCollection {
     /**
      * Add a master to the masters container.
      */
-    add(master: Master): void;
-    createMasterBySpec(masterSpec: LampTypes.MasterSpec): void;
+    add(master: LampTypes.Master): void;
     /**
      * Get a master object by the master name.
      *
      * @param name - The name of the master slide.
      */
-    get(name: string): Master;
+    get(name: string): LampTypes.Master;
     /**
      * Get all master objects as an object with the master name as properties.
      *
      * @returns {object}
      */
     get all(): {
-        [key: string]: Master;
+        [key: string]: LampTypes.Master;
     };
     /**
      * Get all master names as an array.
@@ -52,6 +50,6 @@ export declare class MasterCollection {
      * @throws If no master can be found and if more than one master name are
      * found.
      */
-    findMaster(data: StringIndexedObject): Master;
+    findMaster(data: StringIndexedObject): LampTypes.Master;
 }
 export declare const masterCollection: MasterCollection;

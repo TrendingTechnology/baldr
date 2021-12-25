@@ -816,6 +816,7 @@ function registerMasters () {
     const masterName = findMasterName(fileName)
     const master = masterCollection.get(masterName)
     const componentMain = requireComponentMain(fileName)
+
     const dataMixin = {
       data () {
         return {
@@ -824,7 +825,10 @@ function registerMasters () {
         }
       }
     }
-    componentMain.default.mixins = [masterMixin, dataMixin]
+
+    if (componentMain.default.cid == null) {
+      componentMain.default.mixins = [masterMixin, dataMixin]
+    }
     checkExport(fileName, componentMain)
     master.componentMain = componentMain.default
   })

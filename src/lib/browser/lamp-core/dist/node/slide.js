@@ -19,7 +19,7 @@ class SlideMetaData {
     cutAndConvert(property) {
         const value = this.raw.cut(property);
         if (value != null) {
-            return markdown_to_html_1.convertMarkdownToHtml(value);
+            return (0, markdown_to_html_1.convertMarkdownToHtml)(value);
         }
     }
 }

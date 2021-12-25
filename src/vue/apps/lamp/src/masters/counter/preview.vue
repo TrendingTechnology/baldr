@@ -34,7 +34,7 @@ export default class CounterMasterPreview extends Vue {
   @Prop({
     type: String
   })
-  toFormatted!: String
+  toFormatted!: string
 
   get fromFormatted (): string {
     return formatCounterNumber(1, this.format)

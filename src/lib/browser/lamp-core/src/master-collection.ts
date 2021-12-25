@@ -1,6 +1,5 @@
-import type { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { LampTypes, StringIndexedObject } from '@bldr/type-definitions'
 
-import { Master } from './master'
 import { convertToString } from '@bldr/core-browser'
 
 /**
@@ -10,7 +9,7 @@ export class MasterCollection {
   /**
    * A container object for all master objects.
    */
-  private masters: { [key: string]: Master }
+  private masters: { [key: string]: LampTypes.Master }
 
   constructor () {
     /**
@@ -22,12 +21,8 @@ export class MasterCollection {
   /**
    * Add a master to the masters container.
    */
-  add (master: Master): void {
+  add (master: LampTypes.Master): void {
     this.masters[master.name] = master
-  }
-
-  createMasterBySpec (masterSpec: LampTypes.MasterSpec): void {
-    this.add(new Master(masterSpec))
   }
 
   /**
@@ -35,11 +30,12 @@ export class MasterCollection {
    *
    * @param name - The name of the master slide.
    */
-  get (name: string): Master {
+  get (name: string): LampTypes.Master {
     if (this.masters[name] == null) {
       throw new Error(`Class Masters.get(): No master named “${name}”`)
     }
-    return this.masters[name]
+    const m = this.masters[name] as unknown
+    return m as LampTypes.Master
   }
 
   /**
@@ -47,7 +43,7 @@ export class MasterCollection {
    *
    * @returns {object}
    */
-  get all (): { [key: string]: Master } {
+  get all (): { [key: string]: LampTypes.Master } {
     return this.masters
   }
 
@@ -81,10 +77,10 @@ export class MasterCollection {
    * @throws If no master can be found and if more than one master name are
    * found.
    */
-  findMaster (data: StringIndexedObject): Master {
+  findMaster (data: StringIndexedObject): LampTypes.Master {
     const rawProperties = Object.keys(data)
-    const intersection = this.allNames.filter(
-      (masterName) => rawProperties.includes(masterName)
+    const intersection = this.allNames.filter(masterName =>
+      rawProperties.includes(masterName)
     )
 
     if (intersection.length === 0) {
@@ -92,7 +88,9 @@ export class MasterCollection {
     }
 
     if (intersection.length > 1) {
-      throw Error(`Each slide must have only one master slide: ${convertToString(data)}`)
+      throw Error(
+        `Each slide must have only one master slide: ${convertToString(data)}`
+      )
     }
 
     return this.get(intersection[0])

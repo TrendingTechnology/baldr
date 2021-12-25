@@ -1,4 +1,3 @@
-import { Master } from './master';
 import { convertToString } from '@bldr/core-browser';
 /**
  * Container for all registered master slides.
@@ -16,9 +15,6 @@ export class MasterCollection {
     add(master) {
         this.masters[master.name] = master;
     }
-    createMasterBySpec(masterSpec) {
-        this.add(new Master(masterSpec));
-    }
     /**
      * Get a master object by the master name.
      *
@@ -28,7 +24,8 @@ export class MasterCollection {
         if (this.masters[name] == null) {
             throw new Error(`Class Masters.get(): No master named “${name}”`);
         }
-        return this.masters[name];
+        const m = this.masters[name];
+        return m;
     }
     /**
      * Get all master objects as an object with the master name as properties.
@@ -68,7 +65,7 @@ export class MasterCollection {
      */
     findMaster(data) {
         const rawProperties = Object.keys(data);
-        const intersection = this.allNames.filter((masterName) => rawProperties.includes(masterName));
+        const intersection = this.allNames.filter(masterName => rawProperties.includes(masterName));
         if (intersection.length === 0) {
             throw Error(`No master slide found: ${convertToString(data)}`);
         }
