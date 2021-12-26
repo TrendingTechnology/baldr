@@ -2,6 +2,8 @@
 import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
+import { LampTypes } from '@bldr/type-definitions'
+
 import inlineMarkup from '../../inline-markup.js'
 import { customStore } from '../../main'
 import Master from './Master.vue'
@@ -43,6 +45,7 @@ export default class MasterMain extends Master {
     this.$nextTick(() => {
       let slideNoChange = false
       if (newValue.slideNo !== oldValue.slideNo) {
+        // TODO: remove
         this.master.afterSlideNoChangeOnComponent(
           {
             oldSlideNo: oldValue.slideNo,
@@ -51,6 +54,10 @@ export default class MasterMain extends Master {
           this
         )
         slideNoChange = true
+        this.afterSlideNoChange({
+          oldSlideNo: oldValue.slideNo,
+          newSlideNo: newValue.slideNo
+        })
       }
       // Previous slide has only one step number
       // oldSlideNo 2 oldStepNo 1 newSlideNo 3 oldStepNo 1
@@ -59,6 +66,7 @@ export default class MasterMain extends Master {
         `${newValue.slideNo}:${newValue.stepNo}` !==
           `${oldValue.slideNo}:${oldValue.stepNo}`
       ) {
+        // TODO: remove
         this.master.afterStepNoChangeOnComponent(
           {
             oldStepNo: oldValue.stepNo,
@@ -67,9 +75,18 @@ export default class MasterMain extends Master {
           },
           this
         )
+        this.afterStepNoChange({
+          oldStepNo: oldValue.stepNo,
+          newStepNo: newValue.stepNo,
+          slideNoChange
+        })
       }
     })
   }
+
+  afterSlideNoChange (payload: LampTypes.OldAndNewSlideNos) {}
+
+  afterStepNoChange (payload: LampTypes.OldAndNewStepNoAndSlideNoChange) {}
 
   mounted (): void {
     this.master.afterSlideNoChangeOnComponent(
@@ -78,7 +95,10 @@ export default class MasterMain extends Master {
       },
       this
     )
-    if (this.navigationNumbers.stepNo) {
+    this.afterSlideNoChange({
+      newSlideNo: this.navigationNumbers.slideNo
+    })
+    if (this.navigationNumbers.stepNo != null) {
       this.master.afterStepNoChangeOnComponent(
         {
           newStepNo: this.navigationNumbers.stepNo,
@@ -86,6 +106,10 @@ export default class MasterMain extends Master {
         },
         this
       )
+      this.afterStepNoChange({
+        newStepNo: this.navigationNumbers.stepNo,
+        slideNoChange: true
+      })
     }
     if (this.isPublic) {
       customStore.vueMasterInstanceCurrent = this

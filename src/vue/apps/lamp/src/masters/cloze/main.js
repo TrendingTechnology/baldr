@@ -125,6 +125,7 @@ export default validateMasterSpec({
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight()
+      console.log(this.$el)
       this.stepController = buildClozeStepController(
         this.$el,
         slide.props.stepSubset

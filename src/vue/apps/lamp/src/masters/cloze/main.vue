@@ -9,12 +9,13 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { StepController } from '@bldr/dom-manipulator'
 
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component({ props: mapStepFieldDefintions(['subset']) })
 export default class ClozeMasterMain extends MasterMain {
-  masterName = 'generic'
+  masterName = 'cloze'
 
   @Prop({
     type: String,
@@ -22,9 +23,11 @@ export default class ClozeMasterMain extends MasterMain {
   })
   src: string
 
-  data () {
+  stepController: StepController
+
+  data (): { stepController: StepController } {
     return {
-      domSteps: null
+      stepController: null
     }
   }
 
