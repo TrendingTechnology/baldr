@@ -5,33 +5,47 @@
       slide-preview-fullscreen
     "
   >
-    <img v-if="asset.previewHttpUrl" :src="asset.previewHttpUrl" class="image-contain"/>
-    <pdf-viewer v-else :page="pageComputed" :src="asset.httpUrl"/>
+    <img
+      v-if="asset.previewHttpUrl"
+      :src="asset.previewHttpUrl"
+      class="image-contain"
+    />
+    <pdf-viewer v-else :page="pageComputed" :src="asset.httpUrl" />
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import PdfViewer from 'vue-pdf'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-export default {
-  props: {
-    asset: {
-      type: Object
-    },
-    page: {
-      type: Number
-    }
-  },
+import { Asset } from '@bldr/presentation-parser'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component({
   components: {
     PdfViewer
-  },
-  computed: {
-    pageComputed () {
-      if (this.page != null) {
-        return this.page
-      }
-      return 1
+  }
+})
+export default class DocumentMasterPreview extends MasterPreview {
+  masterName = 'document'
+
+  @Prop({
+    type: Object
+  })
+  asset: Asset
+
+  @Prop({
+    type: Number
+  })
+  page: number
+
+  get pageComputed () {
+    if (this.page != null) {
+      return this.page
     }
+    return 1
   }
 }
 </script>

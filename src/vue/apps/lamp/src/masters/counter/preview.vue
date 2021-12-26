@@ -12,14 +12,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { formatCounterNumber, Format } from './main'
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
 
 @Component
-export default class CounterMasterPreview extends Vue {
+export default class CounterMasterPreview extends MasterPreview {
+  masterName = 'cloze'
+
   @Prop({
     type: Number,
     required: true

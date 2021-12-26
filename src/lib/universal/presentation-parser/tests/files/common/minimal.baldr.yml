@@ -1,6 +1,7 @@
 ---
 meta:
   ref: EP_common_minimal
+  title: Minimal example
 
 slides:
   - quote:

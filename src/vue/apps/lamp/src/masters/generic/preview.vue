@@ -10,13 +10,20 @@
   />
 </template>
 
-<script>
-export default {
-  props: {
-    markup: {
-      type: String,
-      required: true
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component
+export default class GenericMasterPreview extends MasterPreview {
+  masterName = 'generic'
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  markup: string
 }
 </script>

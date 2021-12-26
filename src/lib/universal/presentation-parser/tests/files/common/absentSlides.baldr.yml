@@ -1,6 +1,7 @@
 ---
 meta:
   ref: EP_common_absentSlides
+  title: Absent slides
 
 slides:
 - generic: present

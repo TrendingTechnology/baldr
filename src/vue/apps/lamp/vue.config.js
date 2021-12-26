@@ -93,19 +93,12 @@ module.exports = {
           'node_modules/vue/dist/vue.runtime.esm.js'
         ),
         // transliteration is very big
-        // '@bldr/string-format$': path.resolve(
-        //   __dirname,
-        //   'node_modules/@bldr/string-format'
-        // ),
-        // '@bldr/core-browser$': path.resolve(
-        //   __dirname,
-        //   'node_modules/@bldr/core-browser'
-        // ),
         ...createAlias([
           '@bldr/string-format',
           '@bldr/core-browser',
           '@bldr/markdown-to-html',
-          '@bldr/http-request'
+          '@bldr/http-request',
+          '@bldr/log'
         ])
       }
     },

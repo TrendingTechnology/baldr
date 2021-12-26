@@ -19,7 +19,11 @@ import { Asset } from '@bldr/presentation-parser'
 
 @Component
 export default class InstrumentMasterPreview extends Vue {
-  @Prop({ type: Object })
+  masterName = 'instrument'
+
+  @Prop({
+    type: Object
+  })
   readonly asset!: Asset
 }
 </script>

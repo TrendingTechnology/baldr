@@ -1,6 +1,7 @@
 ---
 meta:
   ref: EP_common_slidesWithPlayButtons
+  title: Slides with play buttons
 
 slides:
 - audio:

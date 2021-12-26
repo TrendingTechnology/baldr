@@ -43,6 +43,7 @@ const state = {
     }
   },
   presentation: null,
+  presentationNg: null,
   slideNoOld: null,
   slideNo: null,
   slides: {},
@@ -233,6 +234,9 @@ const mutations = {
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
+  },
+  setPresentationNg (state, presentationNg) {
+    Vue.set(state, 'presentationNg', presentationNg)
   },
   showMetaDataOverlay (state, showMetaDataOverlay) {
     Vue.set(state, 'showMetaDataOverlay', showMetaDataOverlay)

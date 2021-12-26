@@ -23,23 +23,36 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    previewHttpUrl: {
-      type: String
-    },
-    waveformHttpUrl: {
-      type: String
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    composer: {
-      type: String
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component
+export default class AudioMasterPreview extends MasterPreview {
+  masterName = 'audio'
+
+  @Prop({
+    type: String
+  })
+  previewHttpUrl: string
+
+  @Prop({
+    type: String
+  })
+  waveformHttpUrl: string
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  title: string
+
+  @Prop({
+    type: String
+  })
+  composer: string
 }
 </script>
 
