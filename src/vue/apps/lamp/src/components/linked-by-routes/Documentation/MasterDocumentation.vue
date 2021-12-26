@@ -41,54 +41,66 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { masterCollection } from '@bldr/lamp-core'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
-export default {
-  name: 'MasterDocumentation',
-  computed: {
-    masterName () {
-      return this.$route.params.master
-    },
-    master () {
-      return masterCollection.get(this.masterName)
-    },
-    props () {
-      return this.master.propsDef
-    },
-    documentation () {
-      if ('documentation' in this.master) {
-        return convertMarkdownToHtml(this.master.documentation)
-      }
-      return ''
-    }
-  },
-  methods: {
-    convertMarkdownToHtml,
-    formatPropSpec (spec) {
-      const options = []
-      if (spec.required) options.push('required')
-      if (spec.markup) options.push('markup')
-      if (spec.assetUri) options.push('assetUri')
-      if (spec.default) options.push(`default=${spec.default}`)
-      if (spec.type) {
-        if (spec.type.name) {
-          options.push(`type=${spec.type.name}`)
-        } else if (Array.isArray(spec.type)) {
-          const types = []
-          for (const type of spec.type) {
-            types.push(type.name)
-          }
-          options.push(`types=${types.join(',')}`)
-        }
-      }
+import { LampTypes } from '@bldr/type-definitions'
 
-      if (options.length) {
-        return ` (${options.join(', ')})`
-      }
-      return ''
+import Component from 'vue-class-component'
+
+@Component({ methods: { convertMarkdownToHtml } })
+export default class MasterDocumentation extends Vue {
+  get masterName (): string {
+    return this.$route.params.master
+  }
+
+  get master (): LampTypes.Master {
+    return masterCollection.get(this.masterName)
+  }
+
+  get props (): LampTypes.PropsDefintion {
+    return this.master.propsDef
+  }
+
+  get documentation (): string {
+    if (this.master.documentation != null) {
+      return convertMarkdownToHtml(this.master.documentation)
     }
+    return ''
+  }
+
+  formatPropSpec (spec: LampTypes.MasterProp): string {
+    const options = []
+    if (spec.required != null && spec.required) {
+      options.push('required')
+    }
+    if (spec.markup != null && spec.markup) {
+      options.push('markup')
+    }
+    if (spec.assetUri != null && spec.assetUri) {
+      options.push('assetUri')
+    }
+    if (spec.default) {
+      options.push(`default=${spec.default}`)
+    }
+    if (spec.type != null) {
+      if (!Array.isArray(spec.type)) {
+        options.push(`type=${spec.type.name}`)
+      } else {
+        const types = []
+        for (const type of spec.type) {
+          types.push(type.name)
+        }
+        options.push(`types=${types.join(',')}`)
+      }
+    }
+
+    if (options.length) {
+      return ` (${options.join(', ')})`
+    }
+    return ''
   }
 }
 </script>

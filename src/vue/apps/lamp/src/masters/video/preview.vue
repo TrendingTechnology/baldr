@@ -11,16 +11,25 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    previewHttpUrl: {
-      type: String
-    },
-    title: {
-      type: String
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component
+export default class VideoMasterPreview extends MasterPreview {
+  masterName = 'video'
+
+  @Prop({
+    type: String
+  })
+  previewHttpUrl: string
+
+  @Prop({
+    type: String
+  })
+  title: string
 }
 </script>
 

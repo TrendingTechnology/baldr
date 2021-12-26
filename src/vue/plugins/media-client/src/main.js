@@ -393,6 +393,8 @@ class Media {
   }
 }
 
+export let media
+
 // https://stackoverflow.com/a/56501461
 // Vue.use(media, router, store, shortcuts)
 const Plugin = {
@@ -412,12 +414,13 @@ const Plugin = {
     Vue.use(DynamicSelect)
 
     Vue.filter('duration', formatDuration)
+    media = new Media()
     /**
      * $media
      * @memberof module:@bldr/lamp~Vue
      * @type {module:@bldr/media-client~Media}
      */
-    Vue.prototype.$media = new Media()
+    Vue.prototype.$media = media
     registerComponents(Vue)
   }
 }

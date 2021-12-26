@@ -12,6 +12,7 @@ import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
 import { showMessage } from '@bldr/notification'
+import { media } from '@bldr/media-client'
 
 import store from '@/store/index.js'
 import { router } from '@/routes'
@@ -130,9 +131,9 @@ export function getViewFromRoute (): 'speaker' | 'public' {
   return 'public'
 }
 
-async function loadPresentationById (vm: any, presRef: string) {
+async function loadPresentationById (vm: typeof Vm, presRef: string) {
   console.log(presRef)
-  vm.$media.player.stop()
+  media.player.stop()
   vm.$store.dispatch('media/clear')
   vm.$store.commit('lamp/setPresentation', null)
 

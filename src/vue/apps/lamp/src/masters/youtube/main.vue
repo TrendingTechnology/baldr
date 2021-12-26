@@ -25,6 +25,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component
@@ -34,7 +36,7 @@ export default class YoutubeMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  asset: any
+  asset: Asset
 
   @Prop({
     type: String,

@@ -41,7 +41,7 @@ export default class SampleListMasterMain extends MasterMain {
   })
   notNumbered: boolean
 
-  cssClassNotNumbered () {
+  cssClassNotNumbered (): { 'not-numbered': boolean } {
     return {
       'not-numbered': this.notNumbered
     }

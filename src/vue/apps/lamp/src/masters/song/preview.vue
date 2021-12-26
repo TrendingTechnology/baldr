@@ -10,17 +10,26 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    imageHttpUrl: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component
+export default class SongMasterPreview extends MasterPreview {
+  masterName = 'song'
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  imageHttpUrl: string
+
+  @Prop({
+    type: String
+  })
+  title: string
 }
 </script>
 

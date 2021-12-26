@@ -9,6 +9,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component
@@ -18,7 +20,7 @@ export default class SongMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  image: any
+  image: Asset
 }
 </script>
 

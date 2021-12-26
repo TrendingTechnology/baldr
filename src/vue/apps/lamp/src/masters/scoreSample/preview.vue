@@ -15,20 +15,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    scoreHttpUrl: {
-      type: String,
-      required: true
-    },
-    hasAudio: {
-      type: Boolean
-    },
-    isMultiPart: {
-      type: Boolean
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
+
+@Component
+export default class ScoreSampleMasterPreview extends MasterPreview {
+  masterName = 'scoreSample'
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  scoreHttpUrl: string
+
+  @Prop({
+    type: Boolean
+  })
+  hasAudio: boolean
+
+  @Prop({
+    type: Boolean
+  })
+  isMultiPart: boolean
 }
 </script>
 

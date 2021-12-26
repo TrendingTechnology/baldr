@@ -15,6 +15,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 import MasterMain from '../../components/reusable/MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
@@ -34,12 +36,12 @@ export default class ScoreSampleMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  asset: any
+  asset: Asset
 
   @Prop({
     type: Object
   })
-  audioSample: any
+  audioSample: Asset
 }
 </script>
 

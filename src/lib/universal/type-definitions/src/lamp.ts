@@ -450,7 +450,7 @@ interface MasterHooks {
  *  }
  * ```
  */
-interface MasterProp {
+export interface MasterProp {
   /**
    * A default value.
    */
@@ -488,7 +488,7 @@ interface MasterProp {
   /**
    * The same as Vue `type`.
    */
-  type?: object
+  type?: Function | Function[]
 }
 
 /**
@@ -629,6 +629,11 @@ export interface Master {
    * `markup`)
    */
   propNamesInlineMedia: string[]
+
+  /**
+   * The properties of the master slide.
+   */
+  propsDef?: PropsDefintion
 
   /**
    * Convert in the props certain strings containing markup to HTML.

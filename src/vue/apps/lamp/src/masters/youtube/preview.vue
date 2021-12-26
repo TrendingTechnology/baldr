@@ -21,16 +21,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/presentation-parser'
 
 import { findPreviewHttpUrl } from './main.js'
+import MasterPreview from '../../components/reusable/MasterPreview.vue'
 
 @Component
-export default class YoutubeMasterPreview extends Vue {
+export default class YoutubeMasterPreview extends MasterPreview {
+  masterName = 'youtube'
+
   @Prop({
     type: Object
   })
