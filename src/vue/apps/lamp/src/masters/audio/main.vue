@@ -5,11 +5,8 @@
     <img :src="previewHttpUrl" class="preview" v-if="previewHttpUrl" />
 
     <p class="composer person" v-if="composer" v-html="composer" />
-
     <p class="title piece" v-if="partOf" v-html="partOf" />
-
     <p class="title piece" v-if="title" v-html="title" />
-
     <p class="artist person" v-if="artist" v-html="artist" />
 
     <wave-form :sample="sample" />
@@ -33,6 +30,7 @@ import ExternalSites from '@/components/reusable/ExternalSites.vue'
 })
 export default class AudioMasterMain extends MasterMain {
   masterName = 'audio'
+
   @Prop({
     type: String
   })

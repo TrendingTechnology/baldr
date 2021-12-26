@@ -1,99 +1,95 @@
 <template>
-  <div
-    class="vc_editor_master"
-    spellcheck="false"
-    v-html="markupSafe"
-  >
-  </div>
+  <div class="vc_editor_master" spellcheck="false" v-html="markupSafe"></div>
 </template>
 
-<script>
-import { createNamespacedHelpers } from 'vuex'
-
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-
-const { mapGetters } = createNamespacedHelpers('lamp')
-
+<script lang="ts">
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
 const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 
-export default {
-  props: {
-    markup: {
-      type: String
-    },
-    ...mapStepFieldDefintions(['mode', 'subset'])
-  },
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class EditorMasterMain extends MasterMain {
+  masterName = 'editor'
+
+  @Prop({
+    type: String
+  })
+  markup: string
+
   data () {
     return {
       domSteps: null
     }
-  },
-  computed: {
-    ...mapGetters(['slide']),
-    markupSafe () {
-      if (this.markup) {
-        return this.markup
-      } else {
-        return defaultMarkup
-      }
+  }
+
+  get markupSafe () {
+    if (this.markup) {
+      return this.markup
+    } else {
+      return defaultMarkup
     }
-  },
-  methods: {
-    onSlideChange () {
-      for (const element of document.querySelectorAll('.vc_editor_master [contenteditable]')) {
-        element.addEventListener('focus', (event) => {
-          const element = event.target
-          if (element.innerHTML === placeholderTag) {
-            element.innerHTML = ''
-          }
-        })
-      }
-      for (const element of document.querySelectorAll('.vc_editor_master ul[contenteditable] li')) {
-        element.addEventListener('click', (event) => {
-          const element = event.target
+  }
+
+  onSlideChange () {
+    for (const element of document.querySelectorAll(
+      '.vc_editor_master [contenteditable]'
+    )) {
+      element.addEventListener('focus', event => {
+        const element = event.target
+        if (element.innerHTML === placeholderTag) {
           element.innerHTML = ''
         }
-        )
-      }
-    },
-    /**
-     * @private
-     */
-    surround_ (elementName) {
-      const selection = window.getSelection()
-      if (selection.rangeCount) {
-        const range = selection.getRangeAt(0)
-        const element = document.createElement(elementName)
-        range.surroundContents(element)
-      }
-    },
-    insertHtml (html) {
-      const range = document.getSelection().getRangeAt(0)
-      const fragment = document.createRange().createContextualFragment(html)
-      range.insertNode(fragment)
+      })
     }
-  },
+    for (const element of document.querySelectorAll(
+      '.vc_editor_master ul[contenteditable] li'
+    )) {
+      element.addEventListener('click', event => {
+        const element = event.target
+        element.innerHTML = ''
+      })
+    }
+  }
+
+  private surround (elementName) {
+    const selection = window.getSelection()
+    if (selection.rangeCount) {
+      const range = selection.getRangeAt(0)
+      const element = document.createElement(elementName)
+      range.surroundContents(element)
+    }
+  }
+
+  insertHtml (html) {
+    const range = document.getSelection().getRangeAt(0)
+    const fragment = document.createRange().createContextualFragment(html)
+    range.insertNode(fragment)
+  }
+
   created () {
     // We can not use mousetrap because mousetrap is disable in
     // contenteditable areas.
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', event => {
       if (event.ctrlKey && event.key === 'b') {
         event.preventDefault()
-        this.surround_('strong')
+        this.surround('strong')
       } else if (event.ctrlKey && event.key === 'u') {
         event.preventDefault()
-        this.surround_('u')
+        this.surround('u')
       } else if (event.ctrlKey && event.key === 'l') {
         event.preventDefault()
         this.insertHtml('<ul><li>.</li></ul>')
       } else if (event.ctrlKey && event.key === '1') {
         event.preventDefault()
-        this.surround_('h1')
+        this.surround('h1')
       } else if (event.ctrlKey && event.key === '2') {
         event.preventDefault()
-        this.surround_('h2')
+        this.surround('h2')
       }
     })
   }
@@ -101,22 +97,22 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_editor_master {
-    // left right padding more because of ul ol etc ...
-    padding: 1vw 4vw;
+.vc_editor_master {
+  // left right padding more because of ul ol etc ...
+  padding: 1vw 4vw;
 
-    .editor-placeholder {
-      font-size: 0.5em;
-      color: gray;
-      opacity: 0.5;
-    }
-
-    [contenteditable] {
-      min-height: 1.5em;
-    }
-
-    table {
-      table-layout: fixed;
-    }
+  .editor-placeholder {
+    font-size: 0.5em;
+    color: gray;
+    opacity: 0.5;
   }
+
+  [contenteditable] {
+    min-height: 1.5em;
+  }
+
+  table {
+    table-layout: fixed;
+  }
+}
 </style>

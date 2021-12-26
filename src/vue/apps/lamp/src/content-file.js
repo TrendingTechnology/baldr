@@ -550,11 +550,7 @@ export class Slide {
     } else {
       name = routeNames.slideNo
     }
-    if (this.ref) {
-      params.slideNo = this.ref
-    } else {
-      params.slideNo = this.no
-    }
+    params.slideNo = this.no
     return { name, params }
   }
 }

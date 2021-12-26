@@ -40,8 +40,6 @@ slides:
 
       lorem ipsum
 
-- editor
-
 - title: Unordered list
   editor: |
     # heading
@@ -72,12 +70,6 @@ slides:
     …
 
     …
-
-- title: Show editor
-  editor: true
-
-- title: Show second editor
-  editor: true
 
 - title: Markup
   editor:
