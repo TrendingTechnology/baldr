@@ -17,7 +17,6 @@ import { createNamespacedHelpers } from 'vuex'
 
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
 
-
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 @Component({

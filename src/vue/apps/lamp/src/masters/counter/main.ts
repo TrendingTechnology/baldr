@@ -6,7 +6,32 @@ import { validateMasterSpec } from '@bldr/lamp-core'
 import { styleConfigurator } from '@bldr/style-configurator'
 
 const alphabet = [
-  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z'
 ]
 
 /**
@@ -21,7 +46,7 @@ export type Format = 'arabic' | 'lower' | 'upper' | 'roman'
 /**
  * @see https://stackoverflow.com/a/41358305
  */
-function convertToRoman(currentNumber: number): string {
+function convertToRoman (currentNumber: number): string {
   const roman: { [romanNumber: string]: number } = {
     M: 1000,
     CM: 900,
@@ -57,8 +82,11 @@ function convertToRoman(currentNumber: number): string {
  * @returns If the current counter number is higher than 26, then the alphabet
  * is no longer used.
  */
-export function formatCounterNumber(currentNumber: number, format: Format): string {
-  if (format === 'lower' || format === 'upper' && currentNumber <= 26) {
+export function formatCounterNumber (
+  currentNumber: number,
+  format: Format
+): string {
+  if (format === 'lower' || (format === 'upper' && currentNumber <= 26)) {
     const glyph = alphabet[currentNumber - 1]
     if (format === 'upper') {
       return glyph.toUpperCase()
@@ -82,7 +110,8 @@ export default validateMasterSpec({
     },
     format: {
       default: 'arabic',
-      description: 'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
+      description:
+        'In welchem Format aufgezählt werden soll: arabic (arabische Zahlen), lower (Kleinbuchstaben), upper (Großbuchstaben), roman (Römische Zahlen).'
     }
   },
   icon: {
@@ -107,8 +136,8 @@ export default validateMasterSpec({
       }
       return props
     },
-    collectPropsMain(props) {
-      return  {
+    collectPropsMain (props) {
+      return {
         to: props.to,
         toFormatted: formatCounterNumber(props.to, props.format),
         format: props.format
@@ -120,7 +149,7 @@ export default validateMasterSpec({
     plainTextFromProps (props): string {
       return `${props.to}`
     },
-    afterStepNoChangeOnComponent(): void {
+    afterStepNoChangeOnComponent (): void {
       styleConfigurator.toggleDarkMode()
     }
   }

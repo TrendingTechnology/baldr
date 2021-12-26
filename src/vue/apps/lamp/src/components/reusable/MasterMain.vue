@@ -33,13 +33,13 @@ export default class MasterMain extends Master {
     type: Boolean,
     default: true
   })
-  isPublic: boolean = true
+  isPublic = true
 
   @Watch('navigationNumbers')
   onNavigationNumbersChange (
     newValue: NavigationNumbers,
     oldValue: NavigationNumbers
-  ) {
+  ): void {
     this.$nextTick(() => {
       let slideNoChange = false
       if (newValue.slideNo !== oldValue.slideNo) {
@@ -71,7 +71,7 @@ export default class MasterMain extends Master {
     })
   }
 
-  mounted () {
+  mounted (): void {
     this.master.afterSlideNoChangeOnComponent(
       {
         newSlideNo: this.navigationNumbers.slideNo
@@ -93,7 +93,7 @@ export default class MasterMain extends Master {
     inlineMarkup.makeReactive()
   }
 
-  beforeDestroy () {
+  beforeDestroy (): void {
     if (this.isPublic) {
       customStore.vueMasterInstanceCurrent = null
     }

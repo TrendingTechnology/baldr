@@ -27,8 +27,17 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import actions from '@/actions.js'
+import actions from '../../actions.js'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
+
+interface CssClasses {
+  up?: boolean
+  down?: boolean
+  right?: boolean
+  left?: boolean
+  activated: boolean
+  triggered: boolean
+}
 
 @Component({
   computed: mapGetters([
@@ -49,52 +58,54 @@ export default class CursorArrows extends Vue {
   /**
    * HTML titles
    */
-  get htmlTitlesUp () {
-    if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2)
+  get htmlTitlesUp (): string {
+    if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2) {
       return ''
+    }
     const no =
       this.slide.stepNo !== 1 ? this.slide.stepNo - 1 : this.slide.stepCount
     return `zum vorhergehenden Schritt (Nr. ${no} von ${this.slide.stepCount})`
   }
 
-  get htmlTitlesRight () {
+  get htmlTitlesRight (): string {
     const no = this.slideNo !== this.slidesCount ? this.slideNo + 1 : 1
     return `zur nächsten Folien (Nr. ${no} von ${this.slidesCount})`
   }
 
-  get htmlTitlesDown () {
-    if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2)
+  get htmlTitlesDown (): string {
+    if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2) {
       return ''
+    }
     const no =
       this.slide.stepNo !== this.slide.stepCount ? this.slide.stepNo + 1 : 1
     return `zum nächsten Schritt (Nr. ${no} von ${this.slide.stepCount})`
   }
 
-  get htmlTitlesLeft () {
+  get htmlTitlesLeft (): string {
     const no = this.slideNo !== 1 ? this.slideNo - 1 : this.slidesCount
     return `zur vorhergehenden Folien (Nr. ${no} von ${this.slidesCount})`
   }
 
-  up () {
+  up (): void {
     actions.goToPreviousStep()
   }
 
-  right () {
+  right (): void {
     actions.goToNextSlide()
   }
 
-  down () {
+  down (): void {
     actions.goToNextStep()
   }
 
-  left () {
+  left (): void {
     actions.goToPreviousSlide()
   }
 
   /**
    * CSS classes
    */
-  cssClassesUp () {
+  cssClassesUp (): CssClasses {
     return {
       up: true,
       activated: this.isUpActive(),
@@ -102,7 +113,7 @@ export default class CursorArrows extends Vue {
     }
   }
 
-  cssClassesRight () {
+  cssClassesRight (): CssClasses {
     return {
       right: true,
       activated: this.isRightActive(),
@@ -110,7 +121,7 @@ export default class CursorArrows extends Vue {
     }
   }
 
-  cssClassesDown () {
+  cssClassesDown (): CssClasses {
     return {
       down: true,
       activated: this.isDownActive(),
@@ -118,7 +129,7 @@ export default class CursorArrows extends Vue {
     }
   }
 
-  cssClassesLeft () {
+  cssClassesLeft (): CssClasses {
     return {
       left: true,
       activated: this.isLeftActive(),
@@ -126,21 +137,21 @@ export default class CursorArrows extends Vue {
     }
   }
 
-  isUpActive () {
+  isUpActive (): boolean {
     if (this.slide && this.slide.stepCount > 1 && this.slide.stepNo !== 1) {
       return true
     }
     return false
   }
 
-  isRightActive () {
+  isRightActive (): boolean {
     if (this.slideNo !== this.slidesCount) {
       return true
     }
     return false
   }
 
-  isDownActive () {
+  isDownActive (): boolean {
     if (
       this.slide &&
       this.slide.stepCount > 1 &&
@@ -151,7 +162,7 @@ export default class CursorArrows extends Vue {
     return false
   }
 
-  isLeftActive () {
+  isLeftActive (): boolean {
     if (this.slideNo !== 1) {
       return true
     }

@@ -20,6 +20,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
@@ -31,8 +33,8 @@ import MasterMain from '../../components/reusable/MasterMain.vue'
 export default class InstrumentMasterMain extends MasterMain {
   masterName = 'instrument'
 
-  @Prop(Object)
-  readonly asset!: object
+  @Prop({ type: Object })
+  readonly asset!: Asset
 }
 </script>
 

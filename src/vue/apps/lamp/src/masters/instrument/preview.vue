@@ -15,10 +15,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 @Component
 export default class InstrumentMasterPreview extends Vue {
-  @Prop(Object)
-  readonly asset!: object
+  @Prop({ type: Object })
+  readonly asset!: Asset
 }
 </script>
 
