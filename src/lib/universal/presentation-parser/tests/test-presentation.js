@@ -7,7 +7,7 @@ const {
   parsePresentation
 } = require('./_helper.js')
 
-describe('Package “@bldr/presentation-parser”', function () {
+describe('File “presentation.ts”', function () {
   describe('meta', function () {
     it('Real world example: 12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen', function () {
       const presentation = parseRealWorldPresentation(
@@ -91,8 +91,8 @@ describe('Package “@bldr/presentation-parser”', function () {
       const presentation = parsePresentation('presentation/ref-abbreviation-ok')
       const rawString = presentation.rawYamlStringExpanded
       assert.ok(rawString != null)
-      assert.ok(rawString.includes('ref:ref-abbreviation_file-1'))
-      assert.ok(rawString.includes('ref:ref-abbreviation_file-2'))
+      assert.ok(rawString.includes('ref:ref-abbreviation-ok_file-1'))
+      assert.ok(rawString.includes('ref:ref-abbreviation-ok_file-2'))
     })
 
     it('error', function () {

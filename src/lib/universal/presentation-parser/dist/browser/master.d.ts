@@ -121,7 +121,8 @@ interface MasterIconSpec {
 }
 export interface Master {
     /**
-     * The name of the master slide. A short name in lower case letters like `audio`.
+     * The name of the master slide. A short name in lower case letters like
+     * `audio`.
      */
     name: string;
     /**
