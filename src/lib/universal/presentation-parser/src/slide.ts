@@ -102,6 +102,11 @@ export class Slide {
       data.keys.includes(masterName)
     )
 
+    // - camera
+    if (typeof data.raw === 'string' && masterNames.includes(data.raw)) {
+      return masterCollection[data.raw]
+    }
+
     if (intersection.length === 0) {
       throw new Error(`No master slide found: ${convertToString(data.raw)}`)
     }

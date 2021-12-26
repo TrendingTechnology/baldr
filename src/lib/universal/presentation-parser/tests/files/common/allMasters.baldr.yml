@@ -6,12 +6,16 @@ meta:
 slides:
 
 - audio: uuid:7cf3ebba-932e-4445-9207-ae7342abd65e
-  description: 'Bilder einer Ausstellung (Klavier): 1. Der Gnom (mit vielen Samples)'
+  description: >-
+    Bilder einer Ausstellung (Klavier): 1. Der Gnom (mit vielen
+    Samples)
 
 - camera
 
-- cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
-  description: Arbeitsblatt „Die Sinfonische Dichtung“ (Lückentext Seite 1 von 1)
+- title: ref:Dukas-Zauberlehrling_LT_1
+  cloze: uuid:0bc8a276-51c3-46ea-9787-2906207ab130
+  description: >-
+    Arbeitsblatt „Die Sinfonische Dichtung“ (Lückentext Seite 1 von 1)
 
 - document: uuid:d4b8d565-4a98-4b28-9ffb-4fa3f04857e1
   description: Arbeitsblatt zum Thema „<em class="person">Ludwig van Beethoven</em>“
@@ -54,17 +58,15 @@ slides:
       </tbody>
     </table>
 
-- generic:
-    step_mode: 'words'
-    markup: |
-      # Heading 1
+- generic: |
+    # Heading 1
 
-      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+    Lorem ipsum [dolor sit amet](https://google.de), consectetur:
 
-      ## Adipisici elit, sed eiusmod
+    ## Adipisici elit, sed eiusmod
 
-      * Tempor incidunt ut labore.
-      * Veniam, quis nostrud.
+    * Tempor incidunt ut labore.
+    * Veniam, quis nostrud.
 
 - group: Rolling-Stones_The
 
@@ -123,13 +125,15 @@ slides:
     audio: 'ref:Schuetz-Freue_HB_Freue-dich'
 
 - section: >-
-    <em class="person">John Cage</em>: <em class="piece">Imaginary Landscape No. 4</em>
+    <em class="person">John Cage</em>: <em class="piece">Imaginary
+    Landscape No. 4</em>
 
 - song: Last-Christmas
 
 - task: <em>“Do this!”</em> __subito__!
 
-- video: ref:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
+- title: ref:Entstehung_VD_Entstehung-aus-soziologischer-Sicht
+  video: uuid:49ba792d-1a19-48d5-9cfe-50833fa6e8b9
 
 - wikipedia: Sequenz_(Musik)
 
