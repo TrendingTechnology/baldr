@@ -1,9 +1,0 @@
----
-meta:
-  ref: EP_common_absentSlides
-
-slides:
-- generic: present
-
-- generic: absent
-  state: absent

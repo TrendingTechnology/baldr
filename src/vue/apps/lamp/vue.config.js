@@ -35,9 +35,10 @@ function readExamples () {
   )
 
   // common
-  for (const exampleFile of fs.readdirSync(basePath)) {
+  const commonBasePath = path.join(basePath, 'common')
+  for (const exampleFile of fs.readdirSync(commonBasePath)) {
     if (exampleFile.match(/\.baldr\.yml$/) != null) {
-      const rawYaml = fs.readFileSync(path.join(basePath, exampleFile), 'utf8')
+      const rawYaml = fs.readFileSync(path.join(commonBasePath, exampleFile), 'utf8')
       examples.common[getBaseName(exampleFile)] = rawYaml
     }
   }

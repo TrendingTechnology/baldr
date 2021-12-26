@@ -1,6 +1,8 @@
 ---
-ref: interactive-graphic-test
-title: Master slide audio test
+meta:
+  ref: EP_master_interactive-graphic
+  title: Master slide “interactive-graphic” test
+
 slides:
 # 1
 - title: Kurzform (Ohne Ebenen, nichts zum Einblenden)

@@ -53,7 +53,7 @@ describe('Class “Slide()”', function () {
   })
 
   it('attribute “audioOverlay”', async function () {
-    const presentation = parsePresentation('audio-overlay')
+    const presentation = parsePresentation('common/audio-overlay')
     const assets = await presentation.resolve()
     assert.strictEqual(assets.length, 11)
     for (const asset of assets) {

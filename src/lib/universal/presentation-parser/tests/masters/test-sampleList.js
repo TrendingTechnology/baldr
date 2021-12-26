@@ -4,7 +4,7 @@ const assert = require('assert')
 
 const { parsePresentation } = require('../_helper.js')
 
-const presentation = parsePresentation('masters/sample-list')
+const presentation = parsePresentation('masters/sampleList')
 
 function getSlide (ref) {
   return presentation.getSlideByRef(ref)

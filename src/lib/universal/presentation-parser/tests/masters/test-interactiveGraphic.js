@@ -4,7 +4,7 @@ const assert = require('assert')
 
 const { parsePresentation } = require('../_helper.js')
 
-const presentation = parsePresentation('masters/interactive-graphic')
+const presentation = parsePresentation('masters/interactiveGraphic')
 
 describe('Master slide “interactive-graphic”', function () {
   describe('Modes', function () {
