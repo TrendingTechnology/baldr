@@ -4,12 +4,14 @@ const path = require('path')
 
 // Third party packages.
 const { DefinePlugin } = require('webpack')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Project packages
 const { gitHead } = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
 const { getConfig } = require('@bldr/config')
+
 const config = getConfig()
 
 function stylePath (themeName) {
@@ -84,7 +86,8 @@ module.exports = {
         gitHead: JSON.stringify(gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readExamples())
-      })
+      }),
+      new BundleAnalyzerPlugin()
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/presentation/' : '/',
