@@ -30,10 +30,6 @@ export declare function connectDb(): Promise<mongodb.MongoClient>;
  * Connect and initialize the MongoDB database.
  */
 export declare function getDatabaseWrapper(): Promise<Database>;
-interface DynamikSelectResult {
-    ref: string;
-    name: string;
-}
 export interface FlushMediaResult {
     numberOfDroppedAssets: number;
     numberOfDroppedPresentations: number;
@@ -82,7 +78,7 @@ export declare class Database implements DatabaseWrapper {
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
     getPresentationByRef(ref: string): Promise<any>;
     getAsset(scheme: 'ref' | 'uuid', uri: string): Promise<any>;
-    searchPresentationBySubstring(substring: string): Promise<DynamikSelectResult[]>;
+    searchPresentationBySubstring(substring: string): Promise<ApiTypes.DynamikSelectResult[]>;
     getDocumentCounts(): Promise<ApiTypes.MediaCount>;
     private getAllAssetRefs;
     private getAllAssetUuids;

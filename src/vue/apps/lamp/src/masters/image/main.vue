@@ -1,15 +1,8 @@
 <template>
   <div class="vc_image_master">
-    <img class="img-contain" ref="image" :src="imageHttpUrl"/>
-    <div
-      ref="metadata"
-      class="metadata"
-    >
-      <h1
-        v-if="title && !noMeta"
-        class="title font-shadow"
-        v-html="title"
-      />
+    <img class="img-contain" ref="image" :src="imageHttpUrl" />
+    <div ref="metadata" class="metadata">
+      <h1 v-if="title && !noMeta" class="title font-shadow" v-html="title" />
       <p
         v-if="descriptionTeaser && !showLongDescription && !noMeta"
         class="description-teaser font-shadow"
@@ -25,37 +18,56 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    imageHttpUrl: {
-      type: String
-    },
-    title: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    descriptionTeaser: {
-      type: String
-    },
-    isLongDescription: {
-      type: Boolean
-    },
-    noMeta: {
-      type: Boolean
-    }
-  },
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class ImageMasterMain extends MasterMain {
+  masterName = 'image'
+
+  @Prop({
+    type: String
+  })
+  imageHttpUrl: string
+
+  @Prop({
+    type: String
+  })
+  title: string
+
+  @Prop({
+    type: String
+  })
+  description: string
+
+  @Prop({
+    type: String
+  })
+  descriptionTeaser: string
+
+  @Prop({
+    type: Boolean
+  })
+  isLongDescription: string
+
+  @Prop({
+    type: Boolean
+  })
+  noMeta: boolean
+
+  showLongDescription: boolean
+
   data () {
     return {
       showLongDescription: false
     }
-  },
-  methods: {
-    toggleDescription () {
-      this.showLongDescription = !this.showLongDescription
-    }
+  }
+
+  toggleDescription () {
+    this.showLongDescription = !this.showLongDescription
   }
 }
 </script>
@@ -76,13 +88,15 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
 
-    .description, .description-teaser, .title {
+    .description,
+    .description-teaser,
+    .title {
       padding: 0 1vw;
       margin: 0;
     }
   }
 
-  &[b-metadata-position="vertical"] {
+  &[b-metadata-position='vertical'] {
     .metadata {
       right: 0;
       bottom: 0;
@@ -90,7 +104,7 @@ export default {
     }
   }
 
-  &[b-metadata-position="horizontal"] {
+  &[b-metadata-position='horizontal'] {
     .metadata {
       bottom: 0;
       left: 0;
@@ -98,7 +112,7 @@ export default {
     }
   }
 
-  &[b-metadata-position="overlay"] {
+  &[b-metadata-position='overlay'] {
     .metadata {
       right: 0;
       bottom: 0;
@@ -106,7 +120,9 @@ export default {
       width: 100%;
       justify-content: flex-end;
 
-      .title, .description, .description-teaser {
+      .title,
+      .description,
+      .description-teaser {
         background: rgba(170, 170, 170, 0.3);
       }
 
@@ -114,7 +130,8 @@ export default {
         padding-left: 5vw;
       }
 
-      .description, .description-teaser {
+      .description,
+      .description-teaser {
         padding: 0.5vw 5vw;
       }
     }

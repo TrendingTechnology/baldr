@@ -6,6 +6,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { StepController } from '@bldr/dom-manipulator'
+
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component
@@ -17,9 +19,11 @@ export default class NoteMasterMain extends MasterMain {
   })
   markup: string
 
+  stepController: StepController
+
   data () {
     return {
-      domSteps: null
+      stepController: null
     }
   }
 }

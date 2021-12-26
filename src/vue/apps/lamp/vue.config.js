@@ -115,7 +115,7 @@ module.exports = {
         lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readExamples())
       }),
-      new BundleAnalyzerPlugin()
+      // new BundleAnalyzerPlugin()
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/presentation/' : '/',

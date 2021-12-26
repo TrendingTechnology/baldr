@@ -33,7 +33,9 @@ import MasterMain from '../../components/reusable/MasterMain.vue'
 export default class InstrumentMasterMain extends MasterMain {
   masterName = 'instrument'
 
-  @Prop({ type: Object })
+  @Prop({
+    type: Object
+  })
   readonly asset!: Asset
 }
 </script>

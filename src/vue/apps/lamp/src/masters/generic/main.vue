@@ -4,49 +4,42 @@
   </div>
 </template>
 
-<script>
-import { createNamespacedHelpers } from 'vuex'
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
-
-const { mapGetters } = createNamespacedHelpers('lamp')
+import MasterMain from '../../components/reusable/MasterMain.vue'
 
 const CHARACTERS_ON_SLIDE = 400
 
-export default {
-  props: {
-    markup: {
-      type: [String, Array],
-      required: true,
-      // It is complicated to convert to prop based markup conversion.
-      // markup: true
-      description: 'Markup im HTML oder Markdown-Format'
-    },
-    charactersOnSlide: {
-      type: [Number],
-      description:
-        'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
-      default: CHARACTERS_ON_SLIDE
-    },
-    ...mapStepFieldDefintions(['mode', 'subset'])
-  },
+@Component
+export default class GenericMasterMain extends MasterMain {
+  masterName = 'generic'
+
+  @Prop({
+    type: [String, Array],
+    required: true
+  })
+  markup: string[]
+
+  @Prop({
+    type: Number,
+    default: CHARACTERS_ON_SLIDE
+  })
+  charactersOnSlide: number
+
   data () {
     return {
       steps: null,
       domSteps: null
     }
-  },
-  computed: {
-    ...mapGetters(['slide']),
-    markupCurrent () {
-      if (this.stepMode) {
-        return this.markup[0]
-      }
-      if (this.navigationNumbers.stepNo) {
-        return this.markup[this.navigationNumbers.stepNo - 1]
-      }
-      return this.markup[0]
+  }
+
+  get markupCurrent (): string {
+    if (this.navigationNumbers.stepNo) {
+      return this.markup[this.navigationNumbers.stepNo - 1]
     }
+    return this.markup[0]
   }
 }
 </script>
