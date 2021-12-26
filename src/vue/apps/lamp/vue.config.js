@@ -60,6 +60,20 @@ function readExamples () {
   return examples
 }
 
+function createAlias (packageNames) {
+  const alias = {}
+
+  for (const packageName of packageNames) {
+    alias[packageName + '$'] = path.resolve(
+      __dirname,
+      'node_modules',
+      packageName
+    )
+  }
+
+  return alias
+}
+
 module.exports = {
   lintOnSave: true,
   chainWebpack: config => {
@@ -79,10 +93,20 @@ module.exports = {
           'node_modules/vue/dist/vue.runtime.esm.js'
         ),
         // transliteration is very big
-        '@bldr/string-format$': path.resolve(
-          __dirname,
-          'node_modules/@bldr/string-format'
-        )
+        // '@bldr/string-format$': path.resolve(
+        //   __dirname,
+        //   'node_modules/@bldr/string-format'
+        // ),
+        // '@bldr/core-browser$': path.resolve(
+        //   __dirname,
+        //   'node_modules/@bldr/core-browser'
+        // ),
+        ...createAlias([
+          '@bldr/string-format',
+          '@bldr/core-browser',
+          '@bldr/markdown-to-html',
+          '@bldr/http-request'
+        ])
       }
     },
     plugins: [
