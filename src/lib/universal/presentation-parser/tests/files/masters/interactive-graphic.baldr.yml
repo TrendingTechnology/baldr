@@ -1,6 +1,7 @@
 ---
-ref: interactive-graphic-test
-title: Master slide “interactive-graphic” test
+meta:
+  ref: interactive-graphic-test
+  title: Master slide “interactive-graphic” test
 
 slides:
 # 1

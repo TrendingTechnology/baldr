@@ -1,6 +1,7 @@
 ---
-ref: unknown-master
-title: Unknown master slide
+meta:
+  ref: unknown-master
+  title: Unknown master slide
 
 slides:
 - unknown_master: test

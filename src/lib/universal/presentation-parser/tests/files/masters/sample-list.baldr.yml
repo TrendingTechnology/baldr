@@ -1,6 +1,7 @@
 ---
-ref: sample-list-test
-title: Master slide “sample-list” test presentation
+meta:
+  ref: sample-list-test
+  title: Master slide “sample-list” test presentation
 
 slides:
 - ref: short-form-array

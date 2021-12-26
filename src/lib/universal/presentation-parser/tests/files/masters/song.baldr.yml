@@ -1,6 +1,7 @@
 ---
-ref: song-test
-title: Master slide “song” test presentation
+meta:
+  ref: song-test
+  title: Master slide “song” test presentation
 
 slides:
 

@@ -1,6 +1,7 @@
 ---
-ref: nested-slides
-title: Nested slides
+meta:
+  ref: nested-slides
+  title: Nested slides
 
 slides:
 - generic: Level 1

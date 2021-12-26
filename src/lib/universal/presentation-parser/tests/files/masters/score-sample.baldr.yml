@@ -1,6 +1,7 @@
 ---
-ref: score-sample-test
-title: Master slide “score-sample” test presentation
+meta:
+  ref: score-sample-test
+  title: Master slide “score-sample” test presentation
 
 slides:
 

@@ -1,6 +1,8 @@
 ---
-ref: counter-test
-title: Master slide “counter” test presentation
+meta:
+  ref: counter-test
+  title: Master slide “counter” test presentation
+
 slides:
 
 - ref: short-form

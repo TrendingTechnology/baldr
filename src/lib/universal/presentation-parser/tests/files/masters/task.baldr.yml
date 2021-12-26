@@ -1,6 +1,7 @@
 ---
-ref: task-test
-title: Master slide “task” test presentation
+meta:
+  ref: task-test
+  title: Master slide “task” test presentation
 
 slides:
 

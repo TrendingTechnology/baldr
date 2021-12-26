@@ -1,6 +1,8 @@
 ---
-ref: group-test
-title: Master slide “group” test presentation
+meta:
+  ref: group-test
+  title: Master slide “group” test presentation
+
 slides:
 
 - ref: short-form

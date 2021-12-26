@@ -1,6 +1,8 @@
 ---
-ref: audio-test
-title: Master slide “audio” test presentation
+meta:
+  ref: audio-test
+  title: Master slide “audio” test presentation
+
 slides:
 
 - ref: description

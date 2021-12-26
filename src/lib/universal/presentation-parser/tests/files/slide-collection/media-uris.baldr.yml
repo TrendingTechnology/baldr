@@ -1,6 +1,7 @@
 ---
-ref: media-uris
-title: Media URIs
+meta:
+  ref: media-uris
+  title: Media URIs
 
 slides:
 - title: Mandatory media URI

@@ -1,6 +1,8 @@
 ---
-ref: image-test
-title: Master slide “image” test presentation
+meta:
+  ref: image-test
+  title: Master slide “image” test presentation
+
 slides:
 
 - title: no_meta

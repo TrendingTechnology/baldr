@@ -1,6 +1,7 @@
 ---
-ref: unknown-property
-title: Unknown property in the presentation root
+meta:
+  ref: unknown-property
+  title: Unknown property in the presentation root
 
 slides:
 - generic: test

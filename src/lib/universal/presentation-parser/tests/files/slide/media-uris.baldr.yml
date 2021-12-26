@@ -1,6 +1,7 @@
 ---
-ref: slide-media-uris
-title: Slide media URIs
+meta:
+  ref: slide-media-uris
+  title: Slide media URIs
 
 slides:
 - image: ref:test

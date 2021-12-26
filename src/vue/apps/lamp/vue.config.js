@@ -20,26 +20,36 @@ function stylePath (themeName) {
 }
 
 function readExamples () {
+  function getBaseName (filePath) {
+    return filePath.replace('.baldr.yml', '')
+  }
+
   const examples = {
     common: {},
     masters: {}
   }
+
+  const basePath = path.join(
+    config.localRepo,
+    'src/lib/universal/presentation-parser/tests/files'
+  )
+
   // common
-  for (const exampleFile of fs.readdirSync('./examples')) {
-    const key = exampleFile.replace('.baldr.yml', '')
-    const rawYaml = fs.readFileSync(path.join('examples', exampleFile), 'utf8')
-    examples.common[key] = rawYaml
+  for (const exampleFile of fs.readdirSync(basePath)) {
+    if (exampleFile.match(/\.baldr\.yml$/) != null) {
+      const rawYaml = fs.readFileSync(path.join(basePath, exampleFile), 'utf8')
+      examples.common[getBaseName(exampleFile)] = rawYaml
+    }
   }
   // masters
-  const mastersBasePath = path.join('src', 'masters')
+  const mastersBasePath = path.join(basePath, 'masters')
   for (const masterName of fs.readdirSync(mastersBasePath)) {
     const rawYaml = fs.readFileSync(
-      path.join(mastersBasePath, masterName, 'examples.baldr.yml'),
+      path.join(mastersBasePath, masterName),
       'utf8'
     )
-    examples.masters[masterName] = rawYaml
+    examples.masters[getBaseName(masterName)] = rawYaml
   }
-
   return examples
 }
 

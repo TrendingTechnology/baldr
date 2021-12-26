@@ -1,6 +1,7 @@
 ---
-ref: note-test
-title: Master slide „note“ test presentation
+meta:
+  ref: note-test
+  title: Master slide „note“ test presentation
 
 slides:
 

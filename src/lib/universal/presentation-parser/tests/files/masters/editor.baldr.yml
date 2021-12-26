@@ -1,6 +1,8 @@
 ---
-ref: editor-test
-title: Master slide “editor” test presentation
+meta:
+  ref: editor-test
+  title: Master slide “editor” test presentation
+
 slides:
 
 - title: Step words

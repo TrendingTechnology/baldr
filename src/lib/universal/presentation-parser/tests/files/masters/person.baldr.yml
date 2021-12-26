@@ -1,6 +1,8 @@
 ---
-ref: person-test
-title: Master slide “person” test presentation
+meta:
+  ref: person-test
+  title: Master slide “person” test presentation
+
 slides:
 
 - ref: short-form

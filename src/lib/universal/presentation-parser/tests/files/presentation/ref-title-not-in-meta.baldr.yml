@@ -1,6 +1,7 @@
 ---
-ref: Reference
-title: Title
+meta:
+  ref: Reference
+  title: Title
 
 slides:
 - generic: test

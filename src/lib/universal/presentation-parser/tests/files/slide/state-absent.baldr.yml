@@ -1,6 +1,7 @@
 ---
-ref: slide-state-absent
-title: Slide state absent
+meta:
+  ref: slide-state-absent
+  title: Slide state absent
 
 slides:
 - generic: absent

@@ -1,6 +1,7 @@
 ---
-ref: media-assets-irresolvable-optional
-title: Irresolvable optional assets
+meta:
+  ref: media-assets-irresolvable-optional
+  title: Irresolvable optional assets
 
 slides:
 - youtube: xxxxxxxxxxx

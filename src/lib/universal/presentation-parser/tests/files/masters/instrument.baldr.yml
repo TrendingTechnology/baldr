@@ -1,6 +1,7 @@
 ---
-ref: instrument-test
-title: Master slide “instrument” test presentation
+meta:
+  ref: instrument-test
+  title: Master slide “instrument” test presentation
 
 slides:
 

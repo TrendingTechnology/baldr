@@ -1,6 +1,7 @@
 ---
-ref: duplicate-slide-ref
-title: Duplicate slide reference
+meta:
+  ref: duplicate-slide-ref
+  title: Duplicate slide reference
 
 slides:
 - ref: one

@@ -1,6 +1,7 @@
 ---
-ref: ref-abbreviation
-title: Reference abbreviation
+meta:
+  ref: ref-abbreviation-ok
+  title: Reference abbreviation
 
 slides:
 - generic: ref:./file-1

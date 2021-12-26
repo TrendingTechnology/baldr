@@ -1,6 +1,7 @@
 ---
-ref: wikipedia-test
-title: Master slide “wikipedia” test presentation
+meta:
+  ref: wikipedia-test
+  title: Master slide “wikipedia” test presentation
 
 slides:
 

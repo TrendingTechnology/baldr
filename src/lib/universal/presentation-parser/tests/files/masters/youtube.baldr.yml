@@ -1,6 +1,7 @@
 ---
-ref: youtube-test
-title: Master slide “youtube” test presentation
+meta:
+  ref: youtube-test
+  title: Master slide “youtube” test presentation
 
 slides:
 - title: Downloaded video

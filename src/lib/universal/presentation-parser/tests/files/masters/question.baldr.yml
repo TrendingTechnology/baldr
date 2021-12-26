@@ -1,6 +1,7 @@
 ---
-ref: question-test
-title: Master slide „question“ test presentation
+meta:
+  ref: question-test
+  title: Master slide „question“ test presentation
 
 slides:
 

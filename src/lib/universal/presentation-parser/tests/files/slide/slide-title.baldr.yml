@@ -1,6 +1,7 @@
 ---
-ref: slide-title
-title: Slide title
+meta:
+  ref: slide-title
+  title: Slide title
 
 slides:
 - ref: from-metadata-title

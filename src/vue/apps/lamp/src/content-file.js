@@ -617,40 +617,13 @@ export class Presentation {
    * this.meta.curriculum
    * ```
    */
-  constructor ({ rawYamlString, rawObject }) {
+  constructor (rawYamlString) {
     // Load the YAML string. Convert the YAML string into a object.
-    let rawYamlObject
-    if (rawYamlString) {
-      try {
-        if (rawObject && rawObject.meta && rawObject.meta.ref) {
-          rawYamlString = this.expandMediaUris(
-            rawYamlString,
-            rawObject.meta.ref
-          )
-        }
-        rawYamlObject = convertFromYamlRaw(rawYamlString)
-      } catch (error) {
-        throw new Error(`${error.name}: ${error.message}`)
-      }
-
-      if (!rawYamlObject) {
-        rawYamlObject = {
-          meta: null,
-          slides: [
-            {
-              title: 'Die Präsentation hat noch keine Folien',
-              generic: 'Die Präsentation hat noch keine Folien'
-            }
-          ]
-        }
-      } else if (!rawYamlObject.slides) {
-        throw new Error(
-          `No top level slides key found!\n\n---\nslides:\n- generic: etc.\n\nCan not parse this content:\n\n${JSON.stringify(
-            rawYamlObject
-          )}`
-        )
-      }
-    }
+    let rawObject = convertFromYamlRaw(rawYamlString)
+    console.log(rawObject)
+    const ref = rawObject.ref != null ? rawObject.ref : rawObject.meta.ref
+    rawYamlString = this.expandMediaUris(rawYamlString, ref)
+    rawObject = convertFromYamlRaw(rawYamlString)
 
     /**
      * The meta object.
@@ -671,9 +644,9 @@ export class Presentation {
      * @property {String} curriculum - Relation to the curriculum.
      * @property {String} curriculum_url - URL of the curriculum web page.
      */
-    this.meta = rawYamlObject.meta
+    this.meta = rawObject.meta != null ? rawObject.meta : {}
 
-    if (rawObject && rawObject.meta && rawObject.meta.path) {
+    if (rawObject.meta && rawObject.meta.path) {
       /**
        * The relative path of the presentation, for example
        * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus/Praesentation.baldr.yml`.
@@ -692,9 +665,8 @@ export class Presentation {
       this.parentDir = rawObject.meta.path.replace(`/${fileName}`, '')
     }
 
-    if (rawObject && rawObject.meta) {
+    if (rawObject.meta != null) {
       const meta = rawObject.meta
-      if (!this.meta) this.meta = {}
       for (const key of ['ref', 'title', 'subtitle', 'curriculum', 'grade']) {
         if (!this.meta[key] && meta[key]) {
           this.meta[key] = meta[key]
@@ -719,10 +691,10 @@ export class Presentation {
     this.slidesTree = []
 
     // In this function call the `Slide()` objects are created.
-    parseSlidesRecursive(rawYamlObject.slides, this.slides, this.slidesTree)
+    parseSlidesRecursive(rawObject.slides, this.slides, this.slidesTree)
 
     // This function is also called inside the function `parseSlidesRecursive()`
-    rawYamlObject = convertPropertiesSnakeToCamel(rawYamlObject)
+    rawObject = convertPropertiesSnakeToCamel(rawObject)
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {

@@ -1,6 +1,7 @@
 ---
-ref: generic-test
-title: Master slide “generic” test presentation
+meta:
+  ref: generic-test
+  title: Master slide “generic” test presentation
 slides:
 
 - ref: short-form

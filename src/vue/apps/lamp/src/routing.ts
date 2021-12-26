@@ -9,10 +9,12 @@
 
 import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 
-import { masterCollection } from '@bldr/lamp-core'
 import { shortenText } from '@bldr/string-format'
 import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
+import * as api from '@bldr/api-wrapper'
+
+// import { parse, parse as parsePresentation } from '@bldr/presentation-parser'
 
 import store from '@/store/index.js'
 import { router } from '@/routes'
@@ -131,40 +133,33 @@ export function getViewFromRoute (): 'speaker' | 'public' {
   return 'public'
 }
 
-async function loadPresentationById (vm: typeof Vm, presRef: string) {
+async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
   console.log(presRef)
   media.player.stop()
   vm.$store.dispatch('media/clear')
   vm.$store.commit('lamp/setPresentation', null)
 
-  // EP: Example
-  if (presRef.match(/^EP_.*$/)) {
-    // master example
-    const masterMatch = presRef.match(/^EP_master_(.*)$/)
-    if (masterMatch) {
-      const masterName = masterMatch[1]
-      const master = masterCollection.get(masterName) as any
-      await vm.$store.dispatch('lamp/openPresentation', {
-        vm,
-        rawYamlString: master.example
-      })
-      return
-    }
+  // Get the yaml content as a string of a presentation for quick refresh
+  let rawYamlString: string | null = null
 
-    // common example
-    const commonMatch = presRef.match(/^EP_common_(.*)$/)
-    if (commonMatch) {
-      const commonName = commonMatch[1]
-      await vm.$store.dispatch('lamp/openPresentation', {
-        vm,
-        rawYamlString:
-          vm.$store.getters['lamp/rawYamlExamples'].common[commonName]
-      })
-      return
-    }
+  // master example
+  const masterMatch = presRef.match(/^EP_master_(.*)$/)
+  if (masterMatch != null) {
+    rawYamlString = rawYamlExamples.masters[masterMatch[1]]
   }
 
-  await vm.$store.dispatch('lamp/openPresentationById', { vm, presRef })
+  // common example
+  const commonMatch = presRef.match(/^EP_common_(.*)$/)
+  if (commonMatch != null) {
+    rawYamlString = rawYamlExamples.common[commonMatch[1]]
+  }
+
+  if (rawYamlString == null) {
+    const dbPresentation = await api.getPresentationByRef(presRef)
+    rawYamlString = await api.readMediaAsString(dbPresentation.meta.path)
+  }
+
+  await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString })
 }
 
 /**
@@ -172,13 +167,13 @@ async function loadPresentationById (vm: typeof Vm, presRef: string) {
  */
 async function loadPresentationByRoute (vm: typeof Vm, route: Route) {
   try {
-    if (route.params.presRef) {
+    if (route.params.presRef != null) {
       const presentation = vm.$store.getters['lamp/presentation']
       if (
-        !presentation ||
-        (presentation && presentation.ref !== route.params.presRef)
+        presentation == null ||
+        (presentation != null && presentation.ref !== route.params.presRef)
       ) {
-        await loadPresentationById(vm, route.params.presRef)
+        await loadPresentationByRef(vm, route.params.presRef)
       }
       if (route.params.slideNo != null) {
         vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)

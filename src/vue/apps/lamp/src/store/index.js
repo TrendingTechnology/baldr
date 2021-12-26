@@ -104,12 +104,9 @@ const getters = {
 const actions = {
   async openPresentation (
     { commit, dispatch },
-    { vm, rawYamlString, mongoDbObject }
+    { vm, rawYamlString }
   ) {
-    const presentation = new Presentation({
-      rawYamlString,
-      rawObject: mongoDbObject
-    })
+    const presentation = new Presentation(rawYamlString)
     dispatch('recent/add', {
       presRef: presentation.ref,
       title: presentation.title
@@ -125,10 +122,8 @@ const actions = {
     const mongoDbObject = await api.getPresentationByRef(presRef)
 
     // Get the yaml content as a string of a presentation for quick refresh
-    const rawYamlString = await api.readMediaAsString(
-      mongoDbObject.meta.path
-    )
-    await dispatch('openPresentation', { vm, rawYamlString, mongoDbObject })
+    const rawYamlString = await api.readMediaAsString(mongoDbObject.meta.path)
+    await dispatch('openPresentation', { vm, rawYamlString })
   },
   /**
    * Reload the presentation and switch to the current slide (the same slide no)

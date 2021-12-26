@@ -1,6 +1,7 @@
 ---
-ref: get-slide-by-ref
-title: Get slide by ref
+meta:
+  ref: get-slide-by-ref
+  title: Get slide by ref
 
 slides:
 - ref: one

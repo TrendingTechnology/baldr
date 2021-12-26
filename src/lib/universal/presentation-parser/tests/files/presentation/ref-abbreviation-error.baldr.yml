@@ -1,5 +1,7 @@
 ---
-title: Reference abbreviation
+meta:
+  # ref: reference-abbreviation-error
+  title: Reference abbreviation
 
 slides:
 - generic: ref:./file-1
