@@ -88,17 +88,19 @@ module.exports = {
         // Avoid conflicting vue imports
         // Strange errors: “$attrs is readonly”,“$listeners is readonly”
         // https://forum.vuejs.org/t/bootstrapvue-table-attrs-is-readonly-listeners-is-readonly/73143/2
-        vue$: path.resolve(
-          __dirname,
-          'node_modules/vue/dist/vue.runtime.esm.js'
-        ),
+        // vue$: path.resolve(
+        //   __dirname,
+        //   'node_modules/vue/dist/vue.runtime.esm.js'
+        // ),
         // transliteration is very big
         ...createAlias([
+          'vue',
           '@bldr/string-format',
           '@bldr/core-browser',
           '@bldr/markdown-to-html',
           '@bldr/http-request',
-          '@bldr/log'
+          '@bldr/log',
+          '@bldr/yaml'
         ])
       }
     },
