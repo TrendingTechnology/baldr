@@ -73,7 +73,7 @@ export default validateMasterSpec({
       return props
     },
     resolveOptionalMediaUris (props) {
-      return youtubeIdToUri(props.id)
+      return youtubeIdToUri(props.youtubeId)
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](

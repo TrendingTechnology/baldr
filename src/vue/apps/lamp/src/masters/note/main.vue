@@ -2,23 +2,25 @@
   <div class="vc_note_master biggest" v-html="markup" />
 </template>
 
-<script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 
-export default {
-  props: {
-    markup: {
-      type: String
-    }
-  },
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class NoteMasterMain extends MasterMain {
+  masterName = 'note'
+
+  @Prop({
+    type: String
+  })
+  markup: string
+
   data () {
     return {
       domSteps: null
     }
-  },
-  computed: {
-    ...mapGetters(['slide'])
   }
 }
 </script>
@@ -31,6 +33,7 @@ export default {
   table {
     table-layout: fixed;
   }
+
   &.biggest {
     line-height: 1.35em;
   }

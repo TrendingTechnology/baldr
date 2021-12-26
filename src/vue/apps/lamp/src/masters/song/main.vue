@@ -5,13 +5,20 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    image: {
-      type: Object
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class SongMasterMain extends MasterMain {
+  masterName = 'song'
+
+  @Prop({
+    type: Object
+  })
+  image: any
 }
 </script>
 

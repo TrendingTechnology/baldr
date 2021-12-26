@@ -1,12 +1,13 @@
 ---
 slides:
 
-- title: Kurzform
-  video: ref:Worksongs-Spirtuals_VD_Die-Geschichte-des-Jazz_Worksongs
+- title: Kurzform (ref:Worksongs-Spirtuals_VD_Worksongs)
+  video: uuid:47611d7c-255e-4be2-87ee-2799f80f0179
 
-- video:
-    src: ref:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
-
-- title: 'URL: ref:'
+- title:  ref:Entstehung_VD_Entstehung-aus-soziologischer-Sicht
   video:
-    src: ref:Worksongs-Spirtuals_VD_Die-Geschichte-des-Jazz_Worksongs
+    src: uuid:49ba792d-1a19-48d5-9cfe-50833fa6e8b9
+
+- title: 'URL: ref:Worksongs-Spirtuals_VD_Worksongs'
+  video:
+    src: uuid:47611d7c-255e-4be2-87ee-2799f80f0179

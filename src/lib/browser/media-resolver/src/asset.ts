@@ -126,8 +126,13 @@ export class ClientMediaAsset implements MediaResolverTypes.ClientMediaAsset {
     return this.yaml.multiPartCount
   }
 
-  getMultiPartHttpUrlByNo (no: number): string {
-    if (this.multiPartCount === 1) return this.httpUrl
+  getMultiPartHttpUrlByNo (no?: number): string {
+    if (this.multiPartCount === 1) {
+      return this.httpUrl
+    }
+    if (no == null) {
+      no = 1
+    }
     if (no > this.multiPartCount) {
       throw new Error(
         `The asset has only ${this.multiPartCount} parts, not ${no}`

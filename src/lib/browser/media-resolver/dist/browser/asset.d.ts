@@ -28,7 +28,7 @@ export declare class ClientMediaAsset implements MediaResolverTypes.ClientMediaA
     get isPlayable(): boolean;
     get isVisible(): boolean;
     get multiPartCount(): number;
-    getMultiPartHttpUrlByNo(no: number): string;
+    getMultiPartHttpUrlByNo(no?: number): string;
 }
 /**
  * A multipart asset can be restricted in different ways. This class holds the

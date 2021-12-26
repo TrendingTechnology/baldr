@@ -8,26 +8,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    httpUrl: {
-      type: String,
-      required: true
-    },
-    previewHttpUrl: {
-      type: String
-    },
-    title: {
-      type: String
-    },
-    description: {
-      type: String
-    },
-    showMeta: {
-      type: Boolean
-    }
-  }
+<script lang="ts">
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import MasterMain from '../../components/reusable/MasterMain.vue'
+
+@Component
+export default class VideoMasterMain extends MasterMain {
+  masterName = 'video'
+
+  @Prop({
+    type: String,
+    required: true
+  })
+  httpUrl: string
+
+  @Prop({
+    type: String
+  })
+  previewHttpUrl: string
+
+  @Prop({
+    type: String
+  })
+  title: string
+
+  @Prop({
+    type: String
+  })
+  description: string
+
+  @Prop({
+    type: Boolean
+  })
+  showMeta: boolean
 }
 </script>
 
