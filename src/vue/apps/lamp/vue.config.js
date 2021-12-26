@@ -4,7 +4,8 @@ const path = require('path')
 
 // Third party packages.
 const { DefinePlugin } = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 // Project packages
 const { gitHead } = require('@bldr/core-node')
@@ -40,7 +41,10 @@ function readExamples () {
   const commonBasePath = path.join(basePath, 'common')
   for (const exampleFile of fs.readdirSync(commonBasePath)) {
     if (exampleFile.match(/\.baldr\.yml$/) != null) {
-      const rawYaml = fs.readFileSync(path.join(commonBasePath, exampleFile), 'utf8')
+      const rawYaml = fs.readFileSync(
+        path.join(commonBasePath, exampleFile),
+        'utf8'
+      )
       examples.common[getBaseName(exampleFile)] = rawYaml
     }
   }
@@ -73,6 +77,11 @@ module.exports = {
         vue$: path.resolve(
           __dirname,
           'node_modules/vue/dist/vue.runtime.esm.js'
+        ),
+        // transliteration is very big
+        '@bldr/string-format$': path.resolve(
+          __dirname,
+          'node_modules/@bldr/string-format'
         )
       }
     },
