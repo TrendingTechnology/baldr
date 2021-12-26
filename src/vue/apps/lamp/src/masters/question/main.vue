@@ -14,6 +14,8 @@ import Question from './Question.vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { StepController } from '@bldr/dom-manipulator'
+
 import MasterMain from '../../components/reusable/MasterMain.vue'
 
 @Component({
@@ -21,14 +23,16 @@ import MasterMain from '../../components/reusable/MasterMain.vue'
     Question
   }
 })
-export default class QuoteMasterMain extends MasterMain {
-  masterName = 'quote'
+export default class QuestionMasterMain extends MasterMain {
+  masterName = 'question'
 
   @Prop({
     type: Array,
     required: true
   })
   questions: any
+
+  stepController: StepController
 
   get subQuestions () {
     if (this.questions.length > 1) {
@@ -44,9 +48,9 @@ export default class QuoteMasterMain extends MasterMain {
     return ''
   }
 
-  data () {
+  data (): { stepController: StepController } {
     return {
-      domSteps: null
+      stepController: null
     }
   }
 }

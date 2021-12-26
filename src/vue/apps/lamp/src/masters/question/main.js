@@ -113,6 +113,7 @@ export default validateMasterSpec({
       this.stepController.hideAll()
     },
     afterStepNoChangeOnComponent ({ newStepNo }) {
+      console.log(newStepNo)
       setQuestionsByStepNo.call(this, newStepNo)
     },
     plainTextFromProps (props) {

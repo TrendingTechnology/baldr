@@ -55,7 +55,7 @@ export default class MasterMain extends Master {
       // Previous slide has only one step number
       // oldSlideNo 2 oldStepNo 1 newSlideNo 3 oldStepNo 1
       if (
-        newValue.stepNo &&
+        newValue.stepNo != null &&
         `${newValue.slideNo}:${newValue.stepNo}` !==
           `${oldValue.slideNo}:${oldValue.stepNo}`
       ) {
