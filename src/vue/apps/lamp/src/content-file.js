@@ -543,7 +543,7 @@ export class Slide {
     if (this.stepCount && this.stepCount > 1) {
       name = routeNames.stepNo
       if (this.stepNo) {
-        params.stepNo = this.stepNo
+        params.stepNo = parseInt(this.stepNo)
       } else {
         params.stepNo = 1
       }

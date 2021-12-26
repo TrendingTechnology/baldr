@@ -22,22 +22,25 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Question',
-  props: {
-    question: {
-      type: Object
-    },
-    noAnswer: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    q () {
-      return this.question
-    }
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+@Component
+export default class Question extends Vue {
+  @Prop({
+    type: Object
+  })
+  question: any
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  noAnswer: boolean
+
+  get q () {
+    return this.question
   }
 }
 </script>

@@ -234,7 +234,7 @@ const mutations = {
     state.slideNo = parseInt(slideNo)
   },
   setStepNoCurrent (state, { slide, stepNo }) {
-    slide.stepNo = stepNo
+    slide.stepNo = parseInt(stepNo)
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
