@@ -84,8 +84,34 @@ export default class MasterMain extends Master {
     })
   }
 
+  /**
+   * This hook is executed on the component after the slide number has
+   * changed.
+   *
+   * ```js
+   * afterSlideNoChange ({ oldSlideNo, newSlideNo }) {
+   *   const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
+   * }
+   * ```
+   */
   afterSlideNoChange (payload: LampTypes.OldAndNewSlideNos) {}
 
+  /**
+   * This hook is executed on the component after the step number has
+   * changed.
+   *
+   * ```js
+   * afterStepNoChange ({ oldStepNo, newStepNo, slideNoChange }) {
+   *   const options = { stepNo: newStepNo }
+   *   if (slideNoChange) {
+   *     options.full = true
+   *   } else {
+   *     options.oldStepNo = oldStepNo
+   *   }
+   *   this.domSteps.displayByNo(options)
+   * }
+   * ```
+   */
   afterStepNoChange (payload: LampTypes.OldAndNewStepNoAndSlideNoChange) {}
 
   mounted (): void {

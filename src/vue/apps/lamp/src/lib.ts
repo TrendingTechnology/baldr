@@ -4,7 +4,7 @@
  * @module @bldr/lamp/lib
  */
 
-import vue from '@/main'
+import { showMessage } from '@bldr/notification'
 
 /**
  * Check if the input is a valid URI. Prefix with `ref:` if necessary.
@@ -13,7 +13,7 @@ import vue from '@/main'
  *
  * @returns {ExecFileSyncOptionsWithStringEncoding}
  */
-export function validateUri (uri) {
+export function validateUri (uri: string) {
   if (typeof uri !== 'string') throw new Error(`”${uri}“ is not a string.`)
   const segments = uri.split(':')
   // To allow URI with out a URI scheme. This defaults to `id`.
@@ -29,15 +29,22 @@ export function validateUri (uri) {
  * not resized easily in IMG tags. The slide preview depends on resizeable
  * SVGs.
  *
- * @param {string} filePath - Path of the SVG. Only need for better error
+ * @param filePath - Path of the SVG. Only need for better error
  *   messages.
  */
-export function warnSvgWidthHeight (filePath) {
-  const svgs = document.querySelectorAll('svg')
+export function warnSvgWidthHeight (filePath?: string): void {
+  const svgs = document.querySelectorAll('svg') as NodeListOf<SVGSVGElement>
   for (const svg of svgs) {
-    if (svg.attributes.height || svg.attributes.width) {
-      if (filePath) filePath = ` (${filePath})`
-      vue.$showMessage.error(`SVG file${filePath} has width and height attributes set.`)
+    if (
+      svg.attributes.getNamedItem('height') != null ||
+      svg.attributes.getNamedItem('width') != null
+    ) {
+      if (filePath != null) {
+        filePath = ` (${filePath})`
+      }
+      showMessage.error(
+        `SVG file${filePath} has width and height attributes set.`
+      )
     }
   }
 }

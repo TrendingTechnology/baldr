@@ -12,35 +12,6 @@ import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 import * as api from '@bldr/api-wrapper'
 
-import { warnSvgWidthHeight } from '@/lib.js'
-
-/**
- * @param {HTMLElement} componentElement - The parent component element.
- *   `<div class="vc_cloze_master master-inner">`
- * @param {HTMLElement} scrollContainer
- * @param {Object} clozeGroup
- */
-export function scrollToClozeGroup (
-  componentElement,
-  scrollContainer,
-  clozeGroup
-) {
-  if (!clozeGroup) return
-
-  // e. g.: 1892
-  // svg.clientHeight
-  const svg = componentElement.querySelector('svg')
-  // e. g.: 794.4473876953125
-  // bBox.height
-  const bBox = svg.getBBox()
-  const glyph = clozeGroup.children[0]
-  // e. g.: 125.11000061035156
-  const glyphOffsetTopSvg =
-    (svg.clientHeight / bBox.height) * glyph.y.baseVal.value
-  const scrollToTop = glyphOffsetTopSvg - 0.8 * scrollContainer.clientHeight
-  scrollContainer.scrollTo({ top: scrollToTop, left: 0, behavior: 'smooth' })
-}
-
 export default validateMasterSpec({
   name: 'cloze',
   title: 'Lückentext',
@@ -120,31 +91,6 @@ export default validateMasterSpec({
     titleFromProps ({ propsMain }) {
       if (propsMain.asset.yaml.title) {
         return propsMain.asset.yaml.title
-      }
-    },
-    afterSlideNoChangeOnComponent ({ newSlideNo }) {
-      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
-      warnSvgWidthHeight()
-      console.log(this.$el)
-      this.stepController = buildClozeStepController(
-        this.$el,
-        slide.props.stepSubset
-      )
-      this.stepController.hideFromSubsetBegin()
-    },
-    afterStepNoChangeOnComponent ({ newStepNo }) {
-      if (newStepNo === 1) {
-        this.stepController.hideFromSubsetBegin()
-      }
-      const step = this.stepController.showUpTo(newStepNo)
-      if (step != null) {
-        const newClozeGroup = step.htmlElement
-
-        // <div class="vc_slide_main">
-        //   <div class="vc_master_renderer">
-        //     <div class="vc_cloze_master master-inner">
-        const scrollContainer = this.$el.parentElement.parentElement
-        scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
       }
     }
   }

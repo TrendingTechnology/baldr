@@ -4,7 +4,7 @@
 
 import Vue from 'vue'
 
-import { warnSvgWidthHeight } from '@/lib.js'
+import { warnSvgWidthHeight } from '@/lib'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'

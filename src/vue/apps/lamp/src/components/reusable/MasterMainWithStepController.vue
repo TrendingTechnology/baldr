@@ -1,0 +1,15 @@
+<script lang="ts">
+import Component from 'vue-class-component'
+import { StepController } from '@bldr/dom-manipulator'
+
+import MasterMain from './MasterMain.vue'
+
+@Component
+export default class MasterMainWithStepController extends MasterMain {
+  data () {
+    return { stepController: null }
+  }
+
+  stepController: StepController
+}
+</script>
