@@ -1,7 +1,7 @@
 ---
 meta:
-  ref: EP_master_sample-list
-  title: Master slide “sample-list” test presentation
+  ref: EP_master_sampleList
+  title: Master slide “sampleList” test presentation
 
 slides:
 - ref: short-form-array
