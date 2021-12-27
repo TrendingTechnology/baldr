@@ -1,10 +1,7 @@
-import Vue, { VNode } from 'vue'
+import Vue from 'vue'
+import { VNode } from 'vue'
 
 import { Configuration } from '@bldr/config'
-
-declare module '*.vue' {
-  export default Vue
-}
 
 /**
  * YAML files inside the folder
