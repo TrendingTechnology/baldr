@@ -29,7 +29,6 @@
     "@bldr/dynamic-select": "*",
     "@bldr/http-request": "*",
     "@bldr/icons": "*",
-    "@bldr/lamp-core": "*",
     "@bldr/markdown-to-html": "*",
     "@bldr/media-client": "*",
     "@bldr/menu-adapter": "*",

@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/group
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 function convertGroupIdToMediaId (groupId) {
   return `ref:GR_${groupId}`

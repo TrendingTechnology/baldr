@@ -637,15 +637,6 @@ export interface Master {
      */
     enterSlide: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
     /**
-     * This hook gets executed after the slide number has changed on the
-     * component. Use `const slide = this.$get('slide')` to get the current slide
-     * object.
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the master component mixin in the file `masters.js`.
-     */
-    afterSlideNoChangeOnComponent: (payload: OldAndNewSlideNos, thisArg: ThisArg) => void;
-    /**
      * Called when leaving a step. This hook is only called on the public master
      * component (the one that is visible for the audience), not on further
      * secondary master components (for example the ad hoc slides or the future
@@ -665,14 +656,6 @@ export interface Master {
      * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
      */
     enterStep: (payload: OldAndNewStepNo, thisArg: ThisArg) => void;
-    /**
-     * This hook gets executed after the step number has changed on the
-     * component.
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the master component mixin in the file `masters.js`.
-     */
-    afterStepNoChangeOnComponent: (payload: OldAndNewStepNoAndSlideNoChange, thisArg: ThisArg) => void;
     $commit: (commitName: string, payload: any) => void;
 }
 /**

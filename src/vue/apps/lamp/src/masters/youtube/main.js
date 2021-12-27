@@ -7,7 +7,7 @@
  */
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { youtubeMModule } from '@bldr/presentation-parser'
 
 export default validateMasterSpec({

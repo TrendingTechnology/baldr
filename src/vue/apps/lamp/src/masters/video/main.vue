@@ -12,6 +12,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { media } from '@bldr/media-client'
+
 import MasterMain from '../MasterMain.vue'
 
 @Component
@@ -43,6 +45,22 @@ export default class VideoMasterMain extends MasterMain {
     type: Boolean
   })
   showMeta: boolean
+
+  async afterSlideNoChange (): Promise<void> {
+    if (!this.isPublic) {
+      return
+    }
+    const sample = this.$store.getters['media/sampleByUri'](
+      this.slide.props.src
+    )
+    const videoWrapper = document.querySelector('#video_master-container')
+    videoWrapper.innerHTML = ''
+    videoWrapper.appendChild(sample.htmlElement)
+    media.player.load(this.slide.props.src)
+    if (this.slide.props.autoplay) {
+      await media.player.start()
+    }
+  }
 }
 </script>
 

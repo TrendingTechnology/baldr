@@ -5,7 +5,7 @@
 import type { LampTypes } from '@bldr/type-definitions'
 
 import { mediaResolver } from '@bldr/media-client'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 export default validateMasterSpec({
   name: 'sampleList',
@@ -63,14 +63,5 @@ export default validateMasterSpec({
         props.samples = wrappedSampleList
       }
     }
-    // no enterSlide hook: $media is not ready yet.
-    // async afterSlideNoChangeOnComponent () {
-    //   if (!this.isPublic) return
-    //   const slide = this.$get('slide')
-    //   this.$media.player.load(slide.props.samples.uris[0])
-    //   if (slide.props.autoplay) {
-    //     await this.$media.player.start()
-    //   }
-    // }
   }
 })

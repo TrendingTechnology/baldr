@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/question
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { questionMModul } from '@bldr/presentation-parser'
 

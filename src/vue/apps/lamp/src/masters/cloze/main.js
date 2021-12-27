@@ -7,7 +7,7 @@
 import Vue from 'vue'
 
 import { MediaUri } from '@bldr/client-media-models'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 import * as api from '@bldr/api-wrapper'

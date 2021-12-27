@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import { LampTypes } from '@bldr/type-definitions'
-import { masterCollection } from '@bldr/lamp-core'
+import { masterCollection } from '../masters.js'
 
 @Component
 export default class Master extends Vue {

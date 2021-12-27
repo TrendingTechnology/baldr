@@ -1,5 +1,24 @@
 import Vue from 'vue'
 
+import { LampTypes } from '@bldr/type-definitions'
+
+/**
+ * Validate the master specification. This function doesn’t change the
+ * the input object. The input object is passed through unchanged. The
+ * validation handles Typescript.
+ *
+ * @TODO remove
+ *
+ * @param masterSpec The specification of the master slide.
+ *
+ * @returns The unchanged object of the specification.
+ */
+export function validateMasterSpec (
+  masterSpec: LampTypes.MasterSpec
+): LampTypes.MasterSpec {
+  return masterSpec
+}
+
 /**
  * Register all master components. Search for  `main.vue` and `preview.vue`
  * files in the subfolder `masters`.

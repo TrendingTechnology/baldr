@@ -3,7 +3,7 @@
  */
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { mapStepFieldDefintions, genericMModul } from '@bldr/presentation-parser'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 

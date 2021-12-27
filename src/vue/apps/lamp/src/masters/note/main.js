@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/note
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'

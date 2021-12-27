@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/counter
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { styleConfigurator } from '@bldr/style-configurator'
 
 const alphabet = [

@@ -3,7 +3,7 @@
  */
 
 import { LampTypes } from '@bldr/type-definitions'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 import * as tex from '@bldr/tex-templates'
 

@@ -9,7 +9,7 @@
 
 import { ObjectPropertyPicker } from '@bldr/core-browser'
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 export default validateMasterSpec({
   name: 'audio',
   title: 'Hörbeispiel',

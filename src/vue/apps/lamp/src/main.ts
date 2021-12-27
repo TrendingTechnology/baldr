@@ -12,7 +12,7 @@ import Vue from 'vue'
 
 import './masters.js'
 
-import { registerMasterComponents } from './lib/register-masters'
+import { registerMasterComponents } from './lib/masters'
 
 // Vue plugins.
 import { router } from '@/routes'

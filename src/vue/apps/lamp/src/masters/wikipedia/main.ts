@@ -4,7 +4,7 @@
  * @module @bldr/lamp/masters/wikipedia
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 import { wikipediaMModule } from '@bldr/presentation-parser'
 
 const defaultLanguage = 'de'

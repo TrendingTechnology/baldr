@@ -16,14 +16,23 @@ interface NavigationNumbers {
 @Component
 export default class MasterMain extends Master {
   /**
-   * navigationNumbers (navigation numbers): this.navigationNumbers = { slideNo: 1, stepNo: 1
-   * } The properties `slideNo` and `stepNo` had to be bundle into one
-   * object, to get a watcher that can execute the two hooks
-   * `afterSlideNoChangeOnComponent` and `afterStepNoChangeOnComponent`
+   * The current slide object.
+   */
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slide: any
+
+  /**
+   * The properties `slideNo` and `stepNo` had to be bundled into one
+   * object to get a watcher that can execute the two hooks
+   * `afterSlideNoChange` and `afterStepNoChange`
    * on demand.
    */
   @Prop({
-    type: Object
+    type: Object,
+    required: true
   })
   navigationNumbers: NavigationNumbers
 

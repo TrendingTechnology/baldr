@@ -43,7 +43,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { masterCollection } from '@bldr/lamp-core'
+import { masterCollection } from '../../../masters.js'
+
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 
 import { LampTypes } from '@bldr/type-definitions'

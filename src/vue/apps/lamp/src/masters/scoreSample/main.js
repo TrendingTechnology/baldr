@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/scoreSample
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 export default validateMasterSpec({
   name: 'score',

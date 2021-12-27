@@ -10,8 +10,96 @@ import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib'
 import inlineMarkup from './inline-markup.js'
 import store from './store/index.js'
+import { convertToString } from '@bldr/core-browser'
 
-import { masterCollection } from '@bldr/lamp-core'
+/**
+ * Container for all registered master slides.
+ */
+export class MasterCollection {
+  constructor () {
+    /**
+     * A container object for all master objects.
+     */
+    this.masters = {}
+  }
+
+  /**
+   * Add a master to the masters container.
+   */
+  add (master) {
+    this.masters[master.name] = master
+  }
+
+  /**
+   * Get a master object by the master name.
+   *
+   * @param name - The name of the master slide.
+   */
+  get (name) {
+    if (this.masters[name] == null) {
+      throw new Error(`Class Masters.get(): No master named “${name}”`)
+    }
+    const m = this.masters[name]
+    return m
+  }
+
+  /**
+   * Get all master objects as an object with the master name as properties.
+   *
+   * @returns {object}
+   */
+  get all () {
+    return this.masters
+  }
+
+  /**
+   * Get all master names as an array.
+   */
+  get allNames () {
+    return Object.keys(this.masters)
+  }
+
+  /**
+   * Check if a master exist.
+   *
+   * @param name - The name of the master slide.
+   */
+  exists (name) {
+    return this.masters[name] != null
+  }
+
+  /**
+   * Find the name of the master by getting the intersection between all master
+   * names and the slide keys.
+   *
+   * This method can be used to check that a slide object uses only one master
+   * slide.
+   *
+   * @param data - The raw object of one slide unmodified from the YAML file.
+   *
+   * @returns An instance of the master.
+   *
+   * @throws If no master can be found and if more than one master name are
+   * found.
+   */
+  findMaster (data) {
+    const rawProperties = Object.keys(data)
+    const intersection = this.allNames.filter(masterName =>
+      rawProperties.includes(masterName)
+    )
+    if (intersection.length === 0) {
+      throw Error(`No master slide found: ${convertToString(data)}`)
+    }
+    if (intersection.length > 1) {
+      throw Error(
+        `Each slide must have only one master slide: ${convertToString(data)}`
+      )
+    }
+    return this.get(intersection[0])
+  }
+}
+
+export const masterCollection = new MasterCollection()
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -652,33 +740,6 @@ class Master {
       { props, master: this },
       thisArg
     )
-  }
-
-  /**
-   * This hook gets executed after the slide number has changed on the component.
-   * Use `const slide = this.$get('slide')` to get the current slide object.
-   *
-   * @param {Object} payload
-   * @property {number} payload.oldSlideNo - The number of the old slide.
-   * @property {number} payload.newSlideNo - The number of the new slide.
-   * @param {object} thisArg - The
-   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
-   *   the master function is called with.
-   */
-  afterSlideNoChangeOnComponent (payload, thisArg) {
-    this.callHook_('afterSlideNoChangeOnComponent', payload, thisArg)
-  }
-
-  /**
-   * This hook gets executed after the sdtep number has changed on the component.
-   *
-   * @param {Object} payload
-   * @param {object} thisArg - The
-   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
-   *   the master function is called with.
-   */
-  afterStepNoChangeOnComponent (payload, thisArg) {
-    this.callHook_('afterStepNoChangeOnComponent', payload, thisArg)
   }
 }
 

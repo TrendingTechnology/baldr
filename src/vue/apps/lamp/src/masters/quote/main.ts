@@ -5,7 +5,7 @@
 import type { LampTypes } from '@bldr/type-definitions'
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 export default validateMasterSpec({
   name: 'quote',

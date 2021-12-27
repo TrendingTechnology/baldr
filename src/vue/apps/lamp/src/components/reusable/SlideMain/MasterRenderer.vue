@@ -18,8 +18,8 @@ export default class MasterRenderer extends Vue {
   slide: any
 
   /**
-   *  All main master components have a prop named `stepNo`. This
-   *  prop is mixed in `masters.js`
+   *  All main master components have a prop named `navigationNumbers`.
+   *  This prop is set in `MasterMain.vue`
    */
   @Prop({
     type: Number
@@ -39,6 +39,7 @@ export default class MasterRenderer extends Vue {
         {
           props: {
             ...this.slide.propsMain,
+            slide: this.slide,
             navigationNumbers: { stepNo: this.stepNo, slideNo: this.slide.no },
             isPublic: this.isPublic
           },

@@ -4,7 +4,7 @@
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 export default validateMasterSpec({
   name: 'task',

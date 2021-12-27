@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/song
  */
 
-import { validateMasterSpec } from '@bldr/lamp-core'
+import { validateMasterSpec } from '../../lib/masters'
 
 function convertSongIdToRef (songId) {
   return `ref:LD_${songId}`

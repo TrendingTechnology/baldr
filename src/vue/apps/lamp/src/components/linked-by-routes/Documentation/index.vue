@@ -110,7 +110,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { masterCollection } from '@bldr/lamp-core'
+import { masterCollection } from '../../../masters.js'
 
 const documentation = `
 

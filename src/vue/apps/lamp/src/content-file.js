@@ -616,7 +616,6 @@ export class Presentation {
   constructor (rawYamlString) {
     // Load the YAML string. Convert the YAML string into a object.
     let rawObject = convertFromYamlRaw(rawYamlString)
-    console.log(rawObject)
     const ref = rawObject.ref != null ? rawObject.ref : rawObject.meta.ref
     rawYamlString = this.expandMediaUris(rawYamlString, ref)
     rawObject = convertFromYamlRaw(rawYamlString)
