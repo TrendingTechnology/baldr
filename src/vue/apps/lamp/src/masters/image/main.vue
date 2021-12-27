@@ -28,6 +28,11 @@ import MasterMain from '../MasterMain.vue'
 export default class ImageMasterMain extends MasterMain {
   masterName = 'image'
 
+  $refs!: {
+    image: HTMLImageElement
+    metadata: HTMLDivElement
+  }
+
   @Prop({
     type: String
   })
@@ -68,6 +73,69 @@ export default class ImageMasterMain extends MasterMain {
 
   toggleDescription () {
     this.showLongDescription = !this.showLongDescription
+  }
+
+  afterSlideNoChange () {
+    // This variable indicates if in the prop description is a lot of text.
+    let lotOfText = false
+    if (
+      this.slide.propsMain.description &&
+      this.slide.propsMain.description.length > 400
+    ) {
+      lotOfText = true
+    }
+
+    function resetMetadataStyle (metaStyle) {
+      metaStyle.width = null
+      if (!lotOfText) {
+        metaStyle.fontSize = null
+      } else {
+        metaStyle.fontSize = '0.8em'
+      }
+      metaStyle.height = null
+    }
+
+    if (this.$refs.image) {
+      const img = this.$refs.image
+
+      // aspectRatio > 1 = 'landscape'
+      // aspectRatio < 1 = 'protrait'
+      const imgAspectRatio = img.naturalWidth / img.naturalHeight
+      const frameAspectRatio = this.$el.clientWidth / this.$el.clientHeight
+      // vertical // left / right free space > 1
+      // horicontal // top / bottom free space < 1
+      const freeSpaceRatio = frameAspectRatio / imgAspectRatio
+
+      var scale = Math.min(
+        this.$el.clientWidth / img.naturalWidth,
+        this.$el.clientHeight / img.naturalHeight
+      )
+
+      const metaStyle = this.$refs.metadata.style
+
+      const overlayZone = 0.3
+      // vertical
+      if (freeSpaceRatio > 1 + overlayZone) {
+        this.$el.setAttribute('b-metadata-position', 'vertical')
+        const width = this.$el.clientWidth - img.naturalWidth * scale
+        resetMetadataStyle(metaStyle)
+        metaStyle.width = `${width}px`
+        // horizontal
+      } else if (freeSpaceRatio < 1 - overlayZone) {
+        this.$el.setAttribute('b-metadata-position', 'horizontal')
+        const height = this.$el.clientHeight - img.naturalHeight * scale
+        resetMetadataStyle(metaStyle)
+        metaStyle.height = `${height}px`
+        // overlay
+      } else {
+        resetMetadataStyle(metaStyle)
+        this.$el.setAttribute('b-metadata-position', 'overlay')
+        // Metadata box which extends to more than 40 percent of the screen.
+        if (this.$refs.metadata.clientHeight / this.$el.clientHeight > 0.3) {
+          metaStyle.fontSize = '0.7em'
+        }
+      }
+    }
   }
 }
 </script>

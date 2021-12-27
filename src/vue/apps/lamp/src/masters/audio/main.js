@@ -126,17 +126,6 @@ export default validateMasterSpec({
       if (asset.yaml.title != null) {
         return asset.yaml.title
       }
-    },
-    // no enterSlide hook: $media is not ready yet.
-    async afterSlideNoChangeOnComponent () {
-      if (!this.isPublic) {
-        return
-      }
-      const slide = this.$get('slide')
-      this.$media.player.load(slide.props.src)
-      if (slide.props.autoplay) {
-        await this.$media.player.start()
-      }
     }
   }
 })

@@ -20,6 +20,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { media } from '@bldr/media-client'
+
 import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
@@ -71,6 +73,16 @@ export default class AudioMasterMain extends MasterMain {
     type: String
   })
   description: string
+
+  async afterSlideNoChange () {
+    if (!this.isPublic) {
+      return
+    }
+    media.player.load(this.slide.props.src)
+    if (this.slide.props.autoplay) {
+      await media.player.start()
+    }
+  }
 }
 </script>
 

@@ -112,22 +112,6 @@ export default validateMasterSpec({
         output.push(convertHtmlToPlainText(markup))
       }
       return output.join(' | ')
-    },
-    afterSlideNoChangeOnComponent ({ newSlideNo }) {
-      const slide = this.$get('slide')
-      // adjustSlideSize(this.$el, this.$refs.contentWrapper)
-      if (this.stepMode) {
-        this.stepController = buildTextStepController(this.$el, slide.props)
-      }
-    },
-    afterStepNoChangeOnComponent ({ newStepNo }) {
-      if (this.stepController == null || this.stepMode == null) {
-        return
-      }
-      const step = this.stepController.showUpTo(newStepNo)
-      if (step != null) {
-        scroll(step.htmlElement)
-      }
     }
   }
 })
