@@ -3,7 +3,7 @@
  *
  * @module @bldr/core-browser/string-format
  */
-import { transliterate } from 'transliteration';
+// import { transliterate } from 'transliteration'
 /**
  * Escape some characters with HTML entities.
  *
@@ -231,7 +231,8 @@ export function asciify(input) {
         .replace(/ü/g, 'ue')
         .replace(/ß/g, 'ss')
         .replace(/!/g, '');
-    return transliterate(output);
+    // return transliterate(output)
+    return output;
 }
 /**
  * This function can be used to generate IDs from different file names.

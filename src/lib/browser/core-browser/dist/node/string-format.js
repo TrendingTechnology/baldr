@@ -6,7 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deasciify = exports.referencify = exports.asciify = exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.escapeHtml = void 0;
-const transliteration_1 = require("transliteration");
+// import { transliterate } from 'transliteration'
 /**
  * Escape some characters with HTML entities.
  *
@@ -248,7 +248,8 @@ function asciify(input) {
         .replace(/ü/g, 'ue')
         .replace(/ß/g, 'ss')
         .replace(/!/g, '');
-    return (0, transliteration_1.transliterate)(output);
+    // return transliterate(output)
+    return output;
 }
 exports.asciify = asciify;
 /**

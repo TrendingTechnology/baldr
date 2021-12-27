@@ -32,7 +32,7 @@
     "access": "public"
   },
   "dependencies": {
-    "transliteration": "2.2.0",
+    "@bldr/transliterate": "0.1.2",
     "@bldr/universal-dom": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"

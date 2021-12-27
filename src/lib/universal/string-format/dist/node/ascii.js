@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.referencify = exports.deasciify = exports.asciify = void 0;
-const transliteration_1 = require("transliteration");
+const transliterate_1 = require("@bldr/transliterate");
 /**
  * Convert some unicode strings into the ASCII format.
  */
@@ -14,15 +14,15 @@ function asciify(input) {
         .replace(/[&+]/g, '-')
         .replace(/-+/g, '-')
         .replace(/-*_-*/g, '_')
-        .replace(/Ä/g, 'Ae')
-        .replace(/ä/g, 'ae')
-        .replace(/Ö/g, 'Oe')
-        .replace(/ö/g, 'oe')
-        .replace(/Ü/g, 'Ue')
-        .replace(/ü/g, 'ue')
-        .replace(/ß/g, 'ss')
+        // .replace(/Ä/g, 'Ae')
+        // .replace(/ä/g, 'ae')
+        // .replace(/Ö/g, 'Oe')
+        // .replace(/ö/g, 'oe')
+        // .replace(/Ü/g, 'Ue')
+        // .replace(/ü/g, 'ue')
+        // .replace(/ß/g, 'ss')
         .replace(/!/g, '');
-    return (0, transliteration_1.transliterate)(output);
+    return (0, transliterate_1.default)(output);
 }
 exports.asciify = asciify;
 /**

@@ -1,4 +1,4 @@
-import { transliterate } from 'transliteration'
+import transliterate from '@bldr/transliterate'
 
 /**
  * Convert some unicode strings into the ASCII format.
@@ -12,13 +12,13 @@ export function asciify (input: string): string {
     .replace(/[&+]/g, '-')
     .replace(/-+/g, '-')
     .replace(/-*_-*/g, '_')
-    .replace(/Ä/g, 'Ae')
-    .replace(/ä/g, 'ae')
-    .replace(/Ö/g, 'Oe')
-    .replace(/ö/g, 'oe')
-    .replace(/Ü/g, 'Ue')
-    .replace(/ü/g, 'ue')
-    .replace(/ß/g, 'ss')
+    // .replace(/Ä/g, 'Ae')
+    // .replace(/ä/g, 'ae')
+    // .replace(/Ö/g, 'Oe')
+    // .replace(/ö/g, 'oe')
+    // .replace(/Ü/g, 'Ue')
+    // .replace(/ü/g, 'ue')
+    // .replace(/ß/g, 'ss')
     .replace(/!/g, '')
   return transliterate(output)
 }
