@@ -7,13 +7,6 @@ import { convertHtmlToPlainText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
-function scroll (element) {
-  if (!element) return
-  const y = element.getBoundingClientRect().top + window.scrollY
-  const adjustedY = y - 0.8 * window.screen.height
-  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
-}
-
 export default validateMasterSpec({
   name: 'note',
   title: 'Hefteintrag',
@@ -62,17 +55,6 @@ export default validateMasterSpec({
     },
     plainTextFromProps (props) {
       return convertHtmlToPlainText(props.markup)
-    },
-    afterSlideNoChangeOnComponent () {
-      this.stepController = buildTextStepController(this.$el, {
-        stepMode: 'words'
-      })
-    },
-    afterStepNoChangeOnComponent ({ newStepNo }) {
-      const step = this.stepController.showUpTo(newStepNo)
-      if (step != null) {
-        scroll(step.htmlElement)
-      }
     }
   }
 })

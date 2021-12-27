@@ -6,12 +6,12 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { StepController } from '@bldr/dom-manipulator'
+import { buildTextStepController } from '@bldr/dom-manipulator'
 
-import MasterMain from '../MasterMain.vue'
+import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
 @Component
-export default class NoteMasterMain extends MasterMain {
+export default class NoteMasterMain extends MasterMainWithStepController {
   masterName = 'note'
 
   @Prop({
@@ -19,12 +19,26 @@ export default class NoteMasterMain extends MasterMain {
   })
   markup: string
 
-  stepController: StepController
+  afterSlideNoChange (): void {
+    this.stepController = buildTextStepController(this.$el as HTMLElement, {
+      stepMode: 'words'
+    })
+  }
 
-  data () {
-    return {
-      stepController: null
+  afterStepNoChange ({ newStepNo }): void {
+    const step = this.stepController.showUpTo(newStepNo)
+    if (step != null) {
+      this.scroll(step.htmlElement as HTMLElement)
     }
+  }
+
+  private scroll (element: HTMLElement): void {
+    // <div class="vc_slide_main">
+    //   <div class="vc_master_renderer">
+    //     <div class="vc_note_master master-inner">
+    const scrollContainer = this.$el.parentElement.parentElement
+    const adjustedY = element.offsetTop - 0.85 * scrollContainer.clientHeight
+    scrollContainer.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
   }
 }
 </script>

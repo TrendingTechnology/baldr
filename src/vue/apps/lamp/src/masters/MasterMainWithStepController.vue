@@ -10,6 +10,10 @@ export default class MasterMainWithStepController extends MasterMain {
     return { stepController: null }
   }
 
+  /**
+   * An instance of the class `StepController` from the package
+   * `@bldr/dom-manipulator`.
+   */
   stepController: StepController
 }
 </script>

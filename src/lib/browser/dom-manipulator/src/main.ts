@@ -8,3 +8,5 @@ export {
   buildTextStepController,
   buildQuestionStepController
 } from './controller-builder'
+
+export { HTMLSVGElement } from './step'

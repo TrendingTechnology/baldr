@@ -81,13 +81,6 @@ export default validateMasterSpec({
     },
     calculateStepCount ({ props, propsMain }) {
       return propsMain.asset.multiPartCount
-    },
-    // no enterSlide hook: $media is not ready yet.
-    async afterSlideNoChangeOnComponent () {
-      if (!this.isPublic) return
-      const slide = this.$get('slide')
-      if (!slide.props.audio) return
-      this.$media.player.load(slide.props.audio)
     }
   }
 })
