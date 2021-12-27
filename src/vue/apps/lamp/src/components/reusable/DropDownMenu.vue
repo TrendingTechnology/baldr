@@ -13,7 +13,7 @@ import BaldrMenu from '@bldr/menu-webapp'
 import { getWebappMenuDef } from '@bldr/menu-adapter'
 
 import actions from '@/actions.js'
-import router from '@/routes'
+import router from '@/lib/router'
 
 @Component({
   components: {

@@ -17,7 +17,7 @@ import * as api from '@bldr/api-wrapper'
 import { parse as parsePresentation } from '@bldr/presentation-parser'
 
 import store from '@/store/index.js'
-import { router } from '@/routes'
+import { router } from '@/lib/router'
 
 import Vm from './main'
 

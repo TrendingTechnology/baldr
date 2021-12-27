@@ -19,7 +19,7 @@
  * @module @bldr/lamp/remote-control
  */
 
-import { router } from '@/routes'
+import { router } from '@/lib/router'
 
 /**
  * @param {Object} message

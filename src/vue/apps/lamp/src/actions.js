@@ -11,7 +11,7 @@ import { showMessage } from '@bldr/notification'
 
 import store from './store/index.js'
 import vm from './main'
-import { router } from './routes'
+import { router } from './lib/router'
 
 /**
  * Toggle between the destination and the last route:
