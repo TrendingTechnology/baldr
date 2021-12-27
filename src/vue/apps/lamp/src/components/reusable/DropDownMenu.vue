@@ -12,7 +12,7 @@ import Component from 'vue-class-component'
 import BaldrMenu from '@bldr/menu-webapp'
 import { getWebappMenuDef } from '@bldr/menu-adapter'
 
-import actions from '@/actions.js'
+import * as actions from '@/actions'
 import router from '@/lib/router'
 
 @Component({
