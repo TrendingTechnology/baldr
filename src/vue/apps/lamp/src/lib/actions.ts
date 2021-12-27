@@ -10,8 +10,8 @@ import * as api from '@bldr/api-wrapper'
 import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
 
-import store from './store/index.js'
-import { router } from './lib/router'
+import store from '../store/index.js'
+import { router } from './router'
 
 /**
  * Toggle between the destination and the last route:

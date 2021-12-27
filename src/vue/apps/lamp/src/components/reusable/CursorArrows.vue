@@ -27,7 +27,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import * as actions from '../../actions'
+import * as actions from '../../lib/actions'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 interface CssClasses {

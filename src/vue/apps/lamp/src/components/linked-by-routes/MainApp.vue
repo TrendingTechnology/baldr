@@ -34,7 +34,7 @@ import { registerShortcuts } from '@bldr/menu-adapter'
 import { styleConfigurator } from '@bldr/style-configurator'
 
 import { receiveSocketMessage } from '../../remote-control.js'
-import * as actions from '../../actions'
+import * as actions from '../../lib/actions'
 
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
