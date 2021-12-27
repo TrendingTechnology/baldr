@@ -5,41 +5,6 @@ meta:
 
 slides:
 
-- title: Step words
-  editor:
-    step_mode: 'words'
-    markup: |
-      # heading 1
-
-      * one two three
-      * one two three
-
-      lorem ipsum
-
-- title: Step sentences
-  editor:
-    step_mode: 'sentences'
-    markup: |
-      # heading
-
-      * one
-      * two
-      * three
-
-      lorem ipsum
-
-- title: Step words
-  editor:
-    step_mode: 'words'
-    markup: |
-      # heading
-
-      * one
-      * two
-      * three
-
-      lorem ipsum
-
 - title: Unordered list
   editor: |
     # heading

@@ -4,7 +4,6 @@
 
 import Vue from 'vue'
 
-import { warnSvgWidthHeight } from '@/lib'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 import { validateMasterSpec } from '../../lib/masters'
 import { mapStepFieldDefintions } from '@bldr/presentation-parser'
@@ -95,14 +94,6 @@ export default validateMasterSpec({
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
       return buildSvgStepController(svgString, props).stepCount
-    },
-    afterSlideNoChangeOnComponent ({ newSlideNo }) {
-      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
-      warnSvgWidthHeight(this.svgPath)
-      this.stepController = buildSvgStepController(this.$el, slide.props)
-    },
-    afterStepNoChangeOnComponent ({ newStepNo }) {
-      this.stepController.showUpTo(newStepNo)
     }
   }
 })

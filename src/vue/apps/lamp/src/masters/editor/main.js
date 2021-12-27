@@ -72,21 +72,6 @@ export default validateMasterSpec({
       if (element) {
         oldProps.markup = element.innerHTML
       }
-    },
-    afterSlideNoChangeOnComponent ({ newSlideNo }) {
-      this.onSlideChange()
-      if (this.stepMode) {
-        this.stepController = buildTextStepController(this.$el)
-      }
-    },
-    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      if (this.stepController == null || this.stepMode == null) {
-        return
-      }
-      const step = this.stepController.showUpTo(newStepNo)
-      if (step != null) {
-        scroll(step.htmlElement)
-      }
     }
   }
 })
