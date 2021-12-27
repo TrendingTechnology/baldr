@@ -4,7 +4,7 @@
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { validateMasterSpec } from '../../lib/masters'
-import { mapStepFieldDefintions, genericMModul } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps, genericMModul } from '@bldr/presentation-parser'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const CHARACTERS_ON_SLIDE = 400
@@ -51,7 +51,7 @@ export default validateMasterSpec({
       type: Boolean,
       default: false
     },
-    ...mapStepFieldDefintions(['mode', 'subset'])
+    ...mapStepFieldDefintionsToProps(['mode', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',

@@ -6,7 +6,7 @@ import Vue from 'vue'
 
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 import { validateMasterSpec } from '../../lib/masters'
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import * as api from '@bldr/api-wrapper'
 
 export default validateMasterSpec({
@@ -27,7 +27,7 @@ export default validateMasterSpec({
         return ['layer', 'layer+', 'group'].includes(input)
       }
     },
-    ...mapStepFieldDefintions(['selector', 'subset'])
+    ...mapStepFieldDefintionsToProps(['selector', 'subset'])
   },
   icon: {
     name: 'image',
@@ -57,7 +57,7 @@ export default validateMasterSpec({
         props = { src: props }
       }
       if (!props.stepSelector) {
-        const propDefs = mapStepFieldDefintions(['selector'])
+        const propDefs = mapStepFieldDefintionsToProps(['selector'])
         props.stepSelector = propDefs.stepSelector.default
       }
       return props

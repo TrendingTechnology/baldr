@@ -8,7 +8,7 @@ import Vue from 'vue'
 
 import { MediaUri } from '@bldr/client-media-models'
 import { validateMasterSpec } from '../../lib/masters'
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 import * as api from '@bldr/api-wrapper'
 
@@ -22,7 +22,7 @@ export default validateMasterSpec({
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       assetUri: true
     },
-    ...mapStepFieldDefintions(['subset'])
+    ...mapStepFieldDefintionsToProps(['subset'])
   },
   icon: {
     name: 'cloze',

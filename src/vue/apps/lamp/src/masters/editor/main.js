@@ -5,18 +5,11 @@
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '../../lib/masters'
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-
-function scroll (element) {
-  if (!element) return
-  const y = element.getBoundingClientRect().top + window.scrollY
-  const adjustedY = y - 0.8 * window.screen.height
-  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
-}
 
 export default validateMasterSpec({
   name: 'editor',
@@ -28,7 +21,7 @@ export default validateMasterSpec({
       description:
         'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    ...mapStepFieldDefintions(['mode', 'subset'])
+    ...mapStepFieldDefintionsToProps(['mode', 'subset'])
   },
   icon: {
     name: 'pencil',
