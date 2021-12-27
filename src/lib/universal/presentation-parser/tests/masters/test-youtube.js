@@ -3,7 +3,7 @@
 const assert = require('assert')
 const { parsePresentation } = require('../_helper.js')
 
-const { youtubeMaster } = require('../../dist/node/main.js')
+const { youtubeMModule } = require('../../dist/node/main.js')
 
 const presentation = parsePresentation('masters/youtube')
 
@@ -40,24 +40,24 @@ describe('Master slide “youtube”', function () {
 
   describe('Function “getSnippet()”', function () {
     it('jNQXAC9IVRw: Me at the zoo', async function () {
-      const snippet = await youtubeMaster.getSnippet('jNQXAC9IVRw')
+      const snippet = await youtubeMModule.getSnippet('jNQXAC9IVRw')
       assert.strictEqual(snippet.title, 'Me at the zoo')
     })
 
     it('xxxxxxxxxxx: Not available', async function () {
-      const snippet = await youtubeMaster.getSnippet('xxxxxxxxxxx')
+      const snippet = await youtubeMModule.getSnippet('xxxxxxxxxxx')
       assert.strictEqual(snippet, undefined)
     })
   })
 
   describe('Function “checkAvailability()”', function () {
     it('jNQXAC9IVRw: Me at the zoo', async function () {
-      const result = await youtubeMaster.checkAvailability('jNQXAC9IVRw')
+      const result = await youtubeMModule.checkAvailability('jNQXAC9IVRw')
       assert.strictEqual(result, true)
     })
 
     it('xxxxxxxxxxx: Not available', async function () {
-      const result = await youtubeMaster.checkAvailability('xxxxxxxxxxx')
+      const result = await youtubeMModule.checkAvailability('xxxxxxxxxxx')
       assert.strictEqual(result, false)
     })
   })

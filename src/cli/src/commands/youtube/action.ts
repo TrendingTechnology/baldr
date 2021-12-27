@@ -5,7 +5,7 @@ import childProcess from 'child_process'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import { youtubeMaster } from '@bldr/presentation-parser'
+import { youtubeMModule } from '@bldr/presentation-parser'
 import { MediaResolverTypes } from '@bldr/type-definitions'
 import { operations, locationIndicator } from '@bldr/media-manager'
 import * as log from '@bldr/log'
@@ -19,7 +19,7 @@ interface VideoMeta {
 async function requestYoutubeApi (
   youtubeId: string
 ): Promise<VideoMeta | undefined> {
-  const snippet = await youtubeMaster.getSnippet(youtubeId)
+  const snippet = await youtubeMModule.getSnippet(youtubeId)
   if (snippet != null) {
     return {
       youtubeId,

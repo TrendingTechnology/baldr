@@ -4,7 +4,7 @@
 
 import { validateMasterSpec } from '@bldr/lamp-core'
 import { convertHtmlToPlainText } from '@bldr/string-format'
-import { questionMaster } from '@bldr/presentation-parser'
+import { questionMModul } from '@bldr/presentation-parser'
 import { buildQuestionStepController } from '@bldr/dom-manipulator'
 
 /**
@@ -95,7 +95,7 @@ export default validateMasterSpec({
   },
   hooks: {
     normalizeProps (props) {
-      const questions = questionMaster.Question.parse(props)
+      const questions = questionMModul.Question.parse(props)
       return {
         questions,
         sequence: questions[0].sequence
@@ -106,7 +106,7 @@ export default validateMasterSpec({
       return firstQuestion.stepCount
     },
     generateTexMarkup ({ props }) {
-      return questionMaster.generateTexMarkup(props)
+      return questionMModul.generateTexMarkup(props)
     },
     afterSlideNoChangeOnComponent () {
       this.stepController = buildQuestionStepController(this.$el)

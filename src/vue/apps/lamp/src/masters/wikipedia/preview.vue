@@ -19,7 +19,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { wikipediaMaster } from '@bldr/presentation-parser'
+import { wikipediaMModule } from '@bldr/presentation-parser'
 
 import MasterPreview from '../MasterPreview.vue'
 
@@ -53,11 +53,11 @@ export default class WikipediaMasterPreview extends MasterPreview {
   thumbnailUrl: string
 
   get titleNoUnderscores (): string {
-    return wikipediaMaster.formatTitleHumanReadable(this.title)
+    return wikipediaMModule.formatTitleHumanReadable(this.title)
   }
 
   async setThumbnailUrl (): Promise<void> {
-    this.thumbnailUrl = await wikipediaMaster.queryFirstImage(
+    this.thumbnailUrl = await wikipediaMModule.queryFirstImage(
       this.title,
       this.language
     )

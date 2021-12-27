@@ -25,7 +25,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { Asset } from '@bldr/presentation-parser'
+import { Asset, youtubeMModule } from '@bldr/presentation-parser'
+import { media } from '@bldr/media-client'
 
 import MasterMain from '../MasterMain.vue'
 
@@ -36,7 +37,7 @@ export default class YoutubeMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  asset: Asset
+  asset?: Asset
 
   @Prop({
     type: String,
@@ -47,12 +48,27 @@ export default class YoutubeMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  heading: string
+  heading?: string
 
   @Prop({
     type: String
   })
-  info: string
+  info?: string
+
+  async afterSlideNoChange () {
+    if (!this.isPublic) {
+      return
+    }
+
+    if (this.asset != null) {
+      const uri = youtubeMModule.convertYoutubeIdToUri(this.youtubeId)
+      const sample = this.$store.getters['media/sampleByUri'](uri)
+      const videoWrapper = document.querySelector('#youtube-offline-video')
+      videoWrapper.innerHTML = ''
+      videoWrapper.appendChild(sample.htmlElement)
+      media.player.load(uri)
+    }
+  }
 }
 </script>
 

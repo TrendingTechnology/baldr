@@ -334,26 +334,6 @@ interface MasterHooks {
   enterSlide?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
-   * This hook gets executed after the slide number has changed on the
-   * component. Use `const slide = this.$get('slide')` to get the current
-   * slide object.
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the master component mixin in the file `masters.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     afterSlideNoChangeOnComponent ({ oldSlide, oldProps, newSlide, newProps }) {
-   *       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  afterSlideNoChangeOnComponent?: (payload: OldAndNewSlideNos) => void
-
-  /**
    * Called when leaving a step. This hook is only called on the public master
    * component (the one that is visible for the audience), not on further
    * secondary master components (for example the ad hoc slides or the future
@@ -398,33 +378,6 @@ interface MasterHooks {
    * ```
    */
   enterStep?: (payload: OldAndNewStepNo) => void
-
-  /**
-   * This hook gets executed after the step number has changed on the
-   * component.
-   *
-   * - `this`: is the Vue instance of the current main master component.
-   * - called from the master component mixin in the file `masters.js`.
-   *
-   * ```js
-   * export const default = {
-   *   hooks: {
-   *     afterStepNoChangeOnComponent ({ oldStepNo, newStepNo, slideNoChange }) {
-   *       const options = { stepNo: newStepNo }
-   *       if (slideNoChange) {
-   *         options.full = true
-   *       } else {
-   *         options.oldStepNo = oldStepNo
-   *       }
-   *       this.domSteps.displayByNo(options)
-   *     }
-   *   }
-   * }
-   * ```
-   */
-  afterStepNoChangeOnComponent?: (
-    payload: OldAndNewStepNoAndSlideNoChange
-  ) => void
 
   /**
    * To allows access of the functions using the bracket notation with strings.

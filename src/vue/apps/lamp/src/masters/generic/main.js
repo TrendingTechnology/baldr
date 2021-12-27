@@ -4,7 +4,7 @@
 
 import { convertHtmlToPlainText } from '@bldr/string-format'
 import { validateMasterSpec } from '@bldr/lamp-core'
-import { mapStepFieldDefintions, genericMaster } from '@bldr/presentation-parser'
+import { mapStepFieldDefintions, genericMModul } from '@bldr/presentation-parser'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 const CHARACTERS_ON_SLIDE = 400
@@ -77,7 +77,7 @@ export default validateMasterSpec({
         props.charactersOnSlide != null
           ? props.charactersOnSlide
           : CHARACTERS_ON_SLIDE
-      props.markup = genericMaster.splitMarkup(props.markup, charactersOnSlide)
+      props.markup = genericMModul.splitMarkup(props.markup, charactersOnSlide)
 
       if (props.onOne) {
         props.markup = [props.markup.join(' ')]

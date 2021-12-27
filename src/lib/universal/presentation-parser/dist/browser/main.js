@@ -52,14 +52,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { Presentation } from './presentation';
 export { resolver } from './presentation';
 export { mapStepFieldDefintions } from './master';
-import * as genericMaster_1 from './masters/generic';
-export { genericMaster_1 as genericMaster };
-import * as questionMaster_1 from './masters/question';
-export { questionMaster_1 as questionMaster };
-import * as wikipediaMaster_1 from './masters/wikipedia';
-export { wikipediaMaster_1 as wikipediaMaster };
-import * as youtubeMaster_1 from './masters/youtube';
-export { youtubeMaster_1 as youtubeMaster };
+import * as genericMModul_1 from './masters/generic';
+export { genericMModul_1 as genericMModul };
+import * as questionMModul_1 from './masters/question';
+export { questionMModul_1 as questionMModul };
+import * as wikipediaMModule_1 from './masters/wikipedia';
+export { wikipediaMModule_1 as wikipediaMModule };
+import * as youtubeMModule_1 from './masters/youtube';
+export { youtubeMModule_1 as youtubeMModule };
 export { Asset, Sample } from '@bldr/media-resolver-ng';
 export function parse(yamlString) {
     return new Presentation(yamlString);

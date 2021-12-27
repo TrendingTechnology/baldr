@@ -1,8 +1,38 @@
 import { Master } from '../master'
 import { getConfig } from '@bldr/config'
-import { getHttp } from '@bldr/media-resolver-ng'
+import { getHttp, Asset } from '@bldr/media-resolver-ng'
 
 const config = getConfig()
+
+export function convertYoutubeIdToUri (youtubeId: string): string {
+  return `ref:YT_${youtubeId}`
+}
+
+/**
+ * https://stackoverflow.com/a/55890696/10193818
+ *
+ * Low quality
+ * https://img.youtube.com/vi/[video-id]/sddefault.jpg
+ *
+ * medium quality
+ * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
+ *
+ * High quality
+ * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
+ *
+ * maximum resolution
+ * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
+ */
+export function findPreviewHttpUrl (
+  youtubeId: string,
+  asset?: Asset
+): string | undefined {
+  if (asset == null) {
+    return `http://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+  } else {
+    return asset.previewHttpUrl
+  }
+}
 
 export async function getSnippet (
   youtubeId: string
@@ -114,21 +144,21 @@ export interface YoutubeVideoParams {
 
 export interface YoutubeDownloadOptions {
   quality?:
-  | '144p'
-  | '240p'
-  | '270p'
-  | '360p'
-  | '480p'
-  | '720p'
-  | '720p60'
-  | '1080p'
-  | '1080p60'
-  | '1440p'
-  | '1440p60'
-  | '2160p'
-  | '2160p60'
-  | '4320p'
-  | '4320p60'
+    | '144p'
+    | '240p'
+    | '270p'
+    | '360p'
+    | '480p'
+    | '720p'
+    | '720p60'
+    | '1080p'
+    | '1080p60'
+    | '1440p'
+    | '1440p60'
+    | '2160p'
+    | '2160p60'
+    | '4320p'
+    | '4320p60'
   format?: 'mp4' | 'flv' | '3gp' | 'webm' | 'ts'
 }
 
@@ -177,13 +207,7 @@ export class YoutubeMaster implements Master {
 
   shortFormField = 'youtubeId'
 
-  collectOptionalMediaUris (
-    fields: YoutubeFieldNormalized
-  ): string {
-    return this.convertYoutubeIdToUri(fields.youtubeId)
-  }
-
-  private convertYoutubeIdToUri (youtubeId: string): string {
-    return `ref:YT_${youtubeId}`
+  collectOptionalMediaUris (fields: YoutubeFieldNormalized): string {
+    return convertYoutubeIdToUri(fields.youtubeId)
   }
 }

@@ -1,4 +1,22 @@
 import { Master } from '../master';
+import { Asset } from '@bldr/media-resolver-ng';
+export declare function convertYoutubeIdToUri(youtubeId: string): string;
+/**
+ * https://stackoverflow.com/a/55890696/10193818
+ *
+ * Low quality
+ * https://img.youtube.com/vi/[video-id]/sddefault.jpg
+ *
+ * medium quality
+ * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
+ *
+ * High quality
+ * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
+ *
+ * maximum resolution
+ * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
+ */
+export declare function findPreviewHttpUrl(youtubeId: string, asset?: Asset): string | undefined;
 export declare function getSnippet(youtubeId: string): Promise<YoutubeVideoSnippet | undefined>;
 export declare function checkAvailability(youtubeId: string): Promise<boolean>;
 export interface YoutubeVideo {
@@ -117,6 +135,5 @@ export declare class YoutubeMaster implements Master {
     };
     shortFormField: string;
     collectOptionalMediaUris(fields: YoutubeFieldNormalized): string;
-    private convertYoutubeIdToUri;
 }
 export {};

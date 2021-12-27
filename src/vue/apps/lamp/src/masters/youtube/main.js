@@ -8,34 +8,7 @@
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateMasterSpec } from '@bldr/lamp-core'
-import { youtubeMaster } from '@bldr/presentation-parser'
-
-function youtubeIdToUri (youtubeId) {
-  return `ref:YT_${youtubeId}`
-}
-
-/**
- * https://stackoverflow.com/a/55890696/10193818
- *
- * Low quality
- * https://img.youtube.com/vi/[video-id]/sddefault.jpg
- *
- * medium quality
- * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
- *
- * High quality
- * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
- *
- * maximum resolution
- * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
- */
-export function findPreviewHttpUrl (youtubeId, asset) {
-  if (asset == null) {
-    return `http://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-  } else {
-    return asset.previewHttpUrl
-  }
-}
+import { youtubeMModule } from '@bldr/presentation-parser'
 
 export default validateMasterSpec({
   name: 'youtube',
@@ -73,13 +46,13 @@ export default validateMasterSpec({
       return props
     },
     resolveOptionalMediaUris (props) {
-      return youtubeIdToUri(props.youtubeId)
+      return youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](
-        youtubeIdToUri(props.youtubeId)
+        youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
       )
-      youtubeMaster.checkAvailability(props.youtubeId).then(result => {
+      youtubeMModule.checkAvailability(props.youtubeId).then(result => {
         if (!result) {
           this.$showMessage.error(
             `The YouTube video “${props.youtubeId}” is no longer available online.`
@@ -107,19 +80,6 @@ export default validateMasterSpec({
     },
     plainTextFromProps (props) {
       return props.youtubeId
-    },
-    // no enterSlide hook: $media is not ready yet.
-    async afterSlideNoChangeOnComponent () {
-      if (!this.isPublic) return
-      const slide = this.$get('slide')
-      if (slide.propsMain.asset) {
-        const uri = youtubeIdToUri(slide.props.youtubeId)
-        const sample = this.$store.getters['media/sampleByUri'](uri)
-        const videoWrapper = document.querySelector('#youtube-offline-video')
-        videoWrapper.innerHTML = ''
-        videoWrapper.appendChild(sample.htmlElement)
-        this.$media.player.load(uri)
-      }
     }
   }
 })

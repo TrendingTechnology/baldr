@@ -43,10 +43,10 @@
 import { Presentation } from './presentation';
 export { resolver } from './presentation';
 export { mapStepFieldDefintions } from './master';
-export * as genericMaster from './masters/generic';
-export * as questionMaster from './masters/question';
-export * as wikipediaMaster from './masters/wikipedia';
-export * as youtubeMaster from './masters/youtube';
+export * as genericMModul from './masters/generic';
+export * as questionMModul from './masters/question';
+export * as wikipediaMModule from './masters/wikipedia';
+export * as youtubeMModule from './masters/youtube';
 export { Asset, Sample } from '@bldr/media-resolver-ng';
 export declare function parse(yamlString: string): Presentation;
 export declare function parseAndResolve(yamlString: string): Promise<Presentation>;

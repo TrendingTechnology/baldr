@@ -24,9 +24,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { Asset } from '@bldr/presentation-parser'
+import { Asset, youtubeMModule } from '@bldr/presentation-parser'
 
-import { findPreviewHttpUrl } from './main.js'
 import MasterPreview from '../MasterPreview.vue'
 
 @Component
@@ -36,7 +35,7 @@ export default class YoutubeMasterPreview extends MasterPreview {
   @Prop({
     type: Object
   })
-  asset: Asset
+  asset?: Asset
 
   @Prop({
     type: String,
@@ -54,8 +53,8 @@ export default class YoutubeMasterPreview extends MasterPreview {
   })
   info: string
 
-  get httpUrl (): string {
-    return findPreviewHttpUrl(this.youtubeId, this.asset)
+  get httpUrl (): string | undefined {
+    return youtubeMModule.findPreviewHttpUrl(this.youtubeId, this.asset)
   }
 }
 </script>

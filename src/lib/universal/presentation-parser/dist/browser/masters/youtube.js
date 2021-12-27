@@ -10,6 +10,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { getConfig } from '@bldr/config';
 import { getHttp } from '@bldr/media-resolver-ng';
 const config = getConfig();
+export function convertYoutubeIdToUri(youtubeId) {
+    return `ref:YT_${youtubeId}`;
+}
+/**
+ * https://stackoverflow.com/a/55890696/10193818
+ *
+ * Low quality
+ * https://img.youtube.com/vi/[video-id]/sddefault.jpg
+ *
+ * medium quality
+ * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
+ *
+ * High quality
+ * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
+ *
+ * maximum resolution
+ * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
+ */
+export function findPreviewHttpUrl(youtubeId, asset) {
+    if (asset == null) {
+        return `http://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+    }
+    else {
+        return asset.previewHttpUrl;
+    }
+}
 export function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
         const snippet = yield getHttp('https://www.googleapis.com/youtube/v3/videos', {
@@ -66,9 +92,6 @@ export class YoutubeMaster {
         this.shortFormField = 'youtubeId';
     }
     collectOptionalMediaUris(fields) {
-        return this.convertYoutubeIdToUri(fields.youtubeId);
-    }
-    convertYoutubeIdToUri(youtubeId) {
-        return `ref:YT_${youtubeId}`;
+        return convertYoutubeIdToUri(fields.youtubeId);
     }
 }

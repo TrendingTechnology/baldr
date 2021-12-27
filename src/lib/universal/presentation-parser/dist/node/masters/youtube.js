@@ -9,10 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.YoutubeMaster = exports.checkAvailability = exports.getSnippet = void 0;
+exports.YoutubeMaster = exports.checkAvailability = exports.getSnippet = exports.findPreviewHttpUrl = exports.convertYoutubeIdToUri = void 0;
 const config_1 = require("@bldr/config");
 const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 const config = (0, config_1.getConfig)();
+function convertYoutubeIdToUri(youtubeId) {
+    return `ref:YT_${youtubeId}`;
+}
+exports.convertYoutubeIdToUri = convertYoutubeIdToUri;
+/**
+ * https://stackoverflow.com/a/55890696/10193818
+ *
+ * Low quality
+ * https://img.youtube.com/vi/[video-id]/sddefault.jpg
+ *
+ * medium quality
+ * https://img.youtube.com/vi/[video-id]/mqdefault.jpg
+ *
+ * High quality
+ * http://img.youtube.com/vi/[video-id]/hqdefault.jpg
+ *
+ * maximum resolution
+ * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
+ */
+function findPreviewHttpUrl(youtubeId, asset) {
+    if (asset == null) {
+        return `http://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+    }
+    else {
+        return asset.previewHttpUrl;
+    }
+}
+exports.findPreviewHttpUrl = findPreviewHttpUrl;
 function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
         const snippet = yield (0, media_resolver_ng_1.getHttp)('https://www.googleapis.com/youtube/v3/videos', {
@@ -71,10 +99,7 @@ class YoutubeMaster {
         this.shortFormField = 'youtubeId';
     }
     collectOptionalMediaUris(fields) {
-        return this.convertYoutubeIdToUri(fields.youtubeId);
-    }
-    convertYoutubeIdToUri(youtubeId) {
-        return `ref:YT_${youtubeId}`;
+        return convertYoutubeIdToUri(fields.youtubeId);
     }
 }
 exports.YoutubeMaster = YoutubeMaster;

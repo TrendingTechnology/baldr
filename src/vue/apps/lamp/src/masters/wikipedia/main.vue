@@ -14,7 +14,7 @@
 import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
-import { wikipediaMaster } from '@bldr/presentation-parser'
+import { wikipediaMModule } from '@bldr/presentation-parser'
 
 import MasterMain from '../MasterMain.vue'
 
@@ -59,19 +59,19 @@ export default class WikipediaMasterMain extends MasterMain {
   body: string
 
   get titleWithoutUnderscores (): string {
-    return wikipediaMaster.formatTitleHumanReadable(this.title)
+    return wikipediaMModule.formatTitleHumanReadable(this.title)
   }
 
   get linkTitle (): string {
-    return wikipediaMaster.formatTitleForLink(this)
+    return wikipediaMModule.formatTitleForLink(this)
   }
 
   async created (): Promise<void> {
-    await wikipediaMaster.queryHtmlBody(this.title, this.language, this.oldid)
+    await wikipediaMModule.queryHtmlBody(this.title, this.language, this.oldid)
   }
 
   async setBody (): Promise<void> {
-    this.body = await wikipediaMaster.queryHtmlBody(
+    this.body = await wikipediaMModule.queryHtmlBody(
       this.title,
       this.language,
       this.oldid
