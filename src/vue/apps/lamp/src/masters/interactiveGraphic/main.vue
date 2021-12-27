@@ -8,13 +8,13 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 import { warnSvgWidthHeight } from '../../lib'
 
-@Component({ props: mapStepFieldDefintions(['subset', 'mode']) })
+@Component({ props: mapStepFieldDefintionsToProps(['subset', 'mode']) })
 export default class InteractiveGraphicMasterMain extends MasterMainWithStepController {
   masterName = 'interactiveGraphic'
 
@@ -43,7 +43,10 @@ export default class InteractiveGraphicMasterMain extends MasterMainWithStepCont
 
   afterSlideNoChange () {
     warnSvgWidthHeight(this.svgPath)
-    this.stepController = buildSvgStepController(this.$el as HTMLElement, this.slide.props)
+    this.stepController = buildSvgStepController(
+      this.$el as HTMLElement,
+      this.slide.props
+    )
   }
 
   afterStepNoChange ({ newStepNo }) {

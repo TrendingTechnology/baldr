@@ -82,6 +82,30 @@ interface FieldDefinitionCollection {
  * @param selectors - At the moment: “selector”, “mode” and “subset”.
  */
 export declare function mapStepFieldDefintions(selectors: StepFieldNames[]): FieldDefinitionCollection;
+declare type DefaultProps = Record<string, any>;
+declare type Prop<T> = (() => T) | (new (...args: never[]) => T & object) | (new (...args: string[]) => Function);
+declare type PropType<T> = Prop<T> | Array<Prop<T>>;
+declare type PropValidator<T> = PropOptions<T> | PropType<T>;
+interface PropOptions<T = any> {
+    type?: PropType<T>;
+    required?: boolean;
+    default?: T | null | undefined | (() => T | null | undefined);
+    validator?: (value: T) => boolean;
+}
+declare type RecordPropsDefinition<T> = {
+    [K in keyof T]: PropValidator<T[K]>;
+};
+declare type ArrayPropsDefinition<T> = Array<keyof T>;
+declare type PropsDefinition<T> = ArrayPropsDefinition<T> | RecordPropsDefinition<T>;
+declare type VuePropsDefintion = PropsDefinition<DefaultProps>;
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ *
+ * @returns should return `PropsDefinition<DefaultProps>`
+ */
+export declare function mapStepFieldDefintionsToProps(selectors: StepFieldNames[]): VuePropsDefintion;
 /**
  * Specification of the master slide icon that is normally displayed on the
  * top left corner of a slide.

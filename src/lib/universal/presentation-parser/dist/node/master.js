@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.Sample = exports.Asset = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.mapStepFieldDefintionsToProps = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.Sample = exports.Asset = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
@@ -27,6 +27,7 @@ var string_format_2 = require("@bldr/string-format");
 Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_2.shortenText; } });
 const stepFieldDefinitions = {
     selector: {
+        type: String,
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     },
     mode: {
@@ -55,6 +56,25 @@ function mapStepFieldDefintions(selectors) {
     return result;
 }
 exports.mapStepFieldDefintions = mapStepFieldDefintions;
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ *
+ * @returns should return `PropsDefinition<DefaultProps>`
+ */
+function mapStepFieldDefintionsToProps(selectors) {
+    const result = {};
+    for (const selector of selectors) {
+        if (stepFieldDefinitions[selector] != null) {
+            result[`step${selector.charAt(0).toUpperCase()}${selector
+                .substr(1)
+                .toLowerCase()}`] = stepFieldDefinitions[selector];
+        }
+    }
+    return result;
+}
+exports.mapStepFieldDefintionsToProps = mapStepFieldDefintionsToProps;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.

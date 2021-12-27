@@ -101,6 +101,7 @@ interface FieldDefinitionCollection {
 
 const stepFieldDefinitions: FieldDefinitionCollection = {
   selector: {
+    type: String,
     description:
       'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
   },
@@ -134,6 +135,56 @@ export function mapStepFieldDefintions (
     }
   }
   return result
+}
+
+// node_modules/vue/types/options.d.ts
+type DefaultProps = Record<string, any>
+
+type Prop<T> =
+  | (() => T)
+  | (new (...args: never[]) => T & object)
+  | (new (...args: string[]) => Function)
+
+type PropType<T> = Prop<T> | Array<Prop<T>>
+
+type PropValidator<T> = PropOptions<T> | PropType<T>
+
+interface PropOptions<T = any> {
+  type?: PropType<T>
+  required?: boolean
+  default?: T | null | undefined | (() => T | null | undefined)
+  validator?: (value: T) => boolean
+}
+
+type RecordPropsDefinition<T> = {
+  [K in keyof T]: PropValidator<T[K]>
+}
+type ArrayPropsDefinition<T> = Array<keyof T>
+type PropsDefinition<T> = ArrayPropsDefinition<T> | RecordPropsDefinition<T>
+
+type VuePropsDefintion = PropsDefinition<DefaultProps>
+
+/**
+ * Map step support related fields.
+ *
+ * @param selectors - At the moment: “selector”, “mode” and “subset”.
+ *
+ * @returns should return `PropsDefinition<DefaultProps>`
+ */
+export function mapStepFieldDefintionsToProps (
+  selectors: StepFieldNames[]
+): VuePropsDefintion {
+  const result: FieldDefinitionCollection = {}
+  for (const selector of selectors) {
+    if (stepFieldDefinitions[selector] != null) {
+      result[
+        `step${selector.charAt(0).toUpperCase()}${selector
+          .substr(1)
+          .toLowerCase()}`
+      ] = stepFieldDefinitions[selector]
+    }
+  }
+  return result as VuePropsDefintion
 }
 
 /**

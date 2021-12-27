@@ -6,9 +6,9 @@
 
 <script lang="ts">
 import Component from 'vue-class-component'
-import { Prop, } from 'vue-property-decorator'
+import { Prop } from 'vue-property-decorator'
 
-import { mapStepFieldDefintions } from '@bldr/presentation-parser'
+import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 
 import { warnSvgWidthHeight } from '../../lib'
@@ -41,7 +41,9 @@ function scrollToClozeGroup (
   scrollContainer.scrollTo({ top: scrollToTop, left: 0, behavior: 'smooth' })
 }
 
-@Component({ props: mapStepFieldDefintions(['subset']) })
+@Component({
+  props: mapStepFieldDefintionsToProps(['subset'])
+})
 export default class ClozeMasterMain extends MasterMainWithStepController {
   masterName = 'cloze'
 

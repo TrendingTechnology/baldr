@@ -42,7 +42,7 @@
  */
 import { Presentation } from './presentation';
 export { resolver } from './presentation';
-export { mapStepFieldDefintions } from './master';
+export { mapStepFieldDefintionsToProps } from './master';
 export * as genericMModul from './masters/generic';
 export * as questionMModul from './masters/question';
 export * as wikipediaMModule from './masters/wikipedia';
