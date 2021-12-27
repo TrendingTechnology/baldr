@@ -27,7 +27,7 @@
 <script lang="ts">
 import Component from 'vue-class-component'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
 @Component({

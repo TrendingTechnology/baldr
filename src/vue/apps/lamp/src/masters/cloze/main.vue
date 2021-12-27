@@ -12,7 +12,7 @@ import { mapStepFieldDefintions } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 
 import { warnSvgWidthHeight } from '../../lib'
-import MasterMainWithStepController from '../../components/reusable/MasterMainWithStepController.vue'
+import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
 /**
  * @param componentElement - The parent component element.

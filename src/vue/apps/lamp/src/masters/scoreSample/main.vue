@@ -17,7 +17,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/presentation-parser'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
 @Component({

@@ -2,7 +2,7 @@
 import Component from 'vue-class-component'
 
 import Master from './Master.vue'
-import SlidePreviewPlayButton from './SlidesPreview/SlidePreviewPlayButton.vue'
+import SlidePreviewPlayButton from '../components/reusable/SlidesPreview/SlidePreviewPlayButton.vue'
 
 @Component({
   components: {

@@ -12,7 +12,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { formatCounterNumber, Format } from './main'
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component
 export default class CounterMasterMain extends MasterMain {

@@ -16,7 +16,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { formatCounterNumber, Format } from './main'
-import MasterPreview from '../../components/reusable/MasterPreview.vue'
+import MasterPreview from '../MasterPreview.vue'
 
 @Component
 export default class CounterMasterPreview extends MasterPreview {

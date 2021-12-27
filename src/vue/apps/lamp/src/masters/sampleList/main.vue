@@ -18,7 +18,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component
 export default class SampleListMasterMain extends MasterMain {

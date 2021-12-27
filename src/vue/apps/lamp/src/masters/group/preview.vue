@@ -20,7 +20,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/presentation-parser'
 
-import MasterPreview from '../../components/reusable/MasterPreview.vue'
+import MasterPreview from '../MasterPreview.vue'
 
 @Component
 export default class GroupMasterPreview extends MasterPreview {

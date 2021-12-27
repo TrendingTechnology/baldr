@@ -20,7 +20,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import MasterPreview from '../../components/reusable/MasterPreview.vue'
+import MasterPreview from '../MasterPreview.vue'
 import Question from './Question.vue'
 
 @Component({

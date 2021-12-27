@@ -32,7 +32,7 @@ import { Prop } from 'vue-property-decorator'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import { formatToLocalDate } from '@bldr/core-browser'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component({
   components: {

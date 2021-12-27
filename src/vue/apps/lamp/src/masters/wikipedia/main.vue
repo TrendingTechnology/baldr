@@ -16,7 +16,7 @@ import { Prop, Watch } from 'vue-property-decorator'
 
 import { wikipediaMaster } from '@bldr/presentation-parser'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component
 export default class WikipediaMasterMain extends MasterMain {

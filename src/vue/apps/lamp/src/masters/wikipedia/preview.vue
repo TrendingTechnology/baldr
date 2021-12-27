@@ -21,7 +21,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { wikipediaMaster } from '@bldr/presentation-parser'
 
-import MasterPreview from '../../components/reusable/MasterPreview.vue'
+import MasterPreview from '../MasterPreview.vue'
 
 @Component
 export default class WikipediaMasterPreview extends MasterPreview {

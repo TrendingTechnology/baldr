@@ -38,7 +38,7 @@ import { Prop } from 'vue-property-decorator'
 import { formatToYear } from '@bldr/core-browser'
 import { Asset } from '@bldr/presentation-parser'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component({
   components: {

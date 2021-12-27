@@ -16,7 +16,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { StepController } from '@bldr/dom-manipulator'
 
-import MasterMain from '../../components/reusable/MasterMain.vue'
+import MasterMain from '../MasterMain.vue'
 
 @Component({
   components: {
