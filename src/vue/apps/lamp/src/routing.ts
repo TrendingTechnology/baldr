@@ -134,7 +134,6 @@ export function getViewFromRoute (): 'speaker' | 'public' {
 }
 
 async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
-  console.log(presRef)
   media.player.stop()
   vm.$store.dispatch('media/clear')
   vm.$store.commit('lamp/setPresentation', null)
@@ -142,7 +141,6 @@ async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
   // Get the yaml content as a string of a presentation for quick refresh
   let rawYamlString: string | null = null
 
-  // master example
   const masterMatch = presRef.match(/^EP_master_(.*)$/)
   if (masterMatch != null) {
     rawYamlString = rawYamlExamples.masters[masterMatch[1]]
@@ -159,8 +157,7 @@ async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
     rawYamlString = await api.readMediaAsString(dbPresentation.meta.path)
   }
 
-  const presentationNg = parsePresentation(rawYamlString)
-  console.log(presentationNg)
+  parsePresentation(rawYamlString)
 
   await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString })
 }

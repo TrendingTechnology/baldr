@@ -1,4 +1,9 @@
 import { Master } from '../master';
+/**
+ * Collection all question text (without answers) to build the plain
+ * text version.
+ */
+export declare function collectPlainText(text: string, questions: Question[]): string;
 interface Counter {
     sequence: QuestionSequence;
     question: number;
@@ -19,13 +24,14 @@ interface RawSpecObject extends Spec {
 }
 interface QuestionFieldData {
     questions: Question[];
-    sequence: QuestionSequence;
 }
 declare type RawSpec = string | string[] | RawSpecObject | RawSpecObject[];
 /**
+ * `q` stands for question. `a` stands for answer.
+ *
  * `['q1', 'a1', 'q2', 'q3']`
  */
-declare type QuestionSequence = string[];
+export declare type QuestionSequence = string[];
 /**
  * A question with sub questions.
  */
@@ -69,10 +75,6 @@ export declare class QuestionMaster implements Master {
             description: string;
             required: boolean;
             markup: boolean;
-        };
-        sequence: {
-            description: string;
-            type: ArrayConstructor;
         };
     };
     normalizeFieldsInput(fields: RawSpec): QuestionFieldData;

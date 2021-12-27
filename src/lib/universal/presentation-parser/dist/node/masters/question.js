@@ -1,8 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QuestionMaster = exports.generateTexMarkup = exports.Question = void 0;
+exports.QuestionMaster = exports.generateTexMarkup = exports.Question = exports.collectPlainText = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const tex = require("@bldr/tex-templates");
+/**
+ * Collection all question text (without answers) to build the plain
+ * text version.
+ */
+function collectPlainText(text, questions) {
+    for (const question of questions) {
+        text = text + question.questionText + ' | ';
+        if (question.subQuestions) {
+            text = collectPlainText(text, question.subQuestions);
+        }
+    }
+    return text;
+}
+exports.collectPlainText = collectPlainText;
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
  * heading. `1. act` is convert by `marked` into those lists. This is a
@@ -189,18 +203,13 @@ class QuestionMaster {
                 description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
                 required: true,
                 markup: true
-            },
-            sequence: {
-                description: "Wird automatisch erzeugt, z. B.: ['q1', 'a1', 'q2', 'q3'] .",
-                type: Array
             }
         };
     }
     normalizeFieldsInput(fields) {
         const questions = Question.parse(fields);
         return {
-            questions,
-            sequence: questions[0].sequence
+            questions
         };
     }
     generateTexMarkup(fields) {

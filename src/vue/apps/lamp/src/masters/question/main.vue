@@ -14,44 +14,82 @@ import Question from './Question.vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { StepController } from '@bldr/dom-manipulator'
+import { buildQuestionStepController } from '@bldr/dom-manipulator'
+import { questionMModul } from '@bldr/presentation-parser'
 
-import MasterMain from '../MasterMain.vue'
+import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
 @Component({
   components: {
     Question
   }
 })
-export default class QuestionMasterMain extends MasterMain {
+export default class QuestionMasterMain extends MasterMainWithStepController {
   masterName = 'question'
 
   @Prop({
     type: Array,
     required: true
   })
-  questions: any
+  questions: questionMModul.Question[]
 
-  stepController: StepController
+  get sequence (): questionMModul.QuestionSequence {
+    return this.questions[0].sequence
+  }
 
-  get subQuestions () {
+  get subQuestions (): questionMModul.Question[] | undefined {
     if (this.questions.length > 1) {
       return this.questions
     }
-    return ''
   }
 
-  get question () {
+  get question (): questionMModul.Question | undefined {
     if (this.questions.length === 1) {
       return this.questions[0]
     }
-    return ''
   }
 
-  data (): { stepController: StepController } {
-    return {
-      stepController: null
+  private setQuestionsByStepNo (stepNo: number): void {
+    // Question without a question or answer. Only the heading. Or
+    // only one question
+    if (this.sequence.length <= 1) {
+      return
     }
+
+    // q1 or a1
+    const curId = this.sequence[stepNo - 1]
+
+    for (const id of this.sequence) {
+      const element = this.$el.querySelector(`#${id}`)
+      if (element != null) {
+        element.classList.remove('active')
+      }
+    }
+
+    const isAnswer = curId.match(/^a/)
+    const element = this.$el.querySelector(`#${curId}`)
+    if (element == null) {
+      return
+    }
+    element.classList.add('active')
+    if (isAnswer != null) {
+      const answerNo = parseInt(curId.substr(1))
+      this.stepController.showUpTo(answerNo + 1)
+    }
+    if (stepNo === 1) {
+      window.scrollTo(0, 0)
+    } else {
+      element.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    }
+  }
+
+  afterSlideNoChange () {
+    this.stepController = buildQuestionStepController(this.$el as HTMLElement)
+    this.stepController.hideAll()
+  }
+
+  afterStepNoChange ({ newStepNo }) {
+    this.setQuestionsByStepNo(newStepNo)
   }
 }
 </script>

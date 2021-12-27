@@ -1,6 +1,19 @@
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 import * as tex from '@bldr/tex-templates';
 /**
+ * Collection all question text (without answers) to build the plain
+ * text version.
+ */
+export function collectPlainText(text, questions) {
+    for (const question of questions) {
+        text = text + question.questionText + ' | ';
+        if (question.subQuestions) {
+            text = collectPlainText(text, question.subQuestions);
+        }
+    }
+    return text;
+}
+/**
  * We want no lists `<ol>` etc in the HTML output for the question and the
  * heading. `1. act` is convert by `marked` into those lists. This is a
  * quick and dirty hack. Disable some renderer
@@ -184,18 +197,13 @@ export class QuestionMaster {
                 description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
                 required: true,
                 markup: true
-            },
-            sequence: {
-                description: "Wird automatisch erzeugt, z. B.: ['q1', 'a1', 'q2', 'q3'] .",
-                type: Array
             }
         };
     }
     normalizeFieldsInput(fields) {
         const questions = Question.parse(fields);
         return {
-            questions,
-            sequence: questions[0].sequence
+            questions
         };
     }
     generateTexMarkup(fields) {
