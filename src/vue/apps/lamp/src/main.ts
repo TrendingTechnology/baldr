@@ -10,7 +10,9 @@ import './class-component'
 
 import Vue from 'vue'
 
-import { registerMasterComponents } from '@/masters.js'
+import './masters.js'
+
+import { registerMasterComponents } from './lib/register-masters'
 
 // Vue plugins.
 import { router } from '@/routes'

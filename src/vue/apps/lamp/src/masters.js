@@ -6,13 +6,9 @@
 
 /* globals rawYamlExamples */
 
-import Vue from 'vue'
-
-import { customStore } from '@/main'
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib'
 import inlineMarkup from './inline-markup.js'
-import SlidePreviewPlayButton from './components/reusable/SlidesPreview/SlidePreviewPlayButton.vue'
 import store from './store/index.js'
 
 import { masterCollection } from '@bldr/lamp-core'
@@ -686,96 +682,6 @@ class Master {
   }
 }
 
-/**
- * This object is mixed in into each master component.
- */
-const masterMixin = {
-  props: {
-    // navigationNumbers (navigation numbers): this.navigationNumbers = { slideNo: 1, stepNo: 1 }
-    // The properties `slideNo` and `stepNo` had to be bundle into one object,
-    // to get a watcher that can execute the two hooks
-    // `afterSlideNoChangeOnComponent` and `afterStepNoChangeOnComponent`
-    // on demand.
-    navigationNumbers: {
-      type: Object
-    },
-    // By default all master components are marked as main components.
-    // Main master components register their `this` in the `customStore`
-    isPublic: {
-      type: Boolean,
-      default: true
-    }
-  },
-  watch: {
-    navigationNumbers (newValue, oldValue) {
-      this.$nextTick(() => {
-        let slideNoChange = false
-        if (newValue.slideNo !== oldValue.slideNo) {
-          this.master.afterSlideNoChangeOnComponent(
-            {
-              oldSlideNo: oldValue.slideNo,
-              newSlideNo: newValue.slideNo
-            },
-            this
-          )
-          slideNoChange = true
-        }
-        // Previous slide has only one step number
-        // oldSlideNo 2 oldStepNo 1 newSlideNo 3 oldStepNo 1
-        if (
-          newValue.stepNo &&
-          `${newValue.slideNo}:${newValue.stepNo}` !==
-            `${oldValue.slideNo}:${oldValue.stepNo}`
-        ) {
-          this.master.afterStepNoChangeOnComponent(
-            {
-              oldStepNo: oldValue.stepNo,
-              newStepNo: newValue.stepNo,
-              slideNoChange
-            },
-            this
-          )
-        }
-      })
-    }
-  },
-  mounted () {
-    this.master.afterSlideNoChangeOnComponent(
-      {
-        newSlideNo: this.navigationNumbers.slideNo
-      },
-      this
-    )
-    if (this.navigationNumbers.stepNo) {
-      this.master.afterStepNoChangeOnComponent(
-        {
-          newStepNo: this.navigationNumbers.stepNo,
-          slideNoChange: true
-        },
-        this
-      )
-    }
-    if (this.isPublic) {
-      customStore.vueMasterInstanceCurrent = this
-    }
-    inlineMarkup.makeReactive()
-  },
-  beforeDestroy () {
-    if (this.isPublic) {
-      customStore.vueMasterInstanceCurrent = null
-    }
-  }
-}
-
-/**
- * Register all masters. Search for `main.js`, `main.vue` and `preview.vue`
- * files in the subfolder `masters`.
- *
- * @see {@link https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js}
- * @see {@link https://webpack.js.org/guides/dependency-management/#require-context}
- *
- * @returns {module:@bldr/lamp/masters~Masters}
- */
 function registerMasters () {
   function findMasterName (fileName) {
     const match = fileName.match(/\.\/([\w]+)\/.*/)
@@ -785,15 +691,6 @@ function registerMasters () {
     return match[1]
   }
 
-  function checkExport (fileName, requiredObject) {
-    if (!requiredObject) {
-      throw new Error(`“${fileName}” couldn’t be imported.`)
-    }
-    if (!requiredObject.default) {
-      throw new Error(`“${fileName}” must export a default object.`)
-    }
-  }
-
   const requireMaster = require.context('./masters', true, /.+main\.(js|ts)$/)
   requireMaster.keys().forEach(fileName => {
     // ./masterName/main.js
@@ -801,50 +698,8 @@ function registerMasters () {
     const masterObj = requireMaster(fileName)
     const masterSpec = masterObj.default
     masterSpec.name = masterName
-    checkExport(fileName, masterObj)
     const master = new Master(masterSpec)
     masterCollection.add(master)
-  })
-
-  const requireComponentMain = require.context(
-    './masters',
-    true,
-    /.+main\.vue$/
-  )
-  requireComponentMain.keys().forEach(fileName => {
-    // ./masterName/main.vue
-    const masterName = findMasterName(fileName)
-    const master = masterCollection.get(masterName)
-    const componentMain = requireComponentMain(fileName)
-
-    const dataMixin = {
-      data () {
-        return {
-          masterName,
-          master // I tried '$master' with no success. Maybe $ Dollar prefixed properties are not allowed?
-        }
-      }
-    }
-
-    if (componentMain.default.cid == null) {
-      componentMain.default.mixins = [masterMixin, dataMixin]
-    }
-    checkExport(fileName, componentMain)
-    master.componentMain = componentMain.default
-  })
-
-  const requireComponentPreview = require.context(
-    './masters',
-    true,
-    /.+preview\.vue$/
-  )
-  requireComponentPreview.keys().forEach(fileName => {
-    // ./masterName/preview.vue
-    const masterName = findMasterName(fileName)
-    const master = masterCollection.get(masterName)
-    const componentPreview = requireComponentPreview(fileName)
-    checkExport(fileName, componentPreview)
-    master.componentPreview = componentPreview.default
   })
   return masterCollection
 }
@@ -855,28 +710,3 @@ function registerMasters () {
  * @type {module:@bldr/lamp/masters~Master}
  */
 export const masters = registerMasters()
-
-/**
- * This object is mixed in into each preview master vue component.
- */
-const componentPreviewMixin = {
-  components: {
-    SlidePreviewPlayButton
-  }
-}
-
-/**
- * Register all masters as Vue components.
- */
-export function registerMasterComponents () {
-  for (const masterName in masters.all) {
-    const master = masters.get(masterName)
-    if (master.componentMain) {
-      Vue.component(`${masterName}-master-main`, master.componentMain)
-    }
-    if (master.componentPreview) {
-      master.componentPreview.mixins = [componentPreviewMixin]
-      Vue.component(`${masterName}-master-preview`, master.componentPreview)
-    }
-  }
-}
