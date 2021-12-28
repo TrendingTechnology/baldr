@@ -27,6 +27,7 @@ class Meta {
         this.grade = data.cutNumber('grade');
         this.curriculum = data.cutString('curriculum');
         this.curriculumUrl = data.cutString('curriculumUrl');
+        this.path = data.cutString('path');
         data.checkEmpty();
     }
     /**
@@ -58,6 +59,22 @@ export class Presentation {
             throw new Error('Specify both title and ref!');
         }
         return new Meta({ title, ref });
+    }
+    /**
+     * Merge two sources to build a presentation from. A the moment only the
+     * meta.path property is taken from the raw presentation object.
+     *
+     * @param yamlString - The presentation as a YAML string
+     * @param raw - A raw presentation object (as stored in the MongoDB).
+     *
+     * @returns A newly created presentation.
+     */
+    static mergeYamlStringWithRaw(yamlString, raw) {
+        const presentation = new Presentation(yamlString);
+        if (raw.meta.path != null && presentation.meta.path == null) {
+            presentation.meta.path = raw.meta.path;
+        }
+        return presentation;
     }
     /**
      * Media URIs in the “ref” can be shorted with the string `./`. The
@@ -104,6 +121,15 @@ export class Presentation {
             raw = convertFromYaml(yamlString);
         }
         return new DataCutter(raw);
+    }
+    /**
+     * The relative path of parent directory, for example
+     * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus`.
+     */
+    get parentDir() {
+        if (this.meta.path != null) {
+            return this.meta.path.replace(/\/[^/]*\.baldr\.yml/, '');
+        }
     }
     resolve() {
         return __awaiter(this, void 0, void 0, function* () {

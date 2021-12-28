@@ -9,30 +9,57 @@ const {
 
 describe('File “presentation.ts”', function () {
   describe('meta', function () {
-    it('Real world example: 12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen', function () {
+    describe('Real world example: 12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen', function () {
       const presentation = parseRealWorldPresentation(
         '12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen'
       )
 
-      assert.strictEqual(presentation.meta.ref, 'Konzertwesen')
-      assert.strictEqual(
-        presentation.meta.uuid,
-        '35f5146c-3c98-4493-b9b9-534eba361e12'
-      )
-      assert.strictEqual(
-        presentation.meta.title,
-        'Die Entwicklung des Konzertwesens'
-      )
-      assert.strictEqual(presentation.meta.subject, 'Musik')
-      assert.strictEqual(
-        presentation.meta.title,
-        'Die Entwicklung des Konzertwesens'
-      )
-      assert.strictEqual(
-        presentation.meta.curriculum,
-        'Interpreten und Interpretationen / Konzertierende Musiker'
-      )
-      assert.strictEqual(presentation.meta.grade, 12)
+      it('presentation.meta.ref', function () {
+        assert.strictEqual(presentation.meta.ref, 'Konzertwesen')
+      })
+
+      it('presentation.meta.uuid', function () {
+        assert.strictEqual(
+          presentation.meta.uuid,
+          '35f5146c-3c98-4493-b9b9-534eba361e12'
+        )
+      })
+
+      it('presentation.meta.title', function () {
+        assert.strictEqual(
+          presentation.meta.title,
+          'Die Entwicklung des Konzertwesens'
+        )
+      })
+
+      it('presentation.meta.subject', function () {
+        assert.strictEqual(presentation.meta.subject, 'Musik')
+      })
+
+      it('presentation.meta.title', function () {
+        assert.strictEqual(
+          presentation.meta.title,
+          'Die Entwicklung des Konzertwesens'
+        )
+      })
+
+      it('presentation.meta.grade', function () {
+        assert.strictEqual(presentation.meta.grade, 12)
+      })
+
+      it('presentation.meta.curriculum', function () {
+        assert.strictEqual(
+          presentation.meta.curriculum,
+          'Interpreten und Interpretationen / Konzertierende Musiker'
+        )
+      })
+
+      it('presentation.meta.path', function () {
+        assert.strictEqual(
+          presentation.meta.path,
+          'Musik/12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen/Praesentation.baldr.yml'
+        )
+      })
     })
 
     it('“ref” and “title” not in “meta”', function () {
@@ -42,6 +69,16 @@ describe('File “presentation.ts”', function () {
       assert.strictEqual(presentation.meta.title, 'Title')
       assert.strictEqual(presentation.meta.ref, 'Reference')
     })
+  })
+
+  it('Getter method “parentDir”', function () {
+    const presentation = parseRealWorldPresentation(
+      '12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen'
+    )
+    assert.strictEqual(
+      presentation.parentDir,
+      'Musik/12/10_Interpreten/10_Konzertierende-Musiker/20_Konzertwesen'
+    )
   })
 
   it('Unknown property in the presentation root', function () {

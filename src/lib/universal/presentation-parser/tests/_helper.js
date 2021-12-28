@@ -6,23 +6,25 @@ const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
 
+/**
+ * Parse a real word example with a set path.
+ *
+ * @param {string} relPath
+ *
+ * @returns A presentation with a set path attribute im meta.path
+ */
 function parseRealWorldPresentation (relPath) {
-  return parse(
-    readFile(
-      path.join(
-        config.mediaServer.basePath,
-        'Musik',
-        relPath,
-        'Praesentation.baldr.yml'
-      )
-    )
+  const relPathInMedia = path.join('Musik', relPath, 'Praesentation.baldr.yml')
+  const presentation = parse(
+    readFile(path.join(config.mediaServer.basePath, relPathInMedia))
   )
+  presentation.meta.path = relPathInMedia
+
+  return presentation
 }
 
 function parsePresentation (relPath) {
-  return parse(
-    readFile(path.join(__dirname, 'files', `${relPath}.baldr.yml`))
-  )
+  return parse(readFile(path.join(__dirname, 'files', `${relPath}.baldr.yml`)))
 }
 
 function parseFirstSlide (relPath) {

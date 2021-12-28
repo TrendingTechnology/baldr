@@ -39,6 +39,12 @@ declare class Meta implements LampTypes.PresentationMeta {
      * @inheritdoc
      */
     curriculumUrl?: string;
+    /**
+     * The relative path containing the filename `Praesentation.baldr.yml`. This
+     * attribute is present in the MongoDB records, but not in the local
+     * YAML files.
+     */
+    path?: string;
     constructor(raw: any);
     /**
      * Log to the console.
@@ -58,6 +64,16 @@ export declare class Presentation {
     rawYamlStringExpanded?: string;
     constructor(yamlString: string);
     private cutMeta;
+    /**
+     * Merge two sources to build a presentation from. A the moment only the
+     * meta.path property is taken from the raw presentation object.
+     *
+     * @param yamlString - The presentation as a YAML string
+     * @param raw - A raw presentation object (as stored in the MongoDB).
+     *
+     * @returns A newly created presentation.
+     */
+    static mergeYamlStringWithRaw(yamlString: string, raw: any): Presentation;
     /**
      * Media URIs in the “ref” can be shorted with the string `./`. The
      * abbreviationn `./` is replaced with the presentation reference and a
@@ -83,6 +99,11 @@ export declare class Presentation {
      * @throws {Error} If the media URI references cannot be resolved.
      */
     private convertFromYaml;
+    /**
+     * The relative path of parent directory, for example
+     * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus`.
+     */
+    get parentDir(): string | undefined;
     resolve(): Promise<Asset[]>;
     /**
      * The first slide of a presentation. It is equivalent to

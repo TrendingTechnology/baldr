@@ -53,6 +53,13 @@ class Meta implements LampTypes.PresentationMeta {
    */
   curriculumUrl?: string
 
+  /**
+   * The relative path containing the filename `Praesentation.baldr.yml`. This
+   * attribute is present in the MongoDB records, but not in the local
+   * YAML files.
+   */
+  path?: string
+
   constructor (raw: any) {
     const data = new DataCutter(raw)
     this.ref = data.cutStringNotNull('ref')
@@ -63,6 +70,7 @@ class Meta implements LampTypes.PresentationMeta {
     this.grade = data.cutNumber('grade')
     this.curriculum = data.cutString('curriculum')
     this.curriculumUrl = data.cutString('curriculumUrl')
+    this.path = data.cutString('path')
     data.checkEmpty()
   }
 
@@ -119,6 +127,23 @@ export class Presentation {
   }
 
   /**
+   * Merge two sources to build a presentation from. A the moment only the
+   * meta.path property is taken from the raw presentation object.
+   *
+   * @param yamlString - The presentation as a YAML string
+   * @param raw - A raw presentation object (as stored in the MongoDB).
+   *
+   * @returns A newly created presentation.
+   */
+  public static mergeYamlStringWithRaw (yamlString: string, raw: any): Presentation {
+    const presentation = new Presentation(yamlString)
+    if (raw.meta.path != null && presentation.meta.path == null) {
+      presentation.meta.path = raw.meta.path
+    }
+    return presentation
+  }
+
+  /**
    * Media URIs in the “ref” can be shorted with the string `./`. The
    * abbreviationn `./` is replaced with the presentation reference and a
    * underscore, for example the media URI
@@ -165,6 +190,16 @@ export class Presentation {
       raw = convertFromYaml(yamlString)
     }
     return new DataCutter(raw)
+  }
+
+  /**
+   * The relative path of parent directory, for example
+   * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus`.
+   */
+  public get parentDir (): string | undefined {
+    if (this.meta.path != null) {
+      return this.meta.path.replace(/\/[^/]*\.baldr\.yml/, '')
+    }
   }
 
   public async resolve (): Promise<Asset[]> {

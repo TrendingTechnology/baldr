@@ -36,6 +36,7 @@ import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
 import { routerGuards } from '../../../lib/routing-related'
+
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'

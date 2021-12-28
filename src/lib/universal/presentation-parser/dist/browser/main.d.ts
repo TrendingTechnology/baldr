@@ -41,7 +41,7 @@
  * @module @bldr/presentation-parser
  */
 import { Presentation } from './presentation';
-export { resolver } from './presentation';
+export { resolver, Presentation } from './presentation';
 export { mapStepFieldDefintionsToProps } from './master';
 export { Slide } from './slide';
 export * as genericMModul from './masters/generic';
