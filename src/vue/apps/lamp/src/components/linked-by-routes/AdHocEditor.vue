@@ -4,15 +4,19 @@
   </div>
 </template>
 
-<script>
-import SlideMain from '@/components/reusable/SlideMain/index.vue'
-import { Slide } from '@/content-file.js'
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 
-export default {
-  name: 'AdHocEditor',
+import SlideMain from '@/components/reusable/SlideMain/index.vue'
+import { Slide } from '../../content-file.js'
+
+@Component({
   components: {
     SlideMain
-  },
+  }
+})
+export default class AdHocEditor extends Vue {
   data () {
     return {
       slide: new Slide({ editor: { markup: 'Hefteintrag' } })

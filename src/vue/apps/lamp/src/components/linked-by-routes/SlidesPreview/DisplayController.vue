@@ -20,17 +20,15 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
+
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp/preview')
 
-export default {
-  name: 'DisplayController',
-  computed: mapGetters([
-    'layoutCurrent',
-    'detail',
-    'hierarchical'
-  ]),
+@Component({
+  computed: mapGetters(['layoutCurrent', 'detail', 'hierarchical']),
   methods: mapActions([
     'increaseSize',
     'decreaseSize',
@@ -38,17 +36,18 @@ export default {
     'switchLayout',
     'switchHierarchical'
   ])
-}
+})
+export default class DisplayController extends Vue {}
 </script>
 
 <style lang="scss">
-  .vc_display_controller {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 0.9vw;
+.vc_display_controller {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9vw;
 
-    & > span {
-      margin: 0 0.2em;
-    }
+  & > span {
+    margin: 0 0.2em;
   }
+}
 </style>

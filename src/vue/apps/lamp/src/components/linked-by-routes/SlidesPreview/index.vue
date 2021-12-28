@@ -30,10 +30,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import { routerGuards } from '@/routing'
+import { routerGuards } from '../../../routing'
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
@@ -45,8 +47,7 @@ const storePreview = createNamespacedHelpers('lamp/preview')
 const mapActionsPreview = storePreview.mapActions
 const mapGettersPreview = storePreview.mapGetters
 
-export default {
-  name: 'SlidesPreview',
+@Component({
   components: {
     DisplayController,
     GridLayout,
@@ -54,7 +55,18 @@ export default {
     PresentationTitle,
     LoadingIcon
   },
-  mounted: function () {
+  computed: {
+    ...mapGetters(['presentation', 'slide', 'slides', 'slidesCount']),
+    ...mapGettersPreview(['size', 'layoutCurrent', 'hierarchical'])
+  },
+  methods: mapActionsPreview(['increaseSize', 'decreaseSize']),
+  ...routerGuards
+})
+export default class SlidesPreview extends Vue {
+  increaseSize: Function
+  decreaseSize: Function
+
+  mounted () {
     this.$shortcuts.addMultiple([
       {
         keys: '+',
@@ -76,16 +88,11 @@ export default {
     if (elCurrentSlide) {
       elCurrentSlide.scrollIntoView({ block: 'center' })
     }
-  },
-  destroyed: function () {
+  }
+
+  destroyed () {
     this.$shortcuts.removeMultiple(['+', '-'])
-  },
-  computed: {
-    ...mapGetters(['presentation', 'slide', 'slides', 'slidesCount']),
-    ...mapGettersPreview(['size', 'layoutCurrent', 'hierarchical'])
-  },
-  methods: mapActionsPreview(['increaseSize', 'decreaseSize']),
-  ...routerGuards
+  }
 }
 </script>
 

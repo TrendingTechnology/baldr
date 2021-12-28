@@ -14,18 +14,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 
-export default {
-  name: 'SlideSteps',
-  computed: {
-    ...mapGetters(['slide']),
-    steps () {
-      return this.slide.steps
-    }
+@Component({ computed: mapGetters(['slide']) })
+export default class SlideSteps extends Vue {
+  slide: any
+
+  get steps () {
+    return this.slide.steps
   }
 }
 </script>

@@ -18,10 +18,12 @@ import MasterMain from '../MasterMain.vue'
 })
 export default class DocumentMasterMain extends MasterMain {
   masterName = 'document'
+
   @Prop({
     type: Object
   })
   asset: Asset
+
   @Prop({
     type: Number
   })

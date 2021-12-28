@@ -34,21 +34,23 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { createNamespacedHelpers } from 'vuex'
 
 import { routerGuards, switchRouterView } from '@/routing'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
-import PresentationTitle from '@/components/reusable/PresentationTitle'
+import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import SlideSteps from './SlideSteps.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 const mapGettersNav = createNamespacedHelpers('lamp/nav').mapGetters
 
-export default {
-  name: 'SpeakerView',
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
+@Component({
   components: {
     CursorArrows,
     GridLayout,
@@ -58,30 +60,36 @@ export default {
   },
   computed: {
     ...mapGetters(['slide', 'presentation', 'slides']),
-    ...mapGettersNav(['nextRouterParams']),
-    nextSlideRouterParams () {
-      return this.nextRouterParams(1)
-    },
-    nextSlide () {
-      const params = this.nextSlideRouterParams
-      return this.slides[params.slideNo - 1]
-    },
-    currentStepNo () {
-      return this.slide.stepNo
-    },
-    nextStepNo () {
-      return this.nextSlideRouterParams.stepNo
-    },
-    publicViewRoute () {
-      return switchRouterView(this.$route)
-    }
-  },
-  methods: {
-    sendMessage () {
-      this.$socket.sendObj({ presRef: 'Futurismus' })
-    }
+    ...mapGettersNav(['nextRouterParams'])
   },
   ...routerGuards
+})
+export default class SpeakerView extends Vue {
+  slide: any
+  presentation: any
+  slides: any
+  nextRouterParams: any
+
+  get nextSlideRouterParams () {
+    return this.nextRouterParams(1)
+  }
+
+  get nextSlide () {
+    const params = this.nextSlideRouterParams
+    return this.slides[params.slideNo - 1]
+  }
+
+  get currentStepNo () {
+    return this.slide.stepNo
+  }
+
+  get nextStepNo () {
+    return this.nextSlideRouterParams.stepNo
+  }
+
+  get publicViewRoute () {
+    return switchRouterView(this.$route)
+  }
 }
 </script>
 
