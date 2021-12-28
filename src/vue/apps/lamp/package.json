@@ -11,6 +11,7 @@
     "build": "echo 'No build task specified!'",
     "test:e2e": "vue-cli-service test:e2e",
     "test:e2e:headless": "vue-cli-service test:e2e --headless",
+    "test": "npm run test:e2e:headless",
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
     "install:deb": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb",

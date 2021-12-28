@@ -29,7 +29,7 @@ import { resolver } from '@bldr/presentation-parser'
 
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
-import './global-components'
+import './lib/global-components'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)

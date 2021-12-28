@@ -1,4 +1,4 @@
-describe('Master documentation /#/documentation/master/:masterName', () => {
+describe('Master documentation /documentation/master/:masterName', () => {
   function visitDocumentation (masterName) {
     cy.visit('/#/documentation/master/' + masterName)
   }
@@ -96,7 +96,7 @@ describe('Master documentation /#/documentation/master/:masterName', () => {
   })
 })
 
-describe('Master example presentations /#/presentation/EP_master_:masterName/preview', () => {
+describe('Master example presentations /presentation/EP_master_:masterName/preview', () => {
   function visitExample (masterName) {
     cy.visit('/#/presentation/EP_master_' + masterName + '/preview')
     cy.contains('h1', masterName)
