@@ -12,6 +12,8 @@ import Vuex from 'vuex'
 import * as api from '@bldr/api-wrapper'
 
 import { Presentation } from '@/content-file.js'
+import { parse as parsePresentation } from '@bldr/presentation-parser'
+
 import vue, { customStore } from '@/main'
 import nav from './nav.js'
 import preview from './preview.js'
@@ -63,6 +65,19 @@ const getters = {
       return state.presentation
     }
   },
+  presentationNg: state => {
+    return state.presentationNg
+  },
+  slideNgByNo: state => no => {
+    if (state.presentationNg != null) {
+      return state.presentationNg.slides.flat[no]
+    }
+  },
+  slideNg: (state, getters) => {
+    if (state.slideNo != null) {
+      return getters.slideNgByNo(state.slideNo)
+    }
+  },
   slideNo: state => {
     return state.slideNo
   },
@@ -103,17 +118,16 @@ const getters = {
 }
 
 const actions = {
-  async openPresentation (
-    { commit, dispatch },
-    { vm, rawYamlString }
-  ) {
+  async openPresentation ({ commit, dispatch }, { vm, rawYamlString }) {
     const presentation = new Presentation(rawYamlString)
+    const presentationNg = parsePresentation(rawYamlString)
     dispatch('recent/add', {
       presRef: presentation.ref,
       title: presentation.title
     })
     await presentation.resolveMedia(vm)
     commit('setPresentation', presentation)
+    commit('setPresentationNg', presentationNg)
     commit('setSlides', presentation.slides)
     // The presentation can now be entered on each slide not only the first.
     // This is possible by the routes.

@@ -43,6 +43,7 @@
 import { Presentation } from './presentation';
 export { resolver } from './presentation';
 export { mapStepFieldDefintionsToProps } from './master';
+export { Slide } from './slide';
 export * as genericMModul from './masters/generic';
 export * as questionMModul from './masters/question';
 export * as wikipediaMModule from './masters/wikipedia';

@@ -12,8 +12,6 @@ import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
 import * as api from '@bldr/api-wrapper'
 
-import { parse as parsePresentation } from '@bldr/presentation-parser'
-
 import store from '@/store/index.js'
 import { router } from '@/lib/router'
 
@@ -154,8 +152,6 @@ async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
     const dbPresentation = await api.getPresentationByRef(presRef)
     rawYamlString = await api.readMediaAsString(dbPresentation.meta.path)
   }
-
-  parsePresentation(rawYamlString)
 
   await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString })
 }

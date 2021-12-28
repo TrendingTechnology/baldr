@@ -7,8 +7,6 @@
  *
  * @see
  * {@link https://nklayman.github.io/vue-cli-plugin-electron-builder/guide/guide.html#preload-files}
- *
- * @module @bldr/lamp/preload
  */
 
 import { contextBridge, ipcRenderer } from 'electron'

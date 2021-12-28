@@ -51,12 +51,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.mapStepFieldDefintionsToProps = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.Slide = exports.mapStepFieldDefintionsToProps = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
 var master_1 = require("./master");
 Object.defineProperty(exports, "mapStepFieldDefintionsToProps", { enumerable: true, get: function () { return master_1.mapStepFieldDefintionsToProps; } });
+var slide_1 = require("./slide");
+Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
 // MModule = MasterModule
 exports.genericMModul = require("./masters/generic");
 exports.questionMModul = require("./masters/question");

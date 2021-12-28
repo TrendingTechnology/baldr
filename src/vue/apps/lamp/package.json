@@ -17,7 +17,8 @@
     "install:deb": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb",
     "install:electron": "npm run build:electron && npm run install:deb",
     "serve:electron": "vue-cli-service electron:serve",
-    "serve:webapp": "vue-cli-service serve"
+    "serve:webapp": "vue-cli-service serve",
+    "serve": "npm run serve:webapp"
   },
   "main": "background.js",
   "dependencies": {
