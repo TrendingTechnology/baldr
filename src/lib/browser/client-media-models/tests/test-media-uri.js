@@ -56,16 +56,29 @@ describe('Class “MediaUri”', function () {
     })
   })
 
-  it("new MediaUri('xxx:xxx')", function () {
+  it("Throws an error: new MediaUri('xxx:xxx')", function () {
     assert.throws(() => new MediaUri('xxx:xxx'))
   })
 
   describe('Static methods', function () {
-    it('Static method “removeScheme()”', function () {
-      assert.strictEqual(
-        MediaUri.removeScheme('ref:test#fragment'),
-        'test#fragment'
+    it('Static method “check()”', function () {
+      assert.deepStrictEqual(MediaUri.check('ref:test#fragment'), true)
+      assert.deepStrictEqual(MediaUri.check('xxx:test#fragment'), false)
+    })
+
+    it('Static method “validate()”', function () {
+      assert.deepStrictEqual(
+        MediaUri.validate('ref:test#fragment'),
+        'ref:test#fragment'
       )
+      assert.throws(() => MediaUri.validate('xxx:test#fragment'))
+    })
+
+    it('Static method “splitByFragment()”', function () {
+      assert.deepStrictEqual(MediaUri.splitByFragment('ref:test#fragment'), {
+        fragment: 'fragment',
+        prefix: 'ref:test'
+      })
     })
 
     it('Static method “removeFragment()”', function () {
@@ -75,11 +88,11 @@ describe('Class “MediaUri”', function () {
       )
     })
 
-    it('Static method “splitByFragment()”', function () {
-      assert.deepStrictEqual(MediaUri.splitByFragment('ref:test#fragment'), {
-        fragment: 'fragment',
-        prefix: 'ref:test'
-      })
+    it('Static method “removeScheme()”', function () {
+      assert.strictEqual(
+        MediaUri.removeScheme('ref:test#fragment'),
+        'test#fragment'
+      )
     })
   })
 })

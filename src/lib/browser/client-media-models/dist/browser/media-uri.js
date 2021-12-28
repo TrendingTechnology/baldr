@@ -36,14 +36,14 @@ export class MediaUri {
         return false;
     }
     /**
-   * Check if the input is a valid URI.
-   *
-   * @param uri -  The URI to validate.
-   *
-   * @returns The unchanged URI.
-   *
-   * @throws If the given URI is not valid.
-   */
+     * Check if the input is a valid URI.
+     *
+     * @param uri -  The URI to validate.
+     *
+     * @returns The unchanged URI.
+     *
+     * @throws If the given URI is not valid.
+     */
     static validate(uri) {
         if (!MediaUri.check(uri)) {
             throw new Error(`The URI “${uri}” is not valid!`);

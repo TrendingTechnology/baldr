@@ -58,14 +58,14 @@ export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
      */
     static check(uri: string): boolean;
     /**
-   * Check if the input is a valid URI.
-   *
-   * @param uri -  The URI to validate.
-   *
-   * @returns The unchanged URI.
-   *
-   * @throws If the given URI is not valid.
-   */
+     * Check if the input is a valid URI.
+     *
+     * @param uri -  The URI to validate.
+     *
+     * @returns The unchanged URI.
+     *
+     * @throws If the given URI is not valid.
+     */
     static validate(uri: string): string;
     static splitByFragment(uri: string): UriSplittedByFragment;
     /**

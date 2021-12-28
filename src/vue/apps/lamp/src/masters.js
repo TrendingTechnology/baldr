@@ -7,7 +7,6 @@
 /* globals rawYamlExamples */
 
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
-import { validateUri } from './lib'
 import inlineMarkup from './lib/inline-markup'
 import store from './store/index.js'
 import { convertToString } from '@bldr/core-browser'
@@ -674,8 +673,7 @@ class Master {
     for (const propName in props) {
       const prop = this.propsDef[propName]
       if ('assetUri' in prop && prop.assetUri) {
-        MediaUri
-        props[propName] = validateUri(props[propName])
+        props[propName] = MediaUri.validate(props[propName])
       }
     }
     return props
