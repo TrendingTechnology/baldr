@@ -37,7 +37,7 @@
 <script lang="ts">
 import { createNamespacedHelpers } from 'vuex'
 
-import { routerGuards, switchRouterView } from '@/routing'
+import { routerGuards, switchRouterView } from '@/lib/routing'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import PresentationTitle from '@/components/reusable/PresentationTitle.vue'

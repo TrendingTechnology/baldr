@@ -15,7 +15,7 @@ import * as api from '@bldr/api-wrapper'
 import store from '@/store/index.js'
 import { router } from '@/lib/router'
 
-import Vm from './main'
+import Vm from '../main'
 
 /**
  * Set the document title by the current route.
