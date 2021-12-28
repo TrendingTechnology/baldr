@@ -20,24 +20,53 @@ export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
      */
     private static readonly regExpFragment;
     static regExp: RegExp;
+    /**
+     * For example: `ref:Beethoven_Ludwig-van#-4` or
+     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
+     */
     raw: string;
+    /**
+     * For example: `ref` or `uuid`.
+     */
     scheme: string;
+    /**
+     * For example: `Beethoven_Ludwig-van` or
+     * `c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+     */
     authority: string;
+    /**
+     * For example: `ref:Beethoven_Ludwig-van` or
+     * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+     */
     uriWithoutFragment: string;
+    /**
+     * For example: `-4` or `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
+     */
     fragment?: string;
     /**
-     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
-     * `ref:Beethoven_Ludwig-van#-4`
+     * @param uri - A Uniform Resource Identifier (URI). For example:
+     *   `ref:Beethoven_Ludwig-van#-4` or
+     *   `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
      */
     constructor(uri: string);
     /**
      * Check if the given media URI is a valid media URI.
      *
-     * @param uri A media URI.
+     * @param uri - A media URI.
      *
      * @returns True if the given URI is a valid media URI.
      */
     static check(uri: string): boolean;
+    /**
+   * Check if the input is a valid URI.
+   *
+   * @param uri -  The URI to validate.
+   *
+   * @returns The unchanged URI.
+   *
+   * @throws If the given URI is not valid.
+   */
+    static validate(uri: string): string;
     static splitByFragment(uri: string): UriSplittedByFragment;
     /**
      * Remove the fragment suffix of an media URI.

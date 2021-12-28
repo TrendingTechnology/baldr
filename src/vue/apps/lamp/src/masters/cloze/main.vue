@@ -11,7 +11,7 @@ import { Prop } from 'vue-property-decorator'
 import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
 
-import { warnSvgWidthHeight } from '../../lib'
+import { warnSvgWidthHeight } from '../../lib/utils'
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
 /**

@@ -3,8 +3,6 @@
  *
  * - Set the document title by the current route.
  * - Provide router guards for some components.
- *
- * @module @bldr/lamp/routing
  */
 
 import VueRouter, { Route, NavigationGuardNext } from 'vue-router'

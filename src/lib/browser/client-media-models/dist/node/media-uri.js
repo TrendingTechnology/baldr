@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findMediaUris = exports.makeMediaUris = exports.MediaUri = void 0;
 class MediaUri {
     /**
-     * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
-     * `ref:Beethoven_Ludwig-van#-4`
+     * @param uri - A Uniform Resource Identifier (URI). For example:
+     *   `ref:Beethoven_Ludwig-van#-4` or
+     *   `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
      */
     constructor(uri) {
         this.raw = uri;
@@ -26,7 +27,7 @@ class MediaUri {
     /**
      * Check if the given media URI is a valid media URI.
      *
-     * @param uri A media URI.
+     * @param uri - A media URI.
      *
      * @returns True if the given URI is a valid media URI.
      */
@@ -36,6 +37,21 @@ class MediaUri {
             return true;
         }
         return false;
+    }
+    /**
+   * Check if the input is a valid URI.
+   *
+   * @param uri -  The URI to validate.
+   *
+   * @returns The unchanged URI.
+   *
+   * @throws If the given URI is not valid.
+   */
+    static validate(uri) {
+        if (!MediaUri.check(uri)) {
+            throw new Error(`The URI “${uri}” is not valid!`);
+        }
+        return uri;
     }
     static splitByFragment(uri) {
         if (uri.indexOf('#') > 0) {

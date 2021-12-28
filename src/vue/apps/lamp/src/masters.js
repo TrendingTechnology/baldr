@@ -11,6 +11,7 @@ import { validateUri } from './lib'
 import inlineMarkup from './lib/inline-markup'
 import store from './store/index.js'
 import { convertToString } from '@bldr/core-browser'
+import { MediaUri } from '@bldr/client-media-models'
 
 /**
  * Container for all registered master slides.
@@ -673,6 +674,7 @@ class Master {
     for (const propName in props) {
       const prop = this.propsDef[propName]
       if ('assetUri' in prop && prop.assetUri) {
+        MediaUri
         props[propName] = validateUri(props[propName])
       }
     }

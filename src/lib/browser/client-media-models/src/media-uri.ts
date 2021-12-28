@@ -46,15 +46,38 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
       ')'
   )
 
+  /**
+   * For example: `ref:Beethoven_Ludwig-van#-4` or
+   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
+   */
   public raw: string
+
+  /**
+   * For example: `ref` or `uuid`.
+   */
   public scheme: string
+
+  /**
+   * For example: `Beethoven_Ludwig-van` or
+   * `c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+   */
   public authority: string
+
+  /**
+   * For example: `ref:Beethoven_Ludwig-van` or
+   * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+   */
   public uriWithoutFragment: string
+
+  /**
+   * For example: `-4` or `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
+   */
   public fragment?: string
 
   /**
-   * @param uri - `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#2-3` or
-   * `ref:Beethoven_Ludwig-van#-4`
+   * @param uri - A Uniform Resource Identifier (URI). For example:
+   *   `ref:Beethoven_Ludwig-van#-4` or
+   *   `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7#1,2,5-7`
    */
   constructor (uri: string) {
     this.raw = uri
@@ -76,7 +99,7 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
   /**
    * Check if the given media URI is a valid media URI.
    *
-   * @param uri A media URI.
+   * @param uri - A media URI.
    *
    * @returns True if the given URI is a valid media URI.
    */
@@ -86,6 +109,22 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
       return true
     }
     return false
+  }
+
+  /**
+ * Check if the input is a valid URI.
+ *
+ * @param uri -  The URI to validate.
+ *
+ * @returns The unchanged URI.
+ *
+ * @throws If the given URI is not valid.
+ */
+  public static validate (uri: string): string {
+    if (!MediaUri.check(uri)) {
+      throw new Error(`The URI “${uri}” is not valid!`)
+    }
+    return uri
   }
 
   public static splitByFragment (uri: string): UriSplittedByFragment {

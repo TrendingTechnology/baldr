@@ -22,29 +22,3 @@ export function validateUri (uri: string) {
   }
   return uri
 }
-
-/**
- * Search for SVG files in the HTML tree and warn if there are width and
- * height attributes set. With width and height attributes SVGs could
- * not resized easily in IMG tags. The slide preview depends on resizeable
- * SVGs.
- *
- * @param filePath - Path of the SVG. Only need for better error
- *   messages.
- */
-export function warnSvgWidthHeight (filePath?: string): void {
-  const svgs = document.querySelectorAll('svg') as NodeListOf<SVGSVGElement>
-  for (const svg of svgs) {
-    if (
-      svg.attributes.getNamedItem('height') != null ||
-      svg.attributes.getNamedItem('width') != null
-    ) {
-      if (filePath != null) {
-        filePath = ` (${filePath})`
-      }
-      showMessage.error(
-        `SVG file${filePath} has width and height attributes set.`
-      )
-    }
-  }
-}

@@ -12,7 +12,7 @@ import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
-import { warnSvgWidthHeight } from '../../lib'
+import { warnSvgWidthHeight } from '../../lib/utils'
 
 @Component({ props: mapStepFieldDefintionsToProps(['subset', 'mode']) })
 export default class InteractiveGraphicMasterMain extends MasterMainWithStepController {
