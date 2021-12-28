@@ -20,7 +20,7 @@ import CommonExample from '@/components/linked-by-routes/Documentation/CommonExa
 import MasterDocumentation from '@/components/linked-by-routes/Documentation/MasterDocumentation.vue'
 
 import SlidesPreview from '@/components/linked-by-routes/SlidesPreview/index.vue'
-import SlideView from '@/components/linked-by-routes/SlideView/index.vue'
+import SlideView from '@/components/linked-by-routes/SlideView.vue'
 import SpeakerView from '@/components/linked-by-routes/SpeakerView/index.vue'
 import StartPage from '@/components/linked-by-routes/StartPage.vue'
 import TitlesTreePage from '@/components/linked-by-routes/TitlesTreePage/index.vue'

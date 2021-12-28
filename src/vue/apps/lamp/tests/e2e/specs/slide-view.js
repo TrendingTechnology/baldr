@@ -14,7 +14,7 @@ describe('Increase and decrease font size', () => {
     cy.get('.vc_slide_view').should('have.css', 'font-size', '19px')
   })
 
-  it.only('Reset', () => {
+  it('Reset', () => {
     cy.visit('/#/presentation/EP_master_generic/slide/1')
     cy.contains('Lorem')
     cy.get('body').type('{ctrl}2')
