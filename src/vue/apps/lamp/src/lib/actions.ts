@@ -11,7 +11,7 @@ import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
 
 import store from '../store/index.js'
-import { router } from './router'
+import { router } from './router-setup'
 
 /**
  * Toggle between the destination and the last route:

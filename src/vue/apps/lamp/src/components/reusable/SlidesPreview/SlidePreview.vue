@@ -21,7 +21,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
-import { getViewFromRoute } from '@/lib/routing'
+import { getViewFromRoute } from '../../../lib/routing-related'
 
 @Component({
   components: {

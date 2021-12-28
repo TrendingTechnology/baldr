@@ -13,7 +13,7 @@ import { media } from '@bldr/media-client'
 import * as api from '@bldr/api-wrapper'
 
 import store from '@/store/index.js'
-import { router } from '@/lib/router'
+import { router } from '@/lib/router-setup'
 
 import Vm from '../main'
 

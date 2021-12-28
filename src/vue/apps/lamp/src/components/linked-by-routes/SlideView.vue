@@ -18,7 +18,7 @@ import { createNamespacedHelpers } from 'vuex'
 
 import { Slide } from '@bldr/presentation-parser'
 
-import { routerGuards } from '../../lib/routing'
+import { routerGuards } from '../../lib/routing-related'
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 

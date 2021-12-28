@@ -7,7 +7,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import { installDocumentTitleUpdater } from '@/lib/routing'
+import { installDocumentTitleUpdater } from './routing-related'
 
 // Components.
 import AboutPage from '@/components/linked-by-routes/AboutPage.vue'

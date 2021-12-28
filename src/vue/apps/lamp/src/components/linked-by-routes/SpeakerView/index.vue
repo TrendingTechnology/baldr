@@ -35,9 +35,12 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import { routerGuards, switchRouterView } from '@/lib/routing'
+import { routerGuards, switchRouterView } from '../../../lib/routing-related'
+
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
@@ -46,9 +49,6 @@ import SlideSteps from './SlideSteps.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 const mapGettersNav = createNamespacedHelpers('lamp/nav').mapGetters
-
-import Vue from 'vue'
-import Component from 'vue-class-component'
 
 @Component({
   components: {

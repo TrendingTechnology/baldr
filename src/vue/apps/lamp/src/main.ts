@@ -16,7 +16,7 @@ import './masters.js'
 import { registerMasterComponents } from './lib/masters'
 
 // Vue plugins.
-import { router } from '@/lib/router'
+import { router } from '@/lib/router-setup'
 import store from '@/store/index.js'
 import shortcuts from '@bldr/shortcuts'
 import MaterialIcon from '@bldr/icons'

@@ -22,8 +22,8 @@ import { mediaResolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
-import { router } from '@/lib/router'
-import { routerViews } from '@/lib/routing'
+import { router } from '@/lib/router-setup'
+import { routerViews } from '@/lib/routing-related'
 import vm from '@/main'
 
 /**

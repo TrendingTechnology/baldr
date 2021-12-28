@@ -15,7 +15,7 @@ import Component from 'vue-class-component'
 
 import * as api from '@bldr/api-wrapper'
 
-import { router } from '../../../lib/router'
+import { router } from '../../../lib/router-setup'
 
 @Component
 export default class SearchPresentation extends Vue {
