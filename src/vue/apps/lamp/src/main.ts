@@ -6,7 +6,8 @@
 
 /* globals config */
 
-import './lib/class-component'
+// Must be first import
+import './lib/components'
 
 import Vue from 'vue'
 
@@ -29,7 +30,6 @@ import { resolver } from '@bldr/presentation-parser'
 
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
-import './lib/global-components'
 
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
