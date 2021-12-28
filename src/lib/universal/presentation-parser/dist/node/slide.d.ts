@@ -56,6 +56,12 @@ export declare class Slide {
      */
     readonly optionalMediaUris: Set<string>;
     readonly audioOverlay?: WrappedUriList;
+    /**
+     * The scale factor is used to calculate the font size css style property of
+     * the root element in the component
+     * `src/vue/apps/lamp/src/components/linked-by-routes/SlideView/index.vue`
+     */
+    scaleFactor: number;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
     private parseAudioOverlay;

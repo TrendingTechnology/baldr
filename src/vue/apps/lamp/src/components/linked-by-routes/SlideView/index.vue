@@ -37,9 +37,9 @@ export default class SlideView extends Vue {
 
   slideNg!: Slide
 
-  get style () {
+  get style (): { fontSize: string } {
     return {
-      fontSize: `${this.slide.scaleFactor * 2}vw`
+      fontSize: `${this.slideNg.scaleFactor * 2}vw`
     }
   }
 }

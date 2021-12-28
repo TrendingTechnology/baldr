@@ -22,6 +22,12 @@ class SlideMeta {
 export class Slide {
     constructor(raw, no, level) {
         this.stepCollector = new StepCollector();
+        /**
+         * The scale factor is used to calculate the font size css style property of
+         * the root element in the component
+         * `src/vue/apps/lamp/src/components/linked-by-routes/SlideView/index.vue`
+         */
+        this.scaleFactor = 1;
         this.no = no;
         this.level = level;
         const data = new DataCutter(raw);

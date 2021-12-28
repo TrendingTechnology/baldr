@@ -70,7 +70,7 @@ const getters = {
   },
   slideNgByNo: state => no => {
     if (state.presentationNg != null) {
-      return state.presentationNg.slides.flat[no]
+      return state.presentationNg.slides.flat[no - 1]
     }
   },
   slideNg: (state, getters) => {
@@ -201,8 +201,12 @@ const actions = {
   },
   highlightCursorArrow ({ commit, getters }, name) {
     const state = getters.cursorArrowsStates[name]
-    if (state.triggered) return
-    if (state.timeoutId) clearTimeout(state.timeoutId)
+    if (state.triggered) {
+      return
+    }
+    if (state.timeoutId) {
+      clearTimeout(state.timeoutId)
+    }
     commit('setCursorArrowTriggerState', { name, triggered: true })
     const timeoutId = setTimeout(() => {
       commit('setCursorArrowTriggerState', { name, triggered: false })
@@ -211,12 +215,6 @@ const actions = {
     commit('setCursorArrowTimeoutId', { name, timeoutId })
   },
   increaseSlideScaleFactor ({ commit, getters }) {
-    const slide = getters.slide
-    if (slide != null) {
-      const scaleFactor = slide.scaleFactor + 0.05
-      commit('setSlideScaleFactor', { slide, scaleFactor })
-    }
-
     const slideNg = getters.slideNg
     if (slideNg != null) {
       const scaleFactor = slideNg.scaleFactor + 0.05
@@ -224,15 +222,6 @@ const actions = {
     }
   },
   decreaseSlideScaleFactor ({ commit, getters }) {
-    const slide = getters.slide
-    if (slide != null) {
-      let scaleFactor = slide.scaleFactor
-      if (scaleFactor > 0.1) {
-        scaleFactor = scaleFactor - 0.05
-      }
-      commit('setSlideScaleFactor', { slide, scaleFactor })
-    }
-
     const slideNg = getters.slideNg
     if (slideNg != null) {
       let scaleFactor = slideNg.scaleFactor
@@ -243,11 +232,6 @@ const actions = {
     }
   },
   resetSlideScaleFactor ({ commit, getters }) {
-    const slide = getters.slide
-    if (slide != null) {
-      commit('setSlideScaleFactor', { slide, scaleFactor: 1 })
-    }
-
     const slideNg = getters.slideNg
     if (slideNg != null) {
       commit('setSlideNgScaleFactor', { slideNg, scaleFactor: 1 })
@@ -285,9 +269,6 @@ const mutations = {
   },
   setSpeakerView (state, isSpeakerView) {
     state.isSpeakerView = isSpeakerView
-  },
-  setSlideScaleFactor (state, { slide, scaleFactor }) {
-    slide.scaleFactor = scaleFactor
   },
   setSlideNgScaleFactor (state, { slideNg, scaleFactor }) {
     slideNg.scaleFactor = scaleFactor
