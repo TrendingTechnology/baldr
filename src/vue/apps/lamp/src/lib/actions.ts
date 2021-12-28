@@ -22,13 +22,13 @@ import { router } from './router'
 function toggleLastRoute (routeNameTo: string): void {
   if (router.currentRoute.name === routeNameTo) {
     const lastRoute = store.getters['lamp/nav/lastRoute']
-    if (lastRoute) {
+    if (lastRoute != null) {
       store.commit('lamp/nav/lastRoute', null)
-      router.push(lastRoute)
+      router.push(lastRoute).catch(() => {})
     }
   } else {
     store.commit('lamp/nav/lastRoute', router.currentRoute)
-    router.push({ name: routeNameTo })
+    router.push({ name: routeNameTo }).catch(() => {})
   }
 }
 
@@ -49,7 +49,7 @@ function callOpenRestApi (
   create = false
 ): void {
   const presentation = store.getters['lamp/presentation']
-  if (!presentation || Object.keys(presentation).length === 0) {
+  if (presentation != null || Object.keys(presentation).length === 0) {
     showMessage.error(
       'Es ist keine Präsentation geladen.',
       'Der übergeordnete Ordner konnte nicht geöffnet werden.'
@@ -61,14 +61,14 @@ function callOpenRestApi (
     api.openEditor({
       ref: presentation.meta.ref,
       type: 'presentation'
-    })
+    }).catch(() => {})
   } else {
     api.openFileManager({
       ref: presentation.meta.ref,
       type: 'presentation',
       archive,
       create
-    })
+    }).catch(() => {})
   }
 }
 
@@ -100,13 +100,13 @@ function getNavRouteNameFromRoute (
   from: Route
 ): 'speaker-view-step-no' | 'speaker-view' | 'slide-step-no' | 'slide' {
   if (from.name === 'speaker-view' || from.name === 'speaker-view-step-no') {
-    if (to.stepNo) {
+    if (to.stepNo != null) {
       return 'speaker-view-step-no'
     } else {
       return 'speaker-view'
     }
   } else {
-    if (to.stepNo) {
+    if (to.stepNo != null) {
       return 'slide-step-no'
     } else {
       return 'slide'
@@ -121,7 +121,7 @@ function getNavRouteNameFromRoute (
  */
 function goToNextSlideByDirection (direction: 1 | -1): void {
   const presentation = store.getters['lamp/presentation']
-  if (!presentation) {
+  if (presentation == null) {
     return
   }
   const slide = store.getters['lamp/slide']
@@ -137,15 +137,15 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
   } else if (direction === -1 && slide.no === 1) {
     params.slideNo = slidesCount
   } else {
-    params.slideNo = slide.no + direction
+    params.slideNo = slide.no as number + direction
   }
 
   // next
   if (direction === 1) {
-    store.dispatch('lamp/highlightCursorArrow', 'right')
+    store.dispatch('lamp/highlightCursorArrow', 'right').catch(() => {})
     // previous
   } else if (direction === -1) {
-    store.dispatch('lamp/highlightCursorArrow', 'left')
+    store.dispatch('lamp/highlightCursorArrow', 'left').catch(() => {})
   }
 
   if (params.slideNo != null) {
@@ -158,7 +158,7 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
 
   const name = getNavRouteNameFromRoute(params, router.currentRoute)
 
-  router.push({ name, params })
+  router.push({ name, params }).catch(() => {})
 }
 
 /**
@@ -168,18 +168,18 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
  */
 function goToNextStepByDirection (direction: 1 | -1): void {
   const presentation = store.getters['lamp/presentation']
-  if (!presentation) {
+  if (presentation == null) {
     return
   }
   const slide = store.getters['lamp/slide']
 
-  if (!slide.stepCount || slide.stepCount < 2) {
+  if (slide.stepCount == null || slide.stepCount < 2) {
     return
   }
 
   const params: RouterParams | string = {
     presRef: presentation.ref,
-    slideNo: slide.no
+    slideNo: slide.no as number
   }
 
   // next
@@ -189,18 +189,18 @@ function goToNextStepByDirection (direction: 1 | -1): void {
   } else if (direction === -1 && slide.stepNo === 1) {
     params.stepNo = slide.stepCount
   } else {
-    params.stepNo = slide.stepNo + direction
+    params.stepNo = slide.stepNo as number + direction
   }
 
   // next
   if (direction === 1) {
-    store.dispatch('lamp/highlightCursorArrow', 'down')
+    store.dispatch('lamp/highlightCursorArrow', 'down').catch(() => {})
     // previous
   } else if (direction === -1) {
-    store.dispatch('lamp/highlightCursorArrow', 'up')
+    store.dispatch('lamp/highlightCursorArrow', 'up').catch(() => {})
   }
 
-  router.push({ name: 'slide-step-no', params })
+  router.push({ name: 'slide-step-no', params }).catch(() => {})
 }
 
 /**
@@ -210,7 +210,9 @@ function goToNextStepByDirection (direction: 1 | -1): void {
  */
 function goToNextSlideOrStepByDirection (direction: 1 | -1): void {
   const presentation = store.getters['lamp/presentation']
-  if (!presentation) return
+  if (presentation == null) {
+    return
+  }
   const params = store.getters['lamp/nav/nextRouterParams'](direction)
   params.presRef = presentation.ref
 
@@ -218,47 +220,47 @@ function goToNextSlideOrStepByDirection (direction: 1 | -1): void {
 
   // next
   if (direction === 1) {
-    if (params.stepNo && params.stepNo !== 1) {
-      store.dispatch('lamp/highlightCursorArrow', 'down')
+    if (params.stepNo != null && params.stepNo !== 1) {
+      store.dispatch('lamp/highlightCursorArrow', 'down').catch(() => {})
     } else {
-      store.dispatch('lamp/highlightCursorArrow', 'right')
+      store.dispatch('lamp/highlightCursorArrow', 'right').catch(() => {})
     }
     // previous
   } else if (direction === -1) {
     if (
-      params.stepNo &&
+      params.stepNo != null &&
       params.stepNo !== store.getters['lamp/slide'].stepCount
     ) {
-      store.dispatch('lamp/highlightCursorArrow', 'up')
+      store.dispatch('lamp/highlightCursorArrow', 'up').catch(() => {})
     } else {
-      store.dispatch('lamp/highlightCursorArrow', 'left')
+      store.dispatch('lamp/highlightCursorArrow', 'left').catch(() => {})
     }
   }
 
-  router.push({ name, params })
+  router.push({ name, params }).catch(() => {})
 }
 
 export function resetSlideScaleFactor (): void {
-  store.dispatch('lamp/resetSlideScaleFactor')
+  store.dispatch('lamp/resetSlideScaleFactor').catch(() => {})
 }
 
 export function increaseSlideScaleFactor (): void {
-  store.dispatch('lamp/increaseSlideScaleFactor')
+  store.dispatch('lamp/increaseSlideScaleFactor').catch(() => {})
 }
 
 export function decreaseSlideScaleFactor (): void {
-  store.dispatch('lamp/decreaseSlideScaleFactor')
+  store.dispatch('lamp/decreaseSlideScaleFactor').catch(() => {})
 }
 
 export function toggleSlides (): void {
-  store.dispatch('lamp/setSlideNoToOld')
+  store.dispatch('lamp/setSlideNoToOld').catch(() => {})
 }
 
 export async function update (): Promise<void> {
   try {
     const result = await api.updateMediaServer()
-    store.dispatch('lamp/titles/loadRootTreeList')
-    if (result.errors.length) {
+    store.dispatch('lamp/titles/loadRootTreeList').catch(() => {})
+    if (result.errors.length > 0) {
       for (const errorMsg of result.errors) {
         showMessage.error(errorMsg)
       }
@@ -281,9 +283,9 @@ export function openEditor (): void {
 
 export function openMedia (): void {
   const slide = store.getters['lamp/slide']
-  if (slide && slide.firstMediaUri) {
+  if (slide?.firstMediaUri != null) {
     const uri = slide.firstMediaUri.split(':')[1]
-    api.openEditor({ ref: uri, type: 'asset' })
+    api.openEditor({ ref: uri, type: 'asset' }).catch(() => {})
   } else {
     showMessage.error('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
   }
@@ -304,7 +306,7 @@ export function openEditorParentArchive (): void {
 
 export async function reloadPresentation (): Promise<void> {
   const presentation = store.getters['lamp/presentation']
-  if (!presentation) {
+  if (presentation == null) {
     showMessage.error('Keine Präsention geladen.')
     return
   }
@@ -317,7 +319,7 @@ export async function reloadPresentation (): Promise<void> {
 }
 
 export function toggleMetaDataOverlay (): void {
-  store.dispatch('lamp/toggleMetaDataOverlay')
+  store.dispatch('lamp/toggleMetaDataOverlay').catch(() => {})
 }
 
 /**
@@ -333,7 +335,7 @@ export function toggleSpeakerView (): void {
     name = 'speaker-view-step-no'
   } else if (route.name === 'slides-preview') {
     name = 'speaker-view'
-    if (!params.slideNo) {
+    if (params.slideNo == null) {
       params.slideNo = '1'
       delete params.stepNo
     }
@@ -342,7 +344,9 @@ export function toggleSpeakerView (): void {
   } else if (route.name === 'speaker-view-step-no') {
     name = 'slide-step-no'
   }
-  if (name) router.push({ name, params: route.params })
+  if (name != null) {
+    router.push({ name, params: route.params }).catch(() => {})
+  }
 }
 
 export function toggleMediaOverview (): void {

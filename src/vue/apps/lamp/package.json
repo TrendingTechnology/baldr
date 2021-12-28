@@ -97,7 +97,8 @@
     "extends": [
       "plugin:vue/essential",
       "@vue/standard",
-      "@vue/typescript/recommended"
+      "@vue/typescript/recommended",
+      "ts-standard"
     ],
     "parserOptions": {
       "ecmaVersion": 2020
