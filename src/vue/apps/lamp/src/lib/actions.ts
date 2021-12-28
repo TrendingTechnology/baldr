@@ -12,6 +12,8 @@ import { media } from '@bldr/media-client'
 
 import store from '../store/index.js'
 import { router } from './router-setup'
+import vm from '../main'
+import { loadPresentation } from './routing-related'
 
 /**
  * Toggle between the destination and the last route:
@@ -58,17 +60,21 @@ function callOpenRestApi (
   }
 
   if (openWith === 'editor') {
-    api.openEditor({
-      ref: presentation.meta.ref,
-      type: 'presentation'
-    }).catch(() => {})
+    api
+      .openEditor({
+        ref: presentation.meta.ref,
+        type: 'presentation'
+      })
+      .catch(() => {})
   } else {
-    api.openFileManager({
-      ref: presentation.meta.ref,
-      type: 'presentation',
-      archive,
-      create
-    }).catch(() => {})
+    api
+      .openFileManager({
+        ref: presentation.meta.ref,
+        type: 'presentation',
+        archive,
+        create
+      })
+      .catch(() => {})
   }
 }
 
@@ -137,7 +143,7 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
   } else if (direction === -1 && slide.no === 1) {
     params.slideNo = slidesCount
   } else {
-    params.slideNo = slide.no as number + direction
+    params.slideNo = (slide.no as number) + direction
   }
 
   // next
@@ -189,7 +195,7 @@ function goToNextStepByDirection (direction: 1 | -1): void {
   } else if (direction === -1 && slide.stepNo === 1) {
     params.stepNo = slide.stepCount
   } else {
-    params.stepNo = slide.stepNo as number + direction
+    params.stepNo = (slide.stepNo as number) + direction
   }
 
   // next
@@ -311,7 +317,7 @@ export async function reloadPresentation (): Promise<void> {
     return
   }
   try {
-    await store.dispatch('lamp/reloadPresentation')
+    await loadPresentation(vm, presentation.ref, true)
     showMessage.success('Die Präsentation wurde neu geladen.')
   } catch (error) {
     showMessage.error(error as Error)

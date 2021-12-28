@@ -9,12 +9,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import * as api from '@bldr/api-wrapper'
-
-import { Presentation } from '@/content-file.js'
-import { parse as parsePresentation } from '@bldr/presentation-parser'
-
-import vue, { customStore } from '@/main'
+import { customStore } from '@/main'
 import nav from './nav.js'
 import preview from './preview.js'
 import masters from './masters.js'
@@ -118,42 +113,25 @@ const getters = {
 }
 
 const actions = {
-  async openPresentation ({ commit, dispatch }, { vm, rawYamlString }) {
-    const presentation = new Presentation(rawYamlString)
-    const presentationNg = parsePresentation(rawYamlString)
-    dispatch('recent/add', {
-      presRef: presentation.ref,
-      title: presentation.title
-    })
-    await presentation.resolveMedia(vm)
+  loadPresentation (
+    { commit, dispatch },
+    { presentation, presentationNg, reload }
+  ) {
+    if (!reload) {
+      dispatch('media/clear', null, { root: true })
+      // Must done before resolving to get visual loader symbol
+      // commit('setPresentation', null)
+      dispatch('recent/add', {
+        presRef: presentation.ref,
+        title: presentation.title
+      })
+    }
+
     commit('setPresentation', presentation)
     commit('setPresentationNg', presentationNg)
     commit('setSlides', presentation.slides)
-    // The presentation can now be entered on each slide not only the first.
-    // This is possible by the routes.
-    // dispatch('setSlideNoCurrent', 1)
   },
-  async openPresentationById ({ dispatch }, { vm, presRef }) {
-    const mongoDbObject = await api.getPresentationByRef(presRef)
 
-    // Get the yaml content as a string of a presentation for quick refresh
-    const rawYamlString = await api.readMediaAsString(mongoDbObject.meta.path)
-    await dispatch('openPresentation', { vm, rawYamlString })
-  },
-  /**
-   * Reload the presentation and switch to the current slide (the same slide no)
-   * again.
-   */
-  async reloadPresentation ({ dispatch, getters }) {
-    const presentation = getters.presentation
-    if (presentation && presentation.meta && presentation.meta.ref) {
-      await dispatch('openPresentationById', {
-        vm: vue,
-        presRef: presentation.meta.ref
-      })
-      dispatch('setSlideNoCurrent', getters.slide.no)
-    }
-  },
   setSlideNoToOld ({ dispatch, getters }) {
     const slideNoOld = getters.slideNoOld
     if (slideNoOld) dispatch('setSlideNoCurrent', slideNoOld)
@@ -236,6 +214,10 @@ const actions = {
     if (slideNg != null) {
       commit('setSlideNgScaleFactor', { slideNg, scaleFactor: 1 })
     }
+  },
+  clearPresentation ({ commit }) {
+    commit('setPresentation', null)
+    commit('setPresentationNg', null)
   }
 }
 

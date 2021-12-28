@@ -73,8 +73,9 @@ class Presentation {
      * @returns A newly created presentation.
      */
     static mergeYamlStringWithRaw(yamlString, raw) {
+        var _a;
         const presentation = new Presentation(yamlString);
-        if (raw.meta.path != null && presentation.meta.path == null) {
+        if (((_a = raw === null || raw === void 0 ? void 0 : raw.meta) === null || _a === void 0 ? void 0 : _a.path) != null && presentation.meta.path == null) {
             presentation.meta.path = raw.meta.path;
         }
         return presentation;

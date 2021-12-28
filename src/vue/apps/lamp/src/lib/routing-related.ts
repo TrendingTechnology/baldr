@@ -12,6 +12,9 @@ import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
 import * as api from '@bldr/api-wrapper'
 
+import { Presentation as PresentationNg } from '@bldr/presentation-parser'
+import { Presentation } from '@/content-file.js'
+
 import store from '@/store/index.js'
 import { router } from '@/lib/router-setup'
 
@@ -129,31 +132,61 @@ export function getViewFromRoute (): 'speaker' | 'public' {
   return 'public'
 }
 
-async function loadPresentationByRef (vm: typeof Vm, presRef: string) {
-  media.player.stop()
-  vm.$store.dispatch('media/clear')
-  vm.$store.commit('lamp/setPresentation', null)
+function getRawYamlExampleByRef (ref: string): string | undefined {
+  let rawYamlString: string | undefined
 
-  // Get the yaml content as a string of a presentation for quick refresh
-  let rawYamlString: string | null = null
-
-  const masterMatch = presRef.match(/^EP_master_(.*)$/)
+  // master example
+  const masterMatch = ref.match(/^EP_master_(.*)$/)
   if (masterMatch != null) {
     rawYamlString = rawYamlExamples.masters[masterMatch[1]]
   }
 
   // common example
-  const commonMatch = presRef.match(/^EP_common_(.*)$/)
+  const commonMatch = ref.match(/^EP_common_(.*)$/)
   if (commonMatch != null) {
     rawYamlString = rawYamlExamples.common[commonMatch[1]]
   }
 
-  if (rawYamlString == null) {
-    const dbPresentation = await api.getPresentationByRef(presRef)
-    rawYamlString = await api.readMediaAsString(dbPresentation.meta.path)
+  return rawYamlString
+}
+
+export async function loadPresentation (
+  vm: typeof Vm,
+  ref: string,
+  reload: boolean = false
+) {
+  if (!reload) {
+    media.player.stop()
+
+    // To show the loader
+    vm.$store.dispatch('lamp/clearPresentation')
   }
 
-  await vm.$store.dispatch('lamp/openPresentation', { vm, rawYamlString })
+  // Get the yaml content as a string of a presentation for quick refresh
+  let rawYamlString: string | undefined
+  let rawPresentation
+
+  rawYamlString = getRawYamlExampleByRef(ref)
+
+  if (rawYamlString == null) {
+    rawPresentation = await api.getPresentationByRef(ref)
+    rawYamlString = await api.readMediaAsString(rawPresentation.meta.path)
+  }
+
+  const presentation = new Presentation(rawYamlString)
+  await presentation.resolveMedia(vm)
+
+  const presentationNg = PresentationNg.mergeYamlStringWithRaw(
+    rawYamlString,
+    rawPresentation
+  )
+  await presentationNg.resolve()
+
+  await vm.$store.dispatch('lamp/loadPresentation', {
+    presentation,
+    presentationNg,
+    reload
+  })
 }
 
 /**
@@ -167,7 +200,7 @@ async function loadPresentationByRoute (vm: typeof Vm, route: Route) {
         presentation == null ||
         (presentation != null && presentation.ref !== route.params.presRef)
       ) {
-        await loadPresentationByRef(vm, route.params.presRef)
+        await loadPresentation(vm, route.params.presRef)
       }
       if (route.params.slideNo != null) {
         vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)

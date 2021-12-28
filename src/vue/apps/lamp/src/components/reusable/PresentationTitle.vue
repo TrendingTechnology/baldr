@@ -1,8 +1,8 @@
 <template>
   <section class="vc_presentation_title" v-if="presentation">
     <titles-bread-crumbs
-      v-if="presentation.parentDir"
-      :rel-path="presentation.parentDir"
+      v-if="parentDir"
+      :rel-path="parentDir"
       :not-last="true"
     />
     <h1 v-if="title" v-html="title" />
@@ -31,10 +31,6 @@ export default class PresentationTitle extends Vue {
   presentation!: any
   presentationNg!: Presentation
 
-  mounted () {
-    console.log(this.presentationNg)
-  }
-
   get title (): string | undefined {
     if (this.presentationNg?.meta?.title) {
       return this.presentationNg.meta.title
@@ -45,6 +41,10 @@ export default class PresentationTitle extends Vue {
     if (this.presentationNg?.meta?.subtitle) {
       return this.presentationNg.meta.subtitle
     }
+  }
+
+  get parentDir (): string | undefined {
+    return this.presentationNg.parentDir
   }
 }
 </script>

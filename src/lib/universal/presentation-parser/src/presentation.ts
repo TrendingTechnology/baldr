@@ -135,9 +135,9 @@ export class Presentation {
    *
    * @returns A newly created presentation.
    */
-  public static mergeYamlStringWithRaw (yamlString: string, raw: any): Presentation {
+  public static mergeYamlStringWithRaw (yamlString: string, raw?: any): Presentation {
     const presentation = new Presentation(yamlString)
-    if (raw.meta.path != null && presentation.meta.path == null) {
+    if (raw?.meta?.path != null && presentation.meta.path == null) {
       presentation.meta.path = raw.meta.path
     }
     return presentation

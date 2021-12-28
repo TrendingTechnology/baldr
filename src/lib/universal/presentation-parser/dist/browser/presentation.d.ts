@@ -73,7 +73,7 @@ export declare class Presentation {
      *
      * @returns A newly created presentation.
      */
-    static mergeYamlStringWithRaw(yamlString: string, raw: any): Presentation;
+    static mergeYamlStringWithRaw(yamlString: string, raw?: any): Presentation;
     /**
      * Media URIs in the “ref” can be shorted with the string `./`. The
      * abbreviationn `./` is replaced with the presentation reference and a
