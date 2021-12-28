@@ -1,7 +1,5 @@
 /**
  * Create the main Electron process.
- *
- * @module @bldr/lamp/background
  */
 import { app, protocol, BrowserWindow, Menu, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'

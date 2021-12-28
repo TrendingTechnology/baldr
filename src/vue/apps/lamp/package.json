@@ -20,7 +20,7 @@
     "serve:webapp": "vue-cli-service serve",
     "serve": "npm run serve:webapp"
   },
-  "main": "background.js",
+  "main": "lib/electron-background.js",
   "dependencies": {
     "@bldr/api-wrapper": "*",
     "@bldr/client-media-models": "*",

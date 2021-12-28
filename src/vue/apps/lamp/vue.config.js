@@ -126,6 +126,7 @@ module.exports = {
     },
     electronBuilder: {
       preload: 'src/preload.js',
+      mainProcessFile: 'src/lib/electron-background',
       // nodeIntegration: true,
       builderOptions: {
         appId: 'rocks.friedrich.baldr',
