@@ -4,7 +4,7 @@ import { Prop, Watch } from 'vue-property-decorator'
 
 import { LampTypes } from '@bldr/type-definitions'
 
-import inlineMarkup from '../inline-markup.js'
+import inlineMarkup from '../lib/inline-markup'
 import { customStore } from '../main'
 import Master from './Master.vue'
 

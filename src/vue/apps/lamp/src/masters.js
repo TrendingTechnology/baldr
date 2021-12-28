@@ -8,7 +8,7 @@
 
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import { validateUri } from './lib'
-import inlineMarkup from './inline-markup.js'
+import inlineMarkup from './lib/inline-markup'
 import store from './store/index.js'
 import { convertToString } from '@bldr/core-browser'
 

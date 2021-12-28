@@ -1,6 +1,7 @@
-import vue from '@/main'
-
 import { MediaUri } from '@bldr/client-media-models'
+
+import vm from '@/main'
+import store from '@/store/index.js'
 
 /**
  * Unfortunatley it is not possible to write a Vue js component tag inline
@@ -47,13 +48,18 @@ export const regExp = '\\[' + mediaUri + ' ?([^\\]]*)?' + '\\]'
  * ```
  */
 export class Item {
+  uri: string
+  text?: string
+  slide?: string
+  caption?: string
+  align?: string
   /**
-   * @param {String} markup - for example
+   * @param markup - for example
    *   `[id:Fuer-Elise caption="Für Elise"]` or
    *   `[id:Beethoven class="left large"]` or
    *   `[id:Mozart center]`
    */
-  constructor (markup) {
+  constructor (markup: string) {
     const match = markup.match(new RegExp(regExp))
     if (!match) {
       throw new Error(`Invalid inline markup: ${markup}`)
@@ -71,10 +77,17 @@ export class Item {
       // (caption)=("(Für Elise)")
       const matches = attrs.matchAll(/([a-z]+)(="([^"]*)")?/g)
       for (const match of matches) {
-        if (match[3]) {
-          this[match[1]] = match[3]
-        } else {
-          this[match[1]] = true
+        const value = match[3]
+        const key = match[1]
+
+        if (key === 'caption' && value != null && typeof value === 'string') {
+          this.caption = value
+        } else if (
+          key === 'align' &&
+          value != null &&
+          typeof value === 'string'
+        ) {
+          this.align = value
         }
       }
     }
@@ -86,7 +99,7 @@ export class Item {
  *
  * @param {@bldr/lamp/inline-markup~Item} item
  */
-export function render (item) {
+export function render (item: Item) {
   if (item.slide) {
     const slide = item.slide.replace(/^[a-z]+:/, '')
     let text
@@ -97,7 +110,7 @@ export function render (item) {
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.uri) {
-    const asset = vue.$store.getters['media/assetByUri'](item.uri)
+    const asset = vm.$store.getters['media/assetByUri'](item.uri)
 
     let controls = ''
     let htmlTag
@@ -139,7 +152,7 @@ export function makeReactive () {
     if (type === 'slide-link') {
       const slideId = element.getAttribute('b-inline-slide')
       element.addEventListener('click', () => {
-        const presentation = vue.$get('presentation')
+        const presentation = store.getters('lamp/presentation')
         presentation.goto(slideId)
       })
     }
