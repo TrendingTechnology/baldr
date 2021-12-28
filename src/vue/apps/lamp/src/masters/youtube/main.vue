@@ -55,7 +55,7 @@ export default class YoutubeMasterMain extends MasterMain {
   })
   info?: string
 
-  async afterSlideNoChange () {
+  async afterSlideNoChange (): Promise<void> {
     if (!this.isPublic) {
       return
     }

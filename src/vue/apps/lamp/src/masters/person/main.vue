@@ -29,6 +29,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Asset } from '@bldr/presentation-parser'
+
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import { formatToLocalDate } from '@bldr/core-browser'
 
@@ -46,16 +48,15 @@ export default class PersonMasterMain extends MasterMain {
     type: Object,
     required: true
   })
-  asset: any
+  asset: Asset
 
-  get birth () {
+  get birth (): string | undefined {
     if (this.asset.yaml.birth != null) {
       return `* ${formatToLocalDate(this.asset.yaml.birth)}`
     }
-    return undefined
   }
 
-  get death () {
+  get death (): string | undefined {
     if (this.asset.yaml.death != null) {
       return `† ${formatToLocalDate(this.asset.yaml.death)}`
     }

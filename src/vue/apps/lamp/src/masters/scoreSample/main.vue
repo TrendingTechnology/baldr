@@ -44,7 +44,7 @@ export default class ScoreSampleMasterMain extends MasterMain {
   })
   audioSample: Asset
 
-  async afterSlideNoChange () {
+  afterSlideNoChange (): void {
     if (!this.isPublic) {
       return
     }

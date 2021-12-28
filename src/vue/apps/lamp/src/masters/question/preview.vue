@@ -20,6 +20,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { questionMModul } from '@bldr/presentation-parser'
+
 import MasterPreview from '../MasterPreview.vue'
 import Question from './Question.vue'
 
@@ -35,20 +37,18 @@ export default class QuestionMasterPreview extends MasterPreview {
     type: Array,
     required: true
   })
-  questions: any[]
+  questions: questionMModul.Question[]
 
-  get subQuestions () {
+  get subQuestions (): questionMModul.Question[] | undefined {
     if (this.questions.length > 1) {
       return this.questions
     }
-    return ''
   }
 
-  get question () {
+  get question (): questionMModul.Question | undefined {
     if (this.questions.length === 1) {
       return this.questions[0]
     }
-    return ''
   }
 }
 </script>

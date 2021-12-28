@@ -83,12 +83,12 @@ export default class QuestionMasterMain extends MasterMainWithStepController {
     }
   }
 
-  afterSlideNoChange () {
+  afterSlideNoChange (): void {
     this.stepController = buildQuestionStepController(this.$el as HTMLElement)
     this.stepController.hideAll()
   }
 
-  afterStepNoChange ({ newStepNo }) {
+  afterStepNoChange ({ newStepNo }): void {
     this.setQuestionsByStepNo(newStepNo)
   }
 }

@@ -62,10 +62,10 @@ function convertToRoman (currentNumber: number): string {
     IV: 4,
     I: 1
   }
-  let output: string = ''
+  let output = ''
 
-  for (var romanNumber of Object.keys(roman)) {
-    var q = Math.floor(currentNumber / roman[romanNumber])
+  for (const romanNumber of Object.keys(roman)) {
+    const q = Math.floor(currentNumber / roman[romanNumber])
     currentNumber -= q * roman[romanNumber]
     output += romanNumber.repeat(q)
   }

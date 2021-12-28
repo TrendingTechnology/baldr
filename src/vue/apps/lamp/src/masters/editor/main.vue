@@ -3,14 +3,14 @@
 </template>
 
 <script lang="ts">
-const placeholder = '…'
-const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
-
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import MasterMain from '../MasterMain.vue'
+
+const placeholder = '…'
+const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
+const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 
 @Component
 export default class EditorMasterMain extends MasterMain {
@@ -29,7 +29,7 @@ export default class EditorMasterMain extends MasterMain {
     }
   }
 
-  private surround (elementName) {
+  private surround (elementName: string): void {
     const selection = window.getSelection()
     if (selection.rangeCount) {
       const range = selection.getRangeAt(0)
@@ -38,13 +38,13 @@ export default class EditorMasterMain extends MasterMain {
     }
   }
 
-  insertHtml (html) {
+  insertHtml (html: string): void {
     const range = document.getSelection().getRangeAt(0)
     const fragment = document.createRange().createContextualFragment(html)
     range.insertNode(fragment)
   }
 
-  created () {
+  created (): void {
     // We can not use mousetrap because mousetrap is disable in
     // contenteditable areas.
     document.addEventListener('keydown', event => {

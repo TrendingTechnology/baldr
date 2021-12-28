@@ -53,21 +53,19 @@ export default class GroupMasterMain extends MasterMain {
   })
   asset: Asset
 
-  get startDate () {
+  get startDate (): string | undefined {
     if (this.asset.yaml.startDate) {
       return formatToYear(this.asset.yaml.startDate)
     }
-    return false
   }
 
-  get endDate () {
+  get endDate (): string | undefined {
     if (this.asset.yaml.endDate) {
       return formatToYear(this.asset.yaml.endDate)
     }
-    return false
   }
 
-  get members () {
+  get members (): string[] {
     if (Array.isArray(this.asset.yaml.members)) {
       return this.asset.yaml.members
     } else if (typeof this.asset.yaml.members === 'string') {
@@ -76,7 +74,7 @@ export default class GroupMasterMain extends MasterMain {
     return []
   }
 
-  get hasMembers(): boolean {
+  get hasMembers (): boolean {
     return this.members.length > 0
   }
 }

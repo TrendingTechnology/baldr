@@ -27,19 +27,22 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { questionMModul } from '@bldr/presentation-parser'
+
 @Component
 export default class Question extends Vue {
   @Prop({
     type: Object
   })
-  question: any
+  question: questionMModul.Question
+
   @Prop({
     type: Boolean,
     default: false
   })
   noAnswer: boolean
 
-  get q () {
+  get q (): questionMModul.Question {
     return this.question
   }
 }
