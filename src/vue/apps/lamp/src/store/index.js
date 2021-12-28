@@ -212,23 +212,45 @@ const actions = {
   },
   increaseSlideScaleFactor ({ commit, getters }) {
     const slide = getters.slide
-    if (slide) {
+    if (slide != null) {
       const scaleFactor = slide.scaleFactor + 0.05
       commit('setSlideScaleFactor', { slide, scaleFactor })
+    }
+
+    const slideNg = getters.slideNg
+    if (slideNg != null) {
+      const scaleFactor = slideNg.scaleFactor + 0.05
+      commit('setSlideNgScaleFactor', { slideNg, scaleFactor })
     }
   },
   decreaseSlideScaleFactor ({ commit, getters }) {
     const slide = getters.slide
-    if (slide) {
+    if (slide != null) {
       let scaleFactor = slide.scaleFactor
-      if (scaleFactor > 0.1) scaleFactor = scaleFactor - 0.05
+      if (scaleFactor > 0.1) {
+        scaleFactor = scaleFactor - 0.05
+      }
       commit('setSlideScaleFactor', { slide, scaleFactor })
+    }
+
+    const slideNg = getters.slideNg
+    if (slideNg != null) {
+      let scaleFactor = slideNg.scaleFactor
+      if (scaleFactor > 0.1) {
+        scaleFactor = scaleFactor - 0.05
+      }
+      commit('setSlideNgScaleFactor', { slideNg, scaleFactor })
     }
   },
   resetSlideScaleFactor ({ commit, getters }) {
     const slide = getters.slide
-    if (slide) {
+    if (slide != null) {
       commit('setSlideScaleFactor', { slide, scaleFactor: 1 })
+    }
+
+    const slideNg = getters.slideNg
+    if (slideNg != null) {
+      commit('setSlideNgScaleFactor', { slideNg, scaleFactor: 1 })
     }
   }
 }
@@ -266,6 +288,9 @@ const mutations = {
   },
   setSlideScaleFactor (state, { slide, scaleFactor }) {
     slide.scaleFactor = scaleFactor
+  },
+  setSlideNgScaleFactor (state, { slideNg, scaleFactor }) {
+    slideNg.scaleFactor = scaleFactor
   }
 }
 
