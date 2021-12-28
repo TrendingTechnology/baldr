@@ -6,7 +6,7 @@
 
 /* globals config */
 
-import './class-component'
+import './lib/class-component'
 
 import Vue from 'vue'
 
