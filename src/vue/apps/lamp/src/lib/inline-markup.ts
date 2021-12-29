@@ -96,10 +96,8 @@ export class Item {
 
 /**
  * Convert the inline markup into HTML.
- *
- * @param {@bldr/lamp/inline-markup~Item} item
  */
-export function render (item: Item) {
+export function render (item: Item): string | undefined {
   if (item.slide) {
     const slide = item.slide.replace(/^[a-z]+:/, '')
     let text
@@ -143,7 +141,7 @@ export function render (item: Item) {
  * This function has to be called on master slides containing inline
  * markup.
  */
-export function makeReactive () {
+export function makeReactive (): void {
   const elements = document.querySelectorAll('[b-inline-type]')
 
   for (const element of elements) {

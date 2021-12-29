@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable indent, no-undef */
 import Component from 'vue-class-component'
 
 import MasterMain from '../MasterMain.vue'

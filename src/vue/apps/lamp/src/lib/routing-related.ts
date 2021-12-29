@@ -211,6 +211,7 @@ async function loadPresentationByRoute (vm: typeof Vm, route: Route) {
   }
 }
 
+// eslint-disable-next-line
 async function actOnRouteChange (vm: any, route: Route) {
   await loadPresentationByRoute(vm, route)
   if (isSpeakerRoute(route)) {

@@ -1,4 +1,6 @@
 <script lang="ts">
+/* eslint-disable no-empty-pattern, @typescript-eslint/no-empty-function */
+
 import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 

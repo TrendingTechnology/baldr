@@ -15,6 +15,10 @@ import { router } from './router-setup'
 import vm from '../main'
 import { loadPresentation } from './routing-related'
 
+function logCatch (reason: unknown) {
+  console.log(reason)
+}
+
 /**
  * Toggle between the destination and the last route:
  *
@@ -26,11 +30,11 @@ function toggleLastRoute (routeNameTo: string): void {
     const lastRoute = store.getters['lamp/nav/lastRoute']
     if (lastRoute != null) {
       store.commit('lamp/nav/lastRoute', null)
-      router.push(lastRoute).catch(() => {})
+      router.push(lastRoute).catch(logCatch)
     }
   } else {
     store.commit('lamp/nav/lastRoute', router.currentRoute)
-    router.push({ name: routeNameTo }).catch(() => {})
+    router.push({ name: routeNameTo }).catch(logCatch)
   }
 }
 
@@ -65,7 +69,7 @@ function callOpenRestApi (
         ref: presentation.meta.ref,
         type: 'presentation'
       })
-      .catch(() => {})
+      .catch(logCatch)
   } else {
     api
       .openFileManager({
@@ -74,7 +78,7 @@ function callOpenRestApi (
         archive,
         create
       })
-      .catch(() => {})
+      .catch(logCatch)
   }
 }
 
@@ -148,10 +152,10 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
 
   // next
   if (direction === 1) {
-    store.dispatch('lamp/highlightCursorArrow', 'right').catch(() => {})
+    store.dispatch('lamp/highlightCursorArrow', 'right').catch(logCatch)
     // previous
   } else if (direction === -1) {
-    store.dispatch('lamp/highlightCursorArrow', 'left').catch(() => {})
+    store.dispatch('lamp/highlightCursorArrow', 'left').catch(logCatch)
   }
 
   if (params.slideNo != null) {
@@ -164,7 +168,7 @@ function goToNextSlideByDirection (direction: 1 | -1): void {
 
   const name = getNavRouteNameFromRoute(params, router.currentRoute)
 
-  router.push({ name, params }).catch(() => {})
+  router.push({ name, params }).catch(logCatch)
 }
 
 /**
@@ -200,13 +204,13 @@ function goToNextStepByDirection (direction: 1 | -1): void {
 
   // next
   if (direction === 1) {
-    store.dispatch('lamp/highlightCursorArrow', 'down').catch(() => {})
+    store.dispatch('lamp/highlightCursorArrow', 'down').catch(logCatch)
     // previous
   } else if (direction === -1) {
-    store.dispatch('lamp/highlightCursorArrow', 'up').catch(() => {})
+    store.dispatch('lamp/highlightCursorArrow', 'up').catch(logCatch)
   }
 
-  router.push({ name: 'slide-step-no', params }).catch(() => {})
+  router.push({ name: 'slide-step-no', params }).catch(logCatch)
 }
 
 /**
@@ -227,9 +231,9 @@ function goToNextSlideOrStepByDirection (direction: 1 | -1): void {
   // next
   if (direction === 1) {
     if (params.stepNo != null && params.stepNo !== 1) {
-      store.dispatch('lamp/highlightCursorArrow', 'down').catch(() => {})
+      store.dispatch('lamp/highlightCursorArrow', 'down').catch(logCatch)
     } else {
-      store.dispatch('lamp/highlightCursorArrow', 'right').catch(() => {})
+      store.dispatch('lamp/highlightCursorArrow', 'right').catch(logCatch)
     }
     // previous
   } else if (direction === -1) {
@@ -237,35 +241,35 @@ function goToNextSlideOrStepByDirection (direction: 1 | -1): void {
       params.stepNo != null &&
       params.stepNo !== store.getters['lamp/slide'].stepCount
     ) {
-      store.dispatch('lamp/highlightCursorArrow', 'up').catch(() => {})
+      store.dispatch('lamp/highlightCursorArrow', 'up').catch(logCatch)
     } else {
-      store.dispatch('lamp/highlightCursorArrow', 'left').catch(() => {})
+      store.dispatch('lamp/highlightCursorArrow', 'left').catch(logCatch)
     }
   }
 
-  router.push({ name, params }).catch(() => {})
+  router.push({ name, params }).catch(logCatch)
 }
 
 export function resetSlideScaleFactor (): void {
-  store.dispatch('lamp/resetSlideScaleFactor').catch(() => {})
+  store.dispatch('lamp/resetSlideScaleFactor').catch(logCatch)
 }
 
 export function increaseSlideScaleFactor (): void {
-  store.dispatch('lamp/increaseSlideScaleFactor').catch(() => {})
+  store.dispatch('lamp/increaseSlideScaleFactor').catch(logCatch)
 }
 
 export function decreaseSlideScaleFactor (): void {
-  store.dispatch('lamp/decreaseSlideScaleFactor').catch(() => {})
+  store.dispatch('lamp/decreaseSlideScaleFactor').catch(logCatch)
 }
 
 export function toggleSlides (): void {
-  store.dispatch('lamp/setSlideNoToOld').catch(() => {})
+  store.dispatch('lamp/setSlideNoToOld').catch(logCatch)
 }
 
 export async function update (): Promise<void> {
   try {
     const result = await api.updateMediaServer()
-    store.dispatch('lamp/titles/loadRootTreeList').catch(() => {})
+    store.dispatch('lamp/titles/loadRootTreeList').catch(logCatch)
     if (result.errors.length > 0) {
       for (const errorMsg of result.errors) {
         showMessage.error(errorMsg)
@@ -291,7 +295,7 @@ export function openMedia (): void {
   const slide = store.getters['lamp/slide']
   if (slide?.firstMediaUri != null) {
     const uri = slide.firstMediaUri.split(':')[1]
-    api.openEditor({ ref: uri, type: 'asset' }).catch(() => {})
+    api.openEditor({ ref: uri, type: 'asset' }).catch(logCatch)
   } else {
     showMessage.error('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
   }
@@ -325,7 +329,7 @@ export async function reloadPresentation (): Promise<void> {
 }
 
 export function toggleMetaDataOverlay (): void {
-  store.dispatch('lamp/toggleMetaDataOverlay').catch(() => {})
+  store.dispatch('lamp/toggleMetaDataOverlay').catch(logCatch)
 }
 
 /**
@@ -351,7 +355,7 @@ export function toggleSpeakerView (): void {
     name = 'slide-step-no'
   }
   if (name != null) {
-    router.push({ name, params: route.params }).catch(() => {})
+    router.push({ name, params: route.params }).catch(logCatch)
   }
 }
 
