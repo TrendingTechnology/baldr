@@ -1,5 +1,6 @@
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { VNode, CreateElement }  from 'vue'
+
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
@@ -32,7 +33,7 @@ export default class MasterRenderer extends Vue {
   })
   isPublic: boolean
 
-  render (createElement) {
+  render (createElement: CreateElement): VNode {
     if (this.slide.masterName) {
       const masterElement = createElement(
         `${this.slide.masterName}-master-main`,

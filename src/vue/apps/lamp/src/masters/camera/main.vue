@@ -209,7 +209,7 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  async mounted () {
+  async mounted (): Promise<void> {
     this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
     if (!this.labelDefaultCamera) {
       this.$store.commit('lamp/masters/camera/setCameraNotFound', true)

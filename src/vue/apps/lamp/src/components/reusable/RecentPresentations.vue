@@ -29,7 +29,7 @@ const { mapGetters, mapActions } = createNamespacedHelpers('lamp/recent')
   methods: mapActions(['readFromLocalStorage'])
 })
 export default class RecentPresentations extends Vue {
-  mounted () {
+  mounted (): void {
     if (!this.recent.length) {
       this.readFromLocalStorage()
     }

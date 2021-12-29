@@ -1,5 +1,5 @@
 describe('Increase and decrease font size', () => {
-  it('Increase', () => {
+  it('Shortcut to increase font size', () => {
     cy.visit('/#/presentation/EP_master_generic/slide/1')
     cy.contains('Lorem')
     cy.get('.vc_slide_view').should('have.css', 'font-size', '20px')
@@ -7,14 +7,14 @@ describe('Increase and decrease font size', () => {
     cy.get('.vc_slide_view').should('have.css', 'font-size', '21px')
   })
 
-  it('Decrease', () => {
+  it('Shortcut to dncrease font size', () => {
     cy.visit('/#/presentation/EP_master_generic/slide/1')
     cy.contains('Lorem')
     cy.get('body').type('{ctrl}3')
     cy.get('.vc_slide_view').should('have.css', 'font-size', '19px')
   })
 
-  it('Reset', () => {
+  it('Shortcut to reset font size', () => {
     cy.visit('/#/presentation/EP_master_generic/slide/1')
     cy.contains('Lorem')
     cy.get('body').type('{ctrl}2')

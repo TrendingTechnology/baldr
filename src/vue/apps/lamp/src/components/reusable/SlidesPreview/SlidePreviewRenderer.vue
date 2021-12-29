@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { VNode, CreateElement } from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
@@ -10,7 +10,7 @@ export default class SlidePreviewRenderer extends Vue {
   })
   slide: any
 
-  render (createElement) {
+  render (createElement: CreateElement): VNode {
     if (this.slide && this.slide.propsPreview) {
       return createElement(`${this.slide.master.name}-master-preview`, {
         props: this.slide.propsPreview,

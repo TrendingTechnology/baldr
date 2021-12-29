@@ -34,7 +34,7 @@ import DropDownMenu from '@/components/reusable/DropDownMenu.vue'
   }
 })
 export default class StartPage extends Vue {
-  mounted () {
+  mounted (): void {
     styleConfigurator.reset()
   }
 }

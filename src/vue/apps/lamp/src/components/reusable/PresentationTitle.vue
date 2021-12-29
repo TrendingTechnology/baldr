@@ -1,5 +1,5 @@
 <template>
-  <section class="vc_presentation_title" v-if="presentation">
+  <section class="vc_presentation_title" v-show="presentationNg">
     <titles-bread-crumbs
       v-if="parentDir"
       :rel-path="parentDir"
@@ -25,10 +25,9 @@ const { mapGetters } = createNamespacedHelpers('lamp')
   components: {
     TitlesBreadCrumbs
   },
-  computed: mapGetters(['presentation', 'presentationNg'])
+  computed: mapGetters(['presentationNg'])
 })
 export default class PresentationTitle extends Vue {
-  presentation!: any
   presentationNg!: Presentation
 
   get title (): string | undefined {
@@ -48,3 +47,11 @@ export default class PresentationTitle extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.vc_presentation_title {
+  h1 {
+    margin-top: 1em !important;
+  }
+}
+</style>

@@ -36,7 +36,7 @@ import { styleConfigurator } from '@bldr/style-configurator'
 import { receiveSocketMessage } from '../../remote-control.js'
 import * as actions from '../../lib/actions'
 
-const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
+const { mapActions } = createNamespacedHelpers('lamp')
 
 /**
  * Hide the mouse after x seconds of inactivity.
@@ -64,7 +64,6 @@ export function hideMouseAfterSec (seconds: number = 5): void {
 }
 
 @Component({
-  computed: mapGetters(['slide', 'presentation']),
   methods: mapActions([
     'setSlideNextOrPrevious',
     'setStepNextOrPrevious',
@@ -72,7 +71,7 @@ export function hideMouseAfterSec (seconds: number = 5): void {
   ])
 })
 export default class MainApp extends Vue {
-  mounted () {
+  mounted (): void {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
     // see preload.js
     if (window.api != null) {

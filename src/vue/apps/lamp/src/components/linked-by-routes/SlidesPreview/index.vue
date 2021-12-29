@@ -67,7 +67,7 @@ export default class SlidesPreview extends Vue {
   increaseSize: Function
   decreaseSize: Function
 
-  mounted () {
+  mounted (): void {
     this.$shortcuts.addMultiple([
       {
         keys: '+',
@@ -91,7 +91,7 @@ export default class SlidesPreview extends Vue {
     }
   }
 
-  destroyed () {
+  destroyed (): void {
     this.$shortcuts.removeMultiple(['+', '-'])
   }
 }
@@ -100,7 +100,7 @@ export default class SlidesPreview extends Vue {
 <style lang="scss">
 .vc_slides_preview {
   font-size: 1.5vmin;
-  padding: 1vw;
+  padding: 0 1vw;
 
   .vc_presentation_title {
     font-size: 2em;

@@ -1,31 +1,16 @@
 <template>
-  <ul
-    class="vc_titles_bread_crumbs"
-    v-if="rootTreeList"
-  >
-
+  <ul class="vc_titles_bread_crumbs" v-if="rootTreeList">
     <li>
-      <router-link
-        to="/titles"
-      >Alle Themen</router-link>
+      <router-link to="/titles">Alle Fächer</router-link>
     </li>
 
     <li>
       <span class="separator">/</span>
     </li>
 
-    <li
-      v-for="(segment, index) in segments"
-      :key="segment.relPath"
-    >
-      <router-link
-        :to="`/${segment.relPath}`"
-        v-html="segment.text"
-      />
-      <span
-        v-if="index < segments.length - 1"
-        class="separator"
-      >/</span>
+    <li v-for="(segment, index) in segments" :key="segment.relPath">
+      <router-link :to="`/${segment.relPath}`" v-html="segment.text" />
+      <span v-if="index < segments.length - 1" class="separator">/</span>
     </li>
   </ul>
 </template>
@@ -36,7 +21,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { createNamespacedHelpers } from 'vuex'
 
-import type { TitlesTypes } from '@bldr/type-definitions'
+import { TitlesTypes } from '@bldr/type-definitions'
 
 const mapLampGetters = createNamespacedHelpers('lamp').mapGetters
 const mapTitlesGetters = createNamespacedHelpers('lamp/titles').mapGetters
@@ -89,7 +74,7 @@ export default class TitlesBreadCrumbs extends Vue {
     return segments
   }
 
-  mounted () {
+  mounted (): void {
     if (this.rootTreeList == null) {
       this.$store.dispatch('lamp/titles/loadRootTreeList')
     }
@@ -98,7 +83,7 @@ export default class TitlesBreadCrumbs extends Vue {
 </script>
 
 <style lang="scss">
-ul.vc_titles_bread_crumbs {
+.vc_titles_bread_crumbs {
   padding-left: 0 !important;
 
   li {

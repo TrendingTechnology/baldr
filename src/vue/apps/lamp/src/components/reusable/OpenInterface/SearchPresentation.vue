@@ -37,7 +37,7 @@ export default class SearchPresentation extends Vue {
     })
   }
 
-  search (title: string) {
+  search (title: string): void {
     if (title == null) {
       return
     }
@@ -46,7 +46,7 @@ export default class SearchPresentation extends Vue {
     })
   }
 
-  mounted () {
+  mounted (): void {
     this.$dynamicSelect.focus()
   }
 }

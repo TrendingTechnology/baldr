@@ -41,11 +41,11 @@ export default class MetaDataOverlay extends Vue {
 
 <style lang="scss">
 .vc_meta_data_overlay {
-  position: absolute;
-  top: 0;
+  background: none !important;
   left: 5em;
   padding: 1em;
-  background: none !important;
+  position: absolute;
+  top: 0;
   z-index: 2;
 
   .transparent-bg {

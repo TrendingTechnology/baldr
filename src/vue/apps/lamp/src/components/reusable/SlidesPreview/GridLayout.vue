@@ -22,6 +22,8 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { createNamespacedHelpers } from 'vuex'
 
+import { Slide } from '@bldr/presentation-parser'
+
 import SlidePreview from './SlidePreview.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp/preview')
@@ -36,9 +38,9 @@ export default class GridLayout extends Vue {
   @Prop({
     type: Array
   })
-  slides: any
+  slides: Slide
 
-  get slideCurrent () {
+  get slideCurrent (): Slide {
     return this.$store.getters['lamp/slide']
   }
 }
