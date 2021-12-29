@@ -17,7 +17,7 @@ export default class ProgressBar extends PlayableBase {
   }
 
   updateProgress () {
-    if (this.$refs.elapsed == null || this.playable == null) {
+    if (this.$refs.elapsed == null) {
       return
     }
     this.$refs.elapsed.style.width = `${this.playable.progress * 100}%`

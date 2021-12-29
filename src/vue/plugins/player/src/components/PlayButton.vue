@@ -92,16 +92,13 @@ export default class PlayButton extends PlayableBase {
   }
 
   private setPlaybackStateFromPlayable (): void {
-    if (this.playable == null) {
-      return
-    }
     if (this.playbackState !== 'starting') {
       this.playbackState = this.playable.playbackState
     }
   }
 
   private updateProgress (): void {
-    if (!this.$refs.progress || this.playable == null) {
+    if (!this.$refs.progress) {
       return
     }
     this.setProgress(this.playable.progress)
@@ -133,9 +130,6 @@ export default class PlayButton extends PlayableBase {
   }
 
   unregisterEvents (): void {
-    if (this.playable == null) {
-      return
-    }
     this.playable.removeEventsListener(this.updateProgress)
     this.playable.removeEventsListener(this.updatePlaybackState)
   }
@@ -152,9 +146,6 @@ export default class PlayButton extends PlayableBase {
   }
 
   async actByStatus (): Promise<void> {
-    if (this.playable == null) {
-      return
-    }
     if (this.playable.playbackState !== 'stopped') {
       player.stop()
     } else {

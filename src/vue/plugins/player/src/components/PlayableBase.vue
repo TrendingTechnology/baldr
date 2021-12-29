@@ -16,16 +16,10 @@ export default class PlayableBase extends Vue {
   uri!: string
 
   get asset (): Asset | undefined {
-    if (this.playable == null) {
-      return
-    }
     return this.playable.sample.asset
   }
 
-  get playable (): Playable | undefined {
-    if (this.uri == null) {
-      return
-    }
+  get playable (): Playable {
     return player.getPlayable(this.uri)
   }
 
