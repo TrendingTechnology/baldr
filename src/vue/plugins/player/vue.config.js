@@ -1,6 +1,8 @@
 const path = require('path')
-const { getConfig } = require('@bldr/config')
 const { DefinePlugin } = require('webpack')
+
+const { createAliases } = require('@bldr/vue-config-helper')
+const { getConfig } = require('@bldr/config')
 
 function stylePath (themeName) {
   return path.join(
@@ -19,6 +21,9 @@ module.exports = {
     }
   },
   configureWebpack: {
+    resolve: {
+      alias: createAliases(['vue'], __dirname)
+    },
     plugins: [
       new DefinePlugin({
         config: JSON.stringify(config)

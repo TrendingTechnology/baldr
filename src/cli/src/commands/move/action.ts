@@ -1,4 +1,3 @@
-// Third party packages.
 import fs from 'fs'
 import path from 'path'
 import childProcess from 'child_process'

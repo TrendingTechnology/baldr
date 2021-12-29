@@ -7,12 +7,10 @@
  * @module @bldr/songbook-intermediate-files
  */
 
-// Node packages.
 import * as childProcess from 'child_process'
 import * as os from 'os'
 import * as path from 'path'
 
-// Third party packages.
 import * as fs from 'fs-extra'
 import glob from 'glob'
 

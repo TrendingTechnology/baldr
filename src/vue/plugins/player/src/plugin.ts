@@ -3,6 +3,7 @@ import _Vue from 'vue'
 import { Resolver } from '@bldr/media-resolver-ng'
 
 import { Player } from './player'
+
 import PlayButton from './components/plugin/PlayButton.vue'
 import MediaPlayer from './components/plugin/MediaPlayer.vue'
 

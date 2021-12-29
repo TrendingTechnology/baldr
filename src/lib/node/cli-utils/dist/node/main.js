@@ -37,10 +37,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommandRunner = void 0;
-// Node packages.
 const childProcess = __importStar(require("child_process"));
 const os_1 = __importDefault(require("os"));
-// Third party packages.
 const ora_1 = __importDefault(require("ora"));
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'

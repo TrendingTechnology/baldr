@@ -4,11 +4,9 @@
  * @module @bldr/songbook-intermediate-files/song
  */
 
-// Node packages.
 import * as path from 'path'
 import * as childProcess from 'child_process'
 
-// Third party packages.
 import * as fs from 'fs-extra'
 
 // Project packages.

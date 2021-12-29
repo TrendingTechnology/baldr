@@ -2,12 +2,10 @@
  * @module @bldr/wikidata
  */
 
-// Node packages.
 import * as fs from 'fs'
 import * as childProcess from 'child_process'
 import fetch from 'node-fetch'
 
-// Third party packages.
 import * as wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.

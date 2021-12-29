@@ -1,4 +1,3 @@
-// Node packages.
 import childProcess from 'child_process'
 import path from 'path'
 import fs from 'fs'

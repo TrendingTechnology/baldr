@@ -4,7 +4,6 @@
  * @module @bldr/open-with
  */
 
-// Node packages.
 import childProcess from 'child_process'
 import fs from 'fs'
 

@@ -5,14 +5,12 @@
  * @module @bldr/core-node
  */
 
-// Node packages.
 import childProcess from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import { URL } from 'url'
 
-// Third party packages.
 import git from 'git-rev-sync'
 import fetch from 'node-fetch'
 

@@ -36,10 +36,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createIconFont = exports.setLogLevel = void 0;
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
 const webfont_1 = __importDefault(require("webfont"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");

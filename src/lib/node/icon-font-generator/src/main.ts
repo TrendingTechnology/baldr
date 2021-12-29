@@ -5,11 +5,9 @@
 
 import { IconFontGeneratorTypes, Configuration } from '@bldr/type-definitions'
 
-// Node packages.
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
 import webfont from 'webfont'
 
 // Project packages.

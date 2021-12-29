@@ -46,7 +46,8 @@ import Component from 'vue-class-component'
 import { PlainIcon } from '@bldr/icons'
 
 import { player } from '../../plugin'
-import { Playable, PlaybackState } from '../../playable'
+import { PlaybackState } from '../../playable'
+
 import PlayableBase from './PlayableBase.vue'
 
 const circleRadius = 100
@@ -76,8 +77,7 @@ export default class PlayButton extends PlayableBase {
 
   data () {
     return {
-      playbackState: 'stopped',
-      htmlElement: null
+      playbackState: 'stopped'
     }
   }
 
@@ -97,14 +97,14 @@ export default class PlayButton extends PlayableBase {
     }
   }
 
-  private updateProgress (playable: Playable) {
+  private updateProgress (): void {
     if (!this.$refs.progress) {
       return
     }
     this.setProgress(this.playable.progress)
   }
 
-  private updatePlaybackState (playbackState: PlaybackState) {
+  private updatePlaybackState (playbackState: PlaybackState): void {
     this.playbackState = playbackState
   }
 
@@ -129,7 +129,7 @@ export default class PlayButton extends PlayableBase {
     this.playable.registerPlaybackChangeListener(this.updatePlaybackState)
   }
 
-  unregisterEvents () {
+  unregisterEvents (): void {
     this.playable.removeEventsListener(this.updateProgress)
     this.playable.removeEventsListener(this.updatePlaybackState)
   }

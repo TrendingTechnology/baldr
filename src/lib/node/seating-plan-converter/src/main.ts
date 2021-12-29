@@ -2,10 +2,8 @@
  * @module @bldr/seating-plan-converter
  */
 
-// Node packages.
 import fs from 'fs'
 
-// Third party packages.
 import csv from 'csv-parser'
 
 // Project packages.

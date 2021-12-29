@@ -19,13 +19,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.copyToTmp = exports.createTmpDir = exports.getTmpDirPath = exports.getBasename = exports.findParentFile = exports.untildify = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = void 0;
-// Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 const os_1 = __importDefault(require("os"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
-// Third party packages.
 const git_rev_sync_1 = __importDefault(require("git-rev-sync"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 /**

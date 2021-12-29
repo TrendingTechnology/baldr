@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");

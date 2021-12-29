@@ -30,7 +30,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");

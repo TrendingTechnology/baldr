@@ -1,4 +1,3 @@
-// Node packages.
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'

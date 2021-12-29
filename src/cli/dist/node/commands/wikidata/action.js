@@ -30,7 +30,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.

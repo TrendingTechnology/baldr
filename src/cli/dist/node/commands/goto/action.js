@@ -21,7 +21,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
 // Project packages.

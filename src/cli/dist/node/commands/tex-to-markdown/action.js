@@ -31,9 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
-// Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");

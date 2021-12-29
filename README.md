@@ -97,10 +97,8 @@ The Baldr project follows the [standardJS](https://standardjs.com/) style guides
 #### Node packages
 
 ```js
-// Node packages.
 const path = require('path')
 
-// Third party packages.
 const jquery = require('jquery')
 
 // Project packages.

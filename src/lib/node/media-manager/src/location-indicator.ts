@@ -2,7 +2,6 @@
  * @module @bldr/media-manager/location-indicator
  */
 
-// Node packages.
 import path from 'path'
 import fs from 'fs'
 

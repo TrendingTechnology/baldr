@@ -13,11 +13,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.query = exports.mergeData = exports.fetchCommonsFile = void 0;
-// Node packages.
 const fs = require("fs");
 const childProcess = require("child_process");
 const node_fetch_1 = require("node-fetch");
-// Third party packages.
 const wikibaseSdk = require("wikibase-sdk");
 // Project packages.
 const core_node_1 = require("@bldr/core-node");

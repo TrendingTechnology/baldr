@@ -1,11 +1,8 @@
-// Node packages.
 const os = require('os')
 const path = require('path')
 
-// Third party packages.
 const { DefinePlugin } = require('webpack')
 
-// Project packages
 const { gitHead } = require('@bldr/core-node')
 
 const { getConfig } = require('@bldr/config')

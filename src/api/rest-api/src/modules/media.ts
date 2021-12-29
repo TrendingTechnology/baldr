@@ -1,4 +1,3 @@
-// Third party packages.
 import express from 'express'
 
 import { validateMediaType } from '../utils'

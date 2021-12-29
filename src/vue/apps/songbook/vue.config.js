@@ -1,8 +1,6 @@
-// Node packages.
 const os = require('os')
 const path = require('path')
 
-// Third party packages.
 const CopyPlugin = require('copy-webpack-plugin')
 const { DefinePlugin } = require('webpack')
 

@@ -1,4 +1,3 @@
-// Node packages.
 import fs from 'fs'
 
 // Project packages.

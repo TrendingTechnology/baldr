@@ -1,4 +1,3 @@
-// Node packages.
 import path from 'path'
 
 // Project packages.

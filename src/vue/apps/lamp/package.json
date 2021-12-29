@@ -58,6 +58,9 @@
   },
   "devDependencies": {
     "@bldr/core-node": "*",
+    "@bldr/http-request": "*",
+    "@bldr/log": "*",
+    "@bldr/vue-config-helper": "*",
     "@types/electron-devtools-installer": "2.2.0",
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
@@ -87,9 +90,7 @@
     "vue-cli-plugin-style-resources-loader": "0.1.4",
     "vue-file-toolbar-menu": "1.1.3",
     "vue-template-compiler": "2.6.11",
-    "webpack-bundle-analyzer": "4.5.0",
-    "@bldr/http-request": "*",
-    "@bldr/log": "*"
+    "webpack-bundle-analyzer": "4.5.0"
   },
   "eslintConfig": {
     "root": true,

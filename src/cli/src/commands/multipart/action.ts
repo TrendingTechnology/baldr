@@ -1,7 +1,5 @@
-// Node packages.
 import fs from 'fs'
 
-// Third party packages.
 import glob from 'glob'
 
 // Project packages.

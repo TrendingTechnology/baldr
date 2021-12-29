@@ -1,4 +1,3 @@
-// Node packages.
 const path = require('path')
 
 function stylePath (themeName) {

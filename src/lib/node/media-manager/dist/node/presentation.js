@@ -32,7 +32,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateAutomaticPresentation = exports.normalizePresentationFile = void 0;
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // Project packages.

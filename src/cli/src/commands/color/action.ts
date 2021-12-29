@@ -1,4 +1,3 @@
-// Third party packages.
 import Color from 'color'
 
 import * as log from '@bldr/log'

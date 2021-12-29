@@ -22,7 +22,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.process = exports.searchUnknownProps = exports.mergeNames = exports.formatFilePath = exports.detectCategoryByPath = void 0;
-// Node packages.
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const core_browser_1 = require("@bldr/core-browser");

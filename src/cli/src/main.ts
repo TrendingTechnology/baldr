@@ -1,10 +1,8 @@
 #! /usr/bin/env node
 
-// Node packages.
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
 import { Command } from 'commander'
 
 // Project packages.

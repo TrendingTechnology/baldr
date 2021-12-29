@@ -25,10 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntermediateSong = exports.ExtendedSong = void 0;
-// Node packages.
 const path = __importStar(require("path"));
 const childProcess = __importStar(require("child_process"));
-// Third party packages.
 const fs = __importStar(require("fs-extra"));
 // Project packages.
 const songbook_core_1 = require("@bldr/songbook-core");

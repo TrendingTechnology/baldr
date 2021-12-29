@@ -4,11 +4,9 @@
  * @module @bldr/cli-utils
  */
 
-// Node packages.
 import * as childProcess from 'child_process'
 import os from 'os'
 
-// Third party packages.
 import ora from 'ora'
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'

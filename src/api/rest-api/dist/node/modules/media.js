@@ -58,7 +58,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Third party packages.
 var express_1 = __importDefault(require("express"));
 var utils_1 = require("../utils");
 var open_file_manager_1 = __importDefault(require("../operations/open-file-manager"));

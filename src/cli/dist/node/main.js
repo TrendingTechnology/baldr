@@ -33,10 +33,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateDefintion = exports.collectAllOpts = void 0;
-// Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
 const commander_1 = require("commander");
 // Project packages.
 const core_node_1 = require("@bldr/core-node");

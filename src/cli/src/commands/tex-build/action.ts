@@ -1,8 +1,6 @@
-// Node packages.
 import path from 'path'
 import childProcess from 'child_process'
 
-// Third party packages.
 import chalk from 'chalk'
 
 // Project packages.

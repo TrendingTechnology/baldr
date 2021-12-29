@@ -31,11 +31,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntermediateLibrary = exports.PianoScore = void 0;
-// Node packages.
 const childProcess = __importStar(require("child_process"));
 const os = __importStar(require("os"));
 const path = __importStar(require("path"));
-// Third party packages.
 const fs = __importStar(require("fs-extra"));
 const glob_1 = __importDefault(require("glob"));
 // Project packages.

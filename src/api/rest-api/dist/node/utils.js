@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAbsPathFromRef = exports.validateMediaType = void 0;
-// Node packages.
 var path_1 = __importDefault(require("path"));
 // Project packages.
 var config_1 = require("@bldr/config");

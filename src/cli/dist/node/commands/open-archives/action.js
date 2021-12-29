@@ -21,7 +21,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// Node packages.
 const path_1 = __importDefault(require("path"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");

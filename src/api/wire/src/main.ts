@@ -10,7 +10,6 @@
  * @module @bldr/wire
  */
 
-// Third party packages.
 import WebSocket from 'ws'
 
 // Globals.
