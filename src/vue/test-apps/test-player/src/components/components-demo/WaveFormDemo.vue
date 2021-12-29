@@ -11,7 +11,7 @@ import Component from 'vue-class-component'
 
 import { player, Playable, WaveForm } from '@bldr/player'
 
-import { resolver } from '../app'
+import { resolver } from '../../app'
 
 @Component({ components: { WaveForm } })
 export default class ComponentWaveFormDemo extends Vue {

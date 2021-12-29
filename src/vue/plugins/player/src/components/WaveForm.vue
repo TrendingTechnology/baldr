@@ -17,7 +17,7 @@ export default class WaveForm extends PlayableBase {
     waveformImg: HTMLElement
   }
 
-  updateProgress () {
+  updateProgress (): void {
     if (this.$refs.waveformImg == null) {
       return
     }
@@ -33,14 +33,14 @@ export default class WaveForm extends PlayableBase {
     div.style.marginTop = `${img.offsetTop}px`
   }
 
-  seek (event: MouseEvent) {
+  seek (event: MouseEvent): void {
     if (this.playable != null) {
       this.playable.progress =
         event.offsetX / this.$refs.waveformImg.clientWidth
     }
   }
 
-  registerEvents () {
+  registerEvents (): void {
     this.$nextTick(() => {
       if (this.$refs.waveformImg != null) {
         this.$refs.waveformImg.addEventListener('click', this.seek)

@@ -5,9 +5,9 @@ import { Resolver } from '@bldr/media-resolver-ng'
 import { Player } from './player'
 
 import MediaPlayer from './components/MediaPlayer.vue'
-export { default as MediaPlayer } from './components/MediaPlayer.vue'
 
 import PlayButton from './components/PlayButton.vue'
+export { default as MediaPlayer } from './components/MediaPlayer.vue'
 export { default as PlayButton } from './components/PlayButton.vue'
 
 export { default as ProgressBar } from './components/ProgressBar.vue'

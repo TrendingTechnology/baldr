@@ -16,14 +16,14 @@ export default class ProgressBar extends PlayableBase {
     elapsed: HTMLElement
   }
 
-  updateProgress () {
+  updateProgress (): void {
     if (this.$refs.elapsed == null) {
       return
     }
     this.$refs.elapsed.style.width = `${this.playable.progress * 100}%`
   }
 
-  seek (event: MouseEvent) {
+  seek (event: MouseEvent): void {
     if (this.playable != null) {
       this.playable.progress = event.offsetX / this.$refs.progress.clientWidth
     }

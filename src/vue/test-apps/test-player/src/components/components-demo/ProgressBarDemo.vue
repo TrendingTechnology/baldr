@@ -11,7 +11,7 @@ import Component from 'vue-class-component'
 
 import { player, Playable, ProgressBar } from '@bldr/player'
 
-import { resolver } from '../app'
+import { resolver } from '../../app'
 
 @Component({ components: { ProgressBar } })
 export default class ComponentProgressBarDemo extends Vue {

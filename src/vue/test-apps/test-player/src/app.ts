@@ -5,12 +5,12 @@ import { Resolver } from '@bldr/media-resolver-ng'
 import Player from '@bldr/player'
 
 import App from '@/components/App.vue'
-import ClassPlayableDemo from '@/components/ClassPlayableDemo.vue'
-import ClassPlayerDemo from '@/components/ClassPlayerDemo.vue'
-import ComponentMediaPlayerDemo from '@/components/ComponentMediaPlayerDemo.vue'
-import ComponentPlayButtonDemo from '@/components/ComponentPlayButtonDemo.vue'
-import ComponentProgressBarDemo from '@/components/ComponentProgressBarDemo.vue'
-import ComponentWaveFormDemo from '@/components/ComponentWaveFormDemo.vue'
+import ClassPlayableDemo from '@/components/classes-demo/PlayableDemo.vue'
+import ClassPlayerDemo from '@/components/classes-demo/PlayerDemo.vue'
+import ComponentMediaPlayerDemo from '@/components/components-demo/MediaPlayerDemo.vue'
+import ComponentPlayButtonDemo from '@/components/components-demo/PlayButtonDemo.vue'
+import ComponentProgressBarDemo from '@/components/components-demo/ProgressBarDemo.vue'
+import ComponentWaveFormDemo from '@/components/components-demo/WaveFormDemo.vue'
 
 Vue.config.productionTip = false
 

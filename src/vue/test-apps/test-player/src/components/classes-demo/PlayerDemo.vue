@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>ComponentMediaPlayerDemo</h1>
+    <h1>ClassPlayerDemo</h1>
+    <h2>Stückauswahl</h2>
 
     <button @click="player.start('uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64')">
       ref:Du-bist-als-Kind-zu-heiss-gebadet-worden
@@ -14,13 +15,14 @@
       ref:Mein-kleiner-gruener-Kaktus
     </button>
 
-    <h2>MediaPlayer Instanz 1</h2>
+    <h2>Steuerung</h2>
 
-    <media-player-ng></media-player-ng>
-
-    <h2>MediaPlayer Instanz 2</h2>
-
-    <media-player-ng></media-player-ng>
+    <button @click="player.start()">start</button>
+    <button @click="player.stop()">stop</button>
+    <button @click="player.toggle()">toggle</button>
+    <button @click="player.pause()">pause</button>
+    <button @click="player.backward()">backward</button>
+    <button @click="player.forward()">forward</button>
   </div>
 </template>
 
@@ -30,10 +32,10 @@ import Component from 'vue-class-component'
 
 import { player } from '@bldr/player'
 
-import { resolver } from '../app'
+import { resolver } from '../../app'
 
 @Component
-export default class ComponentMediaPlayerDemo extends Vue {
+export default class ClassPlayerDemo extends Vue {
   get player () {
     return player
   }
@@ -48,11 +50,14 @@ export default class ComponentMediaPlayerDemo extends Vue {
     // ref:Mein-kleiner-gruener-Kaktus
     // uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e
 
+    const uri = 'uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e'
     await resolver.resolve([
       'uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64',
       'uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a',
       'uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e'
     ])
+    player.load(uri)
+    await player.start()
   }
 }
 </script>

@@ -30,7 +30,7 @@ import Component from 'vue-class-component'
 
 import { player, Playable } from '@bldr/player'
 
-import { resolver } from '../app'
+import { resolver } from '../../app'
 
 @Component
 export default class ComponentPlayButtonDemo extends Vue {

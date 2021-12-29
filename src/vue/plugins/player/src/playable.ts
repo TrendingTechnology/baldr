@@ -145,7 +145,7 @@ export class Playable {
       fadeInSec = fadeInDuration
     }
 
-    return await new Promise(async (resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
       this.intervalExecutor.clear()
@@ -157,23 +157,24 @@ export class Playable {
           this.triggerTimeUpdateListener()
         }, TIME_UPDATE_INTERVAL)
       }
-      await this.htmlElement.play()
-      // Normally 0.01 by volume = 1
-      const steps = targetVolume / 100
-      // Interval: every X ms increase volume by step
-      // in milliseconds: duration * 1000 / 100
-      const stepInterval = fadeInSec * 10
-      this.intervalExecutor.set(() => {
-        actualVolume += steps
-        if (actualVolume <= targetVolume) {
-          this.volume = actualVolume
-        } else {
-          this.intervalExecutor.clear()
-          this.volume = targetVolume
-          this.playbackState = 'playing'
-          resolve()
-        }
-      }, stepInterval)
+      this.htmlElement.play().then(() => {
+        // Normally 0.01 by volume = 1
+        const steps = targetVolume / 100
+        // Interval: every X ms increase volume by step
+        // in milliseconds: duration * 1000 / 100
+        const stepInterval = fadeInSec * 10
+        this.intervalExecutor.set(() => {
+          actualVolume += steps
+          if (actualVolume <= targetVolume) {
+            this.volume = actualVolume
+          } else {
+            this.intervalExecutor.clear()
+            this.volume = targetVolume
+            this.playbackState = 'playing'
+            resolve()
+          }
+        }, stepInterval)
+      }, () => {})
     })
   }
 
