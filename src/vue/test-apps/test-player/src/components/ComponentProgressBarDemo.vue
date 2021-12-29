@@ -1,7 +1,7 @@
 <template>
-  <div class="vc_component_wave_form_demo">
-    <h1>ComponentWaveFormDemo</h1>
-    <wave-form :playable="playable"></wave-form>
+  <div class="vc_component_progress_bar_demo">
+    <h1>ComponentProgressBarDemo</h1>
+    <progress-bar :playable="playable"></progress-bar>
   </div>
 </template>
 
@@ -9,14 +9,12 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { resolver } from '../../app'
-import { player } from '../../plugin'
-import { Playable } from '../../playable'
+import { player, Playable, ProgressBar } from '@bldr/player'
 
-import WaveForm from '../plugin/WaveForm.vue'
+import { resolver } from '../app'
 
-@Component({ components: { WaveForm } })
-export default class ComponentWaveFormDemo extends Vue {
+@Component({ components: { ProgressBar } })
+export default class ComponentProgressBarDemo extends Vue {
   playable!: Playable
 
   data () {
@@ -35,9 +33,3 @@ export default class ComponentWaveFormDemo extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.vc_component_wave_form_demo {
-  background-color: $yellow;
-}
-</style>

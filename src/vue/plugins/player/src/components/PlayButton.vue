@@ -45,8 +45,8 @@ import Component from 'vue-class-component'
 
 import { PlainIcon } from '@bldr/icons'
 
-import { player } from '../../plugin'
-import { PlaybackState } from '../../playable'
+import { player } from '../plugin'
+import { PlaybackState } from '../playable'
 
 import PlayableBase from './PlayableBase.vue'
 

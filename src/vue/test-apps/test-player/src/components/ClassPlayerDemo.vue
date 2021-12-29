@@ -30,8 +30,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { resolver } from '../../app'
-import { player } from '../../plugin'
+import { player } from '@bldr/player'
+
+import { resolver } from '../app'
 
 @Component
 export default class ClassPlayerDemo extends Vue {

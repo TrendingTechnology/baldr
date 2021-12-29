@@ -44,9 +44,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { resolver } from '../../app'
-import { player } from '../../plugin'
-import { Playable } from '../../playable'
+import { player, Playable } from '@bldr/player'
+
+import { resolver } from '../app'
 
 function setTextContent (
   element: Vue | Element | Vue[] | Element[],

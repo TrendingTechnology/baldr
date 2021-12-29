@@ -35,9 +35,11 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import { Sample, Asset } from '@bldr/media-resolver-ng'
+
+import { player } from '../plugin'
+import { Playable } from '../playable'
+
 import ProgressBar from './ProgressBar.vue'
-import { player } from '../../plugin'
-import { Playable } from '../../playable'
 
 @Component({
   components: {

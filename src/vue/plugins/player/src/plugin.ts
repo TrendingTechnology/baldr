@@ -4,8 +4,16 @@ import { Resolver } from '@bldr/media-resolver-ng'
 
 import { Player } from './player'
 
-import PlayButton from './components/plugin/PlayButton.vue'
-import MediaPlayer from './components/plugin/MediaPlayer.vue'
+import MediaPlayer from './components/MediaPlayer.vue'
+export { default as MediaPlayer } from './components/MediaPlayer.vue'
+
+import PlayButton from './components/PlayButton.vue'
+export { default as PlayButton } from './components/PlayButton.vue'
+
+export { default as ProgressBar } from './components/ProgressBar.vue'
+export { default as WaveForm } from './components/WaveForm.vue'
+
+export { Playable } from './playable'
 
 export let player: Player
 

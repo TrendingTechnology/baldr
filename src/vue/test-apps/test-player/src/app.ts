@@ -2,16 +2,15 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
 import { Resolver } from '@bldr/media-resolver-ng'
+import Player from '@bldr/player'
 
-import App from '@/components/app/App.vue'
-import ClassPlayableDemo from '@/components/app/ClassPlayableDemo.vue'
-import ClassPlayerDemo from '@/components/app/ClassPlayerDemo.vue'
-import ComponentMediaPlayerDemo from '@/components/app/ComponentMediaPlayerDemo.vue'
-import ComponentPlayButtonDemo from '@/components/app/ComponentPlayButtonDemo.vue'
-import ComponentProgressBarDemo from '@/components/app/ComponentProgressBarDemo.vue'
-import ComponentWaveFormDemo from '@/components/app/ComponentWaveFormDemo.vue'
-
-import Plugin from './plugin'
+import App from '@/components/App.vue'
+import ClassPlayableDemo from '@/components/ClassPlayableDemo.vue'
+import ClassPlayerDemo from '@/components/ClassPlayerDemo.vue'
+import ComponentMediaPlayerDemo from '@/components/ComponentMediaPlayerDemo.vue'
+import ComponentPlayButtonDemo from '@/components/ComponentPlayButtonDemo.vue'
+import ComponentProgressBarDemo from '@/components/ComponentProgressBarDemo.vue'
+import ComponentWaveFormDemo from '@/components/ComponentWaveFormDemo.vue'
 
 Vue.config.productionTip = false
 
@@ -56,7 +55,7 @@ const router = new VueRouter({
 
 export const resolver = new Resolver()
 
-Vue.use(Plugin, resolver)
+Vue.use(Player, resolver)
 
 new Vue({
   router,

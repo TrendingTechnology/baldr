@@ -8,6 +8,7 @@
     "src/cli",
     "src/masters/*",
     "src/vue/apps/*",
+    "src/vue/test-apps/*",
     "src/vue/plugins/*"
   ],
   "version": "independent",

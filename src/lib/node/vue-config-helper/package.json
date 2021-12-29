@@ -25,6 +25,9 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "dist/main.js",
+  "dependencies": {
+    "@bldr/themes": "*"
+  },
   "devDependencies": {
     "@types/node": "14.14.7"
   }

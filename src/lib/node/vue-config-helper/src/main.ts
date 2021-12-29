@@ -44,3 +44,27 @@ export function createAliases (
 
   return aliases
 }
+
+function stylePath (themeName: 'default' | 'handwriting'): string {
+  return path.join(
+    path.dirname(require.resolve('@bldr/themes')),
+    `${themeName}.scss`
+  )
+}
+
+/**
+ * ```js
+ * pluginOptions: {
+ *   'style-resources-loader': {
+ *     preProcessor: 'scss',
+ *     patterns: [
+ *       '.../baldr/src/vue/plugins/themes/src/default.scss',
+ *       '../baldr/src/vue/plugins/themes/src/handwriting.scss'
+ *     ]
+ *   }
+ * }
+ * ```
+ */
+export function getStylePaths (): string[] {
+  return [stylePath('default'), stylePath('handwriting')]
+}

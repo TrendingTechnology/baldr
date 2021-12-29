@@ -4,7 +4,7 @@ import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/media-resolver-ng'
-import { Playable } from '../../playable'
+import { Playable } from '../playable'
 
 @Component
 export default class PlayableBase extends Vue {

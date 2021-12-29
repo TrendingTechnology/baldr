@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { createAliases } = require('@bldr/vue-config-helper')
+const { createAliases, getStylePaths } = require('@bldr/vue-config-helper')
 
 const { DefinePlugin } = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -13,13 +13,6 @@ const packageJson = require('./package.json')
 const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
-
-function stylePath (themeName) {
-  return path.join(
-    path.dirname(require.resolve('@bldr/themes')),
-    `${themeName}.scss`
-  )
-}
 
 function readExamples () {
   function getBaseName (filePath) {
@@ -102,7 +95,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [stylePath('default'), stylePath('handwriting')]
+      patterns: getStylePaths()
     },
     electronBuilder: {
       preload: 'src/preload.js',
