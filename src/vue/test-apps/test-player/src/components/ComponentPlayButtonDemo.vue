@@ -4,19 +4,19 @@
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor
-    <play-button-ng :playable="gate" />
+    <play-button-ng :uri="gate" />
     Kapelle
-    <play-button-ng :playable="chapel" />
+    <play-button-ng :uri="chapel" />
     Glocken
-    <play-button-ng :playable="chimes" />
+    <play-button-ng :uri="chimes" />
     Menschen laufen durch das Tor
-    <play-button-ng :playable="people" />
+    <play-button-ng :uri="people" />
 
     <h2>Zwei mal das gleiche Sample</h2>
     Glocken
-    <play-button-ng :playable="chimes" />
+    <play-button-ng :uri="chimes" />
     Glocken
-    <play-button-ng v-if="!isOnePlayButtonVisible" :playable="chimes" />
+    <play-button-ng v-if="!isOnePlayButtonVisible" :uri="chimes" />
 
     <p>
       <button @click="hideOnePlayButton()">Verberge PlayButton</button>
@@ -28,25 +28,22 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { player, Playable } from '@bldr/player'
-
 import { resolver } from '../app'
+
+    const uri = 'uuid:702ba259-349a-459f-bc58-cf1b0da37263'
+
 
 @Component
 export default class ComponentPlayButtonDemo extends Vue {
   isOnePlayButtonVisible!: boolean
-  gate!: Playable
-  chapel!: Playable
-  chimes!: Playable
-  people!: Playable
+  gate = uri + '#tor'
+  chapel = uri + '#kapelle'
+  chimes = uri + '#glocken'
+  people = uri + '#menschen'
 
   data () {
     return {
-      isOnePlayButtonVisible: false,
-      gate: undefined,
-      chapel: undefined,
-      chimes: undefined,
-      people: undefined
+      isOnePlayButtonVisible: false
     }
   }
 
@@ -60,10 +57,6 @@ export default class ComponentPlayButtonDemo extends Vue {
     // uuid:702ba259-349a-459f-bc58-cf1b0da37263
     const uri = 'uuid:702ba259-349a-459f-bc58-cf1b0da37263'
     await resolver.resolve(uri)
-    this.gate = player.getPlayable(uri + '#tor')
-    this.chapel = player.getPlayable(uri + '#kapelle')
-    this.chimes = player.getPlayable(uri + '#glocken')
-    this.people = player.getPlayable(uri + '#menschen')
   }
 
   hideOnePlayButton (): void {
