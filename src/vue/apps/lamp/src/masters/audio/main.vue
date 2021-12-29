@@ -9,9 +9,11 @@
     <p class="title piece" v-if="title" v-html="title" />
     <p class="artist person" v-if="artist" v-html="artist" />
 
-    <wave-form :sample="sample" />
+    <wave-form-ng :playable="playable" />
+    <!-- <wave-form :sample="sample" /> -->
 
-    <play-button class="left-bottom-corner" :sample="sample" />
+    <play-button-ng class="left-bottom-corner" :playable="playable" />
+    <!-- <play-button class="left-bottom-corner" :sample="sample" /> -->
     <external-sites :asset="mediaAsset" />
   </div>
 </template>
@@ -21,6 +23,8 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { media } from '@bldr/media-client'
+import { player, Playable } from '@bldr/player'
+import { Sample, Asset } from '@bldr/presentation-parser'
 
 import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
@@ -41,12 +45,12 @@ export default class AudioMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  sample: any
+  sample: Sample
 
   @Prop({
     type: Object
   })
-  mediaAsset: any
+  mediaAsset: Asset
 
   @Prop({
     type: String,
@@ -74,7 +78,11 @@ export default class AudioMasterMain extends MasterMain {
   })
   description: string
 
-  async afterSlideNoChange () {
+  get playable (): Playable {
+    return player.getPlayable(this.slide.props.src)
+  }
+
+  async afterSlideNoChange (): Promise<void> {
     if (!this.isPublic) {
       return
     }

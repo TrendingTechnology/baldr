@@ -6,7 +6,7 @@ import MasterMain from './MasterMain.vue'
 
 @Component
 export default class MasterMainWithStepController extends MasterMain {
-  data () {
+  data (): { stepController: StepController } {
     return { stepController: null }
   }
 

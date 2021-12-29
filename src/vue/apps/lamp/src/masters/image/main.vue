@@ -65,17 +65,17 @@ export default class ImageMasterMain extends MasterMain {
 
   showLongDescription: boolean
 
-  data () {
+  data (): { showLongDescription: boolean } {
     return {
       showLongDescription: false
     }
   }
 
-  toggleDescription () {
+  toggleDescription (): void {
     this.showLongDescription = !this.showLongDescription
   }
 
-  afterSlideNoChange () {
+  afterSlideNoChange (): void {
     // This variable indicates if in the prop description is a lot of text.
     let lotOfText = false
     if (
@@ -85,7 +85,7 @@ export default class ImageMasterMain extends MasterMain {
       lotOfText = true
     }
 
-    function resetMetadataStyle (metaStyle) {
+    function resetMetadataStyle (metaStyle: CSSStyleDeclaration): void {
       metaStyle.width = null
       if (!lotOfText) {
         metaStyle.fontSize = null

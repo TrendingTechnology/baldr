@@ -41,7 +41,7 @@ export default class DocumentMasterPreview extends MasterPreview {
   })
   page: number
 
-  get pageComputed () {
+  get pageComputed (): number {
     if (this.page != null) {
       return this.page
     }

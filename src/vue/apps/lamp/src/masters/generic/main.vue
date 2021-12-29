@@ -28,13 +28,6 @@ export default class GenericMasterMain extends MasterMain {
   })
   charactersOnSlide: number
 
-  data () {
-    return {
-      steps: null,
-      domSteps: null
-    }
-  }
-
   get markupCurrent (): string {
     if (this.navigationNumbers.stepNo) {
       return this.markup[this.navigationNumbers.stepNo - 1]

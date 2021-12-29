@@ -18,6 +18,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { WrappedUriList } from '@bldr/presentation-parser'
+
 import MasterMain from '../MasterMain.vue'
 
 @Component
@@ -29,12 +31,11 @@ export default class SampleListMasterMain extends MasterMain {
   })
   heading: string
 
-  // WrappedSampleList
   @Prop({
     type: Object,
     required: true
   })
-  samples: any
+  samples: WrappedUriList
 
   @Prop({
     type: Boolean

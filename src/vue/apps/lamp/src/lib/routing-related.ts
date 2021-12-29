@@ -117,7 +117,7 @@ function isSpeakerRoute (route: Route): boolean {
  */
 export function switchRouterView (route: Route): Route | undefined {
   if (route.name == null) return
-  const newRoute: any = {}
+  const newRoute: Partial<Route> = {}
   newRoute.name = counterParts[route.name]
   newRoute.params = Object.assign({}, route.params)
   newRoute.query = Object.assign({}, route.query)
@@ -153,8 +153,8 @@ function getRawYamlExampleByRef (ref: string): string | undefined {
 export async function loadPresentation (
   vm: typeof Vm,
   ref: string,
-  reload: boolean = false
-) {
+  reload = false
+): Promise<void> {
   if (!reload) {
     media.player.stop()
 

@@ -41,7 +41,7 @@ export interface OldAndNewPropsAndSlide {
   newProps: StringIndexedData
 }
 
-export interface OldAndNewSlideNos {
+export interface OldNewSlideNos {
   oldSlideNo?: number
   newSlideNo: number
 }
@@ -51,7 +51,7 @@ export interface OldAndNewStepNo {
   newStepNo: number
 }
 
-export interface OldAndNewStepNoAndSlideNoChange extends OldAndNewStepNo {
+export interface OldNewStepSlideNos extends OldAndNewStepNo {
   slideNoChange: boolean
 }
 

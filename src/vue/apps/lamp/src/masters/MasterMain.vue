@@ -3,6 +3,7 @@ import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import { LampTypes } from '@bldr/type-definitions'
+import { Slide } from '@bldr/presentation-parser'
 
 import inlineMarkup from '../lib/inline-markup'
 import { customStore } from '../main'
@@ -22,7 +23,7 @@ export default class MasterMain extends Master {
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
 
   /**
    * The properties `slideNo` and `stepNo` had to be bundled into one
@@ -83,19 +84,23 @@ export default class MasterMain extends Master {
    * changed.
    *
    * ```js
-   * afterSlideNoChange ({ oldSlideNo, newSlideNo }) {
+   * import { LampTypes } from '@bldr/type-definitions'
+   *
+   * afterSlideNoChange ({ oldSlideNo, newSlideNo }: LampTypes.OldNewSlideNos): void {
    *   const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
    * }
    * ```
    */
-  afterSlideNoChange (payload: LampTypes.OldAndNewSlideNos) {}
+  afterSlideNoChange ({}: LampTypes.OldNewSlideNos): void {}
 
   /**
    * This hook is executed on the component after the step number has
    * changed.
    *
    * ```js
-   * afterStepNoChange ({ oldStepNo, newStepNo, slideNoChange }) {
+   * import { LampTypes } from '@bldr/type-definitions'
+   *
+   * afterStepNoChange ({ oldStepNo, newStepNo, slideNoChange }: LampTypes.OldNewStepSlideNos): void {
    *   if (newStepNo === 1) {
    *     this.stepController.hideFromSubsetBegin()
    *   }
@@ -103,7 +108,7 @@ export default class MasterMain extends Master {
    * }
    * ```
    */
-  afterStepNoChange (payload: LampTypes.OldAndNewStepNoAndSlideNoChange) {}
+  afterStepNoChange ({}: LampTypes.OldNewStepSlideNos): void {}
 
   mounted (): void {
     this.afterSlideNoChange({

@@ -30,6 +30,11 @@ import Component from 'vue-class-component'
 import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
+interface MediaDevice {
+  name: string
+  id: string
+}
+
 @Component({
   components: {
     ExternalSites
@@ -37,7 +42,12 @@ import ExternalSites from '@/components/reusable/ExternalSites.vue'
 })
 export default class CameraMasterMain extends MasterMain {
   masterName = 'camera'
-  data () {
+
+  data (): {
+    device: MediaDevice
+    stream: MediaStream
+    labelDefaultCamera: string
+  } {
     return {
       // for v-model of dynamic select
       device: null,
@@ -47,22 +57,22 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  device: { name: string; id: string }
+  device: MediaDevice
   stream: MediaStream
   labelDefaultCamera: string
 
-  get mediaDevices () {
+  get mediaDevices (): MediaDevice[] {
     return this.$store.getters['lamp/masters/camera/forDynamicSelect']
   }
 
-  get cameraNotFound () {
+  get cameraNotFound (): boolean {
     return this.$store.getters['lamp/masters/camera/cameraNotFound']
   }
 
   /**
    * Called by the input event of the dynamic select component.
    */
-  async setDeviceId () {
+  async setDeviceId (): Promise<void> {
     this.$modal.hide('select-video-device')
     this.labelDefaultCamera = this.device.name
     window.localStorage.setItem('labelDefaultCamera', this.device.name)
@@ -73,7 +83,7 @@ export default class CameraMasterMain extends MasterMain {
   /**
    * Show the modal dialog with the dynamic select form element.
    */
-  showDeviceSelect () {
+  showDeviceSelect (): void {
     this.$store.dispatch('lamp/masters/camera/setMediaDevices')
     this.$modal.toggle('select-video-device')
     this.$dynamicSelect.focus()
@@ -138,7 +148,7 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  async buildConstraints (deviceId?: string) {
+  async buildConstraints (deviceId?: string): Promise<MediaStreamConstraints> {
     if (deviceId == null) {
       deviceId = await this.getDeviceId()
     }
@@ -155,7 +165,9 @@ export default class CameraMasterMain extends MasterMain {
   /**
    * Try multiple times to get a camera stream.
    */
-  async getStream (constraints: MediaStreamConstraints) {
+  async getStream (
+    constraints: MediaStreamConstraints
+  ): Promise<MediaStream | undefined> {
     for (let index = 0; index < 3; index++) {
       try {
         return await navigator.mediaDevices.getUserMedia(constraints)
@@ -175,7 +187,7 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  async setVideoStream (constraints?: MediaStreamConstraints) {
+  async setVideoStream (constraints?: MediaStreamConstraints): Promise<void> {
     const wrapperElement = document.querySelector(
       '.vc_camera_master #video-wrapper'
     )

@@ -16,6 +16,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { buildQuestionStepController } from '@bldr/dom-manipulator'
 import { questionMModul } from '@bldr/presentation-parser'
+import { LampTypes } from '@bldr/type-definitions'
 
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
@@ -88,7 +89,9 @@ export default class QuestionMasterMain extends MasterMainWithStepController {
     this.stepController.hideAll()
   }
 
-  afterStepNoChange ({ newStepNo }): void {
+  afterStepNoChange ({
+    newStepNo
+  }: LampTypes.OldNewStepSlideNos): void {
     this.setQuestionsByStepNo(newStepNo)
   }
 }

@@ -35,7 +35,7 @@ Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification)
 
-Vue.use(DynamicSelect as any)
+Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.use(Websocket, config.wire.localUri, {
@@ -52,7 +52,7 @@ Vue.config.productionTip = false
 // Must be before new Vue()
 registerMasterComponents()
 
-store.subscribe((mutation, state) => {
+store.subscribe((mutation) => {
   if (mutation.type === 'media/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {

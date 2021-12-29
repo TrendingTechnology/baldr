@@ -56,6 +56,8 @@ export * as youtubeMModule from './masters/youtube'
 
 export { Asset, Sample } from '@bldr/media-resolver-ng'
 
+export { WrappedUriList } from './fuzzy-uri'
+
 export function parse (yamlString: string): Presentation {
   return new Presentation(yamlString)
 }

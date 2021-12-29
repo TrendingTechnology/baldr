@@ -10,6 +10,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildClozeStepController } from '@bldr/dom-manipulator'
+import { LampTypes } from '@bldr/type-definitions'
 
 import { warnSvgWidthHeight } from '../../lib/utils'
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
@@ -53,11 +54,11 @@ export default class ClozeMasterMain extends MasterMainWithStepController {
   })
   src: string
 
-  get svgMarkup () {
+  get svgMarkup (): string {
     return this.$store.getters['lamp/masters/cloze/svgByUri'](this.src)
   }
 
-  afterSlideNoChange ({ newSlideNo }) {
+  afterSlideNoChange ({ newSlideNo }: LampTypes.OldNewSlideNos): void {
     const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
     warnSvgWidthHeight()
     this.stepController = buildClozeStepController(
@@ -67,7 +68,7 @@ export default class ClozeMasterMain extends MasterMainWithStepController {
     this.stepController.hideFromSubsetBegin()
   }
 
-  afterStepNoChange ({ newStepNo }) {
+  afterStepNoChange ({ newStepNo }: LampTypes.OldNewStepSlideNos): void {
     if (newStepNo === 1) {
       this.stepController.hideFromSubsetBegin()
     }

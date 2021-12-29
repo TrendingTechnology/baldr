@@ -29,7 +29,7 @@ export default class DocumentMasterMain extends MasterMain {
   })
   page: number
 
-  get pageComputed () {
+  get pageComputed (): number {
     if (this.page != null) {
       return this.page
     }

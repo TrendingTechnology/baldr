@@ -10,6 +10,7 @@ import { Prop } from 'vue-property-decorator'
 
 import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
+import { LampTypes } from '@bldr/type-definitions'
 
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 import { warnSvgWidthHeight } from '../../lib/utils'
@@ -41,7 +42,7 @@ export default class InteractiveGraphicMasterMain extends MasterMainWithStepCont
     )
   }
 
-  afterSlideNoChange () {
+  afterSlideNoChange (): void {
     warnSvgWidthHeight(this.svgPath)
     this.stepController = buildSvgStepController(
       this.$el as HTMLElement,
@@ -49,7 +50,7 @@ export default class InteractiveGraphicMasterMain extends MasterMainWithStepCont
     )
   }
 
-  afterStepNoChange ({ newStepNo }) {
+  afterStepNoChange ({ newStepNo }: LampTypes.OldNewStepSlideNos): void {
     this.stepController.showUpTo(newStepNo)
   }
 }

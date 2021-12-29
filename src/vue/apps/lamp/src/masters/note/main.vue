@@ -7,6 +7,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { buildTextStepController } from '@bldr/dom-manipulator'
+import { LampTypes } from '@bldr/type-definitions'
 
 import MasterMainWithStepController from '../MasterMainWithStepController.vue'
 
@@ -25,7 +26,7 @@ export default class NoteMasterMain extends MasterMainWithStepController {
     })
   }
 
-  afterStepNoChange ({ newStepNo }): void {
+  afterStepNoChange ({ newStepNo }: LampTypes.OldNewStepSlideNos): void {
     const step = this.stepController.showUpTo(newStepNo)
     if (step != null) {
       this.scroll(step.htmlElement as HTMLElement)

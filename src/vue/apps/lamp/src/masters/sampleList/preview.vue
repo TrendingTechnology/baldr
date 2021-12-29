@@ -21,6 +21,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { WrappedUriList } from '@bldr/presentation-parser'
+
 import MasterPreview from '../MasterPreview.vue'
 
 @Component
@@ -36,6 +38,6 @@ export default class SampleListMasterPreview extends MasterPreview {
     type: Object,
     required: true
   })
-  samples: any
+  samples: WrappedUriList
 }
 </script>
