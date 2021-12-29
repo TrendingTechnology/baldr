@@ -66,7 +66,7 @@ export default class ExternalSites extends Vue {
   })
   asset: any
 
-  get yaml (): any {
+  get yaml (): Record<string, string> {
     if (this.asset.yaml != null) {
       return this.asset.yaml
     } else {
@@ -74,28 +74,25 @@ export default class ExternalSites extends Vue {
     }
   }
 
-  get imslp () {
+  get imslp (): string | undefined {
     if (this.yaml.imslp) {
       return formatImslpUrl(this.yaml.imslp)
     }
-    return null
   }
 
-  get musicbrainzRecordingId () {
+  get musicbrainzRecordingId (): string | undefined {
     if (this.yaml.musicbrainzRecordingId) {
       return formatMusicbrainzRecordingUrl(this.yaml.musicbrainzRecordingId)
     }
-    return null
   }
 
-  get musicbrainzWorkId () {
+  get musicbrainzWorkId (): string | undefined {
     if (this.yaml.musicbrainzWorkId) {
       return formatMusicbrainzWorkUrl(this.yaml.musicbrainzWorkId)
     }
-    return null
   }
 
-  get wikicommons () {
+  get wikicommons (): string | undefined {
     if (this.yaml.wikicommons) {
       return formatWikicommonsUrl(this.yaml.wikicommons)
     }
@@ -105,28 +102,24 @@ export default class ExternalSites extends Vue {
         return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
       }
     }
-    return null
   }
 
-  get wikidata () {
+  get wikidata (): string | undefined {
     if (this.yaml.wikidata) {
       return formatWikidataUrl(this.yaml.wikidata)
     }
-    return null
   }
 
-  get wikipedia () {
+  get wikipedia (): string | undefined {
     if (this.yaml.wikipedia) {
       return formatWikipediaUrl(this.yaml.wikipedia)
     }
-    return null
   }
 
-  get youtube () {
+  get youtube (): string | undefined {
     if (this.yaml.youtube) {
       return formatYoutubeUrl(this.yaml.youtube)
     }
-    return null
   }
 }
 </script>
