@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { createAliases, getStylePaths } = require('@bldr/vue-config-helper')
+const { createAliases, getStylePaths, readMasterExamples } = require('@bldr/vue-config-helper')
 
 const { DefinePlugin } = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -13,44 +13,6 @@ const packageJson = require('./package.json')
 const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
-
-function readExamples () {
-  function getBaseName (filePath) {
-    return filePath.replace('.baldr.yml', '')
-  }
-
-  const examples = {
-    common: {},
-    masters: {}
-  }
-
-  const basePath = path.join(
-    config.localRepo,
-    'src/lib/universal/presentation-parser/tests/files'
-  )
-
-  // common
-  const commonBasePath = path.join(basePath, 'common')
-  for (const exampleFile of fs.readdirSync(commonBasePath)) {
-    if (exampleFile.match(/\.baldr\.yml$/) != null) {
-      const rawYaml = fs.readFileSync(
-        path.join(commonBasePath, exampleFile),
-        'utf8'
-      )
-      examples.common[getBaseName(exampleFile)] = rawYaml
-    }
-  }
-  // masters
-  const mastersBasePath = path.join(basePath, 'masters')
-  for (const masterName of fs.readdirSync(mastersBasePath)) {
-    const rawYaml = fs.readFileSync(
-      path.join(mastersBasePath, masterName),
-      'utf8'
-    )
-    examples.masters[getBaseName(masterName)] = rawYaml
-  }
-  return examples
-}
 
 module.exports = {
   lintOnSave: true,
@@ -86,7 +48,7 @@ module.exports = {
         defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
         gitHead: JSON.stringify(gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
-        rawYamlExamples: JSON.stringify(readExamples())
+        rawYamlExamples: JSON.stringify(readMasterExamples())
       })
       // new BundleAnalyzerPlugin()
     ]

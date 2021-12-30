@@ -32,9 +32,18 @@ export declare function createAliases(packageNames: string[], dirname: string): 
  * pluginOptions: {
  *   'style-resources-loader': {
  *     preProcessor: 'scss',
- *     patterns: [stylePath('default'), stylePath('handwriting')]
+ *     patterns: [
+ *       '.../baldr/src/vue/plugins/themes/src/default.scss',
+ *       '../baldr/src/vue/plugins/themes/src/handwriting.scss'
+ *     ]
  *   }
  * }
  * ```
  */
 export declare function getStylePaths(): string[];
+interface MasterExamples {
+    common: Record<string, string>;
+    masters: Record<string, string>;
+}
+export declare function readMasterExamples(): MasterExamples;
+export {};
