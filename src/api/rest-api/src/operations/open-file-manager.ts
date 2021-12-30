@@ -1,19 +1,10 @@
 import path from 'path'
 
 import { openInFileManager } from '@bldr/open-with'
+import { ApiTypes } from '@bldr/type-definitions'
 
 import openArchivesInFileManager from './open-archives-in-file-manager'
 import { getAbsPathFromRef } from '../utils'
-import { MediaType } from '../modules/media'
-
-interface OpenFileManagerResult {
-  ref: string
-  absPath: string
-  parentFolders: string[]
-  mediaType: MediaType
-  openArchiveFolder: boolean
-  createParentDir: boolean
-}
 
 /**
  * Open the parent folder of a presentation, a media asset in a file explorer
@@ -28,11 +19,11 @@ interface OpenFileManagerResult {
  */
 export default async function (
   ref: string,
-  mediaType: MediaType,
+  mediaType: ApiTypes.MediaType,
   openArchiveFolder: boolean,
   createParentDir: boolean,
   dryRun: boolean = false
-): Promise<OpenFileManagerResult> {
+): Promise<ApiTypes.OpenFileManagerResult> {
   const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
   let parentFolders: string[] = []

@@ -11,7 +11,7 @@ interface OpenEditorParameters {
     type?: 'presentation' | 'asset';
     dryRun?: boolean;
 }
-export declare function openEditor(params: OpenEditorParameters): Promise<any>;
+export declare function openEditor(params: OpenEditorParameters): Promise<ApiTypes.OpenEditorResult>;
 interface OpenFileManagerParameters {
     ref: string;
     type?: 'presentation' | 'asset';
@@ -19,5 +19,5 @@ interface OpenFileManagerParameters {
     archive?: boolean;
     dryRun?: boolean;
 }
-export declare function openFileManager(params: OpenFileManagerParameters): Promise<any>;
+export declare function openFileManager(params: OpenFileManagerParameters): Promise<ApiTypes.OpenInFileManagerResult>;
 export {};

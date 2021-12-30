@@ -2,14 +2,7 @@ import path from 'path'
 
 import { locationIndicator } from '@bldr/media-manager'
 import { openInFileManager } from '@bldr/open-with'
-
-interface OpenInFileManagerResult {
-  fileManager: string
-  filePath: string
-  parentDir: string
-  opened: boolean
-  createdParentDir: boolean
-}
+import { ApiTypes } from '@bldr/type-definitions'
 
 /**
  * Open the current path multiple times.
@@ -25,7 +18,7 @@ interface OpenInFileManagerResult {
 export default function (
   filePath: string,
   createParentDir: boolean
-): OpenInFileManagerResult[] {
+): ApiTypes.OpenInFileManagerResult[] {
   const relPath = locationIndicator.getRelPath(filePath)
   const filePaths: string[] = []
   for (const basePath of locationIndicator.basePaths) {

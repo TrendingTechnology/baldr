@@ -29,7 +29,7 @@ export function formatWikipediaUrl(nameSpace) {
  *
  * `https://musicbrainz.org/recording/${RecordingId}`
  *
- * @param recordingId
+ * @param recordingId - A UUID.
  */
 export function formatMusicbrainzRecordingUrl(recordingId) {
     return `https://musicbrainz.org/recording/${recordingId}`;
@@ -39,7 +39,7 @@ export function formatMusicbrainzRecordingUrl(recordingId) {
  *
  * `https://musicbrainz.org/work/${WorkId}`
  *
- * @param workId
+ * @param workId - A UUID.
  */
 export function formatMusicbrainzWorkUrl(workId) {
     return `https://musicbrainz.org/work/${workId}`;

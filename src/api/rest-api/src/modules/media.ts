@@ -7,8 +7,6 @@ import updateMedia from '../operations/update-media'
 import { database } from '../api'
 import * as query from '../query'
 
-export type MediaType = 'asset' | 'presentation'
-
 export default function (): express.Express {
   const app = express()
 

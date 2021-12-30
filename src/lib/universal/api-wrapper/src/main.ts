@@ -120,10 +120,12 @@ interface OpenEditorParameters {
   dryRun?: boolean
 }
 
-export async function openEditor (params: OpenEditorParameters) {
+export async function openEditor (
+  params: OpenEditorParameters
+): Promise<ApiTypes.OpenEditorResult> {
   return await callWithErrorMessage(
     { url: 'media/open/editor', params },
-    'Open Editor.'
+    `Could not open the media file with the reference “${params.ref}” in the editor.`
   )
 }
 
@@ -135,9 +137,11 @@ interface OpenFileManagerParameters {
   dryRun?: boolean
 }
 
-export async function openFileManager (params: OpenFileManagerParameters) {
+export async function openFileManager (
+  params: OpenFileManagerParameters
+): Promise<ApiTypes.OpenInFileManagerResult> {
   return await callWithErrorMessage(
     { url: 'media/open/file-manager', params },
-    'Open Editor.'
+    `Could not open the media file with the reference “${params.ref}” in the file manager.`
   )
 }

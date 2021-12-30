@@ -98,11 +98,11 @@ export function getTitleTree() {
 }
 export function openEditor(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'media/open/editor', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/editor', params }, `Could not open the media file with the reference “${params.ref}” in the editor.`);
     });
 }
 export function openFileManager(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({ url: 'media/open/file-manager', params }, 'Open Editor.');
+        return yield callWithErrorMessage({ url: 'media/open/file-manager', params }, `Could not open the media file with the reference “${params.ref}” in the file manager.`);
     });
 }

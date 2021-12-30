@@ -3,19 +3,11 @@ import fs from 'fs'
 
 import { openWith } from '@bldr/open-with'
 import { getConfig } from '@bldr/config'
+import { ApiTypes } from '@bldr/type-definitions'
 
 import { getAbsPathFromRef } from '../utils'
-import { MediaType } from '../modules/media'
 
 const config = getConfig()
-
-interface OpenEditorResult {
-  ref: string
-  mediaType: MediaType
-  absPath: string
-  parentFolder: string
-  editor: string
-}
 
 /**
  * Open a media file specified by an ID with an editor specified in
@@ -26,9 +18,9 @@ interface OpenEditorResult {
  */
 export default async function (
   ref: string,
-  mediaType: MediaType,
+  mediaType: ApiTypes.MediaType,
   dryRun: boolean = false
-): Promise<OpenEditorResult> {
+): Promise<ApiTypes.OpenEditorResult> {
   const absPath = await getAbsPathFromRef(ref, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor

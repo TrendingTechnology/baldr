@@ -17,7 +17,7 @@ export declare function formatWikipediaUrl(nameSpace: string): string;
  *
  * `https://musicbrainz.org/recording/${RecordingId}`
  *
- * @param recordingId
+ * @param recordingId - A UUID.
  */
 export declare function formatMusicbrainzRecordingUrl(recordingId: string): string;
 /**
@@ -25,7 +25,7 @@ export declare function formatMusicbrainzRecordingUrl(recordingId: string): stri
  *
  * `https://musicbrainz.org/work/${WorkId}`
  *
- * @param workId
+ * @param workId - A UUID.
  */
 export declare function formatMusicbrainzWorkUrl(workId: string): string;
 /**

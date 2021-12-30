@@ -1,12 +1,4 @@
-import { MediaType } from '../modules/media';
-interface OpenFileManagerResult {
-    ref: string;
-    absPath: string;
-    parentFolders: string[];
-    mediaType: MediaType;
-    openArchiveFolder: boolean;
-    createParentDir: boolean;
-}
+import { ApiTypes } from '@bldr/type-definitions';
 /**
  * Open the parent folder of a presentation, a media asset in a file explorer
  * GUI application.
@@ -18,5 +10,4 @@ interface OpenFileManagerResult {
  * @param createParentDir - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-export default function (ref: string, mediaType: MediaType, openArchiveFolder: boolean, createParentDir: boolean, dryRun?: boolean): Promise<OpenFileManagerResult>;
-export {};
+export default function (ref: string, mediaType: ApiTypes.MediaType, openArchiveFolder: boolean, createParentDir: boolean, dryRun?: boolean): Promise<ApiTypes.OpenFileManagerResult>;

@@ -4,7 +4,7 @@ import path from 'path'
 import { getConfig } from '@bldr/config'
 
 import { database } from './api'
-import { MediaType } from './modules/media'
+import { ApiTypes } from '@bldr/type-definitions'
 
 const config = getConfig()
 
@@ -13,7 +13,7 @@ const config = getConfig()
  *
  * @param mediaType - At the moment `asset` and `presentation`
  */
-export function validateMediaType (mediaType: string): MediaType {
+export function validateMediaType (mediaType: string): ApiTypes.MediaType {
   const mediaTypes = ['asset', 'presentation']
   if (mediaType == null) {
     return 'asset'
@@ -25,7 +25,7 @@ export function validateMediaType (mediaType: string): MediaType {
       )}`
     )
   } else {
-    return mediaType as MediaType
+    return mediaType as ApiTypes.MediaType
   }
 }
 
@@ -38,7 +38,7 @@ export function validateMediaType (mediaType: string): MediaType {
  */
 export async function getAbsPathFromRef (
   ref: string,
-  mediaType: MediaType = 'presentation'
+  mediaType: ApiTypes.MediaType = 'presentation'
 ): Promise<string> {
   mediaType = validateMediaType(mediaType)
   const result = await database.db

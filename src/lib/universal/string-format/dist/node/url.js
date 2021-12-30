@@ -34,7 +34,7 @@ exports.formatWikipediaUrl = formatWikipediaUrl;
  *
  * `https://musicbrainz.org/recording/${RecordingId}`
  *
- * @param recordingId
+ * @param recordingId - A UUID.
  */
 function formatMusicbrainzRecordingUrl(recordingId) {
     return `https://musicbrainz.org/recording/${recordingId}`;
@@ -45,7 +45,7 @@ exports.formatMusicbrainzRecordingUrl = formatMusicbrainzRecordingUrl;
  *
  * `https://musicbrainz.org/work/${WorkId}`
  *
- * @param workId
+ * @param workId - A UUID.
  */
 function formatMusicbrainzWorkUrl(workId) {
     return `https://musicbrainz.org/work/${workId}`;

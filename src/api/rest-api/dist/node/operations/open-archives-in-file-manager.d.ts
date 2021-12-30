@@ -1,10 +1,4 @@
-interface OpenInFileManagerResult {
-    fileManager: string;
-    filePath: string;
-    parentDir: string;
-    opened: boolean;
-    createdParentDir: boolean;
-}
+import { ApiTypes } from '@bldr/type-definitions';
 /**
  * Open the current path multiple times.
  *
@@ -16,5 +10,4 @@ interface OpenInFileManagerResult {
  * @param createParentDir - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-export default function (filePath: string, createParentDir: boolean): OpenInFileManagerResult[];
-export {};
+export default function (filePath: string, createParentDir: boolean): ApiTypes.OpenInFileManagerResult[];
