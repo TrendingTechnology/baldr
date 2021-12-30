@@ -156,9 +156,9 @@ class ShortcutManager {
   /**
    * Remove multiple shortcuts at once.
    *
-   * @param {Array} keysList - An array of Mousetrap key specification.
+   * @param keysList - An array of Mousetrap key specification.
    */
-  removeMultiple (keysList: string): void {
+  removeMultiple (keysList: string[]): void {
     for (const keys of keysList) {
       this.remove(keys)
     }

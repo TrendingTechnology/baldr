@@ -35,6 +35,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
+import { shortcutManager } from '@bldr/shortcuts'
+
 import { routerGuards } from '../../../lib/routing-related'
 
 import DisplayController from './DisplayController.vue'
@@ -68,7 +70,7 @@ export default class SlidesPreview extends Vue {
   decreaseSize: Function
 
   mounted (): void {
-    this.$shortcuts.addMultiple([
+    shortcutManager.addMultiple([
       {
         keys: '+',
         callback: this.increaseSize,
@@ -92,7 +94,7 @@ export default class SlidesPreview extends Vue {
   }
 
   destroyed (): void {
-    this.$shortcuts.removeMultiple(['+', '-'])
+    shortcutManager.removeMultiple(['+', '-'])
   }
 }
 </script>

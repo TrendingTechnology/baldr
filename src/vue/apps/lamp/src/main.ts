@@ -6,7 +6,7 @@
 
 /* globals config */
 
-// Must be first import
+// Must the be first import
 import './lib/components'
 
 import Vue from 'vue'
