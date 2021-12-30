@@ -31,7 +31,7 @@ import { resolver } from '@bldr/presentation-parser'
 // Vue components.
 import MainApp from '@/components/linked-by-routes/MainApp.vue'
 
-Vue.use(shortcuts, router, store)
+Vue.use(shortcuts, { router, store })
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification)
 
@@ -52,7 +52,7 @@ Vue.config.productionTip = false
 // Must be before new Vue()
 registerMasterComponents()
 
-store.subscribe((mutation) => {
+store.subscribe(mutation => {
   if (mutation.type === 'media/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {

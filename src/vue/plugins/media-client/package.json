@@ -21,7 +21,7 @@
     "@bldr/http-request": "*",
     "@bldr/media-resolver": "*",
     "@bldr/yaml": "*",
-    "vuex": "3.5.1"
+    "vuex": "3.4.0"
   },
   "publishConfig": {
     "access": "public"
