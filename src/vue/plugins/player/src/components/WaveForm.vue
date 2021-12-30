@@ -34,7 +34,10 @@ export default class WaveForm extends PlayableBase {
   }
 
   seek (event: MouseEvent): void {
-    this.playable.progress = event.offsetX / this.$refs.waveformImg.clientWidth
+    if (this.playable != null) {
+      this.playable.progress =
+        event.offsetX / this.$refs.waveformImg.clientWidth
+    }
   }
 
   registerEvents (): void {
@@ -43,14 +46,19 @@ export default class WaveForm extends PlayableBase {
         this.$refs.waveformImg.addEventListener('click', this.seek)
       }
     })
-    this.playable.registerTimeUpdateListener(this.updateProgress)
+
+    if (this.playable != null) {
+      this.playable.registerTimeUpdateListener(this.updateProgress)
+    }
   }
 
   unregisterEvents (): void {
     if (this.$refs.waveformImg != null) {
       this.$refs.waveformImg.removeEventListener('click', this.seek)
     }
-    this.playable.removeEventsListener(this.updateProgress)
+    if (this.playable != null) {
+      this.playable.removeEventsListener(this.updateProgress)
+    }
   }
 }
 </script>
