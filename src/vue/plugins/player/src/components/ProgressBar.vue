@@ -24,23 +24,17 @@ export default class ProgressBar extends PlayableBase {
   }
 
   seek (event: MouseEvent): void {
-    if (this.playable != null) {
-      this.playable.progress = event.offsetX / this.$refs.progress.clientWidth
-    }
+    this.playable.progress = event.offsetX / this.$refs.progress.clientWidth
   }
 
   registerEvents (): void {
     this.$refs.progress.addEventListener('click', this.seek)
-    if (this.playable != null) {
-      this.playable.registerTimeUpdateListener(this.updateProgress)
-    }
+    this.playable.registerTimeUpdateListener(this.updateProgress)
   }
 
   unregisterEvents (): void {
     this.$refs.progress.removeEventListener('click', this.seek)
-    if (this.playable != null) {
-      this.playable.removeEventsListener(this.updateProgress)
-    }
+    this.playable.removeEventsListener(this.updateProgress)
   }
 }
 </script>

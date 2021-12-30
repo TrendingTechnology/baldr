@@ -5,16 +5,19 @@ import { Prop, Watch } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/media-resolver-ng'
 import { Playable } from '../playable'
+import { player } from '../plugin'
 
 @Component
 export default class PlayableBase extends Vue {
-  @Prop()
-  playable!: Playable
+  @Prop({ type: String, required: true })
+  uri!: string
 
-  get asset (): Asset | undefined {
-    if (this.playable != null) {
-      return this.playable.sample.asset
-    }
+  get playable (): Playable {
+    return player.getPlayable(this.uri)
+  }
+
+  get asset (): Asset {
+    return this.playable.sample.asset
   }
 
   registerEvents (): void {}
@@ -25,8 +28,8 @@ export default class PlayableBase extends Vue {
     this.registerEvents()
   }
 
-  @Watch('playable')
-  onPlayableChange (): void {
+  @Watch('uri')
+  onUriChange (): void {
     this.unregisterEvents()
     this.registerEvents()
   }

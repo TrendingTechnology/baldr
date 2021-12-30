@@ -82,9 +82,6 @@ export default class PlayButton extends PlayableBase {
   }
 
   get htmlTitle (): string {
-    if (this.playable == null) {
-      return ''
-    }
     if (this.playable.sample.shortcut) {
       return `${this.playable.sample.titleSafe} [${this.playable.sample.shortcut}]`
     }
@@ -109,10 +106,6 @@ export default class PlayButton extends PlayableBase {
   }
 
   registerEvents (): void {
-    if (this.playable == null) {
-      return
-    }
-
     this.setPlaybackStateFromPlayable()
 
     this.$el.addEventListener('mouseenter', () => {
