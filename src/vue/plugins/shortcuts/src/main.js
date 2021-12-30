@@ -205,16 +205,10 @@ class Shortcuts {
     }
   }
 
-  /**
-   *
-   */
   pause () {
     Mousetrap.pause()
   }
 
-  /**
-   *
-   */
   unpause () {
     Mousetrap.unpause()
   }
