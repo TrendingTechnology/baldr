@@ -70,6 +70,7 @@ export class Player {
   private loaded?: Playable
   public events: EventsListenerStore
   private readonly cache: PlayerCache
+  public resolver: Resolver
 
   /**
    * Can be used as data `data () { return player.uris }` in Vue components.
@@ -86,12 +87,18 @@ export class Player {
   globalVolume: number = 1
 
   constructor (resolver: Resolver) {
+    this.resolver = resolver
     this.events = new EventsListenerStore()
     this.cache = new PlayerCache(resolver)
   }
 
   public getPlayable (uri: string): Playable {
     return this.cache.getPlayable(uri)
+  }
+
+  public async resolvePlayable (uri: string): Promise<Playable> {
+    await this.resolver.resolve(uri)
+    return this.getPlayable(uri)
   }
 
   /**

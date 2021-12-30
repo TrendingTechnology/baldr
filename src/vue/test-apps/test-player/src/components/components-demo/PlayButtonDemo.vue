@@ -21,6 +21,14 @@
     <p>
       <button @click="hideOnePlayButton()">Verberge PlayButton</button>
     </p>
+
+    <h1>ComponentResolveablePlayButton</h1>
+
+    <resolveable-play-button uri="uuid:6defb53b-d43d-4353-ab7e-f8c7bcfb114e" />
+
+    <resolveable-play-button uri="uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a" />
+
+    <resolveable-play-button uri="uuid:e402afc0-930d-4c95-b93d-1e906261300e" />
   </div>
 </template>
 
