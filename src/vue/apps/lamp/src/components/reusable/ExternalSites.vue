@@ -57,7 +57,7 @@ import {
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl
-} from '@bldr/core-browser'
+} from '@bldr/string-format'
 
 @Component
 export default class ExternalSites extends Vue {

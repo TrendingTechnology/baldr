@@ -1,4 +1,5 @@
 export { asciify, deasciify, referencify } from './ascii';
 export { convertDurationToSeconds, getCurrentSchoolYear, getFormatedSchoolYear, formatDuration } from './date';
-export { shortenText, convertHtmlToPlainText } from './format';
 export { formatMultiPartAssetFileName, getExtension } from './file-path';
+export { shortenText, convertHtmlToPlainText } from './format';
+export { formatImslpUrl, formatMusicbrainzRecordingUrl, formatMusicbrainzWorkUrl, formatWikicommonsUrl, formatWikidataUrl, formatWikipediaUrl, formatYoutubeUrl } from './url';

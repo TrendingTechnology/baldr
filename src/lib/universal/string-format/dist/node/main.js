@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getExtension = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.shortenText = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = exports.referencify = exports.deasciify = exports.asciify = void 0;
+exports.formatYoutubeUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatWikicommonsUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatImslpUrl = exports.convertHtmlToPlainText = exports.shortenText = exports.getExtension = exports.formatMultiPartAssetFileName = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = exports.referencify = exports.deasciify = exports.asciify = void 0;
 var ascii_1 = require("./ascii");
 Object.defineProperty(exports, "asciify", { enumerable: true, get: function () { return ascii_1.asciify; } });
 Object.defineProperty(exports, "deasciify", { enumerable: true, get: function () { return ascii_1.deasciify; } });
@@ -10,9 +10,17 @@ Object.defineProperty(exports, "convertDurationToSeconds", { enumerable: true, g
 Object.defineProperty(exports, "getCurrentSchoolYear", { enumerable: true, get: function () { return date_1.getCurrentSchoolYear; } });
 Object.defineProperty(exports, "getFormatedSchoolYear", { enumerable: true, get: function () { return date_1.getFormatedSchoolYear; } });
 Object.defineProperty(exports, "formatDuration", { enumerable: true, get: function () { return date_1.formatDuration; } });
-var format_1 = require("./format");
-Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return format_1.shortenText; } });
-Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return format_1.convertHtmlToPlainText; } });
 var file_path_1 = require("./file-path");
 Object.defineProperty(exports, "formatMultiPartAssetFileName", { enumerable: true, get: function () { return file_path_1.formatMultiPartAssetFileName; } });
 Object.defineProperty(exports, "getExtension", { enumerable: true, get: function () { return file_path_1.getExtension; } });
+var format_1 = require("./format");
+Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return format_1.shortenText; } });
+Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return format_1.convertHtmlToPlainText; } });
+var url_1 = require("./url");
+Object.defineProperty(exports, "formatImslpUrl", { enumerable: true, get: function () { return url_1.formatImslpUrl; } });
+Object.defineProperty(exports, "formatMusicbrainzRecordingUrl", { enumerable: true, get: function () { return url_1.formatMusicbrainzRecordingUrl; } });
+Object.defineProperty(exports, "formatMusicbrainzWorkUrl", { enumerable: true, get: function () { return url_1.formatMusicbrainzWorkUrl; } });
+Object.defineProperty(exports, "formatWikicommonsUrl", { enumerable: true, get: function () { return url_1.formatWikicommonsUrl; } });
+Object.defineProperty(exports, "formatWikidataUrl", { enumerable: true, get: function () { return url_1.formatWikidataUrl; } });
+Object.defineProperty(exports, "formatWikipediaUrl", { enumerable: true, get: function () { return url_1.formatWikipediaUrl; } });
+Object.defineProperty(exports, "formatYoutubeUrl", { enumerable: true, get: function () { return url_1.formatYoutubeUrl; } });
