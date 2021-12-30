@@ -1,4 +1,4 @@
-import transliterate from '@bldr/transliterate'
+import { transliterate } from '@bldr/transliterate'
 
 /**
  * Convert some unicode strings into the ASCII format.

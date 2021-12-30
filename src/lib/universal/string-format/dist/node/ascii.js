@@ -22,7 +22,7 @@ function asciify(input) {
         // .replace(/ü/g, 'ue')
         // .replace(/ß/g, 'ss')
         .replace(/!/g, '');
-    return (0, transliterate_1.default)(output);
+    return (0, transliterate_1.transliterate)(output);
 }
 exports.asciify = asciify;
 /**

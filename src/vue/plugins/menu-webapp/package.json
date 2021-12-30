@@ -24,8 +24,8 @@
     "eslint-plugin-vue": "7.1.0",
     "sass": "1.29.0",
     "sass-loader": "8.0.2",
-    "vue": "2.6.12",
-    "vue-template-compiler": "2.6.12"
+    "vue": "2.6.11",
+    "vue-template-compiler": "2.6.11"
   },
   "peerDependencies": {
     "sass-loader": ">=10.1.0"

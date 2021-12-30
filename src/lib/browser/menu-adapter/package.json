@@ -37,7 +37,7 @@
   "devDependencies": {
     "electron": "11.0.1",
     "vue-router": "3.2.0",
-    "vue": "2.6.12"
+    "vue": "2.6.11"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

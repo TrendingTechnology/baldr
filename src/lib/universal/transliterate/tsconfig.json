@@ -5,8 +5,7 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
-    "lib": ["ES6"],
-    "allowSyntheticDefaultImports": true
+    "lib": ["ES6"]
   },
   "include": ["src/*.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]
