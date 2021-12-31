@@ -1,5 +1,5 @@
 describe('Slides preview', () => {
-  it.only('Mannenberg preview', () => {
+  it('Mannenberg preview', () => {
     cy.visit('/#/presentation/Ibrahim-Mannenberg/preview')
     cy.contains(
       'Alle Fächer/Fach Musik/12. Jahrgangsstufe/Musik nach 1950/Einflüsse anderer Kulturen'

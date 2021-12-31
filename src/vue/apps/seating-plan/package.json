@@ -19,10 +19,14 @@
   "scripts": {
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
-    "build": "echo 'No build task specified!'",
+    "build": "npm run build",
     "install:deb": "sudo apt remove baldr-seating-plan; sudo dpkg -i dist_electron/baldr-seating-plan_${npm_package_version}_amd64.deb",
     "serve:electron": "vue-cli-service electron:serve",
-    "serve:webapp": "vue-cli-service serve"
+    "serve:webapp": "vue-cli-service serve",
+    "serve": "npm run serve:webapp",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test": "npm run test:e2e:headless"
   },
   "dependencies": {
     "@bldr/components-collection": "*",
@@ -48,6 +52,7 @@
   "devDependencies": {
     "@bldr/vue-config-helper": "*",
     "@types/electron-devtools-installer": "2.2.0",
+    "@vue/cli-plugin-e2e-cypress": "4.5.15",
     "@vue/cli-plugin-typescript": "4.5.9",
     "@vue/cli-service": "4.5.9",
     "electron-devtools-installer": "3.2.0",

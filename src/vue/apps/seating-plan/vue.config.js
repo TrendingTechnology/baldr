@@ -1,15 +1,14 @@
 const os = require('os')
 const path = require('path')
 
-const { DefinePlugin } = require('webpack')
-
-const { gitHead } = require('@bldr/core-node')
-const { buildStyleResourcesLoaderConfig } = require('@bldr/vue-config-helper')
+const {
+  buildStyleResourcesLoaderConfig,
+  buildDefinePluginConfig,
+  searchForAliases
+} = require('@bldr/vue-config-helper')
 const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
-
-const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
@@ -20,16 +19,13 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        $HOME: os.homedir()
+        $HOME: os.homedir(),
+        ...searchForAliases(__dirname)
       }
     },
     plugins: [
-      new DefinePlugin({
-        // https://webpack.js.org/plugins/define-plugin/
-        // If the value is a string it will be used as a code fragment.
-        compilationTime: new Date().getTime(),
-        config: JSON.stringify(config),
-        gitHead: JSON.stringify(gitHead())
+      buildDefinePluginConfig({
+        songsJson: require(path.join(config.songbook.path, 'songs.json'))
       })
     ]
   },

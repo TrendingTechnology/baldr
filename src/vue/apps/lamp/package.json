@@ -8,17 +8,17 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "echo 'No build task specified!'",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test:e2e:headless": "vue-cli-service test:e2e --headless",
-    "test": "npm run test:e2e:headless",
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
+    "build": "echo 'No build task specified!'",
     "install:deb": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb",
     "install:electron": "npm run build:electron && npm run install:deb",
     "serve:electron": "vue-cli-service electron:serve",
     "serve:webapp": "vue-cli-service serve",
-    "serve": "npm run serve:webapp"
+    "serve": "npm run serve:webapp",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test": "npm run test:e2e:headless"
   },
   "main": "lib/electron-background.js",
   "dependencies": {
@@ -64,7 +64,7 @@
     "@types/electron-devtools-installer": "2.2.0",
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
-    "@vue/cli-plugin-e2e-cypress": "^4.5.15",
+    "@vue/cli-plugin-e2e-cypress": "4.5.15",
     "@vue/cli-plugin-eslint": "4.5.0",
     "@vue/cli-plugin-router": "4.5.0",
     "@vue/cli-plugin-typescript": "4.5.0",

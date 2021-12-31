@@ -22,6 +22,9 @@ const core_node_1 = require("@bldr/core-node");
 const config_1 = require("@bldr/config");
 const config = (0, config_1.getConfig)();
 /**
+ * Use no `JSON.stringify()`
+ * Default defintions: `compilationTime`, `config`, `gitHead`
+ *
  * https://webpack.js.org/plugins/define-plugin/
  * If the value is a string it will be used as a code fragment.
  *

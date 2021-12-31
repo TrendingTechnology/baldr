@@ -5,7 +5,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 const {
   buildStyleResourcesLoaderConfig,
-  buildDefinePluginConfig
+  buildDefinePluginConfig,
+  searchForAliases
 } = require('@bldr/vue-config-helper')
 const { getConfig } = require('@bldr/config')
 
@@ -21,7 +22,8 @@ module.exports = {
     devtool: 'source-map',
     resolve: {
       alias: {
-        $HOME: os.homedir()
+        $HOME: os.homedir(),
+        ...searchForAliases(__dirname)
       }
     },
     plugins: [

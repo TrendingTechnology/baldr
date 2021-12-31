@@ -16,6 +16,9 @@
  */
 import { DefinePlugin } from 'webpack';
 /**
+ * Use no `JSON.stringify()`
+ * Default defintions: `compilationTime`, `config`, `gitHead`
+ *
  * https://webpack.js.org/plugins/define-plugin/
  * If the value is a string it will be used as a code fragment.
  *

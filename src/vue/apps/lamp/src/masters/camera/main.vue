@@ -28,7 +28,7 @@
 /* eslint-disable indent, no-undef */
 import Component from 'vue-class-component'
 
-import { shortcutsManager } from '@bldr/shortcuts'
+import { shortcutManager } from '@bldr/shortcuts'
 
 import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
@@ -231,7 +231,7 @@ export default class CameraMasterMain extends MasterMain {
     } else {
       await this.setVideoStream()
     }
-    shortcutsManager.add(
+    shortcutManager.add(
       {
         keys: 'ctrl+c+s',
         callback: this.showDeviceSelect,

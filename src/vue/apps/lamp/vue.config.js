@@ -1,19 +1,15 @@
 const {
   searchForAliases,
   buildStyleResourcesLoaderConfig,
-  readMasterExamples
+  readMasterExamples,
+  buildDefinePluginConfig
 } = require('@bldr/vue-config-helper')
 
-const { DefinePlugin } = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
-const { gitHead } = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
-const { getConfig } = require('@bldr/config')
-
-const config = getConfig()
 
 module.exports = {
   lintOnSave: true,
@@ -28,15 +24,10 @@ module.exports = {
       alias: searchForAliases(__dirname)
     },
     plugins: [
-      new DefinePlugin({
-        // https://webpack.js.org/plugins/define-plugin/
-        // If the value is a string it will be used as a code fragment.
-        compilationTime: new Date().getTime(),
-        config: JSON.stringify(config),
-        defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
-        gitHead: JSON.stringify(gitHead()),
-        lampVersion: JSON.stringify(packageJson.version),
-        rawYamlExamples: JSON.stringify(readMasterExamples())
+      buildDefinePluginConfig({
+        defaultThemeSassVars: exportSassAsJson(),
+        lampVersion: packageJson.version,
+        rawYamlExamples: readMasterExamples()
       })
       // new BundleAnalyzerPlugin()
     ]
