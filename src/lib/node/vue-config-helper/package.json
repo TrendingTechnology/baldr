@@ -27,11 +27,14 @@
   },
   "main": "dist/main.js",
   "dependencies": {
+    "@bldr/core-node": "*",
     "@bldr/presentation-parser": "*",
-    "@bldr/themes": "*"
+    "@bldr/themes": "*",
+    "webpack": "4.44.2"
   },
   "devDependencies": {
+    "@bldr/config": "*",
     "@types/node": "14.14.7",
-    "@bldr/config": "*"
+    "@types/webpack": "5.28.0"
   }
 }

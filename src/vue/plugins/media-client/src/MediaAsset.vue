@@ -52,7 +52,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
-import { formatMusicbrainzRecordingUrl, formatYoutubeUrl } from '@bldr/core-browser'
+import { formatMusicbrainzRecordingUrl, formatYoutubeUrl } from '@bldr/string-format'
 
 export default {
   name: 'ClientMediaAsset',

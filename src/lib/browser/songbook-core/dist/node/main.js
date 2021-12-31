@@ -6,6 +6,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreLibrary = exports.SongMetaDataCombined = exports.AlphabeticalSongsTree = exports.songConstants = void 0;
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 exports.songConstants = {
     intermediateFolder: 'NB',
     firstSlideName: 'Projektor.svg',
@@ -159,7 +160,7 @@ class SongMetaDataCombined {
      */
     get wikidataUrl() {
         if (this.metaData.wikidata != null) {
-            return (0, core_browser_1.formatWikidataUrl)(this.metaData.wikidata);
+            return (0, string_format_1.formatWikidataUrl)(this.metaData.wikidata);
         }
     }
     /**
@@ -167,7 +168,7 @@ class SongMetaDataCombined {
      */
     get wikipediaUrl() {
         if (this.metaData.wikipedia != null) {
-            return (0, core_browser_1.formatWikipediaUrl)(this.metaData.wikipedia);
+            return (0, string_format_1.formatWikipediaUrl)(this.metaData.wikipedia);
         }
     }
     /**
@@ -175,7 +176,7 @@ class SongMetaDataCombined {
      */
     get youtubeUrl() {
         if (this.metaData.youtube != null) {
-            return (0, core_browser_1.formatYoutubeUrl)(this.metaData.youtube);
+            return (0, string_format_1.formatYoutubeUrl)(this.metaData.youtube);
         }
     }
     toJSON() {

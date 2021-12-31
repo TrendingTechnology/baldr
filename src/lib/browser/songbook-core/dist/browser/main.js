@@ -2,7 +2,8 @@
  * Core functionality for the BALDR songbook without node dependencies.
  * @module @bldr/songbook-core
  */
-import { sortObjectsByProperty, formatWikidataUrl, formatWikipediaUrl, formatYoutubeUrl } from '@bldr/core-browser';
+import { sortObjectsByProperty } from '@bldr/core-browser';
+import { formatWikidataUrl, formatWikipediaUrl, formatYoutubeUrl } from '@bldr/string-format';
 export const songConstants = {
     intermediateFolder: 'NB',
     firstSlideName: 'Projektor.svg',

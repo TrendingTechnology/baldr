@@ -3,12 +3,13 @@
  * @module @bldr/songbook-core
  */
 
+import { sortObjectsByProperty } from '@bldr/core-browser'
+
 import {
-  sortObjectsByProperty,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl
-} from '@bldr/core-browser'
+} from '@bldr/string-format'
 
 import { StringIndexedObject } from '@bldr/type-definitions'
 

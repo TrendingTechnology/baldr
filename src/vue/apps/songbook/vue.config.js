@@ -2,11 +2,11 @@ const os = require('os')
 const path = require('path')
 
 const CopyPlugin = require('copy-webpack-plugin')
-const { DefinePlugin } = require('webpack')
 
-// Project packages.
-const { gitHead } = require('@bldr/core-node')
-const { buildStyleResourcesLoaderConfig } = require('@bldr/vue-config-helper')
+const {
+  buildStyleResourcesLoaderConfig,
+  buildDefinePluginConfig
+} = require('@bldr/vue-config-helper')
 const { getConfig } = require('@bldr/config')
 
 const config = getConfig()
@@ -36,15 +36,8 @@ module.exports = {
           }
         ]
       }),
-      new DefinePlugin({
-        // https://webpack.js.org/plugins/define-plugin/
-        // If the value is a string it will be used as a code fragment.
-        compilationTime: new Date().getTime(),
-        config: JSON.stringify(config),
-        gitHead: JSON.stringify(gitHead()),
-        songsJson: JSON.stringify(
-          require(path.join(config.songbook.path, 'songs.json'))
-        )
+      buildDefinePluginConfig({
+        songsJson: require(path.join(config.songbook.path, 'songs.json'))
       })
     ]
   },

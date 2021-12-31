@@ -27,7 +27,8 @@
     "lint": "npm run lint:depcheck & npm run lint:ts-standard"
   },
   "dependencies": {
-    "@bldr/core-browser": "*"
+    "@bldr/core-browser": "*",
+    "@bldr/string-format": "*"
   },
   "devDependencies": {
     "@bldr/type-definitions": "*"

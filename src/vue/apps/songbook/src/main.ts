@@ -17,7 +17,7 @@ import media from '@bldr/media-client'
 // Components.
 import MainApp from './MainApp.vue'
 
-Vue.use(shortcuts, router, store)
+Vue.use(shortcuts, { router, store })
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
 
 Vue.use(MaterialIcon)
