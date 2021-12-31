@@ -37,8 +37,8 @@ module.exports = {
         gitHead: JSON.stringify(gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readMasterExamples())
-      }),
-      new BundleAnalyzerPlugin()
+      })
+      // new BundleAnalyzerPlugin()
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/presentation/' : '/',

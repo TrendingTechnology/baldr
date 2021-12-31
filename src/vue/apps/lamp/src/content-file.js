@@ -472,9 +472,13 @@ export class Slide {
   get plainText () {
     const output = []
     const fromProps = this.master.plainTextFromProps(this.props)
-    if (fromProps) output.push(fromProps)
+    if (fromProps) {
+      output.push(fromProps)
+    }
     for (const asset of this.assets) {
-      output.push(asset.plainText)
+      if (asset != null) {
+        output.push(asset.plainText)
+      }
     }
     return output.join(' | ')
   }

@@ -16,7 +16,7 @@ import vm from '../main'
 import { loadPresentation } from './routing-related'
 
 function logCatch (reason: unknown) {
-  console.log(reason)
+  showMessage.error(reason as Error)
 }
 
 /**
