@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@bldr/config": "*",
+    "@bldr/vue-config-helper": "*",
     "@types/electron-devtools-installer": "2.2.0",
     "@vue/cli-plugin-typescript": "4.5.0",
     "@vue/cli-service": "4.5.9",

@@ -4,8 +4,9 @@ const path = require('path')
 const { DefinePlugin } = require('webpack')
 
 const { gitHead } = require('@bldr/core-node')
-
+const { buildStyleResourcesLoaderConfig } = require('@bldr/vue-config-helper')
 const { getConfig } = require('@bldr/config')
+
 const config = getConfig()
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
@@ -34,10 +35,7 @@ module.exports = {
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/seating-plan/' : '/',
   pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: [path.join(themePath, 'default.scss')]
-    },
+    ...buildStyleResourcesLoaderConfig(),
     electronBuilder: {
       builderOptions: {
         appId: 'rocks.friedrich.baldr',

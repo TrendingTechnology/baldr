@@ -6,11 +6,10 @@ const { DefinePlugin } = require('webpack')
 
 // Project packages.
 const { gitHead } = require('@bldr/core-node')
-
+const { buildStyleResourcesLoaderConfig } = require('@bldr/vue-config-helper')
 const { getConfig } = require('@bldr/config')
-const config = getConfig()
 
-const themePath = path.dirname(require.resolve('@bldr/themes'))
+const config = getConfig()
 
 module.exports = {
   chainWebpack: config => {
@@ -51,10 +50,7 @@ module.exports = {
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/songbook/' : '/',
   pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: [path.join(themePath, 'default.scss')]
-    },
+    ...buildStyleResourcesLoaderConfig(),
     electronBuilder: {
       builderOptions: {
         appId: 'rocks.friedrich.baldr',

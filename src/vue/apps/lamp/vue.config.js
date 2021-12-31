@@ -1,6 +1,6 @@
 const {
   searchForAliases,
-  getStylePaths,
+  buildStyleResourcesLoaderConfig,
   readMasterExamples
 } = require('@bldr/vue-config-helper')
 
@@ -43,10 +43,7 @@ module.exports = {
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/presentation/' : '/',
   pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'scss',
-      patterns: getStylePaths()
-    },
+    ...buildStyleResourcesLoaderConfig(),
     electronBuilder: {
       preload: 'src/preload.js',
       mainProcessFile: 'src/lib/electron-background',

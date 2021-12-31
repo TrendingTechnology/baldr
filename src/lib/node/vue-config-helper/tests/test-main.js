@@ -1,7 +1,11 @@
 /* globals describe it */
 const assert = require('assert')
 const path = require('path')
-const { searchForAliases } = require('../dist/main.js')
+
+const {
+  searchForAliases,
+  buildStyleResourcesLoaderConfig
+} = require('../dist/main.js')
 
 const { getConfig } = require('@bldr/config')
 
@@ -14,5 +18,10 @@ describe('Package “@bldr/vue-config-helper”', function () {
     )
     assert.ok(aliases['@bldr/config$'].includes('@bldr/config'))
     assert.ok(aliases.vue$.includes('vue'))
+  })
+
+  it('Function “buildStyleResourcesLoaderConfig()”', function () {
+    const config = buildStyleResourcesLoaderConfig()
+    assert.strictEqual(config['style-resources-loader'].preProcessor, 'scss')
   })
 })
