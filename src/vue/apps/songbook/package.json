@@ -10,7 +10,7 @@
   "scripts": {
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
-    "build": "npm run build",
+    "build": "npm run build:webapp",
     "install:deb": "sudo apt remove baldr-songbook; sudo dpkg -i dist_electron/baldr-songbook_${npm_package_version}_amd64.deb",
     "serve:electron": "vue-cli-service electron:serve",
     "serve:webapp": "vue-cli-service serve",

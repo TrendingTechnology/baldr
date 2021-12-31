@@ -1,14 +1,10 @@
 const os = require('os')
-const path = require('path')
 
 const {
   buildStyleResourcesLoaderConfig,
   buildDefinePluginConfig,
   searchForAliases
 } = require('@bldr/vue-config-helper')
-const { getConfig } = require('@bldr/config')
-
-const config = getConfig()
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
@@ -24,9 +20,7 @@ module.exports = {
       }
     },
     plugins: [
-      buildDefinePluginConfig({
-        songsJson: require(path.join(config.songbook.path, 'songs.json'))
-      })
+      buildDefinePluginConfig()
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/seating-plan/' : '/',
