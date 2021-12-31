@@ -43,13 +43,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { masterCollection } from '../../../masters.js'
+import Component from 'vue-class-component'
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-
 import { LampTypes } from '@bldr/type-definitions'
+import {
+  masterCollection as masterCollectionNg,
+  MasterWrapper
+} from '@bldr/presentation-parser'
 
-import Component from 'vue-class-component'
+import { masterCollection } from '../../../masters.js'
 
 @Component({ methods: { convertMarkdownToHtml } })
 export default class MasterDocumentation extends Vue {
@@ -59,6 +62,10 @@ export default class MasterDocumentation extends Vue {
 
   get master (): LampTypes.Master {
     return masterCollection.get(this.masterName)
+  }
+
+  get masterNg (): MasterWrapper {
+    return masterCollectionNg[this.masterName]
   }
 
   get props (): LampTypes.PropsDefintion {

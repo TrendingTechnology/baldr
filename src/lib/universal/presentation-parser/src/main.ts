@@ -45,8 +45,10 @@ import { Presentation } from './presentation'
 
 export { resolver, Presentation } from './presentation'
 
-export { mapStepFieldDefintionsToProps } from './master'
+export { mapStepFieldDefintionsToProps, MasterWrapper } from './master'
 export { Slide } from './slide'
+
+export { masterCollection } from './master-collection'
 
 // MModule = MasterModule
 export * as genericMModul from './masters/generic'

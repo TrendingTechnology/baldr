@@ -51,8 +51,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Presentation } from './presentation';
 export { resolver, Presentation } from './presentation';
-export { mapStepFieldDefintionsToProps } from './master';
+export { mapStepFieldDefintionsToProps, MasterWrapper } from './master';
 export { Slide } from './slide';
+export { masterCollection } from './master-collection';
 import * as genericMModul_1 from './masters/generic';
 export { genericMModul_1 as genericMModul };
 import * as questionMModul_1 from './masters/question';

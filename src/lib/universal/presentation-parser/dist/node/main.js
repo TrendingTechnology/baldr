@@ -51,15 +51,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.Slide = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.masterCollection = exports.Slide = exports.MasterWrapper = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
 Object.defineProperty(exports, "Presentation", { enumerable: true, get: function () { return presentation_2.Presentation; } });
 var master_1 = require("./master");
 Object.defineProperty(exports, "mapStepFieldDefintionsToProps", { enumerable: true, get: function () { return master_1.mapStepFieldDefintionsToProps; } });
+Object.defineProperty(exports, "MasterWrapper", { enumerable: true, get: function () { return master_1.MasterWrapper; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
+var master_collection_1 = require("./master-collection");
+Object.defineProperty(exports, "masterCollection", { enumerable: true, get: function () { return master_collection_1.masterCollection; } });
 // MModule = MasterModule
 exports.genericMModul = require("./masters/generic");
 exports.questionMModul = require("./masters/question");
