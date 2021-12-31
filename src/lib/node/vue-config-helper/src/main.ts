@@ -46,6 +46,40 @@ export function createAliases (
   return aliases
 }
 
+/**
+ * Search for packages that can be used as aliases in the webpack configuration.
+ *
+ * @param dirname - Directory path of a package. The package must have
+ *   a `node_modules` subfolder.
+ */
+export function searchForAliases (dirname: string): Record<string, string> {
+  const nodeModulesDir = path.join(dirname, 'node_modules')
+
+  // baldr: To avoid duplicates in the webpack builds
+  const baldrDir = path.join(nodeModulesDir, '@bldr')
+  const packageNames: string[] = []
+  if (fs.existsSync(baldrDir)) {
+    for (const baldrPackageName of fs.readdirSync(baldrDir)) {
+      packageNames.push(path.join('@bldr', baldrPackageName))
+    }
+  }
+
+  // vue: To avoid conflicting imports
+  const vuePackages = [
+    'vue',
+    'vuex',
+    'vue-router',
+    'vue-class-component',
+    'vue-property-decorator'
+  ]
+  for (const vuePackage of vuePackages) {
+    if (fs.existsSync(path.join(nodeModulesDir, vuePackage))) {
+      packageNames.push(vuePackage)
+    }
+  }
+  return createAliases(packageNames, dirname)
+}
+
 function stylePath (themeName: 'default' | 'handwriting'): string {
   return path.join(
     path.dirname(require.resolve('@bldr/themes')),

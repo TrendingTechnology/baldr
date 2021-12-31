@@ -28,6 +28,13 @@
  */
 export declare function createAliases(packageNames: string[], dirname: string): Record<string, string>;
 /**
+ * Search for packages that can be used as aliases in the webpack configuration.
+ *
+ * @param dirname - Directory path of a package. The package must habe
+ *   a `node_modules` subfolder.
+ */
+export declare function searchForAliases(dirname: string): Record<string, string>;
+/**
  * ```js
  * pluginOptions: {
  *   'style-resources-loader': {

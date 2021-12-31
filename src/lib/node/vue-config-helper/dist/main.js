@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readMasterExamples = exports.getStylePaths = exports.createAliases = void 0;
+exports.readMasterExamples = exports.getStylePaths = exports.searchForAliases = exports.createAliases = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 /**
@@ -42,6 +42,38 @@ function createAliases(packageNames, dirname) {
     return aliases;
 }
 exports.createAliases = createAliases;
+/**
+ * Search for packages that can be used as aliases in the webpack configuration.
+ *
+ * @param dirname - Directory path of a package. The package must habe
+ *   a `node_modules` subfolder.
+ */
+function searchForAliases(dirname) {
+    const nodeModulesDir = path_1.default.join(dirname, 'node_modules');
+    // baldr: To avoid duplicates in the webpack builds
+    const baldrDir = path_1.default.join(nodeModulesDir, '@bldr');
+    const packageNames = [];
+    if (fs_1.default.existsSync(baldrDir)) {
+        for (const baldrPackageName of fs_1.default.readdirSync(baldrDir)) {
+            packageNames.push(path_1.default.join('@bldr', baldrPackageName));
+        }
+    }
+    // vue: To avoid conflicting imports
+    const vuePackages = [
+        'vue',
+        'vuex',
+        'vue-router',
+        'vue-class-component',
+        'vue-property-decorator'
+    ];
+    for (const vuePackage of vuePackages) {
+        if (fs_1.default.existsSync(path_1.default.join(nodeModulesDir, vuePackage))) {
+            packageNames.push(vuePackage);
+        }
+    }
+    return createAliases(packageNames, dirname);
+}
+exports.searchForAliases = searchForAliases;
 function stylePath(themeName) {
     return path_1.default.join(path_1.default.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`);
 }

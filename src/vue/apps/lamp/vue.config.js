@@ -1,7 +1,8 @@
-const fs = require('fs')
-const path = require('path')
-
-const { createAliases, getStylePaths, readMasterExamples } = require('@bldr/vue-config-helper')
+const {
+  searchForAliases,
+  getStylePaths,
+  readMasterExamples
+} = require('@bldr/vue-config-helper')
 
 const { DefinePlugin } = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -24,20 +25,7 @@ module.exports = {
 
   configureWebpack: {
     resolve: {
-      alias: {
-        ...createAliases(
-          [
-            'vue',
-            '@bldr/string-format',
-            '@bldr/core-browser',
-            '@bldr/markdown-to-html',
-            '@bldr/http-request',
-            '@bldr/log',
-            '@bldr/yaml'
-          ],
-          __dirname
-        )
-      }
+      alias: searchForAliases(__dirname)
     },
     plugins: [
       new DefinePlugin({
@@ -49,8 +37,8 @@ module.exports = {
         gitHead: JSON.stringify(gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readMasterExamples())
-      })
-      // new BundleAnalyzerPlugin()
+      }),
+      new BundleAnalyzerPlugin()
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/presentation/' : '/',
