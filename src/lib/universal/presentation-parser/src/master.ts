@@ -4,7 +4,10 @@
 
 // Imports
 import { Resolver } from '@bldr/media-resolver-ng'
-import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
+import {
+  convertNestedMarkdownToHtml,
+  convertMarkdownToHtml
+} from '@bldr/markdown-to-html'
 import { MediaUri } from '@bldr/client-media-models'
 
 import { Slide } from './slide'
@@ -86,6 +89,12 @@ export interface Master {
    * A human readable name of the master slide.
    */
   displayName: string
+
+  /**
+   * A description text in Markdown format that is displayed on the
+   * documentation page.
+   */
+  description?: string
 
   icon: MasterIconSpec
 
@@ -301,6 +310,15 @@ export class MasterWrapper {
 
   public get displayName (): string {
     return this.master.displayName
+  }
+
+  /**
+   * A description text in HTML format.
+   */
+  public get description (): string | undefined {
+    if (this.master.description != null) {
+      return convertMarkdownToHtml(this.master.description)
+    }
   }
 
   /**

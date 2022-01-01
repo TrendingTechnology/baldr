@@ -63,6 +63,11 @@ export interface Master {
      * A human readable name of the master slide.
      */
     displayName: string;
+    /**
+     * A description text in Markdown format that is displayed on the
+     * documentation page.
+     */
+    description?: string;
     icon: MasterIconSpec;
     /**
      * The defintion of the fields of the master slide.
@@ -216,6 +221,10 @@ export declare class MasterWrapper {
     get fieldsDefintion(): FieldDefinitionCollection;
     get name(): string;
     get displayName(): string;
+    /**
+     * A description text in HTML format.
+     */
+    get description(): string | undefined;
     /**
      * Convert to a set and remove sample fragments, e. g. `#complete`
      */

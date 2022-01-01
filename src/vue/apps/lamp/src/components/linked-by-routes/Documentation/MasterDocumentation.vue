@@ -1,7 +1,8 @@
 <template>
   <div class="vc_master_documentation main-app-padding" b-ui-theme="default">
-    <h1>Master slide “{{ masterName }}”</h1>
+    <h1>Master-Folie “{{ displayName }}” (<code>{{name}}</code>)</h1>
 
+    <section v-html="description" />
 
     <section>
       <h2>Felder</h2>
@@ -28,8 +29,6 @@
 
       <pre><code>{{ master.exampleClean }}</code></pre>
     </section>
-
-    <section v-html="documentation" />
   </div>
 </template>
 
@@ -41,7 +40,8 @@ import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { LampTypes } from '@bldr/type-definitions'
 import {
   masterCollection as masterCollectionNg,
-  MasterWrapper, FieldDefinitionCollection
+  MasterWrapper,
+  FieldDefinitionCollection
 } from '@bldr/presentation-parser'
 
 import { masterCollection } from '../../../masters.js'
@@ -55,31 +55,30 @@ import MasterField from './MasterField.vue'
   }
 })
 export default class MasterDocumentation extends Vue {
-  get masterName (): string {
+  get name (): string {
     return this.$route.params.master
   }
 
+  get displayName (): string {
+    return this.masterNg.displayName
+  }
+
   get master (): LampTypes.Master {
-    return masterCollection.get(this.masterName)
+    return masterCollection.get(this.name)
   }
 
   get masterNg (): MasterWrapper {
-    return masterCollectionNg[this.masterName]
-  }
-
-  get props (): LampTypes.PropsDefintion {
-    return this.master.propsDef
+    return masterCollectionNg[this.name]
   }
 
   get fields (): FieldDefinitionCollection {
     return this.masterNg.fieldsDefintion
   }
 
-  get documentation (): string {
-    if (this.master.documentation != null) {
-      return convertMarkdownToHtml(this.master.documentation)
+  get description (): string {
+    if (this.masterNg.description != null) {
+      return this.masterNg.description
     }
-    return ''
   }
 }
 </script>

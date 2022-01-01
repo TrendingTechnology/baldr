@@ -7,6 +7,7 @@ interface InteractiveGraphicFieldsNormalized {
 export declare class InteractiveGraphicMaster implements Master {
     name: string;
     displayName: string;
+    description: string;
     icon: {
         name: string;
         color: string;

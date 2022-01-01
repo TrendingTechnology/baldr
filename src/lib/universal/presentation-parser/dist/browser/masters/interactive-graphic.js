@@ -3,6 +3,7 @@ export class InteractiveGraphicMaster {
     constructor() {
         this.name = 'interactiveGraphic';
         this.displayName = 'Interaktive Grafik';
+        this.description = 'Diese Master-Folie ist dazu gedacht, mit *Inkscape* erstellte SVG-Dateien darzustellen.';
         this.icon = {
             name: 'image',
             color: 'blue',

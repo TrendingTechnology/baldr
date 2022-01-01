@@ -14,6 +14,8 @@ export class InteractiveGraphicMaster implements Master {
 
   displayName = 'Interaktive Grafik'
 
+  description = 'Diese Master-Folie ist dazu gedacht, mit *Inkscape* erstellte SVG-Dateien darzustellen.'
+
   icon = {
     name: 'image',
     color: 'blue',

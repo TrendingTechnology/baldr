@@ -67,6 +67,14 @@ class MasterWrapper {
         return this.master.displayName;
     }
     /**
+     * A description text in HTML format.
+     */
+    get description() {
+        if (this.master.description != null) {
+            return (0, markdown_to_html_1.convertMarkdownToHtml)(this.master.description);
+        }
+    }
+    /**
      * Convert to a set and remove sample fragments, e. g. `#complete`
      */
     static processMediaUris(uris) {

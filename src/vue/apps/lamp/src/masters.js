@@ -191,13 +191,6 @@ class Master {
     this.styleConfig = null
 
     /**
-     * Some markdown formated string to document this master slide.
-     *
-     * @type {String}
-     */
-    this.documentation = null
-
-    /**
      * A vuex object containing `state`, `getters`, `actions`, `mutations`
      * properties which buildes a submodule vuex store for each master.
      *

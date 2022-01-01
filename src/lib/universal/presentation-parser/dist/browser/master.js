@@ -1,7 +1,7 @@
 /**
  * Bundle many exports for the single master slides to import.
  */
-import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html';
+import { convertNestedMarkdownToHtml, convertMarkdownToHtml } from '@bldr/markdown-to-html';
 import { MediaUri } from '@bldr/client-media-models';
 // Exports
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
@@ -48,6 +48,14 @@ export class MasterWrapper {
     }
     get displayName() {
         return this.master.displayName;
+    }
+    /**
+     * A description text in HTML format.
+     */
+    get description() {
+        if (this.master.description != null) {
+            return convertMarkdownToHtml(this.master.description);
+        }
     }
     /**
      * Convert to a set and remove sample fragments, e. g. `#complete`
