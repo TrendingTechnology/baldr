@@ -43,7 +43,7 @@
 import { Presentation } from './presentation';
 export { resolver, Presentation } from './presentation';
 export { mapStepFieldDefintionsToProps, FieldDefinition, FieldDefinitionCollection } from './field';
-export { MasterWrapper } from './master';
+export { MasterWrapper } from './master-wrapper';
 export { Slide } from './slide';
 export { masterCollection } from './master-collection';
 export * as genericMModul from './masters/generic';

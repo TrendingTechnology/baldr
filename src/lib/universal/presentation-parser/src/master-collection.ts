@@ -22,7 +22,7 @@ import { VideoMaster } from './masters/video'
 import { WikipediaMaster } from './masters/wikipedia'
 import { YoutubeMaster } from './masters/youtube'
 
-import { MasterWrapper } from './master'
+import { MasterWrapper } from './master-wrapper'
 
 export const masterCollection: { [masterName: string]: MasterWrapper } = {
   audio: new MasterWrapper(AudioMaster),

@@ -21,7 +21,7 @@ import { TaskMaster } from './masters/task';
 import { VideoMaster } from './masters/video';
 import { WikipediaMaster } from './masters/wikipedia';
 import { YoutubeMaster } from './masters/youtube';
-import { MasterWrapper } from './master';
+import { MasterWrapper } from './master-wrapper';
 export const masterCollection = {
     audio: new MasterWrapper(AudioMaster),
     camera: new MasterWrapper(CameraMaster),

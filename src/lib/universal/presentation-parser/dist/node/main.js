@@ -58,8 +58,8 @@ Object.defineProperty(exports, "resolver", { enumerable: true, get: function () 
 Object.defineProperty(exports, "Presentation", { enumerable: true, get: function () { return presentation_2.Presentation; } });
 var field_1 = require("./field");
 Object.defineProperty(exports, "mapStepFieldDefintionsToProps", { enumerable: true, get: function () { return field_1.mapStepFieldDefintionsToProps; } });
-var master_1 = require("./master");
-Object.defineProperty(exports, "MasterWrapper", { enumerable: true, get: function () { return master_1.MasterWrapper; } });
+var master_wrapper_1 = require("./master-wrapper");
+Object.defineProperty(exports, "MasterWrapper", { enumerable: true, get: function () { return master_wrapper_1.MasterWrapper; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
 var master_collection_1 = require("./master-collection");

@@ -4,7 +4,9 @@ import * as log from '@bldr/log'
 
 import { DataCutter } from './data-management'
 import { masterCollection } from './master-collection'
-import { MasterWrapper, FieldData } from './master'
+import { FieldData } from './master'
+import { MasterWrapper } from './master-wrapper'
+
 import { Step, StepCollector } from './step'
 import { WrappedUriList } from './fuzzy-uri'
 
