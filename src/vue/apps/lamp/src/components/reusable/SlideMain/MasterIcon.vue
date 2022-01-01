@@ -1,10 +1,6 @@
 <template>
-  <span
-    v-if="master && master.icon.showOnSlides"
-    :class="['vc_master_icon', master.icon.size]"
-    b-content-theme="default"
-  >
-    <color-icon :name="master.icon.name" :color="master.icon.color" />
+  <span :class="cssClasses" v-if="showOnSlides" b-content-theme="default">
+    <color-icon :name="iconName" :color="iconColor" />
   </span>
 </template>
 
@@ -13,16 +9,40 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Slide, Master } from '@bldr/presentation-parser'
+
+type Icon = Master['icon']
+
 @Component
 export default class MasterIcon extends Vue {
   @Prop({
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
 
-  get master () {
-    return this.slide.master
+  private get icon (): Icon {
+    return this.slide.master.icon
+  }
+
+  public get iconName (): string {
+    return this.icon.name
+  }
+
+  public get iconSize (): 'large' | 'small' {
+    return this.icon.size
+  }
+
+  public get iconColor (): string {
+    return this.icon.color
+  }
+
+  public get showOnSlides (): boolean {
+    return this.icon.showOnSlides
+  }
+
+  public get cssClasses (): string[] {
+    return ['vc_master_icon', this.iconSize]
   }
 }
 </script>
