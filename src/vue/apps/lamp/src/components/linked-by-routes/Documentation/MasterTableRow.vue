@@ -32,7 +32,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { masterCollection, MasterWrapper } from '@bldr/presentation-parser'
+import { masterCollection, Master } from '@bldr/presentation-parser'
 
 @Component
 export default class MasterTableRow extends Vue {
@@ -42,7 +42,7 @@ export default class MasterTableRow extends Vue {
   })
   masterName!: string
 
-  get master (): MasterWrapper {
+  get master (): Master {
     return masterCollection[this.masterName]
   }
 

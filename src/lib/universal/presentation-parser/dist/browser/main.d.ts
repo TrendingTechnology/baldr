@@ -3,15 +3,15 @@
  * presentation = new Presentation() [presentation.ts]
  *   new SlideCollection() [slide-collection.ts]
  *     new Slide(..) [slide.ts]
- *       masterWrapper.initializeFields(..)
+ *       Master.initializeFields(..)
  *         master.normalizeFieldsInput(..)
  *         master.collectFieldsOnInstantiation(..)
- *       masterWrapper.processMediaUris(..)
- *       masterWrapper.processOptionalMediaUris(..)
- *       masterWrapper.collectStepsOnInstation(..)
+ *       Master.processMediaUris(..)
+ *       Master.processOptionalMediaUris(..)
+ *       Master.collectStepsOnInstation(..)
  *
  * presentation.resolve()
- *   masterWrapper.finalizeSlide(..) [master.ts]
+ *   Master.finalizeSlide(..) [master.ts]
  *     master.collectFields(..)
  *     master.collectStepsLate(..)
  * ```
@@ -43,7 +43,7 @@
 import { Presentation } from './presentation';
 export { resolver, Presentation } from './presentation';
 export { mapStepFieldDefintionsToProps, FieldDefinition, FieldDefinitionCollection } from './field';
-export { MasterWrapper } from './master-wrapper';
+export { Master } from './master-wrapper';
 export { Slide } from './slide';
 export { masterCollection } from './master-collection';
 export * as genericMModul from './masters/generic';

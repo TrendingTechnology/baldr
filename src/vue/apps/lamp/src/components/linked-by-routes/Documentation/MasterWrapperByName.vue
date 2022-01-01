@@ -2,13 +2,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { masterCollection, MasterWrapper } from '@bldr/presentation-parser'
+import { masterCollection, Master } from '@bldr/presentation-parser'
 
 @Component
-export default class MasterWrapperByName extends Vue {
+export default class MasterByName extends Vue {
   masterName!: string
 
-  get master (): MasterWrapper {
+  get master (): Master {
     return masterCollection[this.masterName]
   }
 }

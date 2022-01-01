@@ -5,7 +5,7 @@ import * as log from '@bldr/log'
 import { DataCutter } from './data-management'
 import { masterCollection } from './master-collection'
 import { FieldData } from './master-specification'
-import { MasterWrapper } from './master-wrapper'
+import { Master } from './master-wrapper'
 
 import { Step, StepCollector } from './step'
 import { WrappedUriList } from './fuzzy-uri'
@@ -65,7 +65,7 @@ export class Slide {
 
   public readonly meta: SlideMeta
 
-  public readonly master: MasterWrapper
+  public readonly master: Master
 
   /**
    * In this attribute we save the normalized field data of a slide.
@@ -105,7 +105,7 @@ export class Slide {
     // data.checkEmpty()
   }
 
-  private detectMaster (data: DataCutter): MasterWrapper {
+  private detectMaster (data: DataCutter): Master {
     const masterNames = Object.keys(masterCollection)
     const intersection = masterNames.filter(masterName =>
       data.keys.includes(masterName)

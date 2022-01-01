@@ -22,30 +22,30 @@ import { VideoMaster } from './masters/video'
 import { WikipediaMaster } from './masters/wikipedia'
 import { YoutubeMaster } from './masters/youtube'
 
-import { MasterWrapper } from './master-wrapper'
+import { Master } from './master-wrapper'
 
-export const masterCollection: { [masterName: string]: MasterWrapper } = {
-  audio: new MasterWrapper(AudioMaster),
-  camera: new MasterWrapper(CameraMaster),
-  cloze: new MasterWrapper(ClozeMaster),
-  counter: new MasterWrapper(CounterMaster),
-  document: new MasterWrapper(DocumentMaster),
-  editor: new MasterWrapper(EditorMaster),
-  generic: new MasterWrapper(GenericMaster),
-  group: new MasterWrapper(GroupMaster),
-  image: new MasterWrapper(ImageMaster),
-  instrument: new MasterWrapper(InstrumentMaster),
-  interactiveGraphic: new MasterWrapper(InteractiveGraphicMaster),
-  note: new MasterWrapper(NoteMaster),
-  person: new MasterWrapper(PersonMaster),
-  question: new MasterWrapper(QuestionMaster),
-  quote: new MasterWrapper(QuoteMaster),
-  sampleList: new MasterWrapper(SampleListMaster),
-  scoreSample: new MasterWrapper(ScoreSampleMaster),
-  section: new MasterWrapper(SectionMaster),
-  song: new MasterWrapper(SongMaster),
-  task: new MasterWrapper(TaskMaster),
-  video: new MasterWrapper(VideoMaster),
-  wikipedia: new MasterWrapper(WikipediaMaster),
-  youtube: new MasterWrapper(YoutubeMaster)
+export const masterCollection: { [masterName: string]: Master } = {
+  audio: new Master(AudioMaster),
+  camera: new Master(CameraMaster),
+  cloze: new Master(ClozeMaster),
+  counter: new Master(CounterMaster),
+  document: new Master(DocumentMaster),
+  editor: new Master(EditorMaster),
+  generic: new Master(GenericMaster),
+  group: new Master(GroupMaster),
+  image: new Master(ImageMaster),
+  instrument: new Master(InstrumentMaster),
+  interactiveGraphic: new Master(InteractiveGraphicMaster),
+  note: new Master(NoteMaster),
+  person: new Master(PersonMaster),
+  question: new Master(QuestionMaster),
+  quote: new Master(QuoteMaster),
+  sampleList: new Master(SampleListMaster),
+  scoreSample: new Master(ScoreSampleMaster),
+  section: new Master(SectionMaster),
+  song: new Master(SongMaster),
+  task: new Master(TaskMaster),
+  video: new Master(VideoMaster),
+  wikipedia: new Master(WikipediaMaster),
+  youtube: new Master(YoutubeMaster)
 }

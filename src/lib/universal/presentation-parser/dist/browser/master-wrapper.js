@@ -1,5 +1,5 @@
 /**
- * Provide the class MasterWrapper.
+ * Provide the class “Master”.
  */
 import { convertNestedMarkdownToHtml, convertMarkdownToHtml } from '@bldr/markdown-to-html';
 import { MediaUri } from '@bldr/client-media-models';
@@ -23,10 +23,10 @@ class MasterIcon {
     }
 }
 /**
- * Wraps a master object. Processes, hides, forwards the field data of the
- * slides and methods.
+ * Wraps a master specification object. Processes, hides, forwards the field
+ * data of the slides and methods.
  */
-export class MasterWrapper {
+export class Master {
     constructor(MasterClass) {
         this.master = new MasterClass();
         this.icon = new MasterIcon(this.master.icon);
@@ -66,13 +66,13 @@ export class MasterWrapper {
     }
     processMediaUris(fields) {
         if (this.master.collectMediaUris != null && fields != null) {
-            return MasterWrapper.processMediaUris(this.master.collectMediaUris(fields));
+            return Master.processMediaUris(this.master.collectMediaUris(fields));
         }
         return new Set();
     }
     processOptionalMediaUris(fields) {
         if (this.master.collectOptionalMediaUris != null && fields != null) {
-            return MasterWrapper.processMediaUris(this.master.collectOptionalMediaUris(fields));
+            return Master.processMediaUris(this.master.collectOptionalMediaUris(fields));
         }
         return new Set();
     }

@@ -1,5 +1,5 @@
 /**
- * Provide the class MasterWrapper.
+ * Provide the class “Master”.
  */
 import { Resolver } from '@bldr/media-resolver-ng';
 import { Slide } from './slide';
@@ -20,10 +20,10 @@ declare class MasterIcon implements MasterIconSpec {
     constructor({ name, color, size, showOnSlides, unicodeSymbol }: MasterIconSpec);
 }
 /**
- * Wraps a master object. Processes, hides, forwards the field data of the
- * slides and methods.
+ * Wraps a master specification object. Processes, hides, forwards the field
+ * data of the slides and methods.
  */
-export declare class MasterWrapper {
+export declare class Master {
     private readonly master;
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);

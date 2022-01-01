@@ -1,6 +1,6 @@
 import { DataCutter } from './data-management';
 import { FieldData } from './master-specification';
-import { MasterWrapper } from './master-wrapper';
+import { Master } from './master-wrapper';
 import { Step, StepCollector } from './step';
 import { WrappedUriList } from './fuzzy-uri';
 /**
@@ -43,7 +43,7 @@ export declare class Slide {
     slides?: Slide[];
     stepCollector: StepCollector;
     readonly meta: SlideMeta;
-    readonly master: MasterWrapper;
+    readonly master: Master;
     /**
      * In this attribute we save the normalized field data of a slide.
      */

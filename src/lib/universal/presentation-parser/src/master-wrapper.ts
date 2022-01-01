@@ -1,5 +1,5 @@
 /**
- * Provide the class MasterWrapper.
+ * Provide the class “Master”.
  */
 
 import { Resolver } from '@bldr/media-resolver-ng'
@@ -57,10 +57,10 @@ class MasterIcon implements MasterIconSpec {
 }
 
 /**
- * Wraps a master object. Processes, hides, forwards the field data of the
- * slides and methods.
+ * Wraps a master specification object. Processes, hides, forwards the field
+ * data of the slides and methods.
  */
-export class MasterWrapper {
+export class Master {
   private readonly master: MasterSpec
 
   public icon: MasterIcon
@@ -111,7 +111,7 @@ export class MasterWrapper {
 
   public processMediaUris (fields?: FieldData): Set<string> {
     if (this.master.collectMediaUris != null && fields != null) {
-      return MasterWrapper.processMediaUris(
+      return Master.processMediaUris(
         this.master.collectMediaUris(fields)
       )
     }
@@ -120,7 +120,7 @@ export class MasterWrapper {
 
   public processOptionalMediaUris (fields?: FieldData): Set<string> {
     if (this.master.collectOptionalMediaUris != null && fields != null) {
-      return MasterWrapper.processMediaUris(
+      return Master.processMediaUris(
         this.master.collectOptionalMediaUris(fields)
       )
     }

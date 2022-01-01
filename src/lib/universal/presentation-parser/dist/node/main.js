@@ -4,15 +4,15 @@
  * presentation = new Presentation() [presentation.ts]
  *   new SlideCollection() [slide-collection.ts]
  *     new Slide(..) [slide.ts]
- *       masterWrapper.initializeFields(..)
+ *       Master.initializeFields(..)
  *         master.normalizeFieldsInput(..)
  *         master.collectFieldsOnInstantiation(..)
- *       masterWrapper.processMediaUris(..)
- *       masterWrapper.processOptionalMediaUris(..)
- *       masterWrapper.collectStepsOnInstation(..)
+ *       Master.processMediaUris(..)
+ *       Master.processOptionalMediaUris(..)
+ *       Master.collectStepsOnInstation(..)
  *
  * presentation.resolve()
- *   masterWrapper.finalizeSlide(..) [master.ts]
+ *   Master.finalizeSlide(..) [master.ts]
  *     master.collectFields(..)
  *     master.collectStepsLate(..)
  * ```
@@ -51,7 +51,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.masterCollection = exports.Slide = exports.MasterWrapper = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.masterCollection = exports.Slide = exports.Master = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
@@ -59,7 +59,7 @@ Object.defineProperty(exports, "Presentation", { enumerable: true, get: function
 var field_1 = require("./field");
 Object.defineProperty(exports, "mapStepFieldDefintionsToProps", { enumerable: true, get: function () { return field_1.mapStepFieldDefintionsToProps; } });
 var master_wrapper_1 = require("./master-wrapper");
-Object.defineProperty(exports, "MasterWrapper", { enumerable: true, get: function () { return master_wrapper_1.MasterWrapper; } });
+Object.defineProperty(exports, "Master", { enumerable: true, get: function () { return master_wrapper_1.Master; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
 var master_collection_1 = require("./master-collection");

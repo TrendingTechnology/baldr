@@ -28,7 +28,7 @@ import Vue from 'vue'
 import {
   FieldDefinitionCollection,
   masterCollection,
-  MasterWrapper
+  Master
 } from '@bldr/presentation-parser'
 
 import MasterField from './MasterField.vue'
@@ -45,7 +45,7 @@ export default class MasterDocumentation extends Vue {
     return this.$route.params.master
   }
 
-  get master (): MasterWrapper {
+  get master (): Master {
     return masterCollection[this.masterName]
   }
 
