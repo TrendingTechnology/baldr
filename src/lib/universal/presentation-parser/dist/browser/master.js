@@ -85,6 +85,9 @@ export class MasterWrapper {
         this.master = new MasterClass();
         this.icon = new MasterIcon(this.master.icon);
     }
+    get fieldsDefintion() {
+        return this.master.fieldsDefintion;
+    }
     get name() {
         return this.master.name;
     }

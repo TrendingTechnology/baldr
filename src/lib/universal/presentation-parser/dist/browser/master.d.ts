@@ -34,7 +34,7 @@ export interface FieldData {
  *  }
  * ```
  */
-interface FieldDefinition {
+export interface FieldDefinition {
     /**
      * A default value.
      */
@@ -73,8 +73,8 @@ interface FieldDefinition {
     validate?: (input: any) => boolean;
 }
 declare type StepFieldNames = 'selector' | 'mode' | 'subset';
-interface FieldDefinitionCollection {
-    [key: string]: FieldDefinition;
+export interface FieldDefinitionCollection {
+    [fieldName: string]: FieldDefinition;
 }
 /**
  * Map step support related fields.
@@ -143,6 +143,9 @@ interface MasterIconSpec {
      */
     unicodeSymbol?: string;
 }
+/**
+ * Interface for all master slides to implement.
+ */
 export interface Master {
     /**
      * The name of the master slide. A short name in lower case letters like
@@ -157,9 +160,7 @@ export interface Master {
     /**
      * The defintion of the fields of the master slide.
      */
-    fieldsDefintion: {
-        [key: string]: FieldDefinition;
-    };
+    fieldsDefintion: FieldDefinitionCollection;
     /**
      * ```yml
      * - audio: ref:./Fuer-Elise.jpg
@@ -305,6 +306,7 @@ export declare class MasterWrapper {
     private readonly master;
     icon: MasterIcon;
     constructor(MasterClass: MasterConstructor);
+    get fieldsDefintion(): FieldDefinitionCollection;
     get name(): string;
     get displayName(): string;
     /**

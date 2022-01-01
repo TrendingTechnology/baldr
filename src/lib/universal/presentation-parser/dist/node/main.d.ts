@@ -42,7 +42,7 @@
  */
 import { Presentation } from './presentation';
 export { resolver, Presentation } from './presentation';
-export { mapStepFieldDefintionsToProps, MasterWrapper } from './master';
+export { mapStepFieldDefintionsToProps, MasterWrapper, FieldDefinition, FieldDefinitionCollection } from './master';
 export { Slide } from './slide';
 export { masterCollection } from './master-collection';
 export * as genericMModul from './masters/generic';

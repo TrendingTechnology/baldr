@@ -47,6 +47,3 @@ export const masterCollection = {
     wikipedia: new MasterWrapper(WikipediaMaster),
     youtube: new MasterWrapper(YoutubeMaster)
 };
-export function getMaster(masterName) {
-    return masterCollection[masterName];
-}

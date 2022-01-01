@@ -47,7 +47,7 @@ export interface FieldData {
  *  }
  * ```
  */
-interface FieldDefinition {
+export interface FieldDefinition {
   /**
    * A default value.
    */
@@ -95,8 +95,8 @@ interface FieldDefinition {
 
 type StepFieldNames = 'selector' | 'mode' | 'subset'
 
-interface FieldDefinitionCollection {
-  [key: string]: FieldDefinition
+export interface FieldDefinitionCollection {
+  [fieldName: string]: FieldDefinition
 }
 
 const stepFieldDefinitions: FieldDefinitionCollection = {
@@ -229,6 +229,9 @@ interface MasterIconSpec {
   unicodeSymbol?: string
 }
 
+/**
+ * Interface for all master slides to implement.
+ */
 export interface Master {
   /**
    * The name of the master slide. A short name in lower case letters like
@@ -246,9 +249,7 @@ export interface Master {
   /**
    * The defintion of the fields of the master slide.
    */
-  fieldsDefintion: {
-    [key: string]: FieldDefinition
-  }
+  fieldsDefintion: FieldDefinitionCollection
 
   /**
    * ```yml
@@ -445,6 +446,10 @@ export class MasterWrapper {
   constructor (MasterClass: MasterConstructor) {
     this.master = new MasterClass()
     this.icon = new MasterIcon(this.master.icon)
+  }
+
+  public get fieldsDefintion (): FieldDefinitionCollection {
+    return this.master.fieldsDefintion
   }
 
   public get name (): string {
