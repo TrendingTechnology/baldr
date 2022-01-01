@@ -6,7 +6,7 @@ class SongMaster {
         this.name = 'song';
         this.displayName = 'Lied';
         this.icon = {
-            name: 'file-song',
+            name: 'file-audio',
             color: 'green',
             /**
              * U+1F3BC

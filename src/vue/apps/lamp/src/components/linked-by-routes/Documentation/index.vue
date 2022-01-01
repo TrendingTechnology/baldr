@@ -26,38 +26,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr
+          <master-table-row
+            :master-name="masterName"
             v-for="(rawYaml, masterName) in examples.masters"
             :key="masterName"
-          >
-            <td>
-              <material-icon
-                :name="getMasterByName(masterName).icon.name"
-                :color="getMasterByName(masterName).icon.color"
-              />
-            </td>
-            <td>
-              <router-link
-                :to="{
-                  name: 'documentation-master',
-                  params: { master: masterName }
-                }"
-              >
-                {{ masterName }}
-              </router-link>
-            </td>
-            <td>{{ getMasterByName(masterName).title }}</td>
-            <td>
-              <router-link
-                :to="{
-                  name: 'slides-preview',
-                  params: { presRef: `EP_master_${masterName}` }
-                }"
-              >
-                <material-icon name="presentation" />
-              </router-link>
-            </td>
-          </tr>
+          />
         </tbody>
       </table>
     </section>
@@ -75,28 +48,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr
+          <common-example-table-row
+            :example-name="exampleName"
             v-for="(example, exampleName) in examples.common"
             :key="exampleName"
-          >
-            <td>
-              <router-link
-                :to="{ name: 'common-example', params: { exampleName } }"
-              >
-                {{ exampleName }}
-              </router-link>
-            </td>
-            <td>
-              <router-link
-                :to="{
-                  name: 'slides-preview',
-                  params: { presRef: `EP_common_${exampleName}` }
-                }"
-              >
-                <material-icon name="presentation" />
-              </router-link>
-            </td>
-          </tr>
+          />
         </tbody>
       </table>
     </section>
@@ -110,7 +66,9 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { masterCollection } from '../../../masters.js'
+
+import MasterTableRow from './MasterTableRow.vue'
+import CommonExampleTableRow from './CommonExampleTableRow.vue'
 
 const documentation = `
 
@@ -127,7 +85,7 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 * _.transparent-background_ (grauer Hintergrund der transparent ist)
 `
 
-@Component
+@Component({ components: { MasterTableRow, CommonExampleTableRow } })
 export default class DocumentationOverview extends Vue {
   get documentation () {
     return convertMarkdownToHtml(documentation)
@@ -135,10 +93,6 @@ export default class DocumentationOverview extends Vue {
 
   get examples () {
     return rawYamlExamples
-  }
-
-  getMasterByName (masterName: string) {
-    return masterCollection.get(masterName)
   }
 }
 </script>

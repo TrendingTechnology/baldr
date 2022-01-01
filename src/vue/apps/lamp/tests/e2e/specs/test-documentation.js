@@ -1,4 +1,30 @@
-describe('Master documentation /documentation/master/:masterName', () => {
+describe('Documentation', function () {
+  it('Documentation overview (/documentation)', function () {
+    cy.visit('/#/documentation/')
+    cy.contains('Dokumentation')
+    cy.contains('Master-Folien')
+    cy.contains('cloze')
+    cy.contains('Lückentext')
+    cy.contains('Allgemeine Beispiele')
+    cy.contains('absentSlides')
+    cy.contains('Semantische CSS-Klassen')
+  })
+
+  it('Master documentation (/documentation/master/audio)', function () {
+    cy.visit('/#/documentation/master/audio')
+    cy.contains('Master-Folie „Hörbeispiel“ (audio)')
+    cy.contains('src: Eine Medien-Datei-URI, z. B. ref:Fuer-Elise oder eine Sample-URI (ref:Fuer-Elise#complete). (required, assetUri, type=String')
+    cy.contains('Beispiel-Präsentation')
+    cy.contains('ref: EP_master_audio')
+  })
+
+  it('Common example (/documentation/common/absentSlides)', function () {
+    cy.visit('/#/documentation/common/absentSlides')
+    cy.contains('Allgemeines Beispiel „absentSlides“')
+  })
+})
+
+describe('Visit all master documentation sites /documentation/master/:masterName', () => {
   function visitDocumentation (masterName) {
     cy.visit('/#/documentation/master/' + masterName)
   }
@@ -96,7 +122,7 @@ describe('Master documentation /documentation/master/:masterName', () => {
   })
 })
 
-describe('Master example presentations /presentation/EP_master_:masterName/preview', () => {
+describe('Visit all master example presentations /presentation/EP_master_:masterName/preview', () => {
   function visitExample (masterName) {
     cy.visit('/#/presentation/EP_master_' + masterName + '/preview')
     cy.contains('h1', masterName)

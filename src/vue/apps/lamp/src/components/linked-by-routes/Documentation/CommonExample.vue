@@ -3,36 +3,36 @@
     class="vc_common_example main-app-padding main-app-fullscreen"
     b-ui-theme="default"
   >
-    <h1>Allgemeines Beispiel “{{ exampleName }}”</h1>
+    <h1>Allgemeines Beispiel „{{ exampleName }}“</h1>
 
-    <section>
-      <h2>
-        Example
-        <router-link
-          :to="{
-            name: 'slides-preview',
-            params: { presRef: `EP_common_${exampleName}` }
-          }"
-        >
-          <material-icon name="presentation" />
-        </router-link>
-      </h2>
-
-      <pre><code>{{ rawYaml }}</code></pre>
-    </section>
+    <presentation-example
+      class="vc_master_presentation_example"
+      :pres-ref="exampleRef"
+      :yaml-markup="rawYaml"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import PresentationExample from './PresentationExample.vue'
 
-@Component
+@Component({
+  components: {
+    PresentationExample
+  }
+})
 export default class CommonExample extends Vue {
-  get exampleName () {
+  get exampleName (): string {
     return this.$route.params.exampleName
   }
-  get rawYaml () {
+
+  get exampleRef (): string {
+    return `EP_common_${this.exampleName}`
+  }
+
+  get rawYaml (): string {
     return rawYamlExamples.common[this.exampleName]
   }
 }

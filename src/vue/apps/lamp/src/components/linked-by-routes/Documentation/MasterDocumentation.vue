@@ -1,6 +1,9 @@
 <template>
   <div class="vc_master_documentation main-app-padding" b-ui-theme="default">
-    <h1>Master-Folie “{{ displayName }}” (<code>{{name}}</code>)</h1>
+    <h1>
+      Master-Folie „{{ displayName }}“ (<code>{{ masterName }}</code
+      >)
+    </h1>
 
     <section v-html="description" />
 
@@ -14,70 +17,49 @@
       </ul>
     </section>
 
-    <section v-if="master.example">
-      <h2>
-        Beispiel-Präsentation
-        <router-link
-          :to="{
-            name: 'slides-preview',
-            params: { presRef: `EP_master_${masterName}` }
-          }"
-        >
-          <material-icon name="presentation" />
-        </router-link>
-      </h2>
-
-      <pre><code>{{ master.exampleClean }}</code></pre>
-    </section>
+    <master-presentation-example :master-name="masterName" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
+import Vue from 'vue'
 
-import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-import { LampTypes } from '@bldr/type-definitions'
 import {
-  masterCollection as masterCollectionNg,
-  MasterWrapper,
-  FieldDefinitionCollection
+  FieldDefinitionCollection,
+  masterCollection,
+  MasterWrapper
 } from '@bldr/presentation-parser'
 
-import { masterCollection } from '../../../masters.js'
-
 import MasterField from './MasterField.vue'
+import MasterPresentationExample from './MasterPresentationExample.vue'
 
 @Component({
-  methods: { convertMarkdownToHtml },
   components: {
-    MasterField
+    MasterField,
+    MasterPresentationExample
   }
 })
 export default class MasterDocumentation extends Vue {
-  get name (): string {
+  get masterName (): string {
     return this.$route.params.master
   }
 
+  get master (): MasterWrapper {
+    return masterCollection[this.masterName]
+  }
+
   get displayName (): string {
-    return this.masterNg.displayName
-  }
-
-  get master (): LampTypes.Master {
-    return masterCollection.get(this.name)
-  }
-
-  get masterNg (): MasterWrapper {
-    return masterCollectionNg[this.name]
+    return this.master.displayName
   }
 
   get fields (): FieldDefinitionCollection {
-    return this.masterNg.fieldsDefintion
+    return this.master.fieldsDefintion
   }
 
   get description (): string {
-    if (this.masterNg.description != null) {
-      return this.masterNg.description
+    if (this.master.description != null) {
+      return this.master.description
     }
   }
 }
