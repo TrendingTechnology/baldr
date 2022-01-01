@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.masterCollection = void 0;
+exports.getMaster = exports.masterCollection = void 0;
 const audio_1 = require("./masters/audio");
 const camera_1 = require("./masters/camera");
 const cloze_1 = require("./masters/cloze");
@@ -50,3 +50,10 @@ exports.masterCollection = {
     wikipedia: new master_wrapper_1.Master(wikipedia_1.WikipediaMaster),
     youtube: new master_wrapper_1.Master(youtube_1.YoutubeMaster)
 };
+function getMaster(masterName) {
+    if (exports.masterCollection[masterName] == null) {
+        throw new Error(`Unknown master “${masterName}”`);
+    }
+    return exports.masterCollection[masterName];
+}
+exports.getMaster = getMaster;

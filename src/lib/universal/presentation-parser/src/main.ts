@@ -53,7 +53,7 @@ export {
 export { Master } from './master-wrapper'
 export { Slide } from './slide'
 
-export { masterCollection } from './master-collection'
+export { masterCollection, getMaster } from './master-collection'
 
 // MModule = MasterModule
 export * as genericMModul from './masters/generic'

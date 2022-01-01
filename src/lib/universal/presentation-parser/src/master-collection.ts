@@ -49,3 +49,10 @@ export const masterCollection: { [masterName: string]: Master } = {
   wikipedia: new Master(WikipediaMaster),
   youtube: new Master(YoutubeMaster)
 }
+
+export function getMaster (masterName: string): Master {
+  if (masterCollection[masterName] == null) {
+    throw new Error(`Unknown master “${masterName}”`)
+  }
+  return masterCollection[masterName]
+}

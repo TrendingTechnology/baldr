@@ -45,7 +45,7 @@ export { resolver, Presentation } from './presentation';
 export { mapStepFieldDefintionsToProps, FieldDefinition, FieldDefinitionCollection } from './field';
 export { Master } from './master-wrapper';
 export { Slide } from './slide';
-export { masterCollection } from './master-collection';
+export { masterCollection, getMaster } from './master-collection';
 export * as genericMModul from './masters/generic';
 export * as questionMModul from './masters/question';
 export * as wikipediaMModule from './masters/wikipedia';
