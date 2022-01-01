@@ -232,11 +232,9 @@ export default class CameraMasterMain extends MasterMain {
       await this.setVideoStream()
     }
     shortcutManager.add(
-      {
-        keys: 'ctrl+c+s',
-        callback: this.showDeviceSelect,
-        description: 'Dokumentenkamera auswählen'
-      }
+      'ctrl+c+s',
+      this.showDeviceSelect,
+      'Dokumentenkamera auswählen'
     )
   }
 }
