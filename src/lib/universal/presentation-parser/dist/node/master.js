@@ -1,80 +1,34 @@
 "use strict";
+/**
+ * Bundle many exports for the single master slides to import.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MasterWrapper = exports.mapStepFieldDefintionsToProps = exports.mapStepFieldDefintions = exports.shortenText = exports.Slide = exports.Resolver = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.StepCollector = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.convertHtmlToPlainText = exports.Sample = exports.Asset = exports.convertMarkdownToHtml = void 0;
+exports.MasterWrapper = exports.StepCollector = exports.Slide = exports.WrappedUriList = exports.extractUrisFromFuzzySpecs = exports.mapStepFieldDefintions = exports.splitHtmlIntoChunks = exports.wrapWords = exports.buildTextStepController = exports.shortenText = exports.convertHtmlToPlainText = exports.Resolver = exports.Sample = exports.Asset = exports.convertMarkdownToHtml = void 0;
 const markdown_to_html_1 = require("@bldr/markdown-to-html");
 const client_media_models_1 = require("@bldr/client-media-models");
+// Exports
 var markdown_to_html_2 = require("@bldr/markdown-to-html");
 Object.defineProperty(exports, "convertMarkdownToHtml", { enumerable: true, get: function () { return markdown_to_html_2.convertMarkdownToHtml; } });
 var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
 Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
+Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
 var string_format_1 = require("@bldr/string-format");
 Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return string_format_1.convertHtmlToPlainText; } });
+Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_1.shortenText; } });
 var dom_manipulator_1 = require("@bldr/dom-manipulator");
 Object.defineProperty(exports, "buildTextStepController", { enumerable: true, get: function () { return dom_manipulator_1.buildTextStepController; } });
 Object.defineProperty(exports, "wrapWords", { enumerable: true, get: function () { return dom_manipulator_1.wrapWords; } });
 Object.defineProperty(exports, "splitHtmlIntoChunks", { enumerable: true, get: function () { return dom_manipulator_1.splitHtmlIntoChunks; } });
-var step_1 = require("./step");
-Object.defineProperty(exports, "StepCollector", { enumerable: true, get: function () { return step_1.StepCollector; } });
+var field_1 = require("./field");
+Object.defineProperty(exports, "mapStepFieldDefintions", { enumerable: true, get: function () { return field_1.mapStepFieldDefintions; } });
 var fuzzy_uri_1 = require("./fuzzy-uri");
 Object.defineProperty(exports, "extractUrisFromFuzzySpecs", { enumerable: true, get: function () { return fuzzy_uri_1.extractUrisFromFuzzySpecs; } });
 Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
-var media_resolver_ng_2 = require("@bldr/media-resolver-ng");
-Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_2.Resolver; } });
 var slide_1 = require("./slide");
 Object.defineProperty(exports, "Slide", { enumerable: true, get: function () { return slide_1.Slide; } });
-var string_format_2 = require("@bldr/string-format");
-Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_2.shortenText; } });
-const stepFieldDefinitions = {
-    selector: {
-        type: String,
-        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
-    },
-    mode: {
-        type: String,
-        description: '„words“ oder „sentences“'
-    },
-    subset: {
-        type: String,
-        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
-    }
-};
-/**
- * Map step support related fields.
- *
- * @param selectors - At the moment: “selector”, “mode” and “subset”.
- */
-function mapStepFieldDefintions(selectors) {
-    const result = {};
-    for (const selector of selectors) {
-        if (stepFieldDefinitions[selector] != null) {
-            result[`step${selector.charAt(0).toUpperCase()}${selector
-                .substr(1)
-                .toLowerCase()}`] = stepFieldDefinitions[selector];
-        }
-    }
-    return result;
-}
-exports.mapStepFieldDefintions = mapStepFieldDefintions;
-/**
- * Map step support related fields.
- *
- * @param selectors - At the moment: “selector”, “mode” and “subset”.
- *
- * @returns should return `PropsDefinition<DefaultProps>`
- */
-function mapStepFieldDefintionsToProps(selectors) {
-    const result = {};
-    for (const selector of selectors) {
-        if (stepFieldDefinitions[selector] != null) {
-            result[`step${selector.charAt(0).toUpperCase()}${selector
-                .substr(1)
-                .toLowerCase()}`] = stepFieldDefinitions[selector];
-        }
-    }
-    return result;
-}
-exports.mapStepFieldDefintionsToProps = mapStepFieldDefintionsToProps;
+var step_1 = require("./step");
+Object.defineProperty(exports, "StepCollector", { enumerable: true, get: function () { return step_1.StepCollector; } });
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.

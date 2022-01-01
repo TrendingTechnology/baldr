@@ -44,8 +44,13 @@
 import { Presentation } from './presentation'
 
 export { resolver, Presentation } from './presentation'
+export {
+  mapStepFieldDefintionsToProps,
+  FieldDefinition,
+  FieldDefinitionCollection
+} from './field'
 
-export { mapStepFieldDefintionsToProps, MasterWrapper, FieldDefinition, FieldDefinitionCollection } from './master'
+export { MasterWrapper } from './master'
 export { Slide } from './slide'
 
 export { masterCollection } from './master-collection'
