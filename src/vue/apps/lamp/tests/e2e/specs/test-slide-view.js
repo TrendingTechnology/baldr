@@ -25,14 +25,8 @@ describe('Increase and decrease font size', () => {
 })
 
 describe('Master icon', function () {
-  it.only('Shortcut to reset font size', () => {
+  it('Shortcut to reset font size', () => {
     cy.visit('/#/presentation/EP_common_allMasters/slide/1')
-    cy.get('.vc_master_icon .baldr-icon')
-      // .should('have.class', '.baldr-icon_music')
-      .should('satisfy', $el => {
-        console.log($el)
-        const classList = Array.from($el[0].classList)
-        return classList.includes('.baldr-icon_music')
-      })
+    cy.get('.vc_master_icon > .baldr-icon')
   })
 })
