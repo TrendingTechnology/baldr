@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type VideoFieldsRaw = string | VideoFieldsNormalized;
 interface VideoFieldsNormalized {
     src: string;
 }
-export declare class VideoMaster implements Master {
+export declare class VideoMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

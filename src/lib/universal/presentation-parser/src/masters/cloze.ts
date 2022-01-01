@@ -1,5 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models'
-import { Master, mapStepFieldDefintions } from '../master'
+import { MasterSpec, mapStepFieldDefintions } from '../master-specification'
 
 type ClozeFieldsRaw = string | ClozeFieldsNormalized
 
@@ -8,7 +8,7 @@ interface ClozeFieldsNormalized {
   stepSubset?: string
 }
 
-export class ClozeMaster implements Master {
+export class ClozeMaster implements MasterSpec {
   name = 'cloze'
 
   displayName = 'Lückentext'

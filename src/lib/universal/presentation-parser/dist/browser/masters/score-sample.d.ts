@@ -1,10 +1,10 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type ScoreSampleFieldsRaw = string | ScoreSampleFieldsNormalized;
 interface ScoreSampleFieldsNormalized {
     score: string;
     audio?: string;
 }
-export declare class ScoreSampleMaster implements Master {
+export declare class ScoreSampleMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

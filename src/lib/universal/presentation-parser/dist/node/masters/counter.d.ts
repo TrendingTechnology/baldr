@@ -1,4 +1,4 @@
-import { Master, StepCollector } from '../master';
+import { MasterSpec, StepCollector } from '../master-specification';
 declare type CounterRawInput = string | number | CounterInput;
 interface CounterInput {
     to: number;
@@ -25,7 +25,7 @@ export declare type Format = 'arabic' | 'lower' | 'upper' | 'roman';
  * is no longer used.
  */
 export declare function formatCounterNumber(currentNumber: number, format: Format): string;
-export declare class CounterMaster implements Master {
+export declare class CounterMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

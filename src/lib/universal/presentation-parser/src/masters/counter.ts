@@ -1,4 +1,4 @@
-import { Master, StepCollector } from '../master'
+import { MasterSpec, StepCollector } from '../master-specification'
 
 type CounterRawInput = string | number | CounterInput
 
@@ -105,7 +105,7 @@ export function formatCounterNumber (
   return `${currentNumber}`
 }
 
-export class CounterMaster implements Master {
+export class CounterMaster implements MasterSpec {
   name = 'counter'
 
   displayName = 'Zähler'

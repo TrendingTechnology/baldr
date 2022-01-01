@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 export type GroupFieldsRaw = string | GroupFieldsNormalized
 
@@ -6,7 +6,7 @@ export interface GroupFieldsNormalized {
   groupId: string
 }
 
-export class GroupMaster implements Master {
+export class GroupMaster implements MasterSpec {
   name = 'group'
 
   displayName = 'Gruppe'

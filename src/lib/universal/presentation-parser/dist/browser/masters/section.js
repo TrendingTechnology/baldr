@@ -1,4 +1,4 @@
-import { shortenText } from '../master';
+import { shortenText } from '../master-specification';
 export class SectionMaster {
     constructor() {
         this.name = 'section';

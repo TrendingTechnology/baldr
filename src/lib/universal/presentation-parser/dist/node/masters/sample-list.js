@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SampleListMaster = void 0;
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 class SampleListMaster {
     constructor() {
         this.name = 'sampleList';
@@ -42,12 +42,12 @@ class SampleListMaster {
         else {
             samples = fields.samples;
         }
-        const wrappedUris = new master_1.WrappedUriList(samples);
+        const wrappedUris = new master_specification_1.WrappedUriList(samples);
         fields.samples = wrappedUris.list;
         return fields;
     }
     collectMediaUris(fields) {
-        return (0, master_1.extractUrisFromFuzzySpecs)(fields.samples);
+        return (0, master_specification_1.extractUrisFromFuzzySpecs)(fields.samples);
     }
     collectFieldsAfterResolution(fields, resolver) {
         if (fields.samples.length === 1) {

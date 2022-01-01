@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClozeMaster = void 0;
 const client_media_models_1 = require("@bldr/client-media-models");
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 class ClozeMaster {
     constructor() {
         this.name = 'cloze';
@@ -22,7 +22,7 @@ class ClozeMaster {
                 required: true,
                 description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
                 assetUri: true
-            } }, (0, master_1.mapStepFieldDefintions)(['subset']));
+            } }, (0, master_specification_1.mapStepFieldDefintions)(['subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

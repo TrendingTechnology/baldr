@@ -1,4 +1,4 @@
-import { Master, convertMarkdownToHtml, StepCollector } from '../master'
+import { MasterSpec, convertMarkdownToHtml, StepCollector } from '../master-specification'
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator'
 
 export type NoteFieldsRaw = string | NoteFieldsInstantiated
@@ -7,7 +7,7 @@ interface NoteFieldsInstantiated {
   markup: string
 }
 
-export class NoteMaster implements Master {
+export class NoteMaster implements MasterSpec {
   name = 'note'
 
   displayName = 'Hefteintrag'

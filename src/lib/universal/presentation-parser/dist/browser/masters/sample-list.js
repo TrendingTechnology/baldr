@@ -1,4 +1,4 @@
-import { extractUrisFromFuzzySpecs, WrappedUriList } from '../master';
+import { extractUrisFromFuzzySpecs, WrappedUriList } from '../master-specification';
 export class SampleListMaster {
     constructor() {
         this.name = 'sampleList';

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SectionMaster = void 0;
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 class SectionMaster {
     constructor() {
         this.name = 'section';
@@ -27,7 +27,7 @@ class SectionMaster {
         this.shortFormField = 'heading';
     }
     deriveTitleFromFields(fields) {
-        return (0, master_1.shortenText)(fields.heading);
+        return (0, master_specification_1.shortenText)(fields.heading);
     }
 }
 exports.SectionMaster = SectionMaster;

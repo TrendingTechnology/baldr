@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 type ScoreSampleFieldsRaw = string | ScoreSampleFieldsNormalized
 
@@ -7,7 +7,7 @@ interface ScoreSampleFieldsNormalized {
   audio?: string
 }
 
-export class ScoreSampleMaster implements Master {
+export class ScoreSampleMaster implements MasterSpec {
   name = 'scoreSample'
 
   displayName = 'Notenbeispiel'

@@ -12,9 +12,9 @@ import { MediaUri } from '@bldr/client-media-models'
 import { Slide } from './slide'
 import { StepCollector } from './step'
 import { FieldData, FieldDefinitionCollection } from './field'
-import { MasterIconSpec, Master } from './master'
+import { MasterIconSpec, MasterSpec } from './master-specification'
 
-type MasterConstructor = new () => Master
+type MasterConstructor = new () => MasterSpec
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -61,7 +61,7 @@ class MasterIcon implements MasterIconSpec {
  * slides and methods.
  */
 export class MasterWrapper {
-  private readonly master: Master
+  private readonly master: MasterSpec
 
   public icon: MasterIcon
   constructor (MasterClass: MasterConstructor) {

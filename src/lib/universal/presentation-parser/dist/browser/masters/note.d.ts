@@ -1,9 +1,9 @@
-import { Master, StepCollector } from '../master';
+import { MasterSpec, StepCollector } from '../master-specification';
 export declare type NoteFieldsRaw = string | NoteFieldsInstantiated;
 interface NoteFieldsInstantiated {
     markup: string;
 }
-export declare class NoteMaster implements Master {
+export declare class NoteMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

@@ -1,4 +1,4 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type MasterFieldsRaw = string | MasterFieldsNormalized;
 interface MasterFieldsNormalized {
     src: string;
@@ -6,7 +6,7 @@ interface MasterFieldsNormalized {
     description?: string;
     noMeta?: boolean;
 }
-export declare class ImageMaster implements Master {
+export declare class ImageMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

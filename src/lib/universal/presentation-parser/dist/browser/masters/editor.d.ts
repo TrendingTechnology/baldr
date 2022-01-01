@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type EditorFieldsRaw = string | EditorFieldsNormalized;
 interface EditorFieldsNormalized {
     markup: string;
 }
-export declare class EditorMaster implements Master {
+export declare class EditorMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

@@ -1,5 +1,5 @@
 import { shortenText } from '@bldr/string-format';
-import { convertMarkdownToHtml, splitHtmlIntoChunks } from '../master';
+import { convertMarkdownToHtml, splitHtmlIntoChunks } from '../master-specification';
 const CHARACTERS_ON_SLIDE = 400;
 export function splitMarkup(rawMarkup, charactersOnSlide) {
     if (typeof rawMarkup === 'string') {

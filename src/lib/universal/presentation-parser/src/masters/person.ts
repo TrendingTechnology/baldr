@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 export type PersonFieldsRaw = string | PersonFieldsNormalized
 
@@ -6,7 +6,7 @@ interface PersonFieldsNormalized {
   personId: string
 }
 
-export class PersonMaster implements Master {
+export class PersonMaster implements MasterSpec {
   name = 'person'
 
   displayName = 'Porträt'

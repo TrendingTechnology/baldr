@@ -1,5 +1,5 @@
 import { MediaUri } from '@bldr/client-media-models';
-import { mapStepFieldDefintions } from '../master';
+import { mapStepFieldDefintions } from '../master-specification';
 export class ClozeMaster {
     constructor() {
         this.name = 'cloze';

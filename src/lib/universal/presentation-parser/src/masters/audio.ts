@@ -1,4 +1,4 @@
-import { Master, Resolver, Asset, Sample } from '../master'
+import { MasterSpec, Resolver, Asset, Sample } from '../master-specification'
 
 export type AudioFieldsRaw = string | AudioFieldsNormalized
 
@@ -21,7 +21,7 @@ interface AudioFieldsResolved extends AudioFieldsNormalized {
   previewHttpUrl?: string
 }
 
-export class AudioMaster implements Master {
+export class AudioMaster implements MasterSpec {
   name = 'audio'
 
   displayName = 'Hörbeispiel'

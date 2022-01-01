@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NoteMaster = void 0;
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 const dom_manipulator_1 = require("@bldr/dom-manipulator");
 class NoteMaster {
     constructor() {
@@ -27,7 +27,7 @@ class NoteMaster {
         this.shortFormField = 'markup';
     }
     normalizeFieldsInput(fields) {
-        fields.markup = (0, master_1.convertMarkdownToHtml)(fields.markup);
+        fields.markup = (0, master_specification_1.convertMarkdownToHtml)(fields.markup);
         // hr tag
         if (fields.markup.indexOf('<hr>') > -1) {
             const segments = fields.markup.split('<hr>');

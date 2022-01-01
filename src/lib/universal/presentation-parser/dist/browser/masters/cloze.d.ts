@@ -1,10 +1,10 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type ClozeFieldsRaw = string | ClozeFieldsNormalized;
 interface ClozeFieldsNormalized {
     src: string;
     stepSubset?: string;
 }
-export declare class ClozeMaster implements Master {
+export declare class ClozeMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

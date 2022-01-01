@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type DocumentFieldsRaw = string | DocumentFieldsNormalized;
 interface DocumentFieldsNormalized {
     src: string;
 }
-export declare class DocumentMaster implements Master {
+export declare class DocumentMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

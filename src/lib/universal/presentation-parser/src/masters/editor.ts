@@ -1,4 +1,4 @@
-import { Master, mapStepFieldDefintions } from '../master'
+import { MasterSpec, mapStepFieldDefintions } from '../master-specification'
 
 type EditorFieldsRaw = string | EditorFieldsNormalized
 
@@ -6,7 +6,7 @@ interface EditorFieldsNormalized {
   markup: string
 }
 
-export class EditorMaster implements Master {
+export class EditorMaster implements MasterSpec {
   name = 'editor'
 
   displayName = 'Hefteintrag'

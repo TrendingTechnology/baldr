@@ -1,4 +1,4 @@
-import { mapStepFieldDefintions } from '../master';
+import { mapStepFieldDefintions } from '../master-specification';
 export class EditorMaster {
     constructor() {
         this.name = 'editor';

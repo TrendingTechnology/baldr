@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type TaskFieldsRaw = string | TaskFieldsNormalized;
 interface TaskFieldsNormalized {
     markup: string;
 }
-export declare class TaskMaster implements Master {
+export declare class TaskMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

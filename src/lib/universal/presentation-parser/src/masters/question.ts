@@ -1,7 +1,7 @@
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import * as tex from '@bldr/tex-templates'
 
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 /**
  * Collection all question text (without answers) to build the plain
@@ -249,7 +249,7 @@ export function generateTexMarkup(fields: QuestionFieldData): string {
   return tex.environment('enumerate', markup.join('\n'))
 }
 
-export class QuestionMaster implements Master {
+export class QuestionMaster implements MasterSpec {
   name = 'question'
 
   displayName = 'Frage'

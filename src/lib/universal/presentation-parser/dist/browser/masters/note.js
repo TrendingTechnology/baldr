@@ -1,4 +1,4 @@
-import { convertMarkdownToHtml } from '../master';
+import { convertMarkdownToHtml } from '../master-specification';
 import { buildTextStepController, wrapWords } from '@bldr/dom-manipulator';
 export class NoteMaster {
     constructor() {

@@ -1,11 +1,11 @@
 import {
-  Master,
+  MasterSpec,
   extractUrisFromFuzzySpecs,
   WrappedUri,
   WrappedUriList,
   Resolver,
   Slide
-} from '../master'
+} from '../master-specification'
 
 type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized
 
@@ -15,7 +15,7 @@ interface SampleListFieldsNormalized {
   notNumbered?: boolean
 }
 
-export class SampleListMaster implements Master {
+export class SampleListMaster implements MasterSpec {
   name = 'sampleList'
 
   displayName = 'Audio-Ausschnitte'

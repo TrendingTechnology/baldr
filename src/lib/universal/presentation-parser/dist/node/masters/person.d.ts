@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 export declare type PersonFieldsRaw = string | PersonFieldsNormalized;
 interface PersonFieldsNormalized {
     personId: string;
 }
-export declare class PersonMaster implements Master {
+export declare class PersonMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

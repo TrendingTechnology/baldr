@@ -1,4 +1,4 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 /**
  * Collection all question text (without answers) to build the plain
  * text version.
@@ -56,7 +56,7 @@ export declare class Question {
     static parse(rawSpec: RawSpec): Question[];
 }
 export declare function generateTexMarkup(fields: QuestionFieldData): string;
-export declare class QuestionMaster implements Master {
+export declare class QuestionMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

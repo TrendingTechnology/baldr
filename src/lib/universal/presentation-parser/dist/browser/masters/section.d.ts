@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 export declare type SectionFieldsRaw = string | SectionFieldsNormalized;
 interface SectionFieldsNormalized {
     heading: string;
 }
-export declare class SectionMaster implements Master {
+export declare class SectionMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

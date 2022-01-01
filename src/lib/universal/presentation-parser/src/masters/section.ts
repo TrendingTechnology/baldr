@@ -1,4 +1,4 @@
-import { Master, shortenText } from '../master'
+import { MasterSpec, shortenText } from '../master-specification'
 
 export type SectionFieldsRaw = string | SectionFieldsNormalized
 
@@ -6,7 +6,7 @@ interface SectionFieldsNormalized {
   heading: string
 }
 
-export class SectionMaster implements Master {
+export class SectionMaster implements MasterSpec {
   name = 'section'
 
   displayName = 'Abschnitt'

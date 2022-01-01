@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 type SongFieldsRaw = string | SongFieldsNormalized
 
@@ -6,7 +6,7 @@ interface SongFieldsNormalized {
   songId: string
 }
 
-export class SongMaster implements Master {
+export class SongMaster implements MasterSpec {
   name = 'song'
 
   displayName = 'Lied'

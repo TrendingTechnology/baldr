@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EditorMaster = void 0;
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 class EditorMaster {
     constructor() {
         this.name = 'editor';
@@ -20,7 +20,7 @@ class EditorMaster {
                 type: String,
                 markup: true,
                 description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
-            } }, (0, master_1.mapStepFieldDefintions)(['mode', 'subset']));
+            } }, (0, master_specification_1.mapStepFieldDefintions)(['mode', 'subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

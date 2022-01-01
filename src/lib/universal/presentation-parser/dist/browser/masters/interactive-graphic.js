@@ -1,4 +1,4 @@
-import { mapStepFieldDefintions } from '../master';
+import { mapStepFieldDefintions } from '../master-specification';
 export class InteractiveGraphicMaster {
     constructor() {
         this.name = 'interactiveGraphic';

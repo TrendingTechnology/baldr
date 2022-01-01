@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 type QuoteFieldsRaw = string | QuoteFieldsNormalized
 
@@ -11,7 +11,7 @@ interface QuoteFieldsNormalized {
   epilog?: string
 }
 
-export class QuoteMaster implements Master {
+export class QuoteMaster implements MasterSpec {
   name = 'quote'
 
   displayName = 'Zitat'

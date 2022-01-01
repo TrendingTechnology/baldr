@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 type MasterFieldsRaw = string | MasterFieldsNormalized
 
@@ -9,7 +9,7 @@ interface MasterFieldsNormalized {
   noMeta?: boolean
 }
 
-export class ImageMaster implements Master {
+export class ImageMaster implements MasterSpec {
   name = 'image'
 
   displayName = 'Bild'

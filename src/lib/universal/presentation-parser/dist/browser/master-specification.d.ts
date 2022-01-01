@@ -52,9 +52,10 @@ export interface MasterIconSpec {
     unicodeSymbol?: string;
 }
 /**
- * Interface for all master slides to implement.
+ * An interface that must be implemented by all master slides. This class
+ * spezifies how a master slide must be constructed.
  */
-export interface Master {
+export interface MasterSpec {
     /**
      * The name of the master slide. A short name in lower case letters like
      * `audio`.

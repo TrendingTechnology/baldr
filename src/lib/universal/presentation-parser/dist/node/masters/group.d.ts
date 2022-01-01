@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 export declare type GroupFieldsRaw = string | GroupFieldsNormalized;
 export interface GroupFieldsNormalized {
     groupId: string;
 }
-export declare class GroupMaster implements Master {
+export declare class GroupMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

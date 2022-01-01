@@ -1,4 +1,4 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 /**
  * Used to store the body text and the preview image url.
  */
@@ -41,7 +41,7 @@ export interface WikipediaFieldsNormalized {
     language: string;
     oldid?: number;
 }
-export declare class WikipediaMaster implements Master {
+export declare class WikipediaMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

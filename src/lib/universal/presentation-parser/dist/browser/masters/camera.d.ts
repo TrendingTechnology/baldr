@@ -1,5 +1,5 @@
-import { Master } from '../master';
-export declare class CameraMaster implements Master {
+import { MasterSpec } from '../master-specification';
+export declare class CameraMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

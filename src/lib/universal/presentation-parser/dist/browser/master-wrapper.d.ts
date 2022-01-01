@@ -5,8 +5,8 @@ import { Resolver } from '@bldr/media-resolver-ng';
 import { Slide } from './slide';
 import { StepCollector } from './step';
 import { FieldData, FieldDefinitionCollection } from './field';
-import { MasterIconSpec, Master } from './master';
-declare type MasterConstructor = new () => Master;
+import { MasterIconSpec, MasterSpec } from './master-specification';
+declare type MasterConstructor = new () => MasterSpec;
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.

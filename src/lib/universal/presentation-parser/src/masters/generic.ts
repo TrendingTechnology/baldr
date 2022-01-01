@@ -1,10 +1,10 @@
 import { shortenText } from '@bldr/string-format'
 import {
-  Master,
+  MasterSpec,
   convertMarkdownToHtml,
   splitHtmlIntoChunks,
   StepCollector
-} from '../master'
+} from '../master-specification'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -61,7 +61,7 @@ export function splitMarkup (
   return markup
 }
 
-export class GenericMaster implements Master {
+export class GenericMaster implements MasterSpec {
   name = 'generic'
 
   displayName = 'Folie'

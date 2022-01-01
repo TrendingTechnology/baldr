@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
 type TaskFieldsRaw = string | TaskFieldsNormalized
 
@@ -6,7 +6,7 @@ interface TaskFieldsNormalized {
   markup: string
 }
 
-export class TaskMaster implements Master {
+export class TaskMaster implements MasterSpec {
   name = 'task'
 
   displayName = 'Arbeitsauftrag'

@@ -1,4 +1,4 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 import { Asset } from '@bldr/media-resolver-ng';
 export declare function convertYoutubeIdToUri(youtubeId: string): string;
 /**
@@ -103,7 +103,7 @@ interface YoutubeFieldNormalized {
     heading?: string;
     info?: string;
 }
-export declare class YoutubeMaster implements Master {
+export declare class YoutubeMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

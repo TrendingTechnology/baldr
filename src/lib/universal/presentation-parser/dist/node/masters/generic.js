@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GenericMaster = exports.splitMarkup = void 0;
 const string_format_1 = require("@bldr/string-format");
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 const CHARACTERS_ON_SLIDE = 400;
 function splitMarkup(rawMarkup, charactersOnSlide) {
     if (typeof rawMarkup === 'string') {
@@ -11,7 +11,7 @@ function splitMarkup(rawMarkup, charactersOnSlide) {
     // Convert into HTML
     const converted = [];
     for (const markup of rawMarkup) {
-        converted.push((0, master_1.convertMarkdownToHtml)(markup));
+        converted.push((0, master_specification_1.convertMarkdownToHtml)(markup));
     }
     // Split by <hr>
     const splittedByHr = [];
@@ -29,7 +29,7 @@ function splitMarkup(rawMarkup, charactersOnSlide) {
     // Split large texts into smaller chunks
     let markup = [];
     for (const html of splittedByHr) {
-        const chunks = (0, master_1.splitHtmlIntoChunks)(html, charactersOnSlide);
+        const chunks = (0, master_specification_1.splitHtmlIntoChunks)(html, charactersOnSlide);
         for (const chunk of chunks) {
             markup.push(chunk);
         }

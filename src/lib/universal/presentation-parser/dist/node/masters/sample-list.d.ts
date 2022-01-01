@@ -1,11 +1,11 @@
-import { Master, WrappedUri, Resolver, Slide } from '../master';
+import { MasterSpec, WrappedUri, Resolver, Slide } from '../master-specification';
 declare type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized;
 interface SampleListFieldsNormalized {
     samples: WrappedUri[];
     heading?: string;
     notNumbered?: boolean;
 }
-export declare class SampleListMaster implements Master {
+export declare class SampleListMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

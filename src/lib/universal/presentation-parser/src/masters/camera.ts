@@ -1,6 +1,6 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 
-export class CameraMaster implements Master {
+export class CameraMaster implements MasterSpec {
   name = 'camera'
 
   displayName = 'Dokumentenkamera'

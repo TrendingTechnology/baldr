@@ -1,4 +1,4 @@
-import { Master, mapStepFieldDefintions } from '../master'
+import { MasterSpec, mapStepFieldDefintions } from '../master-specification'
 
 type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized
 
@@ -9,7 +9,7 @@ interface InteractiveGraphicFieldsNormalized {
   stepSelector: string
 }
 
-export class InteractiveGraphicMaster implements Master {
+export class InteractiveGraphicMaster implements MasterSpec {
   name = 'interactiveGraphic'
 
   displayName = 'Interaktive Grafik'

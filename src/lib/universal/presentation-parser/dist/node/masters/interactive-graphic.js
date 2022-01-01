@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InteractiveGraphicMaster = void 0;
-const master_1 = require("../master");
+const master_specification_1 = require("../master-specification");
 class InteractiveGraphicMaster {
     constructor() {
         this.name = 'interactiveGraphic';
@@ -29,7 +29,7 @@ class InteractiveGraphicMaster {
                 validate: (input) => {
                     return ['layer', 'layer+', 'group'].includes(input);
                 }
-            } }, (0, master_1.mapStepFieldDefintions)(['selector', 'subset']));
+            } }, (0, master_specification_1.mapStepFieldDefintions)(['selector', 'subset']));
     }
     normalizeFieldsInput(fields) {
         if (typeof fields === 'string') {

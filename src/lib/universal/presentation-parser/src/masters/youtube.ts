@@ -1,4 +1,4 @@
-import { Master } from '../master'
+import { MasterSpec } from '../master-specification'
 import { getConfig } from '@bldr/config'
 import { getHttp, Asset } from '@bldr/media-resolver-ng'
 
@@ -170,7 +170,7 @@ interface YoutubeFieldNormalized {
   info?: string
 }
 
-export class YoutubeMaster implements Master {
+export class YoutubeMaster implements MasterSpec {
   name = 'youtube'
 
   displayName = 'YouTube'

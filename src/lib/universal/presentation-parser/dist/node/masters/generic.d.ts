@@ -1,4 +1,4 @@
-import { Master, StepCollector } from '../master';
+import { MasterSpec, StepCollector } from '../master-specification';
 declare type GenericFieldsRawInput = string | string[] | GenericFieldsInput;
 interface GenericFieldsInput {
     markup: string | string[];
@@ -11,7 +11,7 @@ interface GenericFieldsInputFinal extends GenericFieldsInput {
     onOne: boolean;
 }
 export declare function splitMarkup(rawMarkup: string | string[], charactersOnSlide: number): string[];
-export declare class GenericMaster implements Master {
+export declare class GenericMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {

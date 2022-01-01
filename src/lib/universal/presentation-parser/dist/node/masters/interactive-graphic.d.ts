@@ -1,10 +1,10 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized;
 interface InteractiveGraphicFieldsNormalized {
     src: string;
     stepSelector: string;
 }
-export declare class InteractiveGraphicMaster implements Master {
+export declare class InteractiveGraphicMaster implements MasterSpec {
     name: string;
     displayName: string;
     description: string;

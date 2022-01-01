@@ -1,9 +1,9 @@
-import { Master } from '../master';
+import { MasterSpec } from '../master-specification';
 declare type InstrumentFieldsRaw = string | InstrumentFieldsNormalized;
 interface InstrumentFieldsNormalized {
     instrumentId: string;
 }
-export declare class InstrumentMaster implements Master {
+export declare class InstrumentMaster implements MasterSpec {
     name: string;
     displayName: string;
     icon: {
