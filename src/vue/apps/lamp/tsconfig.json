@@ -15,6 +15,7 @@
     "strictFunctionTypes": false, // Problems with install functions: types of parameters 'Vue' and 'Vue' are incompatible.
     "outDir": "build",
     "downlevelIteration": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "types": [
       "webpack-env"

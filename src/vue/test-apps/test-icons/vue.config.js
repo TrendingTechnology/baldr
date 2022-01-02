@@ -1,6 +1,6 @@
-const { assembleVueConfigs } = require('@bldr/vue-config-helper')
+const { configureVue } = require('@bldr/vue-config-helper')
 
-module.exports = assembleVueConfigs({
+module.exports = configureVue({
   dirname: __dirname,
   appEntry: './src/app.ts'
 })

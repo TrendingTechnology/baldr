@@ -26,7 +26,7 @@ function getStylePaths() {
  *
  * ```js
  * pluginOptions: {
- *   ...buildStyleResourcesLoaderConfig()
+ *   'style-resources-loader': buildStyleResourcesLoaderConfig()
  * }
  * ```
  *
@@ -36,22 +36,18 @@ function getStylePaths() {
  *
  *  * ```js
  * {
- *   'style-resources-loader': {
- *     preProcessor: 'scss',
- *     patterns: [
- *       '.../baldr/src/vue/plugins/themes/src/default.scss',
- *       '../baldr/src/vue/plugins/themes/src/handwriting.scss'
- *     ]
- *   }
+ *   preProcessor: 'scss',
+ *   patterns: [
+ *     '.../baldr/src/vue/plugins/themes/src/default.scss',
+ *     '../baldr/src/vue/plugins/themes/src/handwriting.scss'
+ *   ]
  * }
  * ```
  */
 function buildStyleResourcesLoaderConfig() {
     return {
-        'style-resources-loader': {
-            preProcessor: 'scss',
-            patterns: getStylePaths()
-        }
+        preProcessor: 'scss',
+        patterns: getStylePaths()
     };
 }
 exports.buildStyleResourcesLoaderConfig = buildStyleResourcesLoaderConfig;

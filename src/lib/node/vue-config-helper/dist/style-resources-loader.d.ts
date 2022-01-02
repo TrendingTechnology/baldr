@@ -1,15 +1,13 @@
 interface StyleResourcesLoaderConfig {
-    'style-resources-loader': {
-        preProcessor: string;
-        patterns: string[];
-    };
+    preProcessor: string;
+    patterns: string[];
 }
 /**
  * Usage:
  *
  * ```js
  * pluginOptions: {
- *   ...buildStyleResourcesLoaderConfig()
+ *   'style-resources-loader': buildStyleResourcesLoaderConfig()
  * }
  * ```
  *
@@ -19,13 +17,11 @@ interface StyleResourcesLoaderConfig {
  *
  *  * ```js
  * {
- *   'style-resources-loader': {
- *     preProcessor: 'scss',
- *     patterns: [
- *       '.../baldr/src/vue/plugins/themes/src/default.scss',
- *       '../baldr/src/vue/plugins/themes/src/handwriting.scss'
- *     ]
- *   }
+ *   preProcessor: 'scss',
+ *   patterns: [
+ *     '.../baldr/src/vue/plugins/themes/src/default.scss',
+ *     '../baldr/src/vue/plugins/themes/src/handwriting.scss'
+ *   ]
  * }
  * ```
  */
