@@ -10,12 +10,12 @@ export default class MaterialIcon extends ColorIcon {
   @Prop({
     type: String
   })
-  size: string
+  size!: string
 
   @Prop({
     type: String
   })
-  href: string
+  href!: string
 
   @Prop({
     type: String,
@@ -24,7 +24,7 @@ export default class MaterialIcon extends ColorIcon {
       return ['disabled', 'normal', 'show-on-hover'].includes(value)
     }
   })
-  display: 'disabled' | 'normal' | 'show-on-hover'
+  display!: 'disabled' | 'normal' | 'show-on-hover'
 
   // Umriss
   @Prop({
@@ -34,10 +34,10 @@ export default class MaterialIcon extends ColorIcon {
       return ['circle', 'icon', 'square'].includes(value)
     }
   })
-  outline: 'circle' | 'icon' | 'square'
+  outline!: 'circle' | 'icon' | 'square'
 
   @Prop({ type: Boolean })
-  vanish: boolean
+  vanish!: boolean
 
   get classes (): string[] {
     let classes = this.getBaseClasses()

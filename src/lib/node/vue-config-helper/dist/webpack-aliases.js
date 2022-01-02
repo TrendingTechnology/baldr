@@ -46,6 +46,14 @@ function createAliases(packageNames, dirname) {
  *
  * @param dirname - Directory path of a package. The package must have
  *   a `node_modules` subfolder.
+ *
+ * @returns For example
+ *
+ * ```js
+ * {
+ *   vue$: './node_modules/vue/dist/vue.runtime.esm.js'
+ * }
+ * ```
  */
 function searchForAliases(dirname) {
     const nodeModulesDir = path_1.default.join(dirname, 'node_modules');

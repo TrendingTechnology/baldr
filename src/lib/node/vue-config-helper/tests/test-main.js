@@ -4,7 +4,8 @@ const path = require('path')
 
 const {
   searchForAliases,
-  buildStyleResourcesLoaderConfig
+  buildStyleResourcesLoaderConfig,
+  assembleVueConfigs
 } = require('../dist/main.js')
 
 const { getConfig } = require('@bldr/config')
@@ -23,5 +24,12 @@ describe('Package “@bldr/vue-config-helper”', function () {
   it('Function “buildStyleResourcesLoaderConfig()”', function () {
     const config = buildStyleResourcesLoaderConfig()
     assert.strictEqual(config['style-resources-loader'].preProcessor, 'scss')
+  })
+
+  it('Function “assembleVueConfigs()”', function () {
+    const vueConfig = assembleVueConfigs({ dirname: path.join(config.localRepo, 'src/vue/apps/lamp') })
+    assert.strictEqual(vueConfig.pluginOptions['style-resources-loader'].preProcessor, 'scss')
+    assert.strictEqual(vueConfig.pluginOptions['style-resources-loader'].patterns.length, 2)
+    assert.strictEqual(typeof vueConfig.configureWebpack.resolve.alias.vue$, 'string')
   })
 })

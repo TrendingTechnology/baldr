@@ -17,7 +17,7 @@ export default class PlainIcon extends Vue {
   @Prop({
     type: String
   })
-  name: string
+  name!: string
 
   get classes (): string[] {
     return this.getBaseClasses()

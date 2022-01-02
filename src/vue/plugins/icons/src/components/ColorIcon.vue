@@ -12,7 +12,7 @@ export default class ColorIcon extends PlainIcon {
     default: 'black',
     validator: validateColorName
   })
-  color: string
+  color!: string
 
   get classes (): string[] {
     const classes = this.getBaseClasses()

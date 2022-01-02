@@ -37,8 +37,12 @@ interface StyleResourcesLoaderConfig {
  * }
  * ```
  *
- * ```js
- * pluginOptions: {
+ * @see https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader
+ *
+ * @returns For example:
+ *
+ *  * ```js
+ * {
  *   'style-resources-loader': {
  *     preProcessor: 'scss',
  *     patterns: [
@@ -48,8 +52,6 @@ interface StyleResourcesLoaderConfig {
  *   }
  * }
  * ```
- *
- * @see https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader
  */
 export function buildStyleResourcesLoaderConfig (): StyleResourcesLoaderConfig {
   return {
