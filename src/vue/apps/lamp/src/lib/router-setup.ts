@@ -10,21 +10,21 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import { installDocumentTitleUpdater } from './routing-related'
 
 // Components.
-import AboutPage from '@/components/linked-by-routes/AboutPage.vue'
-import AdHocCamera from '@/components/linked-by-routes/AdHocCamera.vue'
-import AdHocEditor from '@/components/linked-by-routes/AdHocEditor.vue'
+import AboutPage from '@/components/routed/AboutPage.vue'
+import AdHocCamera from '@/components/routed/AdHocCamera.vue'
+import AdHocEditor from '@/components/routed/AdHocEditor.vue'
 
 // Documentation
-import DocumentationOverview from '@/components/linked-by-routes/Documentation/index.vue'
-import CommonExample from '@/components/linked-by-routes/Documentation/CommonExample.vue'
-import MasterDocumentation from '@/components/linked-by-routes/Documentation/MasterDocumentation.vue'
+import DocumentationOverview from '@/components/routed/Documentation/index.vue'
+import CommonExample from '@/components/routed/Documentation/CommonExample.vue'
+import MasterDocumentation from '@/components/routed/Documentation/MasterDocumentation.vue'
 
-import SlidesPreview from '@/components/linked-by-routes/SlidesPreview/index.vue'
-import SlideView from '@/components/linked-by-routes/SlideView.vue'
-import SpeakerView from '@/components/linked-by-routes/SpeakerView/index.vue'
-import StartPage from '@/components/linked-by-routes/StartPage.vue'
-import TitlesTreePage from '@/components/linked-by-routes/TitlesTreePage/index.vue'
-import TexMarkdownConverter from '@/components/linked-by-routes/TexMarkdownConverter.vue'
+import SlidesPreview from '@/components/routed/SlidesPreview/index.vue'
+import SlideView from '@/components/routed/SlideView.vue'
+import SpeakerView from '@/components/routed/SpeakerView/index.vue'
+import StartPage from '@/components/routed/StartPage.vue'
+import TitlesTreePage from '@/components/routed/TitlesTreePage/index.vue'
+import TexMarkdownConverter from '@/components/routed/TexMarkdownConverter.vue'
 
 Vue.use(VueRouter)
 

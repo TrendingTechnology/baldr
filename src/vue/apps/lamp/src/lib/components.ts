@@ -7,10 +7,10 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import TitleLink from '@/components/linked-by-routes/TitlesTreePage/TitleLink.vue'
-import TopLevelJumpers from '@/components/linked-by-routes/TitlesTreePage/TopLevelJumpers.vue'
-import TreeTitle from '@/components/linked-by-routes/TitlesTreePage/TreeTitle.vue'
-import TreeTitleList from '@/components/linked-by-routes/TitlesTreePage/TreeTitleList.vue'
+import TitleLink from '@/components/routed/TitlesTreePage/TitleLink.vue'
+import TopLevelJumpers from '@/components/routed/TitlesTreePage/TopLevelJumpers.vue'
+import TreeTitle from '@/components/routed/TitlesTreePage/TreeTitle.vue'
+import TreeTitleList from '@/components/routed/TitlesTreePage/TreeTitleList.vue'
 
 // Register the router hooks with their names
 // https://class-component.vuejs.org/guide/additional-hooks.html
