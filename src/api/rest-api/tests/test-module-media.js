@@ -12,7 +12,7 @@ const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
 describe('/media', function () {
   it('PUT / (update)', async function () {
-    restart(5000)
+    restart(2000)
 
     const result = await httpRequest.request({ url: '', method: 'PUT' })
     assert.ok(typeof result.data.begin === 'number')

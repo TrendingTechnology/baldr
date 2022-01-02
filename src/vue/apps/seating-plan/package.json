@@ -26,7 +26,7 @@
     "serve": "npm run serve:webapp",
     "test:e2e:headless": "vue-cli-service test:e2e --headless",
     "test:e2e": "vue-cli-service test:e2e",
-    "test": "npm run test:e2e:headless"
+    "test:all": "npm run test:e2e:headless"
   },
   "dependencies": {
     "@bldr/components-collection": "*",

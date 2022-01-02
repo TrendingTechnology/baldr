@@ -1,4 +1,4 @@
-/* globals describe it afterEach */
+/* globals describe it */
 const assert = require('assert')
 
 const sinon = require('sinon')
