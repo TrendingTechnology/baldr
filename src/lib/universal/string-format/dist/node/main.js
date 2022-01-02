@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatYoutubeUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatWikicommonsUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatImslpUrl = exports.convertHtmlToPlainText = exports.shortenText = exports.getExtension = exports.formatMultiPartAssetFileName = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = exports.referencify = exports.deasciify = exports.asciify = void 0;
+exports.formatYoutubeUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatWikicommonsUrl = exports.formatMusescoreUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatImslpUrl = exports.convertHtmlToPlainText = exports.shortenText = exports.getExtension = exports.formatMultiPartAssetFileName = exports.formatDuration = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.convertDurationToSeconds = exports.referencify = exports.deasciify = exports.asciify = void 0;
 var ascii_1 = require("./ascii");
 Object.defineProperty(exports, "asciify", { enumerable: true, get: function () { return ascii_1.asciify; } });
 Object.defineProperty(exports, "deasciify", { enumerable: true, get: function () { return ascii_1.deasciify; } });
@@ -20,6 +20,7 @@ var url_1 = require("./url");
 Object.defineProperty(exports, "formatImslpUrl", { enumerable: true, get: function () { return url_1.formatImslpUrl; } });
 Object.defineProperty(exports, "formatMusicbrainzRecordingUrl", { enumerable: true, get: function () { return url_1.formatMusicbrainzRecordingUrl; } });
 Object.defineProperty(exports, "formatMusicbrainzWorkUrl", { enumerable: true, get: function () { return url_1.formatMusicbrainzWorkUrl; } });
+Object.defineProperty(exports, "formatMusescoreUrl", { enumerable: true, get: function () { return url_1.formatMusescoreUrl; } });
 Object.defineProperty(exports, "formatWikicommonsUrl", { enumerable: true, get: function () { return url_1.formatWikicommonsUrl; } });
 Object.defineProperty(exports, "formatWikidataUrl", { enumerable: true, get: function () { return url_1.formatWikidataUrl; } });
 Object.defineProperty(exports, "formatWikipediaUrl", { enumerable: true, get: function () { return url_1.formatWikipediaUrl; } });

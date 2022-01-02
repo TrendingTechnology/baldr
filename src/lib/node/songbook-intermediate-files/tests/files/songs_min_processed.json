@@ -1,0 +1,11 @@
+{
+    "a": {
+        "Auf-der-Mauer": {
+            "title": "Auf der Mauer, auf der Lauer",
+            "folder": "test/songs/processed/one/a/Auf-der-Mauer",
+            "slides": [
+                "01.svg"
+            ]
+        }
+    }
+}

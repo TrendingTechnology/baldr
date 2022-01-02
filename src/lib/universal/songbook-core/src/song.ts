@@ -1,4 +1,5 @@
 import {
+  formatMusescoreUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl
@@ -279,7 +280,7 @@ export class SongMetaDataCombined {
    */
   get musescoreUrl (): string | undefined {
     if (this.metaData.musescore != null) {
-      return `https://musescore.com/score/${this.metaData.musescore}`
+      return formatMusescoreUrl(this.metaData.musescore)
     }
   }
 

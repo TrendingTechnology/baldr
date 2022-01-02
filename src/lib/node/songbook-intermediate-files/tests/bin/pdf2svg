@@ -1,0 +1,27 @@
+#! /bin/sh
+
+# echo "1: $1 2: $2 3: $3 pwd: $(pwd)" >> $HOME/debug_pdf2svg.sh
+
+# 1: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Swing-low/projector.pdf
+# 2: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Swing-low/slides/%02d.svg
+# 3: all
+# pwd: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update
+
+#SONG=$(echo "$1" | sed -e "s#$(pwd)/songs/##g" -e "s#/projector.pdf##")
+
+# Auf-der-Mauer:  2 pages
+# Swing-low:                    2 pages
+# Zum-Tanze-da-geht-ein-Maedel: 2 pages
+
+_svg() {
+	local SVG=$(echo "$1" | sed "s#%02d#0$2#")
+	echo "Test file" > "$SVG"
+}
+
+if [ "$3" = all ]; then
+  _svg "$2" 1
+  _svg "$2" 2
+  exit 0
+else
+  exit 1
+fi

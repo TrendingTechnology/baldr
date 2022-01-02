@@ -15,6 +15,7 @@ export {
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,
   formatMusicbrainzWorkUrl,
+  formatMusescoreUrl,
   formatWikicommonsUrl,
   formatWikidataUrl,
   formatWikipediaUrl,

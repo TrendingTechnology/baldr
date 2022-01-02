@@ -35,6 +35,20 @@ export function formatMusicbrainzWorkUrl (workId: string): string {
 }
 
 /**
+ * Format a Musescore URL.
+ *
+ * @param The score ID.
+ *
+ * @returns For example: For example: `https://musescore.com/score/1234`
+ */
+export function formatMusescoreUrl (id: number | string): string {
+  if (typeof id === 'number') {
+    id = id.toString()
+  }
+  return `https://musescore.com/score/${id}`
+}
+
+/**
  * @param fileName - For example
  *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`
  *

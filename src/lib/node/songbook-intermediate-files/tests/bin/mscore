@@ -1,0 +1,14 @@
+#! /bin/sh
+
+echo "1: $1 2: $2 3: $3" >> $HOME/debug_mscore
+
+# 1: --export-to
+# 2: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Zum-Tanze-da-geht-ein-Maedel/projector.pdf
+# 3: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Zum-Tanze-da-geht-ein-Maedel/projector.mscx
+
+if [ "$1" = --export-to ]; then
+  echo "Test file" > "$2"
+  exit 0
+else
+  exit 1
+fi

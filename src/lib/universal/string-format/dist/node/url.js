@@ -3,7 +3,7 @@
  * Format some HTTP URLs for various external sites.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatYoutubeUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatWikicommonsUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatImslpUrl = void 0;
+exports.formatYoutubeUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatWikicommonsUrl = exports.formatMusescoreUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatImslpUrl = void 0;
 /**
  * @param id - For example
  *   `La_clemenza_di_Tito_(Wagenseil,_Georg_Christoph)`
@@ -36,6 +36,20 @@ function formatMusicbrainzWorkUrl(workId) {
     return `https://musicbrainz.org/work/${workId}`;
 }
 exports.formatMusicbrainzWorkUrl = formatMusicbrainzWorkUrl;
+/**
+ * Format a Musescore URL.
+ *
+ * @param The score ID.
+ *
+ * @returns For example: For example: `https://musescore.com/score/1234`
+ */
+function formatMusescoreUrl(id) {
+    if (typeof id === 'number') {
+        id = id.toString();
+    }
+    return `https://musescore.com/score/${id}`;
+}
+exports.formatMusescoreUrl = formatMusescoreUrl;
 /**
  * @param fileName - For example
  *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`

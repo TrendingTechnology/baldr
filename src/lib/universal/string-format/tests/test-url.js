@@ -26,6 +26,22 @@ describe('url.ts', function () {
     )
   })
 
+  it('Function “formatMusescoreUrl()”', function () {
+    it('Input number', function () {
+      assert.strictEqual(
+        url.formatMusescoreUrl(1234),
+        'https://musescore.com/score/1234'
+      )
+    })
+
+    it('Input string', function () {
+      assert.strictEqual(
+        url.formatMusescoreUrl('1234'),
+        'https://musescore.com/score/1234'
+      )
+    })
+  })
+
   it('Function “formatWikicommonsUrl()”', function () {
     assert.strictEqual(
       url.formatWikicommonsUrl('Cheetah_(Acinonyx_jubatus)_cub.jpg'),
@@ -33,11 +49,20 @@ describe('url.ts', function () {
     )
   })
 
-  it('Function “formatWikidataUrl()”', function () {
-    assert.strictEqual(
-      url.formatWikidataUrl('Q42'),
-      'https://www.wikidata.org/wiki/Q42'
-    )
+  describe('Function “formatWikidataUrl()”', function () {
+    it('Prefixed with Q', function () {
+      assert.strictEqual(
+        url.formatWikidataUrl('Q42'),
+        'https://www.wikidata.org/wiki/Q42'
+      )
+    })
+
+    it('Not prefixed with Q', function () {
+      assert.strictEqual(
+        url.formatWikidataUrl(42),
+        'https://www.wikidata.org/wiki/Q42'
+      )
+    })
   })
 
   it('Function “formatWikipediaUrl()”', function () {
