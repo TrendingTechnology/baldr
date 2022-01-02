@@ -11,8 +11,8 @@ const { restart } = require('../dist/node/main')
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
 describe('/media', function () {
+  this.timeout(100000)
   it('PUT / (update)', async function () {
-    this.timeout(10000)
     restart()
 
     const result = await httpRequest.request({ url: '', method: 'PUT' })

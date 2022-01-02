@@ -4,8 +4,9 @@ const assert = require('assert')
 const api = require('../dist/node/main.js')
 
 describe('Package “@bldr/api-wrapper”', function () {
+  this.timeout(100000)
+
   it('Function “updateMediaServer()”', async function () {
-    this.timeout(100000)
     const result = await api.updateMediaServer()
     assert.strictEqual(typeof result.begin, 'number')
     assert.strictEqual(typeof result.count.assets, 'number')

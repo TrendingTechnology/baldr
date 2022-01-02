@@ -114,7 +114,6 @@ interface MediaServerConfiguration {
 
 interface SongbookConfiguration {
   path: string
-  vueAppPath: string
 }
 
 interface WireConfiguration {
