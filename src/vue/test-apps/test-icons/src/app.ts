@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import App from '@/components/app/App.vue'
-import Home from '@/components/app/Home.vue'
-import AllStyles from '@/components/app/AllStyles.vue'
-import AllIcons from '@/components/app/AllIcons.vue'
-import Link from '@/components/app/Link.vue'
-import VanishDemonstration from '@/components/app/VanishDemonstration.vue'
+import icons from '@bldr/icons'
+
+import App from './components/App.vue'
+import Home from './components/Home.vue'
+import AllStyles from './components/AllStyles.vue'
+import AllIcons from './components/AllIcons.vue'
+import Link from './components/Link.vue'
+import VanishDemonstration from './components/VanishDemonstration.vue'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
+Vue.use(icons)
 
 const routes: Array<RouteConfig> = [
   {

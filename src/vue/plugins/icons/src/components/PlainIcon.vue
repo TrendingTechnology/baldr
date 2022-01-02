@@ -3,9 +3,7 @@ import Vue, { VNode, CreateElement } from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { state } from '../../plugin.js'
-
-import icons from '../../icons.json'
+import { state, iconNames } from '../plugin'
 
 type State = { vanishIcons: boolean }
 
@@ -34,7 +32,7 @@ export default class PlainIcon extends Vue {
   }
 
   get warningText (): string {
-    if (!icons.includes(this.name)) {
+    if (!iconNames.includes(this.name)) {
       const message = `No icon named “${this.name}” found!`
       console.warn(message)
       return message

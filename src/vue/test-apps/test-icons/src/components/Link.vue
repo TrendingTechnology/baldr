@@ -12,7 +12,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import MaterialIcon from '@/components/plugin/MaterialIcon.vue'
+import { MaterialIcon } from '@bldr/icons'
 
 @Component({ components: { MaterialIcon } })
 export default class Link extends Vue {}

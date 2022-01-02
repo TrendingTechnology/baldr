@@ -13,9 +13,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import VanishIcon from '@/components/plugin/VanishIcon.vue'
-import iconNames from '../../icons.json'
-import { registerMouseMoveTimeout } from '../../plugin.js'
+import { registerMouseMoveTimeout, iconNames, VanishIcon } from '@bldr/icons'
 
 @Component({ components: { VanishIcon } })
 export default class VanishDemonstration extends Vue {

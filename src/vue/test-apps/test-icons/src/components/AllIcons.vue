@@ -15,9 +15,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import MaterialIcon from '@/components/plugin/MaterialIcon.vue'
-
-import iconNames from '../../icons.json'
+import { MaterialIcon, iconNames } from '@bldr/icons'
 
 @Component({ components: { MaterialIcon } })
 export default class AllIcons extends Vue {
