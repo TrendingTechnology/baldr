@@ -8,6 +8,9 @@
 
 GLOBAL_EXIT_CODE=0
 
+COUNTER_OK=0
+COUNTER_FAILED=0
+
 BASE_PATH="$(pwd)"
 TMP_FILE=/tmp/bldr-test-output
 
@@ -18,9 +21,11 @@ _run_test() {
 	npm run test &> $TMP_FILE
 		if [ "$?" -eq 0 ]; then
 		echo -e "\033[32mOK:\e[0m $REL_PATH"
+		((COUNTER_OK++))
 	else
 		echo -e "\033[31mERROR:\e[0m $REL_PATH"
 		cat "$TMP_FILE"
+		((COUNTER_FAILED++))
 		GLOBAL_EXIT_CODE=1
 	fi
 }
@@ -83,5 +88,8 @@ _run_test vue/apps/songbook
 #_run_test vue/plugins/player
 #_run_test vue/plugins/shortcuts
 #_run_test vue/plugins/themes
+
+echo
+echo "OK: $COUNTER_OK FAILED: $COUNTER_FAILED"
 
 exit "$GLOBAL_EXIT_CODE"
