@@ -1,6 +1,5 @@
 import ClientMediaAsset from './MediaAsset.vue'
 import MediaOverview from './MediaOverview/index.vue'
-import MediaCategories from './MediaCategories/index.vue'
 
 const style = {
   darkMode: false
@@ -24,15 +23,6 @@ const routes = [
       style
     },
     component: ClientMediaAsset
-  },
-  {
-    path: '/media-categories',
-    name: 'media-categories',
-    meta: {
-      title: 'Meta-Daten Kategorien',
-      style
-    },
-    component: MediaCategories
   }
 ]
 

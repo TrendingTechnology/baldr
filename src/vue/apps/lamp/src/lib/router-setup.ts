@@ -25,6 +25,7 @@ import SpeakerView from '@/components/routed/SpeakerView/index.vue'
 import StartPage from '@/components/routed/StartPage.vue'
 import TitlesTreePage from '@/components/routed/TitlesTreePage/index.vue'
 import TexMarkdownConverter from '@/components/routed/TexMarkdownConverter.vue'
+import MediaCategories from '@/components/routed/MediaCategories/index.vue'
 
 Vue.use(VueRouter)
 
@@ -152,6 +153,14 @@ const routes: RouteConfig[] = [
     meta: {
       title: 'TeX-Markdown-Konvertierung'
     }
+  },
+  {
+    path: '/media-categories',
+    name: 'media-categories',
+    meta: {
+      title: 'Medien Metadaten-Kategorien'
+    },
+    component: MediaCategories
   }
 ]
 
