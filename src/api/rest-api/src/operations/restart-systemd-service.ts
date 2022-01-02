@@ -1,7 +1,13 @@
 import childProcess from 'child_process'
 import { msleep } from '@bldr/core-browser'
 
-export default function (): void {
+/**
+ * Restart the systemd service baldr_api.service and sleep some time
+ * afterwards.
+ *
+ * @param ms - How many milliseconds to wait after execution.
+ */
+export default function (ms: number = 0): void {
   const p = childProcess.spawnSync('systemctl', [
     '--user',
     'restart',
@@ -12,5 +18,5 @@ export default function (): void {
       'The restart of the systemd service “baldr_api.service” failed!'
     )
   }
-  msleep(1500)
+  msleep(ms)
 }

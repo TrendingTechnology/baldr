@@ -11,9 +11,8 @@ const { restart } = require('../dist/node/main')
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 
 describe('/media', function () {
-  this.timeout(100000)
   it('PUT / (update)', async function () {
-    restart()
+    restart(5000)
 
     const result = await httpRequest.request({ url: '', method: 'PUT' })
     assert.ok(typeof result.data.begin === 'number')
@@ -38,8 +37,6 @@ describe('/media', function () {
   })
 
   it('DELETE / (flush media files)', async function () {
-    this.timeout(10000)
-
     const result = await httpRequest.request({
       url: '',
       method: 'DELETE'

@@ -12,7 +12,7 @@ const httpRequest = makeHttpRequestInstance(config, 'local', '/api/database')
 
 describe('/database', function () {
   it('POST / (reinitalize)', async function () {
-    restart()
+    restart(5000)
     const result = await httpRequest.request({
       url: '',
       method: 'POST'
