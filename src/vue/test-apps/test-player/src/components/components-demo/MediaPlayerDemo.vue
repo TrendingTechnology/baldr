@@ -33,7 +33,7 @@ import { player } from '@bldr/player'
 import { resolver, data } from '../../app'
 
 @Component
-export default class ComponentMediaPlayerDemo extends Vue {
+export default class MediaPlayerDemo extends Vue {
   get player () {
     return player
   }

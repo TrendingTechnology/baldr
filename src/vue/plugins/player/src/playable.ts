@@ -13,10 +13,10 @@ export type PlaybackState = 'fadein' | 'playing' | 'fadeout' | 'stopped'
 type JumpDirection = 'forward' | 'backward'
 
 export class Playable {
-  sample: Sample
-  htmlElement: HTMLMediaElement
+  public sample: Sample
+  public htmlElement: HTMLMediaElement
 
-  currentVolume: number = 1
+  public currentVolume: number = 1
 
   public lastPositionSec?: number
 

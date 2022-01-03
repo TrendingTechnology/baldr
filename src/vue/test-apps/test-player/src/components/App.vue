@@ -5,21 +5,15 @@
       <ul>
         <li>
           Components:
-          <router-link to="/components/media-player"
-            >MediaPlayer</router-link
-          >
+          <router-link to="/components/media-player">MediaPlayer</router-link>
           |
-          <router-link to="/components/play-button"
-            >PlayButton</router-link
-          >
+          <router-link to="/components/play-button">PlayButton</router-link>
           |
-          <router-link to="/components/progress-bar"
-            >ProgressBar</router-link
-          >
+          <router-link to="/components/progress-bar">ProgressBar</router-link>
           |
-          <router-link to="/components/wave-form"
-            >WaveForm</router-link
-          >
+          <router-link to="/components/video-screen">VideoScreen</router-link>
+          |
+          <router-link to="/components/wave-form">WaveForm</router-link>
         </li>
         <li>
           Classes:

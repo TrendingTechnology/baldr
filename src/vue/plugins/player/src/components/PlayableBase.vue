@@ -17,8 +17,14 @@ export default class PlayableBase extends Vue {
     }
   }
 
+  /**
+   * The playable is set
+   */
   registerEvents (): void {}
 
+  /**
+   * The playable is removed.
+   */
   unregisterEvents (): void {}
 
   mounted (): void {

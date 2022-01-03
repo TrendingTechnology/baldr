@@ -41,7 +41,7 @@ import { player, Playable } from '@bldr/player'
 import { resolver, data } from '../../app'
 
 @Component
-export default class ComponentPlayButtonDemo extends Vue {
+export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible!: boolean
   gate!: Playable
   chapel!: Playable
