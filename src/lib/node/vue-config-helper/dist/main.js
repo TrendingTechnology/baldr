@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configureVue = exports.readMasterExamples = void 0;
+const webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
 const style_resources_loader_1 = require("./style-resources-loader");
 const webpack_aliases_1 = require("./webpack-aliases");
 const define_plugin_1 = require("./define-plugin");
@@ -95,6 +96,9 @@ function configureVue(simpleConfig) {
         },
         plugins: [(0, define_plugin_1.buildDefinePluginConfig)(simpleConfig.additionalDefinitions)]
     };
+    if (simpleConfig.analyzeBundle != null && simpleConfig.analyzeBundle) {
+        configureWebpack.plugins.push(new webpack_bundle_analyzer_1.BundleAnalyzerPlugin());
+    }
     if (simpleConfig.appEntry != null) {
         configureWebpack.entry = {
             app: simpleConfig.appEntry

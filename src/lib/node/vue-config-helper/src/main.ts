@@ -4,17 +4,69 @@
  * @module @bldr/vue-config-helper
  */
 
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+
 import { buildStyleResourcesLoaderConfig } from './style-resources-loader'
 import { searchForAliases } from './webpack-aliases'
 import { buildDefinePluginConfig } from './define-plugin'
 import { buildElectronBuilderConfig } from './electron-builder'
 export { readMasterExamples } from './master-examples'
 
-interface VueSimplifiedConfig {
+/**
+ * ```js
+ * {
+ *   dirname: __dirname,
+ *   appEntry: './src/app.ts'
+ *   additionalDefinitions: {
+ *     defaultThemeSassVars: exportSassAsJson(),
+ *     lampVersion: packageJson.version,
+ *     rawYamlExamples: readMasterExamples()
+ *   },
+ *   electronAppName: 'lamp',
+ *   analyzeBundle: true
+ * }
+ * ```
+ */
+interface SimpleVueConfig {
+  /**
+   * ```js
+   * {
+   *   dirname: __dirname
+   * }
+   * ```
+   */
   dirname: string
+
+  /**
+   * ```js
+   * {
+   *   appEntry: './src/app.ts'
+   * }
+   * ```
+   */
   appEntry?: string
+
+  /**
+   * @see https://github.com/nklayman/vue-cli-plugin-electron-builder
+   */
   electronAppName?: string
+
+  /**
+   * ```js
+   * {
+   *   additionalDefinitions: {
+   *     defaultThemeSassVars: exportSassAsJson(),
+   *     lampVersion: packageJson.version,
+   *     rawYamlExamples: readMasterExamples()
+   *   }
+   * }
+   * ```
+   */
   additionalDefinitions?: Record<string, any>
+
+  /**
+   * @see https://github.com/webpack-contrib/webpack-bundle-analyzer
+   */
   analyzeBundle?: boolean
 }
 
@@ -89,7 +141,7 @@ function buildChainWebpackConfig () {
  * ```
  */
 export function configureVue (
-  simpleConfig: VueSimplifiedConfig
+  simpleConfig: SimpleVueConfig
 ): Record<string, any> {
   // pluginOptions
   const pluginOptions: Record<string, any> = {
@@ -107,6 +159,10 @@ export function configureVue (
       alias: searchForAliases(simpleConfig.dirname)
     },
     plugins: [buildDefinePluginConfig(simpleConfig.additionalDefinitions)]
+  }
+
+  if (simpleConfig.analyzeBundle != null && simpleConfig.analyzeBundle) {
+    configureWebpack.plugins.push(new BundleAnalyzerPlugin())
   }
   if (simpleConfig.appEntry != null) {
     configureWebpack.entry = {

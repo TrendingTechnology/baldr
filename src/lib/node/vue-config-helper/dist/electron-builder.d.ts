@@ -23,21 +23,4 @@
  * }
  * ```
  */
-export declare function buildElectronBuilderConfig(appName: string): {
-    preload: string;
-    mainProcessFile: string;
-    builderOptions: {
-        appId: string;
-        productName: string;
-        asar: boolean;
-        linux: {
-            target: string;
-            category: string;
-            executableName: string;
-            icon: string;
-        };
-        extraMetadata: {
-            name: string;
-        };
-    };
-};
+export declare function buildElectronBuilderConfig(appName: string): Record<string, any>;

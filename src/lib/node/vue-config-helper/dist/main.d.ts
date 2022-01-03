@@ -4,11 +4,57 @@
  * @module @bldr/vue-config-helper
  */
 export { readMasterExamples } from './master-examples';
-interface VueSimplifiedConfig {
+/**
+ * ```js
+ * {
+ *   dirname: __dirname,
+ *   appEntry: './src/app.ts'
+ *   additionalDefinitions: {
+ *     defaultThemeSassVars: exportSassAsJson(),
+ *     lampVersion: packageJson.version,
+ *     rawYamlExamples: readMasterExamples()
+ *   },
+ *   electronAppName: 'lamp',
+ *   analyzeBundle: true
+ * }
+ * ```
+ */
+interface SimpleVueConfig {
+    /**
+     * ```js
+     * {
+     *   dirname: __dirname
+     * }
+     * ```
+     */
     dirname: string;
+    /**
+     * ```js
+     * {
+     *   appEntry: './src/app.ts'
+     * }
+     * ```
+     */
     appEntry?: string;
+    /**
+     * @see https://github.com/nklayman/vue-cli-plugin-electron-builder
+     */
     electronAppName?: string;
+    /**
+     * ```js
+     * {
+     *   additionalDefinitions: {
+     *     defaultThemeSassVars: exportSassAsJson(),
+     *     lampVersion: packageJson.version,
+     *     rawYamlExamples: readMasterExamples()
+     *   }
+     * }
+     * ```
+     */
     additionalDefinitions?: Record<string, any>;
+    /**
+     * @see https://github.com/webpack-contrib/webpack-bundle-analyzer
+     */
     analyzeBundle?: boolean;
 }
 /**
@@ -61,4 +107,4 @@ interface VueSimplifiedConfig {
  * }
  * ```
  */
-export declare function configureVue(simpleConfig: VueSimplifiedConfig): Record<string, any>;
+export declare function configureVue(simpleConfig: SimpleVueConfig): Record<string, any>;

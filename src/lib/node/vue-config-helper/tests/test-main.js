@@ -26,21 +26,46 @@ describe('Package “@bldr/vue-config-helper”', function () {
     assert.strictEqual(config.preProcessor, 'scss')
   })
 
-  it('Function “configureVue()” (default export)', function () {
-    const vueConfig = configureVue({
-      dirname: path.join(config.localRepo, 'src/vue/apps/lamp')
+  describe('Function “configureVue()”', function () {
+    const dirname = path.join(config.localRepo, 'src/vue/apps/lamp')
+    describe('Minimal config', function () {
+      const minimal = configureVue({
+        dirname
+      })
+
+      describe("pluginOptions['style-resources-loader']", function () {
+        it('preProcessor', function () {
+          assert.strictEqual(
+            minimal.pluginOptions['style-resources-loader'].preProcessor,
+            'scss'
+          )
+        })
+
+        it('patterns', function () {
+          assert.strictEqual(
+            minimal.pluginOptions['style-resources-loader'].patterns.length,
+            2
+          )
+        })
+      })
+
+      it('configureWebpack.resolve.alias', function () {
+        assert.strictEqual(
+          typeof minimal.configureWebpack.resolve.alias.vue$,
+          'string'
+        )
+      })
     })
-    assert.strictEqual(
-      vueConfig.pluginOptions['style-resources-loader'].preProcessor,
-      'scss'
-    )
-    assert.strictEqual(
-      vueConfig.pluginOptions['style-resources-loader'].patterns.length,
-      2
-    )
-    assert.strictEqual(
-      typeof vueConfig.configureWebpack.resolve.alias.vue$,
-      'string'
-    )
+
+    it('analyzeBundle', function () {
+      const vconf = configureVue({
+        dirname,
+        analyzeBundle: true
+      })
+      assert.strictEqual(
+        typeof vconf.configureWebpack.plugins[1],
+        'object'
+      )
+    })
   })
 })

@@ -23,7 +23,9 @@
  * }
  * ```
  */
-export function buildElectronBuilderConfig (appName: string) {
+export function buildElectronBuilderConfig (
+  appName: string
+): Record<string, any> {
   appName = `baldr-${appName}`
   return {
     preload: 'src/preload.js',
