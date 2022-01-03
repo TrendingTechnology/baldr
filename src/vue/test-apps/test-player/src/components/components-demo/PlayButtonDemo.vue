@@ -24,11 +24,11 @@
 
     <h1>ComponentResolveablePlayButton</h1>
 
-    <resolveable-play-button uri="uuid:6defb53b-d43d-4353-ab7e-f8c7bcfb114e" />
+    <resolveable-play-button :uri="testData.cheikha.uuid" />
 
-    <resolveable-play-button uri="uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a" />
+    <resolveable-play-button :uri="testData.aicha.uuid" />
 
-    <resolveable-play-button uri="uuid:e402afc0-930d-4c95-b93d-1e906261300e" />
+    <resolveable-play-button :uri="testData.mannenberg.uuid" />
   </div>
 </template>
 
@@ -38,7 +38,7 @@ import Component from 'vue-class-component'
 
 import { player, Playable } from '@bldr/player'
 
-import { resolver } from '../../app'
+import { resolver, data } from '../../app'
 
 @Component
 export default class ComponentPlayButtonDemo extends Vue {
@@ -58,20 +58,18 @@ export default class ComponentPlayButtonDemo extends Vue {
     }
   }
 
-  async mounted () {
-    // ref:Egmont_HB_Egmont-Ouverture
-    // uuid:70028b77-b817-46e2-b6fa-fe3c6383d748
-    // #Thema_Spanier
-    // #Thema_Niederlaender
+  get testData(): Record<string, any> {
+    return data
+  }
 
-    // ref:Grosses-Tor_HB_Orchester_Samples
-    // uuid:702ba259-349a-459f-bc58-cf1b0da37263
-    const uri = 'uuid:702ba259-349a-459f-bc58-cf1b0da37263'
+  async mounted () {
+    const uri = data.tor.uuid
+    const samples = data.tor.samples
     await resolver.resolve(uri)
-    this.gate = player.getPlayable(uri + '#tor')
-    this.chapel = player.getPlayable(uri + '#kapelle')
-    this.chimes = player.getPlayable(uri + '#glocken')
-    this.people = player.getPlayable(uri + '#menschen')
+    this.gate = player.getPlayable(uri + samples.tor)
+    this.chapel = player.getPlayable(uri + samples.kapelle)
+    this.chimes = player.getPlayable(uri + samples.glocken)
+    this.people = player.getPlayable(uri + samples.menschen)
   }
 
   hideOnePlayButton (): void {

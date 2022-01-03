@@ -11,7 +11,7 @@ import Component from 'vue-class-component'
 
 import { player, Playable, WaveForm } from '@bldr/player'
 
-import { resolver } from '../../app'
+import { resolver, data } from '../../app'
 
 @Component({ components: { WaveForm } })
 export default class ComponentWaveFormDemo extends Vue {
@@ -24,12 +24,9 @@ export default class ComponentWaveFormDemo extends Vue {
   }
 
   async mounted () {
-    // ref:Grosses-Tor_HB_Orchester_Samples
-    // uuid:702ba259-349a-459f-bc58-cf1b0da37263
-    const uri = 'uuid:702ba259-349a-459f-bc58-cf1b0da37263'
-    await resolver.resolve(uri)
-    this.playable = player.getPlayable(uri)
-    player.start(uri)
+    await resolver.resolve(data.tor.uuid)
+    this.playable = player.getPlayable(data.tor.uuid)
+    player.start(data.tor.uuid)
   }
 }
 </script>

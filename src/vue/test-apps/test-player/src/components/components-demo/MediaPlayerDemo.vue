@@ -2,15 +2,15 @@
   <div>
     <h1>Test component “MediaPlayer”</h1>
 
-    <button @click="player.start('uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64')">
+    <button @click="player.start(testData.gebadet.uuid)">
       ref:Du-bist-als-Kind-zu-heiss-gebadet-worden
     </button>
 
-    <button @click="player.start('uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a')">
+    <button @click="player.start(testData.grammophon.uuid)">
       ref:Ich-hab-zu-Haus-ein-Grammophon
     </button>
 
-    <button @click="player.start('uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e')">
+    <button @click="player.start(testData.kaktus.uuid)">
       ref:Mein-kleiner-gruener-Kaktus
     </button>
 
@@ -30,7 +30,7 @@ import Component from 'vue-class-component'
 
 import { player } from '@bldr/player'
 
-import { resolver } from '../../app'
+import { resolver, data } from '../../app'
 
 @Component
 export default class ComponentMediaPlayerDemo extends Vue {
@@ -38,20 +38,15 @@ export default class ComponentMediaPlayerDemo extends Vue {
     return player
   }
 
+  get testData () {
+    return data
+  }
+
   async mounted () {
-    // ref:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    // uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
-
-    // ref:Ich-hab-zu-Haus-ein-Grammophon
-    // uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a
-
-    // ref:Mein-kleiner-gruener-Kaktus
-    // uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e
-
     await resolver.resolve([
-      'uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64',
-      'uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a',
-      'uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e'
+      data.gebadet.uuid,
+      data.grammophon.uuid,
+      data.kaktus.uuid
     ])
   }
 }
