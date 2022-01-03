@@ -5,27 +5,27 @@
       <ul>
         <li>
           Components:
-          <router-link to="/component-media-player-demo"
+          <router-link to="/components/media-player"
             >MediaPlayer</router-link
           >
           |
-          <router-link to="/component-play-button-demo"
+          <router-link to="/components/play-button"
             >PlayButton</router-link
           >
           |
-          <router-link to="/component-progress-bar-demo"
+          <router-link to="/components/progress-bar"
             >ProgressBar</router-link
           >
           |
-          <router-link to="/component-wave-form-demo"
+          <router-link to="/components/wave-form"
             >WaveForm</router-link
           >
         </li>
         <li>
           Classes:
 
-          <router-link to="/class-playable-demo">Playable</router-link>
-          | <router-link to="/class-player-demo">Player</router-link>
+          <router-link to="/classes/playable">Playable</router-link>
+          | <router-link to="/classes/player">Player</router-link>
         </li>
       </ul>
     </div>

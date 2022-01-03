@@ -22,27 +22,27 @@ const routes: RouteConfig[] = [
     component: ComponentPlayButtonDemo
   },
   {
-    path: '/class-playable-demo',
+    path: '/classes/playable',
     component: ClassPlayableDemo
   },
   {
-    path: '/class-player-demo',
+    path: '/classes/player',
     component: ClassPlayerDemo
   },
   {
-    path: '/component-media-player-demo',
+    path: '/components/media-player',
     component: ComponentMediaPlayerDemo
   },
   {
-    path: '/component-play-button-demo',
+    path: '/components/play-button',
     component: ComponentPlayButtonDemo
   },
   {
-    path: '/component-progress-bar-demo',
+    path: '/components/progress-bar',
     component: ComponentProgressBarDemo
   },
   {
-    path: '/component-wave-form-demo',
+    path: '/components/wave-form',
     component: ComponentWaveFormDemo
   }
 ]

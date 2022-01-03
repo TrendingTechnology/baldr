@@ -1,6 +1,6 @@
 <template>
   <div class="vc_play_button_demo">
-    <h1>ComponentPlayButtonDemo</h1>
+    <h1>Test component “PlayButton”</h1>
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor

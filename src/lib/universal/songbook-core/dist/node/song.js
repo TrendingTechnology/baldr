@@ -93,7 +93,7 @@ class SongMetaDataCombined {
      */
     get musescoreUrl() {
         if (this.metaData.musescore != null) {
-            return `https://musescore.com/score/${this.metaData.musescore}`;
+            return (0, string_format_1.formatMusescoreUrl)(this.metaData.musescore);
         }
     }
     /**

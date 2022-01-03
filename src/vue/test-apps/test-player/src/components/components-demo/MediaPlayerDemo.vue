@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>ComponentMediaPlayerDemo</h1>
+    <h1>Test component “MediaPlayer”</h1>
 
     <button @click="player.start('uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64')">
       ref:Du-bist-als-Kind-zu-heiss-gebadet-worden

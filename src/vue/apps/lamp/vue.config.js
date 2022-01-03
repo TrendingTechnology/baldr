@@ -11,5 +11,5 @@ module.exports = configureVue({
     rawYamlExamples: readMasterExamples()
   },
   electronAppName: 'lamp',
-  analyzeBundle: true
+  analyzeBundle: false
 })

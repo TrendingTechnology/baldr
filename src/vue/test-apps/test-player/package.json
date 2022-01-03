@@ -8,7 +8,9 @@
     "build": "vue-cli-service build",
     "build:browser": "tsc --module es2020 --outDir dist/",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e --headless",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test": "npm run test:e2e:headless",
     "lint": "vue-cli-service lint",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'"
   },
