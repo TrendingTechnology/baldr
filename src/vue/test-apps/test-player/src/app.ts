@@ -52,7 +52,15 @@ const routes: RouteConfig[] = [
   }
 ]
 
-export const data = {
+export interface SimpleAssetData {
+  uuid: string
+  ref?: string
+  title?: string
+  samples?: Record<string, string>
+  mimeType?: string
+}
+
+export const data: { [shortName: string]: SimpleAssetData } = {
   aicha: {
     uuid: 'uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a'
   },
@@ -68,6 +76,7 @@ export const data = {
     }
   },
   entstehung: {
+    title: 'Jazz: Entstehung aus soziologischer Sicht',
     ref: 'ref:Entstehung_VD_Entstehung-aus-soziologischer-Sicht',
     uuid: 'uuid:49ba792d-1a19-48d5-9cfe-50833fa6e8b9',
     mimeType: 'video'
@@ -80,7 +89,8 @@ export const data = {
     ref: 'ref:Ich-hab-zu-Haus-ein-Grammophon',
     uuid: 'uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a'
   },
-  intonarumri: {
+  intonarumori: {
+    title: 'Intonarumori',
     ref: 'ref:Futurismus_VD_Intonarumori',
     uuid: 'uuid:b5b15b74-3b40-4da1-9e56-8962fb9b214b',
     mimeType: 'video'
@@ -93,6 +103,7 @@ export const data = {
     uuid: 'uuid:e402afc0-930d-4c95-b93d-1e906261300e'
   },
   oops: {
+    title: 'Oops! … I Did It Again',
     ref: 'ref:YT_CduA0TULnow',
     uuid: 'uuid:0ae7f334-c6e4-46cb-8bf1-cf0d30f52cf3',
     mimeType: 'video'

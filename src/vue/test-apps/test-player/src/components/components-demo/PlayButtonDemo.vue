@@ -29,6 +29,8 @@
     <resolveable-play-button :uri="testData.aicha.uuid" />
 
     <resolveable-play-button :uri="testData.mannenberg.uuid" />
+
+    <playable-selector />
   </div>
 </template>
 
@@ -39,8 +41,11 @@ import Component from 'vue-class-component'
 import { player, Playable } from '@bldr/player'
 
 import { resolver, data } from '../../app'
+import PlayableSelector, {
+  eventBus
+} from './PlayableSelector.vue'
 
-@Component
+@Component({ components: { PlayableSelector } })
 export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible!: boolean
   gate!: Playable
@@ -58,18 +63,28 @@ export default class PlayButtonDemo extends Vue {
     }
   }
 
-  get testData(): Record<string, any> {
+  get testData (): Record<string, any> {
     return data
   }
 
+  listenOnPlayableSelection (uuid: string) {
+    console.log(uuid)
+  }
+
   async mounted () {
+    eventBus.$on(
+      'select-playable',
+      this.listenOnPlayableSelection
+    )
     const uri = data.tor.uuid
     const samples = data.tor.samples
-    await resolver.resolve(uri)
-    this.gate = player.getPlayable(uri + samples.tor)
-    this.chapel = player.getPlayable(uri + samples.kapelle)
-    this.chimes = player.getPlayable(uri + samples.glocken)
-    this.people = player.getPlayable(uri + samples.menschen)
+    if (samples != null) {
+      await resolver.resolve(uri)
+      this.gate = player.getPlayable(uri + samples.tor)
+      this.chapel = player.getPlayable(uri + samples.kapelle)
+      this.chimes = player.getPlayable(uri + samples.glocken)
+      this.people = player.getPlayable(uri + samples.menschen)
+    }
   }
 
   hideOnePlayButton (): void {
