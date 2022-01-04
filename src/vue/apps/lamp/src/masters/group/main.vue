@@ -22,8 +22,8 @@
       <p class="name important transparent-background font-shadow">{{ asset.yaml.name }}</p>
     </div>
     <external-sites :asset="asset"/>
-    <horizontal-play-buttons
-      :samples="asset.yaml.famousPieces"
+    <horizontal-play-buttons-ng
+      :src="asset.yaml.famousPieces"
       class="left-bottom-corner"
       v-if="asset.yaml.famousPieces"
     />

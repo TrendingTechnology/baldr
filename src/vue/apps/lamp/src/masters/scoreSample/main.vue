@@ -16,7 +16,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { Asset } from '@bldr/presentation-parser'
-import { media } from '@bldr/media-client'
+import { player } from '@bldr/player'
 
 import MasterMain from '../MasterMain.vue'
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
@@ -55,7 +55,7 @@ export default class ScoreSampleMasterMain extends MasterMain {
     if (this.slide.props.audio == null) {
       return
     }
-    media.player.load(this.slide.props.audio)
+    player.load(this.slide.props.audio)
   }
 }
 </script>

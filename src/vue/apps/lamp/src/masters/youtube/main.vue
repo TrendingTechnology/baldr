@@ -16,7 +16,7 @@
       frameborder="0"
       v-if="!asset"
     />
-    <div v-if="asset" id="youtube-offline-video" />
+    <video-screen v-if="uri" :src="uri" id="youtube-offline-video" />
     <p class="small" v-if="info" v-html="info" />
   </div>
 </template>
@@ -26,7 +26,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { Asset, youtubeMModule } from '@bldr/presentation-parser'
-import { media } from '@bldr/media-client'
+import { player } from '@bldr/player'
 
 import MasterMain from '../MasterMain.vue'
 
@@ -55,18 +55,19 @@ export default class YoutubeMasterMain extends MasterMain {
   })
   info?: string
 
+  get uri (): string | undefined {
+    if (this.asset != null) {
+      return youtubeMModule.convertYoutubeIdToUri(this.youtubeId)
+    }
+  }
+
   async afterSlideNoChange (): Promise<void> {
     if (!this.isPublic) {
       return
     }
 
     if (this.asset != null) {
-      const uri = youtubeMModule.convertYoutubeIdToUri(this.youtubeId)
-      const sample = this.$store.getters['media/sampleByUri'](uri)
-      const videoWrapper = document.querySelector('#youtube-offline-video')
-      videoWrapper.innerHTML = ''
-      videoWrapper.appendChild(sample.htmlElement)
-      media.player.load(uri)
+      player.load(this.uri)
     }
   }
 }

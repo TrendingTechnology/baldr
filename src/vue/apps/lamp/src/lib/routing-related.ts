@@ -10,9 +10,10 @@ import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 import { shortenText } from '@bldr/string-format'
 import { showMessage } from '@bldr/notification'
 import { media } from '@bldr/media-client'
+import { player } from '@bldr/player'
 import * as api from '@bldr/api-wrapper'
-
 import { Presentation as PresentationNg } from '@bldr/presentation-parser'
+
 import { Presentation } from '@/content-file.js'
 
 import store from '@/store/index.js'
@@ -156,7 +157,7 @@ export async function loadPresentation (
   reload = false
 ): Promise<void> {
   if (!reload) {
-    media.player.stop()
+    player.stop()
 
     // To show the loader
     vm.$store.dispatch('lamp/clearPresentation')

@@ -4,7 +4,7 @@
       <div class="title" v-html="title" v-if="title" />
       <div class="description small" v-html="description" v-if="description" />
     </div>
-    <div id="video_master-container" />
+    <video-screen :src="uri" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { media } from '@bldr/media-client'
+import { player } from '@bldr/player'
 
 import MasterMain from '../MasterMain.vue'
 
@@ -46,19 +46,17 @@ export default class VideoMasterMain extends MasterMain {
   })
   showMeta: boolean
 
+  get uri (): string {
+    return this.slide.props.src
+  }
+
   async afterSlideNoChange (): Promise<void> {
     if (!this.isPublic) {
       return
     }
-    const sample = this.$store.getters['media/sampleByUri'](
-      this.slide.props.src
-    )
-    const videoWrapper = document.querySelector('#video_master-container')
-    videoWrapper.innerHTML = ''
-    videoWrapper.appendChild(sample.htmlElement)
-    media.player.load(this.slide.props.src)
+    player.load(this.uri)
     if (this.slide.props.autoplay) {
-      await media.player.start()
+      await player.start()
     }
   }
 }

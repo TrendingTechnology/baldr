@@ -7,8 +7,8 @@
       v-if="asset.yaml.description"
       v-html="asset.yaml.description"
     ></p>
-    <horizontal-play-buttons
-      :samples="asset.yaml.audioSamples"
+    <horizontal-play-buttons-ng
+      :src="asset.yaml.audioSamples"
       class="left-bottom-corner"
       v-if="asset.yaml.audioSamples"
     />
