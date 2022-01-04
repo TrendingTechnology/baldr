@@ -17,6 +17,11 @@ import { Mousetrap } from '@bldr/mousetrap-wrapper'
 
 import ShortcutsOverview from './ShortcutsOverview.vue'
 
+interface ShortcutGroup {
+  name: string
+  displayName: string
+}
+
 interface ShortcutSpec {
   /**
    * Mousetrap key specification, see the
@@ -38,7 +43,17 @@ interface ShortcutSpec {
    * A list of route names.
    * Activate this shortcut only on this routes.
    */
-  routeNames: string[]
+  routeNames?: string[]
+
+  /**
+   * Keyboard shortcuts that belong together can be identified by this string.
+   * Should be identical with `ShortcutGroup.name`
+   */
+  group?: string
+}
+
+interface ShortcutCollection {
+  [keys: string]: ShortcutSpec
 }
 
 type State = Record<string, ShortcutSpec>
@@ -50,6 +65,8 @@ const getters = {
     return state
   }
 }
+
+const cache: ShortcutCollection = {}
 
 const mutations = {
   add (state: State, shortcut: ShortcutSpec) {
@@ -102,7 +119,8 @@ class ShortcutManager {
     keys: string,
     callback: () => void,
     description: string,
-    routeNames?: string[]
+    routeNames?: string[],
+    group?: string
   ) {
     const prevent = () => {
       if (routeNames != null) {
@@ -124,6 +142,23 @@ class ShortcutManager {
     if (store) {
       store.commit('shortcuts/add', { keys, description })
     }
+    cache[keys] = { keys, callback, description, routeNames, group }
+  }
+
+  addNg (specs: ShortcutSpec | ShortcutSpec[]) {
+    if (!Array.isArray(specs)) {
+      specs = [specs]
+    }
+    for (const spec of specs) {
+      console.log(spec)
+      this.add(
+        spec.keys,
+        spec.callback,
+        spec.description,
+        spec.routeNames,
+        spec.group
+      )
+    }
   }
 
   /**
@@ -135,7 +170,8 @@ class ShortcutManager {
         shortcut.keys,
         shortcut.callback,
         shortcut.description,
-        shortcut.routeNames
+        shortcut.routeNames,
+        shortcut.group
       )
     }
   }
@@ -148,8 +184,18 @@ class ShortcutManager {
    */
   remove (keys: string): void {
     Mousetrap.unbind(keys)
+    delete cache[keys]
     if (store != null) {
       store.commit('shortcuts/remove', keys)
+    }
+  }
+
+  removeByGroup (group: string): void {
+    for (const keys in cache) {
+      const spec = cache[keys]
+      if (spec.group === group) {
+        this.remove(spec.keys)
+      }
     }
   }
 

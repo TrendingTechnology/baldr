@@ -354,7 +354,6 @@ class Media {
       store.commit('media/addAsset', asset)
       if (asset.samples != null) {
         for (const sample of asset.samples) {
-          this.registerSampleShortcut(sample)
           store.commit('media/addSample', sample)
         }
       }

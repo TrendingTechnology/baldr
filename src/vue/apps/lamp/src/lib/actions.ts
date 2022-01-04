@@ -13,7 +13,7 @@ import { player } from '@bldr/player'
 import store from '../store/index.js'
 import { router } from './router-setup'
 import vm from '../main'
-import { loadPresentation } from './routing-related'
+import { loadPresentation } from './presentation'
 
 function logCatch (reason: unknown) {
   showMessage.error(reason as Error)

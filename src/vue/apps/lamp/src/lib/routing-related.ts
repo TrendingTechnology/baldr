@@ -9,17 +9,11 @@ import VueRouter, { Route, NavigationGuardNext } from 'vue-router'
 
 import { shortenText } from '@bldr/string-format'
 import { showMessage } from '@bldr/notification'
-import { media } from '@bldr/media-client'
-import { player } from '@bldr/player'
-import * as api from '@bldr/api-wrapper'
-import { Presentation as PresentationNg } from '@bldr/presentation-parser'
-
-import { Presentation } from '@/content-file.js'
 
 import store from '@/store/index.js'
 import { router } from '@/lib/router-setup'
-
 import Vm from '../main'
+import { loadPresentation } from './presentation'
 
 /**
  * Set the document title by the current route.
@@ -131,63 +125,6 @@ export function getViewFromRoute (): 'speaker' | 'public' {
     return 'speaker'
   }
   return 'public'
-}
-
-function getRawYamlExampleByRef (ref: string): string | undefined {
-  let rawYamlString: string | undefined
-
-  // master example
-  const masterMatch = ref.match(/^EP_master_(.*)$/)
-  if (masterMatch != null) {
-    rawYamlString = rawYamlExamples.masters[masterMatch[1]]
-  }
-
-  // common example
-  const commonMatch = ref.match(/^EP_common_(.*)$/)
-  if (commonMatch != null) {
-    rawYamlString = rawYamlExamples.common[commonMatch[1]]
-  }
-
-  return rawYamlString
-}
-
-export async function loadPresentation (
-  vm: typeof Vm,
-  ref: string,
-  reload = false
-): Promise<void> {
-  if (!reload) {
-    player.stop()
-
-    // To show the loader
-    vm.$store.dispatch('lamp/clearPresentation')
-  }
-
-  // Get the yaml content as a string of a presentation for quick refresh
-  let rawYamlString: string | undefined
-  let rawPresentation
-
-  rawYamlString = getRawYamlExampleByRef(ref)
-
-  if (rawYamlString == null) {
-    rawPresentation = await api.getPresentationByRef(ref)
-    rawYamlString = await api.readMediaAsString(rawPresentation.meta.path)
-  }
-
-  const presentation = new Presentation(rawYamlString)
-  await presentation.resolveMedia(vm)
-
-  const presentationNg = PresentationNg.mergeYamlStringWithRaw(
-    rawYamlString,
-    rawPresentation
-  )
-  await presentationNg.resolve()
-
-  await vm.$store.dispatch('lamp/loadPresentation', {
-    presentation,
-    presentationNg,
-    reload
-  })
 }
 
 /**
