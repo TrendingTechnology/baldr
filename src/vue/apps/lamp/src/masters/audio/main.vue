@@ -9,9 +9,9 @@
     <p class="title piece" v-if="title" v-html="title" />
     <p class="artist person" v-if="artist" v-html="artist" />
 
-    <wave-form-ng :src="uri" />
+    <wave-form :src="uri" />
 
-    <play-button-ng class="left-bottom-corner" :src="uri" />
+    <play-button class="left-bottom-corner" :src="uri" />
     <external-sites :asset="mediaAsset" />
   </div>
 </template>

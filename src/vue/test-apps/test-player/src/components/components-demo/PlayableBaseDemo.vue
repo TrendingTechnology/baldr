@@ -4,19 +4,19 @@
     <code>PlayButton</code>.
 
     <h1><code>src</code> specified as a uri</h1>
-    <play-button-ng :src="uri" />
+    <play-button :src="uri" />
 
     <h1><code>src</code> specified as a Playable</h1>
-    <play-button-ng :src="playable" />
+    <play-button :src="playable" />
 
     <h1><code>src</code> specified as a Sample</h1>
-    <play-button-ng :src="sample" />
+    <play-button :src="sample" />
 
     <h1><code>src</code> specified as a Asset</h1>
-    <play-button-ng :src="asset" />
+    <play-button :src="asset" />
 
     <h1><code>src</code> specified as a null</h1>
-    <play-button-ng :src="null" />
+    <play-button :src="null" />
     The PlayButton is not shown.
   </div>
 </template>

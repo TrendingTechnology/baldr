@@ -3,15 +3,15 @@
     <h1>Test component “HorizontalPlayButtons”</h1>
 
     <h2>src=string</h2>
-    <horizontal-play-buttons-ng :src="testData.mannenberg.uuid" />
+    <horizontal-play-buttons :src="testData.mannenberg.uuid" />
 
     <h2>src=[string, string]</h2>
-    <horizontal-play-buttons-ng
+    <horizontal-play-buttons
       :src="[testData.aicha.uuid, testData.mannenberg.uuid]"
     />
 
     <h2>With titles</h2>
-    <horizontal-play-buttons-ng
+    <horizontal-play-buttons
       :src="[
         { uri: testData.aicha.uuid, title: 'Title 1' },
         { uri: testData.mannenberg.uuid, title: 'Title 2' }
@@ -19,7 +19,7 @@
     />
 
     <h2>Mixed input</h2>
-    <horizontal-play-buttons-ng
+    <horizontal-play-buttons
       :src="[
         { uri: testData.kaktus.uuid, title: 'Title 1' },
         testData.gebadet.uuid

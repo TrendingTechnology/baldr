@@ -16,11 +16,11 @@
 
     <h2>MediaPlayer Instanz 1</h2>
 
-    <media-player-ng></media-player-ng>
+    <media-player/>
 
     <h2>MediaPlayer Instanz 2</h2>
 
-    <media-player-ng></media-player-ng>
+    <media-player/>
   </div>
 </template>
 

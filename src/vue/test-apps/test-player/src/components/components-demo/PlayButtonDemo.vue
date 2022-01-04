@@ -4,19 +4,19 @@
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor
-    <play-button-ng :src="gate" />
+    <play-button :src="gate" />
     Kapelle
-    <play-button-ng :src="chapel" />
+    <play-button :src="chapel" />
     Glocken
-    <play-button-ng :src="chimes" />
+    <play-button :src="chimes" />
     Menschen laufen durch das Tor
-    <play-button-ng :src="people" />
+    <play-button :src="people" />
 
     <h2>Zwei mal das gleiche Sample</h2>
     Glocken
-    <play-button-ng :src="chimes" />
+    <play-button :src="chimes" />
     Glocken
-    <play-button-ng v-if="!isOnePlayButtonVisible" :src="chimes" />
+    <play-button v-if="!isOnePlayButtonVisible" :src="chimes" />
 
     <p>
       <button @click="hideOnePlayButton()">Verberge PlayButton</button>
@@ -24,9 +24,9 @@
 
     <h1>Unresolved uuids as src</h1>
 
-    <play-button-ng :src="testData.cheikha.uuid" />
-    <play-button-ng :src="testData.aicha.uuid" />
-    <play-button-ng :src="testData.mannenberg.uuid" />
+    <play-button :src="testData.cheikha.uuid" />
+    <play-button :src="testData.aicha.uuid" />
+    <play-button :src="testData.mannenberg.uuid" />
   </div>
 </template>
 

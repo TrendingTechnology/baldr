@@ -17,7 +17,7 @@
 
     <external-sites :asset="asset" />
 
-    <horizontal-play-buttons-ng
+    <horizontal-play-buttons
       :src="asset.yaml.famousPieces"
       class="left-bottom-corner"
       v-if="asset.yaml.famousPieces"

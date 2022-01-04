@@ -24,7 +24,8 @@
         <img v-if="asset.previewHttpUrl" :src="asset.previewHttpUrl"/>
         <ol class="samples" >
           <li v-for="sample in asset.samples" :key="sample.uri">
-            <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
+            <!-- <play-button :sample="sample"/>  -->
+            {{ sample.title }} [#{{ sample.id }}]
           </li>
         </ol>
       </div>
@@ -51,13 +52,13 @@
 </template>
 
 <script>
-import PlayButton from './PlayButton.vue'
+// import PlayButton from './PlayButton.vue'
 import { formatMusicbrainzRecordingUrl, formatYoutubeUrl } from '@bldr/string-format'
 
 export default {
   name: 'ClientMediaAsset',
   components: {
-    PlayButton
+    // PlayButton
   },
   computed: {
     uri () {
