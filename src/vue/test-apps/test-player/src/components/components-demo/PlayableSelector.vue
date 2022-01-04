@@ -24,11 +24,24 @@ export default class PlayableSelector extends Vue {
   @Prop()
   simpleAssets!: SimpleAssetData[]
 
+  @Prop()
+  mimeType!: 'audio' | 'video'
+
   get filteredSimpleAssets (): SimpleAssetData[] {
+    let simpleAssets: SimpleAssetData[]
     if (this.simpleAssets != null) {
-      return this.simpleAssets
+      simpleAssets = this.simpleAssets
+    } else {
+      simpleAssets = Object.values(data)
     }
-    return Object.values(data)
+
+    if (this.mimeType != null) {
+      simpleAssets = simpleAssets.filter((simpleAsset: SimpleAssetData) => {
+        return this.mimeType === simpleAsset.mimeType
+      })
+    }
+
+    return simpleAssets
   }
 
   selectPlayable (uuid: string) {

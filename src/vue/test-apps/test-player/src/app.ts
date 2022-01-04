@@ -67,14 +67,20 @@ export interface SimpleAssetData {
 
 export const data: { [shortName: string]: SimpleAssetData } = {
   aicha: {
-    uuid: 'uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a'
+    title: 'Aïcha',
+    uuid: 'uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a',
+    mimeType: 'audio'
   },
   cheikha: {
-    uuid: 'uuid:6defb53b-d43d-4353-ab7e-f8c7bcfb114e'
+    title: 'Cheikha Rimitti: Charrag, gattaa',
+    uuid: 'uuid:6defb53b-d43d-4353-ab7e-f8c7bcfb114e',
+    mimeType: 'audio'
   },
   egmont: {
+    title: 'Beethoven: Egmont-Ouvertüre',
     ref: 'ref:Egmont_HB_Egmont-Ouverture',
     uuid: 'uuid:70028b77-b817-46e2-b6fa-fe3c6383d748',
+    mimeType: 'audio',
     samples: {
       spanier: '#Thema_Spanier',
       niederlaender: '#Thema_Niederlaender'
@@ -87,12 +93,16 @@ export const data: { [shortName: string]: SimpleAssetData } = {
     mimeType: 'video'
   },
   gebadet: {
+    title: 'Du bist als Kind zu heiß gebadet worden',
     ref: 'ref:Du-bist-als-Kind-zu-heiss-gebadet-worden',
-    uuid: 'uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64'
+    uuid: 'uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64',
+    mimeType: 'audio'
   },
   grammophon: {
+    title: 'Ich hab’ zu Haus ein Grammophon',
     ref: 'ref:Ich-hab-zu-Haus-ein-Grammophon',
-    uuid: 'uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a'
+    uuid: 'uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a',
+    mimeType: 'audio'
   },
   intonarumori: {
     title: 'Intonarumori',
@@ -101,11 +111,15 @@ export const data: { [shortName: string]: SimpleAssetData } = {
     mimeType: 'video'
   },
   kaktus: {
+    title: 'Mein kleiner grüner Kaktus',
     ref: 'ref:Mein-kleiner-gruener-Kaktus',
-    uuid: 'uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e'
+    uuid: 'uuid:127abf7e-8b86-4bc3-8064-88efbc4c7f9e',
+    mimeType: 'audio'
   },
   mannenberg: {
-    uuid: 'uuid:e402afc0-930d-4c95-b93d-1e906261300e'
+    title: 'Mannenberg',
+    uuid: 'uuid:e402afc0-930d-4c95-b93d-1e906261300e',
+    mimeType: 'audio'
   },
   oops: {
     title: 'Oops! … I Did It Again',
@@ -114,8 +128,10 @@ export const data: { [shortName: string]: SimpleAssetData } = {
     mimeType: 'video'
   },
   tor: {
+    title: 'Das große Tor von Kiew',
     ref: 'ref:Grosses-Tor_HB_Orchester_Samples',
     uuid: 'uuid:702ba259-349a-459f-bc58-cf1b0da37263',
+    mimeType: 'audio',
     samples: {
       tor: '#tor',
       kapelle: '#kapelle',
