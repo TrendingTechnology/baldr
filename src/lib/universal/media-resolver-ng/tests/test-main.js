@@ -196,7 +196,7 @@ describe('Package “@bldr/media-resolver”', function () {
     })
   })
 
-  describe('Class “ClientMediaAsset”', function () {
+  describe('Class “Asset”', function () {
     const httpUrlBase =
       'http://localhost/media/Musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/'
     let asset
@@ -245,7 +245,7 @@ describe('Package “@bldr/media-resolver”', function () {
     })
   })
 
-  describe('Class “SampleData”', function () {
+  describe('Class “Sample”', function () {
     let sample
     beforeEach(async function () {
       // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
@@ -256,6 +256,30 @@ describe('Package “@bldr/media-resolver”', function () {
 
     it('sample.title', async function () {
       assert.strictEqual(sample.title, 'komplett')
+    })
+
+    it('Mixed mime types to test shortcuts', async function () {
+      // ref:Biographie-Salzburg-Wien_HB_Sonate-a-moll-KV-310
+      // uuid:ac98bd34-5341-4fd6-b4f0-d83da7e1211e
+
+      // ref:Biographie-Salzburg-Wien_VD_Mozart-zu-spaet
+      // uuid:91b77277-3d93-45c1-8a47-d0e76f29e413
+
+      // ref:Biographie-Salzburg-Wien_BD_Mozart_1777
+      // uuid:74bd75ab-8505-4233-a9bf-70dd17c93e56
+      const resolver = new Resolver()
+      await resolver.resolve([
+        'uuid:ac98bd34-5341-4fd6-b4f0-d83da7e1211e',
+        'uuid:91b77277-3d93-45c1-8a47-d0e76f29e413',
+        'uuid:74bd75ab-8505-4233-a9bf-70dd17c93e56'
+      ])
+
+      const samples = resolver.exportSamples()
+      assert.strictEqual(samples[0].shortcut, 'a 1')
+      assert.strictEqual(samples[1].shortcut, 'v 1')
+
+      const assets = resolver.exportAssets()
+      assert.strictEqual(assets[2].shortcut, 'i 1')
     })
   })
 })

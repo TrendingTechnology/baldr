@@ -1,7 +1,10 @@
 import { player } from '@bldr/player'
 import { shortcutManager } from '@bldr/shortcuts'
 import * as api from '@bldr/api-wrapper'
-import { Presentation as PresentationNg, resolver } from '@bldr/presentation-parser'
+import {
+  Presentation as PresentationNg,
+  resolver
+} from '@bldr/presentation-parser'
 
 import { Presentation } from '@/content-file.js'
 import Vm from '../main'
@@ -9,21 +12,22 @@ import Vm from '../main'
 function registerPresentationRelatedShortcuts () {
   const samples = resolver.exportSamples()
   for (const sample of samples) {
-    if (sample.shortcut == null) return
-    shortcutManager.addNg({
-      keys: sample.shortcut,
-      callback: () => {
-        // TODO: Start the same video twice behaves very strange.
-        // this.canvas.hide()
-        player.load(sample.ref)
-        player.start()
-        // if (sample.asset.isVisible) {
-        //   this.canvas.show(sample.htmlElement)
-        // }
-      },
-      description: `Spiele Ausschnitt „${sample.titleSafe}“`,
-      group: 'playable'
-    })
+    if (sample.shortcut != null) {
+      shortcutManager.addNg({
+        keys: sample.shortcut,
+        callback: () => {
+          // TODO: Start the same video twice behaves very strange.
+          // this.canvas.hide()
+          player.load(sample.ref)
+          player.start()
+          // if (sample.asset.isVisible) {
+          //   this.canvas.show(sample.htmlElement)
+          // }
+        },
+        description: `Spiele Ausschnitt „${sample.titleSafe}“`,
+        group: 'playable'
+      })
+    }
   }
 }
 

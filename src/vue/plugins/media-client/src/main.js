@@ -350,7 +350,6 @@ class Media {
   async resolve (assetSpecs, throwException = true) {
     const assets = await mediaResolver.resolve(assetSpecs, throwException)
     for (const asset of assets) {
-      this.registerAssetShortcut(asset)
       store.commit('media/addAsset', asset)
       if (asset.samples != null) {
         for (const sample of asset.samples) {
@@ -358,23 +357,6 @@ class Media {
         }
       }
     }
-  }
-
-  registerSampleShortcut (sample) {
-    if (sample.shortcut == null) return
-    shortcuts.add(
-      sample.shortcut,
-      () => {
-        // TODO: Start the same video twice behaves very strange.
-        this.canvas.hide()
-        this.player.load(sample.ref)
-        this.player.start()
-        if (sample.asset.isVisible) {
-          this.canvas.show(sample.htmlElement)
-        }
-      },
-      `Spiele Ausschnitt „${sample.titleSafe}“`
-    )
   }
 
   registerAssetShortcut (asset) {

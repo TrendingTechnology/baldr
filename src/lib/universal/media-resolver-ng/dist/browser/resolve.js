@@ -60,7 +60,7 @@ class AssetCache extends Cache {
     }
 }
 /**
- * Manager to set shortcuts on  three MIME types (audio, video, image).
+ * Manager to set shortcuts on three MIME types (audio, video, image).
  */
 class ShortcutManager {
     constructor() {
@@ -84,7 +84,7 @@ class ShortcutManager {
             return;
         }
         if (asset.mimeType === 'image') {
-            asset.shortcut = this.audio.get();
+            asset.shortcut = this.image.get();
         }
     }
     reset() {

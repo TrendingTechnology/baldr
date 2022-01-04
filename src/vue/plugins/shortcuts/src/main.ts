@@ -150,7 +150,6 @@ class ShortcutManager {
       specs = [specs]
     }
     for (const spec of specs) {
-      console.log(spec)
       this.add(
         spec.keys,
         spec.callback,
@@ -179,7 +178,7 @@ class ShortcutManager {
   /**
    * Remove a shortcut.
    *
-   * @param {String} keys - Mousetrap key specification, see the
+   * @param keys - Mousetrap key specification, see the
    *   {@link https://craig.is/killing/mice documentation}.
    */
   remove (keys: string): void {
