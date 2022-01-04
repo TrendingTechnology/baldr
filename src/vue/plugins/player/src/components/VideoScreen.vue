@@ -7,10 +7,10 @@
 <script lang="ts">
 import Component from 'vue-class-component'
 
-import PlayableBaseNg from './PlayableBaseNg.vue'
+import PlayableBase from './PlayableBase.vue'
 
 @Component
-export default class VideoScreen extends PlayableBaseNg {
+export default class VideoScreen extends PlayableBase {
   $refs!: {
     screenContainer: HTMLDivElement
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="vc_component_progress_bar_demo">
     <h1>Test component “ProgressBar”</h1>
-    <progress-bar :playable="playable"></progress-bar>
+    <progress-bar :src="playable"></progress-bar>
   </div>
 </template>
 

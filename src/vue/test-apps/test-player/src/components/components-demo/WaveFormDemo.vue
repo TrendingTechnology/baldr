@@ -1,7 +1,7 @@
 <template>
   <div class="vc_component_wave_form_demo">
     <h1>Test component “WaveForm”</h1>
-    <wave-form :playable="playable"></wave-form>
+    <wave-form :src="playable"></wave-form>
   </div>
 </template>
 

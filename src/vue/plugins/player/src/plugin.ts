@@ -10,9 +10,6 @@ export { default as MediaPlayer } from './components/MediaPlayer.vue'
 import PlayButton from './components/PlayButton.vue'
 export { default as PlayButton } from './components/PlayButton.vue'
 
-import ResolveablePlayButton from './components/ResolveablePlayButton.vue'
-export { default as ResolveablePlayButton } from './components/ResolveablePlayButton.vue'
-
 export { default as ProgressBar } from './components/ProgressBar.vue'
 
 import WaveForm from './components/WaveForm.vue'
@@ -31,7 +28,6 @@ export default {
     player = new Player(resolver)
     Vue.component('media-player-ng', MediaPlayer)
     Vue.component('play-button-ng', PlayButton)
-    Vue.component('resolveable-play-button', ResolveablePlayButton)
     Vue.component('wave-form-ng', WaveForm)
     Vue.component('video-screen', VideoScreen)
   }

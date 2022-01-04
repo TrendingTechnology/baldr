@@ -123,8 +123,8 @@ export class Sample {
   }
 
   /**
-   * The reference of the sample. The reference is used to build the URI of the
-   * sample, for example `uri#reference`: `ref:Beethoven#complete`
+   * The sample reference is prefixed with `ref:` and suffixed with a sample
+   * fragment (`#fragment`), for example `ref:Fuer-Elise#complete`.
    */
   public get ref (): string {
     const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref

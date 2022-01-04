@@ -16,27 +16,32 @@ export default class ProgressBar extends PlayableBase {
     elapsed: HTMLElement
   }
 
-  updateProgress (): void {
+  private updateProgress (): void {
     if (this.$refs.elapsed == null) {
       return
     }
     this.$refs.elapsed.style.width = `${this.playable.progress * 100}%`
   }
 
-  seek (event: MouseEvent): void {
+  private seek (event: MouseEvent): void {
     if (this.playable != null) {
       this.playable.progress = event.offsetX / this.$refs.progress.clientWidth
     }
   }
-
-  registerEvents (): void {
+  /**
+   * @override
+   */
+  playableConnected (): void {
     this.$refs.progress.addEventListener('click', this.seek)
     if (this.playable != null) {
       this.playable.registerTimeUpdateListener(this.updateProgress)
     }
   }
 
-  unregisterEvents (): void {
+  /**
+   * @override
+   */
+  playableDisconnected(): void {
     this.$refs.progress.removeEventListener('click', this.seek)
     if (this.playable != null) {
       this.playable.removeEventsListener(this.updateProgress)

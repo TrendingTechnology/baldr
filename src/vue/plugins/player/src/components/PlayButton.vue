@@ -77,7 +77,8 @@ export default class PlayButton extends PlayableBase {
 
   data () {
     return {
-      playbackState: 'stopped'
+      playbackState: 'stopped',
+      playable: null
     }
   }
 
@@ -108,7 +109,10 @@ export default class PlayButton extends PlayableBase {
     this.playbackState = playbackState
   }
 
-  registerEvents (): void {
+  /**
+   * @override
+   */
+  playableConnected (): void {
     if (this.playable == null) {
       return
     }
@@ -129,7 +133,10 @@ export default class PlayButton extends PlayableBase {
     this.playable.registerPlaybackChangeListener(this.updatePlaybackState)
   }
 
-  unregisterEvents (): void {
+  /**
+   * @override
+   */
+  playableDisconnected (): void {
     this.playable.removeEventsListener(this.updateProgress)
     this.playable.removeEventsListener(this.updatePlaybackState)
   }
@@ -140,7 +147,7 @@ export default class PlayButton extends PlayableBase {
    *
    * @param progress - From 0 to 1.
    */
-  setProgress (progress: number): void {
+  private setProgress (progress: number): void {
     const htmlElement = this.$refs.progress as HTMLElement
     htmlElement.style.strokeDashoffset = `${-(circumference * progress)}`
   }

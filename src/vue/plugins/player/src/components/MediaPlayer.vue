@@ -10,7 +10,7 @@
       </div>
       <div class="main-area" v-if="asset">
         <div class="progress-area">
-          <progress-bar :playable="playable" />
+          <progress-bar :src="playable" />
         </div>
         <div class="meta-data">
           <div

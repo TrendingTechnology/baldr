@@ -4,33 +4,29 @@
 
     <h2>Das große Tor von Kiew</h2>
     Das große Tor
-    <play-button-ng :playable="gate" />
+    <play-button-ng :src="gate" />
     Kapelle
-    <play-button-ng :playable="chapel" />
+    <play-button-ng :src="chapel" />
     Glocken
-    <play-button-ng :playable="chimes" />
+    <play-button-ng :src="chimes" />
     Menschen laufen durch das Tor
-    <play-button-ng :playable="people" />
+    <play-button-ng :src="people" />
 
     <h2>Zwei mal das gleiche Sample</h2>
     Glocken
-    <play-button-ng :playable="chimes" />
+    <play-button-ng :src="chimes" />
     Glocken
-    <play-button-ng v-if="!isOnePlayButtonVisible" :playable="chimes" />
+    <play-button-ng v-if="!isOnePlayButtonVisible" :src="chimes" />
 
     <p>
       <button @click="hideOnePlayButton()">Verberge PlayButton</button>
     </p>
 
-    <h1>ComponentResolveablePlayButton</h1>
+    <h1>Unresolved uuids as src</h1>
 
-    <resolveable-play-button :uri="testData.cheikha.uuid" />
-
-    <resolveable-play-button :uri="testData.aicha.uuid" />
-
-    <resolveable-play-button :uri="testData.mannenberg.uuid" />
-
-    <playable-selector />
+    <play-button-ng :src="testData.cheikha.uuid" />
+    <play-button-ng :src="testData.aicha.uuid" />
+    <play-button-ng :src="testData.mannenberg.uuid" />
   </div>
 </template>
 
@@ -41,11 +37,8 @@ import Component from 'vue-class-component'
 import { player, Playable } from '@bldr/player'
 
 import { resolver, data } from '../../app'
-import PlayableSelector, {
-  eventBus
-} from './PlayableSelector.vue'
 
-@Component({ components: { PlayableSelector } })
+@Component
 export default class PlayButtonDemo extends Vue {
   isOnePlayButtonVisible!: boolean
   gate!: Playable
@@ -67,15 +60,7 @@ export default class PlayButtonDemo extends Vue {
     return data
   }
 
-  listenOnPlayableSelection (uuid: string) {
-    console.log(uuid)
-  }
-
   async mounted () {
-    eventBus.$on(
-      'select-playable',
-      this.listenOnPlayableSelection
-    )
     const uri = data.tor.uuid
     const samples = data.tor.samples
     if (samples != null) {
