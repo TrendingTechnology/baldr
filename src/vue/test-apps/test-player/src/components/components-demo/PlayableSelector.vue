@@ -1,9 +1,9 @@
 <template>
   <div class="vc_playable_selector">
     <playable-selector-button
-      v-for="simpleAsset in filteredSimpleAssets"
-      :key="simpleAsset.uuid"
-      :simple-asset="simpleAsset"
+      v-for="testAsset in filteredTestAssets"
+      :key="testAsset.uuid"
+      :test-asset="testAsset"
     />
   </div>
 </template>
@@ -13,7 +13,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { data, SimpleAssetData } from '../../app'
+import { data, TestAsset } from '../../app'
 
 import PlayableSelectorButton from './PlayableSelectorButton.vue'
 
@@ -22,26 +22,26 @@ export const eventBus = new Vue()
 @Component({ components: { PlayableSelectorButton } })
 export default class PlayableSelector extends Vue {
   @Prop()
-  simpleAssets!: SimpleAssetData[]
+  testAssets!: TestAsset[]
 
   @Prop()
   mimeType!: 'audio' | 'video'
 
-  get filteredSimpleAssets (): SimpleAssetData[] {
-    let simpleAssets: SimpleAssetData[]
-    if (this.simpleAssets != null) {
-      simpleAssets = this.simpleAssets
+  get filteredTestAssets (): TestAsset[] {
+    let testAssets: TestAsset[]
+    if (this.testAssets != null) {
+      testAssets = this.testAssets
     } else {
-      simpleAssets = Object.values(data)
+      testAssets = Object.values(data)
     }
 
     if (this.mimeType != null) {
-      simpleAssets = simpleAssets.filter((simpleAsset: SimpleAssetData) => {
-        return this.mimeType === simpleAsset.mimeType
+      testAssets = testAssets.filter((testAsset: TestAsset) => {
+        return this.mimeType === testAsset.mimeType
       })
     }
 
-    return simpleAssets
+    return testAssets
   }
 
   selectPlayable (uuid: string) {

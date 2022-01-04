@@ -57,7 +57,7 @@ const routes: RouteConfig[] = [
   }
 ]
 
-export interface SimpleAssetData {
+export interface TestAsset {
   uuid: string
   ref?: string
   title?: string
@@ -66,7 +66,7 @@ export interface SimpleAssetData {
 }
 
 export interface TestDataCollection {
-  [shortName: string]: SimpleAssetData
+  [shortName: string]: TestAsset
 }
 
 export const data: TestDataCollection = {

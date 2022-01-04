@@ -19,7 +19,6 @@ export default class VideoScreen extends PlayableBase {
    * @override
    */
   playableConnected () {
-    console.log(this.playable.htmlElement)
     this.$refs.screenContainer.appendChild(this.playable.htmlElement)
   }
 
