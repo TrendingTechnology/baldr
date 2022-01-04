@@ -7,6 +7,8 @@
           Components:
           <router-link to="/components/media-player">MediaPlayer</router-link>
           |
+          <router-link to="/components/playable-base">PlayableBase</router-link>
+          |
           <router-link to="/components/play-button">PlayButton</router-link>
           |
           <router-link to="/components/progress-bar">ProgressBar</router-link>

@@ -67,7 +67,7 @@ export default class PlayableBaseNg extends Vue {
   }
 
   /**
-   * The playable is connected
+   * The playable is connected. `this.playable` is not null.
    *
    * @abstract
    */

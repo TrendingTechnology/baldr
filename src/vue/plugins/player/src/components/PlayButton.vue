@@ -4,6 +4,7 @@
     :class="playbackState"
     @click="actByStatus"
     :title="htmlTitle"
+    v-if="playable"
   >
     <svg viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(125,125)">
@@ -113,10 +114,6 @@ export default class PlayButton extends PlayableBase {
    * @override
    */
   playableConnected (): void {
-    if (this.playable == null) {
-      return
-    }
-
     this.setPlaybackStateFromPlayable()
 
     this.$el.addEventListener('mouseenter', () => {
@@ -137,6 +134,9 @@ export default class PlayButton extends PlayableBase {
    * @override
    */
   playableDisconnected (): void {
+    if (this.playable == null) {
+      return
+    }
     this.playable.removeEventsListener(this.updateProgress)
     this.playable.removeEventsListener(this.updatePlaybackState)
   }
@@ -153,6 +153,9 @@ export default class PlayButton extends PlayableBase {
   }
 
   async actByStatus (): Promise<void> {
+    if (this.playable == null) {
+      return
+    }
     if (this.playable.playbackState !== 'stopped') {
       player.stop()
     } else {

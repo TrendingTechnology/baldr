@@ -8,6 +8,7 @@ import App from '@/components/App.vue'
 import ClassPlayableDemo from '@/components/classes-demo/PlayableDemo.vue'
 import ClassPlayerDemo from '@/components/classes-demo/PlayerDemo.vue'
 import ComponentMediaPlayerDemo from '@/components/components-demo/MediaPlayerDemo.vue'
+import ComponentPlayableBaseDemo from '@/components/components-demo/PlayableBaseDemo.vue'
 import ComponentPlayButtonDemo from '@/components/components-demo/PlayButtonDemo.vue'
 import ComponentProgressBarDemo from '@/components/components-demo/ProgressBarDemo.vue'
 import ComponentVideoScreenDemo from '@/components/components-demo/VideoScreenDemo.vue'
@@ -33,6 +34,10 @@ const routes: RouteConfig[] = [
   {
     path: '/components/media-player',
     component: ComponentMediaPlayerDemo
+  },
+  {
+    path: '/components/playable-base',
+    component: ComponentPlayableBaseDemo
   },
   {
     path: '/components/play-button',
