@@ -27,11 +27,12 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
+    "@bldr/client-media-models": "*",
     "@bldr/config": "*",
-    "@bldr/string-format": "*",
     "@bldr/file-reader-writer": "*",
+    "@bldr/string-format": "*",
     "@bldr/titles": "*",
-    "@bldr/client-media-models": "*"
+    "@bldr/type-definitions": "*"
   },
   "devDependencies": {
     "@types/node": "14.14.7"

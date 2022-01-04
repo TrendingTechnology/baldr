@@ -203,7 +203,7 @@ class Resolver {
                 }
                 for (const asset of yield Promise.all(promises)) {
                     if (asset != null) {
-                        (0, client_media_models_1.findMediaUris)(asset.yaml, urisWithoutFragments);
+                        (0, client_media_models_1.findMediaUris)(asset.meta, urisWithoutFragments);
                         assets.push(asset);
                         // In the set urisWithoutFragments can be both ref: and uuid: URIs.
                         urisWithoutFragments.delete(asset.ref);

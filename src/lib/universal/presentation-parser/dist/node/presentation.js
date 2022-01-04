@@ -181,7 +181,7 @@ class Presentation {
         }
         const assets = exports.resolver.exportAssets(this.slides.mediaUris);
         for (const asset of assets) {
-            log.verboseAny(log.formatObject(asset.yaml, { keys: ['title', 'ref'] }));
+            log.verboseAny(log.formatObject(asset.meta, { keys: ['title', 'ref'] }));
         }
     }
 }

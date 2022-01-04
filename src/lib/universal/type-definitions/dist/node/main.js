@@ -15,7 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TitlesTypes = exports.MediaResolverTypes = exports.MediaCategoriesTypes = exports.LampTypes = exports.IconFontGeneratorTypes = exports.CliTypes = exports.ClientMediaModelsTypes = exports.ApiTypes = void 0;
+exports.TitlesTypes = exports.MediaResolverTypes = exports.MediaDataTypes = exports.MediaCategoriesTypes = exports.LampTypes = exports.IconFontGeneratorTypes = exports.CliTypes = exports.ClientMediaModelsTypes = exports.ApiTypes = void 0;
 __exportStar(require("./config"), exports);
 /**
  * Types from specific packages.
@@ -30,5 +30,6 @@ exports.CliTypes = require("./cli");
 exports.IconFontGeneratorTypes = require("./icon-font-generator");
 exports.LampTypes = require("./lamp");
 exports.MediaCategoriesTypes = require("./media-categories");
+exports.MediaDataTypes = require("./media-data");
 exports.MediaResolverTypes = require("./media-resolver");
 exports.TitlesTypes = require("./titles");

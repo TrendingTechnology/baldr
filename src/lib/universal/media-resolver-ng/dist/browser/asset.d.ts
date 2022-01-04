@@ -1,7 +1,7 @@
 import { MediaUri } from '@bldr/client-media-models';
+import { MediaDataTypes } from '@bldr/type-definitions';
 import { Cache } from './cache';
 import { Sample } from './sample';
-import { RestApiRaw } from './types';
 export declare class SampleCollection extends Cache<Sample> {
     private readonly asset;
     constructor(asset: Asset);
@@ -26,7 +26,7 @@ export declare class Asset {
      * A raw javascript object read from the YAML files
      * (`*.extension.yml`)
      */
-    yaml: RestApiRaw;
+    meta: MediaDataTypes.AssetMetaData;
     uri: MediaUri;
     /**
      * The keyboard shortcut to launch the media asset. At the moment only used by
@@ -44,9 +44,9 @@ export declare class Asset {
      */
     httpUrl: string;
     /**
-     * @param yaml - A raw javascript object read from the Rest API
+     * @param meta - A raw javascript object read from the Rest API
      */
-    constructor(uri: string, httpUrl: string, yaml: RestApiRaw);
+    constructor(uri: string, httpUrl: string, meta: MediaDataTypes.AssetMetaData);
     /**
      * The reference authority of the URI using the `ref` scheme. The returned
      * string is prefixed with `ref:`.

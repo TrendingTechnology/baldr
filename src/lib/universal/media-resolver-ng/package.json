@@ -37,7 +37,8 @@
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/http-request": "*",
-    "@bldr/string-format": "*"
+    "@bldr/string-format": "*",
+    "@bldr/type-definitions": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

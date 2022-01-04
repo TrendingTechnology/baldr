@@ -107,12 +107,12 @@ export class AudioMaster implements MasterSpec {
     const sample = resolver.getSample(fields.src)
     const asset = sample.asset
 
-    const artist = fields.artist == null ? asset.yaml.artist : fields.artist
+    const artist = fields.artist == null ? asset.meta.artist : fields.artist
     const composer =
-      fields.composer == null ? asset.yaml.composer : fields.composer
+      fields.composer == null ? asset.meta.composer : fields.composer
     const description =
-      fields.description == null ? asset.yaml.description : fields.description
-    const partOf = fields.partOf == null ? asset.yaml.partOf : fields.partOf
+      fields.description == null ? asset.meta.description : fields.description
+    const partOf = fields.partOf == null ? asset.meta.partOf : fields.partOf
     const title = fields.title == null ? sample.titleSafe : fields.title
 
     let previewHttpUrl

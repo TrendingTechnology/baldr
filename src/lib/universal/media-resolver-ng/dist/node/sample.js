@@ -117,11 +117,11 @@ class Sample {
     get artistSafe() {
         let artist = null;
         let composer = null;
-        if (this.asset.yaml.artist != null) {
-            artist = `<em class="person">${this.asset.yaml.artist}</em>`;
+        if (this.asset.meta.artist != null) {
+            artist = `<em class="person">${this.asset.meta.artist}</em>`;
         }
-        if (this.asset.yaml.composer != null) {
-            composer = `<em class="person">${this.asset.yaml.composer}</em>`;
+        if (this.asset.meta.composer != null) {
+            composer = `<em class="person">${this.asset.meta.composer}</em>`;
         }
         if (artist != null && composer != null) {
             return `${composer} (${artist})`;
@@ -134,15 +134,15 @@ class Sample {
         }
     }
     /**
-     * Combined value build from `this.asset.yaml.creationDate` and
-     * `this.asset.yaml.year`.
+     * Combined value build from `this.asset.meta.creationDate` and
+     * `this.asset.meta.year`.
      */
     get yearSafe() {
-        if (this.asset.yaml.creationDate != null) {
-            return this.asset.yaml.creationDate;
+        if (this.asset.meta.creationDate != null) {
+            return this.asset.meta.creationDate;
         }
-        else if (this.asset.yaml.year != null) {
-            return this.asset.yaml.year;
+        else if (this.asset.meta.year != null) {
+            return this.asset.meta.year;
         }
     }
 }

@@ -50,18 +50,18 @@ class SampleCollection extends cache_1.Cache {
     addFromAsset(asset) {
         // search the “complete” sample from the property “samples”.
         let completeYamlFromSamples;
-        if (asset.yaml.samples != null) {
-            for (let i = 0; i < asset.yaml.samples.length; i++) {
-                const sampleYaml = asset.yaml.samples[i];
+        if (asset.meta.samples != null) {
+            for (let i = 0; i < asset.meta.samples.length; i++) {
+                const sampleYaml = asset.meta.samples[i];
                 if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
                     completeYamlFromSamples = sampleYaml;
-                    asset.yaml.samples.splice(i, 1);
+                    asset.meta.samples.splice(i, 1);
                     break;
                 }
             }
         }
         // First add default sample “complete”
-        const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml);
+        const completeYamlFromRoot = this.gatherYamlFromRoot(asset.meta);
         if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
             throw new Error('Duplicate definition of the default complete sample');
         }
@@ -76,8 +76,8 @@ class SampleCollection extends cache_1.Cache {
         }
         let counter = 0;
         // Add samples from the YAML property “samples”
-        if (asset.yaml.samples != null) {
-            for (const sampleSpec of asset.yaml.samples) {
+        if (asset.meta.samples != null) {
+            for (const sampleSpec of asset.meta.samples) {
                 if (sampleSpec.ref == null && sampleSpec.title == null) {
                     counter++;
                     sampleSpec.ref = `sample${counter}`;
@@ -99,19 +99,19 @@ exports.SampleCollection = SampleCollection;
  */
 class Asset {
     /**
-     * @param yaml - A raw javascript object read from the Rest API
+     * @param meta - A raw javascript object read from the Rest API
      */
-    constructor(uri, httpUrl, yaml) {
+    constructor(uri, httpUrl, meta) {
         this.uri = new client_media_models_1.MediaUri(uri);
         this.httpUrl = httpUrl;
-        this.yaml = yaml;
-        if (this.yaml.extension == null && this.yaml.path != null) {
-            this.yaml.extension = (0, string_format_1.getExtension)(this.yaml.path);
+        this.meta = meta;
+        if (this.meta.extension == null && this.meta.path != null) {
+            this.meta.extension = (0, string_format_1.getExtension)(this.meta.path);
         }
-        if (this.yaml.extension == null) {
+        if (this.meta.extension == null) {
             throw Error('The client media assets needs a extension');
         }
-        this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.yaml.extension);
+        this.mimeType = client_media_models_1.mimeTypeManager.extensionToType(this.meta.extension);
         if (this.isPlayable) {
             this.samples = new SampleCollection(this);
         }
@@ -121,14 +121,14 @@ class Asset {
      * string is prefixed with `ref:`.
      */
     get ref() {
-        return 'ref:' + this.yaml.ref;
+        return 'ref:' + this.meta.ref;
     }
     /**
      * The UUID authority of the URI using the `uuid` scheme. The returned
      * string is prefixed with `uuid:`.
      */
     get uuid() {
-        return 'uuid:' + this.yaml.uuid;
+        return 'uuid:' + this.meta.uuid;
     }
     set shortcut(value) {
         this.shortcut_ = value;
@@ -147,7 +147,7 @@ class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
      */
     get previewHttpUrl() {
-        if (this.yaml.hasPreview != null && this.yaml.hasPreview) {
+        if (this.meta.hasPreview != null && this.meta.hasPreview) {
             return `${this.httpUrl}_preview.jpg`;
         }
     }
@@ -157,16 +157,16 @@ class Asset {
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
     get waveformHttpUrl() {
-        if (this.yaml.hasWaveform != null && this.yaml.hasWaveform) {
+        if (this.meta.hasWaveform != null && this.meta.hasWaveform) {
             return `${this.httpUrl}_waveform.png`;
         }
     }
     get titleSafe() {
-        if (this.yaml.title != null) {
-            return this.yaml.title;
+        if (this.meta.title != null) {
+            return this.meta.title;
         }
-        if (this.yaml.filename != null) {
-            return this.yaml.filename;
+        if (this.meta.filename != null) {
+            return this.meta.filename;
         }
         return this.uri.raw;
     }
@@ -186,10 +186,10 @@ class Asset {
      * The number of parts of a multipart media asset.
      */
     get multiPartCount() {
-        if (this.yaml.multiPartCount == null) {
+        if (this.meta.multiPartCount == null) {
             return 1;
         }
-        return this.yaml.multiPartCount;
+        return this.meta.multiPartCount;
     }
     /**
      * Retrieve the HTTP URL of the multi part asset by the part number.

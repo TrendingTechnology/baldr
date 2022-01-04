@@ -1,9 +1,10 @@
 import { getExtension, formatMultiPartAssetFileName } from '@bldr/string-format'
 import { mimeTypeManager, MediaUri } from '@bldr/client-media-models'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Cache } from './cache'
 import { Sample } from './sample'
-import { SampleYamlFormat, YamlFormat, RestApiRaw } from './types'
+import { SampleYamlFormat, YamlFormat } from './types'
 
 export class SampleCollection extends Cache<Sample> {
   private readonly asset: Asset
@@ -58,19 +59,19 @@ export class SampleCollection extends Cache<Sample> {
   private addFromAsset (asset: Asset): void {
     // search the “complete” sample from the property “samples”.
     let completeYamlFromSamples: SampleYamlFormat | undefined
-    if (asset.yaml.samples != null) {
-      for (let i = 0; i < asset.yaml.samples.length; i++) {
-        const sampleYaml = asset.yaml.samples[i]
+    if (asset.meta.samples != null) {
+      for (let i = 0; i < asset.meta.samples.length; i++) {
+        const sampleYaml = asset.meta.samples[i]
         if (sampleYaml.ref != null && sampleYaml.ref === 'complete') {
           completeYamlFromSamples = sampleYaml
-          asset.yaml.samples.splice(i, 1)
+          asset.meta.samples.splice(i, 1)
           break
         }
       }
     }
 
     // First add default sample “complete”
-    const completeYamlFromRoot = this.gatherYamlFromRoot(asset.yaml)
+    const completeYamlFromRoot = this.gatherYamlFromRoot(asset.meta)
 
     if (completeYamlFromSamples != null && completeYamlFromRoot != null) {
       throw new Error('Duplicate definition of the default complete sample')
@@ -85,8 +86,8 @@ export class SampleCollection extends Cache<Sample> {
     let counter = 0
 
     // Add samples from the YAML property “samples”
-    if (asset.yaml.samples != null) {
-      for (const sampleSpec of asset.yaml.samples) {
+    if (asset.meta.samples != null) {
+      for (const sampleSpec of asset.meta.samples) {
         if (sampleSpec.ref == null && sampleSpec.title == null) {
           counter++
           sampleSpec.ref = `sample${counter}`
@@ -111,7 +112,7 @@ export class Asset {
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
-  yaml: RestApiRaw
+  meta: MediaDataTypes.AssetMetaData
   uri: MediaUri
 
   /**
@@ -134,23 +135,23 @@ export class Asset {
   httpUrl: string
 
   /**
-   * @param yaml - A raw javascript object read from the Rest API
+   * @param meta - A raw javascript object read from the Rest API
    */
-  constructor (uri: string, httpUrl: string, yaml: RestApiRaw) {
+  constructor (uri: string, httpUrl: string, meta: MediaDataTypes.AssetMetaData) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
 
-    this.yaml = yaml
+    this.meta = meta
 
-    if (this.yaml.extension == null && this.yaml.path != null) {
-      this.yaml.extension = getExtension(this.yaml.path)
+    if (this.meta.extension == null && this.meta.path != null) {
+      this.meta.extension = getExtension(this.meta.path)
     }
 
-    if (this.yaml.extension == null) {
+    if (this.meta.extension == null) {
       throw Error('The client media assets needs a extension')
     }
 
-    this.mimeType = mimeTypeManager.extensionToType(this.yaml.extension)
+    this.mimeType = mimeTypeManager.extensionToType(this.meta.extension)
 
     if (this.isPlayable) {
       this.samples = new SampleCollection(this as Asset)
@@ -162,7 +163,7 @@ export class Asset {
    * string is prefixed with `ref:`.
    */
   get ref (): string {
-    return 'ref:' + this.yaml.ref
+    return 'ref:' + this.meta.ref
   }
 
   /**
@@ -170,7 +171,7 @@ export class Asset {
    * string is prefixed with `uuid:`.
    */
   get uuid (): string {
-    return 'uuid:' + this.yaml.uuid
+    return 'uuid:' + this.meta.uuid
   }
 
   set shortcut (value: string | undefined) {
@@ -192,7 +193,7 @@ export class Asset {
    * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
    */
   get previewHttpUrl (): string | undefined {
-    if (this.yaml.hasPreview != null && this.yaml.hasPreview) {
+    if (this.meta.hasPreview != null && this.meta.hasPreview) {
       return `${this.httpUrl}_preview.jpg`
     }
   }
@@ -203,17 +204,17 @@ export class Asset {
    * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
    */
   get waveformHttpUrl (): string | undefined {
-    if (this.yaml.hasWaveform != null && this.yaml.hasWaveform) {
+    if (this.meta.hasWaveform != null && this.meta.hasWaveform) {
       return `${this.httpUrl}_waveform.png`
     }
   }
 
   get titleSafe (): string {
-    if (this.yaml.title != null) {
-      return this.yaml.title
+    if (this.meta.title != null) {
+      return this.meta.title
     }
-    if (this.yaml.filename != null) {
-      return this.yaml.filename
+    if (this.meta.filename != null) {
+      return this.meta.filename
     }
     return this.uri.raw
   }
@@ -236,10 +237,10 @@ export class Asset {
    * The number of parts of a multipart media asset.
    */
   get multiPartCount (): number {
-    if (this.yaml.multiPartCount == null) {
+    if (this.meta.multiPartCount == null) {
       return 1
     }
-    return this.yaml.multiPartCount
+    return this.meta.multiPartCount
   }
 
   /**

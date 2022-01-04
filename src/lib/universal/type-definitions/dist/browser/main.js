@@ -16,6 +16,8 @@ import * as LampTypes_1 from './lamp';
 export { LampTypes_1 as LampTypes };
 import * as MediaCategoriesTypes_1 from './media-categories';
 export { MediaCategoriesTypes_1 as MediaCategoriesTypes };
+import * as MediaDataTypes_1 from './media-data';
+export { MediaDataTypes_1 as MediaDataTypes };
 import * as MediaResolverTypes_1 from './media-resolver';
 export { MediaResolverTypes_1 as MediaResolverTypes };
 import * as TitlesTypes_1 from './titles';

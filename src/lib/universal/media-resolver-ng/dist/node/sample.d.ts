@@ -78,8 +78,8 @@ export declare class Sample {
      */
     get artistSafe(): string | undefined;
     /**
-     * Combined value build from `this.asset.yaml.creationDate` and
-     * `this.asset.yaml.year`.
+     * Combined value build from `this.asset.meta.creationDate` and
+     * `this.asset.meta.year`.
      */
     get yearSafe(): string | undefined;
 }

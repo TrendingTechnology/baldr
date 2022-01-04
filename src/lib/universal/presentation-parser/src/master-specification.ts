@@ -231,7 +231,7 @@ export interface MasterSpec {
    *
    * export class GenericMaster extends Master {
    *   generateTexMarkup ({ props, propsMain, propsPreview }) {
-   *     const yaml = propsMain.asset.yaml
+   *     const yaml = propsMain.asset.meta
    *     return tex.environment('baldrPerson', yaml.shortBiography, {
    *       name: yaml.name
    *     })

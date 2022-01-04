@@ -1,35 +1,11 @@
-import { Builder, MediaData } from './builder';
-export interface MinimalAssetData extends Omit<MediaData, 'relPath'> {
-}
-interface AssetDataRaw extends MediaData {
-    /**
-     * Indicates whether the media asset has a preview image (`_preview.jpg`).
-     */
-    hasPreview?: boolean;
-    /**
-     * Indicates wheter the media asset has a waveform image (`_waveform.png`).
-     */
-    hasWaveform?: boolean;
-    /**
-     * The number of parts of a multipart media asset.
-     */
-    multiPartCount?: number;
-    mimeType?: string;
-}
-export interface DbAssetData extends AssetDataRaw {
-    /**
-     * A reference string, for example `Haydn_Joseph`.
-     */
-    ref: string;
-    uuid: string;
-    title: string;
-}
+import { MediaDataTypes } from '@bldr/type-definitions';
+import { Builder } from './builder';
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
 export declare class AssetBuilder extends Builder {
-    data: AssetDataRaw;
+    data: Partial<MediaDataTypes.AssetMetaData>;
     /**
      * @param filePath - The file path of the media file.
      */
@@ -42,7 +18,6 @@ export declare class AssetBuilder extends Builder {
      */
     detectMultiparts(): AssetBuilder;
     detectMimeType(): AssetBuilder;
-    buildMinimal(): MinimalAssetData;
-    buildForDb(): DbAssetData;
+    buildMinimal(): MediaDataTypes.MinimalAssetMetaData;
+    buildForDb(): MediaDataTypes.AssetMetaData;
 }
-export {};

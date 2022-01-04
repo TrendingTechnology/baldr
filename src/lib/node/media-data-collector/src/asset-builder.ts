@@ -2,45 +2,16 @@ import fs from 'fs'
 
 import { getExtension } from '@bldr/string-format'
 import { mimeTypeManager } from '@bldr/client-media-models'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
-import { Builder, MediaData } from './builder'
-
-export interface MinimalAssetData extends Omit<MediaData, 'relPath'> {}
-
-interface AssetDataRaw extends MediaData {
-  /**
-   * Indicates whether the media asset has a preview image (`_preview.jpg`).
-   */
-  hasPreview?: boolean
-
-  /**
-   * Indicates wheter the media asset has a waveform image (`_waveform.png`).
-   */
-  hasWaveform?: boolean
-
-  /**
-   * The number of parts of a multipart media asset.
-   */
-  multiPartCount?: number
-
-  mimeType?: string
-}
-
-export interface DbAssetData extends AssetDataRaw {
-  /**
-   * A reference string, for example `Haydn_Joseph`.
-   */
-  ref: string
-  uuid: string
-  title: string
-}
+import { Builder } from './builder'
 
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
 export class AssetBuilder extends Builder {
-  data: AssetDataRaw
+  data: Partial<MediaDataTypes.AssetMetaData>
 
   /**
    * @param filePath - The file path of the media file.
@@ -107,13 +78,13 @@ export class AssetBuilder extends Builder {
     return this
   }
 
-  public buildMinimal (): MinimalAssetData {
-    const data: MinimalAssetData = {}
+  public buildMinimal (): MediaDataTypes.MinimalAssetMetaData {
+    const data: MediaDataTypes.MinimalAssetMetaData = {}
     this.importYamlFile(`${this.absPath}.yml`, data)
     return data
   }
 
-  public buildForDb (): DbAssetData {
+  public buildForDb (): MediaDataTypes.AssetMetaData {
     this.importYamlFile(`${this.absPath}.yml`, this.data)
     this.detectPreview()
     this.detectWaveform()
@@ -129,6 +100,6 @@ export class AssetBuilder extends Builder {
         'The asset YAML file must have the properties “ref”, “uuid”, “title”'
       )
     }
-    return this.data as DbAssetData
+    return this.data as MediaDataTypes.AssetMetaData
   }
 }
