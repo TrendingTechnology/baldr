@@ -7,6 +7,7 @@ import Player from '@bldr/player'
 import App from '@/components/App.vue'
 import ClassPlayableDemo from '@/components/classes-demo/PlayableDemo.vue'
 import ClassPlayerDemo from '@/components/classes-demo/PlayerDemo.vue'
+import ComponentHorizontalPlayButtonsDemo from '@/components/components-demo/HorizontalPlayButtonsDemo.vue'
 import ComponentMediaPlayerDemo from '@/components/components-demo/MediaPlayerDemo.vue'
 import ComponentPlayableBaseDemo from '@/components/components-demo/PlayableBaseDemo.vue'
 import ComponentPlayButtonDemo from '@/components/components-demo/PlayButtonDemo.vue'
@@ -34,6 +35,10 @@ const routes: RouteConfig[] = [
   {
     path: '/components/media-player',
     component: ComponentMediaPlayerDemo
+  },
+  {
+    path: '/components/horizontal-play-buttons',
+    component: ComponentHorizontalPlayButtonsDemo
   },
   {
     path: '/components/playable-base',

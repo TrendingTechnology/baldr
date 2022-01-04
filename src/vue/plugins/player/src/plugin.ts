@@ -4,6 +4,9 @@ import { Resolver } from '@bldr/media-resolver-ng'
 
 import { Player } from './player'
 
+import HorizontalPlayButtons from './components/HorizontalPlayButtons.vue'
+export { default as HorizontalPlayButtons } from './components/HorizontalPlayButtons.vue'
+
 import MediaPlayer from './components/MediaPlayer.vue'
 export { default as MediaPlayer } from './components/MediaPlayer.vue'
 
@@ -26,6 +29,7 @@ export let player: Player
 export default {
   install (Vue: typeof _Vue, resolver: Resolver): void {
     player = new Player(resolver)
+    Vue.component('horizontal-play-buttons-ng', HorizontalPlayButtons)
     Vue.component('media-player-ng', MediaPlayer)
     Vue.component('play-button-ng', PlayButton)
     Vue.component('wave-form-ng', WaveForm)

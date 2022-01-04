@@ -5,6 +5,10 @@
       <ul>
         <li>
           Components:
+          <router-link to="/components/horizontal-play-buttons"
+            >HorizontalPlayButtons</router-link
+          >
+          |
           <router-link to="/components/media-player">MediaPlayer</router-link>
           |
           <router-link to="/components/playable-base">PlayableBase</router-link>

@@ -15,9 +15,13 @@ export declare class WrappedUriList {
     list: WrappedUri[];
     constructor(spec: FuzzyUriInput);
     /**
-     * Get all URIs (without sample fragment)
+     * Get all URIs (without the sample fragment).
      */
     get uris(): Set<string>;
+    /**
+     * The first wrapped media URI in the list.
+     */
+    get first(): WrappedUri | undefined;
     [Symbol.iterator](): Generator<WrappedUri, any, any>;
 }
 export declare function extractUrisFromFuzzySpecs(spec: FuzzyUriInput): Set<string>;

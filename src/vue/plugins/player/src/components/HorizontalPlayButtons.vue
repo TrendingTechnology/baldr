@@ -1,7 +1,7 @@
 <template>
   <div class="vc_horizontal_play_buttons">
     <span v-for="wrappedUri in wrappedUris" :key="wrappedUri.uri">
-      <play-button :sample="wrappedUri.uri" />
+      <play-button :src="wrappedUri.uri" />
       <span
         class="manual-title sans"
         v-html="wrappedUri.title"
@@ -16,11 +16,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import {
-  WrappedUriList,
-  FuzzyUriInput,
-  WrappedUri
-} from '@bldr/client-media-models'
+import { WrappedUriList, FuzzyUriInput } from '@bldr/client-media-models'
 
 import { player } from '../plugin'
 
@@ -32,12 +28,14 @@ import PlayButton from './PlayButton.vue'
   }
 })
 export default class HorizontalPlayButtons extends Vue {
-  @Prop()
+  @Prop({
+    required: true
+  })
   src!: FuzzyUriInput
 
   @Prop({
     type: Boolean,
-    default: false
+    default: true
   })
   showTitles!: boolean
 
@@ -46,10 +44,6 @@ export default class HorizontalPlayButtons extends Vue {
     default: true
   })
   loadFirst!: boolean
-
-  get firstWrappedUri (): WrappedUri {
-    return this.wrappedUris[0]
-  }
 
   get wrappedUris (): WrappedUriList {
     return new WrappedUriList(this.src)
@@ -60,8 +54,8 @@ export default class HorizontalPlayButtons extends Vue {
   }
 
   private loadSample (): void {
-    if (this.loadFirst) {
-      player.load(this.firstWrappedUri.uri)
+    if (this.loadFirst && this.wrappedUris.first != null) {
+      player.load(this.wrappedUris.first.uri)
     }
   }
 }

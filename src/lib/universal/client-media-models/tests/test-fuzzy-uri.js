@@ -112,5 +112,10 @@ describe('File “fuzzy-uri.ts”', function () {
       assert.strictEqual(iterator.next().value, 'ref:test1')
       assert.strictEqual(iterator.next().value, 'ref:test2')
     })
+
+    it('Getter method “first”', function () {
+      const list = new WrappedUriList(['ref:test1#1', 'ref:test2#2'])
+      assert.strictEqual(list.first.uri, 'ref:test1#1')
+    })
   })
 })
