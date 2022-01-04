@@ -65,7 +65,11 @@ export interface SimpleAssetData {
   mimeType?: string
 }
 
-export const data: { [shortName: string]: SimpleAssetData } = {
+export interface TestDataCollection {
+  [shortName: string]: SimpleAssetData
+}
+
+export const data: TestDataCollection = {
   aicha: {
     title: 'Aïcha',
     uuid: 'uuid:e24e04ed-3aed-45d3-9280-a122658b6a0a',

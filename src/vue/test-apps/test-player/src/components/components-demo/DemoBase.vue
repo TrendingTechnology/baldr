@@ -5,7 +5,7 @@ import Component from 'vue-class-component'
 import { player } from '@bldr/player'
 
 import PlayableSelector, { eventBus } from './PlayableSelector.vue'
-import { resolver, data } from '../../app'
+import { resolver, data, SimpleAssetData, TestDataCollection } from '../../app'
 
 @Component({ components: { PlayableSelector } })
 export default class DemoBase extends Vue {
@@ -17,8 +17,12 @@ export default class DemoBase extends Vue {
     }
   }
 
-  get simpleAssets () {
+  get simpleAssets (): SimpleAssetData[] {
     return Object.values(data)
+  }
+
+  get testData (): TestDataCollection {
+    return data
   }
 
   mounted () {

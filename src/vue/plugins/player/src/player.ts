@@ -18,9 +18,8 @@ function createHtmlElement (
       video.poster = previewHttpUrl
     }
     return video
-  } else {
-    throw new Error(`Not supported asset type “${mimeType}”.`)
   }
+  throw new Error(`Not supported mime type “${mimeType}”.`)
 }
 
 class HtmlElementCache extends Cache<HTMLMediaElement> {}
@@ -50,7 +49,8 @@ class PlayerCache {
     if (htmlElement == null) {
       htmlElement = createHtmlElement(
         sample.asset.mimeType,
-        sample.asset.httpUrl
+        sample.asset.httpUrl,
+        sample.asset.previewHttpUrl
       )
       this.htmlElements.add(sample.asset.ref, htmlElement)
     }
@@ -76,7 +76,7 @@ export class Player {
    * Can be used as data `data () { return player.uris }` in Vue components.
    * A puremans vuex store.
    */
-  public uris: { loadedUri?: string, playingUri?: string } = {
+  public uris: { loadedUri?: string; playingUri?: string } = {
     loadedUri: undefined,
     playingUri: undefined
   }
