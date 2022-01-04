@@ -211,6 +211,13 @@ export const universalMenuDefinition = [
                         keyboardShortcut: 'Ctrl + Space'
                     },
                     {
+                        label: 'starten / ausblenden',
+                        description: 'Starte geladenen Audio/Video-Ausschnitt von vorne / blende langsam aus',
+                        action: 'executeCallback',
+                        arguments: 'toggleStartFadeOutPlayer',
+                        keyboardShortcut: 'Return'
+                    },
+                    {
                         label: 'Vorhergehender Ausschnitt',
                         description: 'Spiele den vorhergehenden Ausschnitt.',
                         action: 'executeCallback',

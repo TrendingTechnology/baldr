@@ -153,6 +153,10 @@ export class Player {
     }
   }
 
+  public get isPlaying (): boolean {
+    return this.playing != null && this.playing.isPlaying
+  }
+
   /**
    * Jump forwards.
    *

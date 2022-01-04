@@ -47,6 +47,10 @@ export class Playable {
     this.eventsListener.trigger('playback-change', value)
   }
 
+  public get isPlaying (): boolean {
+    return this.playbackState !== 'stopped'
+  }
+
   public registerPlaybackChangeListener (
     callback: (state: PlaybackState) => void
   ): void {
@@ -157,24 +161,27 @@ export class Playable {
           this.triggerTimeUpdateListener()
         }, TIME_UPDATE_INTERVAL)
       }
-      this.htmlElement.play().then(() => {
-        // Normally 0.01 by volume = 1
-        const steps = targetVolume / 100
-        // Interval: every X ms increase volume by step
-        // in milliseconds: duration * 1000 / 100
-        const stepInterval = fadeInSec * 10
-        this.intervalExecutor.set(() => {
-          actualVolume += steps
-          if (actualVolume <= targetVolume) {
-            this.volume = actualVolume
-          } else {
-            this.intervalExecutor.clear()
-            this.volume = targetVolume
-            this.playbackState = 'playing'
-            resolve()
-          }
-        }, stepInterval)
-      }, () => {})
+      this.htmlElement.play().then(
+        () => {
+          // Normally 0.01 by volume = 1
+          const steps = targetVolume / 100
+          // Interval: every X ms increase volume by step
+          // in milliseconds: duration * 1000 / 100
+          const stepInterval = fadeInSec * 10
+          this.intervalExecutor.set(() => {
+            actualVolume += steps
+            if (actualVolume <= targetVolume) {
+              this.volume = actualVolume
+            } else {
+              this.intervalExecutor.clear()
+              this.volume = targetVolume
+              this.playbackState = 'playing'
+              resolve()
+            }
+          }, stepInterval)
+        },
+        () => {}
+      )
     })
   }
 

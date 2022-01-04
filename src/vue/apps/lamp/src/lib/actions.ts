@@ -422,12 +422,21 @@ export function enterFullscreen (): void {
 export function togglePlayer (): void {
   player.toggle()
 }
+
 export function startPlayer (): void {
   player.start()
 }
 
 export function stopPlayer (): void {
   player.stop()
+}
+
+export function toggleStartFadeOutPlayer (): void {
+  if (player.isPlaying) {
+    player.stop(4)
+  } else {
+    player.start()
+  }
 }
 
 export function fadeOutPlayer (): void {
