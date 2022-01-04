@@ -20,7 +20,7 @@ import {
   WrappedUriList,
   FuzzyUriInput,
   WrappedUri
-} from '@bldr/media-resolver-ng'
+} from '@bldr/client-media-models'
 
 import { player } from '../plugin'
 

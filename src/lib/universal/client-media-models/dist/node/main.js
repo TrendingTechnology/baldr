@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = void 0;
+exports.mimeTypeManager = exports.findMediaUris = exports.MediaUri = exports.extractUrisFromFuzzySpecs = exports.WrappedUriList = void 0;
+var fuzzy_uri_1 = require("./fuzzy-uri");
+Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
+Object.defineProperty(exports, "extractUrisFromFuzzySpecs", { enumerable: true, get: function () { return fuzzy_uri_1.extractUrisFromFuzzySpecs; } });
 var media_uri_1 = require("./media-uri");
 Object.defineProperty(exports, "MediaUri", { enumerable: true, get: function () { return media_uri_1.MediaUri; } });
 Object.defineProperty(exports, "findMediaUris", { enumerable: true, get: function () { return media_uri_1.findMediaUris; } });

@@ -6,10 +6,11 @@
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'"
   },
   "dependencies": {
+    "@bldr/client-media-models": "*",
     "@bldr/icons": "*",
     "@bldr/media-resolver-ng": "*",
-    "@bldr/themes": "*",
     "@bldr/string-format": "*",
+    "@bldr/themes": "*",
     "vue-class-component": "7.2.3",
     "vue-property-decorator": "9.1.2",
     "vue-router": "3.2.0",

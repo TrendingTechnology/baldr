@@ -53,17 +53,13 @@ describe('File “fuzzy-uri.ts”', function () {
     })
 
     it('No title with “.”', function () {
-      const spec = getFirstWrappedUri(
-        'ref:test .'
-      )
+      const spec = getFirstWrappedUri('ref:test .')
       assert.strictEqual(spec.uri, 'ref:test')
       assert.strictEqual(spec.title, undefined)
     })
 
     it('No title with “none”', function () {
-      const spec = getFirstWrappedUri(
-        'ref:test none'
-      )
+      const spec = getFirstWrappedUri('ref:test none')
       assert.strictEqual(spec.uri, 'ref:test')
       assert.strictEqual(spec.title, undefined)
     })

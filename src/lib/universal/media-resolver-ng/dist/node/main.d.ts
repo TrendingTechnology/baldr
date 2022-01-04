@@ -11,7 +11,6 @@
  */
 export { Asset } from './asset';
 export { Cache } from './cache';
-export { FuzzyUriInput, WrappedUri, WrappedUriList, extractUrisFromFuzzySpecs } from './fuzzi-uri';
 export { Resolver, updateMediaServer } from './resolve';
 export { Sample } from './sample';
 export { getHttp } from '@bldr/http-request';

@@ -19,13 +19,13 @@ export {
   wrapWords,
   splitHtmlIntoChunks
 } from '@bldr/dom-manipulator'
-
-export { mapStepFieldDefintions, FieldData } from './field'
 export {
   extractUrisFromFuzzySpecs,
   WrappedUri,
   WrappedUriList
-} from './fuzzy-uri'
+} from '@bldr/client-media-models'
+
+export { mapStepFieldDefintions, FieldData } from './field'
 export { Slide } from './slide'
 export { StepCollector } from './step'
 

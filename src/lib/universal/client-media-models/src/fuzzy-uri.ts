@@ -4,8 +4,7 @@
  * specification of the URIs.
  */
 
-import { MediaUri } from '@bldr/client-media-models'
-
+import { MediaUri } from './media-uri'
 export type FuzzyUriInput = string | WrappedUri | string[] | WrappedUri[]
 
 export interface WrappedUri {

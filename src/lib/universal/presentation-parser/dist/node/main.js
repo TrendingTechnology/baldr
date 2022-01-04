@@ -51,7 +51,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.getMaster = exports.masterCollection = exports.Slide = exports.Master = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.genericMModul = exports.getMaster = exports.masterCollection = exports.Slide = exports.Master = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
@@ -73,8 +73,6 @@ exports.youtubeMModule = require("./masters/youtube");
 var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
 Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
 Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
-var fuzzy_uri_1 = require("./fuzzy-uri");
-Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return fuzzy_uri_1.WrappedUriList; } });
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

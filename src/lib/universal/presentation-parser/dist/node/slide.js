@@ -7,7 +7,7 @@ const log = require("@bldr/log");
 const data_management_1 = require("./data-management");
 const master_collection_1 = require("./master-collection");
 const step_1 = require("./step");
-const fuzzy_uri_1 = require("./fuzzy-uri");
+const client_media_models_1 = require("@bldr/client-media-models");
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -61,7 +61,7 @@ class Slide {
     parseAudioOverlay(data) {
         const audioOverlay = data.cutAny('audioOverlay');
         if (audioOverlay != null) {
-            return new fuzzy_uri_1.WrappedUriList(audioOverlay);
+            return new client_media_models_1.WrappedUriList(audioOverlay);
         }
     }
     /**
