@@ -8,7 +8,7 @@ import { Route } from 'vue-router'
 import { styleConfigurator } from '@bldr/style-configurator'
 import * as api from '@bldr/api-wrapper'
 import { showMessage } from '@bldr/notification'
-import { media } from '@bldr/media-client'
+import { player } from '@bldr/player'
 
 import store from '../store/index.js'
 import { router } from './router-setup'
@@ -420,31 +420,24 @@ export function enterFullscreen (): void {
 }
 
 export function togglePlayer (): void {
-  media.player.toggle()
+  player.toggle()
 }
 export function startPlayer (): void {
-  media.player.start()
+  player.start()
 }
 
 export function stopPlayer (): void {
-  media.player.stop()
+  player.stop()
 }
 
 export function fadeOutPlayer (): void {
-  media.player.stop(4)
-}
-
-export function startPreviousInPlaylist (): void {
-  media.playList.startPrevious()
-}
-
-export function startNextInPlaylist (): void {
-  media.playList.startNext()
+  player.stop(4)
 }
 
 export function forwardPlayer (): void {
-  media.player.forward()
+  player.forward()
 }
+
 export function backwardPlayer (): void {
-  media.player.backward()
+  player.backward()
 }

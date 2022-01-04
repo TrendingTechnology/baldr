@@ -2,13 +2,11 @@
  * @file
  * Wrap a media asset or a sample URI with a title in an object. Allow fuzzy
  * specification of the URIs.
- *
- * @TODO move to @bldr/media-resolver-ng
  */
 
 import { MediaUri } from '@bldr/client-media-models'
 
-type FuzzySpec = string | WrappedUri | string[] | WrappedUri[]
+export type FuzzyUriInput = string | WrappedUri | string[] | WrappedUri[]
 
 export interface WrappedUri {
   uri: string
@@ -54,7 +52,7 @@ class WrappedUriCollector implements WrappedUri {
 export class WrappedUriList {
   public list: WrappedUri[]
 
-  constructor (spec: FuzzySpec) {
+  constructor (spec: FuzzyUriInput) {
     let specArray
     if (!Array.isArray(spec)) {
       specArray = [spec]
@@ -86,6 +84,6 @@ export class WrappedUriList {
   }
 }
 
-export function extractUrisFromFuzzySpecs (spec: FuzzySpec): Set<string> {
+export function extractUrisFromFuzzySpecs (spec: FuzzyUriInput): Set<string> {
   return new WrappedUriList(spec).uris
 }

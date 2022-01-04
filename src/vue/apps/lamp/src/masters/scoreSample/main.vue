@@ -2,10 +2,10 @@
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading" />
     <img :src="asset.getMultiPartHttpUrlByNo(navigationNumbers.stepNo)" />
-    <play-button
+    <play-button-ng
       class="left-bottom-corner"
-      v-if="audioSample"
-      :sample="audioSample"
+      v-if="audioUri"
+      :src="audioUri"
     />
     <external-sites :asset="asset" />
   </div>
@@ -43,6 +43,10 @@ export default class ScoreSampleMasterMain extends MasterMain {
     type: Object
   })
   audioSample: Asset
+
+  get audioUri (): string | undefined {
+    return this.slide.props.audio
+  }
 
   afterSlideNoChange (): void {
     if (!this.isPublic) {

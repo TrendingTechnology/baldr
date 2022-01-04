@@ -9,11 +9,9 @@
     <p class="title piece" v-if="title" v-html="title" />
     <p class="artist person" v-if="artist" v-html="artist" />
 
-    <!-- <wave-form-ng :playable="playable" /> -->
-    <wave-form :sample="sample" />
+    <wave-form-ng :src="uri" />
 
-    <!-- <play-button-ng class="left-bottom-corner" :playable="playable" /> -->
-    <play-button class="left-bottom-corner" :sample="sample" />
+    <play-button-ng class="left-bottom-corner" :src="uri" />
     <external-sites :asset="mediaAsset" />
   </div>
 </template>
@@ -77,6 +75,10 @@ export default class AudioMasterMain extends MasterMain {
     type: String
   })
   description: string
+
+  get uri (): string {
+    return this.slide.props.src
+  }
 
   get playable (): Playable {
     return player.getPlayable(this.slide.props.src)
