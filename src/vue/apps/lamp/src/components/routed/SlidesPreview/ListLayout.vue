@@ -1,14 +1,17 @@
 <template>
-  <ol class="vc_list_hierarchical">
+  <ol class="vc_list_layout">
     <li
       v-for="slide in slides"
       :key="slide.no"
       @click="gotToSlide(slide.no)"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slideCurrent && slide.no === slideCurrent.no }"
+      :class="{ 'current-slide': currentSlide && slide.no === currentSlide.no }"
       :style="style(slide)"
     >
-      <slide-preview :slide="slide" />
+      <slide-preview
+        :slide="slide"
+        :slide-ng="presentationNg.getSlideByNo(slide.no)"
+      />
       <div class="slide-info">
         <span class="master-title"> {{ slide.master.title }}: </span>
         <span class="slide-title" v-html="slide.title" />
@@ -19,59 +22,25 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
-import { createNamespacedHelpers } from 'vuex'
 
-import SlidePreview from '@/components/reusable/SlidesPreview/SlidePreview.vue'
+import { Slide } from '../../../content-file.js'
 
-const { mapGetters } = createNamespacedHelpers('lamp/preview')
-const storePreview = createNamespacedHelpers('lamp/preview')
-const mapGettersPreview = storePreview.mapGetters
+import PreviewLayoutBase from '@/components/reusable/SlidesPreview/PreviewLayoutBase.vue'
 
-@Component({
-  components: {
-    SlidePreview
-  },
-  computed: {
-    ...mapGetters(['presentation', 'slidesCount']),
-    ...mapGettersPreview(['detail', 'hierarchical'])
-  }
-})
-export default class ListLayout extends Vue {
-  @Prop({
-    type: Array
-  })
-  slides: any
-
-  presentation: any
-  slidesCount: any
-  detail: any
-  hierachical: any
-
-  get slideCurrent () {
-    return this.$store.getters['lamp/slide']
-  }
-
-  style (slide) {
-    if (this.hierachical) {
-      const padding = (slide.level - 1) * 3
+@Component
+export default class ListLayout extends PreviewLayoutBase {
+  style (slide: Slide) {
+    if (this.hierarchical) {
+      const padding = (slide.level - 1) * 8
       return { paddingLeft: `${padding}em` }
-    }
-  }
-
-  gotToSlide (slideNo) {
-    this.$store.dispatch('lamp/setSlideNoCurrent', slideNo)
-    if (this.$route.name !== 'slide') {
-      this.$router.push({ name: 'slide' })
     }
   }
 }
 </script>
 
 <style lang="scss">
-.vc_list_hierarchical {
+.vc_list_layout {
   li {
     display: flex;
     cursor: pointer;

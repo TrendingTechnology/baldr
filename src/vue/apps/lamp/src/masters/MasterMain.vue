@@ -5,11 +5,12 @@ import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import { LampTypes } from '@bldr/type-definitions'
-import { Slide } from '@bldr/presentation-parser'
+import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import inlineMarkup from '../lib/inline-markup'
 import { customStore } from '../main'
 import Master from './Master.vue'
+import { Slide } from '../content-file.js'
 
 interface NavigationNumbers {
   slideNo: number
@@ -26,6 +27,15 @@ export default class MasterMain extends Master {
     required: true
   })
   slide: Slide
+
+  /**
+   * The current slide object.
+   */
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slideNg: SlideNg
 
   /**
    * The properties `slideNo` and `stepNo` had to be bundled into one

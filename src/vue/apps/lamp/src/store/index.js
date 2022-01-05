@@ -42,6 +42,7 @@ const state = {
   presentation: null,
   presentationNg: null,
   slideNoOld: null,
+  // TODO: rename to currentSlideNo
   slideNo: null,
   slides: {},
   showMetaDataOverlay: false,
@@ -68,7 +69,13 @@ const getters = {
       return state.presentationNg.slides.flat[no - 1]
     }
   },
+  // @TODO remove -> use currentSlideNg
   slideNg: (state, getters) => {
+    if (state.slideNo != null) {
+      return getters.slideNgByNo(state.slideNo)
+    }
+  },
+  currentSlideNg: (state, getters) => {
     if (state.slideNo != null) {
       return getters.slideNgByNo(state.slideNo)
     }
@@ -76,7 +83,13 @@ const getters = {
   slideNo: state => {
     return state.slideNo
   },
+  // @TODO remove
   slide: (state, getters) => {
+    if (state.slideNo) {
+      return getters.slideByNo(state.slideNo)
+    }
+  },
+  currentSlide: (state, getters) => {
     if (state.slideNo) {
       return getters.slideByNo(state.slideNo)
     }

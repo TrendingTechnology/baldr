@@ -1,13 +1,13 @@
 <template>
-  <ol class="vc_gird_hierarchical" v-if="slides">
+  <ol class="vc_gird_layout" v-if="slides">
     <li
       v-for="slide in slides"
       :key="slide.no"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slideCurrent && slide.no === slideCurrent.no }"
+      :class="{ 'current-slide': currentSlide && slide.no === currentSlide.no }"
     >
       <hr v-if="slide.slides.length && hierarchical" />
-      <slide-preview :slide="slide" />
+      <slide-preview :slide="slide" :slide-ng="presentationNg.getSlideByNo(slide.no)" />
       <grid-layout
         v-if="slide.slides.length && hierarchical"
         :slides="slide.slides"
@@ -17,37 +17,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
-import { createNamespacedHelpers } from 'vuex'
 
-import { Slide } from '@bldr/presentation-parser'
+import PreviewLayoutBase from './PreviewLayoutBase.vue'
 
-import SlidePreview from './SlidePreview.vue'
-
-const { mapGetters } = createNamespacedHelpers('lamp/preview')
-
-@Component({
-  components: {
-    SlidePreview
-  },
-  computed: mapGetters(['hierarchical'])
-})
-export default class GridLayout extends Vue {
-  @Prop({
-    type: Array
-  })
-  slides: Slide
-
-  get slideCurrent (): Slide {
-    return this.$store.getters['lamp/slide']
-  }
-}
+@Component
+export default class GridLayout extends PreviewLayoutBase {}
 </script>
 
 <style lang="scss">
-.vc_gird_hierarchical {
+.vc_gird_layout {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

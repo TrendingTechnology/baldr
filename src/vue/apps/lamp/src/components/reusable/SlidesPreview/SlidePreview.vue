@@ -20,8 +20,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
+import { Slide as SlideNg } from '@bldr/presentation-parser'
+
 import { getViewFromRoute } from '../../../lib/routing-related'
+import { Slide } from '../../../content-file.js'
+
+import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
 
 @Component({
   components: {
@@ -30,15 +34,22 @@ import { getViewFromRoute } from '../../../lib/routing-related'
 })
 export default class SlidePreview extends Vue {
   @Prop({
-    type: Object
+    type: Object,
+    required: true
   })
-  slide: any
+  slide: Slide
 
-  get slideCurrent () {
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slideNg: SlideNg
+
+  get slideCurrent (): Slide {
     return this.$store.getters['lamp/slide']
   }
 
-  gotToSlide (slide) {
+  gotToSlide (slide: Slide): void {
     const location = slide.routerLocation(getViewFromRoute())
     this.$router.push(location)
   }
