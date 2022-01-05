@@ -83,16 +83,6 @@ _run test vue/test-apps/test-player
 #_run_test lib/node/songbook-intermediate-files
 #_run_test lib/universal/type-definitions
 #_run_test vue/apps/seating-plan
-#_run_test vue/plugins/components-collection
-#_run_test vue/plugins/dynamic-select
-#_run_test vue/plugins/icons
-#_run_test vue/plugins/media-client
-#_run_test vue/plugins/menu-webapp
-#_run_test vue/plugins/modal-dialog
-#_run_test vue/plugins/notification
-#_run_test vue/plugins/player
-#_run_test vue/plugins/shortcuts
-#_run_test vue/plugins/themes
 
 _run build:webapp vue/apps/lamp
 _run build:webapp vue/apps/songbook
