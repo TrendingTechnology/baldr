@@ -20,24 +20,6 @@ interface NavigationNumbers {
 @Component
 export default class MasterMain extends Master {
   /**
-   * The current slide object.
-   */
-  @Prop({
-    type: Object,
-    required: true
-  })
-  slide: Slide
-
-  /**
-   * The current slide object.
-   */
-  @Prop({
-    type: Object,
-    required: true
-  })
-  slideNg: SlideNg
-
-  /**
    * The properties `slideNo` and `stepNo` had to be bundled into one
    * object to get a watcher that can execute the two hooks
    * `afterSlideNoChange` and `afterStepNoChange`

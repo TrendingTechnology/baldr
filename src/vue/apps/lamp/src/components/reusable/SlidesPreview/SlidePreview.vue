@@ -11,7 +11,7 @@
       :name="slide.master.icon.name"
       :color="slide.master.icon.color"
     />
-    <slide-preview-renderer :slide="slide" />
+    <slide-preview-renderer :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
 
