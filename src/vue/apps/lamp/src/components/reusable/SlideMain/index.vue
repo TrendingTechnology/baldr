@@ -10,7 +10,12 @@
   >
     <master-icon :slide="slide" />
     <meta-data-overlay :slide="slide" />
-    <master-renderer :slide="slide" :step-no="stepNo" :is-public="isPublic" />
+    <master-renderer
+      :slide="slide"
+      :slide-ng="slideNg"
+      :step-no="stepNo"
+      :is-public="isPublic"
+    />
     <audio-overlay :slide="slide" />
   </div>
 </template>
@@ -20,12 +25,14 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { Slide } from '@bldr/presentation-parser'
+import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import AudioOverlay from './AudioOverlay.vue'
 import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
 import MetaDataOverlay from './MetaDataOverlay.vue'
+
+import { Slide } from '../../../content-file.js'
 
 @Component({
   components: {
@@ -46,10 +53,13 @@ export default class SlideMain extends Vue {
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
 
-  @Prop({ type: Object })
-  slideNg: Slide
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slideNg: SlideNg
 
   @Prop({
     type: Number

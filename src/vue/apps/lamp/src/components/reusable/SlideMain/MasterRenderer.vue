@@ -1,10 +1,14 @@
 <script lang="ts">
-import Vue, { VNode, CreateElement }  from 'vue'
+import Vue, { VNode, CreateElement } from 'vue'
 
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Slide as SlideNg } from '@bldr/presentation-parser'
+
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
+
+import { Slide } from '../../../content-file.js'
 
 @Component({
   components: {
@@ -16,7 +20,13 @@ export default class MasterRenderer extends Vue {
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
+
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slideNg: SlideNg
 
   /**
    *  All main master components have a prop named `navigationNumbers`.
@@ -41,6 +51,7 @@ export default class MasterRenderer extends Vue {
           props: {
             ...this.slide.propsMain,
             slide: this.slide,
+            slideNg: this.slideNg,
             navigationNumbers: { stepNo: this.stepNo, slideNo: this.slide.no },
             isPublic: this.isPublic
           },
