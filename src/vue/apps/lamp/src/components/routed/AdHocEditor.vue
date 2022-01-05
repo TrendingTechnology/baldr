@@ -1,12 +1,14 @@
 <template>
   <div class="vc_ad_hoc_editor main-app-fullscreen" b-ui-theme="default">
-    <slide-main :slide="slide" :is-public="false" />
+    <slide-main :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+
+import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import { Slide } from '../../content-file.js'
@@ -17,9 +19,18 @@ import { Slide } from '../../content-file.js'
   }
 })
 export default class AdHocEditor extends Vue {
-  data () {
+  slide: Slide
+
+  slideNg: SlideNg
+
+  data (): {
+    slide: Slide
+    slideNg: SlideNg
+  } {
+    const raw = { editor: { markup: 'Hefteintrag' } }
     return {
-      slide: new Slide({ editor: { markup: 'Hefteintrag' } })
+      slide: new Slide(raw),
+      slideNg: new SlideNg(raw, 1, 1)
     }
   }
 }

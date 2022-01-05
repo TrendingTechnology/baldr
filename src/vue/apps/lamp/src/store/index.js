@@ -97,6 +97,11 @@ const getters = {
       return state.slides
     }
   },
+  slidesNg: state => {
+    if (state.presentationNg.slides.flat.length > 0) {
+      return state.presentationNg.slides.flat
+    }
+  },
   slidesCount: (state, getters) => {
     if (!getters.slides) return
     return getters.slides.length

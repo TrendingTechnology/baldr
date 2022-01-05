@@ -47,7 +47,7 @@ export default class MasterMain extends Master {
     type: Boolean,
     default: true
   })
-  isPublic = true
+  isPublic: boolean
 
   @Watch('navigationNumbers')
   onNavigationNumbersChange (

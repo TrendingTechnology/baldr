@@ -26,11 +26,11 @@ import { convertTexToMd, convertMdToTex } from '@bldr/tex-markdown-converter'
 
 @Component
 export default class TexMarkdownConverter extends Vue {
-  input: string = ''
-  output: string = ''
+  input = ''
+  output = ''
   toMarkdown = true
 
-  get buttonLabel () {
+  get buttonLabel (): string {
     if (this.toMarkdown) {
       return 'TeX → Markdown'
     } else {
@@ -38,12 +38,12 @@ export default class TexMarkdownConverter extends Vue {
     }
   }
 
-  changeDirection () {
+  changeDirection (): void {
     this.toMarkdown = !this.toMarkdown
     this.convert()
   }
 
-  convert () {
+  convert (): void {
     if (this.toMarkdown) {
       this.output = convertTexToMd(this.input)
     } else {
@@ -52,7 +52,7 @@ export default class TexMarkdownConverter extends Vue {
   }
 
   @Watch('input')
-  onInputChanged () {
+  onInputChanged (): void {
     this.convert()
   }
 }

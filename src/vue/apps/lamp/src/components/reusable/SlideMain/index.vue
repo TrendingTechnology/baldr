@@ -20,6 +20,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Slide } from '@bldr/presentation-parser'
+
 import AudioOverlay from './AudioOverlay.vue'
 import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
@@ -45,6 +47,9 @@ export default class SlideMain extends Vue {
     required: true
   })
   slide: any
+
+  @Prop({ type: Object })
+  slideNg: Slide
 
   @Prop({
     type: Number

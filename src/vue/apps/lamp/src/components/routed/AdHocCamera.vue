@@ -1,12 +1,14 @@
 <template>
   <div class="vc_ad_hoc_camera main-app-fullscreen" b-ui-theme="default">
-    <slide-main :slide="slide" :is-public="false" />
+    <slide-main :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+
+import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import { Slide } from '../../content-file.js'
@@ -18,8 +20,10 @@ import { Slide } from '../../content-file.js'
 })
 export default class AdHocCamera extends Vue {
   data () {
+    const raw = { camera: true }
     return {
-      slide: new Slide({ camera: true })
+      slide: new Slide(raw),
+      slideNg: new SlideNg(raw, 1, 1)
     }
   }
 }

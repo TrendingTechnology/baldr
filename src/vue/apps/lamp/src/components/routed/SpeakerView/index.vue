@@ -7,11 +7,17 @@
     <presentation-title />
 
     <div class="slide-panel" v-if="slide">
-      <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo" />
+      <slide-main
+        id="current-slide"
+        :slide="slide"
+        :slide-ng="slideNg"
+        :step-no="currentStepNo"
+      />
       <div>
         <slide-main
           id="next-slide"
           :slide="nextSlide"
+          :slide-ng="nextSlideNg"
           :step-no="nextStepNo"
           :is-public="false"
         />
@@ -38,6 +44,10 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
+import { Route } from 'vue-router'
+
+import { Slide as SlideNg, Presentation } from '@bldr/presentation-parser'
+import { Slide } from '../../../content-file.js'
 
 import { routerGuards, switchRouterView } from '../../../lib/routing-related'
 
@@ -50,6 +60,12 @@ import SlideSteps from './SlideSteps.vue'
 const { mapGetters } = createNamespacedHelpers('lamp')
 const mapGettersNav = createNamespacedHelpers('lamp/nav').mapGetters
 
+interface RouterParams {
+  slideNo: number
+  stepNo?: number
+  presRef: string
+}
+
 @Component({
   components: {
     CursorArrows,
@@ -59,35 +75,49 @@ const mapGettersNav = createNamespacedHelpers('lamp/nav').mapGetters
     SlideSteps
   },
   computed: {
-    ...mapGetters(['slide', 'presentation', 'slides']),
+    ...mapGetters([
+      'slide',
+      'slideNg',
+      'presentation',
+      'presentationNg',
+      'slides',
+      'slidesNg'
+    ]),
     ...mapGettersNav(['nextRouterParams'])
   },
   ...routerGuards
 })
 export default class SpeakerView extends Vue {
-  slide: any
-  presentation: any
-  slides: any
-  nextRouterParams: any
+  slide: Slide
+  slideNg: SlideNg
+  slides: Slide
+  slidesNg: SlideNg[]
+  presentationNg: Presentation
+  nextRouterParams: (direction: 1 | -1) => RouterParams
 
-  get nextSlideRouterParams () {
+  get nextSlideRouterParams (): RouterParams {
     return this.nextRouterParams(1)
   }
 
-  get nextSlide () {
+  get nextSlide (): Slide {
     const params = this.nextSlideRouterParams
     return this.slides[params.slideNo - 1]
   }
 
-  get currentStepNo () {
+  get nextSlideNg (): SlideNg {
+    const params = this.nextSlideRouterParams
+    return this.slidesNg[params.slideNo - 1]
+  }
+
+  get currentStepNo (): number {
     return this.slide.stepNo
   }
 
-  get nextStepNo () {
+  get nextStepNo (): number {
     return this.nextSlideRouterParams.stepNo
   }
 
-  get publicViewRoute () {
+  get publicViewRoute (): Route {
     return switchRouterView(this.$route)
   }
 }

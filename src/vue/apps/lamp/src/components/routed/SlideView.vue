@@ -6,7 +6,7 @@
 <template>
   <!-- The slide object must exist, else error messages when entering -->
   <div v-if="slide" class="vc_slide_view" :style="style">
-    <slide-main :slide="slide" :step-no="slide.stepNo" />
+    <slide-main :slide="slide" :slide-ng="slideNg" :step-no="slide.stepNo" />
     <cursor-arrows />
   </div>
 </template>

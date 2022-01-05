@@ -25,6 +25,7 @@ import { TitlesTypes } from '@bldr/type-definitions'
 
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import TitlesBreadCrumbs from '@/components/reusable/TitlesBreadCrumbs.vue'
+import Vm from '../../../main'
 
 const { mapGetters } = createNamespacedHelpers('lamp/titles')
 
@@ -65,8 +66,8 @@ export default class TitlesTreePage extends Vue {
     to: Route,
     from: Route,
     next: NavigationGuardNext<TitlesTreePage>
-  ) {
-    next(async vm => {
+  ): void {
+    next(async (vm: typeof Vm) => {
       await vm.$store.dispatch('lamp/titles/loadRootTreeList')
       vm.$store.dispatch('lamp/titles/setSubTreeList', to.params.relPath)
     })
@@ -76,7 +77,7 @@ export default class TitlesTreePage extends Vue {
     to: Route,
     from: Route,
     next: NavigationGuardNext<TitlesTreePage>
-  ): any {
+  ): void {
     this.$store.dispatch('lamp/titles/setSubTreeList', to.params.relPath)
     next()
   }
