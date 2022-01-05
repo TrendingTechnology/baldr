@@ -8,19 +8,23 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
+    "serve": "npm run serve:webapp",
+    "build": "echo 'No build task specified!'",
+    "test:e2e": "vue-cli-service test:e2e",
     "build:electron": "vue-cli-service electron:build",
     "build:webapp": "vue-cli-service build",
-    "build": "echo 'No build task specified!'",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
     "install:deb": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb",
     "install:electron": "npm run build:electron && npm run install:deb",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
     "serve:electron": "vue-cli-service electron:serve",
     "serve:webapp": "vue-cli-service serve",
-    "serve": "npm run serve:webapp",
-    "test:e2e:headless": "vue-cli-service test:e2e --headless",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test": "npm run test:e2e:headless"
+    "test": "npm run test:e2e:headless",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless"
   },
-  "main": "lib/electron-background.js",
+  "main": "background.js",
   "dependencies": {
     "@bldr/api-wrapper": "*",
     "@bldr/client-media-models": "*",
@@ -48,12 +52,12 @@
     "@bldr/type-definitions": "*",
     "@bldr/yaml": "*",
     "electron-context-menu": "2.3.0",
+    "vue": "2.6.11",
     "vue-class-component": "7.2.3",
     "vue-native-websocket": "2.0.14",
     "vue-pdf": "4.2.0",
     "vue-property-decorator": "9.1.2",
     "vue-router": "3.2.0",
-    "vue": "2.6.11",
     "vuex": "3.4.0"
   },
   "devDependencies": {
@@ -61,7 +65,7 @@
     "@bldr/http-request": "*",
     "@bldr/log": "*",
     "@bldr/vue-config-helper": "*",
-    "@types/electron-devtools-installer": "2.2.0",
+    "@types/electron-devtools-installer": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
     "@vue/cli-plugin-e2e-cypress": "4.5.15",
@@ -73,17 +77,17 @@
     "@vue/eslint-config-standard": "5.1.2",
     "@vue/eslint-config-typescript": "7.0.0",
     "babel-eslint": "10.1.0",
-    "electron-devtools-installer": "3.2.0",
     "electron": "15.3.0",
+    "electron-devtools-installer": "3.2.0",
+    "eslint": "6.7.2",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.0",
     "eslint-plugin-vue": "6.2.2",
-    "eslint": "6.7.2",
     "node-sass": "5.0.0",
-    "sass-loader": "10.1.0",
     "sass": "^1.26.5",
+    "sass-loader": "10.1.0",
     "style-resources-loader": "1.4.1",
     "typescript": "4.1.5",
     "vue-cli-plugin-electron-builder": "2.1.1",
@@ -104,10 +108,15 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "ignorePatterns": ["**/*.js"],
+    "ignorePatterns": [
+      "**/*.js"
+    ],
     "rules": {}
   },
-  "browserslist": ["> 1%", "last 2 versions"],
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },

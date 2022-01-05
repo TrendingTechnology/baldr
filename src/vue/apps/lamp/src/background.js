@@ -11,7 +11,7 @@ import { getEletronMenuDef } from '@bldr/menu-adapter'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-let win: BrowserWindow | null
+let win
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -123,7 +123,7 @@ app.on('ready', async () => {
     try {
       await installExtension(VUEJS_DEVTOOLS)
     } catch (e) {
-      const error = e as Error
+      const error = e
       console.error('Vue Devtools failed to install:', error.toString())
     }
   }
