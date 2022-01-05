@@ -10,9 +10,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import { customStore } from '@/main'
+
+import masters from './masters.js'
+import mediaNg from './mediaNg.js'
 import nav from './nav.js'
 import preview from './preview.js'
-import masters from './masters.js'
 import recent from './recent.js'
 import titles from './titles.js'
 
@@ -284,9 +286,10 @@ export default new Vuex.Store({
       actions,
       mutations,
       modules: {
+        masters,
+        mediaNg,
         nav,
         preview,
-        masters,
         recent,
         titles
       }
