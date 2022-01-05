@@ -96,6 +96,12 @@ function configureVue(simpleConfig) {
         },
         plugins: [(0, define_plugin_1.buildDefinePluginConfig)(simpleConfig.additionalDefinitions)]
     };
+    if (simpleConfig.plugins != null) {
+        configureWebpack.plugins = [
+            ...configureWebpack.plugins,
+            ...simpleConfig.plugins
+        ];
+    }
     if (simpleConfig.analyzeBundle != null && simpleConfig.analyzeBundle) {
         configureWebpack.plugins.push(new webpack_bundle_analyzer_1.BundleAnalyzerPlugin());
     }

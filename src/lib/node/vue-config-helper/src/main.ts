@@ -68,6 +68,8 @@ interface SimpleVueConfig {
    * @see https://github.com/webpack-contrib/webpack-bundle-analyzer
    */
   analyzeBundle?: boolean
+
+  plugins?: any[]
 }
 
 /**
@@ -159,6 +161,13 @@ export function configureVue (
       alias: searchForAliases(simpleConfig.dirname)
     },
     plugins: [buildDefinePluginConfig(simpleConfig.additionalDefinitions)]
+  }
+
+  if (simpleConfig.plugins != null) {
+    configureWebpack.plugins = [
+      ...configureWebpack.plugins,
+      ...simpleConfig.plugins
+    ]
   }
 
   if (simpleConfig.analyzeBundle != null && simpleConfig.analyzeBundle) {

@@ -56,6 +56,7 @@ interface SimpleVueConfig {
      * @see https://github.com/webpack-contrib/webpack-bundle-analyzer
      */
     analyzeBundle?: boolean;
+    plugins?: Array<any>;
 }
 /**
  * Usage:

@@ -94,6 +94,8 @@ _run test vue/test-apps/test-player
 #_run_test vue/plugins/shortcuts
 #_run_test vue/plugins/themes
 
+_run build:webapp vue/apps/lamp
+_run build:webapp vue/apps/songbook
 
 echo
 echo "OK: $COUNTER_OK FAILED: $COUNTER_FAILED"
