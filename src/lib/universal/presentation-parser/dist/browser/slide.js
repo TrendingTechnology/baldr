@@ -4,7 +4,7 @@ import * as log from '@bldr/log';
 import { DataCutter } from './data-management';
 import { masterCollection } from './master-collection';
 import { StepCollector } from './step';
-import { WrappedUriList } from './fuzzy-uri';
+import { WrappedUriList } from '@bldr/client-media-models';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */

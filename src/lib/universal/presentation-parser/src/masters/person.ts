@@ -6,6 +6,10 @@ interface PersonFieldsNormalized {
   personId: string
 }
 
+export function convertPersonIdToMediaUri (personId: string): string {
+  return `ref:PR_${personId}`
+}
+
 export class PersonMaster implements MasterSpec {
   name = 'person'
 
@@ -33,10 +37,6 @@ export class PersonMaster implements MasterSpec {
   shortFormField = 'personId'
 
   collectMediaUris (fields: PersonFieldsNormalized): string {
-    return this.convertPersonIdToMediaUri(fields.personId)
-  }
-
-  private convertPersonIdToMediaUri (personId: string): string {
-    return `ref:PR_${personId}`
+    return convertPersonIdToMediaUri(fields.personId)
   }
 }

@@ -10,8 +10,8 @@ export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
 export { Asset, Sample, Resolver } from '@bldr/media-resolver-ng';
 export { convertHtmlToPlainText, shortenText } from '@bldr/string-format';
 export { buildTextStepController, wrapWords, splitHtmlIntoChunks } from '@bldr/dom-manipulator';
+export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from '@bldr/client-media-models';
 export { mapStepFieldDefintions, FieldData } from './field';
-export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from './fuzzy-uri';
 export { Slide } from './slide';
 export { StepCollector } from './step';
 /**

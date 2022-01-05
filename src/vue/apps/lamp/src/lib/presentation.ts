@@ -73,15 +73,16 @@ export async function loadPresentation (
     rawYamlString = await api.readMediaAsString(rawPresentation.meta.path)
   }
 
-  const presentation = new Presentation(rawYamlString)
-  await presentation.resolveMedia(vm)
-
   const presentationNg = PresentationNg.mergeYamlStringWithRaw(
     rawYamlString,
     rawPresentation
   )
   await presentationNg.resolve()
   registerPresentationRelatedShortcuts()
+
+  // @TODO remove
+  const presentation = new Presentation(rawYamlString)
+  await presentation.resolveMedia(vm)
 
   await vm.$store.dispatch('lamp/loadPresentation', {
     presentation,

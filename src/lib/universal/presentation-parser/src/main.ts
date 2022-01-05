@@ -57,6 +57,7 @@ export { masterCollection, getMaster } from './master-collection'
 
 // MModule = MasterModule
 export * as genericMModul from './masters/generic'
+export * as personMModul from './masters/person'
 export * as questionMModul from './masters/question'
 export * as wikipediaMModule from './masters/wikipedia'
 export * as youtubeMModule from './masters/youtube'

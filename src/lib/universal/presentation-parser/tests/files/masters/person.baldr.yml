@@ -16,6 +16,10 @@ slides:
   title: All external sites
   person: Lennon_John
 
+- ref: famous-pieces
+  title: With famous pieces field
+  person: Ravel_Maurice
+- person: Mussorgski_Modest
 - person: Bach_Johann-Sebastian
 - person: Bach_Wilhelm-Friedemann
 - person: Beethoven_Ludwig-van

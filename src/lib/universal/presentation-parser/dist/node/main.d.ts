@@ -47,6 +47,7 @@ export { Master } from './master-wrapper';
 export { Slide } from './slide';
 export { masterCollection, getMaster } from './master-collection';
 export * as genericMModul from './masters/generic';
+export * as personMModul from './masters/person';
 export * as questionMModul from './masters/question';
 export * as wikipediaMModule from './masters/wikipedia';
 export * as youtubeMModule from './masters/youtube';

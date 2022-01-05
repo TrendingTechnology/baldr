@@ -3,6 +3,7 @@ export declare type PersonFieldsRaw = string | PersonFieldsNormalized;
 interface PersonFieldsNormalized {
     personId: string;
 }
+export declare function convertPersonIdToMediaUri(personId: string): string;
 export declare class PersonMaster implements MasterSpec {
     name: string;
     displayName: string;
@@ -24,6 +25,5 @@ export declare class PersonMaster implements MasterSpec {
     };
     shortFormField: string;
     collectMediaUris(fields: PersonFieldsNormalized): string;
-    private convertPersonIdToMediaUri;
 }
 export {};

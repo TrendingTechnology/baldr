@@ -47,3 +47,9 @@ export const masterCollection = {
     wikipedia: new Master(WikipediaMaster),
     youtube: new Master(YoutubeMaster)
 };
+export function getMaster(masterName) {
+    if (masterCollection[masterName] == null) {
+        throw new Error(`Unknown master “${masterName}”`);
+    }
+    return masterCollection[masterName];
+}

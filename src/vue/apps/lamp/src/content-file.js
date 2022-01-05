@@ -25,6 +25,7 @@ import store from '@/store/index.js'
 import { router } from '@/lib/router-setup'
 import { routerViews } from '@/lib/routing-related'
 import vm from '@/main'
+import { resolver } from '@bldr/presentation-parser'
 
 /**
  * A raw slide object or a raw slide string.
@@ -77,6 +78,13 @@ function getType (data) {
  */
 function intersect (array1, array2) {
   return array1.filter(n => array2.includes(n))
+}
+
+async function addAssetsNgToStore (uris, throwException = true) {
+  const assetsNg = await resolver.resolve(uris, throwException)
+  for (const assetNg of assetsNg) {
+    store.commit('lamp/mediaNg/addAsset', assetNg)
+  }
 }
 
 /**
@@ -177,7 +185,12 @@ function compileToCSS (sass) {
  *
  * @returns {Object} - The normalized style object
  */
-function normalizeStyle (style) {
+function normalizeStyle (style) {  const presentationNg = PresentationNg.mergeYamlStringWithRaw(
+  rawYamlString,
+  rawPresentation
+)
+
+registerPresentationRelatedShortcuts()
   for (const property in style) {
     style[property] = compileToCSS(style[property])
   }
@@ -764,10 +777,12 @@ export class Presentation {
       /**
        * @type {Object}
        */
+      await addAssetsNgToStore(this.mediaUris)
       this.media = await vmInternal.$media.resolve(this.mediaUris, true) // throw exceptions.
     }
 
     if (this.optionalMediaUris.length > 0) {
+      await addAssetsNgToStore(this.optionalMediaUris, false)
       await vmInternal.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
     }
 

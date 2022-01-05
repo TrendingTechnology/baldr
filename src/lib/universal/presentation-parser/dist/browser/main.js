@@ -54,9 +54,11 @@ export { resolver, Presentation } from './presentation';
 export { mapStepFieldDefintionsToProps } from './field';
 export { Master } from './master-wrapper';
 export { Slide } from './slide';
-export { masterCollection } from './master-collection';
+export { masterCollection, getMaster } from './master-collection';
 import * as genericMModul_1 from './masters/generic';
 export { genericMModul_1 as genericMModul };
+import * as personMModul_1 from './masters/person';
+export { personMModul_1 as personMModul };
 import * as questionMModul_1 from './masters/question';
 export { questionMModul_1 as questionMModul };
 import * as wikipediaMModule_1 from './masters/wikipedia';
@@ -64,7 +66,6 @@ export { wikipediaMModule_1 as wikipediaMModule };
 import * as youtubeMModule_1 from './masters/youtube';
 export { youtubeMModule_1 as youtubeMModule };
 export { Asset, Sample } from '@bldr/media-resolver-ng';
-export { WrappedUriList } from './fuzzy-uri';
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

@@ -1,3 +1,6 @@
+export function convertPersonIdToMediaUri(personId) {
+    return `ref:PR_${personId}`;
+}
 export class PersonMaster {
     constructor() {
         this.name = 'person';
@@ -21,9 +24,6 @@ export class PersonMaster {
         this.shortFormField = 'personId';
     }
     collectMediaUris(fields) {
-        return this.convertPersonIdToMediaUri(fields.personId);
-    }
-    convertPersonIdToMediaUri(personId) {
-        return `ref:PR_${personId}`;
+        return convertPersonIdToMediaUri(fields.personId);
     }
 }

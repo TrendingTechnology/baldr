@@ -1,26 +1,26 @@
 <template>
   <div class="vc_person_master">
-    <img class="img-contain" :src="asset.httpUrl" />
+    <img class="img-contain" :src="mainImageHttpUrl" />
     <p
       class="short-biography font-shadow small"
-      v-if="asset.yaml.shortBiography"
-      v-html="asset.yaml.shortBiography"
+      v-if="shortBiography"
+      v-html="shortBiography"
     />
     <div class="title-box">
       <p class="birth-and-death font-shadow" v-if="birth || death">
         {{ birth }} {{ death }}
       </p>
       <p class="person important transparent-background font-shadow">
-        {{ asset.yaml.name }}
+        {{ name }}
       </p>
     </div>
 
     <external-sites :asset="asset" />
 
     <horizontal-play-buttons
-      :src="asset.yaml.famousPieces"
+      :src="famousPieces"
       class="left-bottom-corner"
-      v-if="asset.yaml.famousPieces"
+      v-if="famousPieces"
     />
   </div>
 </template>
@@ -29,7 +29,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { Asset } from '@bldr/presentation-parser'
+import { Asset, personMModul } from '@bldr/presentation-parser'
 
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import { formatToLocalDate } from '@bldr/core-browser'
@@ -50,17 +50,41 @@ export default class PersonMasterMain extends MasterMain {
   })
   asset: Asset
 
+  get mainImage (): Asset {
+    const uri = personMModul.convertPersonIdToMediaUri(
+      this.slideNg.fields.personId
+    )
+    return this.$store.getters['lamp/mediaNg/assetByUri'](uri)
+  }
+
+  get mainImageHttpUrl (): string {
+    return this.mainImage.httpUrl
+  }
+
+  get name (): string {
+    return this.mainImage.meta.name
+  }
+
+  get shortBiography (): string | undefined {
+    if (this.mainImage.meta.shortBiography != null) {
+      return this.mainImage.meta.shortBiography
+    }
+  }
+
   get birth (): string | undefined {
-    if (this.asset.yaml.birth != null) {
-      return `* ${formatToLocalDate(this.asset.yaml.birth)}`
+    if (this.mainImage.meta.birth != null) {
+      return `* ${formatToLocalDate(this.mainImage.meta.birth)}`
     }
   }
 
   get death (): string | undefined {
-    if (this.asset.yaml.death != null) {
-      return `† ${formatToLocalDate(this.asset.yaml.death)}`
+    if (this.mainImage.meta.death != null) {
+      return `† ${formatToLocalDate(this.mainImage.meta.death)}`
     }
-    return undefined
+  }
+
+  get famousPieces () {
+    return this.mainImage.meta.famousPieces
   }
 }
 </script>

@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PersonMaster = void 0;
+exports.PersonMaster = exports.convertPersonIdToMediaUri = void 0;
+function convertPersonIdToMediaUri(personId) {
+    return `ref:PR_${personId}`;
+}
+exports.convertPersonIdToMediaUri = convertPersonIdToMediaUri;
 class PersonMaster {
     constructor() {
         this.name = 'person';
@@ -24,10 +28,7 @@ class PersonMaster {
         this.shortFormField = 'personId';
     }
     collectMediaUris(fields) {
-        return this.convertPersonIdToMediaUri(fields.personId);
-    }
-    convertPersonIdToMediaUri(personId) {
-        return `ref:PR_${personId}`;
+        return convertPersonIdToMediaUri(fields.personId);
     }
 }
 exports.PersonMaster = PersonMaster;
