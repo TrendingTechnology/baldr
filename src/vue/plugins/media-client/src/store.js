@@ -10,8 +10,6 @@ import * as mediaResolver from '@bldr/media-resolver'
 
 const state = {
   assets: {},
-  playList: [],
-  playListNoCurrent: null,
   samples: {},
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
@@ -43,12 +41,6 @@ const getters = {
   multiPartSelectionByUri: state => uri => {
     return mediaResolver.getMultipartSelection(uri)
   },
-  playList: state => {
-    return state.playList
-  },
-  playListNoCurrent: state => {
-    return state.playListNoCurrent
-  },
   sampleLoaded: state => {
     return state.sampleLoaded
   },
@@ -62,9 +54,6 @@ const getters = {
     if (!uri) return
     const ref = mediaResolver.translateToSampleRef(uri)
     return getters.samples[ref]
-  },
-  samplePlayListCurrent: (state, getters) => {
-    return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
   }
 }
 
@@ -72,17 +61,10 @@ const actions = {
   addAsset ({ commit, getters }, asset) {
     commit('addAsset', asset)
   },
-  addSampleToPlayList ({ commit, getters }, sample) {
-    const list = getters.playList
-    if (!list.includes(sample.uri) && sample.asset.type !== 'image') {
-      commit('addSampleToPlayList', sample)
-    }
-  },
   clear ({ dispatch, commit }) {
     dispatch('removeAssetsAll')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
-    commit('setPlayListNoCurrent', null)
     mediaResolver.resetMediaCache()
   },
   incrementShortcutCounterByType ({ commit, getters }, type) {
@@ -94,7 +76,6 @@ const actions = {
   removeAsset ({ commit }, asset) {
     for (const sampleRef in asset.samples) {
       commit('removeSample', sampleRef)
-      commit('removeSampleFromPlayList', sampleRef)
     }
     commit('removeAsset', asset.ref)
   },
@@ -103,34 +84,8 @@ const actions = {
       dispatch('removeAsset', getters.assets[assetUri])
     }
   },
-  setPlayListSampleCurrent ({ commit, getters }, sample) {
-    let no = null
-    if (sample) {
-      no = getters.playList.indexOf(sample.uri) + 1
-    }
-    commit('setPlayListNoCurrent', no)
-  },
-  setPlayListSampleNext ({ commit, getters }) {
-    const no = getters.playListNoCurrent
-    const count = getters.playList.length
-    if (no === count) {
-      commit('setPlayListNoCurrent', 1)
-    } else {
-      commit('setPlayListNoCurrent', no + 1)
-    }
-  },
-  setPlayListSamplePrevious ({ commit, getters }) {
-    const no = getters.playListNoCurrent
-    const count = getters.playList.length
-    if (no === 1) {
-      commit('setPlayListNoCurrent', count)
-    } else {
-      commit('setPlayListNoCurrent', no - 1)
-    }
-  },
   setSamplePlaying ({ commit, dispatch }, sample) {
     commit('setSamplePlaying', sample)
-    if (sample) dispatch('setPlayListSampleCurrent', sample)
   }
 }
 
@@ -148,25 +103,11 @@ const mutations = {
       Vue.set(state.samples, sample.ref, sample)
     }
   },
-  addSampleToPlayList (state, sample) {
-    state.playList.push(sample.uriRef)
-  },
   removeAsset (state, uri) {
     Vue.delete(state.assets, uri)
   },
   removeSample (state, uri) {
     Vue.delete(state.samples, uri)
-  },
-  removeSampleFromPlayList (state, uri) {
-    while (state.playList.indexOf(uri) > -1) {
-      const index = state.playList.indexOf(uri)
-      if (index > -1) {
-        state.playList.splice(index, 1)
-      }
-    }
-  },
-  setPlayListNoCurrent (state, no) {
-    state.playListNoCurrent = no
   },
   setSampleLoaded (state, sample) {
     state.sampleLoaded = sample
