@@ -179,9 +179,7 @@ export class Asset {
     /**
      * Retrieve the HTTP URL of the multipart asset by the part number.
      *
-     * @param The part number starts with 1.
-     *
-     * @throws If the specified number is higher than multiPartCount.
+     * @param no - The part number starts with 1.
      */
     getMultiPartHttpUrlByNo(no) {
         if (typeof no !== 'number' || this.multiPartCount === 1) {

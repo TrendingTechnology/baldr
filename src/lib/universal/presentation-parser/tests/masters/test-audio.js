@@ -32,7 +32,7 @@ describe('Master slide “audio”', function () {
       fields.asset.uri.raw,
       'uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64'
     )
-    assert.strictEqual(fields.sample.yaml.ref, 'complete')
+    assert.strictEqual(fields.sample.meta.ref, 'complete')
   })
 
   it('short-form', async function () {
