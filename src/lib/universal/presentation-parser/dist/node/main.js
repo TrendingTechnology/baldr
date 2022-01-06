@@ -51,7 +51,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseAndResolve = exports.parse = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.personMModul = exports.genericMModul = exports.getMaster = exports.masterCollection = exports.Slide = exports.Master = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
+exports.parseAndResolve = exports.parse = exports.WrappedUriList = exports.Sample = exports.Asset = exports.youtubeMModule = exports.wikipediaMModule = exports.questionMModul = exports.personMModul = exports.genericMModul = exports.getMaster = exports.masterCollection = exports.Slide = exports.Master = exports.mapStepFieldDefintionsToProps = exports.Presentation = exports.resolver = void 0;
 const presentation_1 = require("./presentation");
 var presentation_2 = require("./presentation");
 Object.defineProperty(exports, "resolver", { enumerable: true, get: function () { return presentation_2.resolver; } });
@@ -74,6 +74,8 @@ exports.youtubeMModule = require("./masters/youtube");
 var media_resolver_1 = require("@bldr/media-resolver");
 Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_1.Asset; } });
 Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_1.Sample; } });
+var client_media_models_1 = require("@bldr/client-media-models");
+Object.defineProperty(exports, "WrappedUriList", { enumerable: true, get: function () { return client_media_models_1.WrappedUriList; } });
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

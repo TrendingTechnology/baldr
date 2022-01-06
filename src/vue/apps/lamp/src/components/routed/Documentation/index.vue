@@ -87,11 +87,11 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 
 @Component({ components: { MasterTableRow, CommonExampleTableRow } })
 export default class DocumentationOverview extends Vue {
-  get documentation () {
+  get documentation (): string {
     return convertMarkdownToHtml(documentation)
   }
 
-  get examples () {
+  get examples (): typeof rawYamlExamples {
     return rawYamlExamples
   }
 }

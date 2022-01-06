@@ -5,12 +5,10 @@ import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
 import { LampTypes } from '@bldr/type-definitions'
-import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import inlineMarkup from '../lib/inline-markup'
 import { customStore } from '../main'
 import Master from './Master.vue'
-import { Slide } from '../content-file.js'
 
 interface NavigationNumbers {
   slideNo: number

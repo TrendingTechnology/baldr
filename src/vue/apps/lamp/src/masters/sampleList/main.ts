@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/sampleList
  */
 
-import type { LampTypes } from '@bldr/type-definitions'
+import { LampTypes } from '@bldr/type-definitions'
 
 // import { mediaResolver } from '@bldr/media-client'
 import { validateMasterSpec } from '../../lib/masters'
@@ -53,7 +53,7 @@ export default validateMasterSpec({
         return props.heading
       }
       return 'Audio-Ausschnitte'
-    },
+    }
     // async afterMediaResolution ({ props }) {
     //   const wrappedSampleList = mediaResolver.getWrappedSampleList(props.samples)
     //   const samplesCollection = wrappedSampleList.getSamplesFromFirst()

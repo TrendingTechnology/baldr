@@ -66,6 +66,7 @@ export { wikipediaMModule_1 as wikipediaMModule };
 import * as youtubeMModule_1 from './masters/youtube';
 export { youtubeMModule_1 as youtubeMModule };
 export { Asset, Sample } from '@bldr/media-resolver';
+export { WrappedUriList } from '@bldr/client-media-models';
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

@@ -11,7 +11,7 @@
       <li
         v-for="wrappedSample in samples"
         :key="wrappedSample.uri"
-        v-html="wrappedSample.titleSafe"
+        v-html="wrappedSample.title"
       />
     </ol>
   </div>
@@ -21,7 +21,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { WrappedUriList } from '@bldr/presentation-parser'
+import { WrappedUri } from '@bldr/presentation-parser'
 
 import MasterPreview from '../MasterPreview.vue'
 
@@ -33,11 +33,8 @@ export default class SampleListMasterPreview extends MasterPreview {
   })
   heading: string
 
-  // WrappedSampleList
-  @Prop({
-    type: Object,
-    required: true
-  })
-  samples: WrappedUriList
+  get samples (): WrappedUri[] {
+    return this.slideNg.fields.samples
+  }
 }
 </script>

@@ -76,7 +76,7 @@ export default class SlideMain extends Vue {
   })
   isPublic: boolean
 
-  get styleConfig () {
+  get styleConfig (): Record<string, string> {
     return this.slide.master.styleConfig
   }
 }

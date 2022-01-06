@@ -10,7 +10,7 @@ import Component from 'vue-class-component'
 
 // import VueFileToolbarMenu from 'vue-file-toolbar-menu'
 import BaldrMenu from '@bldr/menu-webapp'
-import { getWebappMenuDef } from '@bldr/menu-adapter'
+import { getWebappMenuDef, WebappMenuItem } from '@bldr/menu-adapter'
 
 import * as actions from '../../lib/actions'
 import router from '../../lib/router-setup'
@@ -21,7 +21,7 @@ import router from '../../lib/router-setup'
   }
 })
 export default class DropDownMenu extends Vue {
-  get menu () {
+  get menu (): WebappMenuItem[] {
     return getWebappMenuDef(router, actions)
   }
 }

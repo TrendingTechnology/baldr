@@ -61,7 +61,7 @@ export default class TitleLink extends Vue {
   }
 
   get level (): number {
-    if (this.folder!.level != null) {
+    if (this.folder.level != null) {
       return this.folder.level + 1
     }
     return 0

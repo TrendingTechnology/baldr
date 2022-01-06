@@ -28,6 +28,8 @@ import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
 import * as actions from '../../lib/actions'
+import { Slide, Presentation } from '../../content-file.js'
+
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 interface CssClasses {
@@ -37,6 +39,18 @@ interface CssClasses {
   left?: boolean
   activated: boolean
   triggered: boolean
+}
+
+interface CursorArrowState {
+  triggered: boolean
+  timeoutId: number | null
+}
+
+interface CursorArrowStates {
+  up: CursorArrowState
+  down: CursorArrowState
+  right: CursorArrowState
+  left: CursorArrowState
 }
 
 @Component({
@@ -50,9 +64,9 @@ interface CssClasses {
   methods: mapActions(['highlightCursorArrow'])
 })
 export default class CursorArrows extends Vue {
-  presentation: any
-  cursorArrowsStates: any
-  slide: any
+  presentation!: Presentation
+  cursorArrowsStates!: CursorArrowStates
+  slide!: Slide
   slideNo: number
   slidesCount: number
   /**

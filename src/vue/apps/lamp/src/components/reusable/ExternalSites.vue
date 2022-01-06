@@ -58,19 +58,22 @@ import {
   formatWikipediaUrl,
   formatYoutubeUrl
 } from '@bldr/string-format'
+import {
+  Asset
+} from '@bldr/presentation-parser'
+
+type AssetMetaData = Asset['meta']
 
 @Component
 export default class ExternalSites extends Vue {
   @Prop({
     type: Object
   })
-  asset: any
+  asset: Asset
 
-  get meta (): Record<string, string> {
+  get meta (): AssetMetaData {
     if (this.asset.meta != null) {
       return this.asset.meta
-    } else {
-      return this.asset
     }
   }
 

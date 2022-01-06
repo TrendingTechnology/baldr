@@ -30,7 +30,11 @@ import PreviewLayoutBase from '@/components/reusable/SlidesPreview/PreviewLayout
 
 @Component
 export default class ListLayout extends PreviewLayoutBase {
-  style (slide: Slide) {
+  style (
+    slide: Slide
+  ): {
+    paddingLeft: string
+  } {
     if (this.hierarchical) {
       const padding = (slide.level - 1) * 8
       return { paddingLeft: `${padding}em` }

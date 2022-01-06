@@ -41,7 +41,7 @@ const { mapActions } = createNamespacedHelpers('lamp')
 /**
  * Hide the mouse after x seconds of inactivity.
  */
-export function hideMouseAfterSec (seconds: number = 5): void {
+export function hideMouseAfterSec (seconds = 5): void {
   let mouseTimer = null
   let cursorVisible = true
 
@@ -92,7 +92,7 @@ export default class MainApp extends Vue {
     })
     registerShortcuts(this.$router, this.$shortcuts, actions)
 
-    this.$router.afterEach((to, from) => {
+    this.$router.afterEach((to) => {
       if (to.meta.style) {
         styleConfigurator.set(to.meta.style)
       }

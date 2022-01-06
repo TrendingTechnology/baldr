@@ -83,7 +83,7 @@ export default class PersonMasterMain extends MasterMain {
     }
   }
 
-  get famousPieces () {
+  get famousPieces (): string | string[] {
     return this.mainImage.meta.famousPieces
   }
 }

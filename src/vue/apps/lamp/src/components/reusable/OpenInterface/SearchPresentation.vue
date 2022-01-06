@@ -17,20 +17,28 @@ import * as api from '@bldr/api-wrapper'
 
 import { router } from '../../../lib/router-setup'
 
+interface DynamicSelectOption {
+  ref: string
+  name: string
+}
+
 @Component
 export default class SearchPresentation extends Vue {
-  data () {
+  data (): {
+    presentation: DynamicSelectOption
+    options: DynamicSelectOption[]
+    } {
     return {
-      presentation: {},
+      presentation: null,
       options: []
     }
   }
 
-  presentation: any
+  presentation: DynamicSelectOption
 
-  options: any
+  options: DynamicSelectOption[]
 
-  async onInput () {
+  async onInput (): Promise<void> {
     router.push({
       name: 'slides-preview',
       params: { presRef: this.presentation.ref }

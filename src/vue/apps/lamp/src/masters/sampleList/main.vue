@@ -2,13 +2,9 @@
   <div class="vc_sample_list_master">
     <h2 v-if="heading" v-html="heading" />
     <ol :class="cssClassNotNumbered">
-      <li v-for="wrappedSample in samples" :key="wrappedSample.uri">
-        <play-button
-          v-if="wrappedSample.sample"
-          :sample="wrappedSample.sample"
-        />
-        <play-button v-else :sample="wrappedSample" />
-        <span v-html="wrappedSample.titleSafe" />
+      <li v-for="wrappedUri in samples" :key="wrappedUri.uri">
+        <play-button :src="wrappedUri.uri" />
+        <span v-html="wrappedUri.title" />
       </li>
     </ol>
   </div>
@@ -18,7 +14,7 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { WrappedUriList } from '@bldr/presentation-parser'
+import { WrappedUri } from '@bldr/presentation-parser'
 
 import MasterMain from '../MasterMain.vue'
 
@@ -32,12 +28,6 @@ export default class SampleListMasterMain extends MasterMain {
   heading: string
 
   @Prop({
-    type: Object,
-    required: true
-  })
-  samples: WrappedUriList
-
-  @Prop({
     type: Boolean
   })
   notNumbered: boolean
@@ -46,6 +36,10 @@ export default class SampleListMasterMain extends MasterMain {
     return {
       'not-numbered': this.notNumbered
     }
+  }
+
+  get samples (): WrappedUri[] {
+    return this.slideNg.fields.samples
   }
 }
 </script>

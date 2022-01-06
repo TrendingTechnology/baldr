@@ -19,7 +19,10 @@ import { Slide } from '../../content-file.js'
   }
 })
 export default class AdHocCamera extends Vue {
-  data () {
+  data (): {
+    slide: Slide
+    slideNg: SlideNg
+    } {
     const raw = { camera: true }
     return {
       slide: new Slide(raw),

@@ -19,13 +19,20 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
+import { Slide } from '../../../content-file.js'
+
+interface SlideStep {
+  no: number
+  title: string
+}
+
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 @Component({ computed: mapGetters(['slide']) })
 export default class SlideSteps extends Vue {
-  slide: any
+  slide: Slide
 
-  get steps () {
+  get steps (): SlideStep[] {
     return this.slide.steps
   }
 }

@@ -52,5 +52,6 @@ export * as questionMModul from './masters/question';
 export * as wikipediaMModule from './masters/wikipedia';
 export * as youtubeMModule from './masters/youtube';
 export { Asset, Sample } from '@bldr/media-resolver';
+export { WrappedUri, WrappedUriList } from '@bldr/client-media-models';
 export declare function parse(yamlString: string): Presentation;
 export declare function parseAndResolve(yamlString: string): Promise<Presentation>;

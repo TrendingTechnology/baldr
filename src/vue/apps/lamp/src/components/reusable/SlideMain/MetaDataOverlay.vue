@@ -21,19 +21,25 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Slide as SlideNg } from '@bldr/presentation-parser'
+
+import { Slide } from '../../../content-file.js'
+
+type SlideMeta = SlideNg['meta']
+
 @Component
 export default class MetaDataOverlay extends Vue {
   @Prop({
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
 
-  get metaData () {
+  get metaData (): SlideMeta {
     return this.slide.metaData
   }
 
-  get isVisible () {
+  get isVisible (): boolean {
     return this.$store.getters['lamp/showMetaDataOverlay']
   }
 }

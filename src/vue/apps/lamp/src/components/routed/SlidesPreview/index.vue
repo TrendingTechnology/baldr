@@ -59,15 +59,16 @@ const mapGettersPreview = storePreview.mapGetters
     LoadingIcon
   },
   computed: {
-    ...mapGetters(['presentation', 'slide', 'slides', 'slidesCount']),
+    ...mapGetters(['presentation', 'slide', 'slides']),
     ...mapGettersPreview(['size', 'layoutCurrent', 'hierarchical'])
   },
   methods: mapActionsPreview(['increaseSize', 'decreaseSize']),
   ...routerGuards
 })
 export default class SlidesPreview extends Vue {
-  increaseSize: Function
-  decreaseSize: Function
+  increaseSize!: () => void
+  decreaseSize!: () => void
+  size!: number
 
   mounted (): void {
     shortcutManager.addMultiple([

@@ -14,6 +14,10 @@ import { Prop } from 'vue-property-decorator'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { FieldDefinition } from '@bldr/presentation-parser'
 
+interface FieldType {
+  name?: string
+}
+
 @Component
 export default class MasterField extends Vue {
   @Prop({
@@ -47,7 +51,7 @@ export default class MasterField extends Vue {
       return types.join(',')
     }
 
-    const t = this.field.type as any
+    const t = this.field.type as FieldType
     if (t.name != null) {
       return t.name
     }

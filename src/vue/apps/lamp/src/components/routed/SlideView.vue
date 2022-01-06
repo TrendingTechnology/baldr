@@ -16,9 +16,11 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import { Slide } from '@bldr/presentation-parser'
+import { Slide as SlideNg } from '@bldr/presentation-parser'
 
 import { routerGuards } from '../../lib/routing-related'
+import { Slide } from '../../content-file.js'
+
 import CursorArrows from '@/components/reusable/CursorArrows.vue'
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 
@@ -33,9 +35,9 @@ const { mapGetters } = createNamespacedHelpers('lamp')
   ...routerGuards
 })
 export default class SlideView extends Vue {
-  slide!: any
+  slide!: Slide
 
-  slideNg!: Slide
+  slideNg!: SlideNg
 
   get style (): { fontSize: string } {
     return {

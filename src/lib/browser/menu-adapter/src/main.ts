@@ -22,6 +22,8 @@ import {
 } from './menu-item'
 import { universalMenuDefinition } from './definition'
 
+export { WebappMenuItem } from './menu-item'
+
 export function getEletronMenuDef (
   shell: Shell,
   window: BrowserWindow
