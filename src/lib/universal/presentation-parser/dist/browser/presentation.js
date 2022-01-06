@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { convertFromYaml } from '@bldr/yaml';
-import { Resolver } from '@bldr/media-resolver-ng';
+import { Resolver } from '@bldr/media-resolver';
 import * as log from '@bldr/log';
 import { DataCutter } from './data-management';
 import { SlideCollection } from './slide-collection';

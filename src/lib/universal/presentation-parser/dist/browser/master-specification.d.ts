@@ -2,12 +2,12 @@
  * Bundle many exports so that the individual master slides can import them from
  * one module.
  */
-import { Resolver } from '@bldr/media-resolver-ng';
+import { Resolver } from '@bldr/media-resolver';
 import { Slide } from './slide';
 import { StepCollector } from './step';
 import { FieldData, FieldDefinitionCollection } from './field';
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html';
-export { Asset, Sample, Resolver } from '@bldr/media-resolver-ng';
+export { Asset, Sample, Resolver } from '@bldr/media-resolver';
 export { convertHtmlToPlainText, shortenText } from '@bldr/string-format';
 export { buildTextStepController, wrapWords, splitHtmlIntoChunks } from '@bldr/dom-manipulator';
 export { extractUrisFromFuzzySpecs, WrappedUri, WrappedUriList } from '@bldr/client-media-models';

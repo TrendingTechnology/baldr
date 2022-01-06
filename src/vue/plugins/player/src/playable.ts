@@ -1,4 +1,4 @@
-import { Sample } from '@bldr/media-resolver-ng'
+import { Sample } from '@bldr/media-resolver'
 
 import { TimeOutExecutor, IntervalExecutor } from './timer'
 import { EventsListenerStore } from './events'

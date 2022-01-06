@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop, Watch } from 'vue-property-decorator'
 
-import { Asset, Sample } from '@bldr/media-resolver-ng'
+import { Asset, Sample } from '@bldr/media-resolver'
 
 import { Playable } from '../playable'
 import { player } from '../plugin'

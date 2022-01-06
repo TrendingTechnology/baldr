@@ -1,6 +1,6 @@
 import _Vue from 'vue'
 
-import { Resolver } from '@bldr/media-resolver-ng'
+import { Resolver } from '@bldr/media-resolver'
 
 import { Player } from './player'
 

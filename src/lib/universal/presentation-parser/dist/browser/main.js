@@ -65,7 +65,7 @@ import * as wikipediaMModule_1 from './masters/wikipedia';
 export { wikipediaMModule_1 as wikipediaMModule };
 import * as youtubeMModule_1 from './masters/youtube';
 export { youtubeMModule_1 as youtubeMModule };
-export { Asset, Sample } from '@bldr/media-resolver-ng';
+export { Asset, Sample } from '@bldr/media-resolver';
 export function parse(yamlString) {
     return new Presentation(yamlString);
 }

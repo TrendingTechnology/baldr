@@ -1,6 +1,6 @@
 import { MasterSpec } from '../master-specification'
 
-import { getHttp } from '@bldr/media-resolver-ng'
+import { getHttp } from '@bldr/media-resolver'
 
 interface UrlParameterCollection {
   /**

@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getConfig } from '@bldr/config';
-import { getHttp } from '@bldr/media-resolver-ng';
+import { getHttp } from '@bldr/media-resolver';
 const config = getConfig();
 export function convertYoutubeIdToUri(youtubeId) {
     return `ref:YT_${youtubeId}`;

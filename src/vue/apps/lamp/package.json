@@ -36,7 +36,6 @@
     "@bldr/http-request": "*",
     "@bldr/icons": "*",
     "@bldr/markdown-to-html": "*",
-    "@bldr/media-client": "*",
     "@bldr/menu-adapter": "*",
     "@bldr/menu-webapp": "*",
     "@bldr/modal-dialog": "*",

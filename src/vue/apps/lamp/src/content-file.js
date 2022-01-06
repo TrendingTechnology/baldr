@@ -198,59 +198,6 @@ function normalizeStyle (style) {
 }
 
 /**
- * Each slide can be overlayed by a play button to play audio files on each
- * slide.
- *
- * See component `AudioOverlay.vue`
- *
- * @see {@link module:@bldr/media-client~WrappedSample}
- * @see {@link module:@bldr/media-client.WrappedSampleList}
- * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
- */
-class AudioOverlay {
-  /**
-   * @param {Object|String|Array} rawData - Raw data from the yaml key
-   *   `audio_overlay: `
-   */
-  constructor (rawData) {
-    /**
-     * @type {boolean}
-     */
-    this.showTitles = true
-
-    /**
-     * @type {module:@bldr/media-client.WrappedSampleList}
-     */
-    // this.wrappedSampleList = null
-    if (typeof rawData === 'object' && rawData.samples != null) {
-      this.showTitles = rawData.showTitles
-      this.rawData = rawData.samples
-    } else {
-      this.rawData = rawData
-    }
-  }
-
-  get mediaUris () {
-    return mediaResolver.getUrisFromWrappedSpecs(this.rawData)
-  }
-
-  get wrappedSampleList () {
-    return mediaResolver.getWrappedSampleList(this.rawData)
-  }
-
-  /**
-   * @returns {Array}
-   */
-  get samples () {
-    const samples = []
-    for (const uri of this.mediaUris) {
-      samples.push(store.getters['lamp/mediaNg/sampleByUri'](uri))
-    }
-    return samples
-  }
-}
-
-/**
  * A slide.
  */
 export class Slide {
@@ -430,7 +377,7 @@ export class Slide {
 
     const audioOverlay = rawSlideObject.cut('audioOverlay')
     if (audioOverlay) {
-      this.audioOverlay = new AudioOverlay(audioOverlay)
+      this.audioOverlay = audioOverlay
     }
 
     if (!rawSlideObject.isEmpty()) {
@@ -723,11 +670,11 @@ export class Presentation {
       for (const mediaUri of slide.optionalMediaUris) {
         optionalMediaUris.push(mediaUri)
       }
-      if (slide.audioOverlay) {
-        for (const mediaUri of slide.audioOverlay.mediaUris) {
-          mediaUris.push(mediaUri)
-        }
-      }
+      // if (slide.audioOverlay) {
+      //   for (const mediaUri of slide.audioOverlay.mediaUris) {
+      //     mediaUris.push(mediaUri)
+      //   }
+      // }
     }
 
     /**

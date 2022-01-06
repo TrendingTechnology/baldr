@@ -1,5 +1,5 @@
 import { MasterSpec } from '../master-specification';
-import { Asset } from '@bldr/media-resolver-ng';
+import { Asset } from '@bldr/media-resolver';
 export declare function convertYoutubeIdToUri(youtubeId: string): string;
 /**
  * https://stackoverflow.com/a/55890696/10193818

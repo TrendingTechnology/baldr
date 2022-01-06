@@ -12,13 +12,24 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { Slide as SlideNg } from '@bldr/presentation-parser'
+
+import { Slide } from '../../../content-file.js'
+
+
 @Component
 export default class AudioOverlay extends Vue {
   @Prop({
     type: Object,
     required: true
   })
-  slide: any
+  slide: Slide
+
+  @Prop({
+    type: Object,
+    required: true
+  })
+  slideNg: SlideNg
 
   get audioOverlay () {
     if (this.slide && this.slide.audioOverlay) {

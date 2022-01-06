@@ -1,5 +1,5 @@
 import { LampTypes } from '@bldr/type-definitions';
-import { Resolver, Asset } from '@bldr/media-resolver-ng';
+import { Resolver, Asset } from '@bldr/media-resolver';
 import { SlideCollection } from './slide-collection';
 import { Slide } from './slide';
 export declare const resolver: Resolver;

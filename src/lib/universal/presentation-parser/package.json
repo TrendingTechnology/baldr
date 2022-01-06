@@ -37,7 +37,7 @@
     "@bldr/dom-manipulator": "*",
     "@bldr/log": "*",
     "@bldr/markdown-to-html": "*",
-    "@bldr/media-resolver-ng": "*",
+    "@bldr/media-resolver": "*",
     "@bldr/string-format": "*",
     "@bldr/tex-templates": "*",
     "@bldr/type-definitions": "*",

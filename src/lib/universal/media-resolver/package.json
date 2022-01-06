@@ -18,14 +18,13 @@
   },
   "scripts": {
     "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node && npm run patch:jsdom",
+    "build:node": "tsc --module commonjs --outDir dist/node",
     "build": "npm run build:browser && npm run build:node",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "patch:jsdom": "sed -i 's#// <- ##' ./dist/node/html-elements.js",
-    "test:all": "npm run build && mocha 'tests/*.js'"
+    "test": "npm run build:node && mocha 'tests/*' && npm run lint"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
@@ -33,16 +32,13 @@
     "access": "public"
   },
   "dependencies": {
+    "@bldr/api-wrapper": "*",
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
-    "@bldr/string-format": "*",
     "@bldr/http-request": "*",
+    "@bldr/string-format": "*",
     "@bldr/type-definitions": "*"
-  },
-  "devDependencies": {
-    "jsdom": "16.5.3",
-    "@bldr/uuid": "*"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -71,9 +71,9 @@ exports.personMModul = require("./masters/person");
 exports.questionMModul = require("./masters/question");
 exports.wikipediaMModule = require("./masters/wikipedia");
 exports.youtubeMModule = require("./masters/youtube");
-var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
-Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
-Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
+var media_resolver_1 = require("@bldr/media-resolver");
+Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_1.Asset; } });
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_1.Sample; } });
 function parse(yamlString) {
     return new presentation_1.Presentation(yamlString);
 }

@@ -1,7 +1,7 @@
 /**
  * Provide the class “Master”.
  */
-import { Resolver } from '@bldr/media-resolver-ng';
+import { Resolver } from '@bldr/media-resolver';
 import { Slide } from './slide';
 import { StepCollector } from './step';
 import { FieldData, FieldDefinitionCollection } from './field';

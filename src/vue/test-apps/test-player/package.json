@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@bldr/icons": "*",
-    "@bldr/media-resolver-ng": "*",
+    "@bldr/media-resolver": "*",
     "@bldr/player": "*",
     "@bldr/string-format": "*",
     "vue-class-component": "7.2.3",

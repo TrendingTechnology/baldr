@@ -1,6 +1,6 @@
 import { convertFromYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
-import { Resolver, Asset } from '@bldr/media-resolver-ng'
+import { Resolver, Asset } from '@bldr/media-resolver'
 import * as log from '@bldr/log'
 
 import { DataCutter } from './data-management'

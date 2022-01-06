@@ -16,7 +16,7 @@
       :step-no="stepNo"
       :is-public="isPublic"
     />
-    <audio-overlay :slide="slide" />
+    <audio-overlay :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
 

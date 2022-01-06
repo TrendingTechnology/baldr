@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import { Resolver } from '@bldr/media-resolver-ng'
+import { Resolver } from '@bldr/media-resolver'
 import Player from '@bldr/player'
 
 import App from '@/components/App.vue'

@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WikipediaMaster = exports.getHtmlBody = exports.queryHtmlBody = exports.getFirstImage = exports.queryFirstImage = exports.cache = exports.formatUrl = exports.formatTitleForLink = exports.formatTitleHumanReadable = exports.formatWikipediaId = void 0;
-const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+const media_resolver_1 = require("@bldr/media-resolver");
 /**
  * @param language - A Wikipedia language code (for example `de`, `en`)
  */
@@ -22,7 +22,7 @@ function queryWiki(language, params) {
         if (params.format == null) {
             params.format = 'json';
         }
-        const response = yield (0, media_resolver_ng_1.getHttp)(`https://${language}.wikipedia.org/w/api.php`, { params });
+        const response = yield (0, media_resolver_1.getHttp)(`https://${language}.wikipedia.org/w/api.php`, { params });
         if (response.status === 200) {
             return response.data;
         }

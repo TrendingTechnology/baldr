@@ -28,7 +28,7 @@ import Component from 'vue-class-component'
 import { player, Playable } from '@bldr/player'
 
 import { data } from '../../app'
-import { Asset, Sample } from '@bldr/media-resolver-ng'
+import { Asset, Sample } from '@bldr/media-resolver'
 
 @Component
 export default class PlayableBaseDemo extends Vue {

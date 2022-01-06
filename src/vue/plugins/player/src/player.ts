@@ -1,4 +1,4 @@
-import { Cache, Resolver } from '@bldr/media-resolver-ng'
+import { Cache, Resolver } from '@bldr/media-resolver'
 
 import { Playable } from './playable'
 import { EventsListenerStore } from './events'

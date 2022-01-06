@@ -8,10 +8,10 @@ exports.StepCollector = exports.Slide = exports.mapStepFieldDefintions = exports
 // Exports
 var markdown_to_html_1 = require("@bldr/markdown-to-html");
 Object.defineProperty(exports, "convertMarkdownToHtml", { enumerable: true, get: function () { return markdown_to_html_1.convertMarkdownToHtml; } });
-var media_resolver_ng_1 = require("@bldr/media-resolver-ng");
-Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_ng_1.Asset; } });
-Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_ng_1.Sample; } });
-Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_ng_1.Resolver; } });
+var media_resolver_1 = require("@bldr/media-resolver");
+Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return media_resolver_1.Asset; } });
+Object.defineProperty(exports, "Sample", { enumerable: true, get: function () { return media_resolver_1.Sample; } });
+Object.defineProperty(exports, "Resolver", { enumerable: true, get: function () { return media_resolver_1.Resolver; } });
 var string_format_1 = require("@bldr/string-format");
 Object.defineProperty(exports, "convertHtmlToPlainText", { enumerable: true, get: function () { return string_format_1.convertHtmlToPlainText; } });
 Object.defineProperty(exports, "shortenText", { enumerable: true, get: function () { return string_format_1.shortenText; } });

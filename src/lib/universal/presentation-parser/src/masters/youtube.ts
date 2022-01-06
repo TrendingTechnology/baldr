@@ -1,6 +1,6 @@
 import { MasterSpec } from '../master-specification'
 import { getConfig } from '@bldr/config'
-import { getHttp, Asset } from '@bldr/media-resolver-ng'
+import { getHttp, Asset } from '@bldr/media-resolver'
 
 const config = getConfig()
 

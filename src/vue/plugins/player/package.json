@@ -8,7 +8,7 @@
   "dependencies": {
     "@bldr/client-media-models": "*",
     "@bldr/icons": "*",
-    "@bldr/media-resolver-ng": "*",
+    "@bldr/media-resolver": "*",
     "@bldr/string-format": "*",
     "@bldr/themes": "*",
     "vue-class-component": "7.2.3",

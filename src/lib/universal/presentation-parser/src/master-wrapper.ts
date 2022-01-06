@@ -2,7 +2,7 @@
  * Provide the class “Master”.
  */
 
-import { Resolver } from '@bldr/media-resolver-ng'
+import { Resolver } from '@bldr/media-resolver'
 import {
   convertNestedMarkdownToHtml,
   convertMarkdownToHtml

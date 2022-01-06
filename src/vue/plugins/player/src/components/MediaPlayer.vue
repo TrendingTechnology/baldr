@@ -34,7 +34,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { Sample, Asset } from '@bldr/media-resolver-ng'
+import { Sample, Asset } from '@bldr/media-resolver'
 
 import { player } from '../plugin'
 import { Playable } from '../playable'

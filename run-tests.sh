@@ -61,7 +61,7 @@ _run test lib/universal/dom-manipulator
 _run test lib/universal/http-request
 _run test lib/universal/log
 _run test lib/universal/markdown-to-html
-_run test lib/universal/media-resolver-ng
+_run test lib/universal/media-resolver
 _run test lib/universal/presentation-parser
 _run test lib/universal/songbook-core
 _run test lib/universal/string-format

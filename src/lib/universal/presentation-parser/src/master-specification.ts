@@ -4,7 +4,7 @@
  */
 
 // Imports
-import { Resolver } from '@bldr/media-resolver-ng'
+import { Resolver } from '@bldr/media-resolver'
 
 import { Slide } from './slide'
 import { StepCollector } from './step'
@@ -12,7 +12,7 @@ import { FieldData, FieldDefinitionCollection } from './field'
 
 // Exports
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
-export { Asset, Sample, Resolver } from '@bldr/media-resolver-ng'
+export { Asset, Sample, Resolver } from '@bldr/media-resolver'
 export { convertHtmlToPlainText, shortenText } from '@bldr/string-format'
 export {
   buildTextStepController,

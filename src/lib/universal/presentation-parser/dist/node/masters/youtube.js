@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YoutubeMaster = exports.checkAvailability = exports.getSnippet = exports.findPreviewHttpUrl = exports.convertYoutubeIdToUri = void 0;
 const config_1 = require("@bldr/config");
-const media_resolver_ng_1 = require("@bldr/media-resolver-ng");
+const media_resolver_1 = require("@bldr/media-resolver");
 const config = (0, config_1.getConfig)();
 function convertYoutubeIdToUri(youtubeId) {
     return `ref:YT_${youtubeId}`;
@@ -43,7 +43,7 @@ function findPreviewHttpUrl(youtubeId, asset) {
 exports.findPreviewHttpUrl = findPreviewHttpUrl;
 function getSnippet(youtubeId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const snippet = yield (0, media_resolver_ng_1.getHttp)('https://www.googleapis.com/youtube/v3/videos', {
+        const snippet = yield (0, media_resolver_1.getHttp)('https://www.googleapis.com/youtube/v3/videos', {
             params: {
                 part: 'snippet',
                 id: youtubeId,

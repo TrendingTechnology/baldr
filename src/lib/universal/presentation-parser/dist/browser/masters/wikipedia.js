@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { getHttp } from '@bldr/media-resolver-ng';
+import { getHttp } from '@bldr/media-resolver';
 /**
  * @param language - A Wikipedia language code (for example `de`, `en`)
  */
