@@ -4,7 +4,6 @@ import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Cache } from './cache'
 import { Sample } from './sample'
-import { SampleYamlFormat, YamlFormat } from './types'
 
 export class SampleCollection extends Cache<Sample> {
   private readonly asset: Asset
@@ -19,7 +18,10 @@ export class SampleCollection extends Cache<Sample> {
     return this.get(this.asset.ref + '#complete')
   }
 
-  private addSample (asset: Asset, yamlFormat: SampleYamlFormat): void {
+  private addSample (
+    asset: Asset,
+    yamlFormat: MediaDataTypes.SampleMetaData
+  ): void {
     const sample = new Sample(asset, yamlFormat)
     if (this.get(sample.ref) == null) {
       this.add(sample.ref, sample)
@@ -30,9 +32,9 @@ export class SampleCollection extends Cache<Sample> {
    * Gather informations to build the default sample “complete”.
    */
   private gatherYamlFromRoot (
-    assetFormat: YamlFormat
-  ): SampleYamlFormat | undefined {
-    const yamlFormat: SampleYamlFormat = {}
+    assetFormat: MediaDataTypes.AssetMetaData
+  ): MediaDataTypes.SampleMetaData | undefined {
+    const yamlFormat: MediaDataTypes.SampleMetaData = {}
     if (assetFormat.startTime != null) {
       yamlFormat.startTime = assetFormat.startTime
     }
@@ -58,7 +60,7 @@ export class SampleCollection extends Cache<Sample> {
 
   private addFromAsset (asset: Asset): void {
     // search the “complete” sample from the property “samples”.
-    let completeYamlFromSamples: SampleYamlFormat | undefined
+    let completeYamlFromSamples: MediaDataTypes.SampleMetaData | undefined
     if (asset.meta.samples != null) {
       for (let i = 0; i < asset.meta.samples.length; i++) {
         const sampleYaml = asset.meta.samples[i]

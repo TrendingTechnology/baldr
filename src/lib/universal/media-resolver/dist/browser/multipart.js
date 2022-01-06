@@ -6,7 +6,7 @@ import { buildSubsetIndexes } from '@bldr/core-browser';
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-export class MultiPartSelection {
+export class MultipartSelection {
     /**
      * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
@@ -14,24 +14,13 @@ export class MultiPartSelection {
     constructor(asset, selectionSpec) {
         this.selectionSpec = selectionSpec.replace(/^.*#/, '');
         this.asset = asset;
-        if (this.selectionSpec == null) {
-            this.uri = this.asset.uri.raw;
-        }
-        else {
-            this.uri = `${this.asset.uri.raw}#${this.selectionSpec}`;
-        }
         this.partNos = buildSubsetIndexes(this.selectionSpec, this.asset.multiPartCount);
     }
     /**
-     * The URI using the `ref` authority.
+     * The URI using the `ref` authority. Prefixed with `ref:`
      */
     get ref() {
-        if (this.selectionSpec == null) {
-            return this.asset.meta.ref;
-        }
-        else {
-            return `${this.asset.meta.ref}#${this.selectionSpec}`;
-        }
+        return `${this.asset.ref}#${this.selectionSpec}`;
     }
     /**
      * The number of parts of a multipart media asset.

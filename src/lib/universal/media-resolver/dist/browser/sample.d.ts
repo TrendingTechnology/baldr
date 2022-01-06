@@ -1,5 +1,5 @@
+import { MediaDataTypes } from '@bldr/type-definitions';
 import { Asset } from './asset';
-import { SampleYamlFormat } from './types';
 /**
  * A sample (snippet, sprite) of a media asset which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -31,7 +31,7 @@ export declare class Sample {
     /**
      * Raw data coming from the YAML format.
      */
-    yaml: SampleYamlFormat;
+    meta: MediaDataTypes.SampleMetaData;
     /**
      * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
      */
@@ -54,7 +54,7 @@ export declare class Sample {
      * Time in seconds to fade out.
      */
     readonly fadeOutSec: number;
-    constructor(asset: Asset, yaml: SampleYamlFormat);
+    constructor(asset: Asset, meta: MediaDataTypes.SampleMetaData);
     /**
      * Convert strings to numbers, so we can use them as seconds.
      */

@@ -16,20 +16,9 @@ const http_request_1 = require("@bldr/http-request");
 const core_browser_1 = require("@bldr/core-browser");
 const client_media_models_1 = require("@bldr/client-media-models");
 const asset_1 = require("./asset");
+const multipart_1 = require("./multipart");
 const cache_1 = require("./cache");
 const config = (0, config_1.getConfig)();
-class SampleCache extends cache_1.Cache {
-    constructor(translator) {
-        super();
-        this.uriTranslator = translator;
-    }
-    get(uuidOrRef) {
-        const ref = this.uriTranslator.getRef(uuidOrRef);
-        if (ref != null) {
-            return super.get(ref);
-        }
-    }
-}
 class AssetCache extends cache_1.Cache {
     constructor(translator) {
         super();
@@ -60,6 +49,30 @@ class AssetCache extends cache_1.Cache {
             }
         }
         return output;
+    }
+}
+class MultipartSelectionCache extends cache_1.Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
+    }
+}
+class SampleCache extends cache_1.Cache {
+    constructor(translator) {
+        super();
+        this.uriTranslator = translator;
+    }
+    get(uuidOrRef) {
+        const ref = this.uriTranslator.getRef(uuidOrRef);
+        if (ref != null) {
+            return super.get(ref);
+        }
     }
 }
 /**
@@ -106,8 +119,9 @@ class Resolver {
         this.httpRequest = (0, http_request_1.makeHttpRequestInstance)(config, 'automatic', '/api/media');
         this.cache = {};
         this.uriTranslator = new cache_1.UriTranslator();
-        this.sampleCache = new SampleCache(this.uriTranslator);
         this.assetCache = new AssetCache(this.uriTranslator);
+        this.multipartSelectionCache = new MultipartSelectionCache(this.uriTranslator);
+        this.sampleCache = new SampleCache(this.uriTranslator);
         this.shortcutManager = new ShortcutManager();
     }
     /**
@@ -215,21 +229,6 @@ class Resolver {
         });
     }
     /**
-     * Return a media asset.
-     *
-     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-     * sample fragment.
-     *
-     * @returns A media asset or undefined.
-     */
-    getAsset(uri) {
-        const asset = this.assetCache.get(uri);
-        if (asset == null) {
-            throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`);
-        }
-        return asset;
-    }
-    /**
      * Return a media asset. If the asset has not yet been resolved, it will be
      * resolved.
      *
@@ -251,6 +250,23 @@ class Resolver {
         });
     }
     /**
+     * Return a media asset.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     *
+     * @throws If the asset is not present in the asset cache
+     */
+    getAsset(uri) {
+        const asset = this.assetCache.get(uri);
+        if (asset == null) {
+            throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`);
+        }
+        return asset;
+    }
+    /**
      * @returns All previously resolved media assets.
      */
     exportAssets(refs) {
@@ -259,27 +275,49 @@ class Resolver {
         }
         return this.assetCache.getAll();
     }
+    createMultipartSelection(uri, selectionSpec) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const assets = yield this.resolve(uri);
+            const asset = assets[0];
+            const multipart = new multipart_1.MultipartSelection(asset, selectionSpec);
+            const ref = this.uriTranslator.getRef(uri);
+            if (ref == null) {
+                throw Error('URI translation went wrong on multipart creation.');
+            }
+            this.multipartSelectionCache.add(ref, multipart);
+            return multipart;
+        });
+    }
+    resolveMultipartSelection(uri) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const mediaUri = new client_media_models_1.MediaUri(uri);
+            if (mediaUri.fragment == null) {
+                return;
+            }
+            const multipart = this.multipartSelectionCache.get(uri);
+            if (multipart != null) {
+                return multipart;
+            }
+            return yield this.createMultipartSelection(uri, mediaUri.fragment);
+        });
+    }
     /**
-     * Return a sample.
-     *
-     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-     *   sample fragment. If the fragment is omitted, the “complete” sample is
-     *   returned
-     *
-     * @returns A sample or undefined.
-     *
-     * @throws Error
+     * @throws If the URI has no fragment or if the multipart selection is
+     *   not yet resolved.
      */
-    getSample(uri) {
+    getMultipartSelection(uri) {
         const mediaUri = new client_media_models_1.MediaUri(uri);
         if (mediaUri.fragment == null) {
-            uri = uri + '#complete';
+            throw new Error(`A multipart selection requires a fragment #..., got ${uri}`);
         }
-        const sample = this.sampleCache.get(uri);
-        if (sample == null) {
-            throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`);
+        const multipart = this.multipartSelectionCache.get(uri);
+        if (multipart == null) {
+            throw new Error(`The multipart selection with the URI ${uri} couldn’t be resolved.`);
         }
-        return sample;
+        return multipart;
+    }
+    exportMultipartSelections() {
+        return this.multipartSelectionCache.getAll();
     }
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
@@ -304,6 +342,28 @@ class Resolver {
             yield this.resolve(uri);
             return this.sampleCache.get(uri);
         });
+    }
+    /**
+     * Return a sample.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     *   sample fragment. If the fragment is omitted, the “complete” sample is
+     *   returned
+     *
+     * @returns A sample or undefined.
+     *
+     * @throws If the sample couldn’t be resolved.
+     */
+    getSample(uri) {
+        const mediaUri = new client_media_models_1.MediaUri(uri);
+        if (mediaUri.fragment == null) {
+            uri = uri + '#complete';
+        }
+        const sample = this.sampleCache.get(uri);
+        if (sample == null) {
+            throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`);
+        }
+        return sample;
     }
     /**
      * @returns All previously resolved samples.

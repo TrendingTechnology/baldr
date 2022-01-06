@@ -1,5 +1,6 @@
 import { Asset } from './asset';
 import { Sample } from './sample';
+import { MultipartSelection } from './multipart';
 declare type UrisSpec = string | string[] | Set<string>;
 /**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -8,8 +9,9 @@ declare type UrisSpec = string | string[] | Set<string>;
  */
 export declare class Resolver {
     private readonly httpRequest;
-    private readonly sampleCache;
     private readonly assetCache;
+    private readonly multipartSelectionCache;
+    private readonly sampleCache;
     private readonly uriTranslator;
     private readonly shortcutManager;
     /**
@@ -60,15 +62,6 @@ export declare class Resolver {
      */
     resolve(uris: UrisSpec, throwException?: boolean): Promise<Asset[]>;
     /**
-     * Return a media asset.
-     *
-     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-     * sample fragment.
-     *
-     * @returns A media asset or undefined.
-     */
-    getAsset(uri: string): Asset;
-    /**
      * Return a media asset. If the asset has not yet been resolved, it will be
      * resolved.
      *
@@ -79,21 +72,28 @@ export declare class Resolver {
      */
     resolveAsset(uri: string): Promise<Asset | undefined>;
     /**
+     * Return a media asset.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     *
+     * @throws If the asset is not present in the asset cache
+     */
+    getAsset(uri: string): Asset;
+    /**
      * @returns All previously resolved media assets.
      */
     exportAssets(refs?: string | string[] | Set<string>): Asset[];
+    private createMultipartSelection;
+    resolveMultipartSelection(uri: string): Promise<MultipartSelection | undefined>;
     /**
-     * Return a sample.
-     *
-     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-     *   sample fragment. If the fragment is omitted, the “complete” sample is
-     *   returned
-     *
-     * @returns A sample or undefined.
-     *
-     * @throws Error
+     * @throws If the URI has no fragment or if the multipart selection is
+     *   not yet resolved.
      */
-    getSample(uri: string): Sample;
+    getMultipartSelection(uri: string): MultipartSelection;
+    exportMultipartSelections(): MultipartSelection[];
     /**
      * Return a sample. If the sample has not yet been resolved, it will be
      * resolved.
@@ -105,6 +105,18 @@ export declare class Resolver {
      * @returns A sample or undefined.
      */
     resolveSample(uri: string): Promise<Sample | undefined>;
+    /**
+     * Return a sample.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     *   sample fragment. If the fragment is omitted, the “complete” sample is
+     *   returned
+     *
+     * @returns A sample or undefined.
+     *
+     * @throws If the sample couldn’t be resolved.
+     */
+    getSample(uri: string): Sample;
     /**
      * @returns All previously resolved samples.
      */

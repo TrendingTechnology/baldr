@@ -34,7 +34,7 @@ const defaultFadeOutSec = 1;
  * ```
  */
 class Sample {
-    constructor(asset, yaml) {
+    constructor(asset, meta) {
         /**
          * The start time in seconds. The sample is played from this start time
          * using the `mediaElement` of the `asset`. It is the “zero” second
@@ -42,36 +42,36 @@ class Sample {
          */
         this.startTimeSec = 0;
         this.asset = asset;
-        this.yaml = yaml;
-        if (this.yaml.ref == null) {
-            this.yaml.ref = 'complete';
+        this.meta = meta;
+        if (this.meta.ref == null) {
+            this.meta.ref = 'complete';
         }
-        if (this.yaml.startTime != null) {
-            this.startTimeSec = this.convertToSeconds(this.yaml.startTime);
+        if (this.meta.startTime != null) {
+            this.startTimeSec = this.convertToSeconds(this.meta.startTime);
         }
-        if (this.yaml.duration != null && this.yaml.endTime != null) {
+        if (this.meta.duration != null && this.meta.endTime != null) {
             throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.');
         }
-        if (this.yaml.duration != null) {
-            this.durationSec = this.convertToSeconds(this.yaml.duration);
+        if (this.meta.duration != null) {
+            this.durationSec = this.convertToSeconds(this.meta.duration);
         }
-        else if (this.yaml.endTime != null) {
+        else if (this.meta.endTime != null) {
             this.durationSec =
-                this.convertToSeconds(this.yaml.endTime) - this.startTimeSec;
+                this.convertToSeconds(this.meta.endTime) - this.startTimeSec;
         }
-        if (this.yaml.fadeIn != null) {
-            this.fadeInSec = this.convertToSeconds(this.yaml.fadeIn);
+        if (this.meta.fadeIn != null) {
+            this.fadeInSec = this.convertToSeconds(this.meta.fadeIn);
         }
         else {
             this.fadeInSec = defaultFadeInSec;
         }
-        if (this.yaml.fadeOut != null) {
-            this.fadeOutSec = this.convertToSeconds(this.yaml.fadeOut);
+        if (this.meta.fadeOut != null) {
+            this.fadeOutSec = this.convertToSeconds(this.meta.fadeOut);
         }
         else {
             this.fadeOutSec = defaultFadeOutSec;
         }
-        this.shortcut = this.yaml.shortcut;
+        this.shortcut = this.meta.shortcut;
     }
     /**
      * Convert strings to numbers, so we can use them as seconds.
@@ -84,18 +84,18 @@ class Sample {
      * fragment (`#fragment`), for example `ref:Fuer-Elise#complete`.
      */
     get ref() {
-        const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref;
+        const ref = this.meta.ref == null ? 'complete' : this.meta.ref;
         return `${this.asset.ref}#${ref}`;
     }
     /**
      * The title of the sample. For example `komplett`, `Hook-Line`.
      */
     get title() {
-        if (this.yaml.title != null) {
-            return this.yaml.title;
+        if (this.meta.title != null) {
+            return this.meta.title;
         }
-        if (this.yaml.ref != null && this.yaml.ref !== 'complete') {
-            return this.yaml.ref;
+        if (this.meta.ref != null && this.meta.ref !== 'complete') {
+            return this.meta.ref;
         }
         return 'komplett';
     }
@@ -104,7 +104,7 @@ class Sample {
      * For example `Glocken (Das große Tor von Kiew)`
      */
     get titleSafe() {
-        if (this.yaml.ref === 'complete') {
+        if (this.meta.ref === 'complete') {
             return this.asset.titleSafe;
         }
         else {

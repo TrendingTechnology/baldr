@@ -6,23 +6,17 @@ import { Asset } from './asset';
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-export declare class MultiPartSelection {
+export declare class MultipartSelection {
     selectionSpec: string;
     asset: Asset;
     partNos: number[];
-    /**
-     * The URI of the media asset suffixed with the selection specification.
-     * `ref:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
-     * means all parts.
-     */
-    uri: string;
     /**
      * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
      */
     constructor(asset: Asset, selectionSpec: string);
     /**
-     * The URI using the `ref` authority.
+     * The URI using the `ref` authority. Prefixed with `ref:`
      */
     get ref(): string;
     /**

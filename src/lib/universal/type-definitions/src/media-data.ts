@@ -9,7 +9,7 @@ export interface MinimalAssetMetaData extends Omit<MediaData, 'path'> {}
  * Following properties are moved into the sample “complete”: `startTime`,
  * `duration`, `endTime`, `fadeIn`, `fadeOut`, `shortcut`
  */
-export interface SampleYamlFormat {
+export interface SampleMetaData {
   /**
    * for example `Theme 1`
    */
@@ -130,7 +130,7 @@ export interface AssetMetaData extends MediaData {
   /**
    * An array of Sample instances.
    */
-  samples?: SampleYamlFormat[]
+  samples?: SampleMetaData[]
 
   /**
    * An media URI of a image to use a preview image for mainly audio files.

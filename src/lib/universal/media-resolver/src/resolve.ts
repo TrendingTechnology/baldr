@@ -3,31 +3,16 @@ import { getConfig } from '@bldr/config'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import { makeSet } from '@bldr/core-browser'
 import { MediaUri, findMediaUris } from '@bldr/client-media-models'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Asset } from './asset'
 import { Sample } from './sample'
+import { MultipartSelection } from './multipart'
 import { UriTranslator, Cache, MimeTypeShortcutCounter } from './cache'
-import { RestApiRaw } from './types'
 
 const config = getConfig()
 
 type UrisSpec = string | string[] | Set<string>
-
-class SampleCache extends Cache<Sample> {
-  uriTranslator: UriTranslator
-
-  constructor (translator: UriTranslator) {
-    super()
-    this.uriTranslator = translator
-  }
-
-  get (uuidOrRef: string): Sample | undefined {
-    const ref = this.uriTranslator.getRef(uuidOrRef)
-    if (ref != null) {
-      return super.get(ref)
-    }
-  }
-}
 
 class AssetCache extends Cache<Asset> {
   uriTranslator: UriTranslator
@@ -64,6 +49,38 @@ class AssetCache extends Cache<Asset> {
       }
     }
     return output
+  }
+}
+
+class MultipartSelectionCache extends Cache<MultipartSelection> {
+  uriTranslator: UriTranslator
+
+  constructor (translator: UriTranslator) {
+    super()
+    this.uriTranslator = translator
+  }
+
+  get (uuidOrRef: string): MultipartSelection | undefined {
+    const ref = this.uriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
+  }
+}
+
+class SampleCache extends Cache<Sample> {
+  uriTranslator: UriTranslator
+
+  constructor (translator: UriTranslator) {
+    super()
+    this.uriTranslator = translator
+  }
+
+  get (uuidOrRef: string): Sample | undefined {
+    const ref = this.uriTranslator.getRef(uuidOrRef)
+    if (ref != null) {
+      return super.get(ref)
+    }
   }
 }
 
@@ -120,8 +137,11 @@ export class Resolver {
     '/api/media'
   )
 
-  private readonly sampleCache: SampleCache
   private readonly assetCache: AssetCache
+  private readonly multipartSelectionCache: MultipartSelectionCache
+
+  private readonly sampleCache: SampleCache
+
   private readonly uriTranslator: UriTranslator
   private readonly shortcutManager: ShortcutManager
 
@@ -129,13 +149,18 @@ export class Resolver {
    * Assets with linked assets have to be cached. For example: many
    * audio assets can have the same cover ID.
    */
-  private cache: { [uri: string]: RestApiRaw }
+  private cache: { [uri: string]: MediaDataTypes.AssetMetaData }
 
   constructor () {
     this.cache = {}
     this.uriTranslator = new UriTranslator()
-    this.sampleCache = new SampleCache(this.uriTranslator)
+
     this.assetCache = new AssetCache(this.uriTranslator)
+    this.multipartSelectionCache = new MultipartSelectionCache(
+      this.uriTranslator
+    )
+    this.sampleCache = new SampleCache(this.uriTranslator)
+
     this.shortcutManager = new ShortcutManager()
   }
 
@@ -149,14 +174,14 @@ export class Resolver {
   private async queryMediaServer (
     uri: string,
     throwException: boolean = true
-  ): Promise<RestApiRaw | undefined> {
+  ): Promise<MediaDataTypes.AssetMetaData | undefined> {
     const mediaUri = new MediaUri(uri)
     const cacheKey = mediaUri.uriWithoutFragment
     if (this.cache[cacheKey] != null) {
       return this.cache[cacheKey]
     }
     const asset = await api.getAssetByUri(uri, throwException)
-    const rawRestApiAsset: RestApiRaw = asset
+    const rawRestApiAsset: MediaDataTypes.AssetMetaData = asset
     this.cache[cacheKey] = rawRestApiAsset
     return rawRestApiAsset
   }
@@ -172,7 +197,7 @@ export class Resolver {
    *
    * @returns The newly created media asset.
    */
-  private createAsset (uri: string, raw: RestApiRaw): Asset {
+  private createAsset (uri: string, raw: MediaDataTypes.AssetMetaData): Asset {
     const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
     const asset = new Asset(uri, httpUrl, raw)
     this.assetCache.add(asset.ref, asset)
@@ -252,22 +277,6 @@ export class Resolver {
   }
 
   /**
-   * Return a media asset.
-   *
-   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-   * sample fragment.
-   *
-   * @returns A media asset or undefined.
-   */
-  public getAsset (uri: string): Asset {
-    const asset = this.assetCache.get(uri)
-    if (asset == null) {
-      throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`)
-    }
-    return asset
-  }
-
-  /**
    * Return a media asset. If the asset has not yet been resolved, it will be
    * resolved.
    *
@@ -289,6 +298,24 @@ export class Resolver {
   }
 
   /**
+   * Return a media asset.
+   *
+   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+   * sample fragment.
+   *
+   * @returns A media asset or undefined.
+   *
+   * @throws If the asset is not present in the asset cache
+   */
+  public getAsset (uri: string): Asset {
+    const asset = this.assetCache.get(uri)
+    if (asset == null) {
+      throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`)
+    }
+    return asset
+  }
+
+  /**
    * @returns All previously resolved media assets.
    */
   public exportAssets (refs?: string | string[] | Set<string>): Asset[] {
@@ -298,27 +325,58 @@ export class Resolver {
     return this.assetCache.getAll()
   }
 
-  /**
-   * Return a sample.
-   *
-   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
-   *   sample fragment. If the fragment is omitted, the “complete” sample is
-   *   returned
-   *
-   * @returns A sample or undefined.
-   *
-   * @throws Error
-   */
-  public getSample (uri: string): Sample {
+  private async createMultipartSelection (
+    uri: string,
+    selectionSpec: string
+  ): Promise<MultipartSelection> {
+    const assets = await this.resolve(uri)
+    const asset = assets[0]
+    const multipart = new MultipartSelection(asset, selectionSpec)
+    const ref = this.uriTranslator.getRef(uri)
+    if (ref == null) {
+      throw Error('URI translation went wrong on multipart creation.')
+    }
+    this.multipartSelectionCache.add(ref, multipart)
+    return multipart
+  }
+
+  public async resolveMultipartSelection (
+    uri: string
+  ): Promise<MultipartSelection | undefined> {
     const mediaUri = new MediaUri(uri)
     if (mediaUri.fragment == null) {
-      uri = uri + '#complete'
+      return
     }
-    const sample = this.sampleCache.get(uri)
-    if (sample == null) {
-      throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`)
+    const multipart = this.multipartSelectionCache.get(uri)
+    if (multipart != null) {
+      return multipart
     }
-    return sample
+
+    return await this.createMultipartSelection(uri, mediaUri.fragment)
+  }
+
+  /**
+   * @throws If the URI has no fragment or if the multipart selection is
+   *   not yet resolved.
+   */
+  public getMultipartSelection (uri: string): MultipartSelection {
+    const mediaUri = new MediaUri(uri)
+    if (mediaUri.fragment == null) {
+      throw new Error(
+        `A multipart selection requires a fragment #..., got ${uri}`
+      )
+    }
+    const multipart = this.multipartSelectionCache.get(uri)
+    if (multipart == null) {
+      throw new Error(
+        `The multipart selection with the URI ${uri} couldn’t be resolved.`
+      )
+    }
+    return multipart
+  }
+
+  public exportMultipartSelections (): MultipartSelection[] {
+    return this.multipartSelectionCache.getAll()
   }
 
   /**
@@ -346,6 +404,29 @@ export class Resolver {
   }
 
   /**
+   * Return a sample.
+   *
+   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+   *   sample fragment. If the fragment is omitted, the “complete” sample is
+   *   returned
+   *
+   * @returns A sample or undefined.
+   *
+   * @throws If the sample couldn’t be resolved.
+   */
+  public getSample (uri: string): Sample {
+    const mediaUri = new MediaUri(uri)
+    if (mediaUri.fragment == null) {
+      uri = uri + '#complete'
+    }
+    const sample = this.sampleCache.get(uri)
+    if (sample == null) {
+      throw new Error(`The sample with the URI ${uri} couldn’t be resolved.`)
+    }
+    return sample
+  }
+
+  /**
    * @returns All previously resolved samples.
    */
   public exportSamples (): Sample[] {
@@ -364,7 +445,7 @@ export class Resolver {
   /**
    * Reset all delegated caches.
    */
-  reset (): void {
+  public reset (): void {
     this.sampleCache.reset()
     this.assetCache.reset()
     this.uriTranslator.reset()

@@ -1,4 +1,4 @@
-/* globals describe it beforeEach */
+/* globals describe it */
 
 const assert = require('assert')
 
@@ -193,87 +193,6 @@ describe('Package “@bldr/media-resolver”', function () {
           'uuid:c64047d2-983d-4009-a35f-02c95534cb53'
         )
       })
-    })
-  })
-
-  describe('Class “Asset”', function () {
-    const httpUrlBase =
-      'http://localhost/media/Musik/08/20_Mensch-Zeit/20_Popularmusik/70_Hip-Hop/30_Hip-Hop-Hoerquiz/HB/'
-    let asset
-
-    beforeEach(async function () {
-      // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
-      asset = await resolver.resolveAsset(
-        'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
-      )
-    })
-
-    it('asset.ref', function () {
-      assert.strictEqual(
-        asset.ref,
-        'ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island'
-      )
-    })
-
-    it('asset.uuid', function () {
-      assert.strictEqual(
-        asset.uuid,
-        'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
-      )
-    })
-
-    it('asset.previewHttpUrl', function () {
-      assert.strictEqual(
-        asset.previewHttpUrl,
-        httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3_preview.jpg'
-      )
-    })
-
-    it('asset.waveformHttpUrl', function () {
-      assert.strictEqual(
-        asset.waveformHttpUrl,
-        httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3_waveform.png'
-      )
-    })
-
-    it('asset.waveformHttpUrl: undefined document ref:Hip-Hop-Hoerquiz_QL_RAAbits', async function () {
-      const asset = await resolver.resolveAsset(
-        'uuid:c8c0f0e3-744e-4a22-b16f-b98695159d32'
-      )
-      assert.ok(asset != null)
-      assert.strictEqual(asset.waveformHttpUrl, undefined)
-    })
-  })
-
-  describe('Class “Sample”', function () {
-    let sample
-    beforeEach(async function () {
-      // ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island
-      sample = await resolver.resolveSample(
-        'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
-      )
-    })
-
-    it('sample.title', async function () {
-      assert.strictEqual(sample.title, 'komplett')
-    })
-
-    it('Mixed mime types to test shortcuts', async function () {
-      // ref:Biographie-Salzburg-Wien_HB_Sonate-a-moll-KV-310
-      const audio = 'uuid:ac98bd34-5341-4fd6-b4f0-d83da7e1211e'
-
-      // ref:Biographie-Salzburg-Wien_VD_Mozart-zu-spaet
-      const video = 'uuid:91b77277-3d93-45c1-8a47-d0e76f29e413'
-
-      // ref:Biographie-Salzburg-Wien_BD_Mozart_1777
-      const image = 'uuid:74bd75ab-8505-4233-a9bf-70dd17c93e56'
-      const resolver = new Resolver()
-      await resolver.resolve([audio, video, image])
-
-      assert.strictEqual(resolver.getSample(audio).shortcut, 'a 1')
-      assert.strictEqual(resolver.getSample(video).shortcut, 'v 1')
-
-      assert.strictEqual(resolver.getAsset(image).shortcut, 'i 1')
     })
   })
 })

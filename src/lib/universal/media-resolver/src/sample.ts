@@ -1,7 +1,7 @@
 import { convertDurationToSeconds } from '@bldr/string-format'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Asset } from './asset'
-import { SampleYamlFormat } from './types'
 
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
@@ -45,7 +45,7 @@ export class Sample {
   /**
    * Raw data coming from the YAML format.
    */
-  yaml: SampleYamlFormat
+  meta: MediaDataTypes.SampleMetaData
 
   /**
    * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
@@ -74,45 +74,45 @@ export class Sample {
    */
   public readonly fadeOutSec: number
 
-  constructor (asset: Asset, yaml: SampleYamlFormat) {
+  constructor (asset: Asset, meta: MediaDataTypes.SampleMetaData) {
     this.asset = asset
 
-    this.yaml = yaml
+    this.meta = meta
 
-    if (this.yaml.ref == null) {
-      this.yaml.ref = 'complete'
+    if (this.meta.ref == null) {
+      this.meta.ref = 'complete'
     }
 
-    if (this.yaml.startTime != null) {
-      this.startTimeSec = this.convertToSeconds(this.yaml.startTime)
+    if (this.meta.startTime != null) {
+      this.startTimeSec = this.convertToSeconds(this.meta.startTime)
     }
 
-    if (this.yaml.duration != null && this.yaml.endTime != null) {
+    if (this.meta.duration != null && this.meta.endTime != null) {
       throw new Error(
         'Specifiy duration or endTime not both. They are mutually exclusive.'
       )
     }
 
-    if (this.yaml.duration != null) {
-      this.durationSec = this.convertToSeconds(this.yaml.duration)
-    } else if (this.yaml.endTime != null) {
+    if (this.meta.duration != null) {
+      this.durationSec = this.convertToSeconds(this.meta.duration)
+    } else if (this.meta.endTime != null) {
       this.durationSec =
-        this.convertToSeconds(this.yaml.endTime) - this.startTimeSec
+        this.convertToSeconds(this.meta.endTime) - this.startTimeSec
     }
 
-    if (this.yaml.fadeIn != null) {
-      this.fadeInSec = this.convertToSeconds(this.yaml.fadeIn)
+    if (this.meta.fadeIn != null) {
+      this.fadeInSec = this.convertToSeconds(this.meta.fadeIn)
     } else {
       this.fadeInSec = defaultFadeInSec
     }
 
-    if (this.yaml.fadeOut != null) {
-      this.fadeOutSec = this.convertToSeconds(this.yaml.fadeOut)
+    if (this.meta.fadeOut != null) {
+      this.fadeOutSec = this.convertToSeconds(this.meta.fadeOut)
     } else {
       this.fadeOutSec = defaultFadeOutSec
     }
 
-    this.shortcut = this.yaml.shortcut
+    this.shortcut = this.meta.shortcut
   }
 
   /**
@@ -127,7 +127,7 @@ export class Sample {
    * fragment (`#fragment`), for example `ref:Fuer-Elise#complete`.
    */
   public get ref (): string {
-    const ref = this.yaml.ref == null ? 'complete' : this.yaml.ref
+    const ref = this.meta.ref == null ? 'complete' : this.meta.ref
     return `${this.asset.ref}#${ref}`
   }
 
@@ -135,11 +135,11 @@ export class Sample {
    * The title of the sample. For example `komplett`, `Hook-Line`.
    */
   public get title (): string {
-    if (this.yaml.title != null) {
-      return this.yaml.title
+    if (this.meta.title != null) {
+      return this.meta.title
     }
-    if (this.yaml.ref != null && this.yaml.ref !== 'complete') {
-      return this.yaml.ref
+    if (this.meta.ref != null && this.meta.ref !== 'complete') {
+      return this.meta.ref
     }
     return 'komplett'
   }
@@ -149,7 +149,7 @@ export class Sample {
    * For example `Glocken (Das große Tor von Kiew)`
    */
   public get titleSafe (): string {
-    if (this.yaml.ref === 'complete') {
+    if (this.meta.ref === 'complete') {
       return this.asset.titleSafe
     } else {
       return `${this.title} (${this.asset.titleSafe})`
