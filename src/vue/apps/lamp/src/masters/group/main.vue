@@ -3,8 +3,8 @@
     <img class="img-contain" :src="asset.httpUrl">
     <p
       class="short-history font-shadow"
-      v-if="asset.yaml.shortHistory"
-      v-html="asset.yaml.shortHistory"
+      v-if="asset.meta.shortHistory"
+      v-html="asset.meta.shortHistory"
     ></p>
     <p class="members transparent-box font-shadow" v-if="hasMembers">
       <span class="important big">Mitglieder: </span>
@@ -19,13 +19,13 @@
         <span v-if="startDate" class="start-date">Gründung: {{ startDate }}</span>
         <span v-if="endDate" class="end-date">Auflösung: {{ endDate }}</span>
       </div>
-      <p class="name important transparent-background font-shadow">{{ asset.yaml.name }}</p>
+      <p class="name important transparent-background font-shadow">{{ asset.meta.name }}</p>
     </div>
     <external-sites :asset="asset"/>
     <horizontal-play-buttons
-      :src="asset.yaml.famousPieces"
+      :src="asset.meta.famousPieces"
       class="left-bottom-corner"
-      v-if="asset.yaml.famousPieces"
+      v-if="asset.meta.famousPieces"
     />
   </div>
 </template>
@@ -54,22 +54,22 @@ export default class GroupMasterMain extends MasterMain {
   asset: Asset
 
   get startDate (): string | undefined {
-    if (this.asset.yaml.startDate) {
-      return formatToYear(this.asset.yaml.startDate)
+    if (this.asset.meta.startDate) {
+      return formatToYear(this.asset.meta.startDate)
     }
   }
 
   get endDate (): string | undefined {
-    if (this.asset.yaml.endDate) {
-      return formatToYear(this.asset.yaml.endDate)
+    if (this.asset.meta.endDate) {
+      return formatToYear(this.asset.meta.endDate)
     }
   }
 
   get members (): string[] {
-    if (Array.isArray(this.asset.yaml.members)) {
-      return this.asset.yaml.members
-    } else if (typeof this.asset.yaml.members === 'string') {
-      return [this.asset.yaml.members]
+    if (Array.isArray(this.asset.meta.members)) {
+      return this.asset.meta.members
+    } else if (typeof this.asset.meta.members === 'string') {
+      return [this.asset.meta.members]
     }
     return []
   }

@@ -66,38 +66,38 @@ export default class ExternalSites extends Vue {
   })
   asset: any
 
-  get yaml (): Record<string, string> {
-    if (this.asset.yaml != null) {
-      return this.asset.yaml
+  get meta (): Record<string, string> {
+    if (this.asset.meta != null) {
+      return this.asset.meta
     } else {
       return this.asset
     }
   }
 
   get imslp (): string | undefined {
-    if (this.yaml.imslp) {
-      return formatImslpUrl(this.yaml.imslp)
+    if (this.meta.imslp) {
+      return formatImslpUrl(this.meta.imslp)
     }
   }
 
   get musicbrainzRecordingId (): string | undefined {
-    if (this.yaml.musicbrainzRecordingId) {
-      return formatMusicbrainzRecordingUrl(this.yaml.musicbrainzRecordingId)
+    if (this.meta.musicbrainzRecordingId) {
+      return formatMusicbrainzRecordingUrl(this.meta.musicbrainzRecordingId)
     }
   }
 
   get musicbrainzWorkId (): string | undefined {
-    if (this.yaml.musicbrainzWorkId) {
-      return formatMusicbrainzWorkUrl(this.yaml.musicbrainzWorkId)
+    if (this.meta.musicbrainzWorkId) {
+      return formatMusicbrainzWorkUrl(this.meta.musicbrainzWorkId)
     }
   }
 
   get wikicommons (): string | undefined {
-    if (this.yaml.wikicommons) {
-      return formatWikicommonsUrl(this.yaml.wikicommons)
+    if (this.meta.wikicommons) {
+      return formatWikicommonsUrl(this.meta.wikicommons)
     }
-    for (const prop in this.yaml) {
-      const value = this.yaml[prop]
+    for (const prop in this.meta) {
+      const value = this.meta[prop]
       if (value && typeof value === 'string' && value.match(/^wikicommons:/)) {
         return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
       }
@@ -105,20 +105,20 @@ export default class ExternalSites extends Vue {
   }
 
   get wikidata (): string | undefined {
-    if (this.yaml.wikidata) {
-      return formatWikidataUrl(this.yaml.wikidata)
+    if (this.meta.wikidata) {
+      return formatWikidataUrl(this.meta.wikidata)
     }
   }
 
   get wikipedia (): string | undefined {
-    if (this.yaml.wikipedia) {
-      return formatWikipediaUrl(this.yaml.wikipedia)
+    if (this.meta.wikipedia) {
+      return formatWikipediaUrl(this.meta.wikipedia)
     }
   }
 
   get youtube (): string | undefined {
-    if (this.yaml.youtube) {
-      return formatYoutubeUrl(this.yaml.youtube)
+    if (this.meta.youtube) {
+      return formatYoutubeUrl(this.meta.youtube)
     }
   }
 }

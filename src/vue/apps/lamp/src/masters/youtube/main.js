@@ -49,7 +49,7 @@ export default validateMasterSpec({
       return youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](
         youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
       )
       youtubeMModule.checkAvailability(props.youtubeId).then(result => {
@@ -62,18 +62,18 @@ export default validateMasterSpec({
       const propsMain = Object.assign({}, props)
       propsMain.asset = asset
       if (asset != null) {
-        if (props.heading == null && asset.yaml.heading != null) {
-          propsMain.heading = convertMarkdownToHtml(asset.yaml.heading)
+        if (props.heading == null && asset.meta.heading != null) {
+          propsMain.heading = convertMarkdownToHtml(asset.meta.heading)
         } else if (
           props.heading == null &&
-          asset.yaml.originalHeading != null
+          asset.meta.originalHeading != null
         ) {
-          propsMain.heading = convertMarkdownToHtml(asset.yaml.originalHeading)
+          propsMain.heading = convertMarkdownToHtml(asset.meta.originalHeading)
         }
-        if (props.info == null && asset.yaml.info != null) {
-          propsMain.info = convertMarkdownToHtml(asset.yaml.info)
-        } else if (props.info == null && asset.yaml.originalInfo != null) {
-          propsMain.info = convertMarkdownToHtml(asset.yaml.originalInfo)
+        if (props.info == null && asset.meta.info != null) {
+          propsMain.info = convertMarkdownToHtml(asset.meta.info)
+        } else if (props.info == null && asset.meta.originalInfo != null) {
+          propsMain.info = convertMarkdownToHtml(asset.meta.originalInfo)
         }
       }
       return propsMain

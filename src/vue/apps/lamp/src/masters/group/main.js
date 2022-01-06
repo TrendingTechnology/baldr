@@ -39,11 +39,11 @@ export default validateMasterSpec({
       return convertGroupIdToMediaId(props.groupId)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](convertGroupIdToMediaId(props.groupId))
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](convertGroupIdToMediaId(props.groupId))
       return { asset }
     },
     titleFromProps ({ propsMain }) {
-      return propsMain.asset.yaml.name
+      return propsMain.asset.meta.name
     }
   }
 })

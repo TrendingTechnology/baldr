@@ -108,7 +108,7 @@ export function render (item: Item): string | undefined {
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.uri) {
-    const asset = vm.$store.getters['media/assetByUri'](item.uri)
+    const asset = vm.$store.getters['lamp/mediaNg/assetByUri'](item.uri)
 
     let controls = ''
     let htmlTag

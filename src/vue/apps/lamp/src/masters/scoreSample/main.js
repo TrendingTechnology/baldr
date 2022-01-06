@@ -49,17 +49,21 @@ export default validateMasterSpec({
     },
     collectPropsMain (props) {
       let audioSample
-      const audio = this.$store.getters['media/sampleByUri'](props.audio)
+      let audio
+      if (props.audio != null) {
+        audio = this.$store.getters['lamp/mediaNg/sampleByUri'](props.audio)
+      }
+
       if (audio) {
         audioSample = audio
       }
       let asset
-      const multiPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-      if (multiPartSelection) {
-        asset = multiPartSelection
-      } else {
-        asset = this.$store.getters['media/assetByUri'](props.score)
-      }
+      // const multiPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+      // if (multiPartSelection) {
+      //   asset = multiPartSelection
+      // } else {
+      asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.score)
+      // }
 
       return {
         heading: props.heading,

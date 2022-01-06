@@ -53,9 +53,9 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.src)
 
-      const picker = new ObjectPropertyPicker(props, asset.yaml)
+      const picker = new ObjectPropertyPicker(props, asset.meta)
 
       const title = picker.pickProperty('title')
       const description = picker.pickProperty('description')
@@ -96,8 +96,8 @@ export default validateMasterSpec({
         return props.title
       }
       const asset = propsMain.mediaAsset
-      if (asset.yaml.title) {
-        return asset.yaml.title
+      if (asset.meta.title) {
+        return asset.meta.title
       }
     }
   }

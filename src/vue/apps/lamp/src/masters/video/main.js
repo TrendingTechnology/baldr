@@ -38,7 +38,7 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.src)
       const result = {
         httpUrl: asset.httpUrl,
         previewHttpUrl: asset.previewHttpUrl
@@ -46,11 +46,11 @@ export default validateMasterSpec({
       if (props.showMeta != null) {
         result.showMeta = true
       }
-      if (asset.yaml.title != null) {
-        result.title = asset.yaml.title
+      if (asset.meta.title != null) {
+        result.title = asset.meta.title
       }
-      if (asset.yaml.description != null) {
-        result.description = asset.yaml.description
+      if (asset.meta.description != null) {
+        result.description = asset.meta.description
       }
       return result
     }

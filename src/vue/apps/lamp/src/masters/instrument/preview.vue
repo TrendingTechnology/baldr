@@ -6,7 +6,7 @@
   "
   >
     <img class="img-contain" :src="asset.httpUrl" />
-    <p class="important">{{ asset.yaml.name }}</p>
+    <p class="important">{{ asset.meta.name }}</p>
   </div>
 </template>
 

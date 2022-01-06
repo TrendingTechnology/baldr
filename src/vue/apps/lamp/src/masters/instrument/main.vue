@@ -1,16 +1,16 @@
 <template>
   <div class="vc_instrument_master">
     <img class="img-contain" :src="asset.httpUrl" />
-    <p class="name important">{{ asset.yaml.name }}</p>
+    <p class="name important">{{ asset.meta.name }}</p>
     <p
       class="info-box font-shadow smaller"
-      v-if="asset.yaml.description"
-      v-html="asset.yaml.description"
+      v-if="asset.meta.description"
+      v-html="asset.meta.description"
     ></p>
     <horizontal-play-buttons
-      :src="asset.yaml.audioSamples"
+      :src="asset.meta.audioSamples"
       class="left-bottom-corner"
-      v-if="asset.yaml.audioSamples"
+      v-if="asset.meta.audioSamples"
     />
     <external-sites :asset="asset" />
   </div>

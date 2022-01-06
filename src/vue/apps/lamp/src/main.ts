@@ -22,7 +22,6 @@ import shortcuts from '@bldr/shortcuts'
 import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/modal-dialog'
 import DynamicSelect from '@bldr/dynamic-select'
-import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 import Notification from '@bldr/notification'
 import Player from '@bldr/player'
@@ -32,7 +31,6 @@ import { resolver } from '@bldr/presentation-parser'
 import MainApp from '@/components/routed/MainApp.vue'
 
 Vue.use(shortcuts, { router, store })
-Vue.use(media, router, store, Vue.prototype.$shortcuts)
 Vue.use(Notification)
 
 Vue.use(DynamicSelect)
@@ -53,7 +51,7 @@ Vue.config.productionTip = false
 registerMasterComponents()
 
 store.subscribe(mutation => {
-  if (mutation.type === 'media/addAsset') {
+  if (mutation.type === 'lamp/mediaNg/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {
       Vue.prototype.$showMessage.success(

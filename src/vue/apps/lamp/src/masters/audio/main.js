@@ -83,10 +83,10 @@ export default validateMasterSpec({
       return uris
     },
     collectPropsMain (props) {
-      const sample = this.$store.getters['media/sampleByUri'](props.src)
+      const sample = this.$store.getters['lamp/mediaNg/sampleByUri'](props.src)
       const asset = sample.asset
 
-      const grab = new ObjectPropertyPicker(props, asset.yaml)
+      const grab = new ObjectPropertyPicker(props, asset.meta)
       const artist = grab.pickProperty('artist')
       const composer = grab.pickProperty('composer')
       const description = grab.pickProperty('description')
@@ -101,7 +101,7 @@ export default validateMasterSpec({
 
       let previewHttpUrl
       if (props.cover != null) {
-        const coverFile = this.$store.getters['media/assetByUri'](props.cover)
+        const coverFile = this.$store.getters['lamp/mediaNg/assetByUri'](props.cover)
         previewHttpUrl = coverFile.httpUrl
       } else if (asset.previewHttpUrl != null) {
         previewHttpUrl = asset.previewHttpUrl
@@ -123,8 +123,8 @@ export default validateMasterSpec({
         return props.title
       }
       const asset = propsMain.mediaAsset
-      if (asset.yaml.title != null) {
-        return asset.yaml.title
+      if (asset.meta.title != null) {
+        return asset.meta.title
       }
     }
   }

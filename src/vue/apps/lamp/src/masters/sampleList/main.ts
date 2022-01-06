@@ -4,7 +4,7 @@
 
 import type { LampTypes } from '@bldr/type-definitions'
 
-import { mediaResolver } from '@bldr/media-client'
+// import { mediaResolver } from '@bldr/media-client'
 import { validateMasterSpec } from '../../lib/masters'
 
 export default validateMasterSpec({
@@ -42,9 +42,9 @@ export default validateMasterSpec({
       }
       return props
     },
-    resolveMediaUris (props) {
-      return mediaResolver.getUrisFromWrappedSpecs(props.samples)
-    },
+    // resolveMediaUris (props) {
+    //   return mediaResolver.getUrisFromWrappedSpecs(props.samples)
+    // },
     collectPropsMain (props): LampTypes.StringIndexedData {
       return props
     },
@@ -54,14 +54,14 @@ export default validateMasterSpec({
       }
       return 'Audio-Ausschnitte'
     },
-    async afterMediaResolution ({ props }) {
-      const wrappedSampleList = mediaResolver.getWrappedSampleList(props.samples)
-      const samplesCollection = wrappedSampleList.getSamplesFromFirst()
-      if (samplesCollection != null) {
-        props.samples = samplesCollection
-      } else {
-        props.samples = wrappedSampleList
-      }
-    }
+    // async afterMediaResolution ({ props }) {
+    //   const wrappedSampleList = mediaResolver.getWrappedSampleList(props.samples)
+    //   const samplesCollection = wrappedSampleList.getSamplesFromFirst()
+    //   if (samplesCollection != null) {
+    //     props.samples = samplesCollection
+    //   } else {
+    //     props.samples = wrappedSampleList
+    //   }
+    // }
   }
 })

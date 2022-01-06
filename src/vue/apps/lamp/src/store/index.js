@@ -138,7 +138,6 @@ const actions = {
     { presentation, presentationNg, reload }
   ) {
     if (!reload) {
-      dispatch('media/clear', null, { root: true })
       // Must done before resolving to get visual loader symbol
       // commit('setPresentation', null)
       dispatch('recent/add', {

@@ -8,7 +8,7 @@
     <img class="img-contain" :src="asset.httpUrl" />
     <div class="title-box">
       <p class="person important transparent-background font-shadow">
-        {{ asset.yaml.name }}
+        {{ asset.meta.name }}
       </p>
     </div>
   </div>

@@ -81,10 +81,15 @@ function intersect (array1, array2) {
 }
 
 async function addAssetsNgToStore (uris, throwException = true) {
-  const assetsNg = await resolver.resolve(uris, throwException)
-  for (const assetNg of assetsNg) {
-    store.commit('lamp/mediaNg/addAsset', assetNg)
+  const assets = await resolver.resolve(uris, throwException)
+  for (const asset of assets) {
+    store.commit('lamp/mediaNg/addAsset', asset)
   }
+  const samples = resolver.exportSamples()
+  for (const sample of samples) {
+    store.commit('lamp/mediaNg/addSample', sample)
+  }
+  return assets
 }
 
 /**
@@ -185,12 +190,7 @@ function compileToCSS (sass) {
  *
  * @returns {Object} - The normalized style object
  */
-function normalizeStyle (style) {  const presentationNg = PresentationNg.mergeYamlStringWithRaw(
-  rawYamlString,
-  rawPresentation
-)
-
-registerPresentationRelatedShortcuts()
+function normalizeStyle (style) {
   for (const property in style) {
     style[property] = compileToCSS(style[property])
   }
@@ -244,7 +244,7 @@ class AudioOverlay {
   get samples () {
     const samples = []
     for (const uri of this.mediaUris) {
-      samples.push(store.getters['media/sampleByUri'](uri))
+      samples.push(store.getters['lamp/mediaNg/sampleByUri'](uri))
     }
     return samples
   }
@@ -504,7 +504,7 @@ export class Slide {
   get assets () {
     const assets = []
     for (const mediaUri of this.mediaUris) {
-      assets.push(store.getters['media/assetByUri'](mediaUri))
+      assets.push(store.getters['lamp/mediaNg/assetByUri'](mediaUri))
     }
     return assets
   }
@@ -777,13 +777,13 @@ export class Presentation {
       /**
        * @type {Object}
        */
-      await addAssetsNgToStore(this.mediaUris)
-      this.media = await vmInternal.$media.resolve(this.mediaUris, true) // throw exceptions.
+      this.media = await addAssetsNgToStore(this.mediaUris)
+      // this.media = await vmInternal.$media.resolve(this.mediaUris, true) // throw exceptions.
     }
 
     if (this.optionalMediaUris.length > 0) {
       await addAssetsNgToStore(this.optionalMediaUris, false)
-      await vmInternal.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
+      // await vmInternal.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
     }
 
     // After media resolution.

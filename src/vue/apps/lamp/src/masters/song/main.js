@@ -39,13 +39,13 @@ export default validateMasterSpec({
       return convertSongIdToRef(props.songId)
     },
     calculateStepCount ({ props }) {
-      const image = this.$store.getters['media/assetByUri'](
+      const image = this.$store.getters['lamp/mediaNg/assetByUri'](
         convertSongIdToRef(props.songId)
       )
       return image.multiPartCount
     },
     collectPropsMain (props) {
-      const image = this.$store.getters['media/assetByUri'](
+      const image = this.$store.getters['lamp/mediaNg/assetByUri'](
         convertSongIdToRef(props.songId)
       )
       return {
@@ -55,7 +55,7 @@ export default validateMasterSpec({
     collectPropsPreview ({ propsMain }) {
       return {
         imageHttpUrl: propsMain.image.httpUrl,
-        title: propsMain.image.yaml.title
+        title: propsMain.image.meta.title
       }
     }
   }

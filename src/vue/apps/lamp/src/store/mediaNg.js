@@ -20,7 +20,9 @@ const state = {
 
 const getters = {
   assetByUri: (state, getters) => uri => {
-    return resolver.getAsset(uri)
+    try {
+      return resolver.getAsset(uri)
+    } catch (error) {}
   },
   assets: state => {
     return state.assets

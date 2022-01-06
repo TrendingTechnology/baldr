@@ -41,16 +41,16 @@ export default validateMasterSpec({
       return convertPersonIdToMediaId(props.personId)
     },
     collectPropsMain (props): LampTypes.StringIndexedData {
-      const asset = this.$store.getters['media/assetByUri'](
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](
         convertPersonIdToMediaId(props.personId)
       )
       return { asset }
     },
     titleFromProps ({ propsMain }): string {
-      return propsMain.asset.yaml.name
+      return propsMain.asset.meta.name
     },
     generateTexMarkup ({ propsMain }): string {
-      const yaml = propsMain.asset.yaml
+      const yaml = propsMain.asset.meta
       return tex.environment('baldrPerson', yaml.shortBiography, {
         name: yaml.name
       })

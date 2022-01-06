@@ -42,7 +42,7 @@ export default validateMasterSpec({
       return props.src
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.src)
       const output = {
         asset
       }
@@ -54,12 +54,12 @@ export default validateMasterSpec({
     calculateStepCount ({ propsMain }) {
       if (propsMain.page) return 1
       const asset = propsMain.asset
-      if (asset.yaml.pageCount != null && asset.yaml.pageCount > 1) {
-        return asset.yaml.pageCount
+      if (asset.meta.pageCount != null && asset.meta.pageCount > 1) {
+        return asset.meta.pageCount
       }
     },
     titleFromProps ({ propsMain }) {
-      if (propsMain.asset.yaml.title != null) {
+      if (propsMain.asset.meta.title != null) {
         return propsMain.asset.title
       }
     }
