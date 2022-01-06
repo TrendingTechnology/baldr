@@ -126,17 +126,6 @@ export class Asset {
     get uuid() {
         return 'uuid:' + this.meta.uuid;
     }
-    set shortcut(value) {
-        this.shortcut_ = value;
-    }
-    /**
-     * @inheritdoc
-     */
-    get shortcut() {
-        if (this.shortcut_ != null) {
-            return this.shortcut_;
-        }
-    }
     /**
      * Each media asset can have a preview image. The suffix `_preview.jpg`
      * is appended on the path. For example
@@ -148,7 +137,7 @@ export class Asset {
         }
     }
     /**
-     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+     * Each media asset can be associated with a waveform image. The suffix `_waveform.png`
      * is appended on the HTTP URL. For example
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
@@ -188,15 +177,15 @@ export class Asset {
         return this.meta.multiPartCount;
     }
     /**
-     * Retrieve the HTTP URL of the multi part asset by the part number.
+     * Retrieve the HTTP URL of the multipart asset by the part number.
      *
      * @param The part number starts with 1.
+     *
+     * @throws If the specified number is higher than multiPartCount.
      */
     getMultiPartHttpUrlByNo(no) {
-        if (this.multiPartCount === 1)
+        if (typeof no !== 'number' || this.multiPartCount === 1) {
             return this.httpUrl;
-        if (no > this.multiPartCount) {
-            throw new Error(`The asset has only ${this.multiPartCount} parts, not ${no}`);
         }
         return formatMultiPartAssetFileName(this.httpUrl, no);
     }

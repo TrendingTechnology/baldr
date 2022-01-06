@@ -2,11 +2,7 @@
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading" />
     <img :src="asset.getMultiPartHttpUrlByNo(navigationNumbers.stepNo)" />
-    <play-button
-      class="left-bottom-corner"
-      v-if="audioUri"
-      :src="audioUri"
-    />
+    <play-button class="left-bottom-corner" v-if="audioUri" :src="audioUri" />
     <external-sites :asset="asset" />
   </div>
 </template>

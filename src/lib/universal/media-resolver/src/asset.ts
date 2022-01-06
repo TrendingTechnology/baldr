@@ -114,27 +114,28 @@ export class Asset {
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
-  meta: MediaDataTypes.AssetMetaData
+  public meta: MediaDataTypes.AssetMetaData
+
   uri: MediaUri
 
   /**
    * The keyboard shortcut to launch the media asset. At the moment only used by
    * images.
    */
-  private shortcut_?: string
+  public shortcut?: string
 
   samples?: SampleCollection
 
   /**
    * The media type, for example `image`, `audio` or `video`.
    */
-  mimeType: string
+  public mimeType: string
 
   /**
    * HTTP Uniform Resource Locator, for example
    * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a`.
    */
-  httpUrl: string
+  public httpUrl: string
 
   /**
    * @param meta - A raw javascript object read from the Rest API
@@ -168,7 +169,7 @@ export class Asset {
    * The reference authority of the URI using the `ref` scheme. The returned
    * string is prefixed with `ref:`.
    */
-  get ref (): string {
+  public get ref (): string {
     return 'ref:' + this.meta.ref
   }
 
@@ -176,21 +177,8 @@ export class Asset {
    * The UUID authority of the URI using the `uuid` scheme. The returned
    * string is prefixed with `uuid:`.
    */
-  get uuid (): string {
+  public get uuid (): string {
     return 'uuid:' + this.meta.uuid
-  }
-
-  set shortcut (value: string | undefined) {
-    this.shortcut_ = value
-  }
-
-  /**
-   * @inheritdoc
-   */
-  get shortcut (): string | undefined {
-    if (this.shortcut_ != null) {
-      return this.shortcut_
-    }
   }
 
   /**
@@ -198,24 +186,24 @@ export class Asset {
    * is appended on the path. For example
    * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_preview.jpg`
    */
-  get previewHttpUrl (): string | undefined {
+  public get previewHttpUrl (): string | undefined {
     if (this.meta.hasPreview != null && this.meta.hasPreview) {
       return `${this.httpUrl}_preview.jpg`
     }
   }
 
   /**
-   * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+   * Each media asset can be associated with a waveform image. The suffix `_waveform.png`
    * is appended on the HTTP URL. For example
    * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
    */
-  get waveformHttpUrl (): string | undefined {
+  public get waveformHttpUrl (): string | undefined {
     if (this.meta.hasWaveform != null && this.meta.hasWaveform) {
       return `${this.httpUrl}_waveform.png`
     }
   }
 
-  get titleSafe (): string {
+  public get titleSafe (): string {
     if (this.meta.title != null) {
       return this.meta.title
     }
@@ -228,21 +216,21 @@ export class Asset {
   /**
    * True if the media file is playable, for example an audio or a video file.
    */
-  get isPlayable (): boolean {
+  public get isPlayable (): boolean {
     return ['audio', 'video'].includes(this.mimeType)
   }
 
   /**
    * True if the media file is visible, for example an image or a video file.
    */
-  get isVisible (): boolean {
+  public get isVisible (): boolean {
     return ['image', 'video'].includes(this.mimeType)
   }
 
   /**
    * The number of parts of a multipart media asset.
    */
-  get multiPartCount (): number {
+  public get multiPartCount (): number {
     if (this.meta.multiPartCount == null) {
       return 1
     }
@@ -250,16 +238,13 @@ export class Asset {
   }
 
   /**
-   * Retrieve the HTTP URL of the multi part asset by the part number.
+   * Retrieve the HTTP URL of the multipart asset by the part number.
    *
-   * @param The part number starts with 1.
+   * @param no - The part number starts with 1.
    */
-  getMultiPartHttpUrlByNo (no: number): string {
-    if (this.multiPartCount === 1) return this.httpUrl
-    if (no > this.multiPartCount) {
-      throw new Error(
-        `The asset has only ${this.multiPartCount} parts, not ${no}`
-      )
+  public getMultiPartHttpUrlByNo (no: unknown): string {
+    if (typeof no !== 'number' || this.multiPartCount === 1) {
+      return this.httpUrl
     }
     return formatMultiPartAssetFileName(this.httpUrl, no)
   }

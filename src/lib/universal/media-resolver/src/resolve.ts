@@ -30,8 +30,11 @@ class AssetCache extends Cache<Asset> {
     return false
   }
 
+  /**
+   * @param uuidOrRef A asset URI with or without a fragment `#1,2,3`
+   */
   get (uuidOrRef: string): Asset | undefined {
-    const ref = this.uriTranslator.getRef(uuidOrRef)
+    const ref = this.uriTranslator.getRef(uuidOrRef, true)
     if (ref != null) {
       return super.get(ref)
     }
@@ -325,12 +328,16 @@ export class Resolver {
     return this.assetCache.getAll()
   }
 
-  private async createMultipartSelection (
+  private createMultipartSelection (
     uri: string,
     selectionSpec: string
-  ): Promise<MultipartSelection> {
-    const assets = await this.resolve(uri)
-    const asset = assets[0]
+  ): MultipartSelection {
+    const asset = this.getAsset(uri)
+    if (asset == null) {
+      throw new Error(
+        'First resolve the asset and then create the multipart selection object.'
+      )
+    }
     const multipart = new MultipartSelection(asset, selectionSpec)
     const ref = this.uriTranslator.getRef(uri)
     if (ref == null) {
@@ -340,22 +347,11 @@ export class Resolver {
     return multipart
   }
 
-  public async resolveMultipartSelection (
-    uri: string
-  ): Promise<MultipartSelection | undefined> {
-    const mediaUri = new MediaUri(uri)
-    if (mediaUri.fragment == null) {
-      return
-    }
-    const multipart = this.multipartSelectionCache.get(uri)
-    if (multipart != null) {
-      return multipart
-    }
-
-    return await this.createMultipartSelection(uri, mediaUri.fragment)
-  }
-
   /**
+   * There is no function `resolveMultipartSelection`.
+   *
+   * @param uri - For example `ref:Partitur#3,4,5` or `uuid:...#-7`
+   *
    * @throws If the URI has no fragment or if the multipart selection is
    *   not yet resolved.
    */
@@ -367,12 +363,10 @@ export class Resolver {
       )
     }
     const multipart = this.multipartSelectionCache.get(uri)
-    if (multipart == null) {
-      throw new Error(
-        `The multipart selection with the URI ${uri} couldn’t be resolved.`
-      )
+    if (multipart != null) {
+      return multipart
     }
-    return multipart
+    return this.createMultipartSelection(uri, mediaUri.fragment)
   }
 
   public exportMultipartSelections (): MultipartSelection[] {

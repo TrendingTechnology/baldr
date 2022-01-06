@@ -1,5 +1,6 @@
 import { Asset } from './asset'
 import { buildSubsetIndexes } from '@bldr/core-browser'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
 /**
  * A multipart asset can be restricted in different ways. This class holds the
@@ -9,9 +10,9 @@ import { buildSubsetIndexes } from '@bldr/core-browser'
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export class MultipartSelection {
-  selectionSpec: string
-  asset: Asset
-  partNos: number[]
+  private readonly selectionSpec: string
+  public asset: Asset
+  private readonly partNos: number[]
 
   /**
    * @param selectionSpec - Can be a URI, everthing after `#`, for
@@ -24,7 +25,8 @@ export class MultipartSelection {
 
     this.partNos = buildSubsetIndexes(
       this.selectionSpec,
-      this.asset.multiPartCount
+      this.asset.multiPartCount,
+      0
     )
   }
 
@@ -33,6 +35,13 @@ export class MultipartSelection {
    */
   get ref (): string {
     return `${this.asset.ref}#${this.selectionSpec}`
+  }
+
+  /**
+   * We imitate the class “Asset”. ExternalSites.vue requires .meta.
+   */
+  get meta (): MediaDataTypes.AssetMetaData {
+    return this.asset.meta
   }
 
   /**

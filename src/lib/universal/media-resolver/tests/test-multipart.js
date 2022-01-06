@@ -5,71 +5,55 @@ const assert = require('assert')
 const { Resolver } = require('../dist/node/main.js')
 const resolver = new Resolver()
 
-// ---
-// meta:
-//   ref: EP_master_scoreSample
-//   title: Master slide “scoreSample” test presentation
-
-// slides:
-
-// - title: Short form
-//   score_sample: uuid:fd782f52-7182-41e1-9f62-45585eb48454
-
-// - title: Long form
-//   score_sample:
-//     score: uuid:a160a10e-944a-4a62-bc42-97595ad15d18
-
-// - title: With audio
-//   score_sample:
-//     score: uuid:fd782f52-7182-41e1-9f62-45585eb48454
-//     audio: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
-
-// - title: With heading
-//   score_sample:
-//     heading: Heading
-//     score: uuid:fd782f52-7182-41e1-9f62-45585eb48454
-//     audio: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
-
-// - title: Multi part score file
-//   score_sample:
-//     score: uuid:a3fdc611-57e6-452b-9058-248836504048
-//     audio: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
-
-// - title: 'Multi part score file (selection #7-9,10-11)'
-//   score_sample: uuid:d84dd063-c4e7-40b7-93f4-533f1961cdd3#7-9,10-11
-
-// - title: 'Multi part score file (selection #1)'
-//   score_sample: uuid:a3fdc611-57e6-452b-9058-248836504048#1
-
-// - title: 'Multi part score file (selection #10-)'
-//   score_sample: uuid:d84dd063-c4e7-40b7-93f4-533f1961cdd3#10-
-
-// - title: 'Multi part score file (selection #2-3)'
-//   score_sample: uuid:a3fdc611-57e6-452b-9058-248836504048#2-3
-
-// - title: 'Multi part score file (selection #1,3,5,7)'
-//   score_sample: uuid:d84dd063-c4e7-40b7-93f4-533f1961cdd3#1,3,5,7
-
-// - title: 'Multi part score file (selection #-4)'
-//   score_sample: 'uuid:a3fdc611-57e6-452b-9058-248836504048#-4'
-
-// - title: 'Multi part score file with uuid (selection #-4)'
-//   score_sample: uuid:9084790f-ae0b-49ae-b140-dcbd9356579c#-4
-
 describe('File “multipart.ts”', function () {
   describe('Class “MultipartSelection”', function () {
+    const urlBase =
+      'http://localhost/media/' +
+      'Musik/09/20_Kontext/20_Romantik/10_Programmmusik/' +
+      '30_Borodin-Steppenskizzen/PT/Partitur'
     let multipart
     beforeEach(async function () {
-      multipart = await resolver.resolveMultipartSelection(
-        'uuid:d84dd063-c4e7-40b7-93f4-533f1961cdd3#7-9,10-11'
-      )
+      const uri = 'uuid:d84dd063-c4e7-40b7-93f4-533f1961cdd3#7-9,10-11'
+      await resolver.resolveAsset(uri)
+      multipart = resolver.getMultipartSelection(uri)
     })
 
-    it('Property “ref”', async function () {
+    it('Accessor “ref”', async function () {
       assert.strictEqual(
         multipart.ref,
         'ref:Borodin-Steppenskizzen_PT_Partitur#7-9,10-11'
       )
+    })
+
+    it('Accessor “multiPartCount”', async function () {
+      assert.strictEqual(multipart.multiPartCount, 5)
+    })
+
+    it('Accessor “httpUrl”', async function () {
+      assert.strictEqual(multipart.httpUrl, urlBase + '_no007.png')
+    })
+
+    describe('Method “getMultiPartHttpUrlByNo()“', function () {
+      it('no = 1', function () {
+        assert.strictEqual(
+          multipart.getMultiPartHttpUrlByNo(1),
+          urlBase + '_no007.png'
+        )
+      })
+
+      it('no = 2', function () {
+        assert.strictEqual(
+          multipart.getMultiPartHttpUrlByNo(2),
+          urlBase + '_no008.png'
+        )
+      })
+
+      it('no = 5', function () {
+        assert.strictEqual(
+          multipart.getMultiPartHttpUrlByNo(5),
+          urlBase + '_no011.png'
+        )
+      })
     })
   })
 })

@@ -18,40 +18,74 @@ describe('File “asset.ts”', function () {
       )
     })
 
-    it('asset.ref', function () {
+    it('Accessor “ref”', function () {
       assert.strictEqual(
         asset.ref,
         'ref:Hip-Hop-Hoerquiz_HB_Herbie-Hancock_Cantaloupe-Island'
       )
     })
 
-    it('asset.uuid', function () {
+    it('Accessor “uuid“', function () {
       assert.strictEqual(
         asset.uuid,
         'uuid:edd86315-64c1-445c-bcd3-b0dab14af112'
       )
     })
 
-    it('asset.previewHttpUrl', function () {
+    it('Accessor “previewHttpUrl“', function () {
       assert.strictEqual(
         asset.previewHttpUrl,
         httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3_preview.jpg'
       )
     })
 
-    it('asset.waveformHttpUrl', function () {
-      assert.strictEqual(
-        asset.waveformHttpUrl,
-        httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3_waveform.png'
-      )
+    describe('Accessor “waveformHttpUrl“', function () {
+      it('present', function () {
+        assert.strictEqual(
+          asset.waveformHttpUrl,
+          httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3_waveform.png'
+        )
+      })
+
+      it('undefined document ref:Hip-Hop-Hoerquiz_QL_RAAbits', async function () {
+        const asset = await resolver.resolveAsset(
+          'uuid:c8c0f0e3-744e-4a22-b16f-b98695159d32'
+        )
+        assert.ok(asset != null)
+        assert.strictEqual(asset.waveformHttpUrl, undefined)
+      })
     })
 
-    it('asset.waveformHttpUrl: undefined document ref:Hip-Hop-Hoerquiz_QL_RAAbits', async function () {
-      const asset = await resolver.resolveAsset(
-        'uuid:c8c0f0e3-744e-4a22-b16f-b98695159d32'
-      )
-      assert.ok(asset != null)
-      assert.strictEqual(asset.waveformHttpUrl, undefined)
+    it('Accessor “titleSafe“', function () {
+      assert.strictEqual(asset.titleSafe, 'Cantaloupe Island')
+    })
+
+    it('Accessor “isPlayable“', function () {
+      assert.strictEqual(asset.isPlayable, true)
+    })
+
+    it('Accessor “isVisible“', function () {
+      assert.strictEqual(asset.isVisible, false)
+    })
+
+    it('Accessor “multiPartCount“', function () {
+      assert.strictEqual(asset.multiPartCount, 1)
+    })
+
+    describe('Method “getMultiPartHttpUrlByNo()“', function () {
+      it('URL by no = 1', function () {
+        assert.strictEqual(
+          asset.getMultiPartHttpUrlByNo(1),
+          httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3'
+        )
+      })
+
+      it('URL by no = 2: same as no = 1', function () {
+        assert.strictEqual(
+          asset.getMultiPartHttpUrlByNo(2),
+          httpUrlBase + 'Herbie-Hancock_Cantaloupe-Island.mp3'
+        )
+      })
     })
   })
 })

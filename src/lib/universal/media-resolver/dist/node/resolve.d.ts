@@ -87,8 +87,11 @@ export declare class Resolver {
      */
     exportAssets(refs?: string | string[] | Set<string>): Asset[];
     private createMultipartSelection;
-    resolveMultipartSelection(uri: string): Promise<MultipartSelection | undefined>;
     /**
+     * There is no function `resolveMultipartSelection`.
+     *
+     * @param uri - For example `ref:Partitur#3,4,5` or `uuid:...#-7`
+     *
      * @throws If the URI has no fragment or if the multipart selection is
      *   not yet resolved.
      */

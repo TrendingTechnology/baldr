@@ -17,13 +17,19 @@ class MultipartSelection {
     constructor(asset, selectionSpec) {
         this.selectionSpec = selectionSpec.replace(/^.*#/, '');
         this.asset = asset;
-        this.partNos = (0, core_browser_1.buildSubsetIndexes)(this.selectionSpec, this.asset.multiPartCount);
+        this.partNos = (0, core_browser_1.buildSubsetIndexes)(this.selectionSpec, this.asset.multiPartCount, 0);
     }
     /**
      * The URI using the `ref` authority. Prefixed with `ref:`
      */
     get ref() {
         return `${this.asset.ref}#${this.selectionSpec}`;
+    }
+    /**
+     * We imitate the class “Asset”. ExternalSites.vue requires .meta.
+     */
+    get meta() {
+        return this.asset.meta;
     }
     /**
      * The number of parts of a multipart media asset.

@@ -28,8 +28,11 @@ class AssetCache extends Cache {
         }
         return false;
     }
+    /**
+     * @param uuidOrRef A asset URI with or without a fragment `#1,2,3`
+     */
     get(uuidOrRef) {
-        const ref = this.uriTranslator.getRef(uuidOrRef);
+        const ref = this.uriTranslator.getRef(uuidOrRef, true);
         if (ref != null) {
             return super.get(ref);
         }
@@ -273,32 +276,23 @@ export class Resolver {
         return this.assetCache.getAll();
     }
     createMultipartSelection(uri, selectionSpec) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const assets = yield this.resolve(uri);
-            const asset = assets[0];
-            const multipart = new MultipartSelection(asset, selectionSpec);
-            const ref = this.uriTranslator.getRef(uri);
-            if (ref == null) {
-                throw Error('URI translation went wrong on multipart creation.');
-            }
-            this.multipartSelectionCache.add(ref, multipart);
-            return multipart;
-        });
-    }
-    resolveMultipartSelection(uri) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const mediaUri = new MediaUri(uri);
-            if (mediaUri.fragment == null) {
-                return;
-            }
-            const multipart = this.multipartSelectionCache.get(uri);
-            if (multipart != null) {
-                return multipart;
-            }
-            return yield this.createMultipartSelection(uri, mediaUri.fragment);
-        });
+        const asset = this.getAsset(uri);
+        if (asset == null) {
+            throw new Error('First resolve the asset and then create the multipart selection object.');
+        }
+        const multipart = new MultipartSelection(asset, selectionSpec);
+        const ref = this.uriTranslator.getRef(uri);
+        if (ref == null) {
+            throw Error('URI translation went wrong on multipart creation.');
+        }
+        this.multipartSelectionCache.add(ref, multipart);
+        return multipart;
     }
     /**
+     * There is no function `resolveMultipartSelection`.
+     *
+     * @param uri - For example `ref:Partitur#3,4,5` or `uuid:...#-7`
+     *
      * @throws If the URI has no fragment or if the multipart selection is
      *   not yet resolved.
      */
@@ -308,10 +302,10 @@ export class Resolver {
             throw new Error(`A multipart selection requires a fragment #..., got ${uri}`);
         }
         const multipart = this.multipartSelectionCache.get(uri);
-        if (multipart == null) {
-            throw new Error(`The multipart selection with the URI ${uri} couldn’t be resolved.`);
+        if (multipart != null) {
+            return multipart;
         }
-        return multipart;
+        return this.createMultipartSelection(uri, mediaUri.fragment);
     }
     exportMultipartSelections() {
         return this.multipartSelectionCache.getAll();

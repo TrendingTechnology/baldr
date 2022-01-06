@@ -4,6 +4,8 @@
 
 import { validateMasterSpec } from '../../lib/masters'
 
+import { resolver } from '@bldr/presentation-parser'
+
 export default validateMasterSpec({
   name: 'score',
   title: 'Notenbeispiel',
@@ -44,7 +46,9 @@ export default validateMasterSpec({
     },
     resolveMediaUris (props) {
       const uris = new Set([props.score])
-      if ('audio' in props) uris.add(props.audio)
+      if ('audio' in props) {
+        uris.add(props.audio)
+      }
       return uris
     },
     collectPropsMain (props) {
@@ -58,12 +62,11 @@ export default validateMasterSpec({
         audioSample = audio
       }
       let asset
-      // const multiPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-      // if (multiPartSelection) {
-      //   asset = multiPartSelection
-      // } else {
-      asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.score)
-      // }
+      if (props.score.indexOf('#') > -1) {
+        asset = resolver.getMultipartSelection(props.score)
+      } else {
+        asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.score)
+      }
 
       return {
         heading: props.heading,
@@ -83,7 +86,7 @@ export default validateMasterSpec({
       }
       return propsPreview
     },
-    calculateStepCount ({ props, propsMain }) {
+    calculateStepCount ({ propsMain }) {
       return propsMain.asset.multiPartCount
     }
   }

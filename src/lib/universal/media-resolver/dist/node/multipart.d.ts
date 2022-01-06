@@ -1,4 +1,5 @@
 import { Asset } from './asset';
+import { MediaDataTypes } from '@bldr/type-definitions';
 /**
  * A multipart asset can be restricted in different ways. This class holds the
  * data of the restriction (for example all parts, only a single part, a
@@ -7,9 +8,9 @@ import { Asset } from './asset';
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export declare class MultipartSelection {
-    selectionSpec: string;
+    private readonly selectionSpec;
     asset: Asset;
-    partNos: number[];
+    private readonly partNos;
     /**
      * @param selectionSpec - Can be a URI, everthing after `#`, for
      * example `ref:Song-2#2-5` -> `2-5`
@@ -19,6 +20,10 @@ export declare class MultipartSelection {
      * The URI using the `ref` authority. Prefixed with `ref:`
      */
     get ref(): string;
+    /**
+     * We imitate the class “Asset”. ExternalSites.vue requires .meta.
+     */
+    get meta(): MediaDataTypes.AssetMetaData;
     /**
      * The number of parts of a multipart media asset.
      */

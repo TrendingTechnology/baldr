@@ -32,7 +32,7 @@ export declare class Asset {
      * The keyboard shortcut to launch the media asset. At the moment only used by
      * images.
      */
-    private shortcut_?;
+    shortcut?: string;
     samples?: SampleCollection;
     /**
      * The media type, for example `image`, `audio` or `video`.
@@ -57,11 +57,6 @@ export declare class Asset {
      * string is prefixed with `uuid:`.
      */
     get uuid(): string;
-    set shortcut(value: string | undefined);
-    /**
-     * @inheritdoc
-     */
-    get shortcut(): string | undefined;
     /**
      * Each media asset can have a preview image. The suffix `_preview.jpg`
      * is appended on the path. For example
@@ -69,7 +64,7 @@ export declare class Asset {
      */
     get previewHttpUrl(): string | undefined;
     /**
-     * Each meda asset can be associated with a waveform image. The suffix `_waveform.png`
+     * Each media asset can be associated with a waveform image. The suffix `_waveform.png`
      * is appended on the HTTP URL. For example
      * `http://localhost/media/Lieder/i/Ich-hab-zu-Haus-ein-Gramophon/HB/Ich-hab-zu-Haus-ein-Grammophon.m4a_waveform.png`
      */
@@ -88,9 +83,11 @@ export declare class Asset {
      */
     get multiPartCount(): number;
     /**
-     * Retrieve the HTTP URL of the multi part asset by the part number.
+     * Retrieve the HTTP URL of the multipart asset by the part number.
      *
      * @param The part number starts with 1.
+     *
+     * @throws If the specified number is higher than multiPartCount.
      */
-    getMultiPartHttpUrlByNo(no: number): string;
+    getMultiPartHttpUrlByNo(no: unknown): string;
 }

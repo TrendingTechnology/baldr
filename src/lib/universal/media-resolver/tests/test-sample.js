@@ -42,7 +42,7 @@ describe('File “sample.ts”', function () {
       )
     })
 
-    it(' “title”', async function () {
+    it('Accessor “title”', async function () {
       assert.strictEqual(sample.title, 'komplett')
     })
 
