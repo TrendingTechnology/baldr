@@ -15,7 +15,6 @@
   "main": "dist/node/main.js",
   "dependencies": {
     "@bldr/config": "*",
-    "@bldr/core-browser": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/media-data-collector": "*",
     "@bldr/media-manager": "*",

@@ -20,7 +20,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 const log = __importStar(require("@bldr/log"));
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const core_browser_1 = require("@bldr/core-browser");
 const string_format_1 = require("@bldr/string-format");
 /**
  * Convert a Audacity text mark file into a raw sample format.
@@ -127,10 +126,10 @@ function action(filePath) {
         const ref = (0, string_format_1.asciify)(title);
         const timeText = [];
         if (rawSample.startTime != null) {
-            timeText.push((0, core_browser_1.convertSecondsToHHMMSS)(rawSample.startTime, true));
+            timeText.push((0, string_format_1.convertSecondsToHHMMSS)(rawSample.startTime, true));
         }
         if (rawSample.endTime != null) {
-            timeText.push((0, core_browser_1.convertSecondsToHHMMSS)(rawSample.endTime, true));
+            timeText.push((0, string_format_1.convertSecondsToHHMMSS)(rawSample.endTime, true));
         }
         if (timeText.length > 0) {
             title += ' (' + timeText.join('-') + ')';

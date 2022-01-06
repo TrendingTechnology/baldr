@@ -10,18 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 function action(videoFilePath, time1, time2) {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         let startSec = 0;
         let endSec;
         if (time2 == null) {
-            endSec = (0, core_browser_1.convertHHMMSSToSeconds)(time1);
+            endSec = (0, string_format_1.convertHHMMSSToSeconds)(time1);
         }
         else {
-            startSec = (0, core_browser_1.convertHHMMSSToSeconds)(time1);
-            endSec = (0, core_browser_1.convertHHMMSSToSeconds)(time2);
+            startSec = (0, string_format_1.convertHHMMSSToSeconds)(time1);
+            endSec = (0, string_format_1.convertHHMMSSToSeconds)(time2);
         }
         cmd.startSpin();
         yield cmd.exec([
