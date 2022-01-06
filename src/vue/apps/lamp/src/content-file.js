@@ -18,7 +18,6 @@ import {
   RawDataObject
 } from '@bldr/core-browser'
 import { shortenText } from '@bldr/string-format'
-import { mediaResolver } from '@bldr/media-client'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'

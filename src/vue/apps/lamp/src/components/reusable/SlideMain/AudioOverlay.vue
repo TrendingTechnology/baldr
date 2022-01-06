@@ -1,9 +1,6 @@
 <template>
   <div class="vc_audio_overlay" b-ui-theme="default" v-if="audioOverlay">
-    <horizontal-play-buttons
-      :src="audioOverlay.rawData"
-      :show-titles="audioOverlay.showTitles"
-    />
+    <horizontal-play-buttons :src="audioOverlay" />
   </div>
 </template>
 
@@ -13,9 +10,9 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
 import { Slide as SlideNg } from '@bldr/presentation-parser'
+import { WrappedUriList } from '@bldr/client-media-models'
 
 import { Slide } from '../../../content-file.js'
-
 
 @Component
 export default class AudioOverlay extends Vue {
@@ -31,11 +28,8 @@ export default class AudioOverlay extends Vue {
   })
   slideNg: SlideNg
 
-  get audioOverlay () {
-    if (this.slide && this.slide.audioOverlay) {
-      return this.slide.audioOverlay
-    }
-    return false
+  get audioOverlay (): WrappedUriList | undefined {
+    return this.slideNg.audioOverlay
   }
 }
 </script>

@@ -52,7 +52,7 @@ export class WrappedUriList {
         }
     }
     /**
-     * Get all URIs (without sample fragment)
+     * Get all URIs (without the sample fragment).
      */
     get uris() {
         const uris = new Set();
@@ -60,6 +60,14 @@ export class WrappedUriList {
             uris.add(MediaUri.removeFragment(spec.uri));
         }
         return uris;
+    }
+    /**
+     * The first wrapped media URI in the list.
+     */
+    get first() {
+        if (this.list.length > 0) {
+            return this.list[0];
+        }
     }
     *[Symbol.iterator]() {
         for (const spec of this.list) {

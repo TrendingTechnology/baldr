@@ -31,7 +31,7 @@ export default class HorizontalPlayButtons extends Vue {
   @Prop({
     required: true
   })
-  src!: FuzzyUriInput
+  src!: FuzzyUriInput | WrappedUriList
 
   @Prop({
     type: Boolean,
@@ -46,6 +46,9 @@ export default class HorizontalPlayButtons extends Vue {
   loadFirst!: boolean
 
   get wrappedUris (): WrappedUriList {
+    if (this.src instanceof WrappedUriList) {
+      return this.src
+    }
     return new WrappedUriList(this.src)
   }
 
