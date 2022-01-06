@@ -1,4 +1,4 @@
-import { convertDurationToSeconds } from '@bldr/string-format'
+import { convertHHMMSSToSeconds } from '@bldr/string-format'
 import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Asset } from './asset'
@@ -120,7 +120,7 @@ export class Sample {
    * Convert strings to numbers, so we can use them as seconds.
    */
   private convertToSeconds (timeIntervaleString: string | number): number {
-    return convertDurationToSeconds(timeIntervaleString)
+    return convertHHMMSSToSeconds(timeIntervaleString)
   }
 
   /**

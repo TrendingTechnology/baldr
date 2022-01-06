@@ -92,12 +92,6 @@ export declare function removeDuplicatesFromArray(input: string[]): string[];
  */
 export declare function makeSet(values: string | string[] | Set<string>): Set<string>;
 /**
- * @param duration - in seconds
- *
- * @return `01:23`
- */
-export declare function formatDuration(duration: number | string, short?: boolean): string;
-/**
  * Get the current school year. The function returns year in which the school year begins.
  *
  * @returns The year in which the school year begins, for example `2021/22`: `2021`

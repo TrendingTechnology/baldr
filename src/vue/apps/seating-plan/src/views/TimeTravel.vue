@@ -48,7 +48,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { mapGetters, mapActions } from 'vuex'
 
-import { formatToLocalDateTime } from '@bldr/core-browser'
+import { formatToLocalDateTime } from '@bldr/string-format'
 
 @Component({
   computed: mapGetters(['externalStateDates', 'localStateDates']),

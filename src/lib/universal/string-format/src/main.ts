@@ -1,10 +1,12 @@
 export { asciify, deasciify, referencify } from './ascii'
 
 export {
-  convertDurationToSeconds,
+  convertHHMMSSToSeconds,
   getCurrentSchoolYear,
   getFormatedSchoolYear,
-  formatDuration
+  formatToLocalDate,
+  formatToLocalDateTime,
+  convertSecondsToHHMMSS
 } from './date'
 
 export { formatMultiPartAssetFileName, getExtension } from './file-path'

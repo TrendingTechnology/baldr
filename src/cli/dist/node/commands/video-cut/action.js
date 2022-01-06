@@ -17,11 +17,11 @@ function action(videoFilePath, time1, time2) {
         let startSec = 0;
         let endSec;
         if (time2 == null) {
-            endSec = (0, core_browser_1.convertDurationToSeconds)(time1);
+            endSec = (0, core_browser_1.convertHHMMSSToSeconds)(time1);
         }
         else {
-            startSec = (0, core_browser_1.convertDurationToSeconds)(time1);
-            endSec = (0, core_browser_1.convertDurationToSeconds)(time2);
+            startSec = (0, core_browser_1.convertHHMMSSToSeconds)(time1);
+            endSec = (0, core_browser_1.convertHHMMSSToSeconds)(time2);
         }
         cmd.startSpin();
         yield cmd.exec([

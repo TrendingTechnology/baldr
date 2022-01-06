@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { formatDuration } from '@bldr/core-browser'
+import { convertSecondsToHHMMSS } from '@bldr/string-format'
 import PreviewImage from './PreviewImage.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions } = createNamespacedHelpers('media')
@@ -54,7 +54,7 @@ export default {
       if (this.asset.mimeType === 'image' && this.asset.htmlElement.width !== 0 && this.asset.htmlElement.height !== 0) {
         dimension = `${this.asset.htmlElement.width} x ${this.asset.htmlElement.height}`
       } else if (this.asset.isPlayable) {
-        dimension = formatDuration(this.asset.htmlElement.duration)
+        dimension = convertSecondsToHHMMSS(this.asset.htmlElement.duration)
       }
       return dimension
     },

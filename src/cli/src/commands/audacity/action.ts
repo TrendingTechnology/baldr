@@ -2,8 +2,7 @@
 import { MediaDataTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
-import { formatDuration } from '@bldr/core-browser'
-import { asciify } from '@bldr/string-format'
+import { asciify, convertSecondsToHHMMSS } from '@bldr/string-format'
 
 interface RawSample {
   startTime?: number
@@ -123,11 +122,11 @@ function action (filePath: string): void {
 
     const timeText: string[] = []
     if (rawSample.startTime != null) {
-      timeText.push(formatDuration(rawSample.startTime, true))
+      timeText.push(convertSecondsToHHMMSS(rawSample.startTime, true))
     }
 
     if (rawSample.endTime != null) {
-      timeText.push(formatDuration(rawSample.endTime, true))
+      timeText.push(convertSecondsToHHMMSS(rawSample.endTime, true))
     }
 
     if (timeText.length > 0) {

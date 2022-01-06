@@ -1,21 +1,3 @@
-/**
- * @param duration - in seconds
- *
- * @return `01:23`
- */
-export function formatDuration (
-  duration: number | string,
-  short: boolean = false
-): string {
-  duration = Number(duration)
-  let from = 11
-  let length = 8
-  if (duration < 3600 && short) {
-    from = 14
-    length = 5
-  }
-  return new Date(Number(duration) * 1000).toISOString().substr(from, length)
-}
 
 /**
  * Get the current school year. The function returns year in which the school year begins.
@@ -33,6 +15,17 @@ export function getCurrentSchoolYear (): number {
 }
 
 /**
+ * Extract the 4 digit year from a date string
+ *
+ * @param dateSpec - For example `1968-01-01`
+ *
+ * @returns for example `1968`
+ */
+export function formatToYear (dateSpec: string): string {
+  return dateSpec.substr(0, 4)
+}
+
+/**
  * @returns e. g. `2021/22`
  */
 export function getFormatedSchoolYear (): string {
@@ -40,6 +33,37 @@ export function getFormatedSchoolYear (): string {
   const endYear = year + 1
   const endYearString = endYear.toString().substr(2)
   return `${year.toString()}/${endYearString}`
+}
+
+/**
+ * Format a date specification string into a local date string, for
+ * example `28. August 1749`
+ *
+ * @param dateSpec - A valid input for the `Date()` class. If the input
+ *   is invalid the raw `dateSpec` is returned.
+ */
+export function formatToLocalDate (dateSpec: string): string {
+  const date = new Date(dateSpec)
+  // Invalid date
+  if (isNaN(date.getDay())) {
+    return dateSpec
+  }
+  const months = [
+    'Januar',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember'
+  ]
+  // Not getDay()
+  return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
 /**
@@ -74,6 +98,25 @@ export function formatToLocalDateTime (timeStampMsec: number): string {
 }
 
 /**
+ * @param duration - in seconds
+ *
+ * @return `01:23`
+ */
+export function convertSecondsToHHMMSS (
+  duration: number | string,
+  short: boolean = false
+): string {
+  duration = Number(duration)
+  let from = 11
+  let length = 8
+  if (duration < 3600 && short) {
+    from = 14
+    length = 5
+  }
+  return new Date(Number(duration) * 1000).toISOString().substr(from, length)
+}
+
+/**
  * Convert a duration string (`8:01` = 8 minutes 1 seconds or `1:33:12` = 1
  * hour 33 minutes 12 seconds) into seconds.
  *
@@ -86,7 +129,7 @@ export function formatToLocalDateTime (timeStampMsec: number): string {
  *
  * @returns The duration in seconds as a number.
  */
-export function convertDurationToSeconds (duration: string | number): number {
+export function convertHHMMSSToSeconds (duration: string | number): number {
   let hours: number = 0
   let minutes: number = 0
   let seconds: number = 0
@@ -119,44 +162,4 @@ export function convertDurationToSeconds (duration: string | number): number {
     )
   }
   return hours * 3600 + minutes * 60 + seconds
-}
-
-/**
- * Format a date specification string into a local date string, for
- * example `28. August 1749`
- *
- * @param dateSpec - A valid input for the `Date()` class. If the input
- *   is invalid the raw `dateSpec` is returned.
- */
-export function formatToLocalDate (dateSpec: string): string {
-  const date = new Date(dateSpec)
-  // Invalid date
-  if (isNaN(date.getDay())) return dateSpec
-  const months = [
-    'Januar',
-    'Februar',
-    'März',
-    'April',
-    'Mai',
-    'Juni',
-    'Juli',
-    'August',
-    'September',
-    'Oktober',
-    'November',
-    'Dezember'
-  ]
-  // Not getDay()
-  return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`
-}
-
-/**
- * Extract the 4 digit year from a date string
- *
- * @param dateSpec - For example `1968-01-01`
- *
- * @returns for example `1968`
- */
-export function formatToYear (dateSpec: string): string {
-  return dateSpec.substr(0, 4)
 }

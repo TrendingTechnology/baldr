@@ -127,10 +127,10 @@ function action(filePath) {
         const ref = (0, string_format_1.asciify)(title);
         const timeText = [];
         if (rawSample.startTime != null) {
-            timeText.push((0, core_browser_1.formatDuration)(rawSample.startTime, true));
+            timeText.push((0, core_browser_1.convertSecondsToHHMMSS)(rawSample.startTime, true));
         }
         if (rawSample.endTime != null) {
-            timeText.push((0, core_browser_1.formatDuration)(rawSample.endTime, true));
+            timeText.push((0, core_browser_1.convertSecondsToHHMMSS)(rawSample.endTime, true));
         }
         if (timeText.length > 0) {
             title += ' (' + timeText.join('-') + ')';

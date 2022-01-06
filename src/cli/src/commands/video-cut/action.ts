@@ -1,7 +1,7 @@
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 
-import { convertDurationToSeconds } from '@bldr/core-browser'
+import { convertHHMMSSToSeconds } from '@bldr/string-format'
 
 async function action (
   videoFilePath: string,
@@ -13,10 +13,10 @@ async function action (
   let startSec = 0
   let endSec
   if (time2 == null) {
-    endSec = convertDurationToSeconds(time1)
+    endSec = convertHHMMSSToSeconds(time1)
   } else {
-    startSec = convertDurationToSeconds(time1)
-    endSec = convertDurationToSeconds(time2)
+    startSec = convertHHMMSSToSeconds(time1)
+    endSec = convertHHMMSSToSeconds(time2)
   }
 
   cmd.startSpin()

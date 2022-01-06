@@ -1,4 +1,4 @@
-import { convertDurationToSeconds } from '@bldr/string-format';
+import { convertHHMMSSToSeconds } from '@bldr/string-format';
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
  */
@@ -74,7 +74,7 @@ export class Sample {
      * Convert strings to numbers, so we can use them as seconds.
      */
     convertToSeconds(timeIntervaleString) {
-        return convertDurationToSeconds(timeIntervaleString);
+        return convertHHMMSSToSeconds(timeIntervaleString);
     }
     /**
      * The sample reference is prefixed with `ref:` and suffixed with a sample

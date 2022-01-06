@@ -32,6 +32,7 @@
     "@bldr/components-collection": "*",
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
+    "@bldr/string-format": "*",
     "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/http-request": "*",

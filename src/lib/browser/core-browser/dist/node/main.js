@@ -18,7 +18,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = void 0;
+exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.makeSet = exports.removeDuplicatesFromArray = exports.validateUri = exports.sortObjectsByProperty = exports.selectSubset = exports.buildSubsetIndexes = exports.msleep = void 0;
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**
@@ -256,22 +256,6 @@ function makeSet(values) {
     return values;
 }
 exports.makeSet = makeSet;
-/**
- * @param duration - in seconds
- *
- * @return `01:23`
- */
-function formatDuration(duration, short = false) {
-    duration = Number(duration);
-    let from = 11;
-    let length = 8;
-    if (duration < 3600 && short) {
-        from = 14;
-        length = 5;
-    }
-    return new Date(Number(duration) * 1000).toISOString().substr(from, length);
-}
-exports.formatDuration = formatDuration;
 /**
  * Get the current school year. The function returns year in which the school year begins.
  *

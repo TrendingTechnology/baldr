@@ -29,7 +29,7 @@
 import { makeHttpRequestInstance } from '@bldr/http-request'
 import * as tmpMediaResolver from '@bldr/media-resolver'
 import DynamicSelect from '@bldr/dynamic-select'
-import { formatDuration } from '@bldr/core-browser'
+import { convertSecondsToHHMMSS } from '@bldr/core-browser'
 
 import storeModule from './store.js'
 import { registerComponents } from './components.js'
@@ -170,7 +170,7 @@ const Plugin = {
 
     Vue.use(DynamicSelect)
 
-    Vue.filter('duration', formatDuration)
+    Vue.filter('duration', convertSecondsToHHMMSS)
     media = new Media()
     /**
      * $media

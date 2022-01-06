@@ -1,22 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatToYear = exports.formatToLocalDate = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.getFormatedSchoolYear = exports.getCurrentSchoolYear = exports.formatDuration = void 0;
-/**
- * @param duration - in seconds
- *
- * @return `01:23`
- */
-function formatDuration(duration, short = false) {
-    duration = Number(duration);
-    let from = 11;
-    let length = 8;
-    if (duration < 3600 && short) {
-        from = 14;
-        length = 5;
-    }
-    return new Date(Number(duration) * 1000).toISOString().substr(from, length);
-}
-exports.formatDuration = formatDuration;
+exports.convertHHMMSSToSeconds = exports.convertSecondsToHHMMSS = exports.formatToLocalDateTime = exports.formatToLocalDate = exports.getFormatedSchoolYear = exports.formatToYear = exports.getCurrentSchoolYear = void 0;
 /**
  * Get the current school year. The function returns year in which the school year begins.
  *
@@ -33,6 +17,17 @@ function getCurrentSchoolYear() {
 }
 exports.getCurrentSchoolYear = getCurrentSchoolYear;
 /**
+ * Extract the 4 digit year from a date string
+ *
+ * @param dateSpec - For example `1968-01-01`
+ *
+ * @returns for example `1968`
+ */
+function formatToYear(dateSpec) {
+    return dateSpec.substr(0, 4);
+}
+exports.formatToYear = formatToYear;
+/**
  * @returns e. g. `2021/22`
  */
 function getFormatedSchoolYear() {
@@ -42,6 +37,37 @@ function getFormatedSchoolYear() {
     return `${year.toString()}/${endYearString}`;
 }
 exports.getFormatedSchoolYear = getFormatedSchoolYear;
+/**
+ * Format a date specification string into a local date string, for
+ * example `28. August 1749`
+ *
+ * @param dateSpec - A valid input for the `Date()` class. If the input
+ *   is invalid the raw `dateSpec` is returned.
+ */
+function formatToLocalDate(dateSpec) {
+    const date = new Date(dateSpec);
+    // Invalid date
+    if (isNaN(date.getDay())) {
+        return dateSpec;
+    }
+    const months = [
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember'
+    ];
+    // Not getDay()
+    return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
+exports.formatToLocalDate = formatToLocalDate;
 /**
  * Format a timestamp into a string like this example: `Mo 17.2.2020 07:57:53`
  *
@@ -81,6 +107,22 @@ function formatToLocalDateTime(timeStampMsec) {
 }
 exports.formatToLocalDateTime = formatToLocalDateTime;
 /**
+ * @param duration - in seconds
+ *
+ * @return `01:23`
+ */
+function convertSecondsToHHMMSS(duration, short = false) {
+    duration = Number(duration);
+    let from = 11;
+    let length = 8;
+    if (duration < 3600 && short) {
+        from = 14;
+        length = 5;
+    }
+    return new Date(Number(duration) * 1000).toISOString().substr(from, length);
+}
+exports.convertSecondsToHHMMSS = convertSecondsToHHMMSS;
+/**
  * Convert a duration string (`8:01` = 8 minutes 1 seconds or `1:33:12` = 1
  * hour 33 minutes 12 seconds) into seconds.
  *
@@ -93,7 +135,7 @@ exports.formatToLocalDateTime = formatToLocalDateTime;
  *
  * @returns The duration in seconds as a number.
  */
-function convertDurationToSeconds(duration) {
+function convertHHMMSSToSeconds(duration) {
     let hours = 0;
     let minutes = 0;
     let seconds = 0;
@@ -122,45 +164,4 @@ function convertDurationToSeconds(duration) {
     }
     return hours * 3600 + minutes * 60 + seconds;
 }
-exports.convertDurationToSeconds = convertDurationToSeconds;
-/**
- * Format a date specification string into a local date string, for
- * example `28. August 1749`
- *
- * @param dateSpec - A valid input for the `Date()` class. If the input
- *   is invalid the raw `dateSpec` is returned.
- */
-function formatToLocalDate(dateSpec) {
-    const date = new Date(dateSpec);
-    // Invalid date
-    if (isNaN(date.getDay()))
-        return dateSpec;
-    const months = [
-        'Januar',
-        'Februar',
-        'März',
-        'April',
-        'Mai',
-        'Juni',
-        'Juli',
-        'August',
-        'September',
-        'Oktober',
-        'November',
-        'Dezember'
-    ];
-    // Not getDay()
-    return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
-}
-exports.formatToLocalDate = formatToLocalDate;
-/**
- * Extract the 4 digit year from a date string
- *
- * @param dateSpec - For example `1968-01-01`
- *
- * @returns for example `1968`
- */
-function formatToYear(dateSpec) {
-    return dateSpec.substr(0, 4);
-}
-exports.formatToYear = formatToYear;
+exports.convertHHMMSSToSeconds = convertHHMMSSToSeconds;

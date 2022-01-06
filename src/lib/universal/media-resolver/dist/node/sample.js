@@ -77,7 +77,7 @@ class Sample {
      * Convert strings to numbers, so we can use them as seconds.
      */
     convertToSeconds(timeIntervaleString) {
-        return (0, string_format_1.convertDurationToSeconds)(timeIntervaleString);
+        return (0, string_format_1.convertHHMMSSToSeconds)(timeIntervaleString);
     }
     /**
      * The sample reference is prefixed with `ref:` and suffixed with a sample

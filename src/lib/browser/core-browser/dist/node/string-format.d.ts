@@ -26,17 +26,6 @@ export declare function formatToLocalDate(dateSpec: string): string;
  */
 export declare function formatToYear(dateSpec: string): string;
 /**
- * Format a timestamp into a string like this example: `Mo 17.2.2020 07:57:53`
- *
- * @param timeStampMsec - The timestamp in milliseconds.
- */
-export declare function formatToLocalDateTime(timeStampMsec: number): string;
-/**
- * Convert a duration string (8:01 = 8 minutes 1 seconds or 1:33:12 = 1
- * hour 33 minutes 12 seconds) into seconds.
- */
-export declare function convertDurationToSeconds(duration: string | number): number;
-/**
  * Convert a single word into title case, for example `word` gets `Word`.
  */
 export declare function toTitleCase(text: string): string;

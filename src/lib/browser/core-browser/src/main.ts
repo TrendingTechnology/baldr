@@ -296,25 +296,6 @@ export function makeSet (values: string | string[] | Set<string>): Set<string> {
 }
 
 /**
- * @param duration - in seconds
- *
- * @return `01:23`
- */
-export function formatDuration (
-  duration: number | string,
-  short: boolean = false
-): string {
-  duration = Number(duration)
-  let from = 11
-  let length = 8
-  if (duration < 3600 && short) {
-    from = 14
-    length = 5
-  }
-  return new Date(Number(duration) * 1000).toISOString().substr(from, length)
-}
-
-/**
  * Get the current school year. The function returns year in which the school year begins.
  *
  * @returns The year in which the school year begins, for example `2021/22`: `2021`
