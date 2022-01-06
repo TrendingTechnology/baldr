@@ -4,8 +4,6 @@ const assert = require('assert')
 
 const { transliterate } = require('../dist/node/main.js')
 
-console.log(transliterate)
-
 function assertTransliterate (input, expected) {
   assert.strictEqual(transliterate(input), expected)
 }

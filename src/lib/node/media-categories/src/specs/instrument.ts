@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { referencify } from '@bldr/core-browser'
+import { referencify } from '@bldr/string-format'
 import {
   MediaCategoriesTypes,
   MediaResolverTypes

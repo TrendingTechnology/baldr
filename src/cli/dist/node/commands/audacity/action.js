@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 const log = __importStar(require("@bldr/log"));
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
 const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 /**
  * Convert a Audacity text mark file into a raw sample format.
  *
@@ -123,7 +124,7 @@ function action(filePath) {
         else {
             title = rawSample.title;
         }
-        const ref = (0, core_browser_1.asciify)(title);
+        const ref = (0, string_format_1.asciify)(title);
         const timeText = [];
         if (rawSample.startTime != null) {
             timeText.push((0, core_browser_1.formatDuration)(rawSample.startTime, true));

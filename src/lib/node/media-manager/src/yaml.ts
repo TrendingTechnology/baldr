@@ -4,9 +4,8 @@ import path from 'path'
 import { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
-import { asciify, deasciify } from '@bldr/core-browser'
+import { asciify, deasciify, getExtension } from '@bldr/string-format'
 import { categoriesManagement } from '@bldr/media-categories'
-import { getExtension } from '@bldr/string-format'
 
 /**
  * Load the metadata file in the YAML format of a media asset. This

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.group = void 0;
 const path_1 = __importDefault(require("path"));
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const main_1 = require("../main");
 const config_1 = require("@bldr/config");
 const config = (0, config_1.getConfig)();
@@ -37,7 +37,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                value = (0, core_browser_1.referencify)(value);
+                value = (0, string_format_1.referencify)(value);
                 return value;
             },
             overwriteByDerived: true
@@ -49,7 +49,7 @@ exports.group = {
             },
             format: function (value) {
                 value = value.replace(/^(The)[ -](.*)$/, '$2_$1');
-                return `GR_${(0, core_browser_1.referencify)(value)}`;
+                return `GR_${(0, string_format_1.referencify)(value)}`;
             },
             overwriteByDerived: true
         },

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.general = void 0;
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const uuid_1 = require("@bldr/uuid");
 const two_letter_abbreviations_1 = require("../two-letter-abbreviations");
 const main_1 = require("../main");
@@ -19,7 +19,7 @@ exports.general = {
             },
             format: function (value, { data, filePath }) {
                 var _a;
-                let raw = (0, core_browser_1.referencify)(value);
+                let raw = (0, string_format_1.referencify)(value);
                 // a-Strawinsky-Petruschka-Abschnitt-0_22
                 raw = raw.replace(/^[va]-/, '');
                 // eslint-disable-next-line
@@ -87,7 +87,7 @@ exports.general = {
                 return value;
             },
             derive: function ({ data }) {
-                return (0, core_browser_1.deasciify)(data.id);
+                return (0, string_format_1.deasciify)(data.id);
             }
         },
         wikidata: {

@@ -4,8 +4,8 @@ import fs from 'fs'
 
 // Project packages.
 import { mimeTypeManager } from '@bldr/client-media-models'
-import { referencify, asciify, deepCopy, msleep } from '@bldr/core-browser'
-import { getExtension } from '@bldr/string-format'
+import { deepCopy, msleep } from '@bldr/core-browser'
+import { getExtension, referencify, asciify } from '@bldr/string-format'
 import { collectAudioMetadata } from '@bldr/audio-metadata'
 import { categoriesManagement, categories } from '@bldr/media-categories'
 import { writeYamlFile } from '@bldr/file-reader-writer'

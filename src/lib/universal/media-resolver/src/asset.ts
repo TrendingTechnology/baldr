@@ -137,7 +137,11 @@ export class Asset {
   /**
    * @param meta - A raw javascript object read from the Rest API
    */
-  constructor (uri: string, httpUrl: string, meta: MediaDataTypes.AssetMetaData) {
+  constructor (
+    uri: string,
+    httpUrl: string,
+    meta: MediaDataTypes.AssetMetaData
+  ) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
 

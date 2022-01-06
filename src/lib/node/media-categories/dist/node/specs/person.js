@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.person = void 0;
 const path_1 = __importDefault(require("path"));
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const config_1 = require("@bldr/config");
 const config = (0, config_1.getConfig)();
 const main_1 = require("../main");
@@ -52,7 +52,7 @@ exports.person = {
             description: 'Nachname_Vorname, zum Beispiel: Haydn_Joseph.',
             derive: function ({ data }) {
                 check(data);
-                return `${(0, core_browser_1.referencify)(data.lastname)}_${(0, core_browser_1.referencify)(data.firstname)}`;
+                return `${(0, string_format_1.referencify)(data.lastname)}_${(0, string_format_1.referencify)(data.firstname)}`;
             },
             overwriteByDerived: true
         },
@@ -61,7 +61,7 @@ exports.person = {
             description: 'PR_Nachname_Vorname, zum Beispiel: PR_Haydn_Joseph.',
             derive: function ({ data, category }) {
                 const personCategory = category;
-                return `${personCategory.abbreviation}_${(0, core_browser_1.referencify)(data.lastname)}_${(0, core_browser_1.referencify)(data.firstname)}`;
+                return `${personCategory.abbreviation}_${(0, string_format_1.referencify)(data.lastname)}_${(0, string_format_1.referencify)(data.firstname)}`;
             },
             overwriteByDerived: true
         },

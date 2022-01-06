@@ -16,9 +16,8 @@ exports.writeYamlMetaData = exports.readYamlMetaData = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const file_reader_writer_1 = require("@bldr/file-reader-writer");
-const core_browser_1 = require("@bldr/core-browser");
-const media_categories_1 = require("@bldr/media-categories");
 const string_format_1 = require("@bldr/string-format");
+const media_categories_1 = require("@bldr/media-categories");
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
@@ -48,7 +47,7 @@ function writeYamlMetaData(filePath, metaData, force) {
         if (fs_1.default.lstatSync(filePath).isDirectory()) {
             return;
         }
-        const yamlFile = `${(0, core_browser_1.asciify)(filePath)}.yml`;
+        const yamlFile = `${(0, string_format_1.asciify)(filePath)}.yml`;
         if ((force != null && force) || !fs_1.default.existsSync(yamlFile)) {
             if (metaData == null) {
                 // TODO use different type
@@ -60,7 +59,7 @@ function writeYamlMetaData(filePath, metaData, force) {
                 metaData.ref = basename;
             }
             if (metaData.title == null) {
-                metaData.title = (0, core_browser_1.deasciify)(basename);
+                metaData.title = (0, string_format_1.deasciify)(basename);
             }
             metaData.filePath = filePath;
             metaData = yield media_categories_1.categoriesManagement.process(metaData);

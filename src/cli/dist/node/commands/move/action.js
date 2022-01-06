@@ -35,7 +35,6 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const child_process_1 = __importDefault(require("child_process"));
 // Project packages.
-const core_browser_1 = require("@bldr/core-browser");
 const string_format_1 = require("@bldr/string-format");
 const media_manager_1 = require("@bldr/media-manager");
 const media_categories_1 = require("@bldr/media-categories");
@@ -207,11 +206,11 @@ function moveMp3(oldPath, newPath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         // Format dest file path.
         newPath = media_manager_1.locationIndicator.moveIntoSubdir(newPath, 'HB');
-        newPath = (0, core_browser_1.asciify)(newPath);
+        newPath = (0, string_format_1.asciify)(newPath);
         // a Earth, Wind & Fire - Shining Star.mp3
         let fileName = path_1.default.basename(newPath);
         fileName = fileName.replace(/\.mp3$/i, '');
-        fileName = (0, core_browser_1.referencify)(fileName);
+        fileName = (0, string_format_1.referencify)(fileName);
         fileName = `${fileName}.mp3`;
         // a-Fletcher-Henderson_Aint-she-sweet.mp3
         fileName = fileName.replace(/^a-/, '');

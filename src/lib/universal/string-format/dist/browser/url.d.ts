@@ -25,6 +25,14 @@ export declare function formatMusicbrainzRecordingUrl(recordingId: string): stri
  */
 export declare function formatMusicbrainzWorkUrl(workId: string): string;
 /**
+ * Format a Musescore URL.
+ *
+ * @param The score ID.
+ *
+ * @returns For example: For example: `https://musescore.com/score/1234`
+ */
+export declare function formatMusescoreUrl(id: number | string): string;
+/**
  * @param fileName - For example
  *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`
  *

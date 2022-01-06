@@ -3,8 +3,7 @@ import path from 'path'
 import childProcess from 'child_process'
 
 // Project packages.
-import { referencify, asciify } from '@bldr/core-browser'
-import { getExtension } from '@bldr/string-format'
+import { getExtension, referencify, asciify } from '@bldr/string-format'
 import {
   walk,
   operations,

@@ -4,7 +4,7 @@ import {
   MediaCategoriesTypes,
   MediaResolverTypes
 } from '@bldr/type-definitions'
-import { referencify } from '@bldr/core-browser'
+import { referencify } from '@bldr/string-format'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()

@@ -1,5 +1,5 @@
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
-import { deasciify, referencify } from '@bldr/core-browser'
+import { deasciify, referencify } from '@bldr/string-format'
 import { generateUuid } from '@bldr/uuid'
 
 import {

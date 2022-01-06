@@ -2,7 +2,8 @@
 import { MediaResolverTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
-import { asciify, formatDuration } from '@bldr/core-browser'
+import { formatDuration } from '@bldr/core-browser'
+import { asciify } from '@bldr/string-format'
 
 interface RawSample {
   startTime?: number

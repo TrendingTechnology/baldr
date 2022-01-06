@@ -1,7 +1,7 @@
 import path from 'path'
 
 import type { MediaCategoriesTypes, MediaResolverTypes } from '@bldr/type-definitions'
-import { referencify } from '@bldr/core-browser'
+import { referencify } from '@bldr/string-format'
 
 import { validateDate } from '../main'
 import { getConfig } from '@bldr/config'

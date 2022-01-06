@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instrument = void 0;
 const path_1 = __importDefault(require("path"));
-const core_browser_1 = require("@bldr/core-browser");
+const string_format_1 = require("@bldr/string-format");
 const config_1 = require("@bldr/config");
 const config = (0, config_1.getConfig)();
 function check(data) {
@@ -33,7 +33,7 @@ exports.instrument = {
         instrumentId: {
             title: 'Instrumenten-ID',
             derive: function ({ data }) {
-                return (0, core_browser_1.referencify)(data.name);
+                return (0, string_format_1.referencify)(data.name);
             }
         },
         ref: {
@@ -43,7 +43,7 @@ exports.instrument = {
                 // IS: Instrument
                 const instrumentCategory = category;
                 const instrumentData = data;
-                return `${instrumentCategory.abbreviation}_${(0, core_browser_1.referencify)(instrumentData.name)}`;
+                return `${instrumentCategory.abbreviation}_${(0, string_format_1.referencify)(instrumentData.name)}`;
             },
             overwriteByDerived: true
         },

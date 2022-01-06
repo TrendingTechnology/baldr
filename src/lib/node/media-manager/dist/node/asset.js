@@ -51,7 +51,7 @@ const main_1 = require("./main");
 const yaml_2 = require("./yaml");
 function getReferenceFromFilePath(filePath) {
     const basename = path_1.default.basename(filePath, '.' + (0, string_format_1.getExtension)(filePath));
-    return (0, core_browser_1.referencify)(basename);
+    return (0, string_format_1.referencify)(basename);
 }
 function move(oldPath, newPath, { copy, dryRun }) {
     if (oldPath === newPath) {
@@ -161,7 +161,7 @@ function renameMediaAsset(oldPath) {
         newPath = media_categories_1.categoriesManagement.formatFilePath(d, oldPath);
     }
     if (newPath == null) {
-        newPath = (0, core_browser_1.asciify)(oldPath);
+        newPath = (0, string_format_1.asciify)(oldPath);
     }
     const basename = path_1.default.basename(newPath);
     // Remove a- and v- prefixes
