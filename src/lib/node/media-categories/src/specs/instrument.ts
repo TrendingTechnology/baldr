@@ -3,7 +3,7 @@ import path from 'path'
 import { referencify } from '@bldr/string-format'
 import {
   MediaCategoriesTypes,
-  MediaResolverTypes
+  MediaDataTypes
 } from '@bldr/type-definitions'
 import { getConfig } from '@bldr/config'
 
@@ -13,7 +13,7 @@ interface InstrumentCategory extends MediaCategoriesTypes.Category {
   basePath: string
 }
 
-interface InstrumentFileFormat extends MediaResolverTypes.YamlFormat {
+interface InstrumentFileFormat extends MediaDataTypes.AssetMetaData {
   name: string
   extension: string
 }

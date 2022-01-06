@@ -1,4 +1,4 @@
-import { MediaResolverTypes } from '@bldr/type-definitions';
+import { MediaDataTypes } from '@bldr/type-definitions';
 interface MoveAssetConfiguration {
     copy?: boolean;
     dryRun?: boolean;
@@ -40,7 +40,7 @@ export declare function normalizeMediaAsset(filePath: string, options?: Normaliz
 /**
  * Rename, create metadata yaml and normalize the metadata file.
  */
-export declare function initializeMetaYaml(filePath: string, metaData?: MediaResolverTypes.YamlFormat): Promise<void>;
+export declare function initializeMetaYaml(filePath: string, metaData?: MediaDataTypes.AssetMetaData): Promise<void>;
 /**
  * Convert a media asset file.
  *

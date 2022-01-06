@@ -17,7 +17,7 @@ import { convertPropertiesSnakeToCamel } from '@bldr/yaml'
 
 import {
   MediaCategoriesTypes,
-  MediaResolverTypes
+  MediaDataTypes
 } from '@bldr/type-definitions'
 
 import { DeepTitle } from '@bldr/titles'
@@ -70,7 +70,7 @@ export function detectCategoryByPath (
  * @returns A absolute path
  */
 export function formatFilePath (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   oldPath?: string
 ): string | undefined {
   if (data.categories == null) {
@@ -150,15 +150,15 @@ function isValue (value: any): boolean {
  * @param replaceValues - Replace the values in the metadata object.
  */
 function applySpecToProps (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   func: Function,
   category: MediaCategoriesTypes.Category,
   replaceValues: boolean = true
-): MediaResolverTypes.YamlFormat | MediaResolverTypes.YamlFormat {
+): MediaDataTypes.AssetMetaData {
   function applyOneTypeSpec (
     props: MediaCategoriesTypes.PropCollection,
     propName: string,
-    data: MediaResolverTypes.YamlFormat,
+    data: MediaDataTypes.AssetMetaData,
     func: Function,
     replaceValues: boolean
   ): void {
@@ -197,16 +197,16 @@ function isPropertyDerived (propSpec: MediaCategoriesTypes.Prop): boolean {
  *   `*.extension.yml` file.
  */
 async function sortAndDeriveProps (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   category: MediaCategoriesTypes.Category,
   filePath?: string
-): Promise<MediaResolverTypes.YamlFormat> {
+): Promise<MediaDataTypes.AssetMetaData> {
   // eslint-disable-next-line
-  const origData: MediaResolverTypes.YamlFormat = deepCopy(
+  const origData: MediaDataTypes.AssetMetaData = deepCopy(
     data
-  ) as MediaResolverTypes.YamlFormat
+  ) as MediaDataTypes.AssetMetaData
   // eslint-disable-next-line
-  const result: MediaResolverTypes.YamlFormat = {} as MediaResolverTypes.YamlFormat
+  const result: MediaDataTypes.AssetMetaData = {} as MediaDataTypes.AssetMetaData
 
   // eslint-disable-next-line
   let folderTitles: DeepTitle = {} as DeepTitle
@@ -264,10 +264,10 @@ async function sortAndDeriveProps (
  * @param category - The category name.
  */
 function formatProps (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   category: MediaCategoriesTypes.Category,
   filePath?: string
-): MediaResolverTypes.YamlFormat {
+): MediaDataTypes.AssetMetaData {
   function formatOneProp (spec: MediaCategoriesTypes.Prop, value: any): any {
     if (
       isValue(value) &&
@@ -286,7 +286,7 @@ function formatProps (
  * @param category - The specification of one media category.
  */
 function validateProps (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   category: MediaCategoriesTypes.Category
 ): void {
   function validateOneProp (
@@ -323,9 +323,9 @@ function validateProps (
  * @param category - The specification of one media category.
  */
 function removeProps (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   category: MediaCategoriesTypes.Category
-): MediaResolverTypes.YamlFormat {
+): MediaDataTypes.AssetMetaData {
   for (const propName in category.props) {
     if (data[propName] != null) {
       const value = data[propName]
@@ -357,10 +357,10 @@ function removeProps (
  *   `*.extension.yml` file.
  */
 async function processByType (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   name: MediaCategoriesTypes.Name,
   filePath?: string
-): Promise<MediaResolverTypes.YamlFormat> {
+): Promise<MediaDataTypes.AssetMetaData> {
   if (categories[name] == null) {
     throw new Error(`Unkown meta category name: “${name}”`)
   }
@@ -421,10 +421,10 @@ function generalizeCategoriesNames (categoriesNames?: string): string {
  * @returns An array of unknown props.
  */
 export function searchUnknownProps (
-  data: MediaResolverTypes.YamlFormat
+  data: MediaDataTypes.AssetMetaData
 ): string[] {
-  data = deepCopy(data) as MediaResolverTypes.YamlFormat
-  data = convertPropertiesSnakeToCamel(data) as MediaResolverTypes.YamlFormat
+  data = deepCopy(data) as MediaDataTypes.AssetMetaData
+  data = convertPropertiesSnakeToCamel(data) as MediaDataTypes.AssetMetaData
   data.categories = generalizeCategoriesNames(data.categories)
 
   for (const categoryName of data.categories.split(',')) {
@@ -449,16 +449,16 @@ export function searchUnknownProps (
  *   `*.extension.yml` file.
  */
 export async function process (
-  data: MediaResolverTypes.YamlFormat,
+  data: MediaDataTypes.AssetMetaData,
   filePath?: string
-): Promise<MediaResolverTypes.YamlFormat> {
+): Promise<MediaDataTypes.AssetMetaData> {
   if (filePath != null) {
     filePath = path.resolve(filePath)
   }
 
   // The media category specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = convertPropertiesSnakeToCamel(data) as MediaResolverTypes.YamlFormat
+  data = convertPropertiesSnakeToCamel(data) as MediaDataTypes.AssetMetaData
   data.categories = generalizeCategoriesNames(data.categories)
   for (const name of data.categories.split(',')) {
     data = await processByType(

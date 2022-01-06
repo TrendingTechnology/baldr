@@ -5,7 +5,7 @@
  */
 
 import { DeepTitle } from './titles'
-import * as MediaResolverTypes from './media-resolver'
+import * as MediaDataTypes from './media-data'
 
 /**
  * Defintion of the function `format()`.
@@ -55,7 +55,7 @@ export type PropName = string
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-  data: MediaResolverTypes.YamlFormat
+  data: MediaDataTypes.AssetMetaData
   category: Category
   folderTitles?: DeepTitle
   filePath?: string
@@ -163,7 +163,7 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-  data: MediaResolverTypes.YamlFormat
+  data: MediaDataTypes.AssetMetaData
   category: Category
   oldRelPath: string
 }
@@ -181,18 +181,18 @@ type DetectTypeByPathFunc = (category: Category) => RegExp
 /**
  * Defintion of the function `intialize()`.
  */
-type InitializeFunc = (args: DataCategoryFilePath) => MediaResolverTypes.YamlFormat
+type InitializeFunc = (args: DataCategoryFilePath) => MediaDataTypes.AssetMetaData
 
 /**
  * Defintion of the function `finalize()`.
  */
-type FinalizeFunc = (args: DataCategoryFilePath) => MediaResolverTypes.YamlFormat
+type FinalizeFunc = (args: DataCategoryFilePath) => MediaDataTypes.AssetMetaData
 
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-  data: MediaResolverTypes.YamlFormat
+  data: MediaDataTypes.AssetMetaData
   entity: { [key: string]: any }
   functions: { [key: string]: Function }
 }
@@ -200,7 +200,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => MediaResolverTypes.YamlFormat
+type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => MediaDataTypes.AssetMetaData
 
 /**
  * Apart from different file formats, media files can belong to several media
@@ -336,7 +336,7 @@ export interface Data { [key: string]: any }
  * Used in many functions as an argument.
  */
 interface DataCategoryFilePath {
-  data: MediaResolverTypes.YamlFormat
+  data: MediaDataTypes.AssetMetaData
   category: Category
 
   /**
@@ -345,7 +345,7 @@ interface DataCategoryFilePath {
   filePath?: string
 }
 
-export interface CategoryPersonYamlFormat extends MediaResolverTypes.YamlFormat {
+export interface CategoryPersonYamlFormat extends MediaDataTypes.AssetMetaData {
   personId: string
   ref: string
   title: string
@@ -359,7 +359,7 @@ export interface CategoryPersonYamlFormat extends MediaResolverTypes.YamlFormat 
   famousPieces?: string[]
 }
 
-export interface CategoryReferenceYamlFormat extends MediaResolverTypes.YamlFormat {
+export interface CategoryReferenceYamlFormat extends MediaDataTypes.AssetMetaData {
   referenceTitle?: string
   referenceSubtitle?: string
   author?: string

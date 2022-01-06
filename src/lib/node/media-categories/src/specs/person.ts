@@ -2,7 +2,7 @@ import path from 'path'
 
 import {
   MediaCategoriesTypes,
-  MediaResolverTypes
+  MediaDataTypes
 } from '@bldr/type-definitions'
 import { referencify } from '@bldr/string-format'
 import { getConfig } from '@bldr/config'
@@ -11,7 +11,7 @@ const config = getConfig()
 
 import { validateDate } from '../main'
 
-interface PersonFileFormat extends MediaResolverTypes.YamlFormat {
+interface PersonFileFormat extends MediaDataTypes.AssetMetaData {
   firstname: string
   lastname: string
   personId: string

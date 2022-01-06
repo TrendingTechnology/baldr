@@ -1,7 +1,7 @@
 import { operations } from '@bldr/media-manager'
 import { fetchFile } from '@bldr/core-node'
 
-import type { MediaResolverTypes } from '@bldr/type-definitions'
+import type { MediaDataTypes } from '@bldr/type-definitions'
 
 /**
  * Download a media asset.
@@ -28,7 +28,7 @@ async function action (url: string, id?: string, extension?: string): Promise<vo
   if (convertedDestFile != null) {
     const metaData = { source: url }
     const meta = metaData as unknown
-    await operations.initializeMetaYaml(destFile, meta as MediaResolverTypes.YamlFormat)
+    await operations.initializeMetaYaml(destFile, meta as MediaDataTypes.AssetMetaData)
   }
 }
 

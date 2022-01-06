@@ -1,4 +1,4 @@
-import { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions';
+import { MediaDataTypes, StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
@@ -20,4 +20,4 @@ export declare function readYamlMetaData(filePath: string): StringIndexedObject;
  * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
-export declare function writeYamlMetaData(filePath: string, metaData?: MediaResolverTypes.YamlFormat, force?: boolean): Promise<object | undefined>;
+export declare function writeYamlMetaData(filePath: string, metaData?: MediaDataTypes.AssetMetaData, force?: boolean): Promise<object | undefined>;

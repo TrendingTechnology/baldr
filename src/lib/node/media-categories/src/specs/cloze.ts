@@ -2,10 +2,10 @@ import path from 'path'
 
 import {
   MediaCategoriesTypes,
-  MediaResolverTypes
+  MediaDataTypes
 } from '@bldr/type-definitions'
 
-interface ClozeFileFormat extends MediaResolverTypes.YamlFormat {
+interface ClozeFileFormat extends MediaDataTypes.AssetMetaData {
   clozePageNo: number
   clozePageCount: number
 }

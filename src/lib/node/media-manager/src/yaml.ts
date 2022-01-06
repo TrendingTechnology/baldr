@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { MediaResolverTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { MediaDataTypes, StringIndexedObject } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify, getExtension } from '@bldr/string-format'
@@ -33,7 +33,7 @@ export function readYamlMetaData (filePath: string): StringIndexedObject {
  */
 export async function writeYamlMetaData (
   filePath: string,
-  metaData?: MediaResolverTypes.YamlFormat,
+  metaData?: MediaDataTypes.AssetMetaData,
   force?: boolean
 ): Promise<object | undefined> {
   if (fs.lstatSync(filePath).isDirectory()) {
@@ -45,7 +45,7 @@ export async function writeYamlMetaData (
     if (metaData == null) {
       // TODO use different type
       // eslint-disable-next-line
-      metaData = {} as MediaResolverTypes.YamlFormat
+      metaData = {} as MediaDataTypes.AssetMetaData
     }
     const basename = path.basename(filePath, '.' + getExtension(filePath))
     if (metaData.ref == null) {

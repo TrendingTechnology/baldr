@@ -5,7 +5,7 @@ import childProcess from 'child_process'
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 import { youtubeMModule } from '@bldr/presentation-parser'
-import { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 import { operations, locationIndicator } from '@bldr/media-manager'
 import * as log from '@bldr/log'
 
@@ -103,7 +103,7 @@ async function action (youtubeId: string): Promise<void> {
     return
   }
 
-  const metaData = meta as MediaResolverTypes.YamlFormat
+  const metaData = meta as MediaDataTypes.AssetMetaData
   log.verboseAny(metaData)
 
   const parentDir = locationIndicator.getPresParentDir(process.cwd())

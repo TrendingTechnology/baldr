@@ -3,7 +3,7 @@ import path from 'path'
 
 // Project packages.
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 import { query, fetchCommonsFile } from '@bldr/wikidata'
 import { writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
@@ -37,7 +37,7 @@ async function action (
 
   rawData.categories = category
   const data = await categoriesManagement.process(
-    rawData as MediaResolverTypes.YamlFormat
+    rawData as MediaDataTypes.AssetMetaData
   )
   log.infoAny(data)
 

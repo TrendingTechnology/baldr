@@ -12,7 +12,7 @@ import { writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 import wikidata from '@bldr/wikidata'
 import {
-  MediaResolverTypes,
+  MediaDataTypes,
   GenericError,
   MediaCategoriesTypes,
   StringIndexedObject
@@ -162,7 +162,7 @@ export function renameMediaAsset (oldPath: string): string {
     metaData.filePath = oldPath
     const d = metaData as unknown
     newPath = categoriesManagement.formatFilePath(
-      d as MediaResolverTypes.YamlFormat,
+      d as MediaDataTypes.AssetMetaData,
       oldPath
     )
   }
@@ -234,10 +234,10 @@ export function renameByRef (filePath: string): void {
 }
 
 async function queryWikidata (
-  metaData: MediaResolverTypes.YamlFormat,
+  metaData: MediaDataTypes.AssetMetaData,
   categoryNames: MediaCategoriesTypes.Names,
   categoryCollection: MediaCategoriesTypes.Collection
-): Promise<MediaResolverTypes.YamlFormat> {
+): Promise<MediaDataTypes.AssetMetaData> {
   const dataWiki = await wikidata.query(
     metaData.wikidata,
     categoryNames,
@@ -248,7 +248,7 @@ async function queryWikidata (
     metaData,
     dataWiki,
     categoryCollection
-  ) as MediaResolverTypes.YamlFormat
+  ) as MediaDataTypes.AssetMetaData
   // To avoid blocking
   // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
   // status: 429,
@@ -281,11 +281,11 @@ export async function normalizeMediaAsset (
     if (raw != null) {
       raw.filePath = filePath
     }
-    let metaData = raw as MediaResolverTypes.YamlFormat
+    let metaData = raw as MediaDataTypes.AssetMetaData
     if (metaData == null) {
       return
     }
-    const origData = deepCopy(metaData) as MediaResolverTypes.YamlFormat
+    const origData = deepCopy(metaData) as MediaDataTypes.AssetMetaData
 
     // Always: general
     const categoryNames = categoriesManagement.detectCategoryByPath(filePath)
@@ -327,7 +327,7 @@ export async function normalizeMediaAsset (
  */
 export async function initializeMetaYaml (
   filePath: string,
-  metaData?: MediaResolverTypes.YamlFormat
+  metaData?: MediaDataTypes.AssetMetaData
 ): Promise<void> {
   const newPath = renameMediaAsset(filePath)
   await writeYamlMetaData(newPath, metaData)
@@ -466,7 +466,7 @@ export async function convertAsset (
         if (metaData != null) {
           await writeYamlMetaData(
             outputFile,
-            metaData as MediaResolverTypes.YamlFormat
+            metaData as MediaDataTypes.AssetMetaData
           )
         }
       }

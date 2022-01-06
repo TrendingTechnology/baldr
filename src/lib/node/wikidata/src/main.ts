@@ -12,7 +12,7 @@ import * as wikibaseSdk from 'wikibase-sdk'
 import { fetchFile } from '@bldr/core-node'
 import {
   MediaCategoriesTypes,
-  MediaResolverTypes
+  MediaDataTypes
 } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
@@ -446,7 +446,7 @@ export async function query (
   if (!typeNames.includes('general')) typeNames = `general,${typeNames}`
 
   // eslint-disable-next-line
-  const data: MediaResolverTypes.YamlFormat = {} as MediaResolverTypes.YamlFormat
+  const data: MediaDataTypes.AssetMetaData = {} as MediaDataTypes.AssetMetaData
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
     if (categoryCollection[typeName as MediaCategoriesTypes.Name] == null) {

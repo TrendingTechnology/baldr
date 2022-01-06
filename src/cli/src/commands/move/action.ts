@@ -12,7 +12,7 @@ import {
 } from '@bldr/media-manager'
 import { categoriesManagement } from '@bldr/media-categories'
 import { readFile, writeFile, writeYamlFile } from '@bldr/file-reader-writer'
-import { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 
 interface Options {
@@ -220,7 +220,7 @@ async function moveMp3 (
   const convertedPath = await operations.convertAsset(tmpMp3Path)
   if (convertedPath == null) throw new Error('Error converting asset.')
 
-  const metaData = buildMinimalAssetData(convertedPath) as MediaResolverTypes.YamlFormat
+  const metaData = buildMinimalAssetData(convertedPath) as MediaDataTypes.AssetMetaData
   if (metaData == null) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 

@@ -33,7 +33,8 @@ export declare class Sample {
      */
     meta: MediaDataTypes.SampleMetaData;
     /**
-     * The shortcut key stroke combination to launch the sample for example `a 1`, `v 1` or `i 1`.
+     * The shortcut key stroke combination to launch the sample for example `a 1`,
+     * `v 1` or `i 1`.
      */
     shortcut?: string;
     /**

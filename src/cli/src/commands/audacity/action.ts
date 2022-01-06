@@ -1,5 +1,5 @@
 // Project packages.
-import { MediaResolverTypes } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import { formatDuration } from '@bldr/core-browser'
@@ -108,7 +108,7 @@ function action (filePath: string): void {
     rawSamples.unshift(firstRawSample)
   }
 
-  const samples: MediaResolverTypes.SampleYamlFormat[] = []
+  const samples: MediaDataTypes.SampleMetaData[] = []
   // Text mark maybe have no description. We use a counter instead
   let counter = 1
   for (const rawSample of rawSamples) {
@@ -134,7 +134,7 @@ function action (filePath: string): void {
       title += ' (' + timeText.join('-') + ')'
     }
 
-    const sample: MediaResolverTypes.SampleYamlFormat = {
+    const sample: MediaDataTypes.SampleMetaData = {
       ref,
       title
     }

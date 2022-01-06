@@ -4,7 +4,7 @@
  * @module @bldr/type-definitions/meta-spec
  */
 import { DeepTitle } from './titles';
-import * as MediaResolverTypes from './media-resolver';
+import * as MediaDataTypes from './media-data';
 /**
  * Defintion of the function `format()`.
  */
@@ -46,7 +46,7 @@ export declare type PropName = string;
  * Definition of the argument for the function `derive()`.
  */
 interface DeriveFuncArg {
-    data: MediaResolverTypes.YamlFormat;
+    data: MediaDataTypes.AssetMetaData;
     category: Category;
     folderTitles?: DeepTitle;
     filePath?: string;
@@ -138,7 +138,7 @@ export interface PropCollection {
  * Definition of the argument for the function `relPath()`.
  */
 interface RelPathFuncArg {
-    data: MediaResolverTypes.YamlFormat;
+    data: MediaDataTypes.AssetMetaData;
     category: Category;
     oldRelPath: string;
 }
@@ -153,16 +153,16 @@ declare type DetectTypeByPathFunc = (category: Category) => RegExp;
 /**
  * Defintion of the function `intialize()`.
  */
-declare type InitializeFunc = (args: DataCategoryFilePath) => MediaResolverTypes.YamlFormat;
+declare type InitializeFunc = (args: DataCategoryFilePath) => MediaDataTypes.AssetMetaData;
 /**
  * Defintion of the function `finalize()`.
  */
-declare type FinalizeFunc = (args: DataCategoryFilePath) => MediaResolverTypes.YamlFormat;
+declare type FinalizeFunc = (args: DataCategoryFilePath) => MediaDataTypes.AssetMetaData;
 /**
  * Defintion of the argument of the function `normalizeWikidata()`.
  */
 interface NormalizeWikidataFuncArg {
-    data: MediaResolverTypes.YamlFormat;
+    data: MediaDataTypes.AssetMetaData;
     entity: {
         [key: string]: any;
     };
@@ -173,7 +173,7 @@ interface NormalizeWikidataFuncArg {
 /**
  * Defintion of the function `normalizeWikidata()`.
  */
-declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => MediaResolverTypes.YamlFormat;
+declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => MediaDataTypes.AssetMetaData;
 /**
  * Apart from different file formats, media files can belong to several media
  * categories regardless of their file format.
@@ -276,14 +276,14 @@ export interface Data {
  * Used in many functions as an argument.
  */
 interface DataCategoryFilePath {
-    data: MediaResolverTypes.YamlFormat;
+    data: MediaDataTypes.AssetMetaData;
     category: Category;
     /**
      * The path of media asset itself, not the metadata `*.extension.yml` file.
      */
     filePath?: string;
 }
-export interface CategoryPersonYamlFormat extends MediaResolverTypes.YamlFormat {
+export interface CategoryPersonYamlFormat extends MediaDataTypes.AssetMetaData {
     personId: string;
     ref: string;
     title: string;
@@ -296,7 +296,7 @@ export interface CategoryPersonYamlFormat extends MediaResolverTypes.YamlFormat 
     mainImage: string;
     famousPieces?: string[];
 }
-export interface CategoryReferenceYamlFormat extends MediaResolverTypes.YamlFormat {
+export interface CategoryReferenceYamlFormat extends MediaDataTypes.AssetMetaData {
     referenceTitle?: string;
     referenceSubtitle?: string;
     author?: string;
