@@ -58,7 +58,7 @@ export const universalMenuDefinition = [
                 label: 'Folien-Vorschau',
                 action: 'executeCallback',
                 arguments: 'toggleSlidesPreview',
-                keyboardShortcut: 's'
+                keyboardShortcut: 'Tab'
             },
             {
                 label: 'Medien-Überblick',
@@ -264,14 +264,14 @@ export const universalMenuDefinition = [
                 description: 'Die aktuelle Folie vergrößern.',
                 action: 'executeCallback',
                 arguments: 'increaseSlideScaleFactor',
-                keyboardShortcut: 'Ctrl + 2'
+                keyboardShortcut: 'Plus'
             },
             {
                 label: 'Schriftgröße verkleinern',
                 description: 'Die aktuelle Folie verkleinern.',
                 action: 'executeCallback',
                 arguments: 'decreaseSlideScaleFactor',
-                keyboardShortcut: 'Ctrl + 3'
+                keyboardShortcut: '-'
             },
             {
                 label: 'Zwischen zwei Folien hin- und herschalten.',

@@ -127,6 +127,8 @@ exports.convertMenuItemElectron = convertMenuItemElectron;
 function normalizeKeyboardShortcuts(keys, forClient = 'mousetrap') {
     if (forClient === 'mousetrap') {
         // See https://craig.is/killing/mice
+        keys = keys.replace('Plus', 'plus');
+        keys = keys.replace('Tab', 'tab');
         keys = keys.replace('Return', 'enter');
         keys = keys.replace('Ctrl', 'ctrl');
         keys = keys.replace('Shift', 'shift');
