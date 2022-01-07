@@ -1,45 +1,47 @@
 {
-  "name": "@bldr/modal-dialog",
-  "version": "0.2.2",
-  "description": "A simple modal dialog component implementation in Vue.",
-  "author": {
-    "name": "Josef Friedrich",
-    "email": "josef@friedrich.rocks",
-    "url": "https://josef.friedrich.rocks"
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
-  },
-  "main": "src/main.js",
-  "dependencies": {
-    "@bldr/icons": "*",
-    "vue-class-component": "7.2.3",
-    "vue-property-decorator": "9.1.2",
-    "vue": "2.6.11"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "4.5.9",
-    "@vue/cli-plugin-eslint": "4.5.9",
-    "@vue/cli-service": "4.5.9",
-    "@vue/eslint-config-standard": "5.1.2",
-    "@vue/test-utils": "1.1.1",
-    "babel-eslint": "10.1.0",
-    "eslint": "7.13.0",
-    "eslint-plugin-vue": "7.1.0",
-    "node-sass": "5.0.0",
-    "postcss-loader": "4.0.4",
-    "sass": "1.29.0",
-    "sass-loader": "10.1.0",
-    "style-resources-loader": "1.4.1",
-    "vue-cli-plugin-style-resources-loader": "0.1.4",
-    "vue-template-compiler": "2.6.11",
-    "vue-property-decorator": "9.1.2"
-  },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"],
-  "publishConfig": {
-    "access": "public"
-  },
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+	"name": "@bldr/modal-dialog",
+	"version": "0.2.2",
+	"description": "A simple modal dialog component implementation in Vue.",
+	"author": {
+		"name": "Josef Friedrich",
+		"email": "josef@friedrich.rocks",
+		"url": "https://josef.friedrich.rocks"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Josef-Friedrich/baldr.git"
+	},
+	"main": "src/main.js",
+	"dependencies": {
+		"vue": "2.6.11",
+		"vue-class-component": "7.2.3",
+		"vue-property-decorator": "9.1.2"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "4.5.9",
+		"@vue/cli-plugin-eslint": "4.5.9",
+		"@vue/cli-service": "4.5.9",
+		"@vue/eslint-config-standard": "5.1.2",
+		"@vue/test-utils": "1.1.1",
+		"babel-eslint": "10.1.0",
+		"eslint": "7.13.0",
+		"eslint-plugin-vue": "7.1.0",
+		"node-sass": "5.0.0",
+		"postcss-loader": "4.0.4",
+		"sass": "1.29.0",
+		"sass-loader": "10.1.0",
+		"style-resources-loader": "1.4.1",
+		"vue-cli-plugin-style-resources-loader": "0.1.4",
+		"vue-template-compiler": "2.6.11"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not ie <= 8"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

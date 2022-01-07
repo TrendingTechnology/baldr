@@ -1,96 +1,75 @@
 {
-  "name": "@bldr/seating-plan",
-  "version": "0.2.3",
-  "description": "Seating plan app of the baldr project.",
-  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
-  "bugs": {
-    "url": "https://github.com/Josef-Friedrich/baldr/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Josef Friedrich",
-    "email": "josef@friedrich.rocks",
-    "url": "https://josef.friedrich.rocks"
-  },
-  "scripts": {
-    "build:electron": "vue-cli-service electron:build",
-    "build:webapp": "vue-cli-service build",
-    "build": "npm run build:webapp",
-    "install:deb": "sudo apt remove baldr-seating-plan; sudo dpkg -i dist_electron/baldr-seating-plan_${npm_package_version}_amd64.deb",
-    "serve:electron": "vue-cli-service electron:serve",
-    "serve:webapp": "vue-cli-service serve",
-    "serve": "npm run serve:webapp",
-    "test:e2e:headless": "vue-cli-service test:e2e --headless",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test:all": "npm run test:e2e:headless"
-  },
-  "dependencies": {
-    "@bldr/components-collection": "*",
-    "@bldr/config": "*",
-    "@bldr/core-browser": "*",
-    "@bldr/string-format": "*",
-    "@bldr/core-node": "*",
-    "@bldr/dynamic-select": "*",
-    "@bldr/http-request": "*",
-    "@bldr/icons": "*",
-    "@bldr/modal-dialog": "*",
-    "@bldr/shortcuts": "*",
-    "@bldr/themes": "*",
-    "vue-class-component": "7.2.3",
-    "vue-headful": "2.1.0",
-    "vue-property-decorator": "9.1.2",
-    "vue-router": "3.2.0",
-    "vue": "2.6.11",
-    "vuex": "3.4.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "@bldr/config": "*",
-    "@bldr/vue-config-helper": "*",
-    "@types/electron-devtools-installer": "2.2.0",
-    "@vue/cli-plugin-e2e-cypress": "4.5.15",
-    "@vue/cli-plugin-typescript": "4.5.0",
-    "@vue/cli-service": "4.5.9",
-    "@vue/eslint-config-standard": "5.1.2",
-    "electron-devtools-installer": "3.2.0",
-    "electron": "15.3.0",
-    "node-sass": "5.0.0",
-    "resize-observer-polyfill": "1.5.1",
-    "sass-loader": "10.1.0",
-    "style-resources-loader": "1.4.1",
-    "typescript": "4.0.5",
-    "vue-cli-plugin-electron-builder": "2.1.1",
-    "vue-cli-plugin-style-resources-loader": "0.1.4",
-    "vue-template-compiler": "2.6.11"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/base",
-      "plugin:vue/essential",
-      "@vue/standard",
-      "@vue/typescript/recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2020
-    },
-    "rules": {}
-  },
-  "browserslist": ["> 1%", "last 2 versions", "not dead"],
-  "main": "background.js",
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+	"name": "@bldr/seating-plan",
+	"version": "0.2.3",
+	"description": "Seating plan app of the baldr project.",
+	"homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+	"bugs": {
+		"url": "https://github.com/Josef-Friedrich/baldr/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Josef-Friedrich/baldr.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Josef Friedrich",
+		"email": "josef@friedrich.rocks",
+		"url": "https://josef.friedrich.rocks"
+	},
+	"dependencies": {
+		"vue": "2.6.11",
+		"vue-class-component": "7.2.3",
+		"vue-headful": "2.1.0",
+		"vue-property-decorator": "9.1.2",
+		"vue-router": "3.2.0",
+		"vuex": "3.4.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@types/electron-devtools-installer": "2.2.0",
+		"@vue/cli-plugin-e2e-cypress": "4.5.15",
+		"@vue/cli-plugin-typescript": "4.5.0",
+		"@vue/cli-service": "4.5.9",
+		"@vue/eslint-config-standard": "5.1.2",
+		"electron": "15.3.0",
+		"electron-devtools-installer": "3.2.0",
+		"node-sass": "5.0.0",
+		"resize-observer-polyfill": "1.5.1",
+		"sass-loader": "10.1.0",
+		"style-resources-loader": "1.4.1",
+		"typescript": "4.0.5",
+		"vue-cli-plugin-electron-builder": "2.1.1",
+		"vue-cli-plugin-style-resources-loader": "0.1.4",
+		"vue-template-compiler": "2.6.11"
+	},
+	"postcss": {
+		"plugins": {
+			"autoprefixer": {}
+		}
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/base",
+			"plugin:vue/essential",
+			"@vue/standard",
+			"@vue/typescript/recommended"
+		],
+		"parserOptions": {
+			"ecmaVersion": 2020
+		},
+		"rules": {}
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not dead"
+	],
+	"main": "background.js",
+	"gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
