@@ -165,7 +165,8 @@ const routes: RouteConfig[] = [
 ]
 
 export const router = new VueRouter({
-  mode: 'history',
+  // In Electron, it only works in hash mode.
+  mode: process.env.IS_ELECTRON ? 'hash' : 'history',
   routes
 })
 
