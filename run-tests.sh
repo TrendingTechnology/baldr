@@ -18,7 +18,7 @@ _run() {
 	local OUTPUT=
   local COMMAND="$1"
 	local REL_PATH="$2"
-	cd "$BASE_PATH/src/$REL_PATH"
+	cd "$BASE_PATH/$REL_PATH"
 	npm run "$COMMAND" &> $TMP_FILE
 		if [ "$?" -eq 0 ]; then
 		echo -e "$COMMAND \033[32mOK:\e[0m $REL_PATH"

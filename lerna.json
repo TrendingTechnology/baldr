@@ -1,15 +1,15 @@
 {
   "packages": [
     "./",
-    "src/api/*",
-    "src/lib/browser/*",
-    "src/lib/node/*",
-    "src/lib/universal/*",
-    "src/cli",
-    "src/masters/*",
-    "src/vue/apps/*",
-    "src/vue/test-apps/*",
-    "src/vue/plugins/*"
+    "api/*",
+    "lib/browser/*",
+    "lib/node/*",
+    "lib/universal/*",
+    "cli",
+    "masters/*",
+    "vue/apps/*",
+    "vue/test-apps/*",
+    "vue/plugins/*"
   ],
   "version": "independent",
   "command": {
