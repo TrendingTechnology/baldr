@@ -29,7 +29,6 @@ export default class QuestionMasterMain extends MasterMainWithStepController {
   masterName = 'question'
 
   @Prop({
-    type: Array,
     required: true
   })
   questions: questionMModul.Question[]

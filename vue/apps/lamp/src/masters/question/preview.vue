@@ -34,7 +34,6 @@ export default class QuestionMasterPreview extends MasterPreview {
   masterName = 'question'
 
   @Prop({
-    type: Array,
     required: true
   })
   questions: questionMModul.Question[]

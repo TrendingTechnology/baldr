@@ -29,11 +29,14 @@ import { Prop } from 'vue-property-decorator'
 
 import { questionMModul } from '@bldr/presentation-parser'
 
-@Component
+@Component({
+  name: 'Question',
+  components: {
+    Question
+  }
+})
 export default class Question extends Vue {
-  @Prop({
-    type: Object
-  })
+  @Prop()
   question: questionMModul.Question
 
   @Prop({
