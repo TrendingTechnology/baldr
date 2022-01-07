@@ -20,10 +20,54 @@ describe('Package “@bldr/api-wrapper”', function () {
     assert.strictEqual(typeof result.updateTasks[0].lastCommitId, 'string')
   })
 
+  describe('Function “getPresentationByScheme()”', function () {
+    it('ref', async function () {
+      const presentation = await api.getPresentationByScheme(
+        'ref',
+        'Biographie-Kindheit'
+      )
+      assert.strictEqual(
+        presentation.meta.uuid,
+        '95cc10c8-099e-4ece-b9df-80912c4f5630'
+      )
+    })
+
+    it('uuid', async function () {
+      const presentation = await api.getPresentationByScheme(
+        'uuid',
+        '95cc10c8-099e-4ece-b9df-80912c4f5630'
+      )
+      assert.strictEqual(presentation.meta.ref, 'Biographie-Kindheit')
+    })
+  })
+
+  describe('Function “getPresentationByUri()”', function () {
+    it('ref', async function () {
+      const presentation = await api.getPresentationByUri(
+        'ref:Biographie-Kindheit'
+      )
+      assert.strictEqual(
+        presentation.meta.uuid,
+        '95cc10c8-099e-4ece-b9df-80912c4f5630'
+      )
+    })
+
+    it('uuid', async function () {
+      const presentation = await api.getPresentationByUri(
+        'uuid:95cc10c8-099e-4ece-b9df-80912c4f5630'
+      )
+      assert.strictEqual(presentation.meta.ref, 'Biographie-Kindheit')
+    })
+  })
+
   it('Function “getPresentationByRef()”', async function () {
-    // Musik/05/20_Mensch-Zeit/10_Mozart/10_Biographie-Kindheit/Praesentation.baldr.yml
     const presentation = await api.getPresentationByRef('Biographie-Kindheit')
     assert.strictEqual(presentation.meta.ref, 'Biographie-Kindheit')
+  })
+
+  it('Function “getAssetByUri()”', async function () {
+    const asset = await api.getAssetByUri('ref:PR_Mussorgski_Modest')
+    assert.strictEqual(asset.ref, 'PR_Mussorgski_Modest')
   })
 
   it('Function “readMediaAsString()”', async function () {
@@ -38,11 +82,6 @@ describe('Package “@bldr/api-wrapper”', function () {
     const result = results[0]
     assert.strictEqual(typeof result.ref, 'string')
     assert.strictEqual(typeof result.name, 'string')
-  })
-
-  it('Function “getAssetByUri()”', async function () {
-    const asset = await api.getAssetByUri('ref:PR_Mussorgski_Modest')
-    assert.strictEqual(asset.ref, 'PR_Mussorgski_Modest')
   })
 
   it('Function “getTitleTree()”', async function () {

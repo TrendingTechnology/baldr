@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openFileManager = exports.openEditor = exports.getTitleTree = exports.getAssetByUri = exports.readMediaAsString = exports.getDynamicSelectPresentations = exports.getPresentationByRef = exports.getMediaStatistics = exports.updateMediaServer = void 0;
+exports.openFileManager = exports.openEditor = exports.getTitleTree = exports.getAssetByUri = exports.readMediaAsString = exports.getDynamicSelectPresentations = exports.getPresentationByRef = exports.getPresentationByUri = exports.getPresentationByScheme = exports.getMediaStatistics = exports.updateMediaServer = void 0;
 const config_1 = require("@bldr/config");
 const http_request_1 = require("@bldr/http-request");
 const client_media_models_1 = require("@bldr/client-media-models");
@@ -36,15 +36,22 @@ function getMediaStatistics() {
     });
 }
 exports.getMediaStatistics = getMediaStatistics;
+function getPresentationByScheme(scheme, authority) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage(`media/presentations/by-${scheme}/${authority}`, `The presentation with the scheme “${scheme}” and the authority “${authority}” couldn’t be resolved.`);
+    });
+}
+exports.getPresentationByScheme = getPresentationByScheme;
+function getPresentationByUri(uri) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mediaUri = new client_media_models_1.MediaUri(uri);
+        return yield getPresentationByScheme(mediaUri.scheme, mediaUri.authority);
+    });
+}
+exports.getPresentationByUri = getPresentationByUri;
 function getPresentationByRef(ref) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({
-            url: 'media/get/presentation/by-ref',
-            method: 'GET',
-            params: {
-                ref
-            }
-        }, `The presentation with the reference “${ref}” couldn’t be resolved.`);
+        return yield getPresentationByScheme('ref', ref);
     });
 }
 exports.getPresentationByRef = getPresentationByRef;
@@ -73,18 +80,10 @@ exports.readMediaAsString = readMediaAsString;
 function getAssetByUri(uri, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
         const mediaUri = new client_media_models_1.MediaUri(uri);
-        const field = mediaUri.scheme;
-        const search = mediaUri.authority;
-        const response = yield httpRequest.request({
-            url: 'media/get/asset',
-            method: 'GET',
-            params: {
-                [mediaUri.scheme]: mediaUri.authority
-            }
-        });
+        const response = yield httpRequest.request(`media/assets/by-${mediaUri.scheme}/${mediaUri.authority}`);
         if (response == null || response.status !== 200 || response.data == null) {
             if (throwException) {
-                throw new Error(`The media with the ${field} ”${search}” couldn’t be resolved.`);
+                throw new Error(`The media with the ${mediaUri.scheme} ”${mediaUri.authority}” couldn’t be resolved.`);
             }
         }
         else {

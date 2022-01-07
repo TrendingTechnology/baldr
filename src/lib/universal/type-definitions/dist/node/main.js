@@ -15,7 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TitlesTypes = exports.MediaDataTypes = exports.MediaCategoriesTypes = exports.LampTypes = exports.IconFontGeneratorTypes = exports.CliTypes = exports.ClientMediaModelsTypes = exports.ApiTypes = void 0;
+exports.TitlesTypes = exports.MediaDataTypes = exports.MediaCategoriesTypes = exports.LampTypes = exports.IconFontGeneratorTypes = exports.CliTypes = exports.ApiTypes = void 0;
 __exportStar(require("./config"), exports);
 /**
  * Types from specific packages.
@@ -25,7 +25,6 @@ __exportStar(require("./config"), exports);
  * for example @bldr/titles -> TitlesTypes
  */
 exports.ApiTypes = require("./api");
-exports.ClientMediaModelsTypes = require("./client-media-models");
 exports.CliTypes = require("./cli");
 exports.IconFontGeneratorTypes = require("./icon-font-generator");
 exports.LampTypes = require("./lamp");

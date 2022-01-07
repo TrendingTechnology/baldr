@@ -1,3 +1,12 @@
+/**
+ * This class represents an Uniform Resource Identifier (URI) for media and
+ * presentation files. An optional fragment (`#1-7`) (subset or sample selector)
+ * maybe included.
+ *
+ * Possible URIs are for example:
+ * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+ */
 export class MediaUri {
     /**
      * @param uri - A Uniform Resource Identifier (URI). For example:
@@ -11,6 +20,9 @@ export class MediaUri {
             throw new Error(`The media URI is not valid: ${uri}`);
         }
         const groups = matches.groups;
+        if (groups.scheme !== 'ref' && groups.scheme !== 'uuid') {
+            throw new Error('Media URI scheme has to be ref or uuid');
+        }
         this.scheme = groups.scheme;
         this.authority = groups.authority;
         if (groups.fragment != null) {
@@ -49,6 +61,12 @@ export class MediaUri {
             throw new Error(`The URI “${uri}” is not valid!`);
         }
         return uri;
+    }
+    static compose(scheme, authority, fragment = '') {
+        if (fragment !== '') {
+            fragment = '#' + fragment;
+        }
+        return `${scheme}:${authority}${fragment}`;
     }
     static splitByFragment(uri) {
         if (uri.indexOf('#') > 0) {

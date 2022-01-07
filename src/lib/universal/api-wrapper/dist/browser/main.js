@@ -31,15 +31,20 @@ export function getMediaStatistics() {
         return yield callWithErrorMessage({ url: 'media', method: 'GET' }, 'Fetching of statistical informations (stats/count) failed.');
     });
 }
+export function getPresentationByScheme(scheme, authority) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield callWithErrorMessage(`media/presentations/by-${scheme}/${authority}`, `The presentation with the scheme “${scheme}” and the authority “${authority}” couldn’t be resolved.`);
+    });
+}
+export function getPresentationByUri(uri) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mediaUri = new MediaUri(uri);
+        return yield getPresentationByScheme(mediaUri.scheme, mediaUri.authority);
+    });
+}
 export function getPresentationByRef(ref) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield callWithErrorMessage({
-            url: 'media/get/presentation/by-ref',
-            method: 'GET',
-            params: {
-                ref
-            }
-        }, `The presentation with the reference “${ref}” couldn’t be resolved.`);
+        return yield getPresentationByScheme('ref', ref);
     });
 }
 export function getDynamicSelectPresentations(substring) {
@@ -65,18 +70,10 @@ export function readMediaAsString(relPath) {
 export function getAssetByUri(uri, throwException = true) {
     return __awaiter(this, void 0, void 0, function* () {
         const mediaUri = new MediaUri(uri);
-        const field = mediaUri.scheme;
-        const search = mediaUri.authority;
-        const response = yield httpRequest.request({
-            url: 'media/get/asset',
-            method: 'GET',
-            params: {
-                [mediaUri.scheme]: mediaUri.authority
-            }
-        });
+        const response = yield httpRequest.request(`media/assets/by-${mediaUri.scheme}/${mediaUri.authority}`);
         if (response == null || response.status !== 200 || response.data == null) {
             if (throwException) {
-                throw new Error(`The media with the ${field} ”${search}” couldn’t be resolved.`);
+                throw new Error(`The media with the ${mediaUri.scheme} ”${mediaUri.authority}” couldn’t be resolved.`);
             }
         }
         else {

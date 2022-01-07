@@ -41,14 +41,27 @@ export default function (): express.Express {
     }
   })
 
-  app.get('/get/presentation/by-ref', async (request, response, next) => {
-    try {
-      const ref = query.extractString(request.query, 'ref')
-      response.json(await database.getPresentationByRef(ref))
-    } catch (error) {
-      next(error)
+  app.get(
+    '/presentations/by-:scheme/:authority',
+    async (request, response, next) => {
+      try {
+        if (
+          request.params.scheme !== 'ref' &&
+          request.params.scheme !== 'uuid'
+        ) {
+          throw new Error('Scheme has to be “ref” or “uuid”')
+        }
+        response.json(
+          await database.getPresentation(
+            request.params.scheme,
+            request.params.authority
+          )
+        )
+      } catch (error) {
+        next(error)
+      }
     }
-  })
+  )
 
   app.get(
     '/get/presentations/by-substring',
@@ -62,25 +75,38 @@ export default function (): express.Express {
     }
   )
 
-  app.get('/get/asset', async (request, response, next) => {
+  app.get('/assets/by-:scheme/:authority', async (request, response, next) => {
     try {
-      let scheme: 'ref' | 'uuid'
-      let uri
-      if (request.query.ref == null && request.query.uuid != null) {
-        scheme = 'uuid'
-        uri = request.query.uuid
-      } else if (request.query.uuid == null && request.query.ref != null) {
-        scheme = 'ref'
-        uri = request.query.ref
-      } else {
-        throw new Error('Use as query ref or uuid')
+      if (request.params.scheme !== 'ref' && request.params.scheme !== 'uuid') {
+        throw new Error('Scheme has to be “ref” or “uuid”')
       }
+      response.json(
+        await database.getAsset(request.params.scheme, request.params.authority)
+      )
+    } catch (error) {
+      next(error)
+    }
+  })
 
-      if (typeof uri !== 'string') {
-        throw new Error('The value of the query has to be a string.')
-      }
+  app.get('/assets/refs', async (request, response, next) => {
+    try {
+      response.json(await database.getAllAssetRefs())
+    } catch (error) {
+      next(error)
+    }
+  })
 
-      response.json(await database.getAsset(scheme, uri))
+  app.get('/assets/uuids', async (request, response, next) => {
+    try {
+      response.json(await database.getAllAssetUuids())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/assets/uris', async (request, response, next) => {
+    try {
+      response.json(await database.getAllAssetUris())
     } catch (error) {
       next(error)
     }
@@ -89,22 +115,6 @@ export default function (): express.Express {
   app.get('/titles', async (request, response, next) => {
     try {
       response.json(await database.getFolderTitleTree())
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/get/all-asset-refs', async (request, response, next) => {
-    try {
-      response.json({})
-    } catch (error) {
-      next(error)
-    }
-  })
-
-  app.get('/get/all-asset-uuids', async (request, response, next) => {
-    try {
-      response.json({})
     } catch (error) {
       next(error)
     }

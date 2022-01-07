@@ -162,7 +162,14 @@ var Database = /** @class */ (function () {
                 drop: true
             },
             presentations: {
-                indexes: [{ field: 'meta.ref', unique: true }],
+                indexes: [
+                    { field: 'meta.ref', unique: true },
+                    {
+                        field: 'meta.uuid',
+                        unique: true,
+                        partialFilterExpression: { 'meta.uuid': { $type: 'string' } }
+                    }
+                ],
                 drop: true
             },
             updates: {
@@ -224,7 +231,7 @@ var Database = /** @class */ (function () {
      */
     Database.prototype.initialize = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, result, _e, _f, _g, collectionName, indexes, collectionResult, _h, indexes_1, index, indexDefinition, unique;
+            var collectionNames, _a, _b, _i, collectionName, collection, _c, _d, index, options, result, _e, _f, _g, collectionName, indexes, collectionResult, _h, indexes_1, index, indexDefinition, unique;
             var _j;
             return __generator(this, function (_k) {
                 switch (_k.label) {
@@ -252,7 +259,13 @@ var Database = /** @class */ (function () {
                     case 4:
                         if (!(_c < _d.length)) return [3 /*break*/, 7];
                         index = _d[_c];
-                        return [4 /*yield*/, collection.createIndex((_j = {}, _j[index.field] = 1, _j), { unique: index.unique })];
+                        options = index.partialFilterExpression == null
+                            ? { unique: index.unique }
+                            : {
+                                unique: index.unique,
+                                partialFilterExpression: index.partialFilterExpression
+                            };
+                        return [4 /*yield*/, collection.createIndex((_j = {}, _j[index.field] = 1, _j), options)];
                     case 5:
                         _k.sent();
                         _k.label = 6;
@@ -456,25 +469,39 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Database.prototype.getPresentationByRef = function (ref) {
+    /**
+     * @param scheme - Has to be `ref` or `uuid`
+     * @param authority - The part after the colon: For example
+     * `Marmotte` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+     */
+    Database.prototype.getPresentation = function (scheme, authority) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.presentations
-                            .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
-                            .next()];
-                    case 1: return [2 /*return*/, _a.sent()];
+            var field;
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        field = "meta.".concat(scheme);
+                        return [4 /*yield*/, this.presentations
+                                .find((_a = {}, _a[field] = authority, _a), { projection: { _id: 0 } })
+                                .next()];
+                    case 1: return [2 /*return*/, _b.sent()];
                 }
             });
         });
     };
-    Database.prototype.getAsset = function (scheme, uri) {
+    /**
+     * @param scheme - Has to be `ref` or `uuid`
+     * @param authority - The part after the colon: For example
+     * `PR_Beethoven_Ludwig-van` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+     */
+    Database.prototype.getAsset = function (scheme, authority) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.assets
-                            .find((_a = {}, _a[scheme] = uri, _a), { projection: { _id: 0 } })
+                            .find((_a = {}, _a[scheme] = authority, _a), { projection: { _id: 0 } })
                             .next()];
                     case 1: return [2 /*return*/, _b.sent()];
                 }

@@ -1,5 +1,3 @@
-import { ClientMediaModelsTypes } from '@bldr/type-definitions'
-
 /**
  * Example `ref:Alla-Turca#complete`
  */
@@ -15,7 +13,16 @@ interface UriSplittedByFragment {
   fragment?: string
 }
 
-export class MediaUri implements ClientMediaModelsTypes.MediaUri {
+/**
+ * This class represents an Uniform Resource Identifier (URI) for media and
+ * presentation files. An optional fragment (`#1-7`) (subset or sample selector)
+ * maybe included.
+ *
+ * Possible URIs are for example:
+ * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+ */
+export class MediaUri {
   private static readonly schemes: string[] = ['ref', 'uuid']
 
   private static readonly regExpAuthority: string = 'a-zA-Z0-9-_'
@@ -55,7 +62,7 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
   /**
    * For example: `ref` or `uuid`.
    */
-  public scheme: string
+  public scheme: 'ref' | 'uuid'
 
   /**
    * For example: `Beethoven_Ludwig-van` or
@@ -86,6 +93,10 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
       throw new Error(`The media URI is not valid: ${uri}`)
     }
     const groups = matches.groups
+
+    if (groups.scheme !== 'ref' && groups.scheme !== 'uuid') {
+      throw new Error('Media URI scheme has to be ref or uuid')
+    }
     this.scheme = groups.scheme
     this.authority = groups.authority
     if (groups.fragment != null) {
@@ -125,6 +136,17 @@ export class MediaUri implements ClientMediaModelsTypes.MediaUri {
       throw new Error(`The URI “${uri}” is not valid!`)
     }
     return uri
+  }
+
+  public static compose (
+    scheme: 'ref' | 'uuid',
+    authority: string,
+    fragment: string = ''
+  ): string {
+    if (fragment !== '') {
+      fragment = '#' + fragment
+    }
+    return `${scheme}:${authority}${fragment}`
   }
 
   public static splitByFragment (uri: string): UriSplittedByFragment {

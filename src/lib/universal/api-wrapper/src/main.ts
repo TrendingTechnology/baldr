@@ -34,19 +34,27 @@ export async function getMediaStatistics (): Promise<ApiTypes.MediaStatistics> {
   )
 }
 
+export async function getPresentationByScheme (
+  scheme: 'ref' | 'uuid',
+  authority: string
+): Promise<any | undefined> {
+  return await callWithErrorMessage(
+    `media/presentations/by-${scheme}/${authority}`,
+    `The presentation with the scheme “${scheme}” and the authority “${authority}” couldn’t be resolved.`
+  )
+}
+
+export async function getPresentationByUri (
+  uri: string
+): Promise<any | undefined> {
+  const mediaUri = new MediaUri(uri)
+  return await getPresentationByScheme(mediaUri.scheme, mediaUri.authority)
+}
+
 export async function getPresentationByRef (
   ref: string
 ): Promise<any | undefined> {
-  return await callWithErrorMessage(
-    {
-      url: 'media/get/presentation/by-ref',
-      method: 'GET',
-      params: {
-        ref
-      }
-    },
-    `The presentation with the reference “${ref}” couldn’t be resolved.`
-  )
+  return await getPresentationByScheme('ref', ref)
 }
 
 export async function getDynamicSelectPresentations (
@@ -80,19 +88,13 @@ export async function getAssetByUri (
   throwException: boolean = true
 ): Promise<any | undefined> {
   const mediaUri = new MediaUri(uri)
-  const field = mediaUri.scheme
-  const search = mediaUri.authority
-  const response = await httpRequest.request({
-    url: 'media/get/asset',
-    method: 'GET',
-    params: {
-      [mediaUri.scheme]: mediaUri.authority
-    }
-  })
+  const response = await httpRequest.request(
+    `media/assets/by-${mediaUri.scheme}/${mediaUri.authority}`
+  )
   if (response == null || response.status !== 200 || response.data == null) {
     if (throwException) {
       throw new Error(
-        `The media with the ${field} ”${search}” couldn’t be resolved.`
+        `The media with the ${mediaUri.scheme} ”${mediaUri.authority}” couldn’t be resolved.`
       )
     }
   } else {

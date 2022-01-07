@@ -76,12 +76,22 @@ export declare class Database implements DatabaseWrapper {
     get seatingPlan(): mongodb.Collection<any>;
     listUpdateTasks(): Promise<ApiTypes.MediaUpdateTask[]>;
     getFolderTitleTree(): Promise<TitlesTypes.TreeTitleList>;
-    getPresentationByRef(ref: string): Promise<any>;
-    getAsset(scheme: 'ref' | 'uuid', uri: string): Promise<any>;
+    /**
+     * @param scheme - Has to be `ref` or `uuid`
+     * @param authority - The part after the colon: For example
+     * `Marmotte` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+     */
+    getPresentation(scheme: 'ref' | 'uuid', authority: string): Promise<any>;
+    /**
+     * @param scheme - Has to be `ref` or `uuid`
+     * @param authority - The part after the colon: For example
+     * `PR_Beethoven_Ludwig-van` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+     */
+    getAsset(scheme: 'ref' | 'uuid', authority: string): Promise<any>;
     searchPresentationBySubstring(substring: string): Promise<ApiTypes.DynamikSelectResult[]>;
     getDocumentCounts(): Promise<ApiTypes.MediaCount>;
-    private getAllAssetRefs;
-    private getAllAssetUuids;
+    getAllAssetRefs(): Promise<string[]>;
+    getAllAssetUuids(): Promise<string[]>;
     getAllAssetUris(): Promise<string[]>;
 }
 export {};

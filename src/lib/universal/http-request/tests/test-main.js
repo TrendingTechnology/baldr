@@ -15,11 +15,10 @@ const httpRequest = makeHttpRequestInstance(config, 'local', '/api/media')
 describe('Package “@bldr/http-request”', function () {
   it('media/get/asset?uuid=c64047d2-983d-4009-a35f-02c95534cb53', async function () {
     const result = await httpRequest.request(
-      'get/asset?uuid=c64047d2-983d-4009-a35f-02c95534cb53'
+      'assets/by-uuid/c64047d2-983d-4009-a35f-02c95534cb53'
     )
-    const data = result.data
-    assert.strictEqual(data.composer, 'Modest Petrowitsch Mussorgski')
-    assert.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    assert.strictEqual(result.data.composer, 'Modest Petrowitsch Mussorgski')
+    assert.strictEqual(result.data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
   })
 
   it('HTTP URL 404: https://img.youtube.com/vi/xxxxxxxxxxx/hqdefault.jpg', async function () {

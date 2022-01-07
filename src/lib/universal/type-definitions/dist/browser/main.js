@@ -6,8 +6,6 @@
 export * from './config';
 import * as ApiTypes_1 from './api';
 export { ApiTypes_1 as ApiTypes };
-import * as ClientMediaModelsTypes_1 from './client-media-models';
-export { ClientMediaModelsTypes_1 as ClientMediaModelsTypes };
 import * as CliTypes_1 from './cli';
 export { CliTypes_1 as CliTypes };
 import * as IconFontGeneratorTypes_1 from './icon-font-generator';

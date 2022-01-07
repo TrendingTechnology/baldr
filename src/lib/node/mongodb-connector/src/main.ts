@@ -82,6 +82,7 @@ export async function connectDb (): Promise<mongodb.MongoClient> {
 interface IndexDefinition {
   field: string
   unique: boolean
+  partialFilterExpression?: any
 }
 
 interface CollectionDefinition {
@@ -131,7 +132,14 @@ export class Database implements DatabaseWrapper {
         drop: true
       },
       presentations: {
-        indexes: [{ field: 'meta.ref', unique: true }],
+        indexes: [
+          { field: 'meta.ref', unique: true },
+          {
+            field: 'meta.uuid',
+            unique: true,
+            partialFilterExpression: { 'meta.uuid': { $type: 'string' } }
+          }
+        ],
         drop: true
       },
       updates: {
@@ -183,10 +191,14 @@ export class Database implements DatabaseWrapper {
         if (!collectionNames.includes(collectionName)) {
           const collection = await this.db.createCollection(collectionName)
           for (const index of this.schema[collectionName].indexes) {
-            await collection.createIndex(
-              { [index.field]: 1 },
-              { unique: index.unique }
-            )
+            const options =
+              index.partialFilterExpression == null
+                ? { unique: index.unique }
+                : {
+                    unique: index.unique,
+                    partialFilterExpression: index.partialFilterExpression
+                  }
+            await collection.createIndex({ [index.field]: 1 }, options)
           }
         }
       }
@@ -296,15 +308,32 @@ export class Database implements DatabaseWrapper {
     return result.tree
   }
 
-  public async getPresentationByRef (ref: string): Promise<any> {
+  /**
+   * @param scheme - Has to be `ref` or `uuid`
+   * @param authority - The part after the colon: For example
+   * `Marmotte` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+   */
+  public async getPresentation (
+    scheme: 'ref' | 'uuid',
+    authority: string
+  ): Promise<any> {
+    const field = `meta.${scheme}`
     return await this.presentations
-      .find({ 'meta.ref': ref }, { projection: { _id: 0 } })
+      .find({ [field]: authority }, { projection: { _id: 0 } })
       .next()
   }
 
-  public async getAsset (scheme: 'ref' | 'uuid', uri: string): Promise<any> {
+  /**
+   * @param scheme - Has to be `ref` or `uuid`
+   * @param authority - The part after the colon: For example
+   * `PR_Beethoven_Ludwig-van` `d2377ef9-1fa6-4ae9-8f9a-7d23942b319e`
+   */
+  public async getAsset (
+    scheme: 'ref' | 'uuid',
+    authority: string
+  ): Promise<any> {
     return await this.assets
-      .find({ [scheme]: uri }, { projection: { _id: 0 } })
+      .find({ [scheme]: authority }, { projection: { _id: 0 } })
       .next()
   }
 
@@ -352,11 +381,11 @@ export class Database implements DatabaseWrapper {
     }
   }
 
-  private async getAllAssetRefs (): Promise<string[]> {
+  public async getAllAssetRefs (): Promise<string[]> {
     return await this.assets.distinct('ref')
   }
 
-  private async getAllAssetUuids (): Promise<string[]> {
+  public async getAllAssetUuids (): Promise<string[]> {
     return await this.assets.distinct('uuid')
   }
 

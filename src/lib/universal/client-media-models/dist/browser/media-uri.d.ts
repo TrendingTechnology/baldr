@@ -1,4 +1,3 @@
-import { ClientMediaModelsTypes } from '@bldr/type-definitions';
 /**
  * Example `ref:Alla-Turca#complete`
  */
@@ -12,7 +11,16 @@ interface UriSplittedByFragment {
      */
     fragment?: string;
 }
-export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
+/**
+ * This class represents an Uniform Resource Identifier (URI) for media and
+ * presentation files. An optional fragment (`#1-7`) (subset or sample selector)
+ * maybe included.
+ *
+ * Possible URIs are for example:
+ * `ref:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+ */
+export declare class MediaUri {
     private static readonly schemes;
     private static readonly regExpAuthority;
     /**
@@ -28,7 +36,7 @@ export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
     /**
      * For example: `ref` or `uuid`.
      */
-    scheme: string;
+    scheme: 'ref' | 'uuid';
     /**
      * For example: `Beethoven_Ludwig-van` or
      * `c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
@@ -67,6 +75,7 @@ export declare class MediaUri implements ClientMediaModelsTypes.MediaUri {
      * @throws If the given URI is not valid.
      */
     static validate(uri: string): string;
+    static compose(scheme: 'ref' | 'uuid', authority: string, fragment?: string): string;
     static splitByFragment(uri: string): UriSplittedByFragment;
     /**
      * Remove the fragment suffix of an media URI.

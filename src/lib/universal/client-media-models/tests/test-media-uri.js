@@ -74,6 +74,26 @@ describe('Class “MediaUri”', function () {
       assert.throws(() => MediaUri.validate('xxx:test#fragment'))
     })
 
+    describe('Static method “compose()”', function () {
+      it('With a fragment', function () {
+        assert.deepStrictEqual(
+          MediaUri.compose('ref', 'test', 'fragment'),
+          'ref:test#fragment'
+        )
+      })
+
+      it('Without a fragment', function () {
+        assert.deepStrictEqual(MediaUri.compose('ref', 'test'), 'ref:test')
+      })
+
+      it('uuid', function () {
+        assert.deepStrictEqual(
+          MediaUri.compose('uuid', 'd2377ef9-1fa6-4ae9-8f9a-7d23942b319e'),
+          'uuid:d2377ef9-1fa6-4ae9-8f9a-7d23942b319e'
+        )
+      })
+    })
+
     it('Static method “splitByFragment()”', function () {
       assert.deepStrictEqual(MediaUri.splitByFragment('ref:test#fragment'), {
         fragment: 'fragment',

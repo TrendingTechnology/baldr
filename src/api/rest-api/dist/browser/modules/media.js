@@ -110,15 +110,18 @@ export default function () {
             }
         });
     }); });
-    app.get('/get/presentation/by-ref', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, _a, _b, error_4;
+    app.get('/presentations/by-:scheme/:authority', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_4;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    ref = query.extractString(request.query, 'ref');
+                    if (request.params.scheme !== 'ref' &&
+                        request.params.scheme !== 'uuid') {
+                        throw new Error('Scheme has to be “ref” or “uuid”');
+                    }
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.getPresentationByRef(ref)];
+                    return [4 /*yield*/, database.getPresentation(request.params.scheme, request.params.authority)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -150,30 +153,17 @@ export default function () {
             }
         });
     }); });
-    app.get('/get/asset', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var scheme, uri, _a, _b, error_6;
+    app.get('/assets/by-:scheme/:authority', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_6;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    scheme = void 0;
-                    uri = void 0;
-                    if (request.query.ref == null && request.query.uuid != null) {
-                        scheme = 'uuid';
-                        uri = request.query.uuid;
-                    }
-                    else if (request.query.uuid == null && request.query.ref != null) {
-                        scheme = 'ref';
-                        uri = request.query.ref;
-                    }
-                    else {
-                        throw new Error('Use as query ref or uuid');
-                    }
-                    if (typeof uri !== 'string') {
-                        throw new Error('The value of the query has to be a string.');
+                    if (request.params.scheme !== 'ref' && request.params.scheme !== 'uuid') {
+                        throw new Error('Scheme has to be “ref” or “uuid”');
                     }
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.getAsset(scheme, uri)];
+                    return [4 /*yield*/, database.getAsset(request.params.scheme, request.params.authority)];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -185,14 +175,14 @@ export default function () {
             }
         });
     }); });
-    app.get('/titles', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+    app.get('/assets/refs', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
         var _a, _b, error_7;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = response).json;
-                    return [4 /*yield*/, database.getFolderTitleTree()];
+                    return [4 /*yield*/, database.getAllAssetRefs()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -204,30 +194,65 @@ export default function () {
             }
         });
     }); });
-    app.get('/get/all-asset-refs', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            try {
-                response.json({});
+    app.get('/assets/uuids', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_8;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, database.getAllAssetUuids()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_8 = _c.sent();
+                    next(error_8);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            catch (error) {
-                next(error);
-            }
-            return [2 /*return*/];
         });
     }); });
-    app.get('/get/all-asset-uuids', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            try {
-                response.json({});
+    app.get('/assets/uris', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_9;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, database.getAllAssetUris()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_9 = _c.sent();
+                    next(error_9);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            catch (error) {
-                next(error);
+        });
+    }); });
+    app.get('/titles', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_10;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = response).json;
+                    return [4 /*yield*/, database.getFolderTitleTree()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_10 = _c.sent();
+                    next(error_10);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            return [2 /*return*/];
         });
     }); });
     app.get('/open/editor', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, dryRun, _a, _b, error_8;
+        var ref, type, dryRun, _a, _b, error_11;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -241,15 +266,15 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_8 = _c.sent();
-                    next(error_8);
+                    error_11 = _c.sent();
+                    next(error_11);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); });
     app.get('/open/file-manager', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
-        var ref, type, create, archive, dryRun, _a, _b, error_9;
+        var ref, type, create, archive, dryRun, _a, _b, error_12;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -265,8 +290,8 @@ export default function () {
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_9 = _c.sent();
-                    next(error_9);
+                    error_12 = _c.sent();
+                    next(error_12);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

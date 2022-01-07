@@ -51,12 +51,25 @@ describe('Package “@bldr/mongodb-connector”', function () {
       assert.strictEqual(typeof uris[0], 'string')
     })
 
-    it('Getter method “getPresentationByRef()”', async function () {
-      const presentation = await database.getPresentationByRef('Marmotte')
-      assert.strictEqual(presentation.meta.ref, 'Marmotte')
+    describe('Method “getPresentation()”', function () {
+      it('by ref', async function () {
+        const presentation = await database.getPresentation('ref', 'Marmotte')
+        assert.strictEqual(
+          presentation.meta.uuid,
+          'de007e7e-b255-4a4e-92a1-0819d7f046cf'
+        )
+      })
+
+      it('by uuid', async function () {
+        const presentation = await database.getPresentation(
+          'uuid',
+          'de007e7e-b255-4a4e-92a1-0819d7f046cf'
+        )
+        assert.strictEqual(presentation.meta.ref, 'Marmotte')
+      })
     })
 
-    describe('Getter method “getAsset()”', function () {
+    describe('Method “getAsset()”', function () {
       it('by ref', async function () {
         const asset = await database.getAsset(
           'ref',
@@ -75,9 +88,7 @@ describe('Package “@bldr/mongodb-connector”', function () {
     })
 
     it('Getter method “searchPresentationBySubstring()”', async function () {
-      const results = await database.searchPresentationBySubstring(
-        'Beethoven'
-      )
+      const results = await database.searchPresentationBySubstring('Beethoven')
       assert.strictEqual(typeof results[0].ref, 'string')
       assert.strictEqual(typeof results[0].name, 'string')
     })

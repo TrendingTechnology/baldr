@@ -48,54 +48,72 @@ describe('/media', function () {
     await httpRequest.request({ url: '', method: 'PUT' })
   })
 
-  it('GET /titles', async function () {
+  it('GET titles', async function () {
     const result = await httpRequest.request('titles')
     assert.ok(result.data.Musik != null)
   })
 
-  describe('get', function () {
-    describe('asset', function () {
-      it('?ref=IN_Cembalo', async function () {
-        const result = await httpRequest.request({
-          url: 'get/asset',
-          params: {
-            ref: 'IN_Cembalo'
-          }
-        })
-        const data = result.data
-        assert.strictEqual(data.ref, 'IN_Cembalo')
-        assert.strictEqual(data.uuid, '0f741f26-f861-4c17-a4a4-c12dcd8375d9')
-        assert.strictEqual(data.wikidata, 'Q81982')
-      })
-
-      it('?uuid=c64047d2-983d-4009-a35f-02c95534cb53', async function () {
-        const result = await httpRequest.request({
-          url: 'get/asset',
-          params: {
-            uuid: 'c64047d2-983d-4009-a35f-02c95534cb53'
-          }
-        })
-        const data = result.data
-        assert.strictEqual(data.composer, 'Modest Petrowitsch Mussorgski')
-        assert.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
-      })
-    })
-
-    it('presentation/by-ref?ref=Marmotte', async function () {
-      const result = await httpRequest.request({
-        url: 'get/presentation/by-ref',
-        params: {
-          ref: 'Marmotte'
-        }
-      })
-      const data = result.data
-      assert.strictEqual(data.meta.ref, 'Marmotte')
+  describe('presentations', function () {
+    it('GET by-ref/Marmotte', async function () {
+      const result = await httpRequest.request('presentations/by-ref/Marmotte')
       assert.strictEqual(
-        data.meta.path,
+        result.data.meta.uuid,
+        'de007e7e-b255-4a4e-92a1-0819d7f046cf'
+      )
+      assert.strictEqual(
+        result.data.meta.path,
         'Musik/07/20_Mensch-Zeit/10_Beethoven/50_Marmotte/Praesentation.baldr.yml'
       )
     })
 
+    it('GET by-uuid/de007e7e-b255-4a4e-92a1-0819d7f046cf', async function () {
+      const result = await httpRequest.request(
+        'presentations/by-uuid/de007e7e-b255-4a4e-92a1-0819d7f046cf'
+      )
+      assert.strictEqual(result.data.meta.ref, 'Marmotte')
+    })
+  })
+
+  describe('assets', function () {
+    it('GET by-ref/IN_Cembalo', async function () {
+      const result = await httpRequest.request('assets/by-ref/IN_Cembalo')
+      const data = result.data
+      assert.strictEqual(data.ref, 'IN_Cembalo')
+      assert.strictEqual(data.uuid, '0f741f26-f861-4c17-a4a4-c12dcd8375d9')
+      assert.strictEqual(data.wikidata, 'Q81982')
+    })
+
+    it('GET by-uuid/c64047d2-983d-4009-a35f-02c95534cb53', async function () {
+      const result = await httpRequest.request(
+        'assets/by-uuid/c64047d2-983d-4009-a35f-02c95534cb53'
+      )
+      const data = result.data
+      assert.strictEqual(data.composer, 'Modest Petrowitsch Mussorgski')
+      assert.strictEqual(data.uuid, 'c64047d2-983d-4009-a35f-02c95534cb53')
+    })
+
+    it('GET refs', async function () {
+      const result = await httpRequest.request('assets/refs')
+      assert.ok(result.data.includes('PR_Mussorgski_Modest'))
+    })
+
+    it('GET uuids', async function () {
+      const result = await httpRequest.request('assets/uuids')
+      assert.ok(result.data.includes('c64047d2-983d-4009-a35f-02c95534cb53'))
+    })
+
+    it('GET uris', async function () {
+      const result = await httpRequest.request('assets/uris')
+      assert.ok(result.data.includes('ref:PR_Mussorgski_Modest'))
+      assert.ok(
+        result.data.includes('uuid:c64047d2-983d-4009-a35f-02c95534cb53')
+      )
+    })
+  })
+})
+
+describe('get', function () {
+  describe('asset', function () {
     it('presentations/by-substring?search=Ausstellung', async function () {
       const result = await httpRequest.request({
         url: 'get/presentations/by-substring',

@@ -25,7 +25,6 @@ export interface GenericError {
  */
 
 export * as ApiTypes from './api'
-export * as ClientMediaModelsTypes from './client-media-models'
 export * as CliTypes from './cli'
 export * as IconFontGeneratorTypes from './icon-font-generator'
 export * as LampTypes from './lamp'
