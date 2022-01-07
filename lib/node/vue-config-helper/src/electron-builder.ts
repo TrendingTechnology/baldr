@@ -46,7 +46,7 @@ export function buildElectronBuilderConfig (
     builderOptions: {
       appId: 'rocks.friedrich.baldr',
       productName: appName,
-      asar: false,
+      asar: true,
       linux: {
         target: 'deb',
         category: 'Education',
