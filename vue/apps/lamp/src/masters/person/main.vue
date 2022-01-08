@@ -32,7 +32,7 @@ import { Prop } from 'vue-property-decorator'
 import { Asset, personMModul } from '@bldr/presentation-parser'
 
 import ExternalSites from '@/components/reusable/ExternalSites.vue'
-import { formatToLocalDate } from '@bldr/core-browser'
+import { formatToLocalDate } from '@bldr/string-format'
 
 import MasterMain from '../MasterMain.vue'
 

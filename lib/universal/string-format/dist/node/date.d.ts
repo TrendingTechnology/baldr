@@ -1,10 +1,4 @@
 /**
- * Get the current school year. The function returns year in which the school year begins.
- *
- * @returns The year in which the school year begins, for example `2021/22`: `2021`
- */
-export declare function getCurrentSchoolYear(): number;
-/**
  * Extract the 4 digit year from a date string
  *
  * @param dateSpec - For example `1968-01-01`
@@ -13,15 +7,23 @@ export declare function getCurrentSchoolYear(): number;
  */
 export declare function formatToYear(dateSpec: string): string;
 /**
+ * Get the current school year. The function returns year in which the school year begins.
+ *
+ * @returns The year in which the school year begins, for example `2021/22`: `2021`
+ */
+export declare function getCurrentSchoolYear(): number;
+/**
  * @returns e. g. `2021/22`
  */
 export declare function getFormatedSchoolYear(): string;
 /**
- * Format a date specification string into a local date string, for
- * example `28. August 1749`
+ * Format a date specification string into a local date string, for example `28.
+ * August 1749`
  *
- * @param dateSpec - A valid input for the `Date()` class. If the input
- *   is invalid the raw `dateSpec` is returned.
+ * @param dateSpec - A valid input for the `Date()` class, for example
+ *   `1978-12-03`. If the input is invalid the raw `dateSpec` is returned.
+ *
+ * @returns For example `28. August 1749`
  */
 export declare function formatToLocalDate(dateSpec: string): string;
 /**
