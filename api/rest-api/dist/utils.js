@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import path from 'path';
 // Project packages.
 import { getConfig } from '@bldr/config';
@@ -27,21 +36,23 @@ export function validateMediaType(mediaType) {
  * @param ref - The ref of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-export async function getAbsPathFromRef(ref, mediaType = 'presentation') {
-    mediaType = validateMediaType(mediaType);
-    const result = await database.db
-        .collection(mediaType + 's')
-        .find(mediaType === 'presentation' ? { 'meta.ref': ref } : { ref: ref })
-        .next();
-    let relPath;
-    if (mediaType === 'presentation' && typeof result.meta.path === 'string') {
-        relPath = result.meta.path;
-    }
-    else if (typeof result.path === 'string') {
-        relPath = String(result.path) + '.yml';
-    }
-    if (relPath == null) {
-        throw new Error(`Can not find media file with the type “${mediaType}” and the reference “${ref}”.`);
-    }
-    return path.join(config.mediaServer.basePath, relPath);
+export function getAbsPathFromRef(ref, mediaType = 'presentation') {
+    return __awaiter(this, void 0, void 0, function* () {
+        mediaType = validateMediaType(mediaType);
+        const result = yield database.db
+            .collection(mediaType + 's')
+            .find(mediaType === 'presentation' ? { 'meta.ref': ref } : { ref: ref })
+            .next();
+        let relPath;
+        if (mediaType === 'presentation' && typeof result.meta.path === 'string') {
+            relPath = result.meta.path;
+        }
+        else if (typeof result.path === 'string') {
+            relPath = String(result.path) + '.yml';
+        }
+        if (relPath == null) {
+            throw new Error(`Can not find media file with the type “${mediaType}” and the reference “${ref}”.`);
+        }
+        return path.join(config.mediaServer.basePath, relPath);
+    });
 }

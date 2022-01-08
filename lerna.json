@@ -4,6 +4,7 @@
     "api/*",
     "lib/browser/*",
     "lib/node/*",
+    "lib/nodecjs/*",
     "lib/universal/*",
     "cli",
     "masters/*",

@@ -1,0 +1,45 @@
+{
+  "name": "@bldr/vue-config-helper-cjs",
+  "version": "0.1.0",
+  "description": "CommonsJS version helper to setup Vue in vue.config.js.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/main.js",
+  "dependencies": {
+    "@bldr/git-head-info": "*",
+    "@bldr/presentation-parser": "*",
+    "@bldr/themes": "*",
+    "@bldr/config-cjs": "*",
+    "webpack-bundle-analyzer": "4.5.0",
+    "webpack": "4.44.2"
+  },
+  "devDependencies": {
+    "@bldr/config": "*",
+    "@types/node": "14.14.7",
+    "@types/webpack-bundle-analyzer": "4.4.1",
+    "@types/webpack": "5.28.0"
+  },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  }
+}

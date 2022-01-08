@@ -1,12 +1,12 @@
-const { readMasterExamples, configureVue } = require('@bldr/vue-config-helper')
+const { readMasterExamples, configureVue } = require('@bldr/vue-config-helper-cjs')
 
-const { exportSassAsJson } = require('@bldr/themes')
+// const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
 
 module.exports = configureVue({
-  dirname: new URL('.', import.meta.url).pathname,
+  dirname: __dirname,
   additionalDefinitions: {
-    defaultThemeSassVars: exportSassAsJson(),
+    defaultThemeSassVars: {},
     lampVersion: packageJson.version,
     rawYamlExamples: readMasterExamples()
   },

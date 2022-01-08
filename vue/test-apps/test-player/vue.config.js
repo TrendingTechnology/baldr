@@ -1,6 +1,6 @@
-const { configureVue } = require('@bldr/vue-config-helper')
+const { configureVue } = require('@bldr/vue-config-helper-cjs')
 
 module.exports = configureVue({
-  dirname: new URL('.', import.meta.url).pathname,
+  dirname: __dirname,
   appEntry: './src/app.ts'
 })
