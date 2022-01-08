@@ -15,7 +15,7 @@ import { DefinePlugin as _DefinePlugin } from 'webpack';
  *   // If the value is a string it will be used as a code fragment.
  *   compilationTime: new Date().getTime(),
  *   config: JSON.stringify(config),
- *   gitHead: JSON.stringify(gitHead()),
+ *   gitHead: JSON.stringify(getGitHead()),
  *   songsJson: JSON.stringify(
  *     require(path.join(config.songbook.path, 'songs.json'))
  *   )

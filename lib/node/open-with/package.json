@@ -17,8 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:node",
-    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard",

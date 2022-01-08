@@ -4,27 +4,37 @@
  *
  * @module @bldr/core-node
  */
+/**
+ * ```js
+ * const __filename = getFilename(import.meta)
+ * ```
+ */
+export declare function getFilename(meta: ImportMeta): string;
+/**
+ * ```js
+ * const new URL('.', import.meta.url).pathname = getDirname(import.meta)
+ * ```
+ */
+export declare function getDirname(meta: ImportMeta): string;
+/**
+ * ```js
+ * if (require.main === module) {
+ *   // Do something special.
+ * }
+ * ```
+ *
+ * https://github.com/tschaub/es-main/blob/main/main.js
+ */
+export declare function isModuleMain(meta: ImportMeta): boolean;
 interface GitHead {
     short: string;
     long: string;
     isDirty: boolean;
 }
 /**
- * ```js
- * const __filename = getFilename()
- * ```
- */
-export declare function getFilename(): string;
-/**
- * ```js
- * const new URL('.', import.meta.url).pathname = getDirname()
- * ```
- */
-export declare function getDirname(): string;
-/**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
-export declare function gitHead(): GitHead;
+export declare function getGitHead(): GitHead;
 /**
  * Check if some executables are installed. Throws an error if not.
  *
@@ -48,7 +58,7 @@ export declare function getPdfPageCount(filePath: string): number;
  * @param dest - The destination. Missing parent directories are
  *   automatically created.
  */
-export declare function fetchFile(url: string, dest: string): Promise<void>;
+export declare function fetchFile(httpUrl: string, dest: string): Promise<void>;
 /**
  * Replace ~ with the home folder path.
  *

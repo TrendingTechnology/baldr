@@ -1,70 +1,67 @@
 {
-	"name": "@bldr/songbook",
-	"version": "0.2.4",
-	"description": "Vue app of the baldr songbook.",
-	"author": {
-		"name": "Josef Friedrich",
-		"email": "josef@friedrich.rocks",
-		"url": "https://josef.friedrich.rocks"
-	},
-	"main": "background.js",
-	"dependencies": {
-		"vue": "2.6.11",
-		"vue-class-component": "7.2.3",
-		"vue-property-decorator": "9.1.2",
-		"vue-router": "3.2.0",
-		"vuex": "3.4.0"
-	},
-	"devDependencies": {
-		"@types/electron-devtools-installer": "2.2.0",
-		"@vue/cli-plugin-e2e-cypress": "4.5.15",
-		"@vue/cli-plugin-typescript": "4.5.0",
-		"@vue/cli-service": "4.5.9",
-		"@vue/eslint-config-standard": "5.1.2",
-		"copy-webpack-plugin": "6.3.1",
-		"electron": "15.3.0",
-		"electron-devtools-installer": "3.2.0",
-		"node-sass": "7.0.1",
-		"sass-loader": "10.1.0",
-		"style-resources-loader": "1.4.1",
-		"vue-cli-plugin-electron-builder": "2.1.1",
-		"vue-cli-plugin-style-resources-loader": "0.1.4",
-		"vue-template-compiler": "2.6.11"
-	},
-	"postcss": {
-		"plugins": {
-			"autoprefixer": {}
-		}
-	},
-	"eslintConfig": {
-		"root": true,
-		"env": {
-			"node": true
-		},
-		"extends": [
-			"plugin:vue/base",
-			"plugin:vue/essential",
-			"@vue/standard",
-			"@vue/typescript/recommended"
-		],
-		"parserOptions": {
-			"ecmaVersion": 2020
-		},
-		"rules": {}
-	},
-	"browserslist": [
-		"> 1%",
-		"last 2 versions",
-		"not dead"
-	],
-	"gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
-	"publishConfig": {
-		"access": "public"
-	},
-	"homepage": "https://github.com/Josef-Friedrich/baldr#readme",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Josef-Friedrich/baldr.git"
-	}
+  "name": "@bldr/songbook",
+  "version": "0.2.4",
+  "description": "Vue app of the baldr songbook.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "vue": "2.6.11",
+    "vue-class-component": "7.2.3",
+    "vue-property-decorator": "9.1.2",
+    "vue-router": "3.2.0",
+    "vuex": "3.4.0"
+  },
+  "devDependencies": {
+    "@types/electron-devtools-installer": "2.2.0",
+    "@vue/cli-plugin-e2e-cypress": "4.5.15",
+    "@vue/cli-plugin-typescript": "4.5.0",
+    "@vue/cli-service": "4.5.9",
+    "@vue/eslint-config-standard": "5.1.2",
+    "copy-webpack-plugin": "6.3.1",
+    "electron": "15.3.0",
+    "electron-devtools-installer": "3.2.0",
+    "node-sass": "7.0.1",
+    "sass-loader": "10.1.0",
+    "style-resources-loader": "1.4.1",
+    "vue-cli-plugin-electron-builder": "2.1.1",
+    "vue-cli-plugin-style-resources-loader": "0.1.4",
+    "vue-template-compiler": "2.6.11"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/base",
+      "plugin:vue/essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {}
+  },
+  "browserslist": ["> 1%", "last 2 versions", "not dead"],
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  }
 }

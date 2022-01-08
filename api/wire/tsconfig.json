@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ESNext",
+    "module": "ESNext",
     "declaration": true,
     "outDir": "./dist",
     "allowJs": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "moduleResolution": "node"
   },
-  "include": ["src/*.ts"],
+  "include": ["src/*.ts"]
 }

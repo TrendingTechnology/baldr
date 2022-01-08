@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "COMMONJS",
+    "module": "ESNext",
     "declaration": true,
-    "outDir": "./dist/node",
+    "outDir": "./dist",
     "strict": true,
     "lib": ["ES2020", "DOM"],
     "noImplicitAny": true,

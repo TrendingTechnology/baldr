@@ -29,9 +29,6 @@
     "@bldr/string-format": "*"
   },
   "type": "module",
-  "devDependencies": {
-    "@bldr/type-definitions": "*"
-  },
   "mocha": {
     "node-option": ["experimental-specifier-resolution=node"]
   },

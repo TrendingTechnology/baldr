@@ -31,8 +31,7 @@
   },
   "type": "module",
   "scripts": {
-    "build:node": "tsc",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",

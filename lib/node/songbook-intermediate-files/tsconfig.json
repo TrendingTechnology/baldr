@@ -10,7 +10,8 @@
     "noImplicitAny": true,
     "outDir": "./dist",
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "moduleResolution": "node"
   },
   "include": [
     "src/*.ts"

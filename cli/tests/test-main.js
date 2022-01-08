@@ -1,7 +1,7 @@
 /* globals describe it */
 
-const assert = require('assert')
-const childProcess = require('child_process')
+import assert from 'assert'
+import childProcess from 'child_process'
 
 describe('Package “@bldr/cli”', function () {
   it('--help', async function () {

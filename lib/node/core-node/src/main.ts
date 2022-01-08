@@ -9,10 +9,63 @@ import childProcess from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import { URL } from 'url'
+import process from 'process'
+import url from 'url'
+import { createRequire } from 'module'
 
-import git from 'git-rev-sync'
 import fetch from 'node-fetch'
+
+const require = createRequire(import.meta.url)
+/* eslint-disable @typescript-eslint/no-var-requires */
+const git = require('git-rev-sync')
+
+/**
+ * ```js
+ * const __filename = getFilename(import.meta)
+ * ```
+ */
+export function getFilename (meta: ImportMeta): string {
+  return new url.URL('', meta.url).pathname
+}
+
+/**
+ * ```js
+ * const new URL('.', import.meta.url).pathname = getDirname(import.meta)
+ * ```
+ */
+export function getDirname (meta: ImportMeta): string {
+  return new url.URL('.', meta.url).pathname
+}
+
+function stripExtension (name: string): string {
+  const extension = path.extname(name)
+  if (extension == null) {
+    return name
+  }
+
+  return name.slice(0, -extension.length)
+}
+
+/**
+ * ```js
+ * if (require.main === module) {
+ *   // Do something special.
+ * }
+ * ```
+ *
+ * https://github.com/tschaub/es-main/blob/main/main.js
+ */
+export function isModuleMain (meta: ImportMeta): boolean {
+  const modulePath = url.fileURLToPath(meta.url)
+
+  const scriptPath = process.argv[1]
+  const extension = path.extname(scriptPath)
+  if (extension != null) {
+    return modulePath === scriptPath
+  }
+
+  return stripExtension(modulePath) === scriptPath
+}
 
 interface GitHead {
   short: string
@@ -21,27 +74,9 @@ interface GitHead {
 }
 
 /**
- * ```js
- * const __filename = getFilename()
- * ```
- */
-export function getFilename (): string {
-  return new URL('', import.meta.url).pathname
-}
-
-/**
- * ```js
- * const new URL('.', import.meta.url).pathname = getDirname()
- * ```
- */
-export function getDirname (): string {
-  return new URL('.', import.meta.url).pathname
-}
-
-/**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
-export function gitHead (): GitHead {
+export function getGitHead (): GitHead {
   return {
     short: git.short(),
     long: git.long(),
@@ -98,8 +133,8 @@ export function getPdfPageCount (filePath: string): number {
  * @param dest - The destination. Missing parent directories are
  *   automatically created.
  */
-export async function fetchFile (url: string, dest: string): Promise<void> {
-  const response = await fetch(new URL(url))
+export async function fetchFile (httpUrl: string, dest: string): Promise<void> {
+  const response = await fetch(new url.URL(httpUrl))
   fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
 }

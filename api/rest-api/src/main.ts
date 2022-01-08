@@ -22,6 +22,8 @@
  */
 import express from 'express'
 
+import { isModuleMain } from '@bldr/core-node'
+
 import { startRestApi } from './api'
 
 export { startRestApi as start } from './api'
@@ -36,7 +38,7 @@ async function main (): Promise<express.Express> {
   return await startRestApi(port)
 }
 
-if (require.main === module) {
+if (isModuleMain(import.meta)) {
   main()
     .then()
     .catch(reason => console.log(reason))

@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 // Project packages.
-import { checkExecutables } from '@bldr/core-node';
+import { checkExecutables, isModuleMain } from '@bldr/core-node';
 import * as log from '@bldr/log';
 import * as mediaManager from '@bldr/media-manager';
 import { Command } from 'commander';
@@ -143,8 +143,8 @@ async function main() {
         actionHelp();
     }
 }
-// if (require.main === module) {
-main();
-// .then()
-// .catch(reason => log.info(String(reason)))
-// }
+if (isModuleMain(import.meta)) {
+    main()
+        .then()
+        .catch(reason => log.info(String(reason)));
+}

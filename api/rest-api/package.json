@@ -16,6 +16,7 @@
   "dependencies": {
     "@bldr/config": "*",
     "@bldr/core-browser": "*",
+    "@bldr/core-node": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/media-data-collector": "*",
     "@bldr/media-manager": "*",
@@ -32,10 +33,12 @@
     "@types/express": "4.17.13",
     "@types/node": "17.0.8"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "scripts": {
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node && npm run build:browser",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",

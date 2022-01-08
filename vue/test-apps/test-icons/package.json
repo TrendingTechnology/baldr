@@ -50,6 +50,7 @@
     ],
     "root": true
   },
+  "type": "module",
   "dependencies": {
     "@bldr/themes": "*",
     "@bldr/icons": "*",

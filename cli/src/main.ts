@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import { checkExecutables } from '@bldr/core-node'
+import { checkExecutables, isModuleMain } from '@bldr/core-node'
 import { CliTypes } from '@bldr/type-definitions'
 
 import * as log from '@bldr/log'
@@ -13,7 +13,10 @@ import * as mediaManager from '@bldr/media-manager'
 import { Command } from 'commander'
 
 // Globals.
-const commandsPath = path.join(new URL('.', import.meta.url).pathname, 'commands')
+const commandsPath = path.join(
+  new URL('.', import.meta.url).pathname,
+  'commands'
+)
 
 /**
  * To avoid duplicate aliases. The `commander` doesn’t complain about
@@ -109,11 +112,7 @@ async function loadCommands (program: Program): Promise<void> {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
     // eslint-disable-next-line
-    const def = await import(path.join(
-      commandsPath,
-      commandName,
-      'def.js'
-    ))
+    const def = await import(path.join(commandsPath, commandName, 'def.js'))
 
     const definition = def.default as CliTypes.CliCommandSpec
     const subProgramm = program.command(definition.command)
@@ -197,8 +196,8 @@ async function main (): Promise<void> {
   }
 }
 
-// if (require.main === module) {
-main()
-// .then()
-// .catch(reason => log.info(String(reason)))
-// }
+if (isModuleMain(import.meta)) {
+  main()
+    .then()
+    .catch(reason => log.info(String(reason)))
+}

@@ -1,12 +1,14 @@
 /* globals describe it */
 
-const assert = require('assert')
+import assert from 'assert'
 
-const { makeHttpRequestInstance } = require('@bldr/http-request')
-const { getConfig } = require('@bldr/config')
+import { makeHttpRequestInstance } from '@bldr/http-request'
+
+import { getConfig } from '@bldr/config'
+
+import { restart } from '../dist/main'
+
 const config = getConfig()
-
-const { restart } = require('../dist/node/main')
 
 const httpRequest = makeHttpRequestInstance(config, 'local', '/api/database')
 
