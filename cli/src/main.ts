@@ -3,8 +3,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import { Command } from 'commander'
-
 // Project packages.
 import { checkExecutables } from '@bldr/core-node'
 import { CliTypes } from '@bldr/type-definitions'
@@ -12,8 +10,10 @@ import { CliTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
 import * as mediaManager from '@bldr/media-manager'
 
+import { Command } from 'commander'
+
 // Globals.
-const commandsPath = path.join(__dirname, 'commands')
+const commandsPath = path.join(new URL('.', import.meta.url).pathname, 'commands')
 
 /**
  * To avoid duplicate aliases. The `commander` doesn’t complain about
@@ -78,12 +78,13 @@ function actionHandler (
   commandName: string,
   def: CliTypes.CliCommandSpec
 ): ActionHandlerFunction {
-  return function (...args: any[]): void | Promise<void> {
+  return async function (...args: any[]): Promise<void> {
     if (def.checkExecutable != null) {
       checkExecutables(def.checkExecutable)
     }
     // eslint-disable-next-line
-    const action = require(path.join(commandsPath, commandName, 'action.js'))
+    const a = await import(path.join(commandsPath, commandName, 'action.js'))
+    const action = a.default
 
     args = [...arguments, program.opts()]
     args = convertPathArgToParentPresDir(args)
@@ -104,33 +105,35 @@ type Program = typeof program
  *
  * @param program - An instance of the package “commander”.
  */
-function loadCommands (program: Program): void {
+async function loadCommands (program: Program): Promise<void> {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
     // eslint-disable-next-line
-    const def = require(path.join(
+    const def = await import(path.join(
       commandsPath,
       commandName,
       'def.js'
-    )) as CliTypes.CliCommandSpec
-    const subProgramm = program.command(def.command)
-    if (def.alias != null) {
-      if (!aliases.includes(def.alias)) {
-        subProgramm.alias(def.alias)
-        aliases.push(def.alias)
+    ))
+
+    const definition = def.default as CliTypes.CliCommandSpec
+    const subProgramm = program.command(definition.command)
+    if (definition.alias != null) {
+      if (!aliases.includes(definition.alias)) {
+        subProgramm.alias(definition.alias)
+        aliases.push(definition.alias)
       } else {
         throw new Error(
-          `Duplicate alias “${def.alias}” used for the (sub)command “${def.command}”.`
+          `Duplicate alias “${definition.alias}” used for the (sub)command “${definition.command}”.`
         )
       }
     }
-    subProgramm.description(def.description)
-    if (def.options != null) {
-      for (const option of def.options) {
+    subProgramm.description(definition.description)
+    if (definition.options != null) {
+      for (const option of definition.options) {
         subProgramm.option(option[0], option[1])
       }
     }
-    subProgramm.action(actionHandler(commandName, def))
+    subProgramm.action(actionHandler(commandName, definition))
   }
 }
 
@@ -176,7 +179,7 @@ export function validateDefintion (
 }
 
 async function main (): Promise<void> {
-  loadCommands(program)
+  await loadCommands(program)
 
   try {
     await program.parseAsync(process.argv)
@@ -194,8 +197,8 @@ async function main (): Promise<void> {
   }
 }
 
-if (require.main === module) {
-  main()
-    .then()
-    .catch(reason => log.info(String(reason)))
-}
+// if (require.main === module) {
+main()
+// .then()
+// .catch(reason => log.info(String(reason)))
+// }

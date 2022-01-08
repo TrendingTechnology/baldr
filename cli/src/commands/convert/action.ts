@@ -1,4 +1,3 @@
-
 // Project packages.
 import { operations, walk } from '@bldr/media-manager'
 
@@ -8,13 +7,17 @@ import { operations, walk } from '@bldr/media-manager'
  * @param filePaths - An array of input files to convert.
  * @param cmdObj - The command object from the commander.
  */
-async function action (filePaths: string[], cmdObj: { [key: string]: any }): Promise<void> {
-  await walk({
-    all: operations.convertAsset
-  }, {
-    path: filePaths,
-    payload: cmdObj
-  })
+export default async function action (
+  filePaths: string[],
+  cmdObj: { [key: string]: any }
+): Promise<void> {
+  await walk(
+    {
+      all: operations.convertAsset
+    },
+    {
+      path: filePaths,
+      payload: cmdObj
+    }
+  )
 }
-
-export = action

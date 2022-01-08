@@ -4,7 +4,7 @@ import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 
-async function action (): Promise<void> {
+export default async function action (): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
   cmd.startSpin()
 
@@ -27,5 +27,3 @@ async function action (): Promise<void> {
 
   cmd.stopSpin()
 }
-
-export = action

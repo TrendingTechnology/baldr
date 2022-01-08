@@ -19,7 +19,7 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (
+export default async function action (
   globPattern: string,
   prefix: string,
   cmdObj: Options
@@ -53,5 +53,3 @@ async function action (
     await operations.normalizeMediaAsset(firstNewFileName, { wikidata: false })
   }
 }
-
-module.exports = action

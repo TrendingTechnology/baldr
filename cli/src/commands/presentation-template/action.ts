@@ -9,8 +9,9 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePath?: string, cmdObj?: Options): Promise<void> {
+export default async function action (
+  filePath?: string,
+  cmdObj?: Options
+): Promise<void> {
   await operations.generateAutomaticPresentation(filePath, cmdObj?.force)
 }
-
-module.exports = action

@@ -18,7 +18,7 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (filePath: string, cmdObj: Options): void {
+export default function action (filePath: string, cmdObj: Options): void {
   if (filePath == null) {
     filePath = process.cwd()
   }
@@ -38,5 +38,3 @@ function action (filePath: string, cmdObj: Options): void {
   }
   openArchivesInFileManager(filePath, cmdObj.createDirs)
 }
-
-export = action

@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import * as log from '@bldr/log'
 
-async function action (): Promise<void> {
+export default async function action (): Promise<void> {
   const files = fs.readdirSync(process.cwd())
 
   for (const file of files) {
@@ -18,5 +18,3 @@ async function action (): Promise<void> {
     }
   }
 }
-
-module.exports = action

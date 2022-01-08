@@ -1,4 +1,3 @@
-
 import path from 'path'
 import childProcess from 'child_process'
 
@@ -8,7 +7,10 @@ import { findParentFile } from '@bldr/core-node'
 /**
  * @param filePath - A file inside a javascript / node package.
  */
-async function action (scriptName: string, filePath: string): Promise<void> {
+export default async function action (
+  scriptName: string,
+  filePath: string
+): Promise<void> {
   filePath = path.resolve(filePath)
   const packageJson = findParentFile(path.resolve(filePath), 'package.json')
 
@@ -38,5 +40,3 @@ async function action (scriptName: string, filePath: string): Promise<void> {
     })
   })
 }
-
-export = action

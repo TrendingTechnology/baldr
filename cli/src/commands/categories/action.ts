@@ -5,7 +5,7 @@ import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 
-function action (): void {
+export default function action (): void {
   stripCategories()
   const configJson = readJsonFile(config.configurationFileLocations[1])
   configJson.mediaCategories = stripCategories()
@@ -16,5 +16,3 @@ function action (): void {
     log.info(writeJsonFile(filePath, configJson))
   }
 }
-
-module.exports = action

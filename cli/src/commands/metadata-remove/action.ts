@@ -1,9 +1,8 @@
-
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 import { getExtension } from '@bldr/string-format'
 
-async function action (filePath: string): Promise<void> {
+export default async function action (filePath: string): Promise<void> {
   const cmd = new CommandRunner({
     verbose: true
   })
@@ -14,13 +13,17 @@ async function action (filePath: string): Promise<void> {
 
     cmd.startSpin()
     await cmd.exec([
-      'ffmpeg', '-i', filePath,
-      '-map_metadata', '-1',
-      '-c:v', 'copy', '-c:a', 'copy',
+      'ffmpeg',
+      '-i',
+      filePath,
+      '-map_metadata',
+      '-1',
+      '-c:v',
+      'copy',
+      '-c:a',
+      'copy',
       dest
     ])
     cmd.stopSpin()
   }
 }
-
-export = action

@@ -75,7 +75,7 @@ function createGimpPaletteLine (color: ColorSpec, name: string): string {
  * 237 201  88  yellow-light
  * ```
  */
-function createGimpPalette (): void {
+export default function createGimpPalette (): void {
   const lines = []
   lines.push('GIMP Palette')
   lines.push('Name: baldr')
@@ -85,5 +85,3 @@ function createGimpPalette (): void {
   }
   log.info(lines.join('\n'))
 }
-
-module.exports = createGimpPalette

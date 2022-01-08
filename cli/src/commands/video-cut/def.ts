@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'video-cut <video-file> <time-1> [time-2]',
   alias: 'vc',
   description:

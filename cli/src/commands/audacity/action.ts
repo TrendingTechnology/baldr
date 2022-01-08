@@ -91,7 +91,7 @@ function extractSamples (audacityTextmarkFile: string): RawSample[] {
  * @param filePath - The file path of the Audacity’s text mark
  *   file.
  */
-function action (filePath: string): void {
+export default function action (filePath: string): void {
   const text = readFile(filePath)
   log.info('The content of the source file “%s”:\n', [filePath])
   log.info(text)
@@ -152,5 +152,3 @@ function action (filePath: string): void {
   log.info('The content of the destination file “%s”:\n', [dest])
   log.always(writeYamlFile(dest, { samples }))
 }
-
-export = action

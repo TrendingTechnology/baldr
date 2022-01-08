@@ -20,7 +20,7 @@ function openShell (filePath: string): void {
   })
 }
 
-function action (cmdObj: Options): void {
+export default function action (cmdObj: Options): void {
   // In the archive folder are no two letter folders like 'YT'.
   // We try to detect the parent folder where the presentation lies in.
   const presDir = locationIndicator.getPresParentDir(process.cwd())
@@ -46,5 +46,3 @@ function action (cmdObj: Options): void {
     openShell(mirroredPath)
   }
 }
-
-export = action

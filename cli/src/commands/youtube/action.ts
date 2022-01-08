@@ -91,10 +91,7 @@ async function downloadVideo (
   })
 }
 
-/**
- *
- */
-async function action (youtubeId: string): Promise<void> {
+export default async function action (youtubeId: string): Promise<void> {
   const meta = (await requestYoutubeApi(youtubeId)) as unknown
   if (meta == null) {
     log.error('Metadata of the YouTube video “%s” could not be fetched.', [
@@ -146,5 +143,3 @@ async function action (youtubeId: string): Promise<void> {
   }
   cmd.stopSpin()
 }
-
-export = action

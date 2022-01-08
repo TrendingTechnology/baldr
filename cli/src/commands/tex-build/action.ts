@@ -9,7 +9,8 @@ import * as log from '@bldr/log'
 
 function buildOneFile (filePath: string): void {
   const process = childProcess.spawnSync(
-    'lualatex', ['--halt-on-error', '--shell-escape', filePath],
+    'lualatex',
+    ['--halt-on-error', '--shell-escape', filePath],
     { cwd: path.dirname(filePath) }
   )
   if (process.status === 0) {
@@ -25,11 +26,9 @@ function buildOneFile (filePath: string): void {
  * @param filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`
  */
-async function action (filePaths: string[]): Promise<void> {
+export default async function action (filePaths: string[]): Promise<void> {
   await walk(buildOneFile, {
     path: filePaths,
     regex: 'tex'
   })
 }
-
-export = action

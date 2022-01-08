@@ -12,7 +12,7 @@ function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   }
 }
 
-async function action (
+export default async function action (
   pattern: string,
   replacement: string,
   filePath: string
@@ -23,5 +23,3 @@ async function action (
     payload: { pattern, replacement }
   })
 }
-
-export = action

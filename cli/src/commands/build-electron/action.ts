@@ -50,7 +50,7 @@ async function buildElectronApp (
  * @param appName - The name of the app. The app name must be the same
  *   as the parent directory.
  */
-async function action (appName: string): Promise<void> {
+export default async function action (appName: string): Promise<void> {
   const cmd = new CommandRunner({
     verbose: true
   })
@@ -69,5 +69,3 @@ async function action (appName: string): Promise<void> {
     cmd.catch(error as Error)
   }
 }
-
-export = action

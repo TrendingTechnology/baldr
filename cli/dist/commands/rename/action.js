@@ -1,0 +1,17 @@
+// Project packages.
+import { operations, walk } from '@bldr/media-manager';
+/**
+ * Rename files.
+ *
+ * @param filePaths - An array of input files, comes from the
+ *   commanders’ variadic parameter `[files...]`.
+ */
+export default async function action(filePaths) {
+    await walk({
+        all(oldPath) {
+            operations.renameMediaAsset(oldPath);
+        }
+    }, {
+        path: filePaths
+    });
+}

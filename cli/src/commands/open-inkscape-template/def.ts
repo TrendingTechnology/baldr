@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'open-inkscape-template',
   alias: 'oi',
   checkExecutable: 'inkscape',

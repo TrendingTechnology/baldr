@@ -157,7 +157,10 @@ async function createPreviewOneFile (
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths: string[], cmdObj: Options): Promise<void> {
+export default async function action (
+  filePaths: string[],
+  cmdObj: Options
+): Promise<void> {
   await walk(
     {
       async asset (relPath) {
@@ -169,5 +172,3 @@ async function action (filePaths: string[], cmdObj: Options): Promise<void> {
     }
   )
 }
-
-export = action

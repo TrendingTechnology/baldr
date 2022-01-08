@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'api [port]',
   alias: 'a',
   options: [

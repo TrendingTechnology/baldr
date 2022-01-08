@@ -19,7 +19,10 @@ const getAllFiles = function (dirPath: string, min: number = 20): void {
   }
 }
 
-async function action (filePath: string | undefined, opts: any): Promise<void> {
+export default async function action (
+  filePath: string | undefined,
+  opts: any
+): Promise<void> {
   let min = 20
 
   if (opts.min != null) {
@@ -27,5 +30,3 @@ async function action (filePath: string | undefined, opts: any): Promise<void> {
   }
   getAllFiles(filePath != null ? filePath : process.cwd(), min)
 }
-
-export = action

@@ -12,7 +12,10 @@ interface Options {
  * @param filePaths - An array of input files, comes from the
  *   commanders’ variadic parameter `[files...]`.
  */
-async function action (filePaths: string[], opts?: Options): Promise<void> {
+export default async function action (
+  filePaths: string[],
+  opts?: Options
+): Promise<void> {
   let filter
 
   if (opts?.presentation ?? false) {
@@ -25,5 +28,3 @@ async function action (filePaths: string[], opts?: Options): Promise<void> {
 
   await operations.normalize(filePaths, filter)
 }
-
-export = action

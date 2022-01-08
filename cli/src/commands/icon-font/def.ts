@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'icon-font',
   alias: 'if',
   description: 'Download some material icons and build font files from this SVGs.'

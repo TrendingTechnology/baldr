@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
   alias: 'w',
   options: [

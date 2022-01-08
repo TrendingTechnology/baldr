@@ -6,9 +6,7 @@ import * as log from '@bldr/log'
 /**
  * @param {String} audioFile
  */
-async function action (filePath: string): Promise<void> {
+export default async function action (filePath: string): Promise<void> {
   const result = await collectAudioMetadata(filePath)
   log.infoAny(result)
 }
-
-export = action

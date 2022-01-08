@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'build-electron [app-name]',
   alias: 'be',
   description: 'Build the Electron apps.',

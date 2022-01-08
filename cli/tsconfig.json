@@ -5,10 +5,11 @@
     "lib": [
       "ES2020.String", "DOM"
     ],
-    "module": "CommonJS",
+    "module": "esnext",
     "outDir": "./dist",
     "strict": true,
-    "target": "ES6"
+    "target": "esnext",
+    "moduleResolution": "node"
   },
   "include": [
     "./src/**/*"

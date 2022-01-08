@@ -16,12 +16,13 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
+    "build:node": "tsc",
     "build": "npm run build:node && npm run lint",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/**/*.ts'",

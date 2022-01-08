@@ -10,7 +10,7 @@ const config = getConfig()
 /**
  * Open the Inkscape template.
  */
-async function action (): Promise<void> {
+export default async function action (): Promise<void> {
   const cmd = new CommandRunner({
     verbose: false
   })
@@ -27,5 +27,3 @@ async function action (): Promise<void> {
     { detached: true }
   )
 }
-
-export = action

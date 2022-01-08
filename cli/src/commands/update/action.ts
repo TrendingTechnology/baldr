@@ -19,7 +19,10 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (what: whatType, cmdObj: Options): Promise<void> {
+export default async function action (
+  what: whatType,
+  cmdObj: Options
+): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
   cmd.checkRoot()
 
@@ -153,5 +156,3 @@ async function action (what: whatType, cmdObj: Options): Promise<void> {
 
   cmd.stopSpin()
 }
-
-export = action

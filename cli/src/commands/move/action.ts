@@ -317,7 +317,7 @@ async function move (oldPath: string, cmdObj: Options): Promise<void> {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths: string[], cmdObj: Options): Promise<void> {
+export default async function action (filePaths: string[], cmdObj: Options): Promise<void> {
   const opts: { [key: string]: any } = {
     path: filePaths,
     payload: cmdObj
@@ -339,5 +339,3 @@ async function action (filePaths: string[], cmdObj: Options): Promise<void> {
     )
   }
 }
-
-module.exports = action

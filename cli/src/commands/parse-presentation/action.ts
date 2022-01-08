@@ -19,7 +19,10 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-async function action (filePaths?: string, options?: Options): Promise<void> {
+export default async function action (
+  filePaths?: string,
+  options?: Options
+): Promise<void> {
   const errors: { [filePath: string]: string } = {}
   const result = await updateMediaServer()
   log.infoAny(result)

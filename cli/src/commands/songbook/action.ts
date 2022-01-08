@@ -26,7 +26,7 @@ interface Options {
  * @param cmdObj - An object containing options as key-value pairs.
  *  This parameter comes from `commander.Command.opts()`
  */
-function action (cmdObj: Options): void {
+export default function action (cmdObj: Options): void {
   if (cmdObj.folder != null) {
     cmdObj.force = true
   }
@@ -79,5 +79,3 @@ function action (cmdObj: Options): void {
     }
   }
 }
-
-export = action

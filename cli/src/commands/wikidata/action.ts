@@ -20,7 +20,7 @@ interface Options {
  *   `song`
  * @param itemId - For example `Q123`
  */
-async function action (
+export default async function action (
   category: string,
   itemId: string,
   arg1: string,
@@ -75,5 +75,3 @@ async function action (
     log.info('The YAML file already exists: %s', [yamlFile])
   }
 }
-
-export = action

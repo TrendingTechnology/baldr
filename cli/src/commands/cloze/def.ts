@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'cloze [input]',
   alias: 'cl',
   checkExecutable: ['pdfinfo', 'pdf2svg', 'lualatex'],

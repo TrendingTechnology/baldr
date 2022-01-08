@@ -1,6 +1,6 @@
 import { validateDefintion } from '../../main.js'
 
-export = validateDefintion({
+export default validateDefintion({
   command: 'parse-presentation [path]',
   alias: 'pp',
   options: [['--resolve', 'Resolve the media assets.']],

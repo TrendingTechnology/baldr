@@ -34,8 +34,14 @@ function convertTexToMarkdown (input: string): string {
  *   variadic parameter `[files...]` or a text block in the first element
  *   of the array.
  */
-async function action (filesOrText: string | string[]): Promise<void> {
-  if (Array.isArray(filesOrText) && filesOrText.length > 0 && !fs.existsSync(filesOrText[0])) {
+export default async function action (
+  filesOrText: string | string[]
+): Promise<void> {
+  if (
+    Array.isArray(filesOrText) &&
+    filesOrText.length > 0 &&
+    !fs.existsSync(filesOrText[0])
+  ) {
     convertTexToMarkdown(filesOrText[0])
   } else {
     await walk(convertTexToMarkdown, {
@@ -44,5 +50,3 @@ async function action (filesOrText: string | string[]): Promise<void> {
     })
   }
 }
-
-module.exports = action

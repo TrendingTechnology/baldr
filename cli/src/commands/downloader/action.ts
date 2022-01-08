@@ -1,7 +1,7 @@
 import { operations } from '@bldr/media-manager'
 import { fetchFile } from '@bldr/core-node'
 
-import type { MediaDataTypes } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 
 /**
  * Download a media asset.
@@ -10,7 +10,11 @@ import type { MediaDataTypes } from '@bldr/type-definitions'
  * @param id - The ID of the destination file.
  * @param extension - The extension of the destination file.
  */
-async function action (url: string, id?: string, extension?: string): Promise<void> {
+export default async function action (
+  url: string,
+  id?: string,
+  extension?: string
+): Promise<void> {
   if (extension == null) {
     extension = url.substring(url.lastIndexOf('.') + 1)
   }
@@ -28,8 +32,9 @@ async function action (url: string, id?: string, extension?: string): Promise<vo
   if (convertedDestFile != null) {
     const metaData = { source: url }
     const meta = metaData as unknown
-    await operations.initializeMetaYaml(destFile, meta as MediaDataTypes.AssetMetaData)
+    await operations.initializeMetaYaml(
+      destFile,
+      meta as MediaDataTypes.AssetMetaData
+    )
   }
 }
-
-export = action

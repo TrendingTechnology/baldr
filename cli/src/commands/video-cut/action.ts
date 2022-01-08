@@ -3,7 +3,7 @@ import { CommandRunner } from '@bldr/cli-utils'
 
 import { convertHHMMSSToSeconds } from '@bldr/string-format'
 
-async function action (
+export default async function action (
   videoFilePath: string,
   time1: string,
   time2: string
@@ -28,5 +28,3 @@ async function action (
   ])
   cmd.stopSpin()
 }
-
-export = action
