@@ -1,11 +1,12 @@
 export { asciify, deasciify, referencify } from './ascii'
 
 export {
-  convertHHMMSSToSeconds,
+  formatToYear,
   getCurrentSchoolYear,
   getFormatedSchoolYear,
   formatToLocalDate,
   formatToLocalDateTime,
+  convertHHMMSSToSeconds,
   convertSecondsToHHMMSS
 } from './date'
 

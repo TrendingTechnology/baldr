@@ -6,7 +6,7 @@
  * @returns for example `1968`
  */
 export function formatToYear (dateSpec: string): string {
-  return dateSpec.substr(0, 4)
+  return dateSpec.substring(0, 4)
 }
 
 /**

@@ -35,7 +35,7 @@ import ExternalSites from '@/components/reusable/ExternalSites.vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { formatToYear } from '@bldr/core-browser'
+import { formatToYear } from '@bldr/string-format'
 import { Asset } from '@bldr/presentation-parser'
 
 import MasterMain from '../MasterMain.vue'
