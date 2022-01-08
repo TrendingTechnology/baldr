@@ -12,7 +12,7 @@ export {
 
 export { formatMultiPartAssetFileName, getExtension } from './file-path'
 
-export { shortenText, convertHtmlToPlainText } from './format'
+export { shortenText, convertHtmlToPlainText, capitalize } from './format'
 
 export {
   formatImslpUrl,

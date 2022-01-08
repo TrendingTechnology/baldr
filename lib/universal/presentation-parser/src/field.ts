@@ -1,3 +1,5 @@
+import { capitalize } from '@bldr/string-format'
+
 /**
  * Some data indexed by strings
  */
@@ -103,11 +105,7 @@ export function mapStepFieldDefintions (
   const result: FieldDefinitionCollection = {}
   for (const selector of selectors) {
     if (stepFieldDefinitions[selector] != null) {
-      result[
-        `step${selector.charAt(0).toUpperCase()}${selector
-          .substr(1)
-          .toLowerCase()}`
-      ] = stepFieldDefinitions[selector]
+      result[`step${capitalize(selector)}`] = stepFieldDefinitions[selector]
     }
   }
   return result
@@ -153,11 +151,7 @@ export function mapStepFieldDefintionsToProps (
   const result: FieldDefinitionCollection = {}
   for (const selector of selectors) {
     if (stepFieldDefinitions[selector] != null) {
-      result[
-        `step${selector.charAt(0).toUpperCase()}${selector
-          .substr(1)
-          .toLowerCase()}`
-      ] = stepFieldDefinitions[selector]
+      result[`step${capitalize(selector)}`] = stepFieldDefinitions[selector]
     }
   }
   return result as VuePropsDefintion

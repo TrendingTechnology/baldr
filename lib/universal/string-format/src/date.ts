@@ -30,7 +30,7 @@ export function getCurrentSchoolYear (): number {
 export function getFormatedSchoolYear (): string {
   const year = getCurrentSchoolYear()
   const endYear = year + 1
-  const endYearString = endYear.toString().substr(2)
+  const endYearString = endYear.toString().substring(2)
   return `${year.toString()}/${endYearString}`
 }
 
@@ -114,7 +114,7 @@ export function convertSecondsToHHMMSS (
     from = 14
     length = 5
   }
-  return new Date(Number(duration) * 1000).toISOString().substr(from, length)
+  return new Date(Number(duration) * 1000).toISOString().substring(from, from + length)
 }
 
 /**

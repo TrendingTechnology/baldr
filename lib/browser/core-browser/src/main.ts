@@ -8,7 +8,6 @@
  */
 
 export * from './object-manipulation'
-export * from './string-format'
 
 /**
  * Sleep some time

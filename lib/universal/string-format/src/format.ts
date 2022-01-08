@@ -79,15 +79,15 @@ export function shortenText (
   }
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
-  text = text.substr(0, maxLength)
+  text = text.substring(0, maxLength)
   // re-trim if we are in the middle of a word
-  text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
+  text = text.substring(0, Math.min(text.length, text.lastIndexOf(' ')))
   return `${text} …`
 }
 
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
  */
-export function toTitleCase (text: string): string {
+export function capitalize (text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }

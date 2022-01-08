@@ -30,5 +30,5 @@ export declare function shortenText(text: string, options?: ShortenTextOptions):
 /**
  * Convert a single word into title case, for example `word` gets `Word`.
  */
-export declare function toTitleCase(text: string): string;
+export declare function capitalize(text: string): string;
 export {};
