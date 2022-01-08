@@ -24,7 +24,7 @@
 		"copy-webpack-plugin": "6.3.1",
 		"electron": "15.3.0",
 		"electron-devtools-installer": "3.2.0",
-		"node-sass": "5.0.0",
+		"node-sass": "7.0.1",
 		"sass-loader": "10.1.0",
 		"style-resources-loader": "1.4.1",
 		"vue-cli-plugin-electron-builder": "2.1.1",

@@ -24,14 +24,11 @@
   "main": "src/main.js",
   "style": "src/default.scss",
   "dependencies": {
-    "sass-export": "1.0.6"
+    "sass-export": "2.1.0"
   },
   "publishConfig": {
     "access": "public"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
+  "browserslist": ["> 1%", "last 2 versions"],
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
