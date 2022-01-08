@@ -2,13 +2,11 @@ const path = require('path')
 
 const CopyPlugin = require('copy-webpack-plugin')
 
-const { configureVue } = require('@bldr/vue-config-helper')
-const { getConfig } = require('@bldr/config')
-
-const config = getConfig()
+const { configureVue } = require('@bldr/vue-config-helper-cjs')
+const config = require('@bldr/config-cjs')
 
 module.exports = configureVue({
-  dirname: new URL('.', import.meta.url).pathname,
+  dirname: __dirname,
   additionalDefinitions: {
     songsJson: require(path.join(config.songbook.path, 'songs.json'))
   },

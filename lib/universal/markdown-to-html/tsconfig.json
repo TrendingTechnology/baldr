@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "lib": ["ES2020", "DOM"],
-    "module": "ESNext",
+    "module": "ES6",
     "moduleResolution": "node",
     "outDir": "./dist/",
     "strict": true,

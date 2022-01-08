@@ -3,7 +3,7 @@
     "allowSyntheticDefaultImports": false,
     "declaration": true,
     "lib": ["ES6", "DOM"],
-    "module": "ESNext",
+    "module": "ES6",
     "moduleResolution": "node",
     "outDir": "./dist",
     "strict": true,

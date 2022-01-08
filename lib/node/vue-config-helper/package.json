@@ -25,6 +25,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "dist/main.js",
+  "type": "module",
   "dependencies": {
     "@bldr/core-node": "*",
     "@bldr/presentation-parser": "*",

@@ -1,6 +1,10 @@
 import path from 'path'
 import fs from 'fs'
 
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+
 interface MasterExamples {
   common: Record<string, string>
   masters: Record<string, string>
