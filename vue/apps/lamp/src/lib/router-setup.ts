@@ -29,6 +29,89 @@ import MediaCategories from '@/components/routed/MediaCategories/index.vue'
 
 Vue.use(VueRouter)
 
+// path: '/presentations/by-:scheme/:authority',
+// component: SlidesPreview,
+// name: 'slides-preview-short',
+// meta: {
+//   title: 'Überblick über alle Folien'
+// }
+// },
+// {
+// path: '/presentations/by-:scheme/:authority/preview',
+// component: SlidesPreview,
+// name: 'slides-preview',
+// meta: {
+//   shortcut: 'o',
+//   title: 'Überblick über alle Folien'
+// }
+// },
+// {
+// path: '/presentations/by-:scheme/:authority/slide-:noOrRef/:slideNoOrRef',
+// name: 'slide',
+// component: SlideView,
+// meta: {
+//   shortcut: 's',
+//   title: 'Folien'
+// },
+// children: [
+//   {
+//     path: 'step-no/:stepNo',
+//     name: 'slide-step-no',
+//     component: SlideView
+//   }
+// ]
+// },
+// {
+// path: '/speaker-view/by-:scheme/:authority/slide-:noOrRef/:slideNoOrRef',
+// name: 'speaker-view',
+// component: SpeakerView,
+// meta: {
+//   title: 'Referentenansicht'
+// },
+// children: [
+//   {
+//     path: 'step/:stepNo',
+//     name: 'speaker-view-step-no',
+//     component: SpeakerView
+//   }
+// ]
+// },
+
+// interface SlidesPreviewRouteParams {
+//   scheme: 'ref' | 'uuid'
+//   authority: 'string'
+// }
+
+// interface SlideViewRouteParams extends SlidesPreviewRouteParams {
+//   noOrRef: 'no' | 'ref'
+//   slideNoOrRef: number | string
+//   stepNo?: number
+// }
+
+// interface SlideNoRouteParams {
+//   slideNo: number
+//   stepNo?: number
+// }
+
+// interface SlideRefRouteParams {
+//   slideRef: String
+//   stepNo?: number
+// }
+
+// const navigator = {
+//   gotoSlidesPreview (uri: string) {
+//     const mediaUri = new MediaUri(uri)
+//     router.push({
+//       name: 'slides-preview',
+//       params: { scheme: mediaUri.scheme, authority: mediaUri.authority }
+//     })
+//   },
+
+//   gotoSlide () {
+
+//   }
+// }
+
 const routes: RouteConfig[] = [
   {
     path: '/',
