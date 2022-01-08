@@ -1,7 +1,9 @@
-import { DefinePlugin } from 'webpack'
+import webpack, { DefinePlugin as _DefinePlugin } from 'webpack'
 
 import { gitHead } from '@bldr/core-node'
 import { getConfig } from '@bldr/config'
+
+const { DefinePlugin } = webpack
 
 const config = getConfig()
 
@@ -30,7 +32,7 @@ const config = getConfig()
  */
 export function buildDefinePluginConfig (
   additionalDefinitions?: Record<string, any>
-): DefinePlugin {
+): _DefinePlugin {
   const defaultDefinitions = {
     compilationTime: new Date().getTime(),
     config: JSON.stringify(config),
