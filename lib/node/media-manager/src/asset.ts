@@ -10,7 +10,7 @@ import { collectAudioMetadata } from '@bldr/audio-metadata'
 import { categoriesManagement, categories } from '@bldr/media-categories'
 import { writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import wikidata from '@bldr/wikidata'
+import * as wikidata from '@bldr/wikidata'
 import {
   MediaDataTypes,
   GenericError,

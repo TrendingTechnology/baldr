@@ -1,7 +1,7 @@
 {
   "name": "@bldr/wikidata",
   "version": "0.1.0",
-  "description": "Query the wikidata API to enrich the metadata of the BALDR media server.",
+  "description": "Query the Wikidata API to enrich the metadata of the BALDR media server.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
@@ -12,28 +12,28 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@bldr/core-node": "*",
+    "@bldr/media-categories": "*",
     "node-fetch": "2.6.1",
-    "wikibase-sdk": "7.9.1",
-    "@bldr/media-categories": "*"
+    "wikibase-sdk": "7.9.1"
   },
   "devDependencies": {
-    "@types/node-fetch": "2.5.8",
     "@bldr/type-definitions": "*",
+    "@types/node-fetch": "2.5.8",
     "@types/node": "14.14.35"
   },
+  "type": "module",
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
-    "test": "npm run build && npm run lint && mocha 'tests/*'"
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
   }
 }

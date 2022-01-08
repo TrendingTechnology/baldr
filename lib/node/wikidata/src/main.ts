@@ -6,14 +6,11 @@ import * as fs from 'fs'
 import * as childProcess from 'child_process'
 import fetch from 'node-fetch'
 
-import * as wikibaseSdk from 'wikibase-sdk'
+import wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
 import { fetchFile } from '@bldr/core-node'
-import {
-  MediaCategoriesTypes,
-  MediaDataTypes
-} from '@bldr/type-definitions'
+import { MediaCategoriesTypes, MediaDataTypes } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
@@ -484,7 +481,9 @@ export async function query (
         }
 
         // second query
-        if (value != null && propSpec.secondQuery != null) { value = await functions[propSpec.secondQuery](value) }
+        if (value != null && propSpec.secondQuery != null) {
+          value = await functions[propSpec.secondQuery](value)
+        }
 
         // format
         if (value != null && propSpec.format != null) {
