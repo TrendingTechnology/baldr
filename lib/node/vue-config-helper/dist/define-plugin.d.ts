@@ -1,4 +1,4 @@
-import { DefinePlugin as _DefinePlugin } from 'webpack';
+import { DefinePlugin } from 'webpack';
 /**
  * Use no `JSON.stringify()`
  * Default defintions: `compilationTime`, `config`, `gitHead`
@@ -22,4 +22,4 @@ import { DefinePlugin as _DefinePlugin } from 'webpack';
  * })
  * ```
  */
-export declare function buildDefinePluginConfig(additionalDefinitions?: Record<string, any>): _DefinePlugin;
+export declare function buildDefinePluginConfig(additionalDefinitions?: Record<string, any>): DefinePlugin;

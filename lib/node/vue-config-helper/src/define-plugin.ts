@@ -1,11 +1,10 @@
-import webpack, { DefinePlugin as _DefinePlugin } from 'webpack'
+import { DefinePlugin } from 'webpack'
 
-import { getGitHead } from '@bldr/core-node'
-import { getConfig } from '@bldr/config'
+const coreNode = await import('@bldr/core-node')
+const c = await import('@bldr/config')
 
-const { DefinePlugin } = webpack
-
-const config = getConfig()
+const config = c.default.getConfig()
+const getGitHead = coreNode.default.getGitHead
 
 /**
  * Use no `JSON.stringify()`
@@ -32,7 +31,7 @@ const config = getConfig()
  */
 export function buildDefinePluginConfig (
   additionalDefinitions?: Record<string, any>
-): _DefinePlugin {
+): DefinePlugin {
   const defaultDefinitions = {
     compilationTime: new Date().getTime(),
     config: JSON.stringify(config),
