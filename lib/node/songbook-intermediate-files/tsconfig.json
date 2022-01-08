@@ -6,11 +6,11 @@
       "es2020",
       "DOM"
     ],
-    "module": "CommonJS",
+    "module": "ESNext",
     "noImplicitAny": true,
     "outDir": "./dist",
     "strict": true,
-    "target": "ES6"
+    "target": "ESNext"
   },
   "include": [
     "src/*.ts"

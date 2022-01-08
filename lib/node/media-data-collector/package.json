@@ -11,8 +11,7 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
@@ -25,7 +24,7 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "dependencies": {
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
@@ -34,6 +33,10 @@
     "@bldr/titles": "*",
     "@bldr/type-definitions": "*"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "devDependencies": {
     "@types/node": "14.14.7"
   }

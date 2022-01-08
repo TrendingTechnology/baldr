@@ -61,6 +61,6 @@
     "@types/glob": "7.1.4"
   },
   "bin": {
-    "baldr_cli.js": "./dist/node/main.js"
+    "baldr_cli.js": "./dist/main.js"
   }
 }

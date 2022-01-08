@@ -1,6 +1,10 @@
 import fs from 'fs'
 import path from 'path'
+import { createRequire } from 'module'
+
 import { Configuration as ConfigurationType } from './types'
+
+const require = createRequire(import.meta.url)
 
 export type Configuration = ConfigurationType
 

@@ -19,7 +19,7 @@ export function readMasterExamples (): MasterExamples {
   const basePath = path.join(
     require
       .resolve('@bldr/presentation-parser')
-      .replace('/dist/node/main.js', ''),
+      .replace('/dist/main.js', ''),
     'tests',
     'files'
   )

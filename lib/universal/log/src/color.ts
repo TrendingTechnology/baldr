@@ -1,6 +1,11 @@
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 
-export { red, green, yellow, blue, magenta, cyan } from 'chalk'
+export const red = chalk.red
+export const green = chalk.green
+export const yellow = chalk.yellow
+export const blue = chalk.blue
+export const magenta = chalk.magenta
+export const cyan = chalk.cyan
 
 export type ColorName =
   | 'red'

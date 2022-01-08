@@ -16,7 +16,7 @@ module.exports = {
     resolve: {
       alias: {
         $HOME: os.homedir(),
-        ...searchForAliases(__dirname)
+        ...searchForAliases(new URL('.', import.meta.url).pathname)
       }
     },
     plugins: [

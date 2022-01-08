@@ -17,9 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node && npm run build:browser",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
@@ -30,8 +28,12 @@
     "@types/node": "16.11.6",
     "ts-standard": "10.0.0"
   },
-  "browser": "dist/browser/browser-main.js",
-  "main": "dist/node/node-main.js",
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "browser": "dist/browser-main.js",
+  "main": "dist/node-main.js",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   }

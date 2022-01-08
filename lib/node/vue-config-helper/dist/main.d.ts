@@ -7,7 +7,7 @@ export { readMasterExamples } from './master-examples';
 /**
  * ```js
  * {
- *   dirname: __dirname,
+ *   dirname: new URL('.', import.meta.url).pathname,
  *   appEntry: './src/app.ts'
  *   additionalDefinitions: {
  *     defaultThemeSassVars: exportSassAsJson(),
@@ -23,7 +23,7 @@ interface SimpleVueConfig {
     /**
      * ```js
      * {
-     *   dirname: __dirname
+     *   dirname: new URL('.', import.meta.url).pathname
      * }
      * ```
      */
@@ -65,7 +65,7 @@ interface SimpleVueConfig {
  * const { configureVue } = require('@bldr/vue-config-helper')
  *
  * module.exports = configureVue({
- *   dirname: __dirname,
+ *   dirname: new URL('.', import.meta.url).pathname,
  *   appEntry: './src/app.ts'
  * })
  * ```

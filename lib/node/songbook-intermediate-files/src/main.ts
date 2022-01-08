@@ -349,7 +349,7 @@ export class PianoScore {
    * @param The name of the text (TeX) file inside this package
    */
   private read (filename: string): string {
-    return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
+    return fs.readFileSync(path.join(new URL('.', import.meta.url).pathname, filename), { encoding: 'utf8' })
   }
 
   private spawnTex (texFile: string, cwd: string): void {

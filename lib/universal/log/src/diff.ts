@@ -1,5 +1,7 @@
 import { createTwoFilesPatch } from 'diff'
-import { red, green } from 'chalk'
+import chalk from 'chalk'
+
+const { red, green } = chalk
 
 export function colorizeDiff (oldString: string, newString: string): string {
   const output: string[] = []

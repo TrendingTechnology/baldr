@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
@@ -26,6 +26,10 @@
   "devDependencies": {
     "@types/node": "16.9.1"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "scripts": {
     "build:node": "tsc",
     "build": "npm run build:node",

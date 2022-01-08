@@ -17,7 +17,7 @@ const {
   tmpCopy
 } = require('./_helper.js')
 
-process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
+process.env.PATH = path.join(new URL('.', import.meta.url).pathname, 'bin:', process.env.PATH)
 process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
 
 describe('Functions', function () {
@@ -73,7 +73,7 @@ describe('Functions', function () {
   describe('Function “bootstrapConfig()”', function () {
     beforeEach(function () {
       process.env.BALDR_SONGBOOK_PATH = path.resolve(
-        __dirname,
+        new URL('.', import.meta.url).pathname,
         'songs',
         'clean',
         'some'

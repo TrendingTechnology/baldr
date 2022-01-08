@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "CommonJS",
-    "target": "ES6",
+    "module": "ESNext",
+    "target": "ESNext",
     "declaration": true,
     "esModuleInterop": true,
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "moduleResolution": "node"
   },
   "include": ["src/*.ts"]
 }

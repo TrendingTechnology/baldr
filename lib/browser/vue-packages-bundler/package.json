@@ -23,7 +23,11 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/browser/main.js",
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "main": "dist/main.js",
+  "type": "module",
   "dependencies": {
     "vue": "2.6.11",
     "vue-class-component": "7.2.3",

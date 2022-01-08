@@ -10,7 +10,7 @@ import fs from 'fs'
  * module.exports = {
  *   configureWebpack: {
  *     resolve: {
- *       alias: createAliases(['vue'], __dirname)
+ *       alias: createAliases(['vue'], new URL('.', import.meta.url).pathname)
  *     }
  *   }
  * }
@@ -21,7 +21,7 @@ import fs from 'fs'
  *   resolve: {
  *     alias: {
  *        vue$: path.resolve(
- *         __dirname,
+ *         new URL('.', import.meta.url).pathname,
  *         'node_modules/vue/dist/vue.runtime.esm.js'
  *       )
  *     }

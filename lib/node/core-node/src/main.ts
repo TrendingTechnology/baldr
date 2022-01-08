@@ -21,6 +21,24 @@ interface GitHead {
 }
 
 /**
+ * ```js
+ * const __filename = getFilename()
+ * ```
+ */
+export function getFilename (): string {
+  return new URL('', import.meta.url).pathname
+}
+
+/**
+ * ```js
+ * const new URL('.', import.meta.url).pathname = getDirname()
+ * ```
+ */
+export function getDirname (): string {
+  return new URL('.', import.meta.url).pathname
+}
+
+/**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
 export function gitHead (): GitHead {

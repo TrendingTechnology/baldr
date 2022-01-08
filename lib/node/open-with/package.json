@@ -31,7 +31,11 @@
     "@types/node": "14.14.7",
     "@bldr/core-node": "*"
   },
-  "main": "dist/node/main.js",
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   }

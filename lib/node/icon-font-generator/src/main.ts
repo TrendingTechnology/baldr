@@ -8,7 +8,7 @@ import { IconFontGeneratorTypes, Configuration } from '@bldr/type-definitions'
 import fs from 'fs'
 import path from 'path'
 
-import webfont from 'webfont'
+import { webfont } from 'webfont'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'

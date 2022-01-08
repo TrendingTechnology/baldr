@@ -2,11 +2,11 @@
   "compilerOptions": {
     "declaration": true,
     "lib": ["ES2020", "DOM"],
-    "module": "ES6",
+    "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "./dist/",
     "strict": true,
-    "target": "ES6",
+    "target": "ESNext",
     "allowSyntheticDefaultImports": true
   },
   "include": ["./src/**/*.ts"],

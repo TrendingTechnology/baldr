@@ -11,9 +11,7 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build:browser": "tsc --module es2015 --outDir dist/browser",
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:browser && npm run build:node && npm run lint",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard"
@@ -24,6 +22,10 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
+  "type": "module",
   "browser": "dist/browser/main.js",
-  "main": "dist/node/main.js"
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "main": "dist/main.js"
 }

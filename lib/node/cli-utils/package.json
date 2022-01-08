@@ -11,8 +11,7 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard",
@@ -24,7 +23,7 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +33,10 @@
     "ora": "5.4.1",
     "object-assign": "4.1.1"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "devDependencies": {
     "@types/node": "15.12.4"
   }

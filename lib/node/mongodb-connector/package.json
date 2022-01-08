@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "dependencies": {
     "mongodb": "3.6.5",
     "@bldr/config": "*"
@@ -22,14 +22,17 @@
     "@bldr/type-definitions": "*"
   },
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:standard": "standard --fix 'tests/*.js'",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
     "test": "npm run build && mocha 'tests/test-*.js' && npm run lint"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },

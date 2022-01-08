@@ -16,13 +16,12 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/node/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build:node": "tsc --module commonjs --outDir dist/node",
-    "build": "npm run build:node",
+    "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
     "lint:standard": "standard --fix 'tests/*.js'",
@@ -32,6 +31,10 @@
   "dependencies": {
     "music-metadata": "7.11.4"
   },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
   "devDependencies": {
     "@bldr/config": "*",
     "@bldr/core-node": "*",

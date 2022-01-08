@@ -4,7 +4,7 @@ const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
 
 module.exports = configureVue({
-  dirname: __dirname,
+  dirname: new URL('.', import.meta.url).pathname,
   additionalDefinitions: {
     defaultThemeSassVars: exportSassAsJson(),
     lampVersion: packageJson.version,

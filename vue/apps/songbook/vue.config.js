@@ -8,7 +8,7 @@ const { getConfig } = require('@bldr/config')
 const config = getConfig()
 
 module.exports = configureVue({
-  dirname: __dirname,
+  dirname: new URL('.', import.meta.url).pathname,
   additionalDefinitions: {
     songsJson: require(path.join(config.songbook.path, 'songs.json'))
   },
