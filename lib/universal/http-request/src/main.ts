@@ -11,7 +11,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { locationU } from '@bldr/universal-dom'
-import { Configuration } from '@bldr/type-definitions'
+import { Configuration } from '@bldr/config'
 
 export { AxiosRequestConfig } from 'axios'
 

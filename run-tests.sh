@@ -53,6 +53,7 @@ _run test lib/node/open-with
 _run test lib/node/seating-plan-converter
 _run test lib/node/titles
 _run test lib/node/vue-config-helper
+_run test lib/node/sass-export
 _run test lib/node/wikidata
 _run test lib/universal/api-wrapper
 _run test lib/universal/client-media-models

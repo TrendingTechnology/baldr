@@ -9,11 +9,14 @@
  * {@link module:@bldr/wikidata wikidata}.
  */
 import { MediaCategoriesTypes } from '@bldr/type-definitions';
+import { Configuration } from '@bldr/config';
 export declare const categories: MediaCategoriesTypes.Collection;
+declare type Categories = Configuration['mediaCategories'];
 /**
  * Remove all properties that can not represented in JSON. Remove absent
  * properties.
  *
  * @returns A object that can be converted to JSON.
  */
-export declare function stripCategories(): object;
+export declare function stripCategories(): Categories;
+export {};

@@ -21,11 +21,8 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "src/main.js",
+  "main": "src/default.scss",
   "style": "src/default.scss",
-  "dependencies": {
-    "sass-export": "2.1.0"
-  },
   "publishConfig": {
     "access": "public"
   },

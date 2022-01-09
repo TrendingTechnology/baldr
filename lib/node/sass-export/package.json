@@ -1,0 +1,38 @@
+{
+  "name": "@bldr/sass-export",
+  "version": "0.1.0",
+  "description": "Export the Sass variables to JSON",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "dist/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "sass-export": "2.1.0",
+    "@bldr/config": "*"
+  },
+  "devDependencies": {
+    "@types/node": "14.14.35"
+  },
+  "mocha": {
+    "node-option": ["experimental-specifier-resolution=node"]
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "lint:depcheck": "depcheck",
+    "lint:standard": "standard --fix 'tests/*.js'",
+    "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
+    "lint": "npm run lint:depcheck & npm run lint:ts-standard && npm run lint:standard",
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
+  }
+}

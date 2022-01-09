@@ -1,4 +1,4 @@
-import { Configuration as ConfigurationType } from './types';
+import { Configuration as ConfigurationType } from './types/main';
 export declare type Configuration = ConfigurationType;
 /**
  * Re-exports the global config object.

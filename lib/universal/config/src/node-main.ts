@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { createRequire } from 'module'
 
-import { Configuration as ConfigurationType } from './types'
+import { Configuration as ConfigurationType } from './types/main'
 
 const require = createRequire(import.meta.url)
 

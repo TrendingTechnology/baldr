@@ -3,7 +3,8 @@
  */
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
-import { IconFontGeneratorTypes, Configuration } from '@bldr/type-definitions'
+import { Configuration, getConfig } from '@bldr/config'
+import { IconFontGeneratorTypes } from '@bldr/type-definitions'
 
 import fs from 'fs'
 import path from 'path'
@@ -15,7 +16,6 @@ import { CommandRunner } from '@bldr/cli-utils'
 import { createTmpDir } from '@bldr/core-node'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
-import { getConfig } from '@bldr/config'
 
 const config = getConfig()
 

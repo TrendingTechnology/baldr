@@ -10,6 +10,7 @@
  */
 
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
+import { Configuration } from '@bldr/config'
 import { deepCopy } from '@bldr/core-browser'
 
 import { cloze } from './specs/cloze'
@@ -57,14 +58,15 @@ export const categories: MediaCategoriesTypes.Collection = {
   general
 }
 
+type Categories = Configuration['mediaCategories']
+
 /**
  * Remove all properties that can not represented in JSON. Remove absent
  * properties.
  *
  * @returns A object that can be converted to JSON.
  */
-export function stripCategories (): object {
-  // { [category: string]: MediaCategoriesTypes.Category }
+export function stripCategories (): Categories {
   const cats = deepCopy(categories) as any
   for (const name in cats) {
     delete cats[name].detectCategoryByPath

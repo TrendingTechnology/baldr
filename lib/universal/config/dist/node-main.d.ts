@@ -1,4 +1,4 @@
-import { Configuration as ConfigurationType } from './types';
+import { Configuration as ConfigurationType } from './types/main';
 export declare type Configuration = ConfigurationType;
 /**
  * By default this module reads the configuration file `/etc/baldr.json` to

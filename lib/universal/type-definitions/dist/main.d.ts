@@ -3,7 +3,6 @@
  *
  * @module @bldr/type-definitions
  */
-export * from './config';
 export interface StringIndexedObject {
     [key: string]: any;
 }
@@ -24,8 +23,8 @@ export interface GenericError {
  */
 export * as ApiTypes from './api';
 export * as CliTypes from './cli';
-export * as IconFontGeneratorTypes from './icon-font-generator';
 export * as LampTypes from './lamp';
 export * as MediaCategoriesTypes from './media-categories';
 export * as MediaDataTypes from './media-data';
 export * as TitlesTypes from './titles';
+export * as IconFontGeneratorTypes from './icon-font-generator';

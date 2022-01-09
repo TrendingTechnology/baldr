@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES2020",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "lib": [
+      "ES2020",
+    ],
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/*.ts"
+  ]
+}

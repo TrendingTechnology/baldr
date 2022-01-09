@@ -1,7 +1,7 @@
 /**
  * @module @bldr/icon-font-generator
  */
-import { Configuration } from '@bldr/type-definitions';
+import { Configuration } from '@bldr/config';
 import * as log from '@bldr/log';
 /**
  * For the tests. To see whats going on. The test runs very long.

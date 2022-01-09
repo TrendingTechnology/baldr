@@ -1,10 +1,5 @@
-/**
- * The type of the JSON object of the file `/etc/baldr.json`
- *
- * @module @bldr/type-definitions/config
- */
-import * as MediaCategoriesTypes from './media-categories';
-import { IconFontConfiguration } from './icon-font-generator';
+import { IconFontGeneratorTypes } from '@bldr/type-definitions';
+import { Collection as MediaCategories } from './media-categories';
 interface ApiConfiguration {
     port: number;
 }
@@ -121,7 +116,7 @@ export interface Configuration {
     configurationFileLocations: string[];
     databases: DatabasesConfiguration;
     http: HttpConfiguration;
-    iconFont: IconFontConfiguration;
+    iconFont: IconFontGeneratorTypes.IconFontConfiguration;
     /**
      * The path of the local development repository, for example
      * `/home/jf/git-repositories/github/Josef-Friedrich/baldr`.
@@ -135,7 +130,7 @@ export interface Configuration {
      * Use the command line utility `baldr categories` to patch the media
      * categories configurations into the json files at `/etc/baldr.json`
      */
-    mediaCategories: MediaCategoriesTypes.Collection;
+    mediaCategories: MediaCategories;
     /**
      * Subfolders are abbreviated with uppercase two letter names:
      *
@@ -176,5 +171,6 @@ export interface Configuration {
          */
         computerScienceWebsite: string;
     };
+    sassVariables: Record<string, string>;
 }
 export {};

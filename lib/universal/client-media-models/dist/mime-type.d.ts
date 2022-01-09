@@ -3,7 +3,7 @@
  *
  * @module @bldr/client-media-models/mime-type
  */
-import { Configuration } from '@bldr/type-definitions';
+import { Configuration } from '@bldr/config';
 /**
  * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.

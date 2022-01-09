@@ -4,9 +4,8 @@
  * @module @bldr/client-media-models/mime-type
  */
 
-import { Configuration } from '@bldr/type-definitions'
 import { getExtension } from '@bldr/string-format'
-import { getConfig } from '@bldr/config'
+import { getConfig, Configuration } from '@bldr/config'
 
 const config = getConfig()
 
