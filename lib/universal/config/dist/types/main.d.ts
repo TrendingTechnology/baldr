@@ -94,7 +94,7 @@ interface MediaServerConfiguration {
 interface SongbookConfiguration {
     path: string;
 }
-interface WireConfiguration {
+interface WebsocketConfiguration {
     port: number;
     localUri: string;
 }
@@ -124,7 +124,7 @@ export interface Configuration {
     localRepo: string;
     mediaServer: MediaServerConfiguration;
     songbook: SongbookConfiguration;
-    wire: WireConfiguration;
+    websocket: WebsocketConfiguration;
     youtube: YoutubeConfiguration;
     /**
      * Use the command line utility `baldr categories` to patch the media

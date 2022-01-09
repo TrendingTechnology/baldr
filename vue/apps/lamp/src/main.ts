@@ -36,7 +36,7 @@ Vue.use(Notification)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.use(Websocket, config.wire.localUri, {
+Vue.use(Websocket, config.websocket.localUri, {
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
   reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
