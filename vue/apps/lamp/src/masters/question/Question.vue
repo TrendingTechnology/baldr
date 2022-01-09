@@ -30,10 +30,8 @@ import { Prop } from 'vue-property-decorator'
 import { questionMModul } from '@bldr/presentation-parser'
 
 @Component({
-  name: 'Question',
-  components: {
-    Question
-  }
+  // It is a recursive component. It must have a name.
+  name: 'Question'
 })
 export default class Question extends Vue {
   @Prop()

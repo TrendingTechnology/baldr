@@ -4,16 +4,12 @@
  * @module @bldr/lamp/content-file
  */
 
-/* globals defaultThemeSassVars */
-
 import {
-  convertToYamlRaw,
   convertFromYamlRaw,
   convertPropertiesSnakeToCamel
 } from '@bldr/yaml'
 import {
   convertToString,
-  escapeHtml,
   deepCopy,
   RawDataObject
 } from '@bldr/core-browser'
@@ -406,15 +402,6 @@ export class Slide {
     } else {
       return 'default'
     }
-  }
-
-  /**
-   * The property `rawData` converted back into yaml.
-   *
-   * @type {String}
-   */
-  get yamlMarkup () {
-    return escapeHtml(convertToYamlRaw(this.rawData))
   }
 
   /**

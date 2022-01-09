@@ -24,11 +24,13 @@ $colors: (
   "black": $black
 );
 
-$font-family: Alegreya;
-$font-family-serif: Alegreya;
-$font-family: $font-family-serif;
-$font-family-small-caps: "Alegreya SC";
-$font-family-sans: "Alegreya Sans";
-$font-family-sans-small-caps: "Alegreya Sans SC";
-$font-family-mono: "Anonymous Pro";
+// sass-exporter has problems with mutliple font names separted with
+// commas We have to use brackets
+$font-family: (Alegreya, serif);
+$font-family-serif: $font-family;
+$font-family-small-caps: ("Alegreya SC", serif);
+$font-family-sans: ("Alegreya Sans", sans-serif);
+$font-family-sans-small-caps: ("Alegreya Sans SC", sans-serif);
+// Anonymous Pro
+$font-family-mono: ("Anonymous Pro", monospace);
 $font-size: 1.5vw;
