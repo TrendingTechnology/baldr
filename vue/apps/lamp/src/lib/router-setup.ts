@@ -112,6 +112,30 @@ Vue.use(VueRouter)
 //   }
 // }
 
+// From client media
+
+// const routes = [
+//   {
+//     path: '/media',
+//     name: 'media-overview',
+//     meta: {
+//       shortcut: 'm',
+//       title: 'Media',
+//       style
+//     },
+//     component: MediaOverview
+//   },
+//   {
+//     path: '/media/:uriScheme/:uriAuthority',
+//     name: 'asset',
+//     meta: {
+//       title: 'Media file',
+//       style
+//     },
+//     component: ClientMediaAsset
+//   }
+// ]
+
 const routes: RouteConfig[] = [
   {
     path: '/',
