@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@bldr/client-media-models": "*",
+    "@bldr/config": "*",
     "@bldr/core-browser": "*",
     "@bldr/dom-manipulator": "*",
     "@bldr/log": "*",
@@ -41,7 +42,6 @@
     "@bldr/yaml": "*"
   },
   "devDependencies": {
-    "@bldr/config": "*",
     "@bldr/file-reader-writer": "*"
   },
   "mocha": {

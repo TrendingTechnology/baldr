@@ -30,7 +30,10 @@ export default class SlidePreviewRenderer extends Vue {
       }
       return createElement(`${this.slide.master.name}-master-preview`, {
         props,
-        style: this.slide.style
+        style: this.slideNg.cssStyle,
+        attrs: {
+          id: `slide-preview_no-${this.slideNg.no}`
+        }
       })
     } else {
       return createElement('div', {

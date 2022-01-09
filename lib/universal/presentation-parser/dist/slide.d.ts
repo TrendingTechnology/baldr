@@ -1,8 +1,8 @@
+import { WrappedUriList } from '@bldr/client-media-models';
 import { DataCutter } from './data-management';
 import { FieldData } from './master-specification';
 import { Master } from './master-wrapper';
 import { Step, StepCollector } from './step';
-import { WrappedUriList } from '@bldr/client-media-models';
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
@@ -63,9 +63,50 @@ export declare class Slide {
      * `src/vue/apps/lamp/src/components/linked-by-routes/SlideView/index.vue`
      */
     scaleFactor: number;
+    /**
+     * Css properties in camelCase for the style property of the vue js
+     * render function.
+     *
+     * ```yml
+     * - title: Different background color
+     *   task: Background color blue
+     *   style:
+     *     background_color: $green;
+     *     color: $blue;
+     *     font_size: 8vw
+     *     font_weight: bold
+     * ```
+     *
+     * This attribute is used in the lamp appL
+     *
+     * `components/reusable/SlideMain/MasterRenderer.vue`:
+     * `<masterName-master-main :style="slide.cssStyle" />`
+     *
+     * `components/reusable/SlidesPreview/SlidePreviewRenderer.vue`
+     * `<masterName-master-preview :style="slide.cssStyle" />`
+     *
+     * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
+     */
+    cssStyle?: Record<string, string>;
     constructor(raw: any, no: number, level: number);
     private detectMaster;
     private parseAudioOverlay;
+    /**
+     * Normalize (replace SASS variables, remove “;” at the end of the entries) a
+     * style object.
+     *
+     * @param style - The raw style object from the YAML format.
+     *
+     * @returns The normalized CSS style object, for example
+     *
+     * ```js
+     * {
+     *   backgroundColor: '#4e79a7',
+     *   color: '#59a14e'
+     * }
+     * ```
+     */
+    private normalizeCssStyle;
     /**
      * If the slide has no steps, then the array remains empty.
      */

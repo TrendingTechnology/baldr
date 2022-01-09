@@ -58,7 +58,7 @@ export default class MasterRenderer extends Vue {
           class: {
             'master-inner': true
           },
-          style: this.slide.style
+          style: this.slideNg.cssStyle
         }
       )
       return createElement(

@@ -1,14 +1,16 @@
 import { convertToString } from '@bldr/core-browser'
 import { shortenText } from '@bldr/string-format'
 import * as log from '@bldr/log'
+import { WrappedUriList } from '@bldr/client-media-models'
+import { getConfig } from '@bldr/config'
 
 import { DataCutter } from './data-management'
 import { masterCollection } from './master-collection'
 import { FieldData } from './master-specification'
 import { Master } from './master-wrapper'
-
 import { Step, StepCollector } from './step'
-import { WrappedUriList } from '@bldr/client-media-models'
+
+const config = getConfig()
 
 /**
  * The meta data of a slide. Each slide object owns one meta data object.
@@ -91,6 +93,32 @@ export class Slide {
    */
   public scaleFactor = 1
 
+  /**
+   * Css properties in camelCase for the style property of the vue js
+   * render function.
+   *
+   * ```yml
+   * - title: Different background color
+   *   task: Background color blue
+   *   style:
+   *     background_color: $green;
+   *     color: $blue;
+   *     font_size: 8vw
+   *     font_weight: bold
+   * ```
+   *
+   * This attribute is used in the lamp app in this components:
+   *
+   * `components/reusable/SlideMain/MasterRenderer.vue`:
+   * `<masterName-master-main :style="slide.cssStyle" />`
+   *
+   * `components/reusable/SlidesPreview/SlidePreviewRenderer.vue`
+   * `<masterName-master-preview :style="slide.cssStyle" />`
+   *
+   * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
+   */
+  cssStyle?: Record<string, string>
+
   constructor (raw: any, no: number, level: number) {
     this.no = no
     this.level = level
@@ -102,6 +130,11 @@ export class Slide {
     this.optionalMediaUris = this.master.processOptionalMediaUris(this.fields)
     this.master.collectStepsOnInstantiation(this.fields, this.stepCollector)
     this.audioOverlay = this.parseAudioOverlay(data)
+
+    const style = data.cutAny('style')
+    if (style != null) {
+      this.cssStyle = this.normalizeCssStyle(style)
+    }
     // data.checkEmpty()
   }
 
@@ -136,6 +169,44 @@ export class Slide {
     if (audioOverlay != null) {
       return new WrappedUriList(audioOverlay)
     }
+  }
+
+  /**
+   * Normalize (replace SASS variables, remove “;” at the end of the entries) a
+   * style object.
+   *
+   * @param style - The raw style object from the YAML format.
+   *
+   * @returns The normalized CSS style object, for example
+   *
+   * ```js
+   * {
+   *   backgroundColor: '#4e79a7',
+   *   color: '#59a14e'
+   * }
+   * ```
+   */
+  private normalizeCssStyle (
+    style: Record<string, string>
+  ): Record<string, string> {
+    /**
+     * Compile a Sass string to a CSS string.
+     *
+     * @see {@link https://stackoverflow.com/a/34725742/10193818 Stackoverflow}
+     */
+    function compileToCss (sass: string): string {
+      const output = sass.replace(/;$/, '')
+      return output.replace(/(\$[a-zA-Z0-9-]+)/g, function (
+        match: string
+      ): string {
+        return config.sassVariables[match]
+      })
+    }
+
+    for (const property in style) {
+      style[property] = compileToCss(style[property])
+    }
+    return style
   }
 
   /**

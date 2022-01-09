@@ -168,35 +168,6 @@ export class MetaData {
 }
 
 /**
- * Compile a sass string to a css string.
- *
- * @param {String} sass
- *
- * @see {@link https://stackoverflow.com/a/34725742/10193818 Stackoverflow}
- */
-function compileToCSS (sass) {
-  sass = String(sass)
-  const output = sass.replace(/;$/, '')
-  return output.replace(/(\$[a-zA-Z0-9-]+)/g, function ($1, $2) {
-    return defaultThemeSassVars[$2]
-  })
-}
-
-/**
- * Normalize (replace SASS vars, remove ; at the of the entries) a style object.
- *
- * @param {Object} style - The raw style object from the YAML format.
- *
- * @returns {Object} - The normalized style object
- */
-function normalizeStyle (style) {
-  for (const property in style) {
-    style[property] = compileToCSS(style[property])
-  }
-  return style
-}
-
-/**
  * A slide.
  */
 export class Slide {
@@ -325,31 +296,6 @@ export class Slide {
      */
     this.metaData = new MetaData(rawSlideObject)
 
-    const style = rawSlideObject.cut('style')
-    if (style) {
-      normalizeStyle(style)
-    }
-
-    /**
-     * Css properties in camelCase for the style property of the vue js
-     * render function.
-     *
-     * ```yml
-     * - title: Different background color
-     *   task: Background color blue
-     *   style:
-     *     background_color: $green;
-     *     color: $blue;
-     *     font_size: 8vw
-     *     font_weight: bold
-     * ```
-     *
-     * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
-     *
-     * @type {Object}
-     */
-    this.style = style
-
     /**
      * A list of child slide objects.
      *
@@ -377,12 +323,6 @@ export class Slide {
     const audioOverlay = rawSlideObject.cut('audioOverlay')
     if (audioOverlay) {
       this.audioOverlay = audioOverlay
-    }
-
-    if (!rawSlideObject.isEmpty()) {
-      throw Error(
-        `Unknown slide properties: ${convertToString(rawSlideObject.raw)}`
-      )
     }
   }
 
