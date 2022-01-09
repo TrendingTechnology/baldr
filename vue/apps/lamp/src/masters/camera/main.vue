@@ -10,7 +10,7 @@
       />
     </modal-dialog>
 
-    <div id="video-wrapper" />
+    <div ref="videoWrapper" />
 
     <div v-if="!stream" class="no-stream">
       <plain-icon v-if="!cameraNotFound" name="document-camera" />
@@ -60,9 +60,13 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  device: MediaDevice
-  stream: MediaStream
-  labelDefaultCamera: string
+  device!: MediaDevice
+  stream!: MediaStream
+  labelDefaultCamera!: string
+
+  $refs!: {
+    videoWrapper: HTMLDivElement
+  }
 
   get mediaDevices (): MediaDevice[] {
     return this.$store.getters['lamp/masters/camera/forDynamicSelect']
@@ -131,7 +135,7 @@ export default class CameraMasterMain extends MasterMain {
    * Build the constraints object of the method
    * `navigator.mediaDevices.getUserMedia(constraints)`.
    *
-   * @returns {Object}
+   * @returns
    *
    * If a device ID can be found:
    *
@@ -191,29 +195,26 @@ export default class CameraMasterMain extends MasterMain {
    * ```
    */
   async setVideoStream (constraints?: MediaStreamConstraints): Promise<void> {
-    const wrapperElement = document.querySelector(
-      '.vc_camera_master #video-wrapper'
-    )
-    if (wrapperElement.firstChild) {
+    if (this.$refs.videoWrapper.firstChild != null) {
       return
     }
 
     let videoElement = this.$store.getters['lamp/masters/camera/videoElement']
 
-    if (videoElement) {
+    if (videoElement != null) {
       videoElement.play()
-      wrapperElement.appendChild(videoElement)
+      this.$refs.videoWrapper.appendChild(videoElement)
       return
     } else {
       videoElement = document.createElement('video')
       videoElement.autoplay = true
     }
 
-    if (!constraints) {
+    if (constraints == null) {
       constraints = await this.buildConstraints()
     }
     const stream = await this.getStream(constraints)
-    if (stream) {
+    if (stream != null) {
       videoElement.srcObject = stream
       this.stream = stream
       wrapperElement.appendChild(videoElement)
