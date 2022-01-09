@@ -1,22 +1,22 @@
 <template>
   <div class="vc_camera_master">
-    <modal-dialog name="select-video-device">
+    <!-- <modal-dialog name="select-video-device">
       Standard-Dokumenten-Kamera: {{ labelDefaultCamera }}
       <dynamic-select
         placeholder="Wähle eine Dokumentenkamera aus"
-        :options="mediaDevices"
+        :options="devicesForDynamicSelect"
         @input="setDeviceId"
         v-model="device"
       />
-    </modal-dialog>
+    </modal-dialog> -->
 
     <div ref="videoWrapper" />
 
-    <div v-if="!stream" class="no-stream">
+    <div v-if="!videoElement" class="no-stream">
       <plain-icon v-if="!cameraNotFound" name="document-camera" />
       <plain-icon v-if="cameraNotFound" name="document-camera-off" />
       <div>
-        <a v-if="!stream" href="#" @click="showDeviceSelect"
+        <a v-if="!videoElement" href="#" @click="setVideoStream"
           >Dokumentenkamera auswählen</a
         >
       </div>
@@ -27,74 +27,96 @@
 <script lang="ts">
 /* eslint-disable indent, no-undef */
 import Component from 'vue-class-component'
+import { createNamespacedHelpers } from 'vuex'
 
-import { shortcutManager } from '@bldr/shortcuts'
+const { mapGetters } = createNamespacedHelpers('lamp/masters/camera')
+
+// import { shortcutManager } from '@bldr/shortcuts'
 
 import MasterMain from '../MasterMain.vue'
-import ExternalSites from '@/components/reusable/ExternalSites.vue'
 
-interface MediaDevice {
-  name: string
-  id: string
-}
+// interface MediaDeviceDynamicSelect {
+//   name: string
+//   id: string
+// }
 
 @Component({
-  components: {
-    ExternalSites
-  }
+  computed: mapGetters(['cameraNotFound', 'videoElement'])
 })
 export default class CameraMasterMain extends MasterMain {
   masterName = 'camera'
+  videoElement!: HTMLVideoElement
+
+  cameraNotFound!: boolean
 
   data (): {
-    device: MediaDevice
-    stream: MediaStream
-    labelDefaultCamera: string
+    // devices: MediaDeviceInfo[]
+    // device: MediaDeviceDynamicSelect
+    // stream: MediaStream
+    // labelDefaultCamera: string
   } {
     return {
+      // devices: null,
       // for v-model of dynamic select
-      device: null,
+      // device: null,
       // if we have a camera but no stream
-      stream: null,
-      labelDefaultCamera: null
+      // stream: null,
+      // labelDefaultCamera: null
     }
   }
 
-  device!: MediaDevice
-  stream!: MediaStream
-  labelDefaultCamera!: string
+  // devices!: MediaDeviceInfo[]
+  // device!: MediaDeviceDynamicSelect
+  // stream!: MediaStream
+  // labelDefaultCamera!: string
 
   $refs!: {
     videoWrapper: HTMLDivElement
   }
 
-  get mediaDevices (): MediaDevice[] {
-    return this.$store.getters['lamp/masters/camera/forDynamicSelect']
-  }
+  // get devicesForDynamicSelect() {
+  //   if (this.devices == null) {
+  //     return
+  //   }
+  //   const resultList = []
+  //   for (const device of this.devices) {
+  //     if (device.kind === 'videoinput') {
+  //       let label: string
+  //       if (device.label) {
+  //         label = device.label
+  //       } else {
+  //         label = `${device.kind} (${device.deviceId})`
+  //       }
+  //       resultList.push({
+  //         ref: device.deviceId,
+  //         name: label
+  //       })
+  //     }
+  //   }
+  //   return resultList
+  // }
 
-  get cameraNotFound (): boolean {
-    return this.$store.getters['lamp/masters/camera/cameraNotFound']
-  }
+  // async setMediaDevices (): Promise<void> {
+  //   this.devices = await navigator.mediaDevices.enumerateDevices()
+  // }
 
   /**
    * Called by the input event of the dynamic select component.
    */
-  async setDeviceId (): Promise<void> {
-    this.$modal.hide('select-video-device')
-    this.labelDefaultCamera = this.device.name
-    window.localStorage.setItem('labelDefaultCamera', this.device.name)
-    this.$store.commit('lamp/masters/camera/setDeviceId', this.device.id)
-    this.setVideoStream(await this.buildConstraints(this.device.id))
-  }
+  // async setDeviceId (): Promise<void> {
+  //   this.$modal.hide('select-video-device')
+  //   this.labelDefaultCamera = this.device.name
+  //   // window.localStorage.setItem('labelDefaultCamera', this.device.name)
+  //   this.setVideoStream(await this.buildConstraints(this.device.id))
+  // }
 
   /**
    * Show the modal dialog with the dynamic select form element.
    */
-  showDeviceSelect (): void {
-    this.$store.dispatch('lamp/masters/camera/setMediaDevices')
-    this.$modal.toggle('select-video-device')
-    this.$dynamicSelect.focus()
-  }
+  // showDeviceSelect (): void {
+  //   this.$modal.toggle('select-video-device')
+  //   this.$dynamicSelect.focus()
+  // }
 
   /**
    * Get the device ID of the document camera. Search for the
@@ -122,10 +144,11 @@ export default class CameraMasterMain extends MasterMain {
    *
    * @returns - The device ID
    */
-  async getDeviceId (): Promise<string> {
+  async getDeviceId (): Promise<string | undefined> {
     const devices = await navigator.mediaDevices.enumerateDevices()
+    console.log(devices)
     for (const device of devices) {
-      if (device.label === this.labelDefaultCamera) {
+      if (device.label.toLowerCase().includes('elmo')) {
         return device.deviceId
       }
     }
@@ -155,7 +178,9 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  async buildConstraints (deviceId?: string): Promise<MediaStreamConstraints> {
+  async buildConstraints (
+    deviceId?: string
+  ): Promise<MediaStreamConstraints | undefined> {
     if (deviceId == null) {
       deviceId = await this.getDeviceId()
     }
@@ -199,44 +224,43 @@ export default class CameraMasterMain extends MasterMain {
       return
     }
 
-    let videoElement = this.$store.getters['lamp/masters/camera/videoElement']
-
-    if (videoElement != null) {
-      videoElement.play()
-      this.$refs.videoWrapper.appendChild(videoElement)
+    if (this.videoElement != null) {
+      this.videoElement.play()
+      this.$refs.videoWrapper.appendChild(this.videoElement)
       return
     } else {
-      videoElement = document.createElement('video')
+      const videoElement = document.createElement('video')
       videoElement.autoplay = true
+      this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
     }
 
     if (constraints == null) {
       constraints = await this.buildConstraints()
     }
     const stream = await this.getStream(constraints)
+    console.log(stream)
     if (stream != null) {
-      videoElement.srcObject = stream
-      this.stream = stream
-      wrapperElement.appendChild(videoElement)
-      this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
-      this.$store.dispatch('lamp/masters/camera/setMediaDevices')
+      this.videoElement.srcObject = stream
+      this.$refs.videoWrapper.appendChild(this.videoElement)
     } else {
       this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
+      this.$store.commit('lamp/masters/camera/setVideoElement', null)
     }
   }
 
   async mounted (): Promise<void> {
-    this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
-    if (!this.labelDefaultCamera) {
-      this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
-    } else {
-      await this.setVideoStream()
-    }
-    shortcutManager.add(
-      'ctrl+c+s',
-      this.showDeviceSelect,
-      'Dokumentenkamera auswählen'
-    )
+    // await this.setMediaDevices()
+    // this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
+    // if (!this.labelDefaultCamera) {
+    //   this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
+    // } else {
+    await this.setVideoStream()
+    // }
+    // shortcutManager.add(
+    //   'ctrl+c+s',
+    //   this.showDeviceSelect,
+    //   'Dokumentenkamera auswählen'
+    // )
   }
 }
 </script>

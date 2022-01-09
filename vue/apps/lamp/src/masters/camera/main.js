@@ -111,32 +111,10 @@ export default validateMasterSpec({
   },
   store: {
     state: {
-      mediaDevices: [],
       cameraNotFound: false,
       videoElement: null
     },
     getters: {
-      allMediaDevices: state => {
-        return state.mediaDevices
-      },
-      forDynamicSelect: (state, getters) => {
-        const resultList = []
-        for (const device of getters.allMediaDevices) {
-          if (device.kind === 'videoinput') {
-            let label
-            if (device.label) {
-              label = device.label
-            } else {
-              label = `${device.kind} (${device.deviceId})`
-            }
-            resultList.push({
-              ref: device.deviceId,
-              name: label
-            })
-          }
-        }
-        return resultList
-      },
       cameraNotFound: state => {
         return state.cameraNotFound
       },
@@ -144,15 +122,7 @@ export default validateMasterSpec({
         return state.videoElement
       }
     },
-    actions: {
-      async setMediaDevices ({ commit }) {
-        commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
-      }
-    },
     mutations: {
-      setMediaDevices (state, mediaDevices) {
-        state.mediaDevices = mediaDevices
-      },
       setCameraNotFound (state, cameraNotFound) {
         state.cameraNotFound = cameraNotFound
       },
