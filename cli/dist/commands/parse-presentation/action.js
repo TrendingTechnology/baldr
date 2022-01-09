@@ -62,6 +62,6 @@ export default async function action(filePaths, options) {
                 log.error('Error in file “%s”:\n    %s', [filePath, message]);
             }
         }
+        process.exit(1);
     }
 }
-module.exports = action;

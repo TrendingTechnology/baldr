@@ -11,6 +11,11 @@ function exec (...args) {
   const p = childProcess.spawnSync('baldr', args, {
     encoding: 'utf-8'
   })
+  if (p.status !== 0) {
+    console.log(p.stdout)
+    console.log(p.stderr)
+    assert.fail()
+  }
   return p.stdout
 }
 
@@ -25,6 +30,11 @@ describe('Package “@bldr/cli”', function () {
       encoding: 'utf-8'
     })
     assert.ok(process.stdout.includes('--help'))
+  })
+
+  it('parse-presentation', function () {
+    this.timeout(20000)
+    exec('parse-presentation')
   })
 
   describe('baldr audacity', function () {
