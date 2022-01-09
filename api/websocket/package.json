@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/wire",
+  "name": "@bldr/websocket",
   "version": "0.1.0",
   "description": "A websocket server to connect multiple baldr lamp sessions.",
   "author": {
@@ -20,10 +20,13 @@
     "build": "tsc",
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/*.ts'",
-    "lint": "npm run lint:depcheck && npm run lint:ts-standard"
+    "lint": "npm run lint:depcheck && npm run lint:ts-standard",
+    "test": "npm run build && mocha 'tests/*' && npm run lint"
   },
+  "type": "module",
   "dependencies": {
     "@bldr/config": "*",
+    "@bldr/core-node": "*",
     "ws": "7.4.0"
   },
   "devDependencies": {

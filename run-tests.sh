@@ -37,6 +37,7 @@ lerna bootstrap
 export FORCE_COLOR=true
 
 _run test api/rest-api
+_run test api/websocket
 _run test cli
 _run test lib/browser/core-browser
 _run test lib/browser/menu-adapter
@@ -76,7 +77,6 @@ _run test vue/apps/songbook
 _run test vue/test-apps/test-icons
 _run test vue/test-apps/test-player
 #_run_test api/wire
-#_run_test lib/browser/media-resolver
 #_run_test lib/browser/mousetrap-wrapper
 #_run_test lib/browser/style-configurator
 #_run_test lib/browser/tex-markdown-converter
