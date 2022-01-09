@@ -77,7 +77,7 @@ export declare class Slide {
      *     font_weight: bold
      * ```
      *
-     * This attribute is used in the lamp appL
+     * This attribute is used in the lamp app in this components:
      *
      * `components/reusable/SlideMain/MasterRenderer.vue`:
      * `<masterName-master-main :style="slide.cssStyle" />`
