@@ -48,6 +48,11 @@ const getters = {
   },
   sampleByUri: (state, getters) => uri => {
     return resolver.getSample(uri)
+  },
+  sampleShortcuts: (state, getters) => mimeType => {
+    if (Object.keys(getters.samples).length > 0) {
+      return resolver.getSampleShortcuts(mimeType)
+    }
   }
 }
 

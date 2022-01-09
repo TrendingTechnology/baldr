@@ -124,6 +124,9 @@ export declare class Resolver {
      * @returns All previously resolved samples.
      */
     exportSamples(): Sample[];
+    getSampleShortcuts(mimeType: 'audio' | 'video'): {
+        [shortcut: string]: Sample;
+    };
     /**
      * @param uri - A asset URI in various formats.
      *

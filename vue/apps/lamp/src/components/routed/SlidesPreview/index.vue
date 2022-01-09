@@ -13,7 +13,7 @@
     :style="{ fontSize: size + 'vw' }"
   >
     <div v-if="presentation">
-      <display-controller/>
+      <display-controller />
       <presentation-title />
       <div v-if="slides">
         <span v-if="layoutCurrent.id === 'grid'">
@@ -24,6 +24,7 @@
           v-if="layoutCurrent.id === 'list'"
           :slides="presentation.slides"
         />
+        <sample-shortcuts />
       </div>
     </div>
     <loading-icon v-else />
@@ -44,6 +45,7 @@ import GridLayout from '@/components/reusable/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
 import LoadingIcon from '@/components/reusable/LoadingIcon.vue'
 import PresentationTitle from '@/components/reusable/PresentationTitle.vue'
+import SampleShortcuts from './SampleShortcuts.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 const storePreview = createNamespacedHelpers('lamp/preview')
@@ -56,7 +58,8 @@ const mapGettersPreview = storePreview.mapGetters
     GridLayout,
     ListLayout,
     PresentationTitle,
-    LoadingIcon
+    LoadingIcon,
+    SampleShortcuts
   },
   computed: {
     ...mapGetters(['presentation', 'slide', 'slides']),

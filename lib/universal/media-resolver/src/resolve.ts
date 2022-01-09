@@ -427,6 +427,18 @@ export class Resolver {
     return this.sampleCache.getAll()
   }
 
+  public getSampleShortcuts (
+    mimeType: 'audio' | 'video'
+  ): { [shortcut: string]: Sample } {
+    const samples: { [shortcut: string]: Sample } = {}
+    for (const sample of this.exportSamples()) {
+      if (sample.asset.mimeType === mimeType && sample.shortcut != null) {
+        samples[sample.shortcut] = sample
+      }
+    }
+    return samples
+  }
+
   /**
    * @param uri - A asset URI in various formats.
    *
