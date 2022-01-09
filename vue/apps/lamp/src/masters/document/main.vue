@@ -33,7 +33,14 @@ export default class DocumentMasterMain extends MasterMain {
     if (this.page != null) {
       return this.page
     }
-    return this.navigationNumbers.stepNo
+    // this.navigationNumbers.stepNo -> NaN?
+    if (
+      typeof this.navigationNumbers.stepNo === 'number' &&
+      this.navigationNumbers.stepNo > 1
+    ) {
+      return this.navigationNumbers.stepNo
+    }
+    return 1
   }
 }
 </script>
