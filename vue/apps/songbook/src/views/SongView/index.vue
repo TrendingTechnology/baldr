@@ -161,11 +161,6 @@ export default class SongView extends Vue {
   showTableOfContents () {
     this.$modal.show('table-of-contents')
   }
-  resolveAudio () {
-    if (this.songCurrent.metaData.audio) {
-      this.$media.resolve(this.songCurrent.metaData.audio)
-    }
-  }
 
   created () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songId)
@@ -173,13 +168,11 @@ export default class SongView extends Vue {
 
   beforeRouteUpdate (to: Route, from: Route, next: NavigationGuardNext) {
     this.$store.dispatch('setSongCurrent', to.params.songId)
-    this.resolveAudio()
     this.$modal.hide('table-of-contents')
     next()
   }
 
   mounted () {
-    this.resolveAudio()
     this.$shortcuts.addMultiple([
       {
         keys: 'left',

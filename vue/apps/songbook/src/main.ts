@@ -12,13 +12,11 @@ import ModalDialog from '@bldr/modal-dialog'
 import DynamicSelect from '@bldr/dynamic-select'
 import MaterialIcon from '@bldr/icons'
 import shortcuts from '@bldr/shortcuts'
-import media from '@bldr/media-client'
 
 // Components.
 import MainApp from './MainApp.vue'
 
 Vue.use(shortcuts, { router, store })
-Vue.use(media, router, store, Vue.prototype.$shortcuts)
 
 Vue.use(MaterialIcon)
 Vue.use(ModalDialog as any)

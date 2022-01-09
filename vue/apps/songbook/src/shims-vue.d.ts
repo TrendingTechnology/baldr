@@ -99,10 +99,6 @@ interface ShortcutsManager {
   unpause(): void
 }
 
-interface MediaResolver {
-  resolve(uri: string)
-}
-
 declare module 'vue/types/vue' {
   interface Vue {
     $modal: ModalDialog
@@ -113,8 +109,6 @@ declare module 'vue/types/vue' {
     $fullscreen: () => void
 
     $shortcuts: ShortcutsManager
-
-    $media: MediaResolver
   }
 }
 

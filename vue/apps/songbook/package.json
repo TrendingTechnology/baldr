@@ -26,7 +26,6 @@
     "@bldr/core-node": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/icons": "*",
-    "@bldr/media-client": "*",
     "@bldr/modal-dialog": "*",
     "@bldr/shortcuts": "*",
     "@bldr/songbook-core": "*",
