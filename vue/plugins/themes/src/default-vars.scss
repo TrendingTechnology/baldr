@@ -28,9 +28,9 @@ $colors: (
 // commas We have to use brackets
 $font-family: (Alegreya, serif);
 $font-family-serif: $font-family;
-$font-family-small-caps: ("Alegreya SC", serif);
-$font-family-sans: ("Alegreya Sans", sans-serif);
-$font-family-sans-small-caps: ("Alegreya Sans SC", sans-serif);
+$font-family-small-caps: (Alegreya SC, serif);
+$font-family-sans: (Alegreya Sans, sans-serif);
+$font-family-sans-small-caps: (Alegreya Sans SC, sans-serif);
 // Anonymous Pro
-$font-family-mono: ("Anonymous Pro", monospace);
+$font-family-mono: (Anonymous Pro, monospace);
 $font-size: 1.5vw;
