@@ -202,7 +202,7 @@ export class Resolver {
    */
   private createAsset (uri: string, raw: MediaDataTypes.AssetMetaData): Asset {
     const httpUrl = `${this.httpRequest.baseUrl}/${config.mediaServer.urlFillIn}/${raw.path}`
-    const asset = new Asset(uri, httpUrl, raw)
+    const asset = new Asset(uri, httpUrl, raw, this)
     this.assetCache.add(asset.ref, asset)
     this.shortcutManager.setOnAsset(asset)
     if (asset.samples != null) {
@@ -306,7 +306,7 @@ export class Resolver {
    * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
    * sample fragment.
    *
-   * @returns A media asset or undefined.
+   * @returns A media asset.
    *
    * @throws If the asset is not present in the asset cache
    */
@@ -316,6 +316,18 @@ export class Resolver {
       throw new Error(`The asset with the URI ${uri} couldn’t be resolved.`)
     }
     return asset
+  }
+
+  /**
+   * Return a media asset. Throw no exception it the asset is not present.
+   *
+   * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+   * sample fragment.
+   *
+   * @returns A media asset or undefined.
+   */
+  public findAsset (uri: string): Asset | undefined {
+    return this.assetCache.get(uri)
   }
 
   /**

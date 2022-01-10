@@ -4,6 +4,7 @@ import { MediaDataTypes } from '@bldr/type-definitions'
 
 import { Cache } from './cache'
 import { Sample } from './sample'
+import { Resolver } from './resolve'
 
 export class SampleCollection extends Cache<Sample> {
   private readonly asset: Asset
@@ -110,13 +111,15 @@ export class SampleCollection extends Cache<Sample> {
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
 export class Asset {
+  uri: MediaUri
+
   /**
    * A raw javascript object read from the YAML files
    * (`*.extension.yml`)
    */
   public meta: MediaDataTypes.AssetMetaData
 
-  uri: MediaUri
+  resolver: Resolver
 
   /**
    * The keyboard shortcut to launch the media asset. At the moment only used by
@@ -143,12 +146,14 @@ export class Asset {
   constructor (
     uri: string,
     httpUrl: string,
-    meta: MediaDataTypes.AssetMetaData
+    meta: MediaDataTypes.AssetMetaData,
+    resolver: Resolver
   ) {
     this.uri = new MediaUri(uri)
     this.httpUrl = httpUrl
 
     this.meta = meta
+    this.resolver = resolver
 
     if (this.meta.extension == null && this.meta.path != null) {
       this.meta.extension = getExtension(this.meta.path)
@@ -189,6 +194,12 @@ export class Asset {
   public get previewHttpUrl (): string | undefined {
     if (this.meta.hasPreview != null && this.meta.hasPreview) {
       return `${this.httpUrl}_preview.jpg`
+    }
+    if (this.meta.cover != null) {
+      const cover = this.resolver.findAsset(this.meta.cover)
+      if (cover != null) {
+        return cover.httpUrl
+      }
     }
   }
 

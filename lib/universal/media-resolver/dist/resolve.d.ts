@@ -82,6 +82,7 @@ export declare class Resolver {
      * @throws If the asset is not present in the asset cache
      */
     getAsset(uri: string): Asset;
+    findAsset(uri: string): Asset | undefined;
     /**
      * @returns All previously resolved media assets.
      */
