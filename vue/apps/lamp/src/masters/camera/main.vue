@@ -5,6 +5,9 @@
         <button @click="findDevices">aktualisieren</button>
       </p>
 
+
+      <h3>Gefundene Ausgabe-Geräte:</h3>
+
       <p
         v-for="device in devices"
         :key="device.deviceId"
@@ -15,26 +18,12 @@
         </button>
       </p>
     </div>
-    <!-- <modal-dialog name="select-video-device">
-      Standard-Dokumenten-Kamera: {{ labelDefaultCamera }}
-      <dynamic-select
-        placeholder="Wähle eine Dokumentenkamera aus"
-        :options="devicesForDynamicSelect"
-        @input="setDeviceId"
-        v-model="device"
-      />
-    </modal-dialog> -->
 
     <div ref="videoWrapper" />
 
     <div v-if="!videoElement" class="no-stream">
       <plain-icon v-if="!cameraNotFound" name="document-camera" />
       <plain-icon v-if="cameraNotFound" name="document-camera-off" />
-      <div>
-        <a v-if="!videoElement" href="#" @click="setVideoStream"
-          >Dokumentenkamera auswählen</a
-        >
-      </div>
     </div>
   </div>
 </template>
@@ -43,22 +32,14 @@
 /* eslint-disable indent, no-undef */
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
+import MasterMain from '../MasterMain.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp/masters/camera')
-
-// import { shortcutManager } from '@bldr/shortcuts'
-
-import MasterMain from '../MasterMain.vue'
 
 interface SimpleMediaDeviceInfo {
   titel: string
   deviceId: string
 }
-
-// interface MediaDeviceDynamicSelect {
-//   name: string
-//   id: string
-// }
 
 @Component({
   computed: mapGetters(['cameraNotFound', 'videoElement'])
@@ -71,86 +52,19 @@ export default class CameraMasterMain extends MasterMain {
 
   data (): {
     devices: SimpleMediaDeviceInfo[]
-    // device: MediaDeviceDynamicSelect
-    // stream: MediaStream
-    // labelDefaultCamera: string
   } {
     return {
       devices: null
-      // for v-model of dynamic select
-      // device: null,
-      // if we have a camera but no stream
-      // stream: null,
-      // labelDefaultCamera: null
     }
   }
 
   devices!: SimpleMediaDeviceInfo[]
-  // device!: MediaDeviceDynamicSelect
-  // stream!: MediaStream
-  // labelDefaultCamera!: string
 
   $refs!: {
     videoWrapper: HTMLDivElement
   }
 
-  // get devicesForDynamicSelect() {
-  //   if (this.devices == null) {
-  //     return
-  //   }
-  //   const resultList = []
-  //   for (const device of this.devices) {
-  //     if (device.kind === 'videoinput') {
-  //       let label: string
-  //       if (device.label) {
-  //         label = device.label
-  //       } else {
-  //         label = `${device.kind} (${device.deviceId})`
-  //       }
-  //       resultList.push({
-  //         ref: device.deviceId,
-  //         name: label
-  //       })
-  //     }
-  //   }
-  //   return resultList
-  // }
-
-  // async setMediaDevices (): Promise<void> {
-  //   this.devices = await navigator.mediaDevices.enumerateDevices()
-  // }
-
   /**
-   * Called by the input event of the dynamic select component.
-   */
-  // async setDeviceId (): Promise<void> {
-  //   this.$modal.hide('select-video-device')
-  //   this.labelDefaultCamera = this.device.name
-  //   // window.localStorage.setItem('labelDefaultCamera', this.device.name)
-  //   this.setVideoStream(await this.buildConstraints(this.device.id))
-  // }
-
-  /**
-   * Show the modal dialog with the dynamic select form element.
-   */
-  // showDeviceSelect (): void {
-  //   this.$modal.toggle('select-video-device')
-  //   this.$dynamicSelect.focus()
-  // }
-
-  /**
-   * Get the device ID of the document camera. Search for the
-   * name of the camera. The camera name can be specified in the
-   * configuration file `/etc/baldr.json.`
-   *
-   * ```json
-   * {
-   *   "presentation": {
-   *     "camera": "ELMO"
-   *   }
-   * }
-   * ```
-   *
    * ```json
    * [
    *   {
@@ -164,14 +78,11 @@ export default class CameraMasterMain extends MasterMain {
    */
   async findDevices (): Promise<SimpleMediaDeviceInfo[]> {
     console.log('find devices')
-
     const devices = await navigator.mediaDevices.enumerateDevices()
-    console.log('found', devices)
-
     const videoDevices: SimpleMediaDeviceInfo[] = []
     for (const device of devices) {
       if (device.kind === 'videoinput') {
-        console.log(device)
+        console.log('found videoinput', devices)
         let titel: string
         if (device.label != null && device.label !== '') {
           titel = device.label
@@ -183,10 +94,6 @@ export default class CameraMasterMain extends MasterMain {
           titel
         })
       }
-      // if (device.label.toLowerCase().includes('elmo')) {
-      //   console.log(device.label)
-      //   return device.deviceId
-      // }
       this.devices = videoDevices
     }
     return videoDevices
@@ -216,22 +123,6 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  // async buildConstraints (
-  //   deviceId?: string
-  // ): Promise<MediaStreamConstraints | undefined> {
-  //   if (deviceId == null) {
-  //     deviceId = await this.getDeviceId()
-  //   }
-  //   if (deviceId != null) {
-  //     return {
-  //       audio: false,
-  //       video: { deviceId: { exact: deviceId } }
-  //     }
-  //   } else {
-  //     this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
-  //   }
-  // }
-
   buildConstraints (deviceId: string): MediaStreamConstraints {
     return {
       audio: false,
@@ -239,44 +130,23 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  /**
-   * Try multiple times to get a camera stream.
-   */
   async getStream (
     constraints: MediaStreamConstraints
   ): Promise<MediaStream | undefined> {
-    for (let index = 0; index < 3; index++) {
-      try {
-        return await navigator.mediaDevices.getUserMedia(constraints)
-      } catch (error) {
-        // console.log(error)
-      }
-    }
+    return await navigator.mediaDevices.getUserMedia(constraints)
   }
 
-  stopStreamedVideo () {
-    if (this.videoElement.srcObject != null) {
-      const stream = this.videoElement.srcObject
+  stopStreamedVideo (): void {
+    if (this.videoElement?.srcObject != null) {
+      const stream = this.videoElement.srcObject as MediaStream
       const tracks = stream.getTracks()
-
-      tracks.forEach(function (track) {
+      tracks.forEach(function (track: MediaStreamTrack): void {
         track.stop()
       })
-
       this.videoElement.srcObject = null
     }
   }
 
-  /**
-   * @param constraints
-   *
-   * ```js
-   * {
-   *   audio: false,
-   *   video: { deviceId: { exact: '4V7Fv34Bp...' } }
-   * }
-   * ```
-   */
   async setVideoStream (deviceId: string): Promise<void> {
     console.log('Set device', deviceId)
     const constraints = this.buildConstraints(deviceId)
@@ -285,15 +155,10 @@ export default class CameraMasterMain extends MasterMain {
 
     if (stream != null) {
       this.stopStreamedVideo()
-
       const videoElement = document.createElement('video')
       videoElement.autoplay = true
       videoElement.srcObject = stream
-
-      stream.removeTrack()
-
       this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
-
       this.$refs.videoWrapper.appendChild(videoElement)
     }
   }
@@ -306,20 +171,8 @@ export default class CameraMasterMain extends MasterMain {
   }
 
   async mounted (): Promise<void> {
-        this.reuseVideoElement()
-
+    this.reuseVideoElement()
     await this.findDevices()
-    // await this.setMediaDevices()
-    // this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
-    // if (!this.labelDefaultCamera) {
-    //   this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
-    // } else {
-    // }
-    // shortcutManager.add(
-    //   'ctrl+c+s',await
-    //   this.showDeviceSelect,
-    //   'Dokumentenkamera auswählen'
-    // )
   }
 }
 </script>
@@ -350,6 +203,16 @@ export default class CameraMasterMain extends MasterMain {
     top: 0;
     right: 0;
     z-index: 1;
+    margin: 0.5em;
+    padding: 1em;
+    opacity: 0;
+    background-color: $white;
+    color: $black;
+
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 </style>
