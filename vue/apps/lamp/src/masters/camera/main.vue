@@ -1,5 +1,15 @@
 <template>
   <div class="vc_camera_master">
+    <div class="device-selection-area">
+      <div @click="findDevices">aktualisieren</div>
+      <div
+        v-for="device in devices"
+        :key="device.deviceId"
+        @click="setVideoStream(device.deviceId)"
+      >
+        Videoausgabe
+      </div>
+    </div>
     <!-- <modal-dialog name="select-video-device">
       Standard-Dokumenten-Kamera: {{ labelDefaultCamera }}
       <dynamic-select
@@ -50,13 +60,13 @@ export default class CameraMasterMain extends MasterMain {
   cameraNotFound!: boolean
 
   data (): {
-    // devices: MediaDeviceInfo[]
+    devices: MediaDeviceInfo[]
     // device: MediaDeviceDynamicSelect
     // stream: MediaStream
     // labelDefaultCamera: string
   } {
     return {
-      // devices: null,
+      devices: null
       // for v-model of dynamic select
       // device: null,
       // if we have a camera but no stream
@@ -65,7 +75,7 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  // devices!: MediaDeviceInfo[]
+  devices!: MediaDeviceInfo[]
   // device!: MediaDeviceDynamicSelect
   // stream!: MediaStream
   // labelDefaultCamera!: string
@@ -141,16 +151,25 @@ export default class CameraMasterMain extends MasterMain {
    *   }
    * ]
    * ```
-   *
-   * @returns - The device ID
    */
-  async getDeviceId (): Promise<string | undefined> {
+  async findDevices (): Promise<MediaDeviceInfo[]> {
+    console.log('find devices')
+
     const devices = await navigator.mediaDevices.enumerateDevices()
-    console.log(devices)
+    console.log('found', devices)
+
+    const videoDevices = []
     for (const device of devices) {
-      if (device.label.toLowerCase().includes('elmo')) {
-        return device.deviceId
+      // console.log(device.kind)
+      if (device.kind === 'videoinput') {
+        videoDevices.push(device)
       }
+      // if (device.label.toLowerCase().includes('elmo')) {
+      //   console.log(device.label)
+      //   return device.deviceId
+      // }
+      this.devices = videoDevices
+      return videoDevices
     }
   }
 
@@ -178,19 +197,26 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  async buildConstraints (
-    deviceId?: string
-  ): Promise<MediaStreamConstraints | undefined> {
-    if (deviceId == null) {
-      deviceId = await this.getDeviceId()
-    }
-    if (deviceId != null) {
-      return {
-        audio: false,
-        video: { deviceId: { exact: deviceId } }
-      }
-    } else {
-      this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
+  // async buildConstraints (
+  //   deviceId?: string
+  // ): Promise<MediaStreamConstraints | undefined> {
+  //   if (deviceId == null) {
+  //     deviceId = await this.getDeviceId()
+  //   }
+  //   if (deviceId != null) {
+  //     return {
+  //       audio: false,
+  //       video: { deviceId: { exact: deviceId } }
+  //     }
+  //   } else {
+  //     this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
+  //   }
+  // }
+
+  buildConstraints (deviceId: string): MediaStreamConstraints {
+    return {
+      audio: false,
+      video: { deviceId: { exact: deviceId } }
     }
   }
 
@@ -219,7 +245,8 @@ export default class CameraMasterMain extends MasterMain {
    * }
    * ```
    */
-  async setVideoStream (constraints?: MediaStreamConstraints): Promise<void> {
+  async setVideoStream (deviceId: string): Promise<void> {
+    console.log(deviceId, 'Set video stream')
     if (this.$refs.videoWrapper.firstChild != null) {
       return
     }
@@ -234,9 +261,8 @@ export default class CameraMasterMain extends MasterMain {
       this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
     }
 
-    if (constraints == null) {
-      constraints = await this.buildConstraints()
-    }
+    const constraints = this.buildConstraints(deviceId)
+
     const stream = await this.getStream(constraints)
     console.log(stream)
     if (stream != null) {
@@ -249,6 +275,7 @@ export default class CameraMasterMain extends MasterMain {
   }
 
   async mounted (): Promise<void> {
+    await this.findDevices()
     // await this.setMediaDevices()
     // this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
     // if (!this.labelDefaultCamera) {
@@ -257,7 +284,7 @@ export default class CameraMasterMain extends MasterMain {
     await this.setVideoStream()
     // }
     // shortcutManager.add(
-    //   'ctrl+c+s',
+    //   'ctrl+c+s',await
     //   this.showDeviceSelect,
     //   'Dokumentenkamera auswählen'
     // )
@@ -284,6 +311,13 @@ export default class CameraMasterMain extends MasterMain {
   .baldr-icon_document-camera,
   .baldr-icon_document-camera-off {
     font-size: 25em;
+  }
+
+  .device-selection-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
   }
 }
 </style>
