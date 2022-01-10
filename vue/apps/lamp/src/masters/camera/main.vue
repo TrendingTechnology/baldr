@@ -1,14 +1,19 @@
 <template>
   <div class="vc_camera_master">
     <div class="device-selection-area">
-      <div @click="findDevices">aktualisieren</div>
-      <div
+      <p>
+        <button @click="findDevices">aktualisieren</button>
+      </p>
+
+      <p
         v-for="device in devices"
         :key="device.deviceId"
         @click="setVideoStream(device.deviceId)"
       >
-        Videoausgabe
-      </div>
+        <button>
+          {{ device.titel }}
+        </button>
+      </p>
     </div>
     <!-- <modal-dialog name="select-video-device">
       Standard-Dokumenten-Kamera: {{ labelDefaultCamera }}
@@ -45,6 +50,11 @@ const { mapGetters } = createNamespacedHelpers('lamp/masters/camera')
 
 import MasterMain from '../MasterMain.vue'
 
+interface SimpleMediaDeviceInfo {
+  titel: string
+  deviceId: string
+}
+
 // interface MediaDeviceDynamicSelect {
 //   name: string
 //   id: string
@@ -60,7 +70,7 @@ export default class CameraMasterMain extends MasterMain {
   cameraNotFound!: boolean
 
   data (): {
-    devices: MediaDeviceInfo[]
+    devices: SimpleMediaDeviceInfo[]
     // device: MediaDeviceDynamicSelect
     // stream: MediaStream
     // labelDefaultCamera: string
@@ -75,7 +85,7 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  devices!: MediaDeviceInfo[]
+  devices!: SimpleMediaDeviceInfo[]
   // device!: MediaDeviceDynamicSelect
   // stream!: MediaStream
   // labelDefaultCamera!: string
@@ -152,25 +162,34 @@ export default class CameraMasterMain extends MasterMain {
    * ]
    * ```
    */
-  async findDevices (): Promise<MediaDeviceInfo[]> {
+  async findDevices (): Promise<SimpleMediaDeviceInfo[]> {
     console.log('find devices')
 
     const devices = await navigator.mediaDevices.enumerateDevices()
     console.log('found', devices)
 
-    const videoDevices = []
+    const videoDevices: SimpleMediaDeviceInfo[] = []
     for (const device of devices) {
-      // console.log(device.kind)
       if (device.kind === 'videoinput') {
-        videoDevices.push(device)
+        console.log(device)
+        let titel: string
+        if (device.label != null && device.label !== '') {
+          titel = device.label
+        } else {
+          titel = device.deviceId.substring(0, 5)
+        }
+        videoDevices.push({
+          deviceId: device.deviceId,
+          titel
+        })
       }
       // if (device.label.toLowerCase().includes('elmo')) {
       //   console.log(device.label)
       //   return device.deviceId
       // }
       this.devices = videoDevices
-      return videoDevices
     }
+    return videoDevices
   }
 
   /**
@@ -235,6 +254,19 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
+  stopStreamedVideo () {
+    if (this.videoElement.srcObject != null) {
+      const stream = this.videoElement.srcObject
+      const tracks = stream.getTracks()
+
+      tracks.forEach(function (track) {
+        track.stop()
+      })
+
+      this.videoElement.srcObject = null
+    }
+  }
+
   /**
    * @param constraints
    *
@@ -246,42 +278,42 @@ export default class CameraMasterMain extends MasterMain {
    * ```
    */
   async setVideoStream (deviceId: string): Promise<void> {
-    console.log(deviceId, 'Set video stream')
-    if (this.$refs.videoWrapper.firstChild != null) {
-      return
-    }
+    console.log('Set device', deviceId)
+    const constraints = this.buildConstraints(deviceId)
+    const stream = await this.getStream(constraints)
+    console.log('Got video stream', stream)
 
-    if (this.videoElement != null) {
-      this.videoElement.play()
-      this.$refs.videoWrapper.appendChild(this.videoElement)
-      return
-    } else {
+    if (stream != null) {
+      this.stopStreamedVideo()
+
       const videoElement = document.createElement('video')
       videoElement.autoplay = true
+      videoElement.srcObject = stream
+
+      stream.removeTrack()
+
       this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
+
+      this.$refs.videoWrapper.appendChild(videoElement)
     }
+  }
 
-    const constraints = this.buildConstraints(deviceId)
-
-    const stream = await this.getStream(constraints)
-    console.log(stream)
-    if (stream != null) {
-      this.videoElement.srcObject = stream
+  reuseVideoElement () {
+    if (this.videoElement != null && this.$refs.videoWrapper != null) {
+      this.videoElement.play()
       this.$refs.videoWrapper.appendChild(this.videoElement)
-    } else {
-      this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
-      this.$store.commit('lamp/masters/camera/setVideoElement', null)
     }
   }
 
   async mounted (): Promise<void> {
+        this.reuseVideoElement()
+
     await this.findDevices()
     // await this.setMediaDevices()
     // this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
     // if (!this.labelDefaultCamera) {
     //   this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
     // } else {
-    await this.setVideoStream()
     // }
     // shortcutManager.add(
     //   'ctrl+c+s',await
