@@ -77,11 +77,19 @@ export declare class Resolver {
      * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
      * sample fragment.
      *
-     * @returns A media asset or undefined.
+     * @returns A media asset.
      *
      * @throws If the asset is not present in the asset cache
      */
     getAsset(uri: string): Asset;
+    /**
+     * Return a media asset. Throw no exception it the asset is not present.
+     *
+     * @param uri - A media URI in the `ref` or `uuid` scheme with or without a
+     * sample fragment.
+     *
+     * @returns A media asset or undefined.
+     */
     findAsset(uri: string): Asset | undefined;
     /**
      * @returns All previously resolved media assets.

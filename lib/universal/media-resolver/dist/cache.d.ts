@@ -1,4 +1,3 @@
-import * as Types from './types';
 /**
  * This class manages the counter for one MIME type (`audio`, `image` and `video`).
  */
@@ -15,7 +14,7 @@ export declare class MimeTypeShortcutCounter {
     get(): string | undefined;
     reset(): void;
 }
-export declare class Cache<T> implements Types.Cache<T> {
+export declare class Cache<T> {
     protected cache: {
         [ref: string]: T;
     };
