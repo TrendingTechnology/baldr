@@ -58,3 +58,10 @@ import PlayableSelector from './PlayableSelector.vue'
 @Component({ components: { PlayableSelector, ControllButtons } })
 export default class App extends Vue {}
 </script>
+
+<style lang="scss">
+.vc_controll_buttons {
+  font-size: 4em;
+  margin: 1em;
+}
+</style>

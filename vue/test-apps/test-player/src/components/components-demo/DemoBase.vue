@@ -31,7 +31,8 @@ export default class DemoBase extends Vue {
 
   private async listenOnPlayableSelection (uuid: string) {
     await resolver.resolve(uuid)
-    await player.start(uuid)
+    player.load(uuid)
+    // await player.start(uuid)
     this.src = uuid
   }
 }

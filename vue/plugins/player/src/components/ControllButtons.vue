@@ -1,9 +1,10 @@
 <template>
   <div class="vc_controll_buttons">
-    <plain-icon name="skip-previous" @click.native="backward()" />
-    <plain-icon name="play" @click.native="play()" />
-    <plain-icon name="pause" @click.native="pause()" />
-    <plain-icon name="skip-next" @click.native="forward()" />
+    <clickable-icon name="backward" @click.native="backward()" />
+    <clickable-icon name="play" @click.native="play()" />
+    <clickable-icon name="stop" @click.native="stop()" />
+    <clickable-icon name="pause" @click.native="pause()" />
+    <clickable-icon name="forward" @click.native="forward()" />
   </div>
 </template>
 
@@ -11,13 +12,13 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { PlainIcon } from '@bldr/icons'
+import { ClickableIcon } from '@bldr/icons'
 
 import { player } from '../plugin'
 
 @Component({
   components: {
-    PlainIcon
+    ClickableIcon
   }
 })
 export default class ControllButtons extends Vue {
@@ -27,6 +28,10 @@ export default class ControllButtons extends Vue {
 
   pause () {
     player.pause()
+  }
+
+  stop () {
+    player.stop()
   }
 
   forward () {
