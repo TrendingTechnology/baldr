@@ -186,10 +186,14 @@ export class Playable {
   }
 
   public start (targetVolume: number): void {
-    this.play(targetVolume, this.sample.startTimeSec)
+    this.initializePlayback(targetVolume, this.sample.startTimeSec)
   }
 
-  private play (
+  public play (targetVolume = 1): void {
+    this.initializePlayback(targetVolume)
+  }
+
+  private initializePlayback (
     targetVolume: number,
     startTimeSec?: number,
     fadeInSec?: number
@@ -297,7 +301,7 @@ export class Playable {
 
   public toggle (targetVolume: number = 1): void {
     if (this.htmlElement.paused) {
-      this.play(targetVolume)
+      this.initializePlayback(targetVolume)
     } else {
       this.pause().then(
         () => {},

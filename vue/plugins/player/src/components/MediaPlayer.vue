@@ -51,7 +51,7 @@ export default class MediaPlayer extends Vue {
   playingUri?: string
 
   data () {
-    return player.uris
+    return player.data
   }
 
   $refs!: {

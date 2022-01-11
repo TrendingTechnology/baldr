@@ -1,9 +1,13 @@
 <template>
   <div class="vc_controll_buttons">
     <clickable-icon name="backward" @click.native="backward()" />
-    <clickable-icon name="play" @click.native="play()" />
-    <clickable-icon name="stop" @click.native="stop()" />
-    <clickable-icon name="pause" @click.native="pause()" />
+    <clickable-icon name="play" :disabled="isPlaying" @click.native="start()" />
+    <clickable-icon name="stop" :disabled="!isPlaying" @click.native="stop()" />
+    <clickable-icon
+      name="pause"
+      :disabled="!isPlaying"
+      @click.native="pause()"
+    />
     <clickable-icon name="forward" @click.native="forward()" />
   </div>
 </template>
@@ -22,7 +26,18 @@ import { player } from '../plugin'
   }
 })
 export default class ControllButtons extends Vue {
-  play () {
+  loadedUri?: string
+  playingUri?: string
+
+  data () {
+    return player.data
+  }
+
+  get isPlaying (): boolean {
+    return this.playingUri != null
+  }
+
+  start () {
     player.start()
   }
 

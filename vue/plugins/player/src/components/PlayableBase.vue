@@ -85,7 +85,10 @@ export default class PlayableBaseNg extends Vue {
       console.log(reason)
     })
     if (this.playable != null) {
-      this.playableConnected(this.playable)
+      // nextTick is required, else mouse listener not working
+      this.$nextTick(() => {
+        this.playableConnected(this.playable)
+      })
     }
   }
 
@@ -100,7 +103,9 @@ export default class PlayableBaseNg extends Vue {
   onPlayableChange (): void {
     this.playableDisconnected()
     if (this.playable != null) {
-      this.playableConnected(this.playable)
+      this.$nextTick(() => {
+        this.playableConnected(this.playable)
+      })
     }
   }
 

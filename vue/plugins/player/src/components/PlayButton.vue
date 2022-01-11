@@ -115,14 +115,21 @@ export default class PlayButton extends PlayableBase {
    */
   playableConnected (): void {
     this.setPlaybackStateFromPlayable()
+    console.log('connected')
 
     this.$el.addEventListener('mouseenter', () => {
+      console.log('mouseenter')
+      console.log(this.playbackState)
       if (this.playbackState === 'playing') {
         this.playbackState = 'stoppable'
       }
     })
 
+    console.log(this.$el)
+
     this.$el.addEventListener('mouseleave', () => {
+      console.log('mouseenter')
+
       this.setPlaybackStateFromPlayable()
     })
 
