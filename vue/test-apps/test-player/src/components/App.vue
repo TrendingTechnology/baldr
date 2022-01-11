@@ -30,5 +30,31 @@
       </ul>
     </div>
     <router-view />
+
+    <hr />
+
+    <h2>Playable selector:</h2>
+
+    <h2>audio</h2>
+
+    <playable-selector mime-type="audio" />
+
+    <h2>video</h2>
+
+    <playable-selector mime-type="video" />
+
+    <controll-buttons />
   </div>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+import Component from 'vue-class-component'
+
+import { ControllButtons } from '@bldr/player'
+
+import PlayableSelector from './PlayableSelector.vue'
+
+@Component({ components: { PlayableSelector, ControllButtons } })
+export default class App extends Vue {}
+</script>

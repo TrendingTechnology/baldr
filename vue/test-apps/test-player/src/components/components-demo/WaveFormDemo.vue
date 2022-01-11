@@ -2,7 +2,6 @@
   <div class="vc_component_wave_form_demo">
     <h1>Test component “WaveForm”</h1>
     <wave-form :src="src"></wave-form>
-    <playable-selector mime-type="audio" />
   </div>
 </template>
 

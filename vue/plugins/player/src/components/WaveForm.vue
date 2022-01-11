@@ -85,13 +85,14 @@ export default class WaveForm extends PlayableBase {
 
   .progress-indicator-overlay {
     background-color: $blue;
+    border-right: 1px solid darken($blue, 40%);
     height: 0;
     left: 0;
     opacity: 0.2;
+    pointer-events: none;
     position: absolute;
     top: 0;
     width: 0;
-    pointer-events: none;
   }
 }
 </style>
