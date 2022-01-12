@@ -1,9 +1,3 @@
-/**
- * @module @bldr/media-client/store
- */
-
-/* globals config */
-
 import Vue from 'vue'
 
 import { resolver } from '@bldr/presentation-parser'
@@ -11,9 +5,6 @@ import { resolver } from '@bldr/presentation-parser'
 const state = {
   assets: {},
   samples: {},
-  // To realize a playthrough and stop option on the audio and video master
-  // slides, we must track the currently playing sample and the in the future
-  // to be played sample (loaded).
   sampleLoaded: null,
   samplePlaying: null
 }
@@ -26,13 +17,6 @@ const getters = {
   },
   assets: state => {
     return state.assets
-  },
-  httpUrlByUri: (state, getters) => uri => {
-    const media = getters.assets
-    if (uri in media) {
-      return media[uri].httpUrl
-    }
-    return null
   },
   isMedia: (state, getters) => {
     return Object.keys(getters.assets).length > 0
@@ -65,13 +49,6 @@ const actions = {
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     resolver.reset()
-  },
-  incrementShortcutCounterByType ({ commit, getters }, type) {
-    const counter = getters.shortcutCounterByType(type) + 1
-    commit('setShortcutCounterByType', {
-      type,
-      counter
-    })
   },
   removeAsset ({ commit }, asset) {
     for (const sampleRef in asset.samples) {
