@@ -49,7 +49,7 @@ export default validateMasterSpec({
       return youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
     },
     collectPropsMain (props) {
-      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](
+      const asset = this.$store.getters['lamp/media/assetByUri'](
         youtubeMModule.convertYoutubeIdToUri(props.youtubeId)
       )
       youtubeMModule.checkAvailability(props.youtubeId).then(result => {

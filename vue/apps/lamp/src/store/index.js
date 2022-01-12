@@ -12,7 +12,7 @@ import Vuex from 'vuex'
 import { customStore } from '@/main'
 
 import masters from './masters.js'
-import mediaNg from './mediaNg.js'
+import media from './media.js'
 import nav from './nav.js'
 import preview from './preview.js'
 import recent from './recent.js'
@@ -286,7 +286,7 @@ export default new Vuex.Store({
       mutations,
       modules: {
         masters,
-        mediaNg,
+        media,
         nav,
         preview,
         recent,

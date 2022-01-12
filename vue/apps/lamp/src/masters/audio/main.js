@@ -83,7 +83,7 @@ export default validateMasterSpec({
       return uris
     },
     collectPropsMain (props) {
-      const sample = this.$store.getters['lamp/mediaNg/sampleByUri'](props.src)
+      const sample = this.$store.getters['lamp/media/sampleByUri'](props.src)
       const asset = sample.asset
 
       const grab = new ObjectPropertyPicker(props, asset.meta)
@@ -101,7 +101,7 @@ export default validateMasterSpec({
 
       let previewHttpUrl
       if (props.cover != null) {
-        const coverFile = this.$store.getters['lamp/mediaNg/assetByUri'](props.cover)
+        const coverFile = this.$store.getters['lamp/media/assetByUri'](props.cover)
         previewHttpUrl = coverFile.httpUrl
       } else if (asset.previewHttpUrl != null) {
         previewHttpUrl = asset.previewHttpUrl

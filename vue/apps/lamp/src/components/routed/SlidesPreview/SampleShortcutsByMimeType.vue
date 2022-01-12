@@ -22,7 +22,7 @@ export default class SampleShortcutsByMimeType extends Vue {
   mimeType: 'audio' | 'video'
 
   get samples (): Record<string, Sample> {
-    return this.$store.getters['lamp/mediaNg/sampleShortcuts'](this.mimeType)
+    return this.$store.getters['lamp/media/sampleShortcuts'](this.mimeType)
   }
 
   get hasSamples (): boolean {

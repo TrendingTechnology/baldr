@@ -54,7 +54,7 @@ export default class PersonMasterMain extends MasterMain {
     const uri = personMModul.convertPersonIdToMediaUri(
       this.slideNg.fields.personId
     )
-    return this.$store.getters['lamp/mediaNg/assetByUri'](uri)
+    return this.$store.getters['lamp/media/assetByUri'](uri)
   }
 
   get mainImageHttpUrl (): string {

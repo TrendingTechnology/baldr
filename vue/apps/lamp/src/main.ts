@@ -51,7 +51,7 @@ Vue.config.productionTip = false
 registerMasterComponents()
 
 store.subscribe(mutation => {
-  if (mutation.type === 'lamp/mediaNg/addAsset') {
+  if (mutation.type === 'lamp/media/addAsset') {
     const asset = mutation.payload
     if (asset.uriScheme === 'localfile') {
       Vue.prototype.$showMessage.success(

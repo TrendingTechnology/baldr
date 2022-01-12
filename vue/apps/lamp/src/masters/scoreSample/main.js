@@ -55,7 +55,7 @@ export default validateMasterSpec({
       let audioSample
       let audio
       if (props.audio != null) {
-        audio = this.$store.getters['lamp/mediaNg/sampleByUri'](props.audio)
+        audio = this.$store.getters['lamp/media/sampleByUri'](props.audio)
       }
 
       if (audio) {
@@ -65,7 +65,7 @@ export default validateMasterSpec({
       if (props.score.indexOf('#') > -1) {
         asset = resolver.getMultipartSelection(props.score)
       } else {
-        asset = this.$store.getters['lamp/mediaNg/assetByUri'](props.score)
+        asset = this.$store.getters['lamp/media/assetByUri'](props.score)
       }
 
       return {

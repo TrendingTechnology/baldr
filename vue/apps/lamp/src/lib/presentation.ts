@@ -60,7 +60,7 @@ export async function loadPresentation (
     // To show the loader
     vm.$store.dispatch('lamp/clearPresentation')
     resolver.reset()
-    vm.$store.dispatch('lamp/mediaNg/clear')
+    vm.$store.dispatch('lamp/media/clear')
   }
 
   // Get the yaml content as a string of a presentation for quick refresh

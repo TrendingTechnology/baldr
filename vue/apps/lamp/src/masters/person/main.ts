@@ -41,7 +41,7 @@ export default validateMasterSpec({
       return convertPersonIdToMediaId(props.personId)
     },
     collectPropsMain (props): LampTypes.StringIndexedData {
-      const asset = this.$store.getters['lamp/mediaNg/assetByUri'](
+      const asset = this.$store.getters['lamp/media/assetByUri'](
         convertPersonIdToMediaId(props.personId)
       )
       return { asset }

@@ -78,11 +78,11 @@ function intersect (array1, array2) {
 async function addAssetsNgToStore (uris, throwException = true) {
   const assets = await resolver.resolve(uris, throwException)
   for (const asset of assets) {
-    store.commit('lamp/mediaNg/addAsset', asset)
+    store.commit('lamp/media/addAsset', asset)
   }
   const samples = resolver.exportSamples()
   for (const sample of samples) {
-    store.commit('lamp/mediaNg/addSample', sample)
+    store.commit('lamp/media/addSample', sample)
   }
   return assets
 }
@@ -386,7 +386,7 @@ export class Slide {
   get assets () {
     const assets = []
     for (const mediaUri of this.mediaUris) {
-      assets.push(store.getters['lamp/mediaNg/assetByUri'](mediaUri))
+      assets.push(store.getters['lamp/media/assetByUri'](mediaUri))
     }
     return assets
   }
