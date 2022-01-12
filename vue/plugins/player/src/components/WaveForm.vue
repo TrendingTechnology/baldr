@@ -21,22 +21,24 @@ export default class WaveForm extends PlayableBase {
     if (this.$refs.waveformImage == null) {
       return
     }
-    const div = this.$refs.progressOverlay
+    const progress = this.$refs.progressOverlay
 
-    const img = this.$refs.waveformImage
-    const height = img.clientHeight
-    const width = img.clientWidth
+    const waveform = this.$refs.waveformImage
+    const height = waveform.clientHeight
+    const width = waveform.clientWidth
 
-    div.style.height = `${height}px`
-    div.style.width = `${this.playable.progress * width}px`
-    div.style.marginLeft = `${img.offsetLeft}px`
-    div.style.marginTop = `${img.offsetTop}px`
+    progress.style.height = `${height}px`
+    progress.style.width = `${this.playable.progress * width}px`
+    progress.style.marginLeft = `${waveform.offsetLeft}px`
+    progress.style.marginTop = `${waveform.offsetTop}px`
   }
 
   private seek (event: MouseEvent): void {
+    const progress = event.offsetX / this.$refs.waveformImage.clientWidth
+    if (!this.playable.isPlaying) {
+    }
     if (this.playable != null) {
-      this.playable.progress =
-        event.offsetX / this.$refs.waveformImage.clientWidth
+      this.playable.progress = progress
     }
   }
 

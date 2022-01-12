@@ -64,8 +64,10 @@ export default class CameraMasterMain extends MasterMain {
   }
 
   /**
-   * ```json
-   * [
+   * ```js
+   * devices = await navigator.mediaDevices.enumerateDevices()
+   *
+   * devices = [
    *   {
    *     "deviceId": "21c19a409344f4bee3a71d7b1b14d1bb452dcd86cba8c9c5136a992c33241c08",
    *     "kind": "videoinput",
@@ -162,7 +164,7 @@ export default class CameraMasterMain extends MasterMain {
     }
   }
 
-  reuseVideoElement () {
+  reuseVideoElement (): void {
     if (this.videoElement != null && this.$refs.videoWrapper != null) {
       this.videoElement.play()
       this.$refs.videoWrapper.appendChild(this.videoElement)

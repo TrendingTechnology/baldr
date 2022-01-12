@@ -2,8 +2,25 @@ import { Sample } from '@bldr/media-resolver'
 
 import { TimeOutExecutor, IntervalExecutor } from './timer'
 import { EventsListenerStore } from './events'
+import { Player } from './player'
 
 const TIME_UPDATE_INTERVAL: number = 10
+
+interface StartOptions {
+  startTimeSec?: number
+
+  /**
+   * Number from 0 - 1
+   */
+  startProgress?: number
+
+  /**
+   * Number from 0 - 1
+   */
+  targetVolume?: number
+
+  fadeInSec?: number
+}
 
 /**
  * The state of the current playback.
@@ -29,6 +46,14 @@ export class Playable {
   private readonly eventsListener = new EventsListenerStore()
 
   private playbackState_: PlaybackState = 'stopped'
+
+  public player: Player
+
+  constructor (sample: Sample, htmlElement: HTMLMediaElement, player: Player) {
+    this.sample = sample
+    this.htmlElement = htmlElement
+    this.player = player
+  }
 
   /**
    * The playback states of a playable are:
@@ -69,11 +94,6 @@ export class Playable {
 
   private triggerTimeUpdateListener (): void {
     this.eventsListener.trigger('time-update', this)
-  }
-
-  constructor (sample: Sample, htmlElement: HTMLMediaElement) {
-    this.sample = sample
-    this.htmlElement = htmlElement
   }
 
   /**

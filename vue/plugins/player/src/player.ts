@@ -30,11 +30,13 @@ class PlayerCache {
   htmlElements: HtmlElementCache
   playables: PlayableCache
   resolver: Resolver
+  player: Player
 
-  constructor (resolver: Resolver) {
+  constructor (resolver: Resolver, player: Player) {
     this.htmlElements = new HtmlElementCache()
     this.playables = new PlayableCache()
     this.resolver = resolver
+    this.player = player
   }
 
   getPlayable (uri: string): Playable {
@@ -55,7 +57,7 @@ class PlayerCache {
       this.htmlElements.add(sample.asset.ref, htmlElement)
     }
 
-    playable = new Playable(sample, htmlElement)
+    playable = new Playable(sample, htmlElement, this.player)
     this.playables.add(sample.ref, playable)
     return playable
   }
@@ -89,7 +91,7 @@ export class Player {
   constructor (resolver: Resolver) {
     this.resolver = resolver
     this.events = new EventsListenerStore()
-    this.cache = new PlayerCache(resolver)
+    this.cache = new PlayerCache(resolver, this)
   }
 
   public getPlayable (uri: string): Playable {
