@@ -250,6 +250,10 @@ function goToNextSlideOrStepByDirection (direction: 1 | -1): void {
   router.push({ name, params }).catch(logCatch)
 }
 
+export interface Actions {
+  [actionName: string]: () => void
+}
+
 export function resetSlideScaleFactor (): void {
   store.dispatch('lamp/resetSlideScaleFactor').catch(logCatch)
 }

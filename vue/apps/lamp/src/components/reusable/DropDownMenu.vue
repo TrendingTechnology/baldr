@@ -10,7 +10,9 @@ import Component from 'vue-class-component'
 
 // import VueFileToolbarMenu from 'vue-file-toolbar-menu'
 import BaldrMenu from '@bldr/menu-webapp'
-import { getWebappMenuDef, WebappMenuItem } from '@bldr/menu-adapter'
+import { WebappMenuItem } from '@bldr/menu-adapter'
+
+import { getWebappMenuDef } from '../../lib/menu-processing'
 
 import * as actions from '../../lib/actions'
 import router from '../../lib/router-setup'

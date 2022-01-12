@@ -1,6 +1,6 @@
-import { RawMenuItem } from './menu-item'
+import { RawMenuItem } from '@bldr/menu-adapter'
 
-export const universalMenuDefinition: RawMenuItem[] = [
+export default [
   {
     label: 'Datei',
     submenu: [
@@ -218,7 +218,8 @@ export const universalMenuDefinition: RawMenuItem[] = [
           },
           {
             label: 'starten / ausblenden',
-            description: 'Starte geladenen Audio/Video-Ausschnitt von vorne / blende langsam aus',
+            description:
+              'Starte geladenen Audio/Video-Ausschnitt von vorne / blende langsam aus',
             action: 'executeCallback',
             arguments: 'toggleStartFadeOutPlayer',
             keyboardShortcut: 'Return'
@@ -361,4 +362,4 @@ export const universalMenuDefinition: RawMenuItem[] = [
       }
     ]
   }
-]
+] as RawMenuItem[]

@@ -90,7 +90,7 @@ const storeModule = {
 /**
  * This class is mounted under `this.$shortcuts`
  */
-class ShortcutManager {
+export class ShortcutManager {
   constructor () {
     const route = {
       path: '/shortcuts',

@@ -12,44 +12,61 @@
 import { Shell, BrowserWindow } from 'electron'
 import VueRouter from 'vue-router'
 
+// import { ShortcutManager } from '@bldr/shortcuts'
+
+import { RawMenuItem } from './menu-item'
+
 import { traverseMenu } from './traverse'
 import {
   ElectronMenuItem,
   WebappMenuItem,
-  convertMenuItemElectron,
-  convertMenuItemWebapp,
+  convertMenuForElectron,
+  convertMenuForWebapp,
   registerShortcut
 } from './menu-item'
-import { universalMenuDefinition } from './definition'
 
-export { WebappMenuItem } from './menu-item'
+export { traverseMenu } from './traverse'
+export {
+  ElectronMenuItem,
+  RawMenuItem,
+  WebappMenuItem,
+  convertMenuForElectron,
+  convertMenuForWebapp
+} from './menu-item'
+
+type Actions = {
+  [actionName: string]: () => void
+}
 
 export function getEletronMenuDef (
+  menu: RawMenuItem[],
   shell: Shell,
   window: BrowserWindow
 ): ElectronMenuItem[] {
-  return traverseMenu(universalMenuDefinition, convertMenuItemElectron, {
+  return traverseMenu(menu, convertMenuForElectron, {
     shell,
     window
   })
 }
 
 export function getWebappMenuDef (
+  menu: RawMenuItem[],
   router: VueRouter,
-  actions: any
+  actions: Actions
 ): WebappMenuItem[] {
-  return traverseMenu(universalMenuDefinition, convertMenuItemWebapp, {
+  return traverseMenu(menu, convertMenuForWebapp, {
     router,
     actions
   })
 }
 
 export function registerShortcuts (
+  menu: RawMenuItem[],
   router: VueRouter,
   shortcuts: any,
-  actions: any
+  actions: Actions
 ): void {
-  traverseMenu(universalMenuDefinition, registerShortcut, {
+  traverseMenu(menu, registerShortcut, {
     router,
     shortcuts,
     actions

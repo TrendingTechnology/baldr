@@ -10,8 +10,13 @@
  */
 import { Shell, BrowserWindow } from 'electron';
 import VueRouter from 'vue-router';
+import { RawMenuItem } from './menu-item';
 import { ElectronMenuItem, WebappMenuItem } from './menu-item';
-export { WebappMenuItem } from './menu-item';
-export declare function getEletronMenuDef(shell: Shell, window: BrowserWindow): ElectronMenuItem[];
-export declare function getWebappMenuDef(router: VueRouter, actions: any): WebappMenuItem[];
-export declare function registerShortcuts(router: VueRouter, shortcuts: any, actions: any): void;
+export { traverseMenu } from './traverse';
+export { ElectronMenuItem, RawMenuItem, WebappMenuItem, convertMenuForElectron, convertMenuForWebapp } from './menu-item';
+declare type Actions = {
+    [actionName: string]: () => void;
+};
+export declare function getEletronMenuDef(menu: RawMenuItem[], shell: Shell, window: BrowserWindow): ElectronMenuItem[];
+export declare function getWebappMenuDef(menu: RawMenuItem[], router: VueRouter, actions: Actions): WebappMenuItem[];
+export declare function registerShortcuts(menu: RawMenuItem[], router: VueRouter, shortcuts: any, actions: Actions): void;

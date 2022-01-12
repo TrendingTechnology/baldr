@@ -30,11 +30,11 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
 
-import { registerShortcuts } from '@bldr/menu-adapter'
 import { styleConfigurator } from '@bldr/style-configurator'
 
 import { receiveSocketMessage } from '../../remote-control.js'
 import * as actions from '../../lib/actions'
+import { registerShortcuts } from '../../lib/menu-processing'
 
 const { mapActions } = createNamespacedHelpers('lamp')
 
@@ -90,9 +90,10 @@ export default class MainApp extends Vue {
     window.addEventListener('error', event => {
       this.$showMessage.error(event.error)
     })
+
     registerShortcuts(this.$router, this.$shortcuts, actions)
 
-    this.$router.afterEach((to) => {
+    this.$router.afterEach(to => {
       if (to.meta.style) {
         styleConfigurator.set(to.meta.style)
       }

@@ -46,8 +46,8 @@ export interface WebappMenuItem {
 export interface ActionCollection {
     [actionName: string]: () => void;
 }
-export declare function convertMenuItemWebapp(raw: RawMenuItem, payload: any): WebappMenuItem | undefined;
-export declare function convertMenuItemElectron(raw: RawMenuItem, payload: any): ElectronMenuItem;
+export declare function convertMenuForWebapp(raw: RawMenuItem, payload: any): WebappMenuItem | undefined;
+export declare function convertMenuForElectron(raw: RawMenuItem, payload: any): ElectronMenuItem;
 /**
  * Normalize the keyboard shortcuts.
  *

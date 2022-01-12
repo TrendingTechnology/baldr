@@ -67,7 +67,7 @@ interface WebappPayload {
   actions: ActionCollection
 }
 
-export function convertMenuItemWebapp (
+export function convertMenuForWebapp (
   raw: RawMenuItem,
   payload: any
 ): WebappMenuItem | undefined {
@@ -125,7 +125,7 @@ interface ElectronPayload {
   window: BrowserWindow
 }
 
-export function convertMenuItemElectron (
+export function convertMenuForElectron (
   raw: RawMenuItem,
   payload: any
 ): ElectronMenuItem {

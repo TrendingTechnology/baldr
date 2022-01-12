@@ -7,7 +7,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import contextMenu from 'electron-context-menu'
 
-import { getEletronMenuDef } from '@bldr/menu-adapter'
+import { getEletronMenuDef } from './lib/menu-processing'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 

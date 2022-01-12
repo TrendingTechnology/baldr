@@ -33,7 +33,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@bldr/type-definitions": "*"
+    "@bldr/type-definitions": "*",
+    "@bldr/shortcuts": "*"
   },
   "devDependencies": {
     "electron": "11.0.1",
