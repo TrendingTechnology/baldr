@@ -4,6 +4,8 @@ import { Resolver } from '@bldr/media-resolver'
 
 import { Player } from './player'
 
+export { default as ControllButtons } from './components/ControllButtons.vue'
+
 import HorizontalPlayButtons from './components/HorizontalPlayButtons.vue'
 export { default as HorizontalPlayButtons } from './components/HorizontalPlayButtons.vue'
 

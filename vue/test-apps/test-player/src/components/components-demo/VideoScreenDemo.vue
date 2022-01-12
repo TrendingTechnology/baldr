@@ -4,7 +4,6 @@
 
     <h2>Select videos</h2>
     <video-screen :src="src" />
-    <playable-selector mime-type="video" />
 
     <h2>Preconfigured</h2>
 
@@ -13,11 +12,9 @@
 </template>
 
 <script lang="ts">
+import DemoBase from './DemoBase.vue'
 import Component from 'vue-class-component'
 
-import PlayableSelector from './PlayableSelector.vue'
-import DemoBase from './DemoBase.vue'
-
-@Component({ components: { PlayableSelector } })
+@Component
 export default class VideoScreenDemo extends DemoBase {}
 </script>

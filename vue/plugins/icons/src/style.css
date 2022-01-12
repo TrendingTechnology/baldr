@@ -50,266 +50,278 @@
   content: "\ea05";
 }
 
-.baldr-icon_baldr::before {
+.baldr-icon_backward::before {
   content: "\ea06";
 }
 
-.baldr-icon_chevron-down::before {
+.baldr-icon_baldr::before {
   content: "\ea07";
 }
 
-.baldr-icon_chevron-left::before {
+.baldr-icon_chevron-down::before {
   content: "\ea08";
 }
 
-.baldr-icon_chevron-right::before {
+.baldr-icon_chevron-left::before {
   content: "\ea09";
 }
 
-.baldr-icon_chevron-up::before {
+.baldr-icon_chevron-right::before {
   content: "\ea0a";
 }
 
-.baldr-icon_close::before {
+.baldr-icon_chevron-up::before {
   content: "\ea0b";
 }
 
-.baldr-icon_cloud::before {
+.baldr-icon_close::before {
   content: "\ea0c";
 }
 
-.baldr-icon_cloud-download::before {
+.baldr-icon_cloud::before {
   content: "\ea0d";
 }
 
-.baldr-icon_cloze::before {
+.baldr-icon_cloud-download::before {
   content: "\ea0e";
 }
 
-.baldr-icon_counter::before {
+.baldr-icon_cloze::before {
   content: "\ea0f";
 }
 
-.baldr-icon_delete::before {
+.baldr-icon_counter::before {
   content: "\ea10";
 }
 
-.baldr-icon_dice-multiple::before {
+.baldr-icon_delete::before {
   content: "\ea11";
 }
 
-.baldr-icon_document-camera::before {
+.baldr-icon_dice-multiple::before {
   content: "\ea12";
 }
 
-.baldr-icon_document-camera-off::before {
+.baldr-icon_document-camera::before {
   content: "\ea13";
 }
 
-.baldr-icon_export::before {
+.baldr-icon_document-camera-off::before {
   content: "\ea14";
 }
 
-.baldr-icon_fadeout::before {
+.baldr-icon_export::before {
   content: "\ea15";
 }
 
-.baldr-icon_file-audio::before {
+.baldr-icon_fadeout::before {
   content: "\ea16";
 }
 
-.baldr-icon_file-document::before {
+.baldr-icon_file-audio::before {
   content: "\ea17";
 }
 
-.baldr-icon_file-image::before {
+.baldr-icon_file-document::before {
   content: "\ea18";
 }
 
-.baldr-icon_file-outline::before {
+.baldr-icon_file-image::before {
   content: "\ea19";
 }
 
-.baldr-icon_file-presentation-box::before {
+.baldr-icon_file-outline::before {
   content: "\ea1a";
 }
 
-.baldr-icon_file-tree::before {
+.baldr-icon_file-presentation-box::before {
   content: "\ea1b";
 }
 
-.baldr-icon_file-video::before {
+.baldr-icon_file-tree::before {
   content: "\ea1c";
 }
 
-.baldr-icon_folder-open::before {
+.baldr-icon_file-video::before {
   content: "\ea1d";
 }
 
-.baldr-icon_fullscreen::before {
+.baldr-icon_folder-open::before {
   content: "\ea1e";
 }
 
-.baldr-icon_google-spreadsheet::before {
+.baldr-icon_forward::before {
   content: "\ea1f";
 }
 
-.baldr-icon_image::before {
+.baldr-icon_fullscreen::before {
   content: "\ea20";
 }
 
-.baldr-icon_import::before {
+.baldr-icon_google-spreadsheet::before {
   content: "\ea21";
 }
 
-.baldr-icon_imslp::before {
+.baldr-icon_image::before {
   content: "\ea22";
 }
 
-.baldr-icon_instrument::before {
+.baldr-icon_import::before {
   content: "\ea23";
 }
 
-.baldr-icon_magnify::before {
+.baldr-icon_imslp::before {
   content: "\ea24";
 }
 
-.baldr-icon_multi-part::before {
+.baldr-icon_instrument::before {
   content: "\ea25";
 }
 
-.baldr-icon_musescore::before {
+.baldr-icon_magnify::before {
   content: "\ea26";
 }
 
-.baldr-icon_music::before {
+.baldr-icon_multi-part::before {
   content: "\ea27";
 }
 
-.baldr-icon_musicbrainz::before {
+.baldr-icon_musescore::before {
   content: "\ea28";
 }
 
-.baldr-icon_musicbrainz-recording::before {
+.baldr-icon_music::before {
   content: "\ea29";
 }
 
-.baldr-icon_musicbrainz-work::before {
+.baldr-icon_musicbrainz::before {
   content: "\ea2a";
 }
 
-.baldr-icon_notebook::before {
+.baldr-icon_musicbrainz-recording::before {
   content: "\ea2b";
 }
 
-.baldr-icon_open-in-new::before {
+.baldr-icon_musicbrainz-work::before {
   content: "\ea2c";
 }
 
-.baldr-icon_pause::before {
+.baldr-icon_notebook::before {
   content: "\ea2d";
 }
 
-.baldr-icon_pencil::before {
+.baldr-icon_open-in-new::before {
   content: "\ea2e";
 }
 
-.baldr-icon_person::before {
+.baldr-icon_pause::before {
   content: "\ea2f";
 }
 
-.baldr-icon_play::before {
+.baldr-icon_pencil::before {
   content: "\ea30";
 }
 
-.baldr-icon_play-speed::before {
+.baldr-icon_person::before {
   content: "\ea31";
 }
 
-.baldr-icon_presentation::before {
+.baldr-icon_play::before {
   content: "\ea32";
 }
 
-.baldr-icon_question::before {
+.baldr-icon_play-speed::before {
   content: "\ea33";
 }
 
-.baldr-icon_quote::before {
+.baldr-icon_presentation::before {
   content: "\ea34";
 }
 
-.baldr-icon_save::before {
+.baldr-icon_question::before {
   content: "\ea35";
 }
 
-.baldr-icon_seat-outline::before {
+.baldr-icon_quote::before {
   content: "\ea36";
 }
 
-.baldr-icon_skip-next::before {
+.baldr-icon_save::before {
   content: "\ea37";
 }
 
-.baldr-icon_skip-previous::before {
+.baldr-icon_seat-outline::before {
   content: "\ea38";
 }
 
-.baldr-icon_slides::before {
+.baldr-icon_skip-next::before {
   content: "\ea39";
 }
 
-.baldr-icon_steps::before {
+.baldr-icon_skip-previous::before {
   content: "\ea3a";
 }
 
-.baldr-icon_table-of-contents::before {
+.baldr-icon_slides::before {
   content: "\ea3b";
 }
 
-.baldr-icon_task::before {
+.baldr-icon_steps::before {
   content: "\ea3c";
 }
 
-.baldr-icon_test-tube::before {
+.baldr-icon_stop::before {
   content: "\ea3d";
 }
 
-.baldr-icon_timeline-text::before {
+.baldr-icon_table-of-contents::before {
   content: "\ea3e";
 }
 
-.baldr-icon_update::before {
+.baldr-icon_task::before {
   content: "\ea3f";
 }
 
-.baldr-icon_video-switch::before {
+.baldr-icon_test-tube::before {
   content: "\ea40";
 }
 
-.baldr-icon_video-vintage::before {
+.baldr-icon_timeline-text::before {
   content: "\ea41";
 }
 
-.baldr-icon_wikicommons::before {
+.baldr-icon_update::before {
   content: "\ea42";
 }
 
-.baldr-icon_wikidata::before {
+.baldr-icon_video-switch::before {
   content: "\ea43";
 }
 
-.baldr-icon_wikipedia::before {
+.baldr-icon_video-vintage::before {
   content: "\ea44";
 }
 
-.baldr-icon_window-open::before {
+.baldr-icon_wikicommons::before {
   content: "\ea45";
 }
 
-.baldr-icon_worker::before {
+.baldr-icon_wikidata::before {
   content: "\ea46";
 }
 
-.baldr-icon_youtube::before {
+.baldr-icon_wikipedia::before {
   content: "\ea47";
+}
+
+.baldr-icon_window-open::before {
+  content: "\ea48";
+}
+
+.baldr-icon_worker::before {
+  content: "\ea49";
+}
+
+.baldr-icon_youtube::before {
+  content: "\ea4a";
 }

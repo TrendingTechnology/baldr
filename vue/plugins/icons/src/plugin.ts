@@ -7,14 +7,17 @@
 
 import _Vue from 'vue'
 
+import ColorIcon from './components/ColorIcon.vue'
+export { default as ColorIcon } from './components/ColorIcon.vue'
+
+import ClickableIcon from './components/ClickableIcon.vue'
+export { default as ClickableIcon } from './components/ClickableIcon.vue'
+
 import MaterialIcon from './components/MaterialIcon.vue'
 export { default as MaterialIcon } from './components/MaterialIcon.vue'
 
 import PlainIcon from './components/PlainIcon.vue'
 export { default as PlainIcon } from './components/PlainIcon.vue'
-
-import ColorIcon from './components/ColorIcon.vue'
-export { default as ColorIcon } from './components/ColorIcon.vue'
 
 import VanishIcon from './components/VanishIcon.vue'
 export { default as VanishIcon } from './components/VanishIcon.vue'
@@ -168,9 +171,10 @@ export function registerMouseMoveTimeout (seconds: number = 5): void {
 
 const Plugin = {
   install (Vue: typeof _Vue) {
+    Vue.component('clickable-icon', ClickableIcon)
+    Vue.component('color-icon', ColorIcon)
     Vue.component('material-icon', MaterialIcon)
     Vue.component('plain-icon', PlainIcon)
-    Vue.component('color-icon', ColorIcon)
     Vue.component('vanish-icon', VanishIcon)
     registerMouseMoveTimeout(1)
   }

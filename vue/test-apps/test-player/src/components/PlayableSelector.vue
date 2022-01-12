@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="vc_playable_selector">
     <playable-selector-button
       v-for="testAsset in filteredTestAssets"
@@ -13,7 +13,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { data, TestAsset } from '../../app'
+import { data, TestAsset } from '../app'
 
 import PlayableSelectorButton from './PlayableSelectorButton.vue'
 

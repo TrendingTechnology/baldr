@@ -1,7 +1,7 @@
 <template>
   <div class="vc_wave_form" v-if="asset != null && asset.waveformHttpUrl">
-    <img ref="waveformImg" :src="asset.waveformHttpUrl" />
-    <div ref="progressIndicatorOverlayDiv" class="progress-indicator-overlay" />
+    <img ref="waveformImage" :src="asset.waveformHttpUrl" />
+    <div ref="progressOverlay" class="progress-indicator-overlay" />
   </div>
 </template>
 
@@ -13,17 +13,17 @@ import PlayableBase from './PlayableBase.vue'
 @Component
 export default class WaveForm extends PlayableBase {
   $refs!: {
-    progressIndicatorOverlayDiv: HTMLElement
-    waveformImg: HTMLElement
+    progressOverlay: HTMLElement
+    waveformImage: HTMLElement
   }
 
   private updateProgress (): void {
-    if (this.$refs.waveformImg == null) {
+    if (this.$refs.waveformImage == null) {
       return
     }
-    const div = this.$refs.progressIndicatorOverlayDiv
+    const div = this.$refs.progressOverlay
 
-    const img = this.$refs.waveformImg
+    const img = this.$refs.waveformImage
     const height = img.clientHeight
     const width = img.clientWidth
 
@@ -36,8 +36,15 @@ export default class WaveForm extends PlayableBase {
   private seek (event: MouseEvent): void {
     if (this.playable != null) {
       this.playable.progress =
-        event.offsetX / this.$refs.waveformImg.clientWidth
+        event.offsetX / this.$refs.waveformImage.clientWidth
     }
+  }
+
+  private resetProgress (): void {
+    if (this.$refs.progressOverlay == null) {
+      return
+    }
+    this.$refs.progressOverlay.style.width = '0px'
   }
 
   /**
@@ -45,8 +52,8 @@ export default class WaveForm extends PlayableBase {
    */
   playableConnected (): void {
     this.$nextTick(() => {
-      if (this.$refs.waveformImg != null) {
-        this.$refs.waveformImg.addEventListener('click', this.seek)
+      if (this.$refs.waveformImage != null) {
+        this.$refs.waveformImage.addEventListener('click', this.seek)
       }
     })
 
@@ -59,8 +66,10 @@ export default class WaveForm extends PlayableBase {
    * @override
    */
   playableDisconnected (): void {
-    if (this.$refs.waveformImg != null) {
-      this.$refs.waveformImg.removeEventListener('click', this.seek)
+    this.resetProgress()
+
+    if (this.$refs.waveformImage != null) {
+      this.$refs.waveformImage.removeEventListener('click', this.seek)
     }
     if (this.playable != null) {
       this.playable.removeEventsListener(this.updateProgress)
@@ -85,13 +94,14 @@ export default class WaveForm extends PlayableBase {
 
   .progress-indicator-overlay {
     background-color: $blue;
+    border-right: 1px solid darken($blue, 40%);
     height: 0;
     left: 0;
     opacity: 0.2;
+    pointer-events: none;
     position: absolute;
     top: 0;
     width: 0;
-    pointer-events: none;
   }
 }
 </style>

@@ -4,10 +4,10 @@ import Component from 'vue-class-component'
 
 import { player } from '@bldr/player'
 
-import PlayableSelector, { eventBus } from './PlayableSelector.vue'
+import { eventBus } from '../PlayableSelector.vue'
 import { resolver, data, TestAsset, TestDataCollection } from '../../app'
 
-@Component({ components: { PlayableSelector } })
+@Component
 export default class DemoBase extends Vue {
   src!: string
 
@@ -31,7 +31,8 @@ export default class DemoBase extends Vue {
 
   private async listenOnPlayableSelection (uuid: string) {
     await resolver.resolve(uuid)
-    await player.start(uuid)
+    player.load(uuid)
+    // await player.start(uuid)
     this.src = uuid
   }
 }

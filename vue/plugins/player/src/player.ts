@@ -1,6 +1,6 @@
 import { Cache, Resolver } from '@bldr/media-resolver'
 
-import { Playable } from './playable'
+import { Playable, PlaybackState } from './playable'
 import { EventsListenerStore } from './events'
 
 function createHtmlElement (
@@ -73,10 +73,10 @@ export class Player {
   public resolver: Resolver
 
   /**
-   * Can be used as data `data () { return player.uris }` in Vue components.
+   * Can be used as data `data () { return player.data }` in Vue components.
    * A puremans vuex store.
    */
-  public uris: { loadedUri?: string; playingUri?: string } = {
+  public data: { loadedUri?: string; playingUri?: string } = {
     loadedUri: undefined,
     playingUri: undefined
   }
@@ -106,7 +106,7 @@ export class Player {
    */
   public load (uri: string): void {
     this.loaded = this.cache.getPlayable(uri)
-    this.uris.loadedUri = uri
+    this.data.loadedUri = uri
   }
 
   /**
@@ -126,7 +126,13 @@ export class Player {
     }
     this.loaded.start(this.globalVolume)
     this.playing = this.loaded
-    this.uris.playingUri = this.uris.loadedUri
+    this.playing.registerPlaybackChangeListener((state: PlaybackState) => {
+      if (state === 'stopped') {
+        this.playing = undefined
+        this.data.playingUri = undefined
+      }
+    })
+    this.data.playingUri = this.data.loadedUri
   }
 
   /**
@@ -141,7 +147,14 @@ export class Player {
     }
     await this.playing.stop(fadeOutSec)
     this.playing = undefined
-    this.uris.playingUri = undefined
+    this.data.playingUri = undefined
+  }
+
+  public play () {
+    if (this.playing == null) {
+      return
+    }
+    this.playing.play()
   }
 
   /**

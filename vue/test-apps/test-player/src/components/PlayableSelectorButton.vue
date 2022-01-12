@@ -12,7 +12,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { TestAsset } from '../../app'
+import { TestAsset } from '../app'
 
 import { eventBus } from './PlayableSelector.vue'
 
