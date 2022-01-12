@@ -5,7 +5,6 @@
         <button @click="findDevices">aktualisieren</button>
       </p>
 
-
       <h3>Gefundene Ausgabe-Geräte:</h3>
 
       <p
@@ -199,16 +198,15 @@ export default class CameraMasterMain extends MasterMain {
   }
 
   .device-selection-area {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
-    margin: 0.5em;
-    padding: 1em;
-    opacity: 0;
     background-color: $white;
     color: $black;
-
+    margin: 0.5em;
+    opacity: 0;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
 
     &:hover {
       opacity: 1;
