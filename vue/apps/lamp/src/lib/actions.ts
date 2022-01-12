@@ -54,8 +54,8 @@ function callOpenRestApi (
   archive = false,
   create = false
 ): void {
-  const presentation = store.getters['lamp/presentation']
-  if (presentation != null || Object.keys(presentation).length === 0) {
+  const presentation = store.getters['lamp/presentationNg']
+  if (presentation == null || Object.keys(presentation).length === 0) {
     showMessage.error(
       'Es ist keine Präsentation geladen.',
       'Der übergeordnete Ordner konnte nicht geöffnet werden.'
