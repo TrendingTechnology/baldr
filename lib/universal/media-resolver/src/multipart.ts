@@ -1,4 +1,4 @@
-import { Asset } from './asset'
+import { Asset, Identifiable } from './asset'
 import { buildSubsetIndexes } from '@bldr/core-browser'
 import { MediaDataTypes } from '@bldr/type-definitions'
 
@@ -9,7 +9,7 @@ import { MediaDataTypes } from '@bldr/type-definitions'
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-export class MultipartSelection {
+export class MultipartSelection implements Identifiable {
   private readonly selectionSpec: string
   public asset: Asset
   private readonly partNos: number[]
@@ -30,11 +30,12 @@ export class MultipartSelection {
     )
   }
 
-  /**
-   * The URI using the `ref` authority. Prefixed with `ref:`
-   */
   get ref (): string {
     return `${this.asset.ref}#${this.selectionSpec}`
+  }
+
+  get uuid (): string {
+    return `${this.asset.uuid}#${this.selectionSpec}`
   }
 
   /**

@@ -1,5 +1,5 @@
 import { MediaDataTypes } from '@bldr/type-definitions';
-import { Asset } from './asset';
+import { Asset, Identifiable } from './asset';
 /**
  * A sample (snippet, sprite) of a media asset which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
@@ -23,7 +23,7 @@ import { Asset } from './asset';
  *  | <-      durationSec      ->|
  * ```
  */
-export declare class Sample {
+export declare class Sample implements Identifiable {
     /**
      * The parent media asset.
      */
@@ -61,10 +61,19 @@ export declare class Sample {
      */
     private convertToSeconds;
     /**
+     * @returns For example `complete` or `Chorus`
+     */
+    get sampleRef(): string;
+    /**
      * The sample reference is prefixed with `ref:` and suffixed with a sample
      * fragment (`#fragment`), for example `ref:Fuer-Elise#complete`.
      */
     get ref(): string;
+    /**
+     * The sample uuid is prefixed with `uuid:` and suffixed with a sample
+     * fragment (`#fragment`), for example `uuid:...#complete`.
+     */
+    get uuid(): string;
     /**
      * The title of the sample. For example `komplett`, `Hook-Line`.
      */

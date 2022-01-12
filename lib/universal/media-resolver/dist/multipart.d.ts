@@ -1,4 +1,4 @@
-import { Asset } from './asset';
+import { Asset, Identifiable } from './asset';
 import { MediaDataTypes } from '@bldr/type-definitions';
 /**
  * A multipart asset can be restricted in different ways. This class holds the
@@ -7,7 +7,7 @@ import { MediaDataTypes } from '@bldr/type-definitions';
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-export declare class MultipartSelection {
+export declare class MultipartSelection implements Identifiable {
     private readonly selectionSpec;
     asset: Asset;
     private readonly partNos;
@@ -16,10 +16,8 @@ export declare class MultipartSelection {
      * example `ref:Song-2#2-5` -> `2-5`
      */
     constructor(asset: Asset, selectionSpec: string);
-    /**
-     * The URI using the `ref` authority. Prefixed with `ref:`
-     */
     get ref(): string;
+    get uuid(): string;
     /**
      * We imitate the class “Asset”. ExternalSites.vue requires .meta.
      */

@@ -1,7 +1,8 @@
 import { convertFromYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
-import { Resolver, Asset } from '@bldr/media-resolver'
+import { Resolver, Asset, Identifiable } from '@bldr/media-resolver'
 import * as log from '@bldr/log'
+import { generateUUID } from '@bldr/string-format'
 
 import { DataCutter } from './data-management'
 import { SlideCollection } from './slide-collection'
@@ -82,7 +83,7 @@ class Meta implements LampTypes.PresentationMeta {
   }
 }
 
-export class Presentation {
+export class Presentation implements Identifiable {
   public meta: Meta
   public slides: SlideCollection
 
@@ -102,6 +103,25 @@ export class Presentation {
     this.meta = this.cutMeta(data)
     this.slides = new SlideCollection(data.cutNotNull('slides'))
     data.checkEmpty()
+  }
+
+  get ref (): string {
+    return `ref:${this.meta.ref}`
+  }
+
+  private uuid_?: string
+
+  public get uuid (): string {
+    let authority: string
+    if (this.meta.uuid != null) {
+      authority = this.meta.uuid
+    } else if (this.uuid_ != null) {
+      authority = this.uuid_
+    } else {
+      this.uuid_ = generateUUID()
+      authority = this.uuid_
+    }
+    return `uuid:${authority}`
   }
 
   private cutMeta (data: DataCutter): Meta {
@@ -135,7 +155,10 @@ export class Presentation {
    *
    * @returns A newly created presentation.
    */
-  public static mergeYamlStringWithRaw (yamlString: string, raw?: any): Presentation {
+  public static mergeYamlStringWithRaw (
+    yamlString: string,
+    raw?: any
+  ): Presentation {
     const presentation = new Presentation(yamlString)
     if (raw?.meta?.path != null && presentation.meta.path == null) {
       presentation.meta.path = raw.meta.path

@@ -1,7 +1,7 @@
 import { convertHHMMSSToSeconds } from '@bldr/string-format'
 import { MediaDataTypes } from '@bldr/type-definitions'
 
-import { Asset } from './asset'
+import { Asset, Identifiable } from './asset'
 
 /**
  * We fade in very short and smoothly to avoid audio artefacts.
@@ -36,7 +36,7 @@ const defaultFadeOutSec: number = 1
  *  | <-      durationSec      ->|
  * ```
  */
-export class Sample {
+export class Sample implements Identifiable {
   /**
    * The parent media asset.
    */
@@ -124,12 +124,26 @@ export class Sample {
   }
 
   /**
+   * @returns For example `complete` or `Chorus`
+   */
+  public get sampleRef (): string {
+    return this.meta.ref == null ? 'complete' : this.meta.ref
+  }
+
+  /**
    * The sample reference is prefixed with `ref:` and suffixed with a sample
    * fragment (`#fragment`), for example `ref:Fuer-Elise#complete`.
    */
   public get ref (): string {
-    const ref = this.meta.ref == null ? 'complete' : this.meta.ref
-    return `${this.asset.ref}#${ref}`
+    return `${this.asset.ref}#${this.sampleRef}`
+  }
+
+  /**
+   * The sample uuid is prefixed with `uuid:` and suffixed with a sample
+   * fragment (`#fragment`), for example `uuid:...#complete`.
+   */
+  public get uuid (): string {
+    return `${this.asset.uuid}#${this.sampleRef}`
   }
 
   /**

@@ -1,5 +1,5 @@
 import { LampTypes } from '@bldr/type-definitions';
-import { Resolver, Asset } from '@bldr/media-resolver';
+import { Resolver, Asset, Identifiable } from '@bldr/media-resolver';
 import { SlideCollection } from './slide-collection';
 import { Slide } from './slide';
 export declare const resolver: Resolver;
@@ -51,7 +51,7 @@ declare class Meta implements LampTypes.PresentationMeta {
      */
     log(): void;
 }
-export declare class Presentation {
+export declare class Presentation implements Identifiable {
     meta: Meta;
     slides: SlideCollection;
     /**
@@ -63,6 +63,9 @@ export declare class Presentation {
      */
     rawYamlStringExpanded?: string;
     constructor(yamlString: string);
+    get ref(): string;
+    private uuid_?;
+    get uuid(): string;
     private cutMeta;
     /**
      * Merge two sources to build a presentation from. A the moment only the

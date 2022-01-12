@@ -3,6 +3,18 @@ import { MediaDataTypes } from '@bldr/type-definitions';
 import { Cache } from './cache';
 import { Sample } from './sample';
 import { Resolver } from './resolve';
+export interface Identifiable {
+    /**
+     * The reference authority of the URI using the `ref` scheme. The returned
+     * string is prefixed with `ref:`.
+     */
+    ref: string;
+    /**
+     * The UUID authority of the URI using the `uuid` scheme. The returned
+     * string is prefixed with `uuid:`.
+     */
+    uuid: string;
+}
 export declare class SampleCollection extends Cache<Sample> {
     private readonly asset;
     constructor(asset: Asset);
@@ -22,7 +34,7 @@ export declare class SampleCollection extends Cache<Sample> {
  * URI fragment (for example `#2`). The URI `ref:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-export declare class Asset {
+export declare class Asset implements Identifiable {
     uri: MediaUri;
     /**
      * A raw javascript object read from the YAML files

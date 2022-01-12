@@ -9,7 +9,7 @@
  * resolve.ts -> main.ts
  * ```
  */
-export { Asset } from './asset'
+export { Asset, Identifiable } from './asset'
 export { Cache } from './cache'
 export { Resolver, updateMediaServer } from './resolve'
 export { Sample } from './sample'
