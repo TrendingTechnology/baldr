@@ -160,7 +160,7 @@ export default class PlayButton extends PlayableBase {
       player.stop()
     } else {
       this.playbackState = 'starting'
-      await player.start(this.playable.sample.ref)
+      await player.start({ uri: this.playable.sample.ref })
     }
   }
 }

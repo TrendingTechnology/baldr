@@ -26,7 +26,7 @@ export default class ProgressBarDemo extends Vue {
   async mounted () {
     await resolver.resolve(data.tor.uuid)
     this.playable = player.getPlayable(data.tor.uuid)
-    player.start(data.tor.uuid)
+    player.start({ uri: data.tor.uuid })
   }
 }
 </script>

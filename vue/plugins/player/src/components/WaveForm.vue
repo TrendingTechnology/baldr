@@ -36,6 +36,7 @@ export default class WaveForm extends PlayableBase {
   private seek (event: MouseEvent): void {
     const progress = event.offsetX / this.$refs.waveformImage.clientWidth
     if (!this.playable.isPlaying) {
+      this.playable.player.start({ startProgress: progress })
     }
     if (this.playable != null) {
       this.playable.progress = progress

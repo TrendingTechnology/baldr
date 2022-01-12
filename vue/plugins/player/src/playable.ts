@@ -6,7 +6,7 @@ import { Player } from './player'
 
 const TIME_UPDATE_INTERVAL: number = 10
 
-interface StartOptions {
+export interface PlaybackOptions {
   startTimeSec?: number
 
   /**
@@ -135,12 +135,7 @@ export class Playable {
    * the end.
    */
   public set progress (value: number) {
-    if (value < 0 || value > 1) {
-      throw new Error(
-        'The property “progress” of the class “Playable” can only be between 0 und 1!'
-      )
-    }
-    this.jumpTo(this.durationSec * value)
+    this.jumpTo(this.calculateStartTimeSecFromProgress(value))
   }
 
   public get volume (): number {
@@ -205,22 +200,57 @@ export class Playable {
     })
   }
 
-  public start (targetVolume: number): void {
-    this.initializePlayback(targetVolume, this.sample.startTimeSec)
+  private calculateStartTimeSecFromProgress (process: number): number {
+    if (process < 0 || process > 1) {
+      throw new Error(
+        'The property “progress” of the class “Playable” can only be between 0 und 1!'
+      )
+    }
+    return this.sample.startTimeSec + this.durationSec * process
   }
 
-  public play (targetVolume = 1): void {
-    this.initializePlayback(targetVolume)
+  /**
+   * Play a sample from the beginning.
+   */
+  public start (options?: PlaybackOptions): void {
+    if (options == null) {
+      options = {}
+    }
+    if (options.startTimeSec == null && options.startProgress == null) {
+      options.startTimeSec = this.sample.startTimeSec
+    }
+    this.initializePlayback(options)
   }
 
-  private initializePlayback (
-    targetVolume: number,
-    startTimeSec?: number,
-    fadeInSec?: number
-  ): void {
+  /**
+   * Play a sample from the last position.
+   */
+  public play (options?: PlaybackOptions): void {
+    if (options == null) {
+      options = {}
+    }
+    this.initializePlayback(options)
+  }
+
+  private initializePlayback ({
+    startProgress,
+    targetVolume,
+    startTimeSec,
+    fadeInSec
+  }: PlaybackOptions): void {
     if (fadeInSec == null) {
       fadeInSec = this.sample.fadeInSec
     }
+    if (startTimeSec != null && startProgress != null) {
+      throw new Error(
+        `${this.sample.ref}: Playback options: Specify either startTimeSec or startProgress`
+      )
+    }
+
+    if (startProgress != null) {
+      startTimeSec = this.calculateStartTimeSecFromProgress(startProgress)
+    }
+
     // The start() triggers play with this.startTimeSec. “complete” samples
     // have on this.startTimeSec 0.
     if (startTimeSec != null || startTimeSec === 0) {
@@ -319,9 +349,9 @@ export class Playable {
     this.currentVolume = this.htmlElement.volume
   }
 
-  public toggle (targetVolume: number = 1): void {
+  public toggle (): void {
     if (this.htmlElement.paused) {
-      this.initializePlayback(targetVolume)
+      this.initializePlayback({})
     } else {
       this.pause().then(
         () => {},

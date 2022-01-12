@@ -431,11 +431,18 @@ export function stopPlayer (): void {
   player.stop()
 }
 
+/**
+ * Intelligent toggling
+ */
 export function toggleStartFadeOutPlayer (): void {
-  if (player.isPlaying) {
-    player.stop(4)
-  } else {
+  if (player.isNewLoaded) {
     player.start()
+  } else if (player.isPlaying) {
+    player.stop(4)
+  } else if (player.isLoaded) {
+    player.start()
+  } else {
+    console.log('No sample loaded')
   }
 }
 

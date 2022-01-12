@@ -1,7 +1,11 @@
 import { Cache, Resolver } from '@bldr/media-resolver'
 
-import { Playable, PlaybackState } from './playable'
+import { Playable, PlaybackState, PlaybackOptions } from './playable'
 import { EventsListenerStore } from './events'
+
+interface PlayerStartOptions extends PlaybackOptions {
+  uri?: string
+}
 
 function createHtmlElement (
   mimeType: string,
@@ -94,6 +98,28 @@ export class Player {
     this.cache = new PlayerCache(resolver, this)
   }
 
+  public get isLoaded (): boolean {
+    return this.loaded != null
+  }
+
+  public get isPlaying (): boolean {
+    return this.playing != null && this.playing.isPlaying
+  }
+
+  /**
+   * True if a new playable is loaded and the old playable is still playing.
+   */
+  public get isNewLoaded (): boolean {
+    if (
+      this.loaded != null &&
+      this.playing != null &&
+      this.loaded.sample.ref !== this.playing.sample.ref
+    ) {
+      return true
+    }
+    return false
+  }
+
   public getPlayable (uri: string): Playable {
     return this.cache.getPlayable(uri)
   }
@@ -115,9 +141,12 @@ export class Player {
    * Play a loaded sample from the position `sample.startTimeSec` on. Stop the
    * currently playing sample.
    */
-  public async start (uri?: string): Promise<void> {
-    if (uri != null) {
-      this.load(uri)
+  public async start (options?: PlayerStartOptions): Promise<void> {
+    if (options == null) {
+      options = {}
+    }
+    if (options.uri != null) {
+      this.load(options.uri)
     }
     if (this.loaded == null) {
       throw new Error('First load a sample')
@@ -126,7 +155,11 @@ export class Player {
     if (this.playing != null) {
       await this.playing.stop()
     }
-    this.loaded.start(this.globalVolume)
+
+    if (options.targetVolume == null) {
+      options.targetVolume = this.globalVolume
+    }
+    this.loaded.start(options)
     this.playing = this.loaded
     this.playing.registerPlaybackChangeListener((state: PlaybackState) => {
       if (state === 'stopped') {
@@ -152,11 +185,11 @@ export class Player {
     this.data.playingUri = undefined
   }
 
-  public play () {
+  public play (options?: PlaybackOptions) {
     if (this.playing == null) {
       return
     }
-    this.playing.play()
+    this.playing.play(options)
   }
 
   /**
@@ -166,10 +199,6 @@ export class Player {
     if (this.playing != null) {
       await this.playing.pause()
     }
-  }
-
-  public get isPlaying (): boolean {
-    return this.playing != null && this.playing.isPlaying
   }
 
   /**
@@ -200,7 +229,7 @@ export class Player {
    */
   public toggle (): void {
     if (this.playing != null) {
-      this.playing.toggle(this.globalVolume)
+      this.playing.toggle()
     }
   }
 }

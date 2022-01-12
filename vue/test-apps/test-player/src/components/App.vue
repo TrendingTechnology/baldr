@@ -44,6 +44,14 @@
     <playable-selector mime-type="video" />
 
     <controll-buttons />
+
+    <dl>
+      <dt>loadedUri:</dt>
+      <dd>{{ loadedUri }} ({{ loadedTitle }})</dd>
+
+      <dt>playingUri:</dt>
+      <dd>{{ playingUri }} ({{ playingTitle }})</dd>
+    </dl>
   </div>
 </template>
 
@@ -51,12 +59,48 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { ControllButtons } from '@bldr/player'
+import { ControllButtons, player } from '@bldr/player'
 
 import PlayableSelector from './PlayableSelector.vue'
 
+import { data } from '../app'
+
 @Component({ components: { PlayableSelector, ControllButtons } })
-export default class App extends Vue {}
+export default class App extends Vue {
+  loadedUri!: string
+
+  playingUri!: string
+  data () {
+    return player.data
+  }
+
+  private getTitleFromUuid (uuid: string): string | undefined {
+    for (const key in data) {
+      const simpleAsset = data[key]
+      if (simpleAsset.uuid === uuid) {
+        if (simpleAsset.title != null) {
+          return simpleAsset.title
+        }
+        if (simpleAsset.ref != null) {
+          return simpleAsset.ref
+        }
+        return simpleAsset.uuid
+      }
+    }
+  }
+
+  get loadedTitle () {
+    if (this.loadedUri != null) {
+      return this.getTitleFromUuid(this.loadedUri)
+    }
+  }
+
+  get playingTitle () {
+    if (this.playingUri != null) {
+      return this.getTitleFromUuid(this.playingUri)
+    }
+  }
+}
 </script>
 
 <style lang="scss">
