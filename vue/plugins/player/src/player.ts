@@ -67,13 +67,20 @@ class PlayerCache {
   }
 }
 
+interface PlayerData {
+  loadedUri?: string
+  playingUri?: string
+  pausedUri?: string
+}
+
 /**
  * A deeply with vuex coupled media player. Only one media file can be
  * played a the same time.
  */
 export class Player {
-  private playing?: Playable
   private loaded?: Playable
+  private playing?: Playable
+  private paused?: Playable
   public events: EventsListenerStore
   private readonly cache: PlayerCache
   public resolver: Resolver
@@ -82,9 +89,10 @@ export class Player {
    * Can be used as data `data () { return player.data }` in Vue components.
    * A puremans vuex store.
    */
-  public data: { loadedUri?: string; playingUri?: string } = {
+  public data: PlayerData = {
     loadedUri: undefined,
-    playingUri: undefined
+    playingUri: undefined,
+    pausedUri: undefined
   }
 
   /**
@@ -227,9 +235,17 @@ export class Player {
    * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
    * start this sample.
    */
-  public toggle (): void {
-    if (this.playing != null) {
-      this.playing.toggle()
+  public async toggle (): Promise<void> {
+    if (this.loaded != null && this.playing == null && this.paused == null) {
+      await this.start()
+    } else if (this.playing != null) {
+      this.data.pausedUri = this.data.playingUri
+      this.paused = this.playing
+      this.playing.pause()
+    } else if (this.paused != null) {
+      this.data.playingUri = this.data.pausedUri
+      this.playing = this.paused
+      this.paused.play()
     }
   }
 }
