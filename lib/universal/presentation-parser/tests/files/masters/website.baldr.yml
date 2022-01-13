@@ -1,0 +1,15 @@
+---
+meta:
+  ref: EP_master_website
+  title: Master slide “website” test presentation
+
+slides:
+
+- ref: short-form
+  title: Short form
+  website: https://www.sachsen.schule/~terra2014/index.php
+
+- ref: long-form
+  title: Long form
+  website:
+    url: https://dbup2date.uni-bayreuth.de/index.html

@@ -30,6 +30,18 @@ body {
   text-shadow: 0 0 0.2em $black, 0 0 0.05em $black;
 }
 
+.serif {
+  font-family: $font-family-serif;
+}
+
+.sans {
+  font-family: $font-family-sans;
+}
+
+.mono {
+  font-family: $font-family-mono;
+}
+
 .smallest {
   font-size: 0.6em;
 }
@@ -94,6 +106,17 @@ body {
   width: 100vw;
   overflow-x: hidden;
 }
+
+// <div
+// class="vc_about_page valign-wrapper main-app-fullscreen main-app-padding"
+// b-ui-theme="default"
+// >
+// <app-info-simple
+//   class="valign-center"
+//   package-name="@bldr/lamp"
+//   :version="version"
+// />
+// </div>
 
 .valign-wrapper {
   display: table;

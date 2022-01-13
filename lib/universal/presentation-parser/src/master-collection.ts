@@ -19,6 +19,7 @@ import { SectionMaster } from './masters/section'
 import { SongMaster } from './masters/song'
 import { TaskMaster } from './masters/task'
 import { VideoMaster } from './masters/video'
+import { WebsiteMaster } from './masters/website'
 import { WikipediaMaster } from './masters/wikipedia'
 import { YoutubeMaster } from './masters/youtube'
 
@@ -46,6 +47,7 @@ export const masterCollection: { [masterName: string]: Master } = {
   song: new Master(SongMaster),
   task: new Master(TaskMaster),
   video: new Master(VideoMaster),
+  website: new Master(WebsiteMaster),
   wikipedia: new Master(WikipediaMaster),
   youtube: new Master(YoutubeMaster)
 }
