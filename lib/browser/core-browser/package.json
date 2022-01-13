@@ -32,8 +32,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@bldr/type-definitions": "*"
-  },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

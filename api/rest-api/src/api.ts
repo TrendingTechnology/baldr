@@ -3,7 +3,6 @@ import express from 'express'
 
 // Project packages.
 import { getConfig } from '@bldr/config'
-import { StringIndexedObject } from '@bldr/type-definitions'
 import { connectDb, Database } from '@bldr/mongodb-connector'
 
 // Submodules.
@@ -34,7 +33,7 @@ export async function startRestApi (port?: number): Promise<express.Express> {
   app.use('/media', registerMedia())
   app.use('/seating-plan', registerSeatingPlan())
 
-  const helpMessages: StringIndexedObject = {}
+  const helpMessages: Record<string, any> = {}
 
   app.get('/', (request, response) => {
     response.json({

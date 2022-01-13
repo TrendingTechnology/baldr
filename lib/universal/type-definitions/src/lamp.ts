@@ -833,26 +833,6 @@ export interface Slide {
   stepNo?: number
 
   /**
-   * Css properties in camelCase for the style property of the vue js
-   * render function.
-   *
-   * ```yml
-   * - title: Different background color
-   *   task: Background color blue
-   *   style:
-   *     background_color: $green;
-   *     color: $blue;
-   *     font_size: 8vw
-   *     font_weight: bold
-   * ```
-   *
-   * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
-   *
-   * @type {Object}
-   */
-  // style: StringIndexedObject
-
-  /**
    * The level in the hierarchial slide tree.
    */
   level: number

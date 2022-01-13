@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { MediaDataTypes, StringIndexedObject } from '@bldr/type-definitions'
+import { MediaDataTypes } from '@bldr/type-definitions'
 import { readYamlFile, writeYamlFile } from '@bldr/file-reader-writer'
 
 import { asciify, deasciify, getExtension } from '@bldr/string-format'
@@ -18,7 +18,7 @@ import { categoriesManagement } from '@bldr/media-categories'
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-export function readYamlMetaData (filePath: string): StringIndexedObject {
+export function readYamlMetaData (filePath: string): Record<string, any> {
   return readYamlFile(`${filePath}.yml`)
 }
 

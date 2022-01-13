@@ -7,7 +7,6 @@ import { fetchFile } from '@bldr/core-node'
 import { CommandRunner } from '@bldr/cli-utils'
 import { mimeTypeManager, walk } from '@bldr/media-manager'
 import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
-import { StringIndexedObject } from '@bldr/type-definitions'
 
 interface Options {
   seconds: number
@@ -44,7 +43,7 @@ async function createAudioWaveForm (srcPath: string): Promise<void> {
 }
 
 async function downloadAudioCoverImage (
-  metaData: StringIndexedObject,
+  metaData: Record<string, any>,
   destPath: string
 ): Promise<void> {
   if (metaData.coverSource != null) {

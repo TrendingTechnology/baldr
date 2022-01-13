@@ -4,8 +4,6 @@
  * @module @bldr/core-browser/object-manipulation
  */
 
-import { StringIndexedObject } from '@bldr/type-definitions'
-
 /**
  * Convert various data to a string. Meant for error messages. Objects
  * are converted to a string using `JSON.stringify`
@@ -99,10 +97,10 @@ export class RawDataObject {
  * server.
  */
 export class ObjectPropertyPicker {
-  private readonly object1: StringIndexedObject
-  private readonly object2: StringIndexedObject
+  private readonly object1: Record<string, any>
+  private readonly object2: Record<string, any>
 
-  constructor (object1: StringIndexedObject, object2: StringIndexedObject) {
+  constructor (object1: Record<string, any>, object2: Record<string, any>) {
     this.object1 = object1
     this.object2 = object2
   }
@@ -128,8 +126,8 @@ export class ObjectPropertyPicker {
    *
    * @returns A new object containing the key and value pairs.
    */
-  pickMultipleProperties (properties: string[]): StringIndexedObject {
-    const result: StringIndexedObject = {}
+  pickMultipleProperties (properties: string[]): Record<string, any> {
+    const result: Record<string, any> = {}
     for (const propName of properties) {
       const value = this.pickProperty(propName)
       if (value != null) {

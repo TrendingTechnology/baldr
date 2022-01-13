@@ -14,8 +14,7 @@ import * as wikidata from '@bldr/wikidata'
 import {
   MediaDataTypes,
   GenericError,
-  MediaCategoriesTypes,
-  StringIndexedObject
+  MediaCategoriesTypes
 } from '@bldr/type-definitions'
 import { convertToYaml } from '@bldr/yaml'
 import { buildMinimalAssetData } from '@bldr/media-data-collector'
@@ -306,7 +305,7 @@ export async function normalizeMediaAsset (
       }
     }
     const newMetaData = await categoriesManagement.process(metaData, filePath)
-    const oldMetaData = origData as StringIndexedObject
+    const oldMetaData = origData as Record<string, any>
     delete oldMetaData.filePath
 
     const oldYamlMarkup = convertToYaml(oldMetaData)

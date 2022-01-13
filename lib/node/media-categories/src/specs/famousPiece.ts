@@ -1,12 +1,9 @@
-import {
-  MediaCategoriesTypes,
-  StringIndexedObject
-} from '@bldr/type-definitions'
+import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
 
 import path from 'path'
 
-function readPersonYaml (filePath: string): StringIndexedObject | undefined {
+function readPersonYaml (filePath: string): Record<string, any> | undefined {
   const match = filePath.match(/^.*\/Personen\/\w\/.*?\//)
   if (match != null) {
     const prefix = match[0]

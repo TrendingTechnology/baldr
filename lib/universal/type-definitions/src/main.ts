@@ -4,10 +4,6 @@
  * @module @bldr/type-definitions
  */
 
-export interface StringIndexedObject { [key: string]: any }
-
-export interface StringIndexedStringIndexedData { [key: string]: string }
-
 export interface GenericError {
   name: string
   message: string

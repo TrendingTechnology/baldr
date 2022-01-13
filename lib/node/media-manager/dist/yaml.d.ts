@@ -1,4 +1,4 @@
-import { MediaDataTypes, StringIndexedObject } from '@bldr/type-definitions';
+import { MediaDataTypes } from '@bldr/type-definitions';
 /**
  * Load the metadata file in the YAML format of a media asset. This
  * function appends `.yml` on the file path. It is a small wrapper
@@ -10,7 +10,7 @@ import { MediaDataTypes, StringIndexedObject } from '@bldr/type-definitions';
  * @returns The parsed YAML file as an object. The string properties are
  * converted in the `camleCase` format.
  */
-export declare function readYamlMetaData(filePath: string): StringIndexedObject;
+export declare function readYamlMetaData(filePath: string): Record<string, any>;
 /**
  * Write the metadata YAML file for a corresponding media file specified
  * by `filePath`. The property names are converted to `snake_case`.

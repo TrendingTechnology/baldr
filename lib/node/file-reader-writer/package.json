@@ -33,7 +33,6 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/node": "14.14.7",
-    "@bldr/type-definitions": "*"
+    "@types/node": "14.14.7"
   }
 }
