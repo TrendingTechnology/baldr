@@ -3,7 +3,6 @@
  *
  * @module @bldr/core-browser/object-manipulation
  */
-import { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Convert various data to a string. Meant for error messages. Objects
  * are converted to a string using `JSON.stringify`
@@ -58,7 +57,7 @@ export declare class RawDataObject {
 export declare class ObjectPropertyPicker {
     private readonly object1;
     private readonly object2;
-    constructor(object1: StringIndexedObject, object2: StringIndexedObject);
+    constructor(object1: Record<string, any>, object2: Record<string, any>);
     /**
      * Grab a value from two objects.
      *
@@ -72,5 +71,5 @@ export declare class ObjectPropertyPicker {
      *
      * @returns A new object containing the key and value pairs.
      */
-    pickMultipleProperties(properties: string[]): StringIndexedObject;
+    pickMultipleProperties(properties: string[]): Record<string, any>;
 }

@@ -15,6 +15,8 @@ import { createRequire } from 'module'
 
 import fetch from 'node-fetch'
 
+import { GitHead } from '@bldr/type-definitions'
+
 const require = createRequire(import.meta.url)
 /* eslint-disable @typescript-eslint/no-var-requires */
 const git = require('git-rev-sync')
@@ -65,12 +67,6 @@ export function isModuleMain (meta: ImportMeta): boolean {
   }
 
   return stripExtension(modulePath) === scriptPath
-}
-
-interface GitHead {
-  short: string
-  long: string
-  isDirty: boolean
 }
 
 /**

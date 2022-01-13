@@ -4,6 +4,7 @@
  *
  * @module @bldr/core-node
  */
+import { GitHead } from '@bldr/type-definitions';
 /**
  * ```js
  * const __filename = getFilename(import.meta)
@@ -26,11 +27,6 @@ export declare function getDirname(meta: ImportMeta): string;
  * https://github.com/tschaub/es-main/blob/main/main.js
  */
 export declare function isModuleMain(meta: ImportMeta): boolean;
-interface GitHead {
-    short: string;
-    long: string;
-    isDirty: boolean;
-}
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
@@ -104,4 +100,3 @@ export declare function createTmpDir(): string;
  * @returns The destination path in the temporary directory of the OS.
  */
 export declare function copyToTmp(...pathSegments: string[]): string;
-export {};

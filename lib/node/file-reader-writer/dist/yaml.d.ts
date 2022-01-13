@@ -1,4 +1,3 @@
-import type { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * Load a YAML file and convert it into a Javascript object. The string
  * properties are converted into the `camleCase` format.
@@ -8,7 +7,7 @@ import type { StringIndexedObject } from '@bldr/type-definitions';
  * @returns The parsed YAML file as an object. The string properties are
  * converted into the `camleCase` format.
  */
-export declare function readYamlFile(filePath: string): StringIndexedObject;
+export declare function readYamlFile(filePath: string): Record<string, any>;
 /**
  * Convert some data (usually Javascript objets) into the YAML format
  * and write the string into a text file. The property names are

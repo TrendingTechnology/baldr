@@ -4,7 +4,9 @@
 	"version": "0.2.2",
 	"main": "src/main.js",
 	"dependencies": {
-		"vue": "2.6.12"
+		"vue": "2.6.12",
+    "vue-class-component": "7.2.3",
+    "vue-property-decorator": "9.1.2"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "4.5.9",
@@ -12,9 +14,10 @@
 		"@vue/cli-service": "4.5.9",
 		"@vue/eslint-config-standard": "5.1.2",
 		"babel-eslint": "10.1.0",
-		"eslint": "7.13.0",
 		"eslint-plugin-vue": "7.1.0",
-		"vue-template-compiler": "2.6.11"
+		"eslint": "7.13.0",
+		"vue-template-compiler": "2.6.11",
+    "@bldr/type-definitions": "*"
 	},
 	"publishConfig": {
 		"access": "public"

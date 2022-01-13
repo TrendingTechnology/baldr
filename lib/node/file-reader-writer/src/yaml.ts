@@ -1,6 +1,5 @@
 import { convertToYaml, convertFromYaml } from '@bldr/yaml'
 import { readFile, writeFile } from './txt'
-import type { StringIndexedObject } from '@bldr/type-definitions'
 
 /**
  * Load a YAML file and convert it into a Javascript object. The string
@@ -11,7 +10,7 @@ import type { StringIndexedObject } from '@bldr/type-definitions'
  * @returns The parsed YAML file as an object. The string properties are
  * converted into the `camleCase` format.
  */
-export function readYamlFile (filePath: string): StringIndexedObject {
+export function readYamlFile (filePath: string): Record<string, any> {
   return convertFromYaml(readFile(filePath))
 }
 

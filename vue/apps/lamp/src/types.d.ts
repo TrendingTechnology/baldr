@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { VNode } from 'vue'
 
 import { Configuration } from '@bldr/config'
+import { GitHead } from '@bldr/type-definitions'
 
 /**
  * YAML files inside the folder
@@ -28,11 +29,7 @@ declare global {
    */
   const compilationTime: number
 
-  const gitHead: {
-    short: string
-    long: string
-    isDirty: boolean
-  }
+  const gitHead: GitHead
 
   /**
    * Into string converted presentation examples.
