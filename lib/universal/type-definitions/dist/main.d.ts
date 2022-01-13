@@ -14,6 +14,11 @@ export interface GenericError {
     message: string;
     code: string;
 }
+export interface GitHead {
+    short: string;
+    long: string;
+    isDirty: boolean;
+}
 /**
  * Types from specific packages.
  *

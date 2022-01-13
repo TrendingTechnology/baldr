@@ -29,9 +29,10 @@
     "node-fetch": "2.6.1"
   },
   "devDependencies": {
-    "@types/node": "14.14.35",
+    "@bldr/config": "*",
+    "@bldr/type-definitions": "*",
     "@types/node-fetch": "2.5.8",
-    "@bldr/config": "*"
+    "@types/node": "14.14.35"
   },
   "publishConfig": {
     "access": "public"

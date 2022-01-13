@@ -15,4 +15,10 @@ describe('Various pages', () => {
     cy.contains('Zwei-Buchstaben-Abkürzungen')
     cy.contains('Metadaten-Kategorien')
   })
+
+  it('/about', () => {
+    cy.visit('/about')
+    cy.contains('Über die App „@bldr/lamp“')
+    cy.contains('Zeitpunkt der Kompilierung')
+  })
 })

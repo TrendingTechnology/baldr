@@ -27,38 +27,49 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /* globals compilationTime gitHead */
-import { MaterialIcon } from '@bldr/icons'
 
-export default {
-  name: 'AppInfo',
-  props: {
-    packageName: {
-      required: true,
-      type: String
-    },
-    version: {
-      required: true,
-      type: String
-    }
-  },
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+
+import { MaterialIcon } from '@bldr/icons'
+import { GitHead } from '@bldr/type-definitions'
+
+@Component({
   components: {
     MaterialIcon
-  },
+  }
+})
+export default class AppInfo extends Vue {
   data () {
     return {
       show: false,
       gitHead: gitHead,
       compilationTime: new Date(compilationTime).toLocaleString()
     }
-  },
-  methods: {
-    toggle: function () {
-      this.show = !this.show
-    }
-  },
-  mounted: function () {
+  }
+
+  show!: boolean
+  gitHead!: GitHead
+  compilationTime: string
+
+  @Prop({
+    required: true,
+    type: String
+  })
+  packageName!: string
+
+  @Prop({
+    required: true,
+    type: String
+  })
+  toggle () {
+    this.show = !this.show
+  }
+
+  mounted (): void {
     // Show the app info.
     this.$shortcuts.add(
       'ctrl+,',
