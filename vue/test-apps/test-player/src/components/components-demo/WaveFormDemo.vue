@@ -10,7 +10,7 @@ import Component from 'vue-class-component'
 
 import { WaveForm } from '@bldr/player'
 
-import DemoBase from './DemoBase.vue'
+import DemoBase from '../DemoBase.vue'
 
 @Component({ components: { WaveForm } })
 export default class ComponentWaveFormDemo extends DemoBase {}

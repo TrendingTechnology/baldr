@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import DemoBase from './DemoBase.vue'
+import DemoBase from '../DemoBase.vue'
 import Component from 'vue-class-component'
 
 @Component

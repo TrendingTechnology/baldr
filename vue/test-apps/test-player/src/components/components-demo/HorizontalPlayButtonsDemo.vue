@@ -31,7 +31,7 @@
 <script lang="ts">
 import Component from 'vue-class-component'
 
-import DemoBase from './DemoBase.vue'
+import DemoBase from '../DemoBase.vue'
 
 @Component
 export default class HorizontalPlayButtonsDemo extends DemoBase {}

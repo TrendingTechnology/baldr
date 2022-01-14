@@ -43,10 +43,6 @@ export default class PlayableSelector extends Vue {
 
     return testAssets
   }
-
-  selectPlayable (uuid: string) {
-    eventBus.$emit('select-playable', uuid)
-  }
 }
 </script>
 

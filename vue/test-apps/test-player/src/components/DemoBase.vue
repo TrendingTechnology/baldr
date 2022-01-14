@@ -4,8 +4,8 @@ import Component from 'vue-class-component'
 
 import { player } from '@bldr/player'
 
-import { eventBus } from '../PlayableSelector.vue'
-import { resolver, data, TestAsset, TestDataCollection } from '../../app'
+import { eventBus } from './PlayableSelector.vue'
+import { resolver, data, TestAsset, TestDataCollection } from '../app'
 
 @Component
 export default class DemoBase extends Vue {
