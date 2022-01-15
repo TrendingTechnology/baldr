@@ -54,6 +54,8 @@ export default class WaveForm extends PlayableBase {
    * @override
    */
   playableConnected (): void {
+    window.addEventListener('resize', this.updateProgress)
+
     this.$nextTick(() => {
       if (this.$refs.waveformImage != null) {
         this.$refs.waveformImage.addEventListener('click', this.seek)
@@ -70,6 +72,7 @@ export default class WaveForm extends PlayableBase {
    */
   playableDisconnected (): void {
     this.resetProgress()
+    window.removeEventListener('resize', this.updateProgress)
 
     if (this.$refs.waveformImage != null) {
       this.$refs.waveformImage.removeEventListener('click', this.seek)
