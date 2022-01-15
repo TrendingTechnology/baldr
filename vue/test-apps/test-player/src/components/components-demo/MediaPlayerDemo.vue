@@ -2,18 +2,6 @@
   <div>
     <h1>Test component “MediaPlayer”</h1>
 
-    <button @click="player.start(testData.gebadet.uuid)">
-      ref:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    </button>
-
-    <button @click="player.start(testData.grammophon.uuid)">
-      ref:Ich-hab-zu-Haus-ein-Grammophon
-    </button>
-
-    <button @click="player.start(testData.kaktus.uuid)">
-      ref:Mein-kleiner-gruener-Kaktus
-    </button>
-
     <h2>MediaPlayer Instanz 1</h2>
 
     <media-player />
