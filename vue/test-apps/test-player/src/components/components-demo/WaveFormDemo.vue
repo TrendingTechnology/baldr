@@ -15,9 +15,3 @@ import DemoBase from '../DemoBase.vue'
 @Component({ components: { WaveForm } })
 export default class ComponentWaveFormDemo extends DemoBase {}
 </script>
-
-<style lang="scss">
-.vc_component_wave_form_demo {
-  background-color: $yellow;
-}
-</style>

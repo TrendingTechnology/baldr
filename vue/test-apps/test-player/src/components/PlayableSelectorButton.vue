@@ -37,9 +37,3 @@ export default class PlayableSelectorButton extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.vc_component_wave_form_demo {
-  background-color: $yellow;
-}
-</style>

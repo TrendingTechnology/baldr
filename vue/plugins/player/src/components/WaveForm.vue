@@ -90,7 +90,6 @@ export default class WaveForm extends PlayableBase {
   padding: 1em;
 
   img {
-    filter: invert(100%);
     opacity: 0.4;
     height: 10vw;
     width: 100%;
@@ -108,6 +107,12 @@ export default class WaveForm extends PlayableBase {
     position: absolute;
     top: 0;
     width: 0;
+  }
+}
+
+[b-dark-mode='true'] .vc_wave_form {
+  img {
+    filter: invert(100%);
   }
 }
 </style>

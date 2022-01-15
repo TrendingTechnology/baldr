@@ -306,7 +306,7 @@ export default [
         label: 'Dark mode',
         action: 'executeCallback',
         arguments: 'toggleDarkMode',
-        keyboardShortcut: 'Ctrl + Alt + d'
+        keyboardShortcut: 'Ctrl + d'
       },
       {
         label: 'Standard-Darstellung',
