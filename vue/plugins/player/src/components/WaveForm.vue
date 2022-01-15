@@ -28,7 +28,7 @@ export default class WaveForm extends PlayableBase {
     const width = waveform.clientWidth
 
     progress.style.height = `${height}px`
-    progress.style.width = `${this.playable.progress * width}px`
+    progress.style.width = `${this.playable.progressComplete * width}px`
     progress.style.marginLeft = `${waveform.offsetLeft}px`
     progress.style.marginTop = `${waveform.offsetTop}px`
   }

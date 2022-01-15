@@ -138,6 +138,13 @@ export class Playable {
     this.jumpTo(this.calculateStartTimeSecFromProgress(value))
   }
 
+  /**
+   * Progress in relation to the whole audio / video element.
+   */
+  public get progressComplete (): number {
+    return this.htmlElement.currentTime / this.htmlElement.duration
+  }
+
   public get volume (): number {
     return this.htmlElement.volume
   }
