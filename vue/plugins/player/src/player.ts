@@ -68,9 +68,8 @@ class PlayerCache {
 }
 
 interface PlayerData {
+  enqueuedUri?: string
   loadedUri?: string
-  playingUri?: string
-  pausedUri?: string
 }
 
 /**
@@ -78,9 +77,8 @@ interface PlayerData {
  * played a the same time.
  */
 export class Player {
+  private enqueued?: Playable
   private loaded?: Playable
-  private playing?: Playable
-  private paused?: Playable
   public events: EventsListenerStore
   private readonly cache: PlayerCache
   public resolver: Resolver
@@ -90,9 +88,8 @@ export class Player {
    * A puremans vuex store.
    */
   public data: PlayerData = {
-    loadedUri: undefined,
-    playingUri: undefined,
-    pausedUri: undefined
+    enqueuedUri: undefined,
+    loadedUri: undefined
   }
 
   /**
@@ -107,11 +104,11 @@ export class Player {
   }
 
   public get isLoaded (): boolean {
-    return this.loaded != null
+    return this.enqueued != null
   }
 
   public get isPlaying (): boolean {
-    return this.playing != null && this.playing.isPlaying
+    return this.loaded != null && this.loaded.isPlaying
   }
 
   /**
@@ -119,9 +116,9 @@ export class Player {
    */
   public get isNewLoaded (): boolean {
     if (
+      this.enqueued != null &&
       this.loaded != null &&
-      this.playing != null &&
-      this.loaded.sample.ref !== this.playing.sample.ref
+      this.enqueued.sample.ref !== this.loaded.sample.ref
     ) {
       return true
     }
@@ -141,8 +138,8 @@ export class Player {
    * Load a sample. Only loaded samples can be played.
    */
   public load (uri: string): void {
-    this.loaded = this.cache.getPlayable(uri)
-    this.data.loadedUri = uri
+    this.enqueued = this.cache.getPlayable(uri)
+    this.data.enqueuedUri = uri
   }
 
   /**
@@ -156,26 +153,20 @@ export class Player {
     if (options.uri != null) {
       this.load(options.uri)
     }
-    if (this.loaded == null) {
+    if (this.enqueued == null) {
       throw new Error('First load a sample')
     }
-    this.events.trigger('fadeinbegin', this.loaded)
-    if (this.playing != null) {
-      await this.playing.stop()
+    this.events.trigger('fadeinbegin', this.enqueued)
+    if (this.loaded != null) {
+      await this.loaded.stop()
     }
 
     if (options.targetVolume == null) {
       options.targetVolume = this.globalVolume
     }
-    this.loaded.start(options)
-    this.playing = this.loaded
-    this.playing.registerPlaybackChangeListener((state: PlaybackState) => {
-      if (state === 'stopped') {
-        this.playing = undefined
-        this.data.playingUri = undefined
-      }
-    })
-    this.data.playingUri = this.data.loadedUri
+    this.enqueued.start(options)
+    this.loaded = this.enqueued
+    this.data.loadedUri = this.data.enqueuedUri
   }
 
   /**
@@ -185,27 +176,25 @@ export class Player {
    * @param fadeOutSec - Duration in seconds to fade out the sample.
    */
   public async stop (fadeOutSec?: number): Promise<void> {
-    if (this.playing == null) {
+    if (this.loaded == null) {
       return
     }
-    await this.playing.stop(fadeOutSec)
-    this.playing = undefined
-    this.data.playingUri = undefined
+    await this.loaded.stop(fadeOutSec)
   }
 
   public play (options?: PlaybackOptions) {
-    if (this.playing == null) {
+    if (this.loaded == null) {
       return
     }
-    this.playing.play(options)
+    this.loaded.play(options)
   }
 
   /**
    * Pause a sample at the current position.
    */
   public async pause (): Promise<void> {
-    if (this.playing != null) {
-      await this.playing.pause()
+    if (this.loaded != null) {
+      await this.loaded.pause()
     }
   }
 
@@ -215,8 +204,8 @@ export class Player {
    * @param interval - Time interval in seconds.
    */
   public forward (interval: number = 10): void {
-    if (this.playing != null) {
-      this.playing.forward(interval)
+    if (this.loaded != null) {
+      this.loaded.forward(interval)
     }
   }
 
@@ -226,8 +215,8 @@ export class Player {
    * @param interval - Time interval in seconds.
    */
   public backward (interval: number = 10): void {
-    if (this.playing != null) {
-      this.playing.backward(interval)
+    if (this.loaded != null) {
+      this.loaded.backward(interval)
     }
   }
 
@@ -236,16 +225,10 @@ export class Player {
    * start this sample.
    */
   public async toggle (): Promise<void> {
-    if (this.loaded != null && this.playing == null && this.paused == null) {
+    if (this.enqueued != null && this.loaded == null) {
       await this.start()
-    } else if (this.playing != null) {
-      this.data.pausedUri = this.data.playingUri
-      this.paused = this.playing
-      this.playing.pause()
-    } else if (this.paused != null) {
-      this.data.playingUri = this.data.pausedUri
-      this.playing = this.paused
-      this.paused.play()
+    } else if (this.loaded != null) {
+      this.loaded.toggle()
     }
   }
 }

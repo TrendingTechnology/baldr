@@ -25,7 +25,12 @@ export interface PlaybackOptions {
 /**
  * The state of the current playback.
  */
-export type PlaybackState = 'fadein' | 'playing' | 'fadeout' | 'stopped'
+export type PlaybackState =
+  | 'fadein'
+  | 'playing'
+  | 'paused'
+  | 'fadeout'
+  | 'stopped'
 
 type JumpDirection = 'forward' | 'backward'
 
@@ -45,9 +50,15 @@ export class Playable {
 
   private readonly eventsListener = new EventsListenerStore()
 
-  private playbackState_: PlaybackState = 'stopped'
-
   public player: Player
+
+  /**
+   * Can be used as data `data () { return playable.data }` in Vue components.
+   * A puremans vuex store.
+   */
+  public data: { playbackState: PlaybackState } = {
+    playbackState: 'stopped'
+  }
 
   constructor (sample: Sample, htmlElement: HTMLMediaElement, player: Player) {
     this.sample = sample
@@ -60,20 +71,22 @@ export class Playable {
    *
    * - `fadein`: during the fade in process.
    * - `playing`: The playable is being played at the target volume.
+   * - `paused`: The playable is being paused. The playback can be
+   *   continued at the current position.
    * - `fadeout`: during the fade out process.
    * - `stopped`: The playable is not played after the fade out process finishes.
    */
   get playbackState (): PlaybackState {
-    return this.playbackState_
+    return this.data.playbackState
   }
 
   set playbackState (value: PlaybackState) {
-    this.playbackState_ = value
+    this.data.playbackState = value
     this.eventsListener.trigger('playback-change', value)
   }
 
   public get isPlaying (): boolean {
-    return this.playbackState !== 'stopped'
+    return this.playbackState !== 'stopped' && this.playbackState !== 'paused'
   }
 
   public registerPlaybackChangeListener (
@@ -339,6 +352,7 @@ export class Playable {
     }
     await this.fadeOut(fadeOutSec)
     this.htmlElement.currentTime = this.sample.startTimeSec
+    this.lastPositionSec = undefined
     this.timeOutExecutor.clear()
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.load()
@@ -348,6 +362,7 @@ export class Playable {
 
   public async pause (): Promise<void> {
     await this.fadeOut()
+    this.playbackState = 'paused'
     this.timeOutExecutor.clear()
     if (this.sample.asset.mimeType === 'video') {
       this.htmlElement.style.opacity = '0'

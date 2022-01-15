@@ -47,8 +47,8 @@ import ProgressBar from './ProgressBar.vue'
   }
 })
 export default class MediaPlayer extends Vue {
+  enqueuedUri?: string
   loadedUri?: string
-  playingUri?: string
 
   data () {
     return player.data
@@ -59,8 +59,8 @@ export default class MediaPlayer extends Vue {
   }
 
   get playable (): Playable | undefined {
-    if (this.playingUri != null) {
-      return player.getPlayable(this.playingUri)
+    if (this.loadedUri != null) {
+      return player.getPlayable(this.loadedUri)
     }
   }
 

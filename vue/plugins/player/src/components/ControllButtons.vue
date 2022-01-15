@@ -1,14 +1,40 @@
 <template>
   <div class="vc_controll_buttons">
-    <clickable-icon name="player-backward" @click.native="backward()" />
-    <clickable-icon name="player-play" :disabled="isPlaying" @click.native="start()" />
-    <clickable-icon name="player-stop" :disabled="!isPlaying" @click.native="stop()" />
+    <clickable-icon
+      name="player-backward"
+      :disabled="isBackwardDisabled"
+      @click.native="backward()"
+    />
+
+    <clickable-icon
+      name="player-play"
+      :disabled="isPlayDisabled"
+      @click.native="play()"
+    />
+
+    <clickable-icon
+      name="player-replay"
+      :disabled="isStartDisabled"
+      @click.native="start()"
+    />
+
+    <clickable-icon
+      name="player-stop"
+      :disabled="isStopDisabled"
+      @click.native="stop()"
+    />
+
     <clickable-icon
       name="player-pause"
-      :disabled="!isPlaying"
+      :disabled="isPauseDisabled"
       @click.native="pause()"
     />
-    <clickable-icon name="player-forward" @click.native="forward()" />
+
+    <clickable-icon
+      name="player-forward"
+      @click.native="forward()"
+      :disabled="isForwardDisabled"
+    />
   </div>
 </template>
 
@@ -18,7 +44,7 @@ import Component from 'vue-class-component'
 
 import { ClickableIcon } from '@bldr/icons'
 
-import { player } from '../plugin'
+import { Playable, player } from '../plugin'
 
 @Component({
   components: {
@@ -26,35 +52,74 @@ import { player } from '../plugin'
   }
 })
 export default class ControllButtons extends Vue {
+  enqueuedUri?: string
   loadedUri?: string
-  playingUri?: string
 
   data () {
     return player.data
   }
 
-  get isPlaying (): boolean {
-    return this.playingUri != null
+  private get isEnqueued (): boolean {
+    return this.enqueuedUri != null
   }
 
-  start () {
+  private get isLoadedPlaying (): boolean {
+    return this.loaded != null && this.loaded.isPlaying
+  }
+
+  private get loaded (): Playable | undefined {
+    if (this.loadedUri == null) {
+      return
+    }
+    return player.getPlayable(this.loadedUri)
+  }
+
+  public backward (): void {
+    player.backward(10)
+  }
+
+  public get isBackwardDisabled (): boolean {
+    return !this.isLoadedPlaying
+  }
+
+  public play (): void {
+    player.play()
+  }
+
+  public get isPlayDisabled (): boolean {
+    return this.isLoadedPlaying
+  }
+
+  public start (): void {
     player.start()
   }
 
-  pause () {
-    player.pause()
+  public get isStartDisabled (): boolean {
+    return !this.isEnqueued
   }
 
-  stop () {
+  public stop (): void {
     player.stop()
   }
 
-  forward () {
+  public get isStopDisabled (): boolean {
+    return !this.isLoadedPlaying
+  }
+
+  public pause (): void {
+    player.pause()
+  }
+
+  public get isPauseDisabled (): boolean {
+    return !this.isLoadedPlaying
+  }
+
+  public forward (): void {
     player.forward(10)
   }
 
-  backward () {
-    player.backward(10)
+  public get isForwardDisabled (): boolean {
+    return !this.isLoadedPlaying
   }
 }
 </script>

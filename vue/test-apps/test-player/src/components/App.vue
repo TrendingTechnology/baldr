@@ -56,11 +56,11 @@
     <controll-buttons />
 
     <dl>
-      <dt>loadedUri:</dt>
-      <dd>{{ loadedUri }} ({{ loadedTitle }})</dd>
+      <dt>enqueuedUri:</dt>
+      <dd>{{ enqueuedUri }} ({{ loadedTitle }})</dd>
 
-      <dt>playingUri:</dt>
-      <dd>{{ playingUri }} ({{ playingTitle }})</dd>
+      <dt>loadedUri:</dt>
+      <dd>{{ loadedUri }} ({{ playingTitle }})</dd>
     </dl>
   </div>
 </template>
@@ -77,16 +77,16 @@ import { data } from '../app'
 
 export let state: {
   startOnClick: boolean
+  enqueuedUri?: string
   loadedUri?: string
-  playingUri?: string
   pausedUri?: string
 }
 
 @Component({ components: { PlayableSelector, ControllButtons } })
 export default class App extends Vue {
-  loadedUri!: string
+  enqueuedUri!: string
 
-  playingUri!: string
+  loadedUri!: string
   data () {
     const data = Object.assign(player.data, { startOnClick: true })
     state = data
@@ -109,14 +109,14 @@ export default class App extends Vue {
   }
 
   get loadedTitle () {
-    if (this.loadedUri != null) {
-      return this.getTitleFromUuid(this.loadedUri)
+    if (this.enqueuedUri != null) {
+      return this.getTitleFromUuid(this.enqueuedUri)
     }
   }
 
   get playingTitle () {
-    if (this.playingUri != null) {
-      return this.getTitleFromUuid(this.playingUri)
+    if (this.loadedUri != null) {
+      return this.getTitleFromUuid(this.loadedUri)
     }
   }
 }

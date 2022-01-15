@@ -17,7 +17,7 @@
     <div class="icons">
       <plain-icon
         v-if="playbackState === 'starting'"
-        name="player-play-speed"
+        name="player-wait"
         class="baldr-icon-spin"
       />
       <plain-icon
@@ -72,6 +72,7 @@ export default class PlayButton extends PlayableBase {
     | 'starting'
     | 'fadein'
     | 'playing'
+    | 'paused'
     | 'fadeout'
     | 'stopped'
     | 'stoppable' = 'stopped'
