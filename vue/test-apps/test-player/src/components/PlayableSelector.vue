@@ -1,4 +1,4 @@
- <template>
+<template>
   <div class="vc_playable_selector">
     <playable-selector-button
       v-for="testAsset in filteredTestAssets"
@@ -27,7 +27,10 @@ export default class PlayableSelector extends Vue {
   @Prop()
   mimeType!: 'audio' | 'video'
 
-  get filteredTestAssets (): TestAsset[] {
+  @Prop()
+  onlySamples!: boolean
+
+  get filteredTestAssets (): Record<string, string>[] | TestAsset[] {
     let testAssets: TestAsset[]
     if (this.testAssets != null) {
       testAssets = this.testAssets
@@ -39,6 +42,26 @@ export default class PlayableSelector extends Vue {
       testAssets = testAssets.filter((testAsset: TestAsset) => {
         return this.mimeType === testAsset.mimeType
       })
+    }
+
+    if (this.onlySamples) {
+      const testSamples = []
+
+      for (const testAsset of testAssets) {
+        if (testAsset.samples != null) {
+          for (const key in testAsset.samples) {
+            const testSample: Record<string, string> = {
+              uuid: testAsset.uuid + testAsset.samples[key]
+            }
+            if (testAsset.ref != null) {
+              testSample.ref = testAsset.ref + testAsset.samples[key]
+            }
+            testSamples.push(testSample)
+          }
+        }
+      }
+
+      return testSamples
     }
 
     return testAssets

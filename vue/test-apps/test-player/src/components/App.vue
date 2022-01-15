@@ -37,9 +37,17 @@
 
     <h2>Playable selector:</h2>
 
+    Start on click:
+    <input type="checkbox" id="checkbox" v-model="startOnClick" />
+    <label for="checkbox">{{ startOnClick }}</label>
+
     <h2>audio</h2>
 
     <playable-selector mime-type="audio" />
+
+    <h3>only samples</h3>
+
+    <playable-selector mime-type="audio" only-samples="true" />
 
     <h2>video</h2>
 
@@ -67,13 +75,22 @@ import PlayableSelector from './PlayableSelector.vue'
 
 import { data } from '../app'
 
+export let state: {
+  startOnClick: boolean
+  loadedUri?: string
+  playingUri?: string
+  pausedUri?: string
+}
+
 @Component({ components: { PlayableSelector, ControllButtons } })
 export default class App extends Vue {
   loadedUri!: string
 
   playingUri!: string
   data () {
-    return player.data
+    const data = Object.assign(player.data, { startOnClick: true })
+    state = data
+    return data
   }
 
   private getTitleFromUuid (uuid: string): string | undefined {

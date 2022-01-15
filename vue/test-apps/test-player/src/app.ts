@@ -152,6 +152,17 @@ export const data: TestDataCollection = {
       glocken: '#glocken',
       menschen: '#menschen'
     }
+  },
+  nonino: {
+    title: 'Adios Nonino',
+    ref: 'ref:Piazzolla-Nonino_HB_Adios-Nonino',
+    uuid: 'uuid:b3f2d623-ef34-4140-a406-94e23094e510',
+    mimeType: 'audio',
+    samples: {
+      haupt: '#Hauptthema',
+      melancholico: '#Thema-melancholico',
+      ueberleitung: '#Ueberleitung'
+    }
   }
 }
 

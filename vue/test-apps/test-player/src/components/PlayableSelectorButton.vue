@@ -1,8 +1,5 @@
 <template>
-  <button
-    class="vc_playable_selector_button"
-    v-on:click="selectPlayable(testAsset.uuid)"
-  >
+  <button class="vc_playable_selector_button" v-on:click="selectPlayable(uri)">
     {{ label }}
   </button>
 </template>
@@ -23,6 +20,10 @@ export default class PlayableSelectorButton extends Vue {
 
   selectPlayable (uuid: string) {
     eventBus.$emit('select-playable', uuid)
+  }
+
+  get uri () {
+    return this.testAsset.uuid
   }
 
   get label () {
