@@ -31,11 +31,11 @@ export default class PlayableText extends PlayableBase {
     return this.playable.sample.titleSafe
   }
 
-  get iconName(): 'play' | 'stop' {
+  get iconName(): 'player-play' | 'player-stop' {
     if (this.playable.isPlaying) {
-      return 'stop'
+      return 'player-stop'
     }
-    return 'play'
+    return 'player-play'
   }
 
   async actByStatus (): Promise<void> {

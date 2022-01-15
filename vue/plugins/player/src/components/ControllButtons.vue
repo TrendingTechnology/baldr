@@ -1,14 +1,14 @@
 <template>
   <div class="vc_controll_buttons">
-    <clickable-icon name="backward" @click.native="backward()" />
-    <clickable-icon name="play" :disabled="isPlaying" @click.native="start()" />
-    <clickable-icon name="stop" :disabled="!isPlaying" @click.native="stop()" />
+    <clickable-icon name="player-backward" @click.native="backward()" />
+    <clickable-icon name="player-play" :disabled="isPlaying" @click.native="start()" />
+    <clickable-icon name="player-stop" :disabled="!isPlaying" @click.native="stop()" />
     <clickable-icon
-      name="pause"
+      name="player-pause"
       :disabled="!isPlaying"
       @click.native="pause()"
     />
-    <clickable-icon name="forward" @click.native="forward()" />
+    <clickable-icon name="player-forward" @click.native="forward()" />
   </div>
 </template>
 

@@ -51,8 +51,8 @@
     "root": true
   },
   "dependencies": {
-    "@bldr/themes": "*",
     "@bldr/icons": "*",
+    "@bldr/themes": "*",
     "vue-class-component": "7.2.3",
     "vue-property-decorator": "9.1.2",
     "vue-router": "3.2.0",
@@ -60,6 +60,8 @@
     "vuex": "3.4.0"
   },
   "devDependencies": {
+    "@bldr/config": "*",
+    "@bldr/type-definitions": "*",
     "@bldr/vue-config-helper-cjs": "*",
     "@types/chai": "4.2.11",
     "@types/mocha": "5.2.4",

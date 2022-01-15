@@ -26,4 +26,4 @@ export * as LampTypes from './lamp';
 export * as MediaCategoriesTypes from './media-categories';
 export * as MediaDataTypes from './media-data';
 export * as TitlesTypes from './titles';
-export * as IconFontGeneratorTypes from './icon-font-generator';
+export * as IconTypes from './icons';

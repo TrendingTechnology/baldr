@@ -17,24 +17,24 @@
     <div class="icons">
       <plain-icon
         v-if="playbackState === 'starting'"
-        name="play-speed"
+        name="player-play-speed"
         class="baldr-icon-spin"
       />
       <plain-icon
         v-if="playbackState === 'fadein'"
-        name="fadeout"
+        name="player-fadeout"
         class="spin-clockwise"
       />
-      <plain-icon v-if="playbackState === 'stopped'" name="play" />
-      <plain-icon v-if="playbackState === 'stoppable'" name="pause" />
+      <plain-icon v-if="playbackState === 'stopped'" name="player-play" />
+      <plain-icon v-if="playbackState === 'stoppable'" name="player-pause" />
       <plain-icon
         v-if="playbackState === 'playing'"
-        name="play"
+        name="player-play"
         class="baldr-icon-spin"
       />
       <plain-icon
         v-if="playbackState === 'fadeout'"
-        name="fadeout"
+        name="player-fadeout"
         class="spin-counter-clockwise"
       />
     </div>

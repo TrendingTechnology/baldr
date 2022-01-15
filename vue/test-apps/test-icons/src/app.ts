@@ -4,7 +4,6 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import icons from '@bldr/icons'
 
 import App from './components/App.vue'
-import Home from './components/Home.vue'
 import AllStyles from './components/AllStyles.vue'
 import AllIcons from './components/AllIcons.vue'
 import Link from './components/Link.vue'
@@ -18,7 +17,7 @@ Vue.use(icons)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    component: Home
+    component: AllIcons
   },
   {
     path: '/icons',

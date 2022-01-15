@@ -2,12 +2,13 @@
   <div class="vc_all_icons">
     <h1>All Icons</h1>
 
-    <section class="all-icons">
-      <p v-for="icon in iconNames" :key="icon">
-        <material-icon :name="icon" />
-        <span class="description">{{ icon }}</span>
-      </p>
-    </section>
+    <div class="all-icons">
+      <icon-info
+        v-for="name in iconNames"
+        :key="name"
+        :name="name"
+      />
+    </div>
   </div>
 </template>
 
@@ -15,12 +16,12 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { MaterialIcon, iconNames } from '@bldr/icons'
+import IconInfo from './IconInfo.vue'
 
-@Component({ components: { MaterialIcon } })
+@Component({ components: { IconInfo } })
 export default class AllIcons extends Vue {
-  get iconNames (): string[] {
-    return iconNames
+  get iconNames () {
+    return Object.keys(config.iconFont.iconMapping).sort()
   }
 }
 </script>
@@ -29,6 +30,18 @@ export default class AllIcons extends Vue {
 .vc_all_icons {
   .all-icons {
     columns: 4;
+
+    @media screen and (max-width: 1400px) {
+      columns: 3;
+    }
+
+    @media screen and (max-width: 1200px) {
+      columns: 2;
+    }
+
+    @media screen and (max-width: 600px) {
+      columns: 1;
+    }
 
     .baldr-icon {
       font-size: 3em;

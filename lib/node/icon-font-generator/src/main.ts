@@ -4,7 +4,7 @@
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
 import { Configuration, getConfig } from '@bldr/config'
-import { IconFontGeneratorTypes } from '@bldr/type-definitions'
+import { IconTypes } from '@bldr/type-definitions'
 
 import fs from 'fs'
 import path from 'path'
@@ -31,34 +31,20 @@ export const setLogLevel = log.setLogLevel
  *
  * @param url - The URL to download a icon.
  * @param destDir - The destination directory where the icon should be stored.
- * @param oldName - The old original name of the Material Design icons project.
  * @param newName - The new name of the icon.
  */
-function downloadIcon (
-  url: string,
-  destDir: string,
-  oldName: string,
-  newName?: string
-): void {
-  let destName: string
-  if (newName != null && newName !== '') {
-    destName = newName
-  } else {
-    destName = oldName
-  }
-  log.info('Download icon %s from %s', [destName, url])
-  cmd.execSync(['wget', '-O', path.join(destDir, `${destName}.svg`), url])
+function downloadIcon (url: string, destDir: string, newName: string): void {
+  log.info('Download icon %s from %s', [newName, url])
+  cmd.execSync(['wget', '-O', path.join(destDir, `${newName}.svg`), url])
 }
 
 /**
  * Download all icons.
  *
- * @param iconMapping
- * @param urlTemplate
  * @param destDir - The destination directory where the icon should be stored.
  */
 function downloadIcons (
-  iconMapping: IconFontGeneratorTypes.IconFontMapping,
+  iconMapping: IconTypes.IconFontMapping,
   urlTemplate: string,
   destDir: string
 ): void {
@@ -66,23 +52,18 @@ function downloadIcons (
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
   for (const newName in iconMapping) {
-    let oldName: string = newName
+    const iconDef = iconMapping[newName]
 
-    const iconDef: false | string | IconFontGeneratorTypes.IconDefintion =
-      iconMapping[newName]
-    if (typeof iconDef === 'string') {
-      oldName = iconDef
-    } else if (typeof iconDef === 'object' && iconDef.oldName != null) {
-      oldName = iconDef.oldName
+    if (iconDef.materialName != null) {
+      const url = urlTemplate.replace('{icon}', iconDef.materialName)
+
+      downloadIcon(url, destDir, newName)
+      count++
+      cmd.updateProgress(
+        count / iconsCount,
+        log.format('download icon “%s”', [newName])
+      )
     }
-    const url = urlTemplate.replace('{icon}', oldName)
-
-    downloadIcon(url, destDir, oldName, newName)
-    count++
-    cmd.updateProgress(
-      count / iconsCount,
-      log.format('download icon “%s”', [newName])
-    )
   }
   cmd.stopProgress()
 }
@@ -91,22 +72,23 @@ function downloadIcons (
  * Copy svg icons for a source folder to a destination folder.
  *
  * @param srcFolder - The source folder.
- * @param destFolder - The destination folder.
+ * @param destDir - The destination folder.
  */
-function copyIcons (srcFolder: string, destFolder: string): void {
-  const icons = fs.readdirSync(srcFolder)
-  for (const icon of icons) {
-    if (icon.includes('.svg')) {
-      const src = path.join(srcFolder, icon)
-      const dest = path.join(destFolder, icon)
+function copyIcons (
+  iconMapping: IconTypes.IconFontMapping,
+  srcFolder: string,
+  destDir: string
+): void {
+  for (const newName in iconMapping) {
+    const iconDef = iconMapping[newName]
+
+    if (iconDef.fileName != null) {
+      const src = path.join(srcFolder, iconDef.fileName)
+      const dest = path.join(destDir, `${newName}.svg`)
       fs.copyFileSync(src, dest)
       log.info(
         'Copy the file “%s” from the source folder “%s” to the destination folder “%s”.',
-        [
-          icon,
-          src,
-          dest
-        ]
+        [iconDef.fileName, src, dest]
       )
     }
   }
@@ -138,8 +120,9 @@ interface GlyphMetadata {
 
   /**
    * `[ '', 'musicbrainz_recording' ]`
+   * [unicodeCharacter: string, glyphName: string]
    */
-  unicode: [unicodeCharacter: string, glyphName: string]
+  unicode: string[]
 
   /**
    * `false`
@@ -272,7 +255,10 @@ async function convertIntoFontFiles (
   }
 }
 
-function patchConfig (metadataCollection: GlyphMetadata[], destPath: string): void {
+function patchConfig (
+  metadataCollection: GlyphMetadata[],
+  destPath: string
+): void {
   // to get a fresh unpatched version
   const configJson = readJsonFile(config.configurationFileLocations[1])
 
@@ -307,7 +293,11 @@ export async function createIconFont (
     config.iconFont.urlTemplate,
     tmpDir
   )
-  copyIcons(config.iconFont.additionalIconsPath, tmpDir)
+  copyIcons(
+    config.iconFont.iconMapping,
+    config.iconFont.additionalIconsPath,
+    tmpDir
+  )
   await convertIntoFontFiles(tmpDir, config.iconFont.destPath)
 }
 

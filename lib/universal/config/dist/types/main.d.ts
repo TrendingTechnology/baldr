@@ -1,4 +1,4 @@
-import { IconFontGeneratorTypes } from '@bldr/type-definitions';
+import { IconTypes } from '@bldr/type-definitions';
 import { Collection as MediaCategories } from './media-categories';
 interface ApiConfiguration {
     port: number;
@@ -116,7 +116,7 @@ export interface Configuration {
     configurationFileLocations: string[];
     databases: DatabasesConfiguration;
     http: HttpConfiguration;
-    iconFont: IconFontGeneratorTypes.IconFontConfiguration;
+    iconFont: IconTypes.IconFontConfiguration;
     /**
      * The path of the local development repository, for example
      * `/home/jf/git-repositories/github/Josef-Friedrich/baldr`.
