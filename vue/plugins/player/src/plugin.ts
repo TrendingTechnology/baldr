@@ -12,6 +12,9 @@ export { default as HorizontalPlayButtons } from './components/HorizontalPlayBut
 import MediaPlayer from './components/MediaPlayer.vue'
 export { default as MediaPlayer } from './components/MediaPlayer.vue'
 
+import PlayableText from './components/PlayableText.vue'
+export { default as PlayableText } from './components/PlayableText.vue'
+
 import PlayButton from './components/PlayButton.vue'
 export { default as PlayButton } from './components/PlayButton.vue'
 
@@ -34,7 +37,8 @@ export default {
     Vue.component('horizontal-play-buttons', HorizontalPlayButtons)
     Vue.component('media-player', MediaPlayer)
     Vue.component('play-button', PlayButton)
-    Vue.component('wave-form', WaveForm)
+    Vue.component('playable-text', PlayableText)
     Vue.component('video-screen', VideoScreen)
+    Vue.component('wave-form', WaveForm)
   }
 }

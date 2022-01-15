@@ -15,6 +15,8 @@
           |
           <router-link to="/components/play-button">PlayButton</router-link>
           |
+          <router-link to="/components/playable-text">PlayableText</router-link>
+          |
           <router-link to="/components/progress-bar">ProgressBar</router-link>
           |
           <router-link to="/components/video-screen">VideoScreen</router-link>

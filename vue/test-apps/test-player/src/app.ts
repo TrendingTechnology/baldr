@@ -10,6 +10,7 @@ import ClassPlayerDemo from '@/components/classes-demo/PlayerDemo.vue'
 import ComponentHorizontalPlayButtonsDemo from '@/components/components-demo/HorizontalPlayButtonsDemo.vue'
 import ComponentMediaPlayerDemo from '@/components/components-demo/MediaPlayerDemo.vue'
 import ComponentPlayableBaseDemo from '@/components/components-demo/PlayableBaseDemo.vue'
+import ComponentPlayableTextDemo from '@/components/components-demo/PlayableTextDemo.vue'
 import ComponentPlayButtonDemo from '@/components/components-demo/PlayButtonDemo.vue'
 import ComponentProgressBarDemo from '@/components/components-demo/ProgressBarDemo.vue'
 import ComponentVideoScreenDemo from '@/components/components-demo/VideoScreenDemo.vue'
@@ -43,6 +44,10 @@ const routes: RouteConfig[] = [
   {
     path: '/components/playable-base',
     component: ComponentPlayableBaseDemo
+  },
+  {
+    path: '/components/playable-text',
+    component: ComponentPlayableTextDemo
   },
   {
     path: '/components/play-button',

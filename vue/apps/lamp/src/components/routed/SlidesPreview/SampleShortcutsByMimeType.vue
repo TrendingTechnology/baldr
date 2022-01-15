@@ -1,11 +1,9 @@
 <template>
   <div class="vc_sample_shortcuts_by_mime_type" v-if="hasSamples">
     <h3>{{ mimeType }}</h3>
-    <ul>
-      <li v-for="(sample, shortcut) in samples" :key="sample.ref">
-        <strong>{{ shortcut }}:</strong> {{ sample.titleSafe }}
-      </li>
-    </ul>
+    <div v-for="sample in samples" :key="sample.ref">
+      <playable-text :src="sample.ref"></playable-text>
+    </div>
   </div>
 </template>
 
