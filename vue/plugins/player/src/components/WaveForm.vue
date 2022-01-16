@@ -25,7 +25,11 @@ export default class WaveForm extends PlayableBase {
 
     const waveform = this.$refs.waveformImage
     const height = waveform.clientHeight
-    const width = waveform.clientWidth
+    let width = waveform.clientWidth
+
+    if (!this.playable.isPlaying) {
+      width = 0
+    }
 
     progress.style.height = `${height}px`
     progress.style.width = `${this.playable.progressComplete * width}px`

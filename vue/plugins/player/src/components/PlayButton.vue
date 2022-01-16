@@ -51,9 +51,9 @@ import { PlaybackState } from '../playable'
 
 import PlayableBase from './PlayableBase.vue'
 
-const circleRadius = 100
+const CIRCLE_RADIUS = 100
 // 100%: 628.3185307179587
-const circumference = Math.PI * 2 * circleRadius
+const CIRCUM_FERENCE = Math.PI * 2 * CIRCLE_RADIUS
 
 @Component({
   components: {
@@ -149,8 +149,13 @@ export default class PlayButton extends PlayableBase {
    * @param progress - From 0 to 1.
    */
   private setProgress (progress: number): void {
+    if (!this.playable.isPlaying) {
+      progress = 0
+    }
+
+    const strokeDashoffset = -(CIRCUM_FERENCE * progress)
     const htmlElement = this.$refs.progress as HTMLElement
-    htmlElement.style.strokeDashoffset = `${-(circumference * progress)}`
+    htmlElement.style.strokeDashoffset = `${strokeDashoffset}`
   }
 
   async actByStatus (): Promise<void> {

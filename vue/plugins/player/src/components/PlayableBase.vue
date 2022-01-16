@@ -9,7 +9,7 @@ import { Playable } from '../playable'
 import { player } from '../plugin'
 
 @Component
-export default class PlayableBaseNg extends Vue {
+export default class PlayableBase extends Vue {
   @Prop({ required: true })
   src!: string | Playable | Sample | Asset
 

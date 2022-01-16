@@ -36,10 +36,10 @@
       <plain-icon name="wikidata" />
     </a>
     <a v-if="wikipedia" :href="wikipedia" title="Wikipedia" target="_blank">
-      <plain-icon name="wikipedia" />
+      <plain-icon name="master-wikipedia" />
     </a>
     <a v-if="youtube" :href="youtube" title="Youtube" target="_blank">
-      <plain-icon name="youtube" />
+      <plain-icon name="master-youtube" />
     </a>
   </div>
 </template>
