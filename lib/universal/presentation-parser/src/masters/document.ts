@@ -12,7 +12,7 @@ export class DocumentMaster implements MasterSpec {
   displayName = 'Dokument'
 
   icon = {
-    name: 'file-outline',
+    name: 'master-document',
     color: 'gray',
 
     /**

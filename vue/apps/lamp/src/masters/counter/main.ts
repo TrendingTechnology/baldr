@@ -115,7 +115,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'counter',
+    name: 'master-counter',
     color: 'black',
     size: 'large'
   },

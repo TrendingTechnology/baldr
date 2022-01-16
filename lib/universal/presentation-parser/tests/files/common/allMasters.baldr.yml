@@ -120,6 +120,8 @@ slides:
       bei seiner Einreise auf dem Flughafen von Accra, der Haupstadt
       des westafrikanischen Staates Ghana.
 
+- sample_list: 'ref:Schuetz-Freue_HB_Freue-dich'
+
 - score_sample:
     score: 'ref:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
     audio: 'ref:Schuetz-Freue_HB_Freue-dich'
@@ -134,6 +136,8 @@ slides:
 
 - title: ref:Entstehung_VD_Entstehung-aus-soziologischer-Sicht
   video: uuid:49ba792d-1a19-48d5-9cfe-50833fa6e8b9
+
+- website: https://sql-island.informatik.uni-kl.de
 
 - wikipedia: Sequenz_(Musik)
 

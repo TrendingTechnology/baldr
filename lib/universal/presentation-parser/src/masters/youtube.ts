@@ -176,7 +176,7 @@ export class YoutubeMaster implements MasterSpec {
   displayName = 'YouTube'
 
   icon = {
-    name: 'youtube',
+    name: 'master-youtube',
     color: 'red',
 
     /**

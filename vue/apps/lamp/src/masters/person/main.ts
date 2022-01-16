@@ -21,7 +21,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'person',
+    name: 'master-person',
     color: 'orange'
   },
   styleConfig: {

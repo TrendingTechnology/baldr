@@ -31,7 +31,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'youtube',
+    name: 'master-youtube',
     color: 'red'
   },
   styleConfig: {

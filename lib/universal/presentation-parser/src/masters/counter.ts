@@ -111,7 +111,7 @@ export class CounterMaster implements MasterSpec {
   displayName = 'Zähler'
 
   icon = {
-    name: 'counter',
+    name: 'master-counter',
     color: 'black',
     size: 'large' as const,
 

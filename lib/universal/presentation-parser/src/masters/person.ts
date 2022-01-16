@@ -16,7 +16,7 @@ export class PersonMaster implements MasterSpec {
   displayName = 'Porträt'
 
   icon = {
-    name: 'person',
+    name: 'master-person',
     color: 'orange',
 
     /**

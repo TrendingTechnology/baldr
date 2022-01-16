@@ -20,7 +20,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'video-vintage',
+    name: 'master-video',
     color: 'purple'
   },
   styleConfig: {

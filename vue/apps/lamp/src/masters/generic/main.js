@@ -28,7 +28,7 @@ const CHARACTERS_ON_SLIDE = 400
 // }
 
 export default validateMasterSpec({
-  name: 'generic',
+  name: 'master-generic',
   title: 'Folie',
   propsDef: {
     markup: {

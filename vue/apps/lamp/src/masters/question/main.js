@@ -24,7 +24,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'question',
+    name: 'master-question',
     color: 'yellow',
     size: 'large'
   },

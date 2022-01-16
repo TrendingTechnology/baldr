@@ -17,7 +17,7 @@ export class QuoteMaster implements MasterSpec {
   displayName = 'Zitat'
 
   icon = {
-    name: 'quote',
+    name: 'master-quote',
     color: 'brown',
     size: 'large' as const,
 

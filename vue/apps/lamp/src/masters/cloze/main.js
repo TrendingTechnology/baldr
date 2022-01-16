@@ -25,7 +25,7 @@ export default validateMasterSpec({
     ...mapStepFieldDefintionsToProps(['subset'])
   },
   icon: {
-    name: 'cloze',
+    name: 'master-cloze',
     color: 'blue'
   },
   styleConfig: {

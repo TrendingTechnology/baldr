@@ -278,7 +278,7 @@ export class WikipediaMaster implements MasterSpec {
   displayName = 'Wikipedia'
 
   icon = {
-    name: 'wikipedia',
+    name: 'master-wikipedia',
     color: 'black',
 
     /**

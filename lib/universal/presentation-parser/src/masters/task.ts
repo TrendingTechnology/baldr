@@ -12,7 +12,7 @@ export class TaskMaster implements MasterSpec {
   displayName = 'Arbeitsauftrag'
 
   icon = {
-    name: 'task',
+    name: 'master-task',
     color: 'yellow-dark',
     size: 'large' as const,
 

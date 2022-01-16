@@ -21,7 +21,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'file-outline',
+    name: 'master-document',
     color: 'gray'
   },
   styleConfig: {

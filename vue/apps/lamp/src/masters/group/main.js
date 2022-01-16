@@ -19,7 +19,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'account-group',
+    name: 'master-group',
     color: 'orange'
   },
   styleConfig: {

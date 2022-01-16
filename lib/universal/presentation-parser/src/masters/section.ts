@@ -12,7 +12,7 @@ export class SectionMaster implements MasterSpec {
   displayName = 'Abschnitt'
 
   icon = {
-    name: 'file-tree',
+    name: 'master-section',
     color: 'orange-dark',
 
     /**

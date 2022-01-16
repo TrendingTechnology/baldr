@@ -14,7 +14,7 @@ export class ClozeMaster implements MasterSpec {
   displayName = 'Lückentext'
 
   icon = {
-    name: 'cloze',
+    name: 'master-cloze',
     color: 'blue',
 
     /**

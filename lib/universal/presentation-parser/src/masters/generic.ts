@@ -67,7 +67,7 @@ export class GenericMaster implements MasterSpec {
   displayName = 'Folie'
 
   icon = {
-    name: 'file-presentation-box',
+    name: 'master-generic',
     color: 'gray',
     showOnSlides: false,
 

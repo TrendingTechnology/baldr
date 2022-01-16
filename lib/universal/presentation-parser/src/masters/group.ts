@@ -12,7 +12,7 @@ export class GroupMaster implements MasterSpec {
   displayName = 'Gruppe'
 
   icon = {
-    name: 'account-group',
+    name: 'master-group',
     color: 'orange',
 
     /**

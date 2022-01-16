@@ -12,7 +12,7 @@ export class InstrumentMaster implements MasterSpec {
   displayName = 'Instrument'
 
   icon = {
-    name: 'instrument',
+    name: 'master-instrument',
     color: 'yellow',
 
     /**

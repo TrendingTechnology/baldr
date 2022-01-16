@@ -17,7 +17,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'file-tree',
+    name: 'master-section',
     color: 'orange-dark'
   },
   styleConfig: {

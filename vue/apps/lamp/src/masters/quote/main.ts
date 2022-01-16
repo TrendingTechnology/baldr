@@ -42,7 +42,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'quote',
+    name: 'master-quote',
     color: 'brown',
     size: 'large'
   },

@@ -31,7 +31,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'wikipedia',
+    name: 'master-wikipedia',
     color: 'black'
   },
   styleConfig: {

@@ -12,7 +12,7 @@ export class VideoMaster implements MasterSpec {
   displayName = 'Video'
 
   icon = {
-    name: 'video-vintage',
+    name: 'master-video',
     color: 'purple',
 
     /**

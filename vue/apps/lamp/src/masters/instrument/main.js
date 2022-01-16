@@ -19,7 +19,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'instrument',
+    name: 'master-instrument',
     color: 'yellow'
   },
   styleConfig: {

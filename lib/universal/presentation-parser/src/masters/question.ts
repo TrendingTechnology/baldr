@@ -255,7 +255,7 @@ export class QuestionMaster implements MasterSpec {
   displayName = 'Frage'
 
   icon = {
-    name: 'question',
+    name: 'master-question',
     color: 'yellow',
     size: 'large' as const,
 

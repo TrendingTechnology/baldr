@@ -6,7 +6,7 @@
     slide-preview-fullscreen
   "
   >
-    <plain-icon name="document-camera" />
+    <plain-icon name="master-camera" />
   </div>
 </template>
 
