@@ -53,7 +53,7 @@
 
     <playable-selector mime-type="video" />
 
-    <controll-buttons />
+    <control-buttons />
 
     <dl>
       <dt>enqueuedUri:</dt>
@@ -69,7 +69,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { ControllButtons, player } from '@bldr/player'
+import { ControlButtons, player } from '@bldr/player'
 
 import PlayableSelector from './PlayableSelector.vue'
 
@@ -82,7 +82,7 @@ export let state: {
   pausedUri?: string
 }
 
-@Component({ components: { PlayableSelector, ControllButtons } })
+@Component({ components: { PlayableSelector, ControlButtons } })
 export default class App extends Vue {
   enqueuedUri!: string
 

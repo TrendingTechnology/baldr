@@ -51,7 +51,7 @@ import { Playable, player } from '../plugin'
     ClickableIcon
   }
 })
-export default class ControllButtons extends Vue {
+export default class ControlButtons extends Vue {
   enqueuedUri?: string
   loadedUri?: string
 
@@ -63,15 +63,18 @@ export default class ControllButtons extends Vue {
     return this.enqueuedUri != null
   }
 
-  private get isLoadedPlaying (): boolean {
-    return this.loaded != null && this.loaded.isPlaying
-  }
-
   private get loaded (): Playable | undefined {
     if (this.loadedUri == null) {
       return
     }
     return player.getPlayable(this.loadedUri)
+  }
+
+  private get isLoadedPlaying (): boolean {
+    if (this.loaded == null) {
+      return false
+    }
+    return this.loaded.isPlaying
   }
 
   public backward (): void {
@@ -98,8 +101,8 @@ export default class ControllButtons extends Vue {
     return !this.isEnqueued
   }
 
-  public stop (): void {
-    player.stop()
+   public async stop (): Promise<void> {
+    await player.stop()
   }
 
   public get isStopDisabled (): boolean {
@@ -123,8 +126,3 @@ export default class ControllButtons extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.vc_controll_buttons {
-}
-</style>
