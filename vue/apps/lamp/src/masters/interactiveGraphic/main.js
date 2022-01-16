@@ -30,7 +30,7 @@ export default validateMasterSpec({
     ...mapStepFieldDefintionsToProps(['selector', 'subset'])
   },
   icon: {
-    name: 'image',
+    name: 'master-interactive-graphic',
     color: 'blue',
     showOnSlides: false
   },

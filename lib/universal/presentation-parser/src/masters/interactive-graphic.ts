@@ -17,7 +17,7 @@ export class InteractiveGraphicMaster implements MasterSpec {
   description = 'Diese Master-Folie ist dazu gedacht, mit *Inkscape* erstellte SVG-Dateien darzustellen.'
 
   icon = {
-    name: 'image',
+    name: 'master-interactive-graphic',
     color: 'blue',
     showOnSlides: false,
 

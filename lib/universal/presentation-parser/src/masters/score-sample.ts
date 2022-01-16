@@ -13,7 +13,7 @@ export class ScoreSampleMaster implements MasterSpec {
   displayName = 'Notenbeispiel'
 
   icon = {
-    name: 'file-audio',
+    name: 'master-score-sample',
     color: 'black',
 
     /**

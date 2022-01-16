@@ -28,7 +28,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'music',
+    name: 'master-sample-list',
     color: 'red'
   },
   styleConfig: {

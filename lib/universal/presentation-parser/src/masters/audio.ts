@@ -27,7 +27,7 @@ export class AudioMaster implements MasterSpec {
   displayName = 'Hörbeispiel'
 
   icon = {
-    name: 'music',
+    name: 'master-audio',
     color: 'brown',
 
     /**

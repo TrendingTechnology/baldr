@@ -21,7 +21,7 @@
     <div ref="videoWrapper" />
 
     <div v-if="!videoElement" class="no-stream">
-      <plain-icon v-if="!cameraNotFound" name="document-camera" />
+      <plain-icon v-if="!cameraNotFound" name="master-camera" />
       <plain-icon v-if="cameraNotFound" name="document-camera-off" />
     </div>
   </div>

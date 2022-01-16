@@ -63,7 +63,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'music',
+    name: 'master-audio',
     color: 'brown'
   },
   styleConfig: {

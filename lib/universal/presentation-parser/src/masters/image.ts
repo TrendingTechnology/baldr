@@ -15,7 +15,7 @@ export class ImageMaster implements MasterSpec {
   displayName = 'Bild'
 
   icon = {
-    name: 'image',
+    name: 'master-image',
     color: 'green',
 
     /**

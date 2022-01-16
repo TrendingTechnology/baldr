@@ -18,7 +18,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'pencil',
+    name: 'master-note',
     color: 'blue'
   },
   styleConfig: {

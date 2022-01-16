@@ -35,7 +35,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'image',
+    name: 'master-image',
     color: 'green'
   },
   styleConfig: {

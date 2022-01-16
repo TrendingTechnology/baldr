@@ -18,7 +18,7 @@ export default validateMasterSpec({
     }
   },
   icon: {
-    name: 'file-audio',
+    name: 'master-song',
     color: 'green'
   },
   styleConfig: {

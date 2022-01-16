@@ -21,7 +21,7 @@ export class SampleListMaster implements MasterSpec {
   displayName = 'Audio-Ausschnitte'
 
   icon = {
-    name: 'music',
+    name: 'master-sample-list',
     color: 'red',
 
     /**

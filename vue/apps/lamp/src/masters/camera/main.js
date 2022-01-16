@@ -101,7 +101,7 @@ export default validateMasterSpec({
   name: 'camera',
   title: 'Dokumentenkamera',
   icon: {
-    name: 'document-camera',
+    name: 'master-camera',
     color: 'red'
   },
   styleConfig: {

@@ -6,7 +6,7 @@ export class CameraMaster implements MasterSpec {
   displayName = 'Dokumentenkamera'
 
   icon = {
-    name: 'document-camera',
+    name: 'master-camera',
     color: 'red',
 
     /**

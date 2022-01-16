@@ -12,7 +12,7 @@ export class EditorMaster implements MasterSpec {
   displayName = 'Hefteintrag'
 
   icon = {
-    name: 'pencil',
+    name: 'master-editor',
     color: 'blue',
 
     /**

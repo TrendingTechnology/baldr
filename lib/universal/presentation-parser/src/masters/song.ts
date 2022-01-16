@@ -12,7 +12,7 @@ export class SongMaster implements MasterSpec {
   displayName = 'Lied'
 
   icon = {
-    name: 'file-audio',
+    name: 'master-song',
     color: 'green',
 
     /**

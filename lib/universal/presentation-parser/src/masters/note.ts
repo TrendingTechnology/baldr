@@ -13,7 +13,7 @@ export class NoteMaster implements MasterSpec {
   displayName = 'Hefteintrag'
 
   icon = {
-    name: 'pencil',
+    name: 'master-note',
     color: 'blue',
 
     /**

@@ -24,7 +24,7 @@ export default validateMasterSpec({
     ...mapStepFieldDefintionsToProps(['mode', 'subset'])
   },
   icon: {
-    name: 'pencil',
+    name: 'master-editor',
     color: 'blue'
   },
   styleConfig: {
