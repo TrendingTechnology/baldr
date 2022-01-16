@@ -1,6 +1,6 @@
 <template>
   <div class="vc_slides_preview_play_button valign-wrapper">
-    <plain-icon class="valign-center font-shadow" name="play" />
+    <plain-icon class="valign-center font-shadow" name="player-play" />
   </div>
 </template>
 
