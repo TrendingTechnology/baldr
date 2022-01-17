@@ -12,7 +12,7 @@ import {
   convertToString,
   deepCopy,
   RawDataObject
-} from '@bldr/core-browser'
+} from '@bldr/universal-utils'
 import { shortenText } from '@bldr/string-format'
 import { convertMarkdownToHtml } from '@bldr/markdown-to-html'
 import { masters } from '@/masters.js'

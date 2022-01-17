@@ -34,7 +34,7 @@
     "@bldr/audio-metadata": "*",
     "@bldr/cli-utils": "*",
     "@bldr/config": "*",
-    "@bldr/core-node": "*",
+    "@bldr/node-utils": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/icon-font-generator": "*",
     "@bldr/log": "*",

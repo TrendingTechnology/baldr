@@ -22,8 +22,8 @@
   "main": "background.js",
   "dependencies": {
     "@bldr/components-collection": "*",
-    "@bldr/core-browser": "*",
-    "@bldr/core-node": "*",
+    "@bldr/universal-utils": "*",
+    "@bldr/node-utils": "*",
     "@bldr/dynamic-select": "*",
     "@bldr/icons": "*",
     "@bldr/modal-dialog": "*",

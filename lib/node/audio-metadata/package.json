@@ -37,7 +37,7 @@
   "type": "module",
   "devDependencies": {
     "@bldr/config": "*",
-    "@bldr/core-node": "*",
+    "@bldr/node-utils": "*",
     "@types/node": "16.10.3"
   }
 }

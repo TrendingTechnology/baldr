@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/core-node",
-  "version": "0.2.2",
-  "description": "High level classes and functions used by the node packages.",
+  "name": "@bldr/node-utils",
+  "version": "0.1.0",
+  "description": "Utility functions for the node packages.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

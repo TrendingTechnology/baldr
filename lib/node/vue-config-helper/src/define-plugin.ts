@@ -1,6 +1,6 @@
 import webpack, { DefinePlugin as _DefinePlugin } from 'webpack'
 
-import { getGitHead } from '@bldr/core-node'
+import { getGitHead } from '@bldr/node-utils'
 import { getConfig } from '@bldr/config'
 
 const { DefinePlugin } = webpack

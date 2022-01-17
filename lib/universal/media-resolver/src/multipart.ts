@@ -1,5 +1,5 @@
 import { Asset, Identifiable } from './asset'
-import { buildSubsetIndexes } from '@bldr/core-browser'
+import { buildSubsetIndexes } from '@bldr/universal-utils'
 import { MediaDataTypes } from '@bldr/type-definitions'
 
 /**

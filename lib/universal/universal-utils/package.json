@@ -1,6 +1,6 @@
 {
-  "name": "@bldr/core-browser",
-  "version": "0.11.3",
+  "name": "@bldr/universal-utils",
+  "version": "0.1.0",
   "description": "Base core functionality for the code running in the browser without node (typescript version).",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {

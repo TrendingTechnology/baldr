@@ -1,5 +1,5 @@
 import childProcess from 'child_process'
-import { msleep } from '@bldr/core-browser'
+import { msleep } from '@bldr/universal-utils'
 
 /**
  * Restart the systemd service baldr_api.service and sleep some time

@@ -11,7 +11,7 @@
 import WebSocket from 'ws';
 // Globals.
 import { getConfig } from '@bldr/config';
-import { isModuleMain } from '@bldr/core-node';
+import { isModuleMain } from '@bldr/node-utils';
 const config = getConfig();
 /**
  * Launch the web socket server.

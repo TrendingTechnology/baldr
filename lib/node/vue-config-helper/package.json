@@ -27,7 +27,7 @@
   "main": "dist/main.js",
   "type": "module",
   "dependencies": {
-    "@bldr/core-node": "*",
+    "@bldr/node-utils": "*",
     "@bldr/presentation-parser": "*",
     "@bldr/themes": "*",
     "webpack-bundle-analyzer": "4.5.0",

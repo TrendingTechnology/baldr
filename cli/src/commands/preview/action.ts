@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import * as log from '@bldr/log'
 import { readYamlFile } from '@bldr/file-reader-writer'
-import { fetchFile } from '@bldr/core-node'
+import { fetchFile } from '@bldr/node-utils'
 import { CommandRunner } from '@bldr/cli-utils'
 import { mimeTypeManager, walk } from '@bldr/media-manager'
 import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'

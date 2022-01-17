@@ -9,7 +9,7 @@
 import { convertNestedMarkdownToHtml } from '@bldr/markdown-to-html'
 import inlineMarkup from './lib/inline-markup'
 import store from './store/index.js'
-import { convertToString } from '@bldr/core-browser'
+import { convertToString } from '@bldr/universal-utils'
 import { MediaUri } from '@bldr/client-media-models'
 
 /**

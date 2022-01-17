@@ -9,7 +9,7 @@ import fetch from 'node-fetch'
 import wikibaseSdk from 'wikibase-sdk'
 
 // Project packages.
-import { fetchFile } from '@bldr/core-node'
+import { fetchFile } from '@bldr/node-utils'
 import { MediaCategoriesTypes, MediaDataTypes } from '@bldr/type-definitions'
 
 const wikibase = wikibaseSdk({

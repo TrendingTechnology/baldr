@@ -2,7 +2,7 @@
  * Low level functions used by the node packages. Some helper
  * functions etc.
  *
- * @module @bldr/core-node
+ * @module @bldr/node-utils
  */
 
 import childProcess from 'child_process'

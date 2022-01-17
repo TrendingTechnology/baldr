@@ -1,4 +1,4 @@
-import { sortObjectsByProperty } from '@bldr/core-browser'
+import { sortObjectsByProperty } from '@bldr/universal-utils'
 
 import { Song, DynamicSelectSong } from './song'
 

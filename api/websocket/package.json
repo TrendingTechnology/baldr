@@ -26,7 +26,7 @@
   "type": "module",
   "dependencies": {
     "@bldr/config": "*",
-    "@bldr/core-node": "*",
+    "@bldr/node-utils": "*",
     "ws": "7.4.0"
   },
   "devDependencies": {

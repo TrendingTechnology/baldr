@@ -1,9 +1,9 @@
 import path from 'path'
 
-import { getPdfPageCount } from '@bldr/core-node'
+import { getPdfPageCount } from '@bldr/node-utils'
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { readYamlFile } from '@bldr/file-reader-writer'
-import { getBasename } from '@bldr/core-node'
+import { getBasename } from '@bldr/node-utils'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()

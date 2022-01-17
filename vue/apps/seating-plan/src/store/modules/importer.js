@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 /* globals localStorage config */
 
-import { formatToLocalDateTime } from '@bldr/core-browser'
+import { formatToLocalDateTime } from '@bldr/universal-utils'
 import { makeHttpRequestInstance } from '@bldr/http-request'
 
 const httpRequestLocal = makeHttpRequestInstance(

@@ -2,7 +2,7 @@ import { MediaCategoriesTypes } from '@bldr/type-definitions'
 
 import path from 'path'
 
-import { getPdfPageCount } from '@bldr/core-node'
+import { getPdfPageCount } from '@bldr/node-utils'
 
 /**
  * The meta data type specification “worksheet”.

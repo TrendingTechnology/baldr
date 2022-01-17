@@ -7,7 +7,7 @@
  * @module @bldr/lamp/masters/audio
  */
 
-import { ObjectPropertyPicker } from '@bldr/core-browser'
+import { ObjectPropertyPicker } from '@bldr/universal-utils'
 
 import { validateMasterSpec } from '../../lib/masters'
 export default validateMasterSpec({

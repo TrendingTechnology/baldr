@@ -1,7 +1,7 @@
 import path from 'path';
 import childProcess from 'child_process';
 import * as log from '@bldr/log';
-import { findParentFile } from '@bldr/core-node';
+import { findParentFile } from '@bldr/node-utils';
 /**
  * @param filePath - A file inside a javascript / node package.
  */

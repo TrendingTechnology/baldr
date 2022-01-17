@@ -20,7 +20,7 @@
     "@bldr/cli-utils": "*",
     "@bldr/config": "*",
     "@bldr/file-reader-writer": "*",
-    "@bldr/core-browser": "*",
+    "@bldr/universal-utils": "*",
     "csv-parser": "3.0.0"
   },
   "devDependencies": {

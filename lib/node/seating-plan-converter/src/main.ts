@@ -9,7 +9,7 @@ import csv from 'csv-parser'
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 import { writeFile } from '@bldr/file-reader-writer'
-import { getFormatedSchoolYear } from '@bldr/core-browser'
+import { getFormatedSchoolYear } from '@bldr/universal-utils'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()

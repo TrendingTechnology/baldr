@@ -1,4 +1,4 @@
-import { deepCopy, convertToString } from '@bldr/core-browser'
+import { deepCopy, convertToString } from '@bldr/universal-utils'
 
 /**
  * A container class to store a deep copy of an object. This class can be

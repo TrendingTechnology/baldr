@@ -4,7 +4,7 @@
  * Run `npm run build` to build the node version of this code. The node
  * version uses the CommonJS module system instead of the ES module system.
  *
- * @module @bldr/core-browser
+ * @module @bldr/universal-utils
  */
 export * from './object-manipulation';
 /**

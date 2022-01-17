@@ -7,7 +7,7 @@ import fs from 'fs'
 
 // Project packages.
 
-import { untildify, findParentFile } from '@bldr/core-node'
+import { untildify, findParentFile } from '@bldr/node-utils'
 import { getConfig } from '@bldr/config'
 
 const config = getConfig()

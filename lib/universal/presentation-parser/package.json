@@ -31,7 +31,7 @@
   "dependencies": {
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
-    "@bldr/core-browser": "*",
+    "@bldr/universal-utils": "*",
     "@bldr/dom-manipulator": "*",
     "@bldr/log": "*",
     "@bldr/markdown-to-html": "*",

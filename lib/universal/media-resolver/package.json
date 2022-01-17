@@ -32,7 +32,7 @@
     "@bldr/api-wrapper": "*",
     "@bldr/client-media-models": "*",
     "@bldr/config": "*",
-    "@bldr/core-browser": "*",
+    "@bldr/universal-utils": "*",
     "@bldr/http-request": "*",
     "@bldr/string-format": "*",
     "@bldr/type-definitions": "*"

@@ -13,7 +13,7 @@ import { webfont } from 'webfont'
 
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
-import { createTmpDir } from '@bldr/core-node'
+import { createTmpDir } from '@bldr/node-utils'
 import { readJsonFile, writeJsonFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 

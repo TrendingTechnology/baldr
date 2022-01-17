@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { isModuleMain } from '@bldr/core-node';
+import { isModuleMain } from '@bldr/node-utils';
 import { startRestApi } from './api';
 export { startRestApi as start } from './api';
 export { default as openArchivesInFileManager } from './operations/open-archives-in-file-manager';

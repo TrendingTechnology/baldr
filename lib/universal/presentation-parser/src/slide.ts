@@ -1,4 +1,4 @@
-import { convertToString } from '@bldr/core-browser'
+import { convertToString } from '@bldr/universal-utils'
 import { shortenText } from '@bldr/string-format'
 import * as log from '@bldr/log'
 import { WrappedUriList } from '@bldr/client-media-models'

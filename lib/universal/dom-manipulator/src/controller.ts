@@ -1,4 +1,4 @@
-import { buildSubsetIndexes } from '@bldr/core-browser'
+import { buildSubsetIndexes } from '@bldr/universal-utils'
 
 import { StepElement } from './step'
 

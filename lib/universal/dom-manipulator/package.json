@@ -29,7 +29,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/core-browser": "*",
+    "@bldr/universal-utils": "*",
     "@bldr/universal-dom": "*"
   },
   "devDependencies": {

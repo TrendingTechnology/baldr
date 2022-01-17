@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/image
  */
 import { splitHtmlIntoChunks } from '@bldr/dom-manipulator'
-import { ObjectPropertyPicker } from '@bldr/core-browser'
+import { ObjectPropertyPicker } from '@bldr/universal-utils'
 import { validateMasterSpec } from '../../lib/masters'
 
 const DESCRIPTION_TEASER_LENGTH = 200

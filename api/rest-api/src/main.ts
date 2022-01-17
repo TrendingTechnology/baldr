@@ -22,7 +22,7 @@
  */
 import express from 'express'
 
-import { isModuleMain } from '@bldr/core-node'
+import { isModuleMain } from '@bldr/node-utils'
 
 import { startRestApi } from './api'
 

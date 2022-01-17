@@ -1,5 +1,5 @@
 import { operations } from '@bldr/media-manager'
-import { fetchFile } from '@bldr/core-node'
+import { fetchFile } from '@bldr/node-utils'
 
 import { MediaDataTypes } from '@bldr/type-definitions'
 

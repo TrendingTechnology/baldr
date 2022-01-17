@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/core-node": "*",
+    "@bldr/node-utils": "*",
     "@bldr/media-categories": "*",
     "node-fetch": "2.6.1",
     "wikibase-sdk": "7.9.1"

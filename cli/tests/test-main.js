@@ -5,7 +5,7 @@ import childProcess from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
-import { createTmpDir, getDirname } from '@bldr/core-node'
+import { createTmpDir, getDirname } from '@bldr/node-utils'
 
 function exec (...args) {
   const p = childProcess.spawnSync('baldr', args, {

@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 // Project packages.
-import { checkExecutables, isModuleMain } from '@bldr/core-node'
+import { checkExecutables, isModuleMain } from '@bldr/node-utils'
 import { CliTypes } from '@bldr/type-definitions'
 
 import * as log from '@bldr/log'

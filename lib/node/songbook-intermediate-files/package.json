@@ -16,7 +16,7 @@
   "main": "dist/main.js",
   "dependencies": {
     "@bldr/config": "*",
-    "@bldr/core-browser": "*",
+    "@bldr/universal-utils": "*",
     "@bldr/file-reader-writer": "*",
     "@bldr/log": "*",
     "@bldr/songbook-core": "*",

@@ -11,7 +11,7 @@
 
 import { MediaCategoriesTypes } from '@bldr/type-definitions'
 import { Configuration } from '@bldr/config'
-import { deepCopy } from '@bldr/core-browser'
+import { deepCopy } from '@bldr/universal-utils'
 
 import { cloze } from './specs/cloze'
 import { composition } from './specs/composition'

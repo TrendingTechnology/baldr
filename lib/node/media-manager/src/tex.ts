@@ -9,7 +9,7 @@ import { readFile, writeFile } from '@bldr/file-reader-writer'
 import * as tex from '@bldr/tex-templates'
 import * as log from '@bldr/log'
 import { convertToYaml } from '@bldr/yaml'
-import { getPdfPageCount } from '@bldr/core-node'
+import { getPdfPageCount } from '@bldr/node-utils'
 
 // Local imports.
 import { operations } from './main'
