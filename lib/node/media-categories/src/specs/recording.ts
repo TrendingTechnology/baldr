@@ -30,6 +30,9 @@ export const recording: MediaCategoriesTypes.Category = {
         fromClaim: 'P4404',
         format: 'formatSingleValue'
       },
+      format (value: string): string {
+        return value.replace(/\0/g, '')
+      },
       derive: async function ({ filePath }) {
         return getAudioMetadataValue('musicbrainz_recording_id', filePath)
       }

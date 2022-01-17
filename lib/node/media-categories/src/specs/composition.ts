@@ -76,6 +76,9 @@ export const composition: MediaCategoriesTypes.Category = {
         fromClaim: 'P435',
         format: 'formatSingleValue'
       },
+      format (value: string): string {
+        return value.replace(/\0/g, '')
+      },
       derive: async function ({ filePath }) {
         return getAudioMetadataValue('musicbrainz_work_id', filePath)
       }
