@@ -6,7 +6,7 @@ import { readYamlFile } from '@bldr/file-reader-writer'
 import { fetchFile } from '@bldr/node-utils'
 import { CommandRunner } from '@bldr/cli-utils'
 import { mimeTypeManager, walk } from '@bldr/media-manager'
-import { collectAudioMetadata, extractCoverImage } from '@bldr/audio-metadata'
+import { extractCoverImage } from '@bldr/audio-metadata'
 
 interface Options {
   seconds: number
@@ -16,16 +16,39 @@ interface Options {
 const cmd = new CommandRunner({ verbose: true })
 
 const WAVEFORM_DEFAULT_HEIGHT = 500
-const WAVEFORM_DEFAULT_WIDTH = 1000
+
 // width = duration * factor
 const WAVEFORM_WIDTH_FACTOR = 20
 
-async function createAudioWaveForm (srcPath: string): Promise<void> {
-  const meta = await collectAudioMetadata(srcPath)
-  let width = `${WAVEFORM_DEFAULT_WIDTH}`
-  if (meta?.duration != null) {
-    width = (meta.duration * WAVEFORM_WIDTH_FACTOR).toFixed(0)
+function getDuration (srcPath: string): number {
+  const result = cmd.execSync([
+    'ffprobe',
+    '-v',
+    'quiet',
+    '-show_entries',
+    'format=duration',
+    '-of',
+    'default=noprint_wrappers=1:nokey=1',
+    srcPath
+  ])
+
+  if (result.stdout == null) {
+    throw new Error('Duration couldn’t be detected')
   }
+  return Number(result.stdout)
+}
+
+async function createAudioWaveForm (srcPath: string): Promise<void> {
+  const duration = getDuration(srcPath)
+  let widthFactor = WAVEFORM_WIDTH_FACTOR
+  if (duration < 5) {
+    widthFactor = WAVEFORM_WIDTH_FACTOR * 24
+  } else if (duration < 10) {
+    widthFactor = WAVEFORM_WIDTH_FACTOR * 12
+  } else if (duration < 60) {
+    widthFactor = WAVEFORM_WIDTH_FACTOR * 6
+  }
+  const width = (duration * widthFactor).toFixed(0)
   const destPath = `${srcPath}_waveform.png`
   cmd.execSync([
     'ffmpeg',
