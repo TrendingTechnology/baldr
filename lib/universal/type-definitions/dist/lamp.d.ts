@@ -275,84 +275,6 @@ interface MasterHooks {
      */
     plainTextFromProps?: (props: StringIndexedData) => string;
     /**
-     * Called when leaving a slide. This hook is triggered by the Vue lifecycle
-     * hook `beforeDestroy`.
-     *
-     * ```js
-     * export const default = {
-     *   hooks: {
-     *     leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
-     *     }
-     *   }
-     * }
-     *
-     * ```
-     */
-    leaveSlide?: (payload: OldAndNewPropsAndSlide) => void;
-    /**
-     * Called when entering a slide. This hook is only called on the public master
-     * component (the one that is visible for the audience), not on further
-     * secondary master components (for example the ad hoc slides or the future
-     * slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from within the Vuex store in the file  `store.js`.
-     *
-     * ```js
-     * export const default = {
-     *   hooks: {
-     *     enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
-     *     }
-     *   }
-     * }
-     * ```
-     */
-    enterSlide?: (payload: OldAndNewPropsAndSlide) => void;
-    /**
-     * Called when leaving a step. This hook is only called on the public master
-     * component (the one that is visible for the audience), not on further
-     * secondary master components (for example the ad hoc slides or the future
-     * slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-     *
-     * ```js
-     * export const default = {
-     *   hooks: {
-     *     leaveStep ({ oldStepNo, newStepNo }) {
-     *     }
-     *   }
-     * }
-     * ```
-     */
-    leaveStep?: (payload: OldAndNewStepNo) => void;
-    /**
-     * Called when entering a step. This hook is only called on the public
-     * master component (the one that is visible for the audience), not on
-     * further secondary master components (for example the ad hoc slides or the
-     * future slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-     *
-     * ```js
-     * export const default = {
-     *   hooks: {
-     *     enterStep ({ oldStepNo, newStepNo }) {
-     *       if (this.stepMode) {
-     *         this.domSteps.displayByNo({
-     *           oldStepNo,
-     *           stepNo: this.stepNo
-     *         })
-     *       }
-     *     }
-     *   }
-     * }
-     * ```
-     */
-    enterStep?: (payload: OldAndNewStepNo) => void;
-    /**
      * To allows access of the functions using the bracket notation with strings.
      */
     [key: string]: Function | any;
@@ -621,41 +543,6 @@ export interface Master {
      * Extract a plain text from the props (properties) of a slide.
      */
     plainTextFromProps: (props: any) => string;
-    /**
-     * Called when leaving a slide. This hook is triggered by the Vue lifecycle
-     * hook `beforeDestroy`.
-     */
-    leaveSlide: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
-    /**
-     * Called when entering a slide. This hook is only called on the public master
-     * component (the one that is visible for the audience), not on further
-     * secondary master components (for example the ad hoc slides or the future
-     * slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from within the Vuex store in the file  `store.js`.
-     */
-    enterSlide: (payload: OldAndNewPropsAndSlide, thisArg: ThisArg) => void;
-    /**
-     * Called when leaving a step. This hook is only called on the public master
-     * component (the one that is visible for the audience), not on further
-     * secondary master components (for example the ad hoc slides or the future
-     * slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-     */
-    leaveStep: (payload: OldAndNewStepNo, thisArg: ThisArg) => any;
-    /**
-     * Called when entering a step. This hook is only called on the public
-     * master component (the one that is visible for the audience), not on
-     * further secondary master components (for example the ad hoc slides or the
-     * future slide view in the speakers view.)
-     *
-     * - `this`: is the Vue instance of the current main master component.
-     * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
-     */
-    enterStep: (payload: OldAndNewStepNo, thisArg: ThisArg) => void;
     $commit: (commitName: string, payload: any) => void;
 }
 /**

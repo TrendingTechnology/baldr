@@ -9,8 +9,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { customStore } from '@/main'
-
 import masters from './masters.js'
 import media from './media.js'
 import nav from './nav.js'
@@ -164,26 +162,12 @@ const actions = {
       oldSlide = getters.slide
       commit('setSlideNoOld', oldSlide.no)
       oldProps = oldSlide.props
-      getters.slide.master.leaveSlide(
-        { oldSlide, oldProps, newSlide, newProps },
-        customStore.vueMasterInstanceCurrent
-      )
     }
 
     commit('setSlideNoCurrent', no)
-
-    newSlide.master.enterSlide(
-      { oldSlide, oldProps, newSlide, newProps },
-      customStore.vueMasterInstanceCurrent
-    )
   },
   setStepNoCurrent ({ commit }, { slide, stepNo }) {
-    const oldStepNo = slide.stepNo
-    const newStepNo = stepNo
-    const thisArg = customStore.vueMasterInstanceCurrent
-    slide.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slide, stepNo })
-    slide.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
   setSlideAndStepNoCurrent ({ dispatch, getters }, { slideNo, stepNo }) {
     if (!getters.slide || slideNo !== getters.slide.no) {

@@ -84,11 +84,3 @@ const vm = new Vue({
 }).$mount('#app')
 
 export default vm
-
-interface CustomStore {
-  vueMasterInstanceCurrent?: typeof vm
-}
-
-// To be able to store Vue component instances. If we store a vue component
-// instance in a vuex store there were many errors raised.
-export const customStore: CustomStore = {}

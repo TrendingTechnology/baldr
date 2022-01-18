@@ -59,12 +59,6 @@ export default validateMasterSpec({
     },
     plainTextFromProps (props) {
       return convertHtmlToPlainText(props.markup)
-    },
-    leaveSlide ({ oldProps }) {
-      const element = document.querySelector('.vc_editor_master')
-      if (element) {
-        oldProps.markup = element.innerHTML
-      }
     }
   }
 })

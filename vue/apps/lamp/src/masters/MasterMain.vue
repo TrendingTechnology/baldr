@@ -7,7 +7,6 @@ import { Prop, Watch } from 'vue-property-decorator'
 import { LampTypes } from '@bldr/type-definitions'
 
 import inlineMarkup from '../lib/inline-markup'
-import { customStore } from '../main'
 import Master from './Master.vue'
 
 interface NavigationNumbers {
@@ -31,7 +30,6 @@ export default class MasterMain extends Master {
 
   /**
    * By default all master components are marked as main components.
-   * Main master components register their `this` in the `customStore`
    */
   @Prop({
     type: Boolean,
@@ -114,17 +112,7 @@ export default class MasterMain extends Master {
       })
     }
 
-    if (this.isPublic) {
-      customStore.vueMasterInstanceCurrent = this
-    }
-
     inlineMarkup.makeReactive()
-  }
-
-  beforeDestroy (): void {
-    if (this.isPublic) {
-      customStore.vueMasterInstanceCurrent = null
-    }
   }
 }
 </script>
