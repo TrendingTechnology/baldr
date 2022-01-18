@@ -1,5 +1,9 @@
 <template>
-  <div class="vc_ad_hoc_editor main-app-fullscreen" b-ui-theme="default">
+  <!-- vc_slide_view to get correct sizes of the master icon -->
+  <div
+    class="vc_ad_hoc_editor vc_slide_view main-app-fullscreen"
+    b-ui-theme="default"
+  >
     <slide-main :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
@@ -26,7 +30,7 @@ export default class AdHocEditor extends Vue {
   data (): {
     slide: Slide
     slideNg: SlideNg
-    } {
+  } {
     const raw = { editor: { markup: 'Hefteintrag' } }
     return {
       slide: new Slide(raw),

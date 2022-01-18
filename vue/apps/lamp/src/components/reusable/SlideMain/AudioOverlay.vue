@@ -33,16 +33,3 @@ export default class AudioOverlay extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.vc_audio_overlay {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: none !important;
-
-  .vc_play_button {
-    font-size: 1.5em;
-  }
-}
-</style>

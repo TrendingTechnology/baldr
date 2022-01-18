@@ -70,17 +70,17 @@ export default class SlideView extends Vue {
 
   // src/media-client/src/PlayButton.vue
   .vc_play_button {
-    font-size: 2vw;
+    font-size: 4vw;
   }
 
   // src/media-client/src/HorizontalPlayButtons.vue
   .vc_horizontal_play_buttons {
-    height: 2vw;
+    height: 4vw;
 
     .manual-title {
-      font-size: 1.5vw;
-      padding: 0 0.5vw;
-      transform: translateY(-0.5vw);
+      font-size: 3vw;
+      padding: 0 1vw;
+      transform: translateY(-1.2vw);
     }
   }
 
@@ -95,11 +95,11 @@ export default class SlideView extends Vue {
     top: 1vmin;
 
     &.small {
-      font-size: 4vmin;
+      font-size: 8vmin;
     }
 
     &.large {
-      font-size: 8vmin;
+      font-size: 16vmin;
     }
   }
 }

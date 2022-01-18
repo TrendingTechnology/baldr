@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_ad_hoc_camera main-app-fullscreen" b-ui-theme="default">
+  <div class="vc_ad_hoc_camera main-app-fullscreen vc_slide_view" b-ui-theme="default">
     <slide-main :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
