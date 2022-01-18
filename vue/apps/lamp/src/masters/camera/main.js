@@ -3,7 +3,7 @@
  *
  * ```
  * sudo apt install v4l2loopback-dkms
- * sudo apt install apt install v4l2loopback-utils
+ * sudo apt install v4l2loopback-utils
  * sudo modprobe v4l2loopback devices=2
  * ```
  *
@@ -108,27 +108,5 @@ export default validateMasterSpec({
     darkMode: true,
     contentTheme: 'default',
     centerVertically: true
-  },
-  store: {
-    state: {
-      cameraNotFound: false,
-      videoElement: null
-    },
-    getters: {
-      cameraNotFound: state => {
-        return state.cameraNotFound
-      },
-      videoElement: state => {
-        return state.videoElement
-      }
-    },
-    mutations: {
-      setCameraNotFound (state, cameraNotFound) {
-        state.cameraNotFound = cameraNotFound
-      },
-      setVideoElement (state, videoElement) {
-        state.videoElement = videoElement
-      }
-    }
   }
 })

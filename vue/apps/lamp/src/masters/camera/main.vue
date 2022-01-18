@@ -21,8 +21,7 @@
     <div ref="videoWrapper" />
 
     <div v-if="!videoElement" class="no-stream">
-      <plain-icon v-if="!cameraNotFound" name="master-camera" />
-      <plain-icon v-if="cameraNotFound" name="document-camera-off" />
+      <plain-icon name="master-camera" />
     </div>
   </div>
 </template>
@@ -30,24 +29,18 @@
 <script lang="ts">
 /* eslint-disable indent, no-undef */
 import Component from 'vue-class-component'
-import { createNamespacedHelpers } from 'vuex'
 import MasterMain from '../MasterMain.vue'
-
-const { mapGetters } = createNamespacedHelpers('lamp/masters/camera')
 
 interface SimpleMediaDeviceInfo {
   titel: string
   deviceId: string
 }
 
-@Component({
-  computed: mapGetters(['cameraNotFound', 'videoElement'])
-})
+let videoElement: undefined | HTMLVideoElement
+
+@Component
 export default class CameraMasterMain extends MasterMain {
   masterName = 'camera'
-  videoElement!: HTMLVideoElement
-
-  cameraNotFound!: boolean
 
   data (): {
     devices: SimpleMediaDeviceInfo[]
@@ -61,6 +54,10 @@ export default class CameraMasterMain extends MasterMain {
 
   $refs!: {
     videoWrapper: HTMLDivElement
+  }
+
+  get videoElement (): HTMLVideoElement | undefined {
+    return videoElement
   }
 
   /**
@@ -138,13 +135,13 @@ export default class CameraMasterMain extends MasterMain {
   }
 
   stopStreamedVideo (): void {
-    if (this.videoElement?.srcObject != null) {
-      const stream = this.videoElement.srcObject as MediaStream
+    if (videoElement?.srcObject != null) {
+      const stream = videoElement.srcObject as MediaStream
       const tracks = stream.getTracks()
       tracks.forEach(function (track: MediaStreamTrack): void {
         track.stop()
       })
-      this.videoElement.srcObject = null
+      videoElement.srcObject = null
     }
   }
 
@@ -156,18 +153,17 @@ export default class CameraMasterMain extends MasterMain {
 
     if (stream != null) {
       this.stopStreamedVideo()
-      const videoElement = document.createElement('video')
+      videoElement = document.createElement('video')
       videoElement.autoplay = true
       videoElement.srcObject = stream
-      this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
       this.$refs.videoWrapper.appendChild(videoElement)
     }
   }
 
   reuseVideoElement (): void {
-    if (this.videoElement != null && this.$refs.videoWrapper != null) {
-      this.videoElement.play()
-      this.$refs.videoWrapper.appendChild(this.videoElement)
+    if (videoElement != null && this.$refs.videoWrapper != null) {
+      videoElement.play()
+      this.$refs.videoWrapper.appendChild(videoElement)
     }
   }
 
