@@ -23,6 +23,9 @@ import * as assetOperations from './asset'
 let mediaServerUpdated: boolean = false
 
 function validateYamlOneFile (filePath: string): void {
+  if (!fs.existsSync(filePath)) {
+    return
+  }
   try {
     convertFromYamlRaw(fs.readFileSync(filePath, 'utf8'))
     log.debug('Valid YAML file: %s', [filePath])
@@ -38,17 +41,30 @@ function validateYamlOneFile (filePath: string): void {
 }
 
 async function normalizeAsset (filePath: string): Promise<void> {
+  if (!fs.existsSync(filePath)) {
+    return
+  }
   const yamlFile = `${filePath}.yml`
   if (!fs.existsSync(yamlFile)) {
     await assetOperations.initializeMetaYaml(filePath)
   } else {
     await assetOperations.normalizeMediaAsset(filePath)
   }
-  txtOperations.fixTypography(yamlFile)
+  if (!fs.existsSync(filePath)) {
+    return
+  }
   assetOperations.renameByRef(filePath)
+
+  if (!fs.existsSync(yamlFile)) {
+    return
+  }
+  txtOperations.fixTypography(yamlFile)
 }
 
 function normalizeEveryFile (filePath: string): void {
+  if (!fs.existsSync(filePath)) {
+    return
+  }
   const extension = getExtension(filePath)
   if (extension != null && extension === 'txt') {
     txtOperations.fixTypography(filePath)
@@ -61,6 +77,9 @@ function normalizeEveryFile (filePath: string): void {
 }
 
 async function normalizePresentation (filePath: string): Promise<void> {
+  if (!fs.existsSync(filePath)) {
+    return
+  }
   presentationOperations.normalizePresentationFile(filePath)
   log.verbose('Generate presentation automatically on path %s:', [filePath])
   await presentationOperations.generateAutomaticPresentation(filePath)
