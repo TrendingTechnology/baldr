@@ -91,6 +91,16 @@ body {
   padding: 0.7em;
 }
 
+.gradually-appear {
+  opacity: 0;
+  transition: 1s;
+
+  &:hover {
+    opacity: 1;
+    transition: 1s;
+  }
+}
+
 /*********************************************************************
  * Main components
  ********************************************************************/

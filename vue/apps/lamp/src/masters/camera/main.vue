@@ -1,6 +1,6 @@
 <template>
   <div class="vc_camera_master">
-    <div class="device-selection-area">
+    <div class="device-selection-area gradually-appear">
       <p>
         <button @click="findDevices">aktualisieren</button>
       </p>
@@ -194,7 +194,7 @@ export default class CameraMasterMain extends MasterMain {
     text-align: center;
   }
 
-  .baldr-icon_document-camera,
+  .baldr-icon_master-camera,
   .baldr-icon_document-camera-off {
     font-size: 25em;
   }
@@ -203,16 +203,11 @@ export default class CameraMasterMain extends MasterMain {
     background-color: $white;
     color: $black;
     margin: 0.5em;
-    opacity: 0;
     padding: 1em;
     position: absolute;
     right: 0;
     top: 0;
     z-index: 1;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 }
 </style>
