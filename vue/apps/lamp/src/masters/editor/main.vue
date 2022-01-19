@@ -66,6 +66,27 @@ export default class EditorMasterMain extends MasterMain {
       }
     })
   }
+
+  afterSlideNoChange (): void {
+    for (const element of document.querySelectorAll(
+      '.vc_editor_master [contenteditable]'
+    )) {
+      element.addEventListener('focus', event => {
+        const element = event.target
+        if (element.innerHTML === placeholderTag) {
+          element.innerHTML = ''
+        }
+      })
+    }
+    for (const element of document.querySelectorAll(
+      '.vc_editor_master ul[contenteditable] li'
+    )) {
+      element.addEventListener('click', event => {
+        const element = event.target
+        element.innerHTML = ''
+      })
+    }
+  }
 }
 </script>
 

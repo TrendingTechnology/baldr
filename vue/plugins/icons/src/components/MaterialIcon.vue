@@ -44,7 +44,7 @@ export default class MaterialIcon extends ColorIcon {
     classes.push(`baldr-icon_outline_${this.outline}`)
     if (this.outline !== 'icon') {
       classes.push(`${this.color}`)
-      classes.push(`text-white`)
+      classes.push(`icon-text-white`)
     } else {
       classes.push(`text-${this.color}`)
     }
@@ -100,6 +100,11 @@ $outline-padding: 0.25em;
 
 .baldr-icon {
   display: inline-block;
+
+  // allways white
+  &.icon-text-white {
+    color: $white;
+  }
 
   &.not-vanish-icon {
     opacity: 1;
