@@ -38,3 +38,11 @@ export default class IconGroup extends Vue {
   }
 }
 </script>
+
+
+<style lang="scss">
+.vc_icon_group {
+  border-top: solid 3px;
+  margin-top: 5em;
+}
+</style>

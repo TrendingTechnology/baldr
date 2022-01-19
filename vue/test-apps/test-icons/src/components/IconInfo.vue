@@ -1,7 +1,7 @@
 <template>
   <section class="vc_icon_info">
     <plain-icon :name="name" />
-    <span class="description">{{ name }}</span>
+    <span class="icon-name">{{ name }}</span>
     <p v-if="def.materialName">materialName: {{ def.materialName }}</p>
     <p v-if="def.fileName">fileName: {{ def.fileName }}</p>
     <p v-if="def.description">description: {{ def.description }}</p>
@@ -25,3 +25,20 @@ export default class IconInfo extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.vc_icon_info {
+  border: solid 1px;
+  break-inside: avoid-column;
+  padding: 1em;
+  position: relative;
+
+  .icon-name {
+    font-size: 2em;
+    font-weight: bold;
+    position: absolute;
+    right: 3%;
+    top: 5%;
+  }
+}
+</style>
