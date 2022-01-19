@@ -1,14 +1,6 @@
 <template>
   <div class="vc_all_icons">
-    <h1>All Icons</h1>
-
-    <div class="all-icons">
-      <icon-info
-        v-for="name in iconNames"
-        :key="name"
-        :name="name"
-      />
-    </div>
+    <icon-group v-for="name in groupNames" :key="name" :group-name="name" />
   </div>
 </template>
 
@@ -16,12 +8,18 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import IconInfo from './IconInfo.vue'
+import { groupedIcons } from '../app'
 
-@Component({ components: { IconInfo } })
+import IconGroup from './IconGroup.vue'
+
+@Component({ components: { IconGroup } })
 export default class AllIcons extends Vue {
-  get iconNames () {
-    return Object.keys(config.iconFont.iconMapping).sort()
+  get groupNames () {
+    const groupNames = Object.keys(groupedIcons).filter((value) => {
+      return value !== 'other'
+    }).sort()
+    groupNames.push('other')
+    return groupNames
   }
 }
 </script>

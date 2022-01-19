@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <material-icon :name="name" />
+  <section class="vc_icon_info">
+    <plain-icon :name="name" />
     <span class="description">{{ name }}</span>
     <p v-if="def.materialName">materialName: {{ def.materialName }}</p>
     <p v-if="def.fileName">fileName: {{ def.fileName }}</p>
@@ -13,11 +13,10 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { MaterialIcon } from '@bldr/icons'
 import { IconTypes } from '@bldr/type-definitions'
 
-@Component({ components: { MaterialIcon } })
-export default class AllIcons extends Vue {
+@Component
+export default class IconInfo extends Vue {
   @Prop()
   name!: string
 
