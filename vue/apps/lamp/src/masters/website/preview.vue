@@ -14,7 +14,6 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-
 import MasterPreview from '../MasterPreview.vue'
 
 @Component

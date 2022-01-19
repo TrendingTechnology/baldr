@@ -171,6 +171,10 @@ export interface Configuration {
    */
   twoLetterAbbreviations: { [abbreviation: string]: string }
 
+  presentation: {
+    preferredDocumentCameraRegexp: string
+  }
+
   /**
    * Some configuration informations for the seating plan converter.
    */

@@ -38,6 +38,8 @@ interface SimpleMediaDeviceInfo {
 
 let videoElement: undefined | HTMLVideoElement
 
+let preferredCounter = 0
+
 @Component
 export default class CameraMasterMain extends MasterMain {
   masterName = 'camera'
@@ -75,12 +77,12 @@ export default class CameraMasterMain extends MasterMain {
    * ```
    */
   async findDevices (): Promise<SimpleMediaDeviceInfo[]> {
-    console.log('find devices')
+    console.log('Search for available document camera video devices.')
     const devices = await navigator.mediaDevices.enumerateDevices()
     const videoDevices: SimpleMediaDeviceInfo[] = []
     for (const device of devices) {
       if (device.kind === 'videoinput') {
-        console.log('found videoinput', devices)
+        console.log('Found document camera video input:', device)
         let titel: string
         if (device.label != null && device.label !== '') {
           titel = device.label
@@ -95,6 +97,34 @@ export default class CameraMasterMain extends MasterMain {
       this.devices = videoDevices
     }
     return videoDevices
+  }
+
+  async findedPreferredDevice (): Promise<void> {
+    if (preferredCounter > 9) {
+      console.log('Give up to find preferred document camera.')
+      preferredCounter = 0
+      return
+    }
+    if (videoElement != null) {
+      return
+    }
+    const regExp = new RegExp(config.presentation.preferredDocumentCameraRegexp)
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    for (const device of devices) {
+      if (device.kind === 'videoinput') {
+        if (device.label != null && device.label.match(regExp) != null) {
+          console.log('Found preferred document camera device', device)
+          await this.setVideoStream(device.deviceId)
+          return
+        }
+      }
+    }
+    console.log(
+      `Preferred document camera device not found (attempt no. ${preferredCounter +
+        1}). Try again ...`
+    )
+    preferredCounter++
+    setTimeout(this.findedPreferredDevice, 5000)
   }
 
   /**
@@ -170,6 +200,7 @@ export default class CameraMasterMain extends MasterMain {
   async mounted (): Promise<void> {
     this.reuseVideoElement()
     await this.findDevices()
+    await this.findedPreferredDevice()
   }
 }
 </script>
