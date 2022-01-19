@@ -25,6 +25,8 @@ export default class ClickableIcon extends PlainIcon {
 
 <style lang="scss">
 .vc_clickable_icon {
+  cursor: pointer;
+
   &:not(.disabled):hover {
     color: $red !important;
   }

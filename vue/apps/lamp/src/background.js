@@ -74,8 +74,8 @@ const disposeContextMenu = contextMenu()
 
 function createWindow () {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1600,
+    height: 900,
     autoHideMenuBar: false,
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION != null,

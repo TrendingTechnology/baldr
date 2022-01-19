@@ -100,7 +100,6 @@ $outline-padding: 0.25em;
 
 .baldr-icon {
   display: inline-block;
-  cursor: pointer;
 
   &.not-vanish-icon {
     opacity: 1;
