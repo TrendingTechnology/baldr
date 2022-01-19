@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+/* global lampVersion */
 import Vue from 'vue'
 import Component from 'vue-class-component'
 

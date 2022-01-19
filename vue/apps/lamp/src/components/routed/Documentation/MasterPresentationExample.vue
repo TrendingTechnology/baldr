@@ -7,6 +7,8 @@
 </template>
 
 <script lang="ts">
+/* global rawYamlExamples */
+
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'

@@ -52,7 +52,7 @@ export default class StartPage extends Vue {
     styleConfigurator.reset()
   }
 
-  update () {
+  update (): void {
     actions.update()
   }
 }

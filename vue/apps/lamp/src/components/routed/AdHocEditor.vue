@@ -30,7 +30,7 @@ export default class AdHocEditor extends Vue {
   data (): {
     slide: Slide
     slideNg: SlideNg
-  } {
+    } {
     const raw = { editor: { markup: 'Hefteintrag' } }
     return {
       slide: new Slide(raw),
