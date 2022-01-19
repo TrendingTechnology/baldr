@@ -28,6 +28,7 @@ export default class IconInfo extends Vue {
 
 <style lang="scss">
 .vc_icon_info {
+  margin-bottom: 2%;
   border: solid 1px;
   break-inside: avoid-column;
   padding: 1em;
