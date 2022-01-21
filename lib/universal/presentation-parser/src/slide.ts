@@ -75,6 +75,12 @@ export class Slide {
   fields?: FieldData
 
   /**
+   * Storage for complex objects derived from the fields (for example resolved
+   * assets, samples.)
+   */
+  data?: Record<string, any>
+
+  /**
    * URIs of media assets that must necessarily be present.
    */
   public readonly mediaUris: Set<string>

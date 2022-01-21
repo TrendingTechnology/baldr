@@ -3,6 +3,8 @@ declare type EditorFieldsRaw = string | EditorFieldsNormalized;
 interface EditorFieldsNormalized {
     markup: string;
 }
+export declare const PLACEHOLDER = "\u2026";
+export declare const DEFAULT_MARKUP: string;
 export declare class EditorMaster implements MasterSpec {
     name: string;
     displayName: string;

@@ -8,7 +8,7 @@
       <clickable-icon @click.native="formatUnderline" name="editor-underline" />
       <clickable-icon @click.native="formatList" name="editor-list" />
     </div>
-    <div v-html="markupSafe"></div>
+    <div ref="editedMarkup" v-html="markupSafe"></div>
   </div>
 </template>
 
@@ -26,14 +26,22 @@ const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 export default class EditorMasterMain extends MasterMain {
   masterName = 'editor'
 
+  $refs: {
+    editedMarkup: HTMLDivElement
+  }
+
   @Prop({
     type: String
   })
   markup: string
 
   get markupSafe (): string {
-    if (this.markup) {
+    if (this.slideNg.data?.editedMarkup != null) {
+      return this.slideNg.data.editedMarkup
+    } else if (this.markup != null) {
       return this.markup
+    } else if (this.slideNg.fields.markup != null) {
+      return this.slideNg.fields.markup
     } else {
       return defaultMarkup
     }
@@ -123,6 +131,13 @@ export default class EditorMasterMain extends MasterMain {
         element.innerHTML = ''
       })
     }
+  }
+
+  beforeDestroy (): void {
+    if (this.slideNg.data == null) {
+      this.slideNg.data = {}
+    }
+    this.slideNg.data.editedMarkup = this.$refs.editedMarkup.innerHTML
   }
 }
 </script>

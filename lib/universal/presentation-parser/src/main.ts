@@ -56,6 +56,7 @@ export { Slide } from './slide'
 export { masterCollection, getMaster } from './master-collection'
 
 // MModule = MasterModule
+export * as editorMModul from './masters/editor'
 export * as genericMModul from './masters/generic'
 export * as personMModul from './masters/person'
 export * as questionMModul from './masters/question'

@@ -46,6 +46,7 @@ export { mapStepFieldDefintionsToProps, FieldDefinition, FieldDefinitionCollecti
 export { Master } from './master-wrapper';
 export { Slide } from './slide';
 export { masterCollection, getMaster } from './master-collection';
+export * as editorMModul from './masters/editor';
 export * as genericMModul from './masters/generic';
 export * as personMModul from './masters/person';
 export * as questionMModul from './masters/question';

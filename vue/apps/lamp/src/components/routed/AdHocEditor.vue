@@ -12,10 +12,17 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import { Slide as SlideNg } from '@bldr/presentation-parser'
+import { Slide as SlideNg, editorMModul } from '@bldr/presentation-parser'
 
 import SlideMain from '@/components/reusable/SlideMain/index.vue'
 import { Slide } from '../../content-file.js'
+
+const raw = {
+  editor: { markup: '<div>' + editorMModul.PLACEHOLDER + '</div>' }
+}
+
+const slide = new Slide(raw)
+const slideNg = new SlideNg(raw, 1, 1)
 
 @Component({
   components: {
@@ -31,10 +38,9 @@ export default class AdHocEditor extends Vue {
     slide: Slide
     slideNg: SlideNg
     } {
-    const raw = { editor: { markup: 'Hefteintrag' } }
     return {
-      slide: new Slide(raw),
-      slideNg: new SlideNg(raw, 1, 1)
+      slide,
+      slideNg
     }
   }
 }

@@ -1,10 +1,14 @@
-import { MasterSpec, mapStepFieldDefintions } from '../master-specification'
+import { MasterSpec, mapStepFieldDefintions, convertMarkdownToHtml } from '../master-specification'
 
 type EditorFieldsRaw = string | EditorFieldsNormalized
 
 interface EditorFieldsNormalized {
   markup: string
 }
+
+export const PLACEHOLDER = '…'
+const PLACEHOLDER_TAG = `<span class="editor-placeholder">${PLACEHOLDER}</span>`
+export const DEFAULT_MARKUP = `<p contenteditable>${PLACEHOLDER_TAG}</p>`
 
 export class EditorMaster implements MasterSpec {
   name = 'editor'
@@ -39,6 +43,12 @@ export class EditorMaster implements MasterSpec {
         markup: fields
       }
     }
+
+    fields.markup = convertMarkdownToHtml(fields.markup)
+    fields.markup = fields.markup.replace(
+      />…</g,
+      ` contenteditable>${PLACEHOLDER_TAG}<`
+    )
     return fields
   }
 }
