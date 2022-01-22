@@ -1,22 +1,32 @@
 <template>
-  <div class="vc_display_controller">
-    <span class="link" @click="switchLayout">
-      {{ layoutCurrent.title }}
+  <div class="vc_display_controller gradually-appear">
+    <clickable-icon
+      v-if="layoutCurrent.id === 'list'"
+      @click.native="switchDetail"
+      name="slides-preview-detailed"
+      :disabled="detail"
+    />
+
+    <span @click="switchLayout">
+      <clickable-icon
+        v-if="layoutCurrent.id === 'list'"
+        name="slides-preview-grid"
+      />
+      <clickable-icon v-else name="slides-preview-list" />
     </span>
 
-    <span @click="switchDetail">
-      <span class="link" v-if="detail">kompakt </span>
-      <span class="link" v-if="!detail">ausführlich </span>
-    </span>
+    <clickable-icon
+      @click.native="switchHierarchical"
+      name="slides-preview-hierarchical"
+      :disabled="!hierarchical"
+    />
 
-    <span @click="switchHierarchical">
-      <span class="link" v-if="!hierarchical">flach </span>
-      <span class="link" v-if="hierarchical">hierarchisch </span>
-    </span>
+    <clickable-icon
+      name="slides-preview-enlarge"
+      @click.native="decreaseSize"
+    />
 
-    <span class="link" @click="decreaseSize">- </span>
-
-    <span class="link" @click="increaseSize">+ </span>
+    <clickable-icon name="slides-preview-shrink" @click.native="increaseSize" />
   </div>
 </template>
 
@@ -37,17 +47,33 @@ const { mapActions, mapGetters } = createNamespacedHelpers('lamp/preview')
     'switchHierarchical'
   ])
 })
-export default class DisplayController extends Vue {}
+export default class DisplayController extends Vue {
+  layoutCurrent!: {
+    id: 'grid' | 'list'
+    title: 'Gitter' | 'Liste'
+  }
+
+  detail!: boolean
+
+  hierarchical!: boolean
+
+  increaseSize!: () => void
+
+  decreaseSize!: () => void
+
+  switchDetail!: () => void
+
+  switchLayout!: () => void
+
+  switchHierarchical!: () => void
+}
 </script>
 
 <style lang="scss">
 .vc_display_controller {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9vw;
-
-  & > span {
-    margin: 0 0.2em;
-  }
+  position: absolute;
+  right: 1vw;
+  top: 1vw;
+  font-size: 3vmin;
 }
 </style>
