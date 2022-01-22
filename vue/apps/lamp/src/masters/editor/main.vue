@@ -7,6 +7,7 @@
       <clickable-icon @click.native="formatBold" name="editor-bold" />
       <clickable-icon @click.native="formatUnderline" name="editor-underline" />
       <clickable-icon @click.native="formatList" name="editor-list" />
+      <clickable-icon @click.native="formatReset" name="editor-reset" />
     </div>
     <div ref="editedMarkup" v-html="markupSafe"></div>
   </div>
@@ -18,38 +19,46 @@ import { Prop } from 'vue-property-decorator'
 
 import MasterMain from '../MasterMain.vue'
 
-const placeholder = '…'
-const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
+import { editorMModul } from '@bldr/presentation-parser'
 
 @Component
 export default class EditorMasterMain extends MasterMain {
   masterName = 'editor'
 
-  $refs: {
+  $refs!: {
     editedMarkup: HTMLDivElement
   }
 
   @Prop({
     type: String
   })
-  markup: string
+  markup!: string
+
+  get markupDefault (): string {
+    if (this.markup != null) {
+      return this.markup
+    } else if (this.slideNg.fields?.markup != null) {
+      return this.slideNg.fields.markup
+    } else {
+      return editorMModul.DEFAULT_MARKUP
+    }
+  }
 
   get markupSafe (): string {
     if (this.slideNg.data?.editedMarkup != null) {
       return this.slideNg.data.editedMarkup
     } else if (this.markup != null) {
       return this.markup
-    } else if (this.slideNg.fields.markup != null) {
+    } else if (this.slideNg.fields?.markup != null) {
       return this.slideNg.fields.markup
     } else {
-      return defaultMarkup
+      return editorMModul.DEFAULT_MARKUP
     }
   }
 
   private surround (elementName: string): void {
-    const selection = window.getSelection()
-    if (selection.rangeCount) {
+    const selection = document.getSelection()
+    if (selection != null && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0)
       const element = document.createElement(elementName)
       range.surroundContents(element)
@@ -57,9 +66,12 @@ export default class EditorMasterMain extends MasterMain {
   }
 
   private insertHtml (html: string): void {
-    const range = document.getSelection().getRangeAt(0)
-    const fragment = document.createRange().createContextualFragment(html)
-    range.insertNode(fragment)
+    const selection = document.getSelection()
+    if (selection != null) {
+      const range = selection.getRangeAt(0)
+      const fragment = document.createRange().createContextualFragment(html)
+      range.insertNode(fragment)
+    }
   }
 
   formatHeading1 (): void {
@@ -86,6 +98,11 @@ export default class EditorMasterMain extends MasterMain {
     this.insertHtml('<ul><li>.</li></ul>')
   }
 
+  formatReset (): void {
+    this.$refs.editedMarkup.innerHTML = this.markupDefault
+    this.registerPlaceholderRemover()
+  }
+
   created (): void {
     // We can not use mousetrap because mousetrap is disable in
     // contenteditable areas.
@@ -98,7 +115,7 @@ export default class EditorMasterMain extends MasterMain {
         this.formatUnderline()
       } else if (event.ctrlKey && event.key === 'l') {
         event.preventDefault()
-        this.insertHtml('<ul><li>.</li></ul>')
+        this.formatList()
       } else if (event.ctrlKey && event.key === '1') {
         event.preventDefault()
         this.formatHeading1()
@@ -112,7 +129,7 @@ export default class EditorMasterMain extends MasterMain {
     })
   }
 
-  private storeEditedMarkup () {
+  private storeEditedMarkup (): void {
     if (this.slideNg.data == null) {
       this.slideNg.data = {}
     }
@@ -123,13 +140,13 @@ export default class EditorMasterMain extends MasterMain {
     this.storeEditedMarkup()
   }
 
-  afterSlideNoChange (): void {
+  registerPlaceholderRemover (): void {
     for (const element of document.querySelectorAll(
       '.vc_editor_master [contenteditable]'
     )) {
       element.addEventListener('focus', event => {
-        const element = event.target
-        if (element.innerHTML === placeholderTag) {
+        const element = event.target as HTMLElement
+        if (element.innerHTML === editorMModul.PLACEHOLDER_TAG) {
           element.innerHTML = ''
         }
       })
@@ -138,10 +155,14 @@ export default class EditorMasterMain extends MasterMain {
       '.vc_editor_master ul[contenteditable] li'
     )) {
       element.addEventListener('click', event => {
-        const element = event.target
+        const element = event.target as HTMLElement
         element.innerHTML = ''
       })
     }
+  }
+
+  afterSlideNoChange (): void {
+    this.registerPlaceholderRemover()
   }
 
   beforeDestroy (): void {
@@ -158,7 +179,6 @@ export default class EditorMasterMain extends MasterMain {
   .editor-toolbar {
     border: 1px solid $gray;
     position: absolute;
-    right: 0em;
     top: 0em;
 
     .baldr-icon {

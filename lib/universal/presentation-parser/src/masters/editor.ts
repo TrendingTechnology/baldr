@@ -1,4 +1,8 @@
-import { MasterSpec, mapStepFieldDefintions, convertMarkdownToHtml } from '../master-specification'
+import {
+  MasterSpec,
+  mapStepFieldDefintions,
+  convertMarkdownToHtml
+} from '../master-specification'
 
 type EditorFieldsRaw = string | EditorFieldsNormalized
 
@@ -7,7 +11,7 @@ interface EditorFieldsNormalized {
 }
 
 export const PLACEHOLDER = '…'
-const PLACEHOLDER_TAG = `<span class="editor-placeholder">${PLACEHOLDER}</span>`
+export const PLACEHOLDER_TAG = `<span class="editor-placeholder">${PLACEHOLDER}</span>`
 export const DEFAULT_MARKUP = `<p contenteditable>${PLACEHOLDER_TAG}</p>`
 
 export class EditorMaster implements MasterSpec {
