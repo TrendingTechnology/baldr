@@ -30,7 +30,7 @@ export default class PersonMasterPreview extends MasterPreview {
     type: Object,
     required: true
   })
-  asset: Asset
+  asset!: Asset
 }
 </script>
 

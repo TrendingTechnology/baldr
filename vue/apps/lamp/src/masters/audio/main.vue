@@ -37,43 +37,43 @@ export default class AudioMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  previewHttpUrl: string
+  previewHttpUrl!: string
 
   @Prop({
     type: Object
   })
-  sample: Sample
+  sample!: Sample
 
   @Prop({
     type: Object
   })
-  mediaAsset: Asset
+  mediaAsset!: Asset
 
   @Prop({
     type: String,
     required: true
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String
   })
-  composer: string
+  composer!: string
 
   @Prop({
     type: String
   })
-  artist: string
+  artist!: string
 
   @Prop({
     type: String
   })
-  partOf: string
+  partOf!: string
 
   @Prop({
     type: String
   })
-  description: string
+  description!: string
 
   get uri (): string {
     return this.slide.props.src

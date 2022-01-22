@@ -24,27 +24,27 @@ export default class VideoMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  httpUrl: string
+  httpUrl!: string
 
   @Prop({
     type: String
   })
-  previewHttpUrl: string
+  previewHttpUrl!: string
 
   @Prop({
     type: String
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String
   })
-  description: string
+  description!: string
 
   @Prop({
     type: Boolean
   })
-  showMeta: boolean
+  showMeta!: boolean
 
   get uri (): string {
     return this.slide.props.src

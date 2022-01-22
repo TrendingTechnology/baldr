@@ -16,7 +16,7 @@ export default class Master extends Vue {
    * The name of the master slide. A short name in lower case letters
    * like `audio`.
    */
-  masterName: string
+  masterName!: string
 
   /**
    * The current slide object.
@@ -25,7 +25,7 @@ export default class Master extends Vue {
     type: Object,
     required: true
   })
-  slide: Slide
+  slide!: Slide
 
   /**
    * The current slide object.
@@ -34,7 +34,7 @@ export default class Master extends Vue {
     type: Object,
     required: true
   })
-  slideNg: SlideNg
+  slideNg!: SlideNg
 
   get master (): LampTypes.Master {
     return masterCollection.get(this.masterName)

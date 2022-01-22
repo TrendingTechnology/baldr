@@ -24,12 +24,12 @@ export default class VideoMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  previewHttpUrl: string
+  previewHttpUrl!: string
 
   @Prop({
     type: String
   })
-  title: string
+  title!: string
 }
 </script>
 

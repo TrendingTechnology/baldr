@@ -45,7 +45,7 @@ export default class CameraMasterMain extends MasterMain {
   masterName = 'camera'
 
   data (): {
-    devices: SimpleMediaDeviceInfo[]
+    devices: SimpleMediaDeviceInfo[] | null
   } {
     return {
       devices: null

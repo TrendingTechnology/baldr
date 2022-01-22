@@ -35,13 +35,13 @@ import { questionMModul } from '@bldr/presentation-parser'
 })
 export default class Question extends Vue {
   @Prop()
-  question: questionMModul.Question
+  question!: questionMModul.Question
 
   @Prop({
     type: Boolean,
     default: false
   })
-  noAnswer: boolean
+  noAnswer!: boolean
 
   get q (): questionMModul.Question {
     return this.question

@@ -23,7 +23,7 @@ export default class ClozeMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  svgHttpUrl: string
+  svgHttpUrl!: string
 }
 </script>
 

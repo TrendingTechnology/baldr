@@ -22,12 +22,12 @@ export default class DocumentMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  asset: Asset
+  asset!: Asset
 
   @Prop({
     type: Number
   })
-  page: number
+  page!: number
 
   get pageComputed (): number {
     if (this.page != null) {

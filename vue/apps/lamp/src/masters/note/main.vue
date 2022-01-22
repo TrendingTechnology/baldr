@@ -18,7 +18,7 @@ export default class NoteMasterMain extends MasterMainWithStepController {
   @Prop({
     type: String
   })
-  markup: string
+  markup!: string
 
   afterSlideNoChange (): void {
     this.stepController = buildTextStepController(this.$el as HTMLElement, {
@@ -37,7 +37,10 @@ export default class NoteMasterMain extends MasterMainWithStepController {
     // <div class="vc_slide_main">
     //   <div class="vc_master_renderer">
     //     <div class="vc_note_master master-inner">
-    const scrollContainer = this.$el.parentElement.parentElement
+    const scrollContainer = this.$el.parentElement?.parentElement
+    if (scrollContainer == null) {
+      return
+    }
     const adjustedY = element.offsetTop - 0.85 * scrollContainer.clientHeight
     scrollContainer.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
   }

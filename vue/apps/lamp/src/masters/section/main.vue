@@ -16,7 +16,7 @@ export default class SectionMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  heading: string
+  heading!: string
 }
 </script>
 

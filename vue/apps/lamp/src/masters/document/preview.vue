@@ -34,12 +34,12 @@ export default class DocumentMasterPreview extends MasterPreview {
   @Prop({
     type: Object
   })
-  asset: Asset
+  asset!: Asset
 
   @Prop({
     type: Number
   })
-  page: number
+  page!: number
 
   get pageComputed (): number {
     if (this.page != null) {

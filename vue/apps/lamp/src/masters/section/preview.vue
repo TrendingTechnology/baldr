@@ -24,7 +24,7 @@ export default class SectionMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  heading: string
+  heading!: string
 }
 </script>
 

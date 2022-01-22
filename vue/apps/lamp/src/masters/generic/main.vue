@@ -20,13 +20,13 @@ export default class GenericMasterMain extends MasterMain {
     type: [String, Array],
     required: true
   })
-  markup: string[]
+  markup!: string[]
 
   @Prop({
     type: Number,
     default: CHARACTERS_ON_SLIDE
   })
-  charactersOnSlide: number
+  charactersOnSlide!: number
 
   get markupCurrent (): string {
     if (this.navigationNumbers.stepNo) {

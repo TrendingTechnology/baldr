@@ -24,12 +24,12 @@ export default class SongMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  imageHttpUrl: string
+  imageHttpUrl!: string
 
   @Prop({
     type: String
   })
-  title: string
+  title!: string
 }
 </script>
 

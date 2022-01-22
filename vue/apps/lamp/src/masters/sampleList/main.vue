@@ -25,12 +25,12 @@ export default class SampleListMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  heading: string
+  heading!: string
 
   @Prop({
     type: Boolean
   })
-  notNumbered: boolean
+  notNumbered!: boolean
 
   cssClassNotNumbered (): { 'not-numbered': boolean } {
     return {
@@ -39,7 +39,7 @@ export default class SampleListMasterMain extends MasterMain {
   }
 
   get samples (): WrappedUri[] {
-    return this.slideNg.fields.samples
+    return this.slideNg.fields?.samples
   }
 }
 </script>

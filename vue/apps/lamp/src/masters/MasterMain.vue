@@ -10,6 +10,7 @@ import inlineMarkup from '../lib/inline-markup'
 import Master from './Master.vue'
 
 import { currentMaster } from '../lib/masters'
+import Vue, { VueConstructor } from 'vue'
 
 interface NavigationNumbers {
   slideNo: number
@@ -28,7 +29,7 @@ export default class MasterMain extends Master {
     type: Object,
     required: true
   })
-  navigationNumbers: NavigationNumbers
+  navigationNumbers!: NavigationNumbers
 
   /**
    * By default all master components are marked as main components.
@@ -37,7 +38,7 @@ export default class MasterMain extends Master {
     type: Boolean,
     default: true
   })
-  isPublic: boolean
+  isPublic!: boolean
 
   @Watch('navigationNumbers')
   onNavigationNumbersChange (
@@ -129,7 +130,8 @@ export default class MasterMain extends Master {
     inlineMarkup.makeReactive()
 
     if (this.isPublic) {
-      currentMaster.publicMainComponent = this
+      const component = this as unknown
+      currentMaster.publicMainComponent = component as VueConstructor<Vue>
     }
   }
 }

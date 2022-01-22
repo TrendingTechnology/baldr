@@ -51,7 +51,7 @@ export default class GroupMasterMain extends MasterMain {
     type: Object,
     required: true
   })
-  asset: Asset
+  asset!: Asset
 
   get startDate (): string | undefined {
     if (this.asset.meta.startDate) {

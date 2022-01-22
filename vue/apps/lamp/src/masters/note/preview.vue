@@ -25,7 +25,7 @@ export default class NoteMasterPreview extends Vue {
   @Prop({
     type: String
   })
-  markup: string
+  markup!: string
 }
 </script>
 

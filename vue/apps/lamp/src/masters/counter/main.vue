@@ -22,17 +22,17 @@ export default class CounterMasterMain extends MasterMain {
     type: Number,
     required: true
   })
-  to: number
+  to!: number
 
   @Prop({
     type: String
   })
-  toFormatted: string
+  toFormatted!: string
 
   @Prop({
     type: String
   })
-  format: Format
+  format!: Format
 
   get currentFormatted (): string {
     let currentNumber: number

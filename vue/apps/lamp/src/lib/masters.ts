@@ -7,7 +7,7 @@ import { LampTypes } from '@bldr/type-definitions'
  * trigger some callbacks on the component
  */
 export const currentMaster = {
-  publicMainComponent: null
+  publicMainComponent: Vue
 }
 
 /**

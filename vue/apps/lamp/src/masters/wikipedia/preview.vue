@@ -37,20 +37,20 @@ export default class WikipediaMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String,
     required: true
   })
-  id: string
+  id!: string
 
   @Prop({
     type: String
   })
-  language: string
+  language!: string
 
-  thumbnailUrl: string
+  thumbnailUrl?: string
 
   get titleNoUnderscores (): string {
     return wikipediaMModule.formatTitleHumanReadable(this.title)

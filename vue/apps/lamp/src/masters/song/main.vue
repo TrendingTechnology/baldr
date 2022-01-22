@@ -20,7 +20,7 @@ export default class SongMasterMain extends MasterMain {
   @Prop({
     type: Object
   })
-  image: Asset
+  image!: Asset
 }
 </script>
 

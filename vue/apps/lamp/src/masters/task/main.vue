@@ -16,7 +16,7 @@ export default class TaskMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  markup: string
+  markup!: string
 }
 </script>
 

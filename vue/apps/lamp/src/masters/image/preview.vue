@@ -22,6 +22,6 @@ export default class ImageMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  imageHttpUrl: string
+  imageHttpUrl!: string
 }
 </script>

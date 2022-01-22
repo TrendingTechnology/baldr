@@ -23,6 +23,6 @@ export default class WebsiteMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  url?: string
+  url!: string
 }
 </script>

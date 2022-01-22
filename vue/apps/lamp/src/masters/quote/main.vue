@@ -29,32 +29,32 @@ export default class QuoteMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  text: string
+  text!: string
 
   @Prop({
     type: String
   })
-  author: string
+  author!: string
 
   @Prop({
     type: [String, Number]
   })
-  date: string
+  date!: string
 
   @Prop({
     type: String
   })
-  source: string
+  source!: string
 
   @Prop({
     type: String
   })
-  prolog: string
+  prolog!: string
 
   @Prop({
     type: String
   })
-  epilog: string
+  epilog!: string
 }
 </script>
 

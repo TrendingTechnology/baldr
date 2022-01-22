@@ -24,6 +24,6 @@ export default class GenericMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  markup: string
+  markup!: string
 }
 </script>

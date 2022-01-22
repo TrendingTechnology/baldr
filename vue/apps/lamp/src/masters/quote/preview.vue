@@ -24,22 +24,22 @@ export default class QuoteMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  text: string
+  text!: string
 
   @Prop({
     type: String
   })
-  author: string
+  author!: string
 
   @Prop({
     type: [String, Number]
   })
-  date: string
+  date!: string
 
   @Prop({
     type: String
   })
-  source: string
+  source!: string
 
   get classes (): string[] {
     const classes = ['vc_quote_master_preview', 'slide-preview-fullscreen']

@@ -43,7 +43,7 @@ export default class YoutubeMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  youtubeId: string
+  youtubeId!: string
 
   @Prop({
     type: String
@@ -66,7 +66,7 @@ export default class YoutubeMasterMain extends MasterMain {
       return
     }
 
-    if (this.asset != null) {
+    if (this.asset != null && this.uri != null) {
       player.load(this.uri)
     }
   }

@@ -23,7 +23,7 @@ export default class InteractiveGraphicMasterPreview extends Vue {
     type: String,
     required: true
   })
-  svgHttpUrl: string
+  svgHttpUrl!: string
 }
 </script>
 

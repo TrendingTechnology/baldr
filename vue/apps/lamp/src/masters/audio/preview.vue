@@ -36,23 +36,23 @@ export default class AudioMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  previewHttpUrl: string
+  previewHttpUrl!: string
 
   @Prop({
     type: String
   })
-  waveformHttpUrl: string
+  waveformHttpUrl!: string
 
   @Prop({
     type: String,
     required: true
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String
   })
-  composer: string
+  composer!: string
 }
 </script>
 

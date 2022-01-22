@@ -32,31 +32,31 @@ export default class WikipediaMasterMain extends MasterMain {
     type: String,
     required: true
   })
-  id: string
+  id!: string
 
   @Prop({
     type: String,
     required: true
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String
   })
-  language: string
+  language!: string
 
   @Prop({
     type: Number
   })
-  oldid: number
+  oldid!: number
 
   @Prop({
     type: String,
     required: true
   })
-  httpUrl: string
+  httpUrl!: string
 
-  body: string
+  body?: string
 
   get titleWithoutUnderscores (): string {
     return wikipediaMModule.formatTitleHumanReadable(this.title)

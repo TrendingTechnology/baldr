@@ -164,7 +164,12 @@ const actions = {
       commit('setSlideNoOld', oldSlide.no)
     }
 
-    if (currentMaster.publicMainComponent != null) {
+    if (
+      currentMaster.publicMainComponent != null &&
+      currentMaster.publicMainComponent.beforeSlideNoChange != null &&
+      typeof currentMaster.publicMainComponent.beforeSlideNoChange ===
+        'function'
+    ) {
       currentMaster.publicMainComponent.beforeSlideNoChange()
     }
 

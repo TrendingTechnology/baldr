@@ -31,6 +31,9 @@ function scrollToClozeGroup (
   // e. g.: 1892
   // svg.clientHeight
   const svg = componentElement.querySelector('svg')
+  if (svg == null) {
+    return
+  }
   // e. g.: 794.4473876953125
   // bBox.height
   const bBox = svg.getBBox()
@@ -52,7 +55,7 @@ export default class ClozeMasterMain extends MasterMainWithStepController {
     type: String,
     required: true
   })
-  src: string
+  src!: string
 
   get svgMarkup (): string {
     return this.$store.getters['lamp/masters/cloze/svgByUri'](this.src)
@@ -79,8 +82,10 @@ export default class ClozeMasterMain extends MasterMainWithStepController {
       // <div class="vc_slide_main">
       //   <div class="vc_master_renderer">
       //     <div class="vc_cloze_master master-inner">
-      const scrollContainer = this.$el.parentElement.parentElement
-      scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
+      const scrollContainer = this.$el.parentElement?.parentElement
+      if (scrollContainer != null) {
+        scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
+      }
     }
   }
 }

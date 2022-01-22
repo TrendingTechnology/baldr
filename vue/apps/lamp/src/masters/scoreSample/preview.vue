@@ -29,17 +29,17 @@ export default class ScoreSampleMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  scoreHttpUrl: string
+  scoreHttpUrl!: string
 
   @Prop({
     type: Boolean
   })
-  hasAudio: boolean
+  hasAudio!: boolean
 
   @Prop({
     type: Boolean
   })
-  isMultiPart: boolean
+  isMultiPart!: boolean
 }
 </script>
 

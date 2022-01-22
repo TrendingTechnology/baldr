@@ -31,7 +31,7 @@ export default class QuestionMasterMain extends MasterMainWithStepController {
   @Prop({
     required: true
   })
-  questions: questionMModul.Question[]
+  questions!: questionMModul.Question[]
 
   get sequence (): questionMModul.QuestionSequence {
     return this.questions[0].sequence

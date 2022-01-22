@@ -31,10 +31,10 @@ export default class SampleListMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  heading: string
+  heading!: string
 
   get samples (): WrappedUri[] {
-    return this.slideNg.fields.samples
+    return this.slideNg.fields?.samples
   }
 }
 </script>

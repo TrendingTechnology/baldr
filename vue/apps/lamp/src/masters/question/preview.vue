@@ -36,7 +36,7 @@ export default class QuestionMasterPreview extends MasterPreview {
   @Prop({
     required: true
   })
-  questions: questionMModul.Question[]
+  questions!: questionMModul.Question[]
 
   get subQuestions (): questionMModul.Question[] | undefined {
     if (this.questions.length > 1) {

@@ -6,7 +6,7 @@ import MasterMain from './MasterMain.vue'
 
 @Component
 export default class MasterMainWithStepController extends MasterMain {
-  data (): { stepController: StepController } {
+  data (): { stepController: StepController | null } {
     return { stepController: null }
   }
 
@@ -14,6 +14,6 @@ export default class MasterMainWithStepController extends MasterMain {
    * An instance of the class `StepController` from the package
    * `@bldr/dom-manipulator`.
    */
-  stepController: StepController
+  stepController!: StepController
 }
 </script>

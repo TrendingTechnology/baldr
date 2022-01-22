@@ -36,34 +36,34 @@ export default class ImageMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  imageHttpUrl: string
+  imageHttpUrl!: string
 
   @Prop({
     type: String
   })
-  title: string
+  title!: string
 
   @Prop({
     type: String
   })
-  description: string
+  description!: string
 
   @Prop({
     type: String
   })
-  descriptionTeaser: string
+  descriptionTeaser!: string
 
   @Prop({
     type: Boolean
   })
-  isLongDescription: string
+  isLongDescription!: string
 
   @Prop({
     type: Boolean
   })
-  noMeta: boolean
+  noMeta!: boolean
 
-  showLongDescription: boolean
+  showLongDescription!: boolean
 
   data (): { showLongDescription: boolean } {
     return {
@@ -86,13 +86,13 @@ export default class ImageMasterMain extends MasterMain {
     }
 
     function resetMetadataStyle (metaStyle: CSSStyleDeclaration): void {
-      metaStyle.width = null
+      metaStyle.width = ''
       if (!lotOfText) {
-        metaStyle.fontSize = null
+        metaStyle.fontSize = ''
       } else {
         metaStyle.fontSize = '0.8em'
       }
-      metaStyle.height = null
+      metaStyle.height = ''
     }
 
     if (this.$refs.image) {

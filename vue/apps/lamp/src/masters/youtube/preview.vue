@@ -41,17 +41,17 @@ export default class YoutubeMasterPreview extends MasterPreview {
     type: String,
     required: true
   })
-  youtubeId: string
+  youtubeId!: string
 
   @Prop({
     type: String
   })
-  heading: string
+  heading?: string
 
   @Prop({
     type: String
   })
-  info: string
+  info?: string
 
   get httpUrl (): string | undefined {
     return youtubeMModule.findPreviewHttpUrl(this.youtubeId, this.asset)

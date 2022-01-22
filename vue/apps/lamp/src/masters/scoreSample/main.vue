@@ -28,17 +28,17 @@ export default class ScoreSampleMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  heading: string
+  heading!: string
 
   @Prop({
     type: Object
   })
-  asset: Asset
+  asset!: Asset
 
   @Prop({
     type: Object
   })
-  audioSample: Asset
+  audioSample!: Asset
 
   get audioUri (): string | undefined {
     return this.slide.props.audio

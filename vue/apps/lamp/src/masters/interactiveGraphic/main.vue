@@ -22,19 +22,19 @@ export default class InteractiveGraphicMasterMain extends MasterMainWithStepCont
   @Prop({
     type: String
   })
-  src: string
+  src!: string
 
   @Prop({
     type: String,
     required: true
   })
-  svgPath: string
+  svgPath!: string
 
   @Prop({
     type: String,
     required: true
   })
-  svgTitle: string
+  svgTitle!: string
 
   get svgMarkup (): string {
     return this.$store.getters['lamp/masters/interactiveGraphic/svgByUri'](

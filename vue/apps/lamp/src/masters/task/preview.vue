@@ -12,11 +12,13 @@ import MasterPreview from '../MasterPreview.vue'
 
 @Component
 export default class TaskMasterPreview extends MasterPreview {
+  masterName = 'task'
+
   @Prop({
     type: String,
     required: true
   })
-  markup: string
+  markup!: string
 }
 </script>
 

@@ -26,7 +26,7 @@ export default class EditorMasterPreview extends MasterPreview {
   @Prop({
     type: String
   })
-  markup: string
+  markup!: string
 }
 </script>
 

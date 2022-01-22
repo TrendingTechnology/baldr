@@ -23,7 +23,7 @@ export default class WebsiteMasterMain extends MasterMain {
   @Prop({
     type: String
   })
-  url?: string
+  url!: string
 }
 </script>
 

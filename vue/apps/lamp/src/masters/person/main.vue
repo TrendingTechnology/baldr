@@ -48,9 +48,12 @@ export default class PersonMasterMain extends MasterMain {
     type: Object,
     required: true
   })
-  asset: Asset
+  asset!: Asset
 
   get mainImage (): Asset {
+    if (this.slideNg.fields?.personId == null) {
+      throw new Error('Missing field personId')
+    }
     const uri = personMModul.convertPersonIdToMediaUri(
       this.slideNg.fields.personId
     )
