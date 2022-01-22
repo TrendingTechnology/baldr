@@ -86,6 +86,8 @@ export default class TitlesTreePage extends Vue {
 
 <style lang="scss">
 .vc_titles_tree_page {
+  font-size: 1.7em;
+
   .titles {
     padding: 0 5em;
   }
@@ -101,7 +103,7 @@ export default class TitlesTreePage extends Vue {
 
   ul {
     li {
-      margin-top: 2em;
+      margin-top: 1.4em;
       font-weight: bold;
       font-family: $font-family-sans;
       font-size: 1.1em;
@@ -109,13 +111,13 @@ export default class TitlesTreePage extends Vue {
 
     ul {
       li {
-        margin-top: 1em;
+        margin-top: 0.7em;
         font-size: 0.9em;
       }
 
       ul {
         li {
-          margin-top: 0.5em;
+          margin-top: 0.2em;
           font-weight: normal;
           font-family: $font-family-serif;
         }

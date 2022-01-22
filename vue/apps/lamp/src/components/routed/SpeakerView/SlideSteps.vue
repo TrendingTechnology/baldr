@@ -30,7 +30,7 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 
 @Component({ computed: mapGetters(['slide']) })
 export default class SlideSteps extends Vue {
-  slide: Slide
+  slide!: Slide
 
   get steps (): SlideStep[] {
     return this.slide.steps

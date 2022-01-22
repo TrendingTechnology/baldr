@@ -88,12 +88,17 @@ interface RouterParams {
   ...routerGuards
 })
 export default class SpeakerView extends Vue {
-  slide: Slide
-  slideNg: SlideNg
-  slides: Slide
-  slidesNg: SlideNg[]
-  presentationNg: Presentation
-  nextRouterParams: (direction: 1 | -1) => RouterParams
+  slide!: Slide
+
+  slideNg!: SlideNg
+
+  slides!: Slide[]
+
+  slidesNg!: SlideNg[]
+
+  presentationNg!: Presentation
+
+  nextRouterParams!: (direction: 1 | -1) => RouterParams
 
   get nextSlideRouterParams (): RouterParams {
     return this.nextRouterParams(1)

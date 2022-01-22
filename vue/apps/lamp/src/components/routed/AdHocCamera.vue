@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_ad_hoc_camera main-app-fullscreen vc_slide_view" b-ui-theme="default">
+  <div
+    class="vc_ad_hoc_camera main-app-fullscreen vc_slide_view"
+    b-ui-theme="default"
+  >
     <slide-main :slide="slide" :slide-ng="slideNg" />
   </div>
 </template>
@@ -19,6 +22,10 @@ import { Slide } from '../../content-file.js'
   }
 })
 export default class AdHocCamera extends Vue {
+  slide!: Slide
+
+  slideNg!: SlideNg
+
   data (): {
     slide: Slide
     slideNg: SlideNg

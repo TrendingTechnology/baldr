@@ -30,9 +30,9 @@ const slideNg = new SlideNg(raw, 1, 1)
   }
 })
 export default class AdHocEditor extends Vue {
-  slide: Slide
+  slide!: Slide
 
-  slideNg: SlideNg
+  slideNg!: SlideNg
 
   data (): {
     slide: Slide

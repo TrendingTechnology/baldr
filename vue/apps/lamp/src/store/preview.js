@@ -1,5 +1,5 @@
 const state = {
-  size: 0.6,
+  size: 0.8,
   detail: false,
   hierarchical: false,
   layoutNoCurrent: 0,

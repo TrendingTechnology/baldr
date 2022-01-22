@@ -227,10 +227,19 @@ body {
  */
 
 // Show the whole image on the slide previews.
-.image-contain {
+
+.image-contain,
+.image-cover {
   height: 100%;
-  object-fit: contain;
   width: 100%;
+}
+
+.image-contain {
+  object-fit: contain;
+}
+
+.image-cover {
+  object-fit: cover;
 }
 
 #global-zone {

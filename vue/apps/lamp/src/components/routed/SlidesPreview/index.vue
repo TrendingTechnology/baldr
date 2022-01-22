@@ -70,7 +70,9 @@ const mapGettersPreview = storePreview.mapGetters
 })
 export default class SlidesPreview extends Vue {
   increaseSize!: () => void
+
   decreaseSize!: () => void
+
   size!: number
 
   mounted (): void {
@@ -92,7 +94,7 @@ export default class SlidesPreview extends Vue {
     const elCurrentSlide = document.querySelector(
       '.vc_slide_preview.current-slide'
     )
-    if (elCurrentSlide) {
+    if (elCurrentSlide != null) {
       elCurrentSlide.scrollIntoView({ block: 'center' })
     }
   }
@@ -105,7 +107,7 @@ export default class SlidesPreview extends Vue {
 
 <style lang="scss">
 .vc_slides_preview {
-  font-size: 1.5vmin;
+  // font-size: 1.5vmin;
   padding: 0 1vw;
 
   .vc_presentation_title {

@@ -23,10 +23,10 @@
 
     <clickable-icon
       name="slides-preview-enlarge"
-      @click.native="decreaseSize"
+      @click.native="increaseSize"
     />
 
-    <clickable-icon name="slides-preview-shrink" @click.native="increaseSize" />
+    <clickable-icon name="slides-preview-shrink" @click.native="decreaseSize" />
   </div>
 </template>
 

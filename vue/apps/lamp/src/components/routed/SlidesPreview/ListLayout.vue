@@ -34,7 +34,7 @@ export default class ListLayout extends PreviewLayoutBase {
     slide: Slide
   ): {
     paddingLeft: string
-  } {
+  } | undefined {
     if (this.hierarchical) {
       const padding = (slide.level - 1) * 8
       return { paddingLeft: `${padding}em` }

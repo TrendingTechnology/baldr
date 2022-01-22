@@ -17,7 +17,7 @@ import { Sample } from '@bldr/presentation-parser'
 @Component
 export default class SampleShortcutsByMimeType extends Vue {
   @Prop({ required: true })
-  mimeType: 'audio' | 'video'
+  mimeType!: 'audio' | 'video'
 
   get samples (): Record<string, Sample> {
     return this.$store.getters['lamp/media/sampleShortcuts'](this.mimeType)

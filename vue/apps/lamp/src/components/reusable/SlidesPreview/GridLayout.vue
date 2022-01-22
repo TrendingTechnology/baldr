@@ -30,9 +30,9 @@ export default class GridLayout extends PreviewLayoutBase {}
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-left: 3em;
-  padding-top: 1em;
+  justify-content: center;
   overflow: hidden;
+  padding-top: 1em;
 
   hr {
     width: 100vw;

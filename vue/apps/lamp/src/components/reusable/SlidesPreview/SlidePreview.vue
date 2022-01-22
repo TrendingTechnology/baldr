@@ -37,13 +37,13 @@ export default class SlidePreview extends Vue {
     type: Object,
     required: true
   })
-  slide: Slide
+  slide!: Slide
 
   @Prop({
     type: Object,
     required: true
   })
-  slideNg: SlideNg
+  slideNg!: SlideNg
 
   get slideCurrent (): Slide {
     return this.$store.getters['lamp/slide']
@@ -105,8 +105,9 @@ export default class SlidePreview extends Vue {
 
   .preview-master-icon {
     font-size: 4em;
-    right: 0.1em;
     position: absolute;
+    right: 0.1em;
+    text-shadow: 0 0 0.5em rgba($black, 0.6);
     top: 0.1em;
     z-index: 1;
   }

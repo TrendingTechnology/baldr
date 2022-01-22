@@ -5,7 +5,7 @@
     slide-preview-fullscreen
   "
   >
-    <img :src="imageHttpUrl" class="image-contain" />
+    <img :src="imageHttpUrl" class="image-cover" />
   </div>
 </template>
 
