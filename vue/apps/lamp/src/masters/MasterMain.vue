@@ -9,6 +9,8 @@ import { LampTypes } from '@bldr/type-definitions'
 import inlineMarkup from '../lib/inline-markup'
 import Master from './Master.vue'
 
+import { currentMaster } from '../lib/masters'
+
 interface NavigationNumbers {
   slideNo: number
   stepNo?: number
@@ -70,6 +72,18 @@ export default class MasterMain extends Master {
   }
 
   /**
+   * This hook is executed on the component before the slide number has
+   * changed.
+   *
+   * ```js
+   * beforeSlideNoChange (): void {
+   *   this.storeEditedMarkup()
+   * }
+   * ```
+   */
+  beforeSlideNoChange (): void {}
+
+  /**
    * This hook is executed on the component after the slide number has
    * changed.
    *
@@ -113,6 +127,10 @@ export default class MasterMain extends Master {
     }
 
     inlineMarkup.makeReactive()
+
+    if (this.isPublic) {
+      currentMaster.publicMainComponent = this
+    }
   }
 }
 </script>

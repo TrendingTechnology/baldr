@@ -16,6 +16,8 @@ import preview from './preview.js'
 import recent from './recent.js'
 import titles from './titles.js'
 
+import { currentMaster } from '../lib/masters'
+
 Vue.use(Vuex)
 
 const state = {
@@ -151,17 +153,19 @@ const actions = {
 
   setSlideNoToOld ({ dispatch, getters }) {
     const slideNoOld = getters.slideNoOld
-    if (slideNoOld) dispatch('setSlideNoCurrent', slideNoOld)
+    if (slideNoOld) {
+      dispatch('setSlideNoCurrent', slideNoOld)
+    }
   },
   setSlideNoCurrent ({ commit, getters }, no) {
     let oldSlide
-    let oldProps
-    const newSlide = getters.slideByNo(no)
-    const newProps = newSlide.props
     if (getters.slide) {
       oldSlide = getters.slide
       commit('setSlideNoOld', oldSlide.no)
-      oldProps = oldSlide.props
+    }
+
+    if (currentMaster.publicMainComponent != null) {
+      currentMaster.publicMainComponent.beforeSlideNoChange()
     }
 
     commit('setSlideNoCurrent', no)

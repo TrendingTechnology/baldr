@@ -112,6 +112,17 @@ export default class EditorMasterMain extends MasterMain {
     })
   }
 
+  private storeEditedMarkup () {
+    if (this.slideNg.data == null) {
+      this.slideNg.data = {}
+    }
+    this.slideNg.data.editedMarkup = this.$refs.editedMarkup.innerHTML
+  }
+
+  beforeSlideNoChange (): void {
+    this.storeEditedMarkup()
+  }
+
   afterSlideNoChange (): void {
     for (const element of document.querySelectorAll(
       '.vc_editor_master [contenteditable]'
@@ -134,10 +145,7 @@ export default class EditorMasterMain extends MasterMain {
   }
 
   beforeDestroy (): void {
-    if (this.slideNg.data == null) {
-      this.slideNg.data = {}
-    }
-    this.slideNg.data.editedMarkup = this.$refs.editedMarkup.innerHTML
+    this.storeEditedMarkup()
   }
 }
 </script>

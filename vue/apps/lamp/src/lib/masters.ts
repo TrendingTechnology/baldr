@@ -3,6 +3,14 @@ import Vue from 'vue'
 import { LampTypes } from '@bldr/type-definitions'
 
 /**
+ * Store object to save the current plubic master component to be able to
+ * trigger some callbacks on the component
+ */
+export const currentMaster = {
+  publicMainComponent: null
+}
+
+/**
  * Validate the master specification. This function doesn’t change the
  * the input object. The input object is passed through unchanged. The
  * validation handles Typescript.
