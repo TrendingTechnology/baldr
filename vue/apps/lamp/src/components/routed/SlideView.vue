@@ -86,20 +86,20 @@ export default class SlideView extends Vue {
 
   // See styling:
   // - components/SlideMain/MasterIcon.vue (Basic styling)
-  // - routes/SpeakerView/index.vue (Adjustments for the speaker view)
-  // - routes/SlideView/index.vue (Adjustments for the main slide view)
+  // - routed/SpeakerView/index.vue (Adjustments for the speaker view)
+  // - routed/SlideView.vue (Adjustments for the main slide view)
   .vc_master_icon {
     height: 1em;
-    left: 1vmin;
+    right: 1vmin;
     line-height: 1em;
     top: 1vmin;
 
     &.small {
-      font-size: 8vmin;
+      font-size: 10vmin;
     }
 
     &.large {
-      font-size: 16vmin;
+      font-size: 20vmin;
     }
   }
 }

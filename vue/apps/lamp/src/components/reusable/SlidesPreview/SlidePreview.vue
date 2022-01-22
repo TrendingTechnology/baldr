@@ -104,8 +104,8 @@ export default class SlidePreview extends Vue {
   }
 
   .preview-master-icon {
-    font-size: 3em;
-    left: 0.1em;
+    font-size: 4em;
+    right: 0.1em;
     position: absolute;
     top: 0.1em;
     z-index: 1;
