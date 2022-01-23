@@ -29,6 +29,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { createNamespacedHelpers } from 'vuex'
+import { RawLocation } from 'vue-router'
 
 import { styleConfigurator } from '@bldr/style-configurator'
 
@@ -42,7 +43,7 @@ const { mapActions } = createNamespacedHelpers('lamp')
  * Hide the mouse after x seconds of inactivity.
  */
 export function hideMouseAfterSec (seconds = 5): void {
-  let mouseTimer = null
+  let mouseTimer: number | null = null
   let cursorVisible = true
 
   function disappearCursor () {
@@ -75,11 +76,11 @@ export default class MainApp extends Vue {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
     // see preload.js
     if (window.api != null) {
-      window.api.ipcRendererOn('navigate', route => {
+      window.api.ipcRendererOn('navigate', (route: RawLocation) => {
         this.$router.push(route)
       })
 
-      window.api.ipcRendererOn('action', name => {
+      window.api.ipcRendererOn('action', (name: string) => {
         if (actions[name] && typeof actions[name] === 'function') {
           actions[name]()
         } else {

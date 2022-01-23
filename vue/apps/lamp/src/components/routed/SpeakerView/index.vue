@@ -118,11 +118,11 @@ export default class SpeakerView extends Vue {
     return this.slide.stepNo
   }
 
-  get nextStepNo (): number {
+  get nextStepNo (): number | undefined {
     return this.nextSlideRouterParams.stepNo
   }
 
-  get publicViewRoute (): Route {
+  get publicViewRoute (): Route | undefined {
     return switchRouterView(this.$route)
   }
 }

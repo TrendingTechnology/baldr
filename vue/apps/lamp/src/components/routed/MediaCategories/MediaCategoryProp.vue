@@ -32,15 +32,15 @@ export default class MediaCategories extends Vue {
   @Prop({
     type: Object
   })
-  prop: MediaCategoriesTypes.Prop
+  prop!: MediaCategoriesTypes.Prop
 
   @Prop({
     type: String
   })
-  name: string
+  name!: string
 
   get isDerived (): boolean {
-    return this.prop.overwriteByDerived
+    return this.prop.overwriteByDerived === true
   }
 
   get isWikidata (): boolean {

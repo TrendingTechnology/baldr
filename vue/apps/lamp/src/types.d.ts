@@ -24,6 +24,12 @@ interface ExampleCommonPresentationCollection {
 declare global {
   const config: Configuration
 
+  interface Window {
+    api: {
+      ipcRendererOn: (channel: string, func: (...args?: any[]) => void) => void
+    }
+  }
+
   /**
    * UNIX timestamp from `new Date().getTime()`
    */
