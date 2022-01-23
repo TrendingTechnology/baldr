@@ -95,7 +95,7 @@ export function patchTexTitles (filePath: string): boolean {
 
   if (texFileContent !== texFileContentPatched) {
     log.info('Patch titles in TeX file %s', [filePath])
-    log.verbose(log.colorizeDiff(texFileContent, texFileContentPatched))
+    log.info(log.colorizeDiff(texFileContent, texFileContentPatched))
     writeFile(filePath, texFileContentPatched)
     return true
   }

@@ -34,7 +34,7 @@ function convertPathArgToParentPresDir(args) {
         typeof args[0][0] === 'string') {
         const presParentDir = mediaManager.locationIndicator.getPresParentDir(args[0][0]);
         if (presParentDir != null) {
-            log.info('--parent-pres-dir: Run the task on the parent presentation folder: %s', [presParentDir]);
+            log.verbose('--parent-pres-dir: Run the task on the parent presentation folder: %s', [presParentDir]);
             args[0][0] = presParentDir;
         }
     }

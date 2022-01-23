@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs, { read } from 'fs'
 import path from 'path'
 
 // Project packages.
@@ -6,7 +6,7 @@ import {
   objectifyTexItemize,
   objectifyTexZitat
 } from '@bldr/tex-markdown-converter'
-import { convertToYaml } from '@bldr/yaml'
+import { convertFromYaml, convertToYaml } from '@bldr/yaml'
 import { LampTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { generateUuid } from '@bldr/uuid'
@@ -69,9 +69,19 @@ function shortedMediaUris (
  *
  * @param filePath - A path of a text file.
  */
-export function normalizePresentationFile (filePath: string): void {
+export function normalizePresentationFile (
+  filePath: string,
+  oldTextContent?: string
+): void {
   let textContent = readFile(filePath)
-  const oldTextContent = textContent
+  const intermediateTextContent = textContent
+  if (oldTextContent == null) {
+    oldTextContent = textContent
+  }
+  const oldPresentation = convertFromYaml(
+    oldTextContent
+  ) as LampTypes.FileFormat
+
   const presentation = readYamlFile(filePath) as LampTypes.FileFormat
 
   // Generate meta.
@@ -84,7 +94,9 @@ export function normalizePresentationFile (filePath: string): void {
   if (presentation?.meta?.curriculumUrl != null) {
     meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  if (presentation?.meta?.uuid == null) {
+  if (oldPresentation.meta?.uuid != null) {
+    meta.uuid = oldPresentation.meta.uuid
+  } else if (presentation?.meta?.uuid == null) {
     meta.uuid = generateUuid()
   } else {
     meta.uuid = presentation.meta.uuid
@@ -120,12 +132,14 @@ export function normalizePresentationFile (filePath: string): void {
   textContent = removeSingleQuotes(textContent)
 
   // Remove single quotes.
-  if (oldTextContent !== textContent) {
-    log.info('Normalized presentation %s', [filePath])
-    log.verbose(log.colorizeDiff(oldTextContent, textContent))
+  if (intermediateTextContent !== textContent) {
+    if (oldTextContent !== textContent) {
+      log.info('Normalized presentation %s', [filePath])
+      log.info(log.colorizeDiff(oldTextContent, textContent))
+    }
     writeFile(filePath, textContent)
   } else {
-    log.info('No changes after normalization of the presentation %s', [
+    log.verbose('No changes after normalization of the presentation %s', [
       filePath
     ])
   }
@@ -256,7 +270,7 @@ export async function generateAutomaticPresentation (
     log.verboseAny(rawPresentation)
     if (rawPresentation?.slides != null) {
       filePath = filePath.replace('.baldr.yml', '_automatic.baldr.yml')
-      log.info('Presentation already exists, create tmp file: %s', [
+      log.verbose('Presentation already exists, create tmp file: %s', [
         log.colorize.red(filePath)
       ])
     } else {
@@ -266,6 +280,11 @@ export async function generateAutomaticPresentation (
     }
   }
 
+  let oldTextContent: string | undefined
+  if (fs.existsSync(filePath)) {
+    oldTextContent = readFile(filePath)
+  }
+
   await generatePresentation(filePath)
-  normalizePresentationFile(filePath)
+  normalizePresentationFile(filePath, oldTextContent)
 }

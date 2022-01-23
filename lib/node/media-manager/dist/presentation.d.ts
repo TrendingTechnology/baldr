@@ -5,7 +5,7 @@
  *
  * @param filePath - A path of a text file.
  */
-export declare function normalizePresentationFile(filePath: string): void;
+export declare function normalizePresentationFile(filePath: string, oldTextContent?: string): void;
 /**
  * Create a automatically generated presentation file.
  */

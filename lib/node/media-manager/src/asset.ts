@@ -8,7 +8,7 @@ import { deepCopy, msleep } from '@bldr/universal-utils'
 import { getExtension, referencify, asciify } from '@bldr/string-format'
 import { collectAudioMetadata } from '@bldr/audio-metadata'
 import { categoriesManagement, categories } from '@bldr/media-categories'
-import { writeYamlFile } from '@bldr/file-reader-writer'
+import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
 import * as log from '@bldr/log'
 import * as wikidata from '@bldr/wikidata'
 import {
@@ -261,8 +261,9 @@ interface NormalizeMediaAssetOption {
   wikidata?: boolean
 }
 
-function logDiff (oldYamlMarkup: string, newYamlMarkup: string): void {
-  log.verbose(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
+function logDiff (oldYamlMarkup: string, newYamlMarkup: string, filePath: string): void {
+  log.info('File: %s', [filePath])
+  log.info(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
 }
 
 /**
@@ -308,10 +309,11 @@ export async function normalizeMediaAsset (
     const oldMetaData = origData as Record<string, any>
     delete oldMetaData.filePath
 
-    const oldYamlMarkup = convertToYaml(oldMetaData)
+    const oldYamlMarkup = readFile(yamlFile)
     const newYamlMarkup = convertToYaml(newMetaData)
+
     if (oldYamlMarkup !== newYamlMarkup) {
-      logDiff(oldYamlMarkup, newYamlMarkup)
+      logDiff(oldYamlMarkup, newYamlMarkup, filePath)
       writeYamlFile(yamlFile, newMetaData)
     }
   } catch (error) {

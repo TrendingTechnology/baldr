@@ -61,7 +61,7 @@ function convertPathArgToParentPresDir (args: any[]): any[] {
       args[0][0]
     )
     if (presParentDir != null) {
-      log.info(
+      log.verbose(
         '--parent-pres-dir: Run the task on the parent presentation folder: %s',
         [presParentDir]
       )

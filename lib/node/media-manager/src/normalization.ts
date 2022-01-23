@@ -88,12 +88,11 @@ async function normalizePresentation (filePath: string): Promise<void> {
     await updateMediaServer()
     mediaServerUpdated = true
   }
-  const presentation = await parseAndResolve(readFile(filePath))
-  presentation.log()
+  await parseAndResolve(readFile(filePath))
+  // presentation.log()
 }
 
 function normalizeTex (filePath: string): void {
-  log.info('\nPatch the titles of the TeX file “%s”', [filePath])
   patchTexTitles(filePath)
   txtOperations.fixTypography(filePath)
 }
