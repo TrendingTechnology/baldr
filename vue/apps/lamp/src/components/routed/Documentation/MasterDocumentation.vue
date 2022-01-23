@@ -57,7 +57,7 @@ export default class MasterDocumentation extends Vue {
     return this.master.fieldsDefintion
   }
 
-  get description (): string {
+  get description (): string | undefined {
     if (this.master.description != null) {
       return this.master.description
     }

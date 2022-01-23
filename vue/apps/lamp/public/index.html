@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" sizes="any" href="<%= BASE_URL %>favicon.svg">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      sizes="any"
+      href="<%= BASE_URL %>favicon.svg"
+    />
     <title>Baldr: Lamp</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but presentation doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but presentation doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
     </noscript>
     <div id="app">
-
       <!-- Another spinner is located at components/LoadingIcon.vue -->
       <!-- https://codepen.io/Paolo-Duzioni/pen/ZoRabJ -->
       <style>
@@ -31,7 +38,7 @@
         .spinner-cell {
           display: table-cell;
           vertical-align: middle;
-          padding: 40%;
+          padding: 0 40%;
         }
 
         .spinner {
@@ -42,7 +49,7 @@
           width: 100%;
         }
 
-        .spinner::before{
+        .spinner::before {
           animation: progress 0.5s linear infinite;
           background-color: rgba(0, 0, 0, 0.5);
           content: '';
@@ -52,19 +59,22 @@
           width: 100%;
         }
 
-        @keyframes progress{
-          0%{
+        @keyframes progress {
+          0% {
             background-color: rgba(0, 0, 0, 0.5);
             left: -130%;
           }
-          50%{
+
+          50% {
             background-color: rgba(0, 0, 0, 0.5);
             left: 130%;
           }
-          51%{
+
+          51% {
             background-color: rgba(255, 255, 255, 0.5);
           }
-          100%{
+
+          100% {
             background-color: rgba(255, 255, 255, 0.5);
           }
         }

@@ -40,11 +40,11 @@ export default class MediaCategories extends Vue {
   @Prop({
     type: Object
   })
-  category: MediaCategoriesTypes.Category
+  category!: MediaCategoriesTypes.Category
 
   @Prop({
     type: String
   })
-  name: string
+  name!: string
 }
 </script>
