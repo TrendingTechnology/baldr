@@ -1,13 +1,41 @@
 <template>
   <div class="vc_editor_master" spellcheck="false">
     <div class="editor-toolbar gradually-appear" b-ui-theme="default">
-      <clickable-icon @click.native="formatHeading1" name="editor-heading-1" />
-      <clickable-icon @click.native="formatHeading2" name="editor-heading-2" />
-      <clickable-icon @click.native="formatHeading3" name="editor-heading-3" />
-      <clickable-icon @click.native="formatBold" name="editor-bold" />
-      <clickable-icon @click.native="formatUnderline" name="editor-underline" />
-      <clickable-icon @click.native="formatList" name="editor-list" />
-      <clickable-icon @click.native="formatReset" name="editor-reset" />
+      <clickable-icon
+        @click.native="formatHeading1"
+        name="editor-heading-1"
+        title="Überschrift 1 (Strg + 1)"
+      />
+      <clickable-icon
+        @click.native="formatHeading2"
+        name="editor-heading-2"
+        title="Überschrift 2 (Strg + 2)"
+      />
+      <clickable-icon
+        @click.native="formatHeading3"
+        name="editor-heading-3"
+        title="Überschrift 3 (Strg + 3)"
+      />
+      <clickable-icon
+        @click.native="formatBold"
+        name="editor-bold"
+        title="fett (Strg + b)"
+      />
+      <clickable-icon
+        @click.native="formatUnderline"
+        name="editor-underline"
+        title="unterstrichen (Strg + u)"
+      />
+      <clickable-icon
+        @click.native="formatList"
+        name="editor-list"
+        title="Liste beginnen (Strg + l)"
+      />
+      <clickable-icon
+        @click.native="formatReset"
+        name="editor-reset"
+        title="Editor leeren (auf Standartwerte zurücksetzen)"
+      />
     </div>
     <div ref="editedMarkup" v-html="markupSafe"></div>
   </div>
@@ -107,23 +135,20 @@ export default class EditorMasterMain extends MasterMain {
     // We can not use mousetrap because mousetrap is disable in
     // contenteditable areas.
     document.addEventListener('keydown', event => {
-      if (event.ctrlKey && event.key === 'b') {
+      if (event.ctrlKey && ['b', 'u', 'l', '1', '2', '3'].includes(event.key)) {
         event.preventDefault()
+      }
+      if (event.ctrlKey && event.key === 'b') {
         this.formatBold()
       } else if (event.ctrlKey && event.key === 'u') {
-        event.preventDefault()
         this.formatUnderline()
       } else if (event.ctrlKey && event.key === 'l') {
-        event.preventDefault()
         this.formatList()
       } else if (event.ctrlKey && event.key === '1') {
-        event.preventDefault()
         this.formatHeading1()
       } else if (event.ctrlKey && event.key === '2') {
-        event.preventDefault()
         this.formatHeading2()
       } else if (event.ctrlKey && event.key === '3') {
-        event.preventDefault()
         this.formatHeading3()
       }
     })
