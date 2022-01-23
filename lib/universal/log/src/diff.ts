@@ -6,7 +6,11 @@ const { red, green } = chalk
 export function colorizeDiff (oldString: string, newString: string): string {
   const output: string[] = []
 
-  const patch = createTwoFilesPatch('old', 'new', oldString, newString)
+  let patch = createTwoFilesPatch('old', 'new', oldString, newString)
+  patch = patch.replace(/^=+(\n|\r\n)/, '')
+  patch = patch.replace(/--- old(\n|\r\n)?/, '')
+  patch = patch.replace(/\+\+\+ new(\n|\r\n)?/, '')
+  patch = patch.replace(/\\ No newline at end of file(\n|\r\n)?/, '')
 
   const lines = patch.split(/(\n|\r\n)/)
 

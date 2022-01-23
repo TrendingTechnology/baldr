@@ -1,4 +1,5 @@
 import { MediaDataTypes } from '@bldr/type-definitions';
+export declare function logFileDiff(filePath: string, oldYamlMarkup: string, newYamlMarkup: string): void;
 interface MoveAssetConfiguration {
     copy?: boolean;
     dryRun?: boolean;

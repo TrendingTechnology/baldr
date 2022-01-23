@@ -23,6 +23,11 @@ import { locationIndicator } from './location-indicator'
 import { readYamlMetaData } from './main'
 import { writeYamlMetaData } from './yaml'
 
+export function logFileDiff (filePath: string, oldYamlMarkup: string, newYamlMarkup: string): void {
+  log.info('Updated file content: %s', [filePath])
+  log.infoAny(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
+}
+
 function getReferenceFromFilePath (filePath: string): string {
   const basename = path.basename(filePath, '.' + getExtension(filePath))
   return referencify(basename)
@@ -261,11 +266,6 @@ interface NormalizeMediaAssetOption {
   wikidata?: boolean
 }
 
-function logDiff (oldYamlMarkup: string, newYamlMarkup: string, filePath: string): void {
-  log.info('File: %s', [filePath])
-  log.info(log.colorizeDiff(oldYamlMarkup, newYamlMarkup))
-}
-
 /**
  * Normalize a media asset file.
  *
@@ -313,7 +313,7 @@ export async function normalizeMediaAsset (
     const newYamlMarkup = convertToYaml(newMetaData)
 
     if (oldYamlMarkup !== newYamlMarkup) {
-      logDiff(oldYamlMarkup, newYamlMarkup, filePath)
+      logFileDiff(filePath, oldYamlMarkup, newYamlMarkup)
       writeYamlFile(yamlFile, newMetaData)
     }
   } catch (error) {

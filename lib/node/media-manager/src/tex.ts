@@ -15,6 +15,7 @@ import { getPdfPageCount } from '@bldr/node-utils'
 import { operations } from './main'
 import { locationIndicator } from './location-indicator'
 import { removeSpacesAtLineEnd } from './txt'
+import { logFileDiff } from './asset'
 
 /**
  * @returns A TeX markup like this output:
@@ -94,8 +95,7 @@ export function patchTexTitles (filePath: string): boolean {
   }
 
   if (texFileContent !== texFileContentPatched) {
-    log.info('Patch titles in TeX file %s', [filePath])
-    log.info(log.colorizeDiff(texFileContent, texFileContentPatched))
+    logFileDiff(filePath, texFileContent, texFileContentPatched)
     writeFile(filePath, texFileContentPatched)
     return true
   }

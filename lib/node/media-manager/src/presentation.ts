@@ -1,4 +1,4 @@
-import fs, { read } from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 // Project packages.
@@ -16,6 +16,7 @@ import { buildDbAssetData } from '@bldr/media-data-collector'
 
 import { walk } from './directory-tree-walk'
 import { locationIndicator } from './location-indicator'
+import { logFileDiff } from './asset'
 
 const comment = `
 #-----------------------------------------------------------------------
@@ -134,8 +135,7 @@ export function normalizePresentationFile (
   // Remove single quotes.
   if (intermediateTextContent !== textContent) {
     if (oldTextContent !== textContent) {
-      log.info('Normalized presentation %s', [filePath])
-      log.info(log.colorizeDiff(oldTextContent, textContent))
+      logFileDiff(filePath, oldTextContent, textContent)
     }
     writeFile(filePath, textContent)
   } else {
