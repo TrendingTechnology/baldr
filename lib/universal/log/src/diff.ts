@@ -6,7 +6,15 @@ const { red, green } = chalk
 export function colorizeDiff (oldString: string, newString: string): string {
   const output: string[] = []
 
-  let patch = createTwoFilesPatch('old', 'new', oldString, newString)
+  let patch = createTwoFilesPatch(
+    'old',
+    'new',
+    oldString,
+    newString,
+    undefined,
+    undefined,
+    { context: 2 }
+  )
   patch = patch.replace(/^=+(\n|\r\n)/, '')
   patch = patch.replace(/--- old(\n|\r\n)?/, '')
   patch = patch.replace(/\+\+\+ new(\n|\r\n)?/, '')
