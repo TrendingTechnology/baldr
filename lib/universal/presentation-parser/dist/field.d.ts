@@ -1,8 +1,11 @@
 /**
  * Some data indexed by strings
  */
-export interface FieldData {
+export interface Fields {
     [fieldName: string]: any;
+}
+export interface Data {
+    [dataName: string]: any;
 }
 /**
  * We name the properties of a master slide “field” to better distinguish them

@@ -1,9 +1,16 @@
-import { MasterSpec, WrappedUri, Resolver, Slide } from '../master-specification';
-declare type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized;
-interface SampleListFieldsNormalized {
+import { MasterSpec, WrappedUri, Resolver, Slide, Sample } from '../master-specification';
+declare type SampleListFieldsRaw = string | string[] | SampleListFields;
+interface SampleListFields {
     samples: WrappedUri[];
     heading?: string;
     notNumbered?: boolean;
+}
+interface SampleListData {
+    samples: Sample[];
+}
+export interface SampleListSlide extends Slide {
+    fields: SampleListFields;
+    data: SampleListData;
 }
 export declare class SampleListMaster implements MasterSpec {
     name: string;
@@ -34,9 +41,9 @@ export declare class SampleListMaster implements MasterSpec {
             description: string;
         };
     };
-    normalizeFieldsInput(fields: SampleListFieldsRaw): SampleListFieldsNormalized;
-    collectMediaUris(fields: SampleListFieldsNormalized): Set<string>;
-    collectFieldsAfterResolution(fields: SampleListFieldsNormalized, resolver: Resolver): SampleListFieldsNormalized;
-    collectStepsAfterResolution(fields: SampleListFieldsNormalized, slide: Slide): void;
+    normalizeFieldsInput(fields: SampleListFieldsRaw): SampleListFields;
+    collectMediaUris(fields: SampleListFields): Set<string>;
+    collectFieldsAfterResolution(fields: SampleListFields, resolver: Resolver): SampleListFields;
+    collectStepsAfterResolution(fields: SampleListFields, slide: Slide): void;
 }
 export {};

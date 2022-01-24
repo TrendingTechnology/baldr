@@ -18,25 +18,25 @@
  *
  * The different states of the master slide field types.
  *
- * - `..FieldsRawInput`
- * - `..FieldsInput`
- * - `..FieldsInstantiated`
- * - `..FieldsFinal`
+ * - `..FieldsRaw`
+ * - `..Fields`
+ *
+ * - `..Data`
  *
  * Master slide “generic”:
  *
- * - `GenericFieldsRawInput`
- * - `GenericFieldsInput`
- * - `GenericFieldsInstantiated`
- * - `GenericFieldsFinal`
+ * - `GenericFieldsRaw`
+ * - `GenericFields`
  *
- * `..FieldsRawInput` ->
+ * - `GenericData`
+ *
+ * `..FieldsRaw` ->
  * `master.normalizeFieldsInput(..)` -> (defaults) ->
- * `..FieldsInput` ->
  * `master.collectFieldsOnInstantiation(..)` ->
- * `..FieldsInstantiated` ->
+ * `..Fields` ->
  * `master.collectFieldsAfterResolution(..)` ->
- * `..FieldsFinal`
+ * `master.collectDataAfterResolution(..)` ->
+ * `..Data`
  *
  * @module @bldr/presentation-parser
  */

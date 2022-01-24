@@ -1,6 +1,6 @@
 import { WrappedUriList } from '@bldr/client-media-models';
 import { DataCutter } from './data-management';
-import { FieldData } from './master-specification';
+import { Fields } from './master-specification';
 import { Master } from './master-wrapper';
 import { Step, StepCollector } from './step';
 /**
@@ -45,9 +45,11 @@ export declare class Slide {
     readonly meta: SlideMeta;
     readonly master: Master;
     /**
-     * In this attribute we save the normalized field data of a slide.
+     * The fields of a slide are the normalized input of the key-value mapping
+     * in the YAML file format of a master slide.
+     * In this attribute we save the normalized fields of a slide.
      */
-    fields?: FieldData;
+    fields?: Fields;
     /**
      * Storage for complex objects derived from the fields (for example resolved
      * assets, samples.)

@@ -6,7 +6,7 @@ import { getConfig } from '@bldr/config'
 
 import { DataCutter } from './data-management'
 import { masterCollection } from './master-collection'
-import { FieldData } from './master-specification'
+import { Fields } from './master-specification'
 import { Master } from './master-wrapper'
 import { Step, StepCollector } from './step'
 
@@ -70,9 +70,10 @@ export class Slide {
   public readonly master: Master
 
   /**
-   * In this attribute we save the normalized field data of a slide.
+   * The fields of a slide are the normalized input of the key-value mapping in
+   * the YAML file format.
    */
-  fields?: FieldData
+  fields?: Fields
 
   /**
    * Storage for complex objects derived from the fields (for example resolved

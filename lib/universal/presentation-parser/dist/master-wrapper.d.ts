@@ -4,7 +4,7 @@
 import { Resolver } from '@bldr/media-resolver';
 import { Slide } from './slide';
 import { StepCollector } from './step';
-import { FieldData, FieldDefinitionCollection } from './field';
+import { Fields, FieldDefinitionCollection } from './field';
 import { MasterIconSpec, MasterSpec } from './master-specification';
 declare type MasterConstructor = new () => MasterSpec;
 /**
@@ -38,18 +38,18 @@ export declare class Master {
      * Convert to a set and remove sample fragments, e. g. `#complete`
      */
     private static processMediaUris;
-    processMediaUris(fields?: FieldData): Set<string>;
-    processOptionalMediaUris(fields?: FieldData): Set<string>;
-    collectStepsOnInstantiation(fields: FieldData, stepCollector: StepCollector): void;
-    generateTexMarkup(fields: FieldData): string | undefined;
+    processMediaUris(fields?: Fields): Set<string>;
+    processOptionalMediaUris(fields?: Fields): Set<string>;
+    collectStepsOnInstantiation(fields: Fields, stepCollector: StepCollector): void;
+    generateTexMarkup(fields: Fields): string | undefined;
     /**
      * Before resolving
      */
-    initializeFields(fields: FieldData): FieldData;
+    initializeFields(fields: Fields): Fields;
     /**
      * After the media resolution.
      */
-    finalizeSlide(slide: Slide, resolver: Resolver): FieldData | undefined;
+    finalizeSlide(slide: Slide, resolver: Resolver): Fields | undefined;
     deriveTitleFromFields(fields: any): string | undefined;
     derivePlainTextFromFields(fields: any): string | undefined;
 }

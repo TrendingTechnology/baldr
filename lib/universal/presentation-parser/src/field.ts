@@ -3,8 +3,12 @@ import { capitalize } from '@bldr/string-format'
 /**
  * Some data indexed by strings
  */
-export interface FieldData {
+export interface Fields {
   [fieldName: string]: any
+}
+
+export interface Data {
+  [dataName: string]: any
 }
 
 /**

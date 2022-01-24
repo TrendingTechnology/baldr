@@ -4,15 +4,25 @@ import {
   WrappedUri,
   WrappedUriList,
   Resolver,
-  Slide
+  Slide,
+  Sample
 } from '../master-specification'
 
-type SampleListFieldsRaw = string | string[] | SampleListFieldsNormalized
+type SampleListFieldsRaw = string | string[] | SampleListFields
 
-interface SampleListFieldsNormalized {
+interface SampleListFields {
   samples: WrappedUri[]
   heading?: string
   notNumbered?: boolean
+}
+
+interface SampleListData {
+  samples: Sample[]
+}
+
+export interface SampleListSlide extends Slide {
+  fields: SampleListFields
+  data: SampleListData
 }
 
 export class SampleListMaster implements MasterSpec {
@@ -51,7 +61,7 @@ export class SampleListMaster implements MasterSpec {
 
   normalizeFieldsInput (
     fields: SampleListFieldsRaw
-  ): SampleListFieldsNormalized {
+  ): SampleListFields {
     let samples
     if (typeof fields === 'string' || Array.isArray(fields)) {
       samples = fields
@@ -64,14 +74,14 @@ export class SampleListMaster implements MasterSpec {
     return fields
   }
 
-  collectMediaUris (fields: SampleListFieldsNormalized) {
+  collectMediaUris (fields: SampleListFields) {
     return extractUrisFromFuzzySpecs(fields.samples)
   }
 
   collectFieldsAfterResolution (
-    fields: SampleListFieldsNormalized,
+    fields: SampleListFields,
     resolver: Resolver
-  ): SampleListFieldsNormalized {
+  ): SampleListFields {
     if (fields.samples.length === 1) {
       const asset = resolver.getAsset(fields.samples[0].uri)
       if (asset.samples != null) {
@@ -86,7 +96,7 @@ export class SampleListMaster implements MasterSpec {
   }
 
   collectStepsAfterResolution (
-    fields: SampleListFieldsNormalized,
+    fields: SampleListFields,
     slide: Slide
   ): void {
     for (const wrappedUri of fields.samples) {

@@ -11,7 +11,7 @@ import { MediaUri } from '@bldr/client-media-models'
 
 import { Slide } from './slide'
 import { StepCollector } from './step'
-import { FieldData, FieldDefinitionCollection } from './field'
+import { Fields, FieldDefinitionCollection } from './field'
 import { MasterIconSpec, MasterSpec } from './master-specification'
 
 type MasterConstructor = new () => MasterSpec
@@ -109,7 +109,7 @@ export class Master {
     return result
   }
 
-  public processMediaUris (fields?: FieldData): Set<string> {
+  public processMediaUris (fields?: Fields): Set<string> {
     if (this.master.collectMediaUris != null && fields != null) {
       return Master.processMediaUris(
         this.master.collectMediaUris(fields)
@@ -118,7 +118,7 @@ export class Master {
     return new Set<string>()
   }
 
-  public processOptionalMediaUris (fields?: FieldData): Set<string> {
+  public processOptionalMediaUris (fields?: Fields): Set<string> {
     if (this.master.collectOptionalMediaUris != null && fields != null) {
       return Master.processMediaUris(
         this.master.collectOptionalMediaUris(fields)
@@ -128,7 +128,7 @@ export class Master {
   }
 
   public collectStepsOnInstantiation (
-    fields: FieldData,
+    fields: Fields,
     stepCollector: StepCollector
   ): void {
     if (this.master.collectStepsOnInstantiation != null) {
@@ -136,7 +136,7 @@ export class Master {
     }
   }
 
-  generateTexMarkup (fields: FieldData): string | undefined {
+  generateTexMarkup (fields: Fields): string | undefined {
     if (this.master.generateTexMarkup != null) {
       return this.master.generateTexMarkup(fields)
     }
@@ -145,7 +145,7 @@ export class Master {
   /**
    * Before resolving
    */
-  public initializeFields (fields: FieldData): FieldData {
+  public initializeFields (fields: Fields): Fields {
     if (this.master.shortFormField != null && typeof fields === 'string') {
       const shortform = fields
       fields = {}
@@ -204,7 +204,7 @@ export class Master {
   public finalizeSlide (
     slide: Slide,
     resolver: Resolver
-  ): FieldData | undefined {
+  ): Fields | undefined {
     if (this.master.collectFieldsAfterResolution != null) {
       const fields = this.master.collectFieldsAfterResolution(
         slide.fields,

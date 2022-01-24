@@ -8,7 +8,7 @@ import { Resolver } from '@bldr/media-resolver'
 
 import { Slide } from './slide'
 import { StepCollector } from './step'
-import { FieldData, FieldDefinitionCollection } from './field'
+import { Fields, Data, FieldDefinitionCollection } from './field'
 
 // Exports
 export { convertMarkdownToHtml } from '@bldr/markdown-to-html'
@@ -25,7 +25,7 @@ export {
   WrappedUriList
 } from '@bldr/client-media-models'
 
-export { mapStepFieldDefintions, FieldData } from './field'
+export { mapStepFieldDefintions, Fields } from './field'
 export { Slide } from './slide'
 export { StepCollector } from './step'
 
@@ -130,13 +130,13 @@ export interface MasterSpec {
    * }
    * ```
    */
-  normalizeFieldsInput?: (rawFieldsInput: any) => FieldData
+  normalizeFieldsInput?: (rawFieldsInput: any) => Fields
 
   /**
    * Collect the fields of a slide during the instantiation of the slide
    * objects.
    */
-  collectFieldsOnInstantiation?: (fieldsInput: any) => FieldData
+  collectFieldsOnInstantiation?: (fieldsInput: any) => Fields
 
   /**
    * Retrieve the media URIs which have to be resolved.
@@ -193,7 +193,9 @@ export interface MasterSpec {
   /**
    * Collect the fields of a slide after the media resolution is completed.
    */
-  collectFieldsAfterResolution?: (fields: any, resolver: Resolver) => FieldData
+  collectFieldsAfterResolution?: (fields: any, resolver: Resolver) => Fields
+
+  collectDataAfterResolution?: (fields: any, resolver: Resolver) => Data
 
   /**
    * Collect the steps after the media resolution.
