@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_note_master biggest" v-html="markup" />
+  <div class="vc_note_master bigger" v-html="markup" />
 </template>
 
 <script lang="ts">
@@ -56,7 +56,7 @@ export default class NoteMasterMain extends MasterMainWithStepController {
     table-layout: fixed;
   }
 
-  &.biggest {
+  &.bigger {
     line-height: 1.35em;
   }
 }

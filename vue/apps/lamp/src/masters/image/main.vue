@@ -139,9 +139,7 @@ export default class ImageMasterMain extends MasterMain {
   }
 
   afterSlideNoChange (): void {
-    this.$nextTick(() => {
-      this.setMetadataStyle()
-    })
+    this.setMetadataStyle()
   }
 
   mounted (): void {
