@@ -1,5 +1,10 @@
 <template>
-  <div class="vc_audio_overlay" b-ui-theme="default" v-if="audioOverlay">
+  <div
+    class="vc_audio_overlay"
+    b-ui-theme="default"
+    v-if="audioOverlay"
+    v-bind:style="{ background: 'none' }"
+  >
     <horizontal-play-buttons :src="audioOverlay" />
   </div>
 </template>
@@ -33,3 +38,9 @@ export default class AudioOverlay extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.vc_audio_overlay {
+  background-color: none !important;
+}
+</style>

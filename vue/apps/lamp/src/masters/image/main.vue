@@ -75,7 +75,7 @@ export default class ImageMasterMain extends MasterMain {
     this.showLongDescription = !this.showLongDescription
   }
 
-  afterSlideNoChange (): void {
+  setMetadataStyle (): void {
     // This variable indicates if in the prop description is a lot of text.
     let lotOfText = false
     if (
@@ -136,6 +136,20 @@ export default class ImageMasterMain extends MasterMain {
         }
       }
     }
+  }
+
+  afterSlideNoChange (): void {
+    this.$nextTick(() => {
+      this.setMetadataStyle()
+    })
+  }
+
+  mounted (): void {
+    window.addEventListener('resize', this.setMetadataStyle)
+  }
+
+  beforeDestroy (): void {
+    window.removeEventListener('resize', this.setMetadataStyle)
   }
 }
 </script>
