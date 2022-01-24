@@ -131,6 +131,10 @@ export const general: MediaCategoriesTypes.Category = {
     description: {
       title: 'Beschreibung'
     },
+    comment: {
+      title: 'Kommentar',
+      description: 'Ein Kommentar wird nicht angezeigt und dient der Dokumentation'
+    },
     source: {
       title: 'Quelle'
     },
