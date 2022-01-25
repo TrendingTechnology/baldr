@@ -22,6 +22,10 @@ export declare class WrappedUriList {
      * The first wrapped media URI in the list.
      */
     get first(): WrappedUri | undefined;
+    /**
+     * A number that indicates how many elements are in the list.
+     */
+    get size(): number;
     [Symbol.iterator](): Generator<WrappedUri, any, any>;
 }
 export declare function extractUrisFromFuzzySpecs(spec: FuzzyUriInput): Set<string>;

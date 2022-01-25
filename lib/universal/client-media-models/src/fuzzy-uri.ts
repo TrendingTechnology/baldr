@@ -85,6 +85,13 @@ export class WrappedUriList {
     }
   }
 
+  /**
+   * A number that indicates how many elements are in the list.
+   */
+  get size (): number {
+    return this.list.length
+  }
+
   * [Symbol.iterator] (): Generator<WrappedUri, any, any> {
     for (const spec of this.list) {
       yield spec

@@ -12,6 +12,9 @@
       :color="slide.master.icon.color"
     />
     <slide-preview-renderer :slide="slide" :slide-ng="slideNg" />
+    <div class="audio-overlay-indicator-icons" v-if="audioOverlayCount > 0">
+      <plain-icon name="player-play" v-for="n in audioOverlayCount" :key="n" />
+    </div>
   </div>
 </template>
 
@@ -52,6 +55,10 @@ export default class SlidePreview extends Vue {
   gotToSlide (slide: Slide): void {
     const location = slide.routerLocation(getViewFromRoute())
     this.$router.push(location)
+  }
+
+  get audioOverlayCount (): number | undefined {
+    return this.slideNg.audioOverlay?.size
   }
 }
 </script>
@@ -110,6 +117,12 @@ export default class SlidePreview extends Vue {
     text-shadow: 0 0 0.5em rgba($black, 0.6);
     top: 0.1em;
     z-index: 1;
+  }
+
+  .audio-overlay-indicator-icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 }
 </style>
