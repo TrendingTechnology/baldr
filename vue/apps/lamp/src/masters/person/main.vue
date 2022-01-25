@@ -98,8 +98,8 @@ export default class PersonMasterMain extends MasterMain {
     font-style: italic;
     height: 10em;
     position: absolute;
-    left: 3em;
-    top: 1em;
+    right: 5vw;
+    top: 10vh;
     width: 20em;
   }
 
