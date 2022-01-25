@@ -5,6 +5,7 @@
     slide-preview-fullscreen
   "
   >
+    <h3 v-if="heading" v-html="heading" />
     <img :src="scoreHttpUrl" />
     <slide-preview-play-button v-if="hasAudio" />
     <plain-icon
@@ -26,6 +27,11 @@ export default class ScoreSampleMasterPreview extends MasterPreview {
   masterName = 'scoreSample'
 
   @Prop({
+    type: String
+  })
+  heading!: string
+
+  @Prop({
     type: String,
     required: true
   })
@@ -45,6 +51,18 @@ export default class ScoreSampleMasterPreview extends MasterPreview {
 
 <style lang="scss">
 .vc_score_sample_master_preview {
+  background-color: white;
+
+  h3 {
+    background: rgba($yellow, 0.2);
+    left: 0;
+    padding: 0.3em 0;
+    position: absolute;
+    text-align: center;
+    top: 0.3em;
+    width: 100%;
+  }
+
   img {
     height: 90%;
     margin: 5%;

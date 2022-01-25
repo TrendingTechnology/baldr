@@ -81,7 +81,10 @@ export default validateMasterSpec({
       if (props.audio) {
         propsPreview.hasAudio = true
       }
-      if (propsMain.asset.partCount > 1) {
+      if (props.heading) {
+        propsPreview.heading = props.heading
+      }
+      if (propsMain.asset.multiPartCount > 1) {
         propsPreview.isMultiPart = true
       }
       return propsPreview

@@ -1,7 +1,9 @@
 <template>
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading" />
-    <img :src="asset.getMultiPartHttpUrlByNo(navigationNumbers.stepNo)" />
+    <div class="image-container">
+      <img :src="asset.getMultiPartHttpUrlByNo(navigationNumbers.stepNo)" />
+    </div>
     <play-button class="left-bottom-corner" v-if="audioUri" :src="audioUri" />
     <external-sites :asset="asset" />
   </div>
@@ -62,6 +64,15 @@ export default class ScoreSampleMasterMain extends MasterMain {
   background-color: white;
   text-align: center;
   height: 100%;
+
+  .image-container {
+    height: 90vh;
+    left: 0;
+    margin: 5vh 5vw;
+    position: absolute;
+    top: 0;
+    width: 90vw;
+  }
 
   h1 {
     background: rgba($yellow, 0.2);
