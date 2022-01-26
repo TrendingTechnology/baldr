@@ -1,4 +1,4 @@
-import { LampTypes } from '@bldr/type-definitions';
+import { PresentationTypes } from '@bldr/type-definitions';
 import { Resolver, Asset, Identifiable } from '@bldr/media-resolver';
 import { SlideCollection } from './slide-collection';
 import { Slide } from './slide';
@@ -6,7 +6,7 @@ export declare const resolver: Resolver;
 /**
  * @inheritdoc
  */
-declare class Meta implements LampTypes.PresentationMeta {
+declare class Meta implements PresentationTypes.PresentationMeta {
     /**
      * @inheritdoc
      */

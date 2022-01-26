@@ -1,5 +1,5 @@
 import { convertFromYaml } from '@bldr/yaml'
-import { LampTypes } from '@bldr/type-definitions'
+import { PresentationTypes } from '@bldr/type-definitions'
 import { Resolver, Asset, Identifiable } from '@bldr/media-resolver'
 import * as log from '@bldr/log'
 import { generateUUID } from '@bldr/string-format'
@@ -13,7 +13,7 @@ export const resolver = new Resolver()
 /**
  * @inheritdoc
  */
-class Meta implements LampTypes.PresentationMeta {
+class Meta implements PresentationTypes.PresentationMeta {
   /**
    * @inheritdoc
    */

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      sizes="any"
+      href="<%= BASE_URL %>favicon.svg"
+    />
+    <title>Baldr: Presentation</title>
+  </head>
+  <body>
+    <noscript>
+      <strong
+        >We're sorry but presentation doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
+    </noscript>
+    <div id="app">
+      <!-- Another spinner is located at components/LoadingIcon.vue -->
+      <!-- https://codepen.io/Paolo-Duzioni/pen/ZoRabJ -->
+      <style>
+        .spinner-wrapper {
+          box-sizing: border-box;
+          display: table;
+          font-size: 10em;
+          height: 100vh;
+          left: 0;
+          overflow: hidden;
+          position: absolute;
+          top: 0;
+          width: 100vw;
+        }
+
+        .spinner-cell {
+          display: table-cell;
+          vertical-align: middle;
+          padding: 0 40%;
+        }
+
+        .spinner {
+          background-color: #bab0ac;
+          height: 0.1em;
+          overflow: hidden;
+          position: relative;
+          width: 100%;
+        }
+
+        .spinner::before {
+          animation: progress 0.5s linear infinite;
+          background-color: rgba(0, 0, 0, 0.5);
+          content: '';
+          height: 100%;
+          left: -130%;
+          position: absolute;
+          width: 100%;
+        }
+
+        @keyframes progress {
+          0% {
+            background-color: rgba(0, 0, 0, 0.5);
+            left: -130%;
+          }
+
+          50% {
+            background-color: rgba(0, 0, 0, 0.5);
+            left: 130%;
+          }
+
+          51% {
+            background-color: rgba(255, 255, 255, 0.5);
+          }
+
+          100% {
+            background-color: rgba(255, 255, 255, 0.5);
+          }
+        }
+      </style>
+
+      <div class="spinner-wrapper">
+        <div class="spinner-cell">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

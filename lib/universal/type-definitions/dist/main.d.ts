@@ -22,7 +22,7 @@ export interface GitHead {
  */
 export * as ApiTypes from './api';
 export * as CliTypes from './cli';
-export * as LampTypes from './lamp';
+export * as PresentationTypes from './presentation';
 export * as MediaCategoriesTypes from './media-categories';
 export * as MediaDataTypes from './media-data';
 export * as TitlesTypes from './titles';

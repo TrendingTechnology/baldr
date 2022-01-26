@@ -1,4 +1,4 @@
-import type { LampTypes } from '@bldr/type-definitions'
+import type { PresentationTypes } from '@bldr/type-definitions'
 
 class AttributeSetter<T> {
   public attributeName: string
@@ -106,7 +106,7 @@ export class StyleConfigurator {
     }
   }
 
-  set (styleConfig: LampTypes.StyleConfig): void {
+  set (styleConfig: PresentationTypes.StyleConfig): void {
     for (const setterName in styleConfig) {
       const name: StyleConfigName = setterName as StyleConfigName
       if (this.setterCollection[name] != null) {

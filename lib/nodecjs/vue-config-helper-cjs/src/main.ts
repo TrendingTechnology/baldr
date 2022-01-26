@@ -19,10 +19,10 @@ export { readMasterExamples } from './master-examples'
  *   appEntry: './src/app.ts'
  *   additionalDefinitions: {
  *     defaultThemeSassVars: exportSassAsJson(),
- *     lampVersion: packageJson.version,
+ *     presentationVersion: packageJson.version,
  *     rawYamlExamples: readMasterExamples()
  *   },
- *   electronAppName: 'lamp',
+ *   electronAppName: 'presentation',
  *   analyzeBundle: true
  * }
  * ```
@@ -56,7 +56,7 @@ interface SimpleVueConfig {
    * {
    *   additionalDefinitions: {
    *     defaultThemeSassVars: exportSassAsJson(),
-   *     lampVersion: packageJson.version,
+   *     presentationVersion: packageJson.version,
    *     rawYamlExamples: readMasterExamples()
    *   }
    * }
@@ -124,9 +124,9 @@ function buildChainWebpackConfig () {
  *     resolve: {
  *       alias: {
  *         ...
- *         '@bldr/yaml$': '.../baldr/src/vue/apps/lamp/node_modules/@bldr/yaml',
- *         'vue$': '.../baldr/src/vue/apps/lamp/node_modules/vue',
- *         'vuex$': '.../baldr/src/vue/apps/lamp/node_modules/vuex',
+ *         '@bldr/yaml$': '.../baldr/src/vue/apps/presentation/node_modules/@bldr/yaml',
+ *         'vue$': '.../baldr/src/vue/apps/presentation/node_modules/vue',
+ *         'vuex$': '.../baldr/src/vue/apps/presentation/node_modules/vuex',
  *         ...
  *       }
  *     },

@@ -45,9 +45,8 @@ export declare class Slide {
     readonly meta: SlideMeta;
     readonly master: Master;
     /**
-     * The fields of a slide are the normalized input of the key-value mapping
-     * in the YAML file format of a master slide.
-     * In this attribute we save the normalized fields of a slide.
+     * The fields of a slide are the normalized input of the key-value mapping in
+     * the YAML file format.
      */
     fields?: Fields;
     /**
@@ -67,7 +66,7 @@ export declare class Slide {
     /**
      * The scale factor is used to calculate the font size css style property of
      * the root element in the component
-     * `src/vue/apps/lamp/src/components/linked-by-routes/SlideView/index.vue`
+     * `src/vue/apps/presentation/src/components/linked-by-routes/SlideView/index.vue`
      */
     scaleFactor: number;
     /**
@@ -84,7 +83,7 @@ export declare class Slide {
      *     font_weight: bold
      * ```
      *
-     * This attribute is used in the lamp app in this components:
+     * This attribute is used in the presentation app in this components:
      *
      * `components/reusable/SlideMain/MasterRenderer.vue`:
      * `<masterName-master-main :style="slide.cssStyle" />`

@@ -1,4 +1,4 @@
-import { LampTypes, TitlesTypes } from '@bldr/type-definitions';
+import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions';
 import { FolderTitle } from './folder-title';
 export declare class DeepTitle implements TitlesTypes.DeepTitle {
     /**
@@ -113,5 +113,5 @@ export declare class DeepTitle implements TitlesTypes.DeepTitle {
     /**
      * Generate the presentation meta data.
      */
-    generatePresetationMeta(): LampTypes.PresentationMeta;
+    generatePresetationMeta(): PresentationTypes.PresentationMeta;
 }

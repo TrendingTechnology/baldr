@@ -1,7 +1,7 @@
 {
   "name": "@bldr/websocket",
   "version": "0.1.0",
-  "description": "A websocket server to connect multiple baldr lamp sessions.",
+  "description": "A websocket server to connect multiple baldr presentation sessions.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",

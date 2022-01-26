@@ -171,7 +171,7 @@ export function convertMenuForElectron (
     click = () => {
       // Sometimes some images are not updated.
       // We have to delete the http cache.
-      // Cache location on Linux: /home/<user>/.config/baldr-lamp/Cache
+      // Cache location on Linux: /home/<user>/.config/baldr-presentation/Cache
       window.webContents.session.clearCache().then(
         () => {},
         () => {}

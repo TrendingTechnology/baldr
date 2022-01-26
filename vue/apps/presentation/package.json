@@ -1,0 +1,130 @@
+{
+  "name": "@bldr/presentation",
+  "version": "0.2.4",
+  "description": "The main app of the BALDR project: a presentation app using YAML files.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "serve": "npm run serve:webapp",
+    "build": "npm run build:webapp",
+    "test:e2e": "vue-cli-service test:e2e",
+    "build:electron": "vue-cli-service electron:build",
+    "build:webapp": "vue-cli-service build",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "install:deb": "sudo apt remove baldr-presentation; sudo dpkg -i dist_electron/baldr-presentation_${npm_package_version}_amd64.deb",
+    "install:electron": "npm run build:electron && npm run install:deb",
+    "serve:electron": "vue-cli-service electron:serve",
+    "serve:webapp": "vue-cli-service serve",
+    "test": "npm run test:e2e:headless",
+    "test:e2e:headless": "vue-cli-service test:e2e --headless"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "@bldr/api-wrapper": "*",
+    "@bldr/client-media-models": "*",
+    "@bldr/components-collection": "*",
+    "@bldr/config": "*",
+    "@bldr/universal-utils": "*",
+    "@bldr/dom-manipulator": "*",
+    "@bldr/dynamic-select": "*",
+    "@bldr/http-request": "*",
+    "@bldr/icons": "*",
+    "@bldr/markdown-to-html": "*",
+    "@bldr/menu-adapter": "*",
+    "@bldr/menu-webapp": "*",
+    "@bldr/modal-dialog": "*",
+    "@bldr/notification": "*",
+    "@bldr/player": "*",
+    "@bldr/presentation-parser": "*",
+    "@bldr/shortcuts": "*",
+    "@bldr/string-format": "*",
+    "@bldr/style-configurator": "*",
+    "@bldr/tex-markdown-converter": "*",
+    "@bldr/tex-templates": "*",
+    "@bldr/themes": "*",
+    "@bldr/type-definitions": "*",
+    "@bldr/yaml": "*",
+    "electron-context-menu": "2.3.0",
+    "vue": "2.6.11",
+    "vue-class-component": "7.2.3",
+    "vue-native-websocket": "2.0.14",
+    "vue-pdf": "4.2.0",
+    "vue-property-decorator": "9.1.2",
+    "vue-router": "3.2.0",
+    "vuex": "3.4.0"
+  },
+  "devDependencies": {
+    "@bldr/node-utils": "*",
+    "@bldr/http-request": "*",
+    "@bldr/log": "*",
+    "@bldr/vue-config-helper-cjs": "*",
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "4.18.0",
+    "@typescript-eslint/parser": "4.18.0",
+    "@vue/cli-plugin-e2e-cypress": "4.5.15",
+    "@vue/cli-plugin-eslint": "4.5.0",
+    "@vue/cli-plugin-router": "4.5.0",
+    "@vue/cli-plugin-typescript": "4.5.0",
+    "@vue/cli-plugin-vuex": "4.5.0",
+    "@vue/cli-service": "4.5.0",
+    "@vue/eslint-config-standard": "5.1.2",
+    "@vue/eslint-config-typescript": "7.0.0",
+    "babel-eslint": "10.1.0",
+    "electron": "15.3.0",
+    "electron-devtools-installer": "3.2.0",
+    "eslint": "6.7.2",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.0",
+    "eslint-plugin-vue": "6.2.2",
+    "sass": "1.26.5",
+    "sass-loader": "8.0.2",
+    "node-sass": "7.0.1",
+    "style-resources-loader": "1.4.1",
+    "typescript": "4.1.5",
+    "vue-cli-plugin-electron-builder": "2.1.1",
+    "vue-cli-plugin-style-resources-loader": "0.1.4",
+    "vue-file-toolbar-menu": "1.1.3",
+    "vue-template-compiler": "2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "ignorePatterns": [
+      "**/*.js"
+    ],
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  }
+}

@@ -4,7 +4,7 @@ import path from 'path';
 import { CommandRunner } from '@bldr/cli-utils';
 import { getConfig } from '@bldr/config';
 const config = getConfig();
-const appNames = ['lamp'];
+const appNames = ['presentation'];
 /**
  * @param appName - The name of the name. The must be the same
  *   as the parent directory.

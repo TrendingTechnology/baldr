@@ -7,7 +7,7 @@ import {
   objectifyTexZitat
 } from '@bldr/tex-markdown-converter'
 import { convertFromYaml, convertToYaml } from '@bldr/yaml'
-import { LampTypes } from '@bldr/type-definitions'
+import { PresentationTypes } from '@bldr/type-definitions'
 import { readFile, writeFile, readYamlFile } from '@bldr/file-reader-writer'
 import { generateUuid } from '@bldr/uuid'
 import { DeepTitle } from '@bldr/titles'
@@ -81,9 +81,9 @@ export function normalizePresentationFile (
   }
   const oldPresentation = convertFromYaml(
     oldTextContent
-  ) as LampTypes.FileFormat
+  ) as PresentationTypes.FileFormat
 
-  const presentation = readYamlFile(filePath) as LampTypes.FileFormat
+  const presentation = readYamlFile(filePath) as PresentationTypes.FileFormat
 
   // Generate meta.
   const title = new DeepTitle(filePath)
@@ -104,7 +104,7 @@ export function normalizePresentationFile (
   }
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const metaSorted: LampTypes.PresentationMeta = {} as LampTypes.PresentationMeta
+  const metaSorted: PresentationTypes.PresentationMeta = {} as PresentationTypes.PresentationMeta
 
   metaSorted.ref = meta.ref
   if (meta.uuid != null) {

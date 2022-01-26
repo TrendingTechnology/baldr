@@ -7,16 +7,16 @@
  *     // nodeIntegration: true,
  *     builderOptions: {
  *       appId: 'rocks.friedrich.baldr',
- *       productName: 'baldr-lamp',
+ *       productName: 'baldr-presentation',
  *       asar: true,
  *       linux: {
  *         target: 'deb',
  *         category: 'Education',
- *         executableName: 'baldr-lamp',
+ *         executableName: 'baldr-presentation',
  *         icon: './icon.svg'
  *       },
  *       extraMetadata: {
- *         name: 'baldr-lamp'
+ *         name: 'baldr-presentation'
  *       }
  *     }
  *   }
@@ -48,7 +48,7 @@ export function buildElectronBuilderConfig (
       productName: appName,
       asar: true,
       linux: {
-        target: 'deb',
+        target: 'dir', // deb
         category: 'Education',
         executableName: appName,
         icon: './icon.svg'

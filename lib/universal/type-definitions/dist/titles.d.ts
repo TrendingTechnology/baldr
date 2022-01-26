@@ -1,7 +1,7 @@
 /**
  * @module @bldr/type-definitions/titles
  */
-import { PresentationMeta } from './lamp';
+import { PresentationMeta } from './presentation';
 /**
  * Hold metadata about a folder and its titles in a hierarchical folder
  * structure.

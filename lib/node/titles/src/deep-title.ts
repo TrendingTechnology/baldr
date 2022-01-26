@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { LampTypes, TitlesTypes } from '@bldr/type-definitions'
+import { PresentationTypes, TitlesTypes } from '@bldr/type-definitions'
 
 import { FolderTitle } from './folder-title'
 
@@ -280,8 +280,8 @@ export class DeepTitle implements TitlesTypes.DeepTitle {
   /**
    * Generate the presentation meta data.
    */
-  generatePresetationMeta (): LampTypes.PresentationMeta {
-    const result: LampTypes.PresentationMeta = {
+  generatePresetationMeta (): PresentationTypes.PresentationMeta {
+    const result: PresentationTypes.PresentationMeta = {
       ref: this.ref,
       title: this.title,
       subtitle: this.subtitle,

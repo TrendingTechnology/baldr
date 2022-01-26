@@ -89,7 +89,7 @@ export default async function action(what, cmdObj) {
     // vue
     // if (opts.vue) {
     //   cmd.stopSpin()
-    //   await buildVueApp('lamp')
+    //   await buildVueApp('presentation')
     //   await syncBuilds()
     //   cmd.startSpin()
     // }

@@ -72,7 +72,7 @@ _run test lib/universal/universal-dom
 _run test lib/universal/universal-utils
 _run test lib/universal/uuid
 _run test lib/universal/yaml
-_run test vue/apps/lamp
+_run test vue/apps/presentation
 _run test vue/apps/songbook
 _run test vue/test-apps/test-icons
 _run test vue/test-apps/test-player
@@ -85,8 +85,8 @@ _run test vue/test-apps/test-player
 #_run_test lib/universal/type-definitions
 #_run_test vue/apps/seating-plan
 
-_run build:webapp vue/apps/lamp
-_run build:electron vue/apps/lamp
+_run build:webapp vue/apps/presentation
+_run build:electron vue/apps/presentation
 _run build:webapp vue/apps/songbook
 _run build:electron vue/apps/songbook
 
