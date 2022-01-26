@@ -32,6 +32,13 @@ export function buildElectronBuilderConfig (
     mainProcessFile: 'src/background.js',
 
     /**
+     * If you don't want your files outputted into dist_electron, you can choose
+     * a custom folder in VCPEB's plugin options. You can use the --dest
+     * argument to change the output dir as well.
+     */
+    outputDir: `/opt/${appName}`,
+
+    /**
      * Manually disable typescript plugin for main process. Enable if you want
      * to use regular js for the main process (src/background.js by default).
      */
@@ -48,7 +55,7 @@ export function buildElectronBuilderConfig (
       productName: appName,
       asar: true,
       linux: {
-        target: 'dir', // deb
+        target: 'deb', // deb / dir
         category: 'Education',
         executableName: appName,
         icon: './icon.svg'
