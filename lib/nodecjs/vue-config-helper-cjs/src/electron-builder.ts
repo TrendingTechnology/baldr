@@ -36,7 +36,7 @@ export function buildElectronBuilderConfig (
      * a custom folder in VCPEB's plugin options. You can use the --dest
      * argument to change the output dir as well.
      */
-    outputDir: `/opt/${appName}`,
+    // outputDir: `/opt/${appName}`,
 
     /**
      * Manually disable typescript plugin for main process. Enable if you want
@@ -55,7 +55,7 @@ export function buildElectronBuilderConfig (
       productName: appName,
       asar: true,
       linux: {
-        target: 'deb', // deb / dir
+        target: 'dir', // deb / dir
         category: 'Education',
         executableName: appName,
         icon: './icon.svg'
