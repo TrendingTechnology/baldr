@@ -1,5 +1,7 @@
 import { MasterSpec } from '../master-specification';
 declare type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized;
+export declare const inkscapeModeNames: readonly ["layer", "layer+", "group", "none"];
+export declare type InkscapeMode = typeof inkscapeModeNames[number];
 interface InteractiveGraphicFieldsNormalized {
     src: string;
     stepSelector: string;

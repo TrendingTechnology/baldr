@@ -49,3 +49,13 @@ slides:
   interactive_graphic:
     src: uuid:98596212-21b7-4ebe-96fa-6ad4163bcaf7
     mode: group
+
+- title: mode=layer+ ref:Hauptpersonen_BD_Akt-1
+  interactive_graphic:
+    src: uuid:3f96baf6-70d8-4e3a-adc8-f614c84ef1e0
+    mode: layer+
+
+- title: mode=none ref:Hauptpersonen_BD_Akt-1
+  interactive_graphic:
+    src: uuid:3f96baf6-70d8-4e3a-adc8-f614c84ef1e0
+    mode: none

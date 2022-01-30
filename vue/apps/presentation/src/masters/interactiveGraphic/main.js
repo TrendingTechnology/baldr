@@ -78,6 +78,7 @@ export default validateMasterSpec({
     collectPropsMain (props) {
       const asset = this.$store.getters['presentation/media/assetByUri'](props.src)
       return {
+        mode: props.mode,
         src: props.src,
         svgPath: asset.meta.path,
         svgTitle: asset.meta.title,
@@ -92,6 +93,9 @@ export default validateMasterSpec({
       }
     },
     calculateStepCount ({ props, master }) {
+      if (props.mode === 'none') {
+        return 1
+      }
       const svgString = master.$get('svgByUri')(props.src)
       return buildSvgStepController(svgString, props).stepCount
     }

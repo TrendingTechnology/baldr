@@ -8,7 +8,10 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
-import { mapStepFieldDefintionsToProps } from '@bldr/presentation-parser'
+import {
+  mapStepFieldDefintionsToProps,
+  interactiveGraphicMModule
+} from '@bldr/presentation-parser'
 import { buildSvgStepController } from '@bldr/dom-manipulator'
 import { PresentationTypes } from '@bldr/type-definitions'
 
@@ -18,6 +21,10 @@ import { warnSvgWidthHeight } from '../../lib/utils'
 @Component({ props: mapStepFieldDefintionsToProps(['subset', 'mode']) })
 export default class InteractiveGraphicMasterMain extends MasterMainWithStepController {
   masterName = 'interactiveGraphic'
+  @Prop({
+    type: String
+  })
+  mode!: interactiveGraphicMModule.InkscapeMode
 
   @Prop({
     type: String
@@ -37,20 +44,27 @@ export default class InteractiveGraphicMasterMain extends MasterMainWithStepCont
   svgTitle!: string
 
   get svgMarkup (): string {
-    return this.$store.getters['presentation/masters/interactiveGraphic/svgByUri'](
-      this.src
-    )
+    return this.$store.getters[
+      'presentation/masters/interactiveGraphic/svgByUri'
+    ](this.src)
   }
 
   afterSlideNoChange (): void {
     warnSvgWidthHeight(this.svgPath)
-    this.stepController = buildSvgStepController(
-      this.$el as HTMLElement,
-      this.slide.props
-    )
+    if (this.mode !== 'none') {
+      this.stepController = buildSvgStepController(
+        this.$el as HTMLElement,
+        this.slide.props
+      )
+    }
   }
 
-  afterStepNoChange ({ newStepNo }: PresentationTypes.OldNewStepSlideNos): void {
+  afterStepNoChange ({
+    newStepNo
+  }: PresentationTypes.OldNewStepSlideNos): void {
+    if (this.mode === 'none') {
+      return
+    }
     this.stepController.showUpTo(newStepNo)
   }
 }

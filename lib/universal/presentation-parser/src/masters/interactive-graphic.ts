@@ -2,7 +2,8 @@ import { MasterSpec, mapStepFieldDefintions } from '../master-specification'
 
 type InteractiveGraphicFieldsRaw = string | InteractiveGraphicFieldsNormalized
 
-type InkscapeMode = 'layer' | 'layer+' | 'group'
+export const inkscapeModeNames = ['layer', 'layer+', 'group', 'none'] as const
+export type InkscapeMode = typeof inkscapeModeNames[number]
 
 interface InteractiveGraphicFieldsNormalized {
   src: string
@@ -14,7 +15,8 @@ export class InteractiveGraphicMaster implements MasterSpec {
 
   displayName = 'Interaktive Grafik'
 
-  description = 'Diese Master-Folie ist dazu gedacht, mit *Inkscape* erstellte SVG-Dateien darzustellen.'
+  description =
+    'Diese Master-Folie ist dazu gedacht, mit *Inkscape* erstellte SVG-Dateien darzustellen.'
 
   icon = {
     name: 'master-interactive-graphic',
@@ -37,10 +39,11 @@ export class InteractiveGraphicMaster implements MasterSpec {
       assetUri: true
     },
     mode: {
-      description: 'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen)',
+      description:
+        'layer (Inkscape-Ebenen), layer+ (Elemente der Inkscape-Ebenen), group (Gruppierungen), none (Alles eingeblendet)',
       default: 'layer',
       validate: (input: any) => {
-        return ['layer', 'layer+', 'group'].includes(input)
+        return inkscapeModeNames.includes(input)
       }
     },
     ...mapStepFieldDefintions(['selector', 'subset'])

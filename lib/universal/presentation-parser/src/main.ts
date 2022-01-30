@@ -58,6 +58,7 @@ export { masterCollection, getMaster } from './master-collection'
 // MModule = MasterModule
 export * as editorMModul from './masters/editor'
 export * as genericMModul from './masters/generic'
+export * as interactiveGraphicMModule from './masters/interactive-graphic'
 export * as personMModul from './masters/person'
 export * as questionMModul from './masters/question'
 export * as wikipediaMModule from './masters/wikipedia'
