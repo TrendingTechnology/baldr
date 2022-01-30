@@ -103,12 +103,18 @@ export default class QuestionMasterMain extends MasterMainWithStepController {
     padding: 0.1em 0.3em;
   }
 
+  ol {
+    list-style: upper-alpha;
+  }
+
   .level-0 ol {
     list-style-type: decimal;
   }
+
   .level-1 ol {
     list-style-type: lower-alpha;
   }
+
   .level-2 ol {
     list-style-type: lower-roman;
   }
