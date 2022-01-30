@@ -81,7 +81,7 @@ export function normalizePresentationFile (
   }
   const oldPresentation = convertFromYaml(
     oldTextContent
-  ) as PresentationTypes.FileFormat
+  ) as PresentationTypes.FileFormat | undefined
 
   const presentation = readYamlFile(filePath) as PresentationTypes.FileFormat
 
@@ -95,7 +95,7 @@ export function normalizePresentationFile (
   if (presentation?.meta?.curriculumUrl != null) {
     meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  if (oldPresentation.meta?.uuid != null) {
+  if (oldPresentation?.meta?.uuid != null) {
     meta.uuid = oldPresentation.meta.uuid
   } else if (presentation?.meta?.uuid == null) {
     meta.uuid = generateUuid()
