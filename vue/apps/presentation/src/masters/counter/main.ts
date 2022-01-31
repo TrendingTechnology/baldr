@@ -3,7 +3,6 @@
  */
 
 import { validateMasterSpec } from '../../lib/masters'
-import { styleConfigurator } from '@bldr/style-configurator'
 
 const alphabet = [
   'a',
@@ -148,9 +147,6 @@ export default validateMasterSpec({
     },
     plainTextFromProps (props): string {
       return `${props.to}`
-    },
-    afterStepNoChangeOnComponent (): void {
-      styleConfigurator.toggleDarkMode()
     }
   }
 })

@@ -1,4 +1,4 @@
-import type { PresentationTypes } from '@bldr/type-definitions'
+import { PresentationTypes } from '@bldr/type-definitions'
 
 class AttributeSetter<T> {
   public attributeName: string
@@ -19,7 +19,9 @@ class AttributeSetter<T> {
     this.attributeValue = attributeValue
     const elements = document.querySelectorAll(`[${this.attributeName}]`)
     for (const element of elements) {
-      element.attributes[this.attributeName as any].value = this.attributeValueAsString
+      element.attributes[
+        this.attributeName as any
+      ].value = this.attributeValueAsString
     }
   }
 
@@ -28,8 +30,7 @@ class AttributeSetter<T> {
   }
 }
 
-class StringAttributeSetter extends AttributeSetter<string> {
-}
+class StringAttributeSetter extends AttributeSetter<string> {}
 
 class BooleanAttributeSetter extends AttributeSetter<boolean> {
   toggle (): boolean {
@@ -61,8 +62,10 @@ class ContentThemeSetter extends StringAttributeSetter {
     for (const element of elements) {
       // Preview slide editor has content-theme handwriting, which should
       // be unchangeable.
-      if ((element.attributes['b-content-theme-unchangeable' as any]) == null) {
-        element.attributes[this.attributeName as any].value = this.attributeValueAsString
+      if (element.attributes['b-content-theme-unchangeable' as any] == null) {
+        element.attributes[
+          this.attributeName as any
+        ].value = this.attributeValueAsString
       }
     }
   }
@@ -75,10 +78,10 @@ class UiThemeSetter extends StringAttributeSetter {
 }
 
 type StyleConfigName =
-  'centerVertically' |
-  'contentTheme' |
-  'darkMode' |
-  'uiTheme'
+  | 'centerVertically'
+  | 'contentTheme'
+  | 'darkMode'
+  | 'uiTheme'
 
 export class StyleConfigurator {
   private readonly setterCollection = {
@@ -88,8 +91,8 @@ export class StyleConfigurator {
     centerVertically: new CenterVerticallySetter()
   }
 
-  constructor() {
-    const body  = document.querySelector('body')
+  constructor () {
+    const body = document.querySelector('body')
     if (body != null) {
       body.setAttribute(this.setterCollection.darkMode.attributeName, 'false')
     }

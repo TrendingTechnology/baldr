@@ -11,6 +11,8 @@
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { styleConfigurator } from '@bldr/style-configurator'
+
 import { formatCounterNumber, Format } from './main'
 import MasterMain from '../MasterMain.vue'
 
@@ -34,6 +36,8 @@ export default class CounterMasterMain extends MasterMain {
   })
   format!: Format
 
+  // darkModeForRestore?: string
+
   get currentFormatted (): string {
     let currentNumber: number
     if (this.navigationNumbers.stepNo != null) {
@@ -43,6 +47,20 @@ export default class CounterMasterMain extends MasterMain {
     }
     return formatCounterNumber(currentNumber, this.format)
   }
+
+  afterStepNoChange (): void {
+    styleConfigurator.toggleDarkMode()
+  }
+
+  // beforeMount (): void {
+  //   const body = document.querySelector('body')
+  //   this.darkModeForRestore = body.getAttribute('b-dark-mode')
+  // }
+
+  // destroyed (): void {
+  //   const body = document.querySelector('body')
+  //   body.setAttribute('b-dark-mode', this.darkModeForRestore)
+  // }
 }
 </script>
 
