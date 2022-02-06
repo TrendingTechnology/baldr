@@ -1,13 +1,13 @@
 <template>
-  <div class="vc_audio_master main-app-padding big">
+  <div class="vc_audio_master main-app-padding">
     <p class="description" v-if="description" v-html="description" />
 
     <img :src="previewHttpUrl" class="preview" v-if="previewHttpUrl" />
 
-    <p class="composer person" v-if="composer" v-html="composer" />
+    <p class="first-participant person" v-if="firstParticipant" v-html="firstParticipant" />
     <p class="title piece" v-if="partOf" v-html="partOf" />
     <p class="title piece" v-if="title" v-html="title" />
-    <p class="artist person" v-if="artist" v-html="artist" />
+    <p class="second-participant person" v-if="secondParticipant" v-html="secondParticipant" />
 
     <wave-form :src="uri" />
 
@@ -75,12 +75,43 @@ export default class AudioMasterMain extends MasterMain {
   })
   description!: string
 
+  @Prop({
+    type: Boolean
+  })
+  isClassical!: boolean
+
   get uri (): string {
     return this.slide.props.src
   }
 
   get playable (): Playable {
     return player.getPlayable(this.slide.props.src)
+  }
+
+  get firstParticipant (): string | undefined {
+    if (this.composer == null && this.artist != null) {
+      return this.artist
+    } else if (this.composer != null && this.artist == null) {
+      return this.composer
+    } else if (this.isClassical) {
+      return this.composer
+    } else {
+      return this.artist
+    }
+  }
+
+  get secondParticipant (): string | undefined {
+    if (
+      this.composer != null &&
+      this.artist != null &&
+      this.composer !== this.artist
+    ) {
+      if (this.isClassical) {
+        return this.artist
+      } else {
+        return this.composer
+      }
+    }
   }
 
   async afterSlideNoChange (): Promise<void> {
@@ -103,7 +134,7 @@ export default class AudioMasterMain extends MasterMain {
     margin: 0;
   }
 
-  .composer {
+  .first-participant {
     font-size: 1.2em;
   }
 
@@ -111,7 +142,7 @@ export default class AudioMasterMain extends MasterMain {
     font-size: 1.1em;
   }
 
-  .artist {
+  .second-participant {
     font-size: 0.7em;
   }
 

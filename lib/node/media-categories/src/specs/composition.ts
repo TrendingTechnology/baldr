@@ -18,6 +18,10 @@ export const composition: MediaCategoriesTypes.Category = {
         return getAudioMetadataValue('title', filePath)
       }
     },
+    isClassical: {
+      title: 'klassische Komposition',
+      description: 'Handelt es sich um eine klassische Komposition, dann wird der Komponist hervorgehoben.'
+    },
     composer: {
       title: 'Komponsition',
       // Helbling-Verlag

@@ -87,10 +87,19 @@ export default validateMasterSpec({
       const asset = sample.asset
 
       const grab = new ObjectPropertyPicker(props, asset.meta)
-      const artist = grab.pickProperty('artist')
-      const composer = grab.pickProperty('composer')
+      let artist = grab.pickProperty('artist')
+      let composer = grab.pickProperty('composer')
       const description = grab.pickProperty('description')
       const partOf = grab.pickProperty('partOf')
+      const isClassical = grab.pickProperty('isClassical')
+
+      if (typeof composer !== 'string') {
+        composer = undefined
+      }
+
+      if (typeof artist !== 'string') {
+        artist = undefined
+      }
 
       let title
       if (props.title != null) {
@@ -108,6 +117,7 @@ export default validateMasterSpec({
       }
       return {
         sample,
+        isClassical,
         previewHttpUrl,
         waveformHttpUrl: asset.waveformHttpUrl,
         artist,
