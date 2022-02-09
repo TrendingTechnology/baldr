@@ -1,0 +1,44 @@
+---
+ref: Bolero_HB_Bolero
+uuid: 538204e4-6171-42d3-924c-b3f80a954a1a
+categories: composition,recording,sample
+title: Bolero
+samples:
+- ref: '1'
+  title: '1'
+  start_time: 14.534439
+  end_time: 58.014301
+- ref: '2'
+  title: '2'
+  start_time: 58.014301
+  end_time: 105.817612
+- ref: '3'
+  title: '3'
+  start_time: 105.817612
+  end_time: 154.945322
+- ref: '4'
+  title: '4'
+  start_time: 154.945322
+  end_time: 204.063365
+- ref: '5'
+  title: '5'
+  start_time: 204.063365
+  end_time: 252.391437
+- ref: '6'
+  title: '6'
+  start_time: 252.391437
+  end_time: 301.169306
+- ref: '7'
+  title: '7'
+  start_time: 301.169306
+  end_time: 349.739184
+- ref: '8'
+  title: '8'
+  start_time: 349.739184
+  end_time: 774.223391
+- ref: '17'
+  title: '17'
+  start_time: 774.223391
+artist: Boston Symphony Orchestra, Seiji Ozawa
+musicbrainz_recording_id: 5d65681f-16f6-48fd-a211-d50d73b231fb
+composer: Maurice Ravel

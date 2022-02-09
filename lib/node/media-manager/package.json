@@ -21,7 +21,7 @@
     "lint:depcheck": "depcheck",
     "lint:ts-standard": "ts-standard --fix 'src/**/*.ts'",
     "lint": "npm run lint:depcheck & npm run lint:ts-standard",
-    "test": "npm run build && mocha 'tests/*' && npm run lint"
+    "test": "npm run build && mocha 'tests/**/test-*.js' && npm run lint"
   },
   "dependencies": {
     "@bldr/api-wrapper": "*",

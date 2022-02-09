@@ -18,18 +18,21 @@ import {
 } from './asset'
 import { normalize } from './normalization'
 
+import convertAudacitySamples from './operations/audacity-samples'
+
 /**
  * A collection of functions to manipulate the media asset and presentation
  * files.
  */
 export const operations = {
   convertAsset,
+  convertAudacitySamples,
   fixTypography,
-  generateCloze,
   generateAutomaticPresentation,
+  generateCloze,
   initializeMetaYaml,
-  normalize,
   moveAsset,
+  normalize,
   normalizeMediaAsset,
   normalizePresentationFile,
   patchTexTitles,

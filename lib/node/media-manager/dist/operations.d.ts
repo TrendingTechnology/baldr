@@ -6,18 +6,20 @@ import { normalizePresentationFile, generateAutomaticPresentation } from './pres
 import { removeWidthHeightInSvg, fixTypography } from './txt';
 import { renameMediaAsset, moveAsset, renameByRef, normalizeMediaAsset, initializeMetaYaml, convertAsset } from './asset';
 import { normalize } from './normalization';
+import convertAudacitySamples from './operations/audacity-samples';
 /**
  * A collection of functions to manipulate the media asset and presentation
  * files.
  */
 export declare const operations: {
     convertAsset: typeof convertAsset;
+    convertAudacitySamples: typeof convertAudacitySamples;
     fixTypography: typeof fixTypography;
-    generateCloze: typeof generateCloze;
     generateAutomaticPresentation: typeof generateAutomaticPresentation;
+    generateCloze: typeof generateCloze;
     initializeMetaYaml: typeof initializeMetaYaml;
-    normalize: typeof normalize;
     moveAsset: typeof moveAsset;
+    normalize: typeof normalize;
     normalizeMediaAsset: typeof normalizeMediaAsset;
     normalizePresentationFile: typeof normalizePresentationFile;
     patchTexTitles: typeof patchTexTitles;
