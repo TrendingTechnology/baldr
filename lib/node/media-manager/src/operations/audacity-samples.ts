@@ -1,8 +1,13 @@
 // Project packages.
 import { MediaDataTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
-import { readFile, writeYamlFile } from '@bldr/file-reader-writer'
+import {
+  readFile,
+  writeYamlFile,
+  writeFile
+} from '@bldr/file-reader-writer'
 import { asciify, convertSecondsToHHMMSS } from '@bldr/string-format'
+import { convertFromYaml } from '@bldr/yaml'
 
 interface RawSample {
   startTime?: number
@@ -148,7 +153,22 @@ function convertAudacityToYaml (filePath: string, content: string): void {
   log.always(writeYamlFile(dest, { samples }))
 }
 
-function convertYamlToAudacity (filePath: string, content: string): void {}
+function convertYamlToAudacity (filePath: string, content: string): void {
+  const yaml = convertFromYaml(content)
+  if (yaml.samples == null) {
+    throw new Error('No field “samples” found.')
+  }
+
+  const lines: string[] = []
+  for (const sample of yaml.samples as MediaDataTypes.SampleMetaData[]) {
+    const startTime = sample.startTime
+    const endTime = sample.endTime == null ? sample.startTime : sample.endTime
+    const description = sample.title != null ? sample.title : ''
+    const line = `${startTime}\t${endTime}\t${description}`
+    lines.push(line)
+  }
+  writeFile(filePath + '_audacity.txt', lines.join('\n'))
+}
 
 export default function (filePath: string): void {
   const text = readFile(filePath)
