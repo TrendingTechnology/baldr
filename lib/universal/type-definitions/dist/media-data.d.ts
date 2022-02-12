@@ -16,12 +16,12 @@ export interface SampleMetaData {
     /**
      * without spaces, only ASCII, for example `theme_1`
      */
-    ref?: string;
+    ref: string;
     /**
      * The start time in seconds or as a duration string like `1:23:45` = 1 hour
      * 23 minutes and 45 seconds, for example `61.123435`.
      */
-    startTime?: number | string;
+    startTime: number | string;
     /**
      * The duration in seconds or as a duration string like `1:23:45` = 1 hour 23
      * minutes and 45 seconds, mutually exclusive to `endTime`, for example `12`.

@@ -1,12 +1,12 @@
 // Project packages.
 import { MediaDataTypes } from '@bldr/type-definitions'
 import * as log from '@bldr/log'
+import { readFile, writeYamlFile, writeFile } from '@bldr/file-reader-writer'
 import {
-  readFile,
-  writeYamlFile,
-  writeFile
-} from '@bldr/file-reader-writer'
-import { asciify, convertSecondsToHHMMSS } from '@bldr/string-format'
+  asciify,
+  convertSecondsToHHMMSS,
+  convertHHMMSSToSeconds
+} from '@bldr/string-format'
 import { convertFromYaml } from '@bldr/yaml'
 
 interface RawSample {
@@ -133,7 +133,7 @@ function convertAudacityToYaml (filePath: string, content: string): void {
       title += ' (' + timeText.join('-') + ')'
     }
 
-    const sample: MediaDataTypes.SampleMetaData = {
+    const sample: Partial<MediaDataTypes.SampleMetaData> = {
       ref,
       title
     }
@@ -144,7 +144,7 @@ function convertAudacityToYaml (filePath: string, content: string): void {
     if (rawSample.endTime != null) {
       sample.endTime = rawSample.endTime
     }
-    samples.push(sample)
+    samples.push(sample as MediaDataTypes.SampleMetaData)
     counter += 1
   }
 
@@ -161,9 +161,12 @@ function convertYamlToAudacity (filePath: string, content: string): void {
 
   const lines: string[] = []
   for (const sample of yaml.samples as MediaDataTypes.SampleMetaData[]) {
-    const startTime = sample.startTime
-    const endTime = sample.endTime == null ? sample.startTime : sample.endTime
-    const description = sample.title != null ? sample.title : ''
+    const startTime = convertHHMMSSToSeconds(sample.startTime)
+    const endTime = convertHHMMSSToSeconds(
+      sample.endTime == null ? sample.startTime : sample.endTime
+    )
+    const description =
+      sample.title != null ? sample.title + ' ' + sample.ref : sample.ref
     const line = `${startTime}\t${endTime}\t${description}`
     lines.push(line)
   }
