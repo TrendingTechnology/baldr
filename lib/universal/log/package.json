@@ -1,6 +1,6 @@
 {
   "name": "@bldr/log",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Log to the console with colors in a printf style.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -41,5 +41,6 @@
     "node-option": ["experimental-specifier-resolution=node"]
   },
   "type": "module",
-  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
+  "files": ["dist/*"]
 }
