@@ -135,6 +135,14 @@ export const reference: MediaCategoriesTypes.Category = {
       },
       overwriteByDerived: true
     },
+    approvalNumber: {
+      title: 'Zulassungsnummer',
+      description:
+        'Lehrplan-Plus: https://www.km.bayern.de/download/18655_5_Gymnasium_LPPLUS.pdf G8-Lehrplan: https://www.km.bayern.de/download/21243_4_Gymnasium.pdf',
+      derive: function ({ filePath }) {
+        return getPropertyFromReference(filePath, 'approvalNumber')
+      }
+    },
     ocr: {
       title: 'Texterkennung (OCR)',
       description: 'Ergebnis der Texterkennung'
