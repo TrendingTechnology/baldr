@@ -143,6 +143,13 @@ export const reference: MediaCategoriesTypes.Category = {
         return getPropertyFromReference(filePath, 'approvalNumber')
       }
     },
+    approvalDate: {
+      title: 'Zulassungsdatum',
+      description: 'Format: TT.MM.JJJJ',
+      derive: function ({ filePath }) {
+        return getPropertyFromReference(filePath, 'approvalDate')
+      }
+    },
     ocr: {
       title: 'Texterkennung (OCR)',
       description: 'Ergebnis der Texterkennung'
