@@ -33,7 +33,7 @@ function getPropertyFromReference (
   if (filePath != null) {
     const ref = getBasename(filePath)
     if (references[ref] == null) {
-      console.error(`References not found for ${ref} of ${filePath}`)
+      // console.error(`References not found for ${ref} of ${filePath}`)
       return
     }
     const reference = references[ref]
