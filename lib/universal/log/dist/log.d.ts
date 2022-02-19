@@ -22,6 +22,7 @@ export declare function always(template: string, args?: any[], options?: FormatO
  * 5 (debug).
  **/
 export declare function alwaysAny(...args: any[]): void;
+export declare function isError(): boolean;
 /**
  * Log using a printf like format string at level 1.
  *
@@ -36,6 +37,7 @@ export declare function error(template: string, args?: any[], options?: FormatOp
  * 5 (debug).
  **/
 export declare function errorAny(...args: any[]): void;
+export declare function isWarn(): boolean;
 /**
  * Log using a printf like format string at level 2.
  *
@@ -50,6 +52,7 @@ export declare function warn(template: string, args?: any[], options?: FormatOpt
  * 5 (debug).
  **/
 export declare function warnAny(...args: any[]): void;
+export declare function isInfo(): boolean;
 /**
  * Log using a printf like format string at level 3.
  *
@@ -64,6 +67,7 @@ export declare function info(template: string, args?: any[], options?: FormatOpt
  * 5 (debug).
  **/
 export declare function infoAny(...args: any[]): void;
+export declare function isVerbose(): boolean;
 /**
  * Log using a printf like format string at level 4.
  *
@@ -78,6 +82,7 @@ export declare function verbose(template: string, args?: any[], options?: Format
  * 5 (debug).
  **/
 export declare function verboseAny(...args: any[]): void;
+export declare function isDebug(): boolean;
 /**
  * Log using a printf like format string at level 5.
  *

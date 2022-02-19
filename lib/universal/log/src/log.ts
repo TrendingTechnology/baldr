@@ -39,6 +39,10 @@ export function alwaysAny (...args: any[]): void {
   console.log(...args)
 }
 
+export function isError (): boolean {
+  return logLevel > 0
+}
+
 /**
  * Log using a printf like format string at level 1.
  *
@@ -50,7 +54,7 @@ export function error (
   args?: any[],
   options?: FormatOptions
 ): void {
-  if (logLevel > 0) {
+  if (isError()) {
     if (options == null) {
       options = 'red'
     }
@@ -65,9 +69,13 @@ export function error (
  * 5 (debug).
  **/
 export function errorAny (...args: any[]): void {
-  if (logLevel > 0) {
+  if (isError()) {
     console.error(...args)
   }
+}
+
+export function isWarn (): boolean {
+  return logLevel > 1
 }
 
 /**
@@ -81,7 +89,7 @@ export function warn (
   args?: any[],
   options?: FormatOptions
 ): void {
-  if (logLevel > 1) {
+  if (isWarn()) {
     if (options == null) {
       options = 'yellow'
     }
@@ -96,9 +104,13 @@ export function warn (
  * 5 (debug).
  **/
 export function warnAny (...args: any[]): void {
-  if (logLevel > 1) {
+  if (isWarn()) {
     console.warn(...args)
   }
+}
+
+export function isInfo (): boolean {
+  return logLevel > 2
 }
 
 /**
@@ -112,7 +124,7 @@ export function info (
   args?: any[],
   options?: FormatOptions
 ): void {
-  if (logLevel > 2) {
+  if (isInfo()) {
     if (options == null) {
       options = 'green'
     }
@@ -127,9 +139,13 @@ export function info (
  * 5 (debug).
  **/
 export function infoAny (...args: any[]): void {
-  if (logLevel > 2) {
+  if (isInfo()) {
     console.info(...args)
   }
+}
+
+export function isVerbose (): boolean {
+  return logLevel > 3
 }
 
 /**
@@ -143,7 +159,7 @@ export function verbose (
   args?: any[],
   options?: FormatOptions
 ): void {
-  if (logLevel > 3) {
+  if (isVerbose()) {
     if (options == null) {
       options = 'blue'
     }
@@ -158,9 +174,13 @@ export function verbose (
  * 5 (debug).
  **/
 export function verboseAny (...args: any[]): void {
-  if (logLevel > 3) {
+  if (isVerbose()) {
     console.debug(...args)
   }
+}
+
+export function isDebug (): boolean {
+  return logLevel > 4
 }
 
 /**
@@ -189,7 +209,7 @@ export function debug (
  * 5 (debug).
  **/
 export function debugAny (...args: any[]): void {
-  if (logLevel > 4) {
+  if (isDebug()) {
     console.log(...args)
   }
 }

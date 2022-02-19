@@ -3,15 +3,20 @@ export {
   alwaysAny,
   debug,
   debugAny,
-  verbose,
-  verboseAny,
-  info,
-  infoAny,
-  warn,
-  warnAny,
   error,
   errorAny,
-  setLogLevel
+  info,
+  infoAny,
+  isDebug,
+  isError,
+  isInfo,
+  isVerbose,
+  isWarn,
+  setLogLevel,
+  verbose,
+  verboseAny,
+  warn,
+  warnAny
 } from './log'
 
 export { format, formatObject } from './format'
