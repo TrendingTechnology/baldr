@@ -108,7 +108,13 @@ export function format (
     args = []
   }
 
-  return generatePrefix(colorSpecs) + printf(template, ...args)
+  let result = printf(template, ...args)
+
+  // Handle multiline log messages.
+  const prefix = generatePrefix(colorSpecs)
+  result = result.replace(/(\r?\n)/g, '$1' + prefix)
+
+  return prefix + result
 }
 
 interface FormatObjectOption {
