@@ -170,7 +170,10 @@ function convertYamlToAudacity (filePath: string, content: string): void {
     const line = `${startTime}\t${endTime}\t${description}`
     lines.push(line)
   }
-  writeFile(filePath + '_audacity.txt', lines.join('\n'))
+
+  const dest = filePath + '_audacity.txt'
+  log.info('The content of the destination file “%s”:\n', [dest])
+  log.always(writeFile(dest, lines.join('\n')))
 }
 
 export default function (filePath: string): void {
