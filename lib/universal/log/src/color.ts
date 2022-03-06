@@ -6,6 +6,7 @@ export const yellow = chalk.yellow
 export const blue = chalk.blue
 export const magenta = chalk.magenta
 export const cyan = chalk.cyan
+export const gray = chalk.gray
 
 export type ColorName =
   | 'red'
@@ -14,6 +15,7 @@ export type ColorName =
   | 'blue'
   | 'magenta'
   | 'cyan'
+  | 'gray'
   | 'none'
 
 export function getColorFunction (
@@ -22,6 +24,7 @@ export function getColorFunction (
   switch (colorName) {
     case 'red':
       return chalk.red
+
     case 'green':
       return chalk.green
 
@@ -36,6 +39,9 @@ export function getColorFunction (
 
     case 'cyan':
       return chalk.cyan
+
+    case 'gray':
+      return chalk.gray
 
     case 'none':
     default:

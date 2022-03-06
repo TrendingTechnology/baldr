@@ -5,5 +5,6 @@ export declare const yellow: chalk.Chalk;
 export declare const blue: chalk.Chalk;
 export declare const magenta: chalk.Chalk;
 export declare const cyan: chalk.Chalk;
-export declare type ColorName = 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'none';
+export declare const gray: chalk.Chalk;
+export declare type ColorName = 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'gray' | 'none';
 export declare function getColorFunction(colorName: ColorName): (input: unknown) => string;

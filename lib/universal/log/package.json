@@ -1,6 +1,6 @@
 {
   "name": "@bldr/log",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Log to the console with colors in a printf style.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
