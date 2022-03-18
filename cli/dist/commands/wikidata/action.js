@@ -40,7 +40,7 @@ export default async function action(category, itemId, arg1, arg2, cmdObj) {
         }
     }
     if (!cmdObj.dryRun && !fs.existsSync(dest)) {
-        const src = path.join(config.localRepo, 'src', 'cli', 'src', 'blank.jpg');
+        const src = path.join(config.localRepo, 'cli', 'src', 'blank.jpg');
         log.info(src);
         fs.mkdirSync(path.dirname(dest), { recursive: true });
         fs.copyFileSync(src, dest);
