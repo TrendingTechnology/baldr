@@ -4,5 +4,5 @@ export default validateDefintion({
   alias: 'om',
   checkExecutable: 'xdg-open',
   description:
-    'Open a media file in an external applications, for example svg -> inkscape, jpg -> gimp, pdf -> evince'
+    'Open a file in an external application, for example: svg -> inkscape, jpg -> gimp, pdf -> evince.'
 })

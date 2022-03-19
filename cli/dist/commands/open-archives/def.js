@@ -4,5 +4,5 @@ export default validateDefintion({
     alias: 'oa',
     options: [['-c, --create-dirs', 'Create missings directories.']],
     checkExecutable: 'xdg-open',
-    description: 'Open the parent presentation archive folders of the given file path.'
+    description: 'Open the parent presentation folder and the corresponding archive folders of the given file path.'
 });

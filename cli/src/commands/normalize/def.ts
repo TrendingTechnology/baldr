@@ -9,7 +9,7 @@ export default validateDefintion({
   ],
   alias: 'n',
   description:
-    'Combine multiple tasks to manipulate the metadata, ' +
+    'Combine multiple tasks to normalize the metadata, ' +
     'presentation and TeX files. Create associated metadata files ' +
     'for new media files. Normalize the existing metadata files (sort, clean up). ' +
     'A keyboard shortcut is assigned to this task.'
