@@ -36,8 +36,17 @@ interface OpenInFileManagerResult {
     createdParentDir: boolean;
 }
 /**
- * Open a file path or multiple file paths with the in
- * `config.mediaServer.fileManager` specified file manager.
+ * Open one file path in the file manager / explorer specified in
+ * configuration file (`config.mediaServer.fileManager`).
+ *
+ * @param filePath - The file path that should be opened in the file manager.
+ * @param createParentDir - Create the directory structure of the given
+ *   `filePath` in a recursive manner.
+ */
+export declare function openSinglePathInFileManager(filePath: string, createParentDir?: boolean): OpenInFileManagerResult;
+/**
+ * Open one file path or multiple file paths in the file manager specified in
+ * the configuration file (`config.mediaServer.fileManager`).
  *
  * @param filePaths - The file paths that should be opened in the file manager.
  * @param createParentDir - Create the directory structure of the given
