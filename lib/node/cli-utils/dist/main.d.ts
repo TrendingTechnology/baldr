@@ -11,7 +11,7 @@ interface CommandRunnerOption {
 interface CommandRunnerExecOption {
     cwd?: string;
     detached?: boolean;
-    shell?: true;
+    shell?: boolean;
     encoding?: string;
 }
 declare class CommandResult {
@@ -19,6 +19,7 @@ declare class CommandResult {
     stderr?: string;
     constructor({ stdout, stderr }: any);
 }
+export declare function execute(args: string[], options?: CommandRunnerExecOption): Promise<CommandResult>;
 /**
  * Run commands on the command line in a nice and secure fashion.
  */

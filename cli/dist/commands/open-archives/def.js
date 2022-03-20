@@ -1,4 +1,4 @@
-import { validateDefintion } from '../../main.js';
+import { validateDefintion } from '../../main';
 export default validateDefintion({
     command: 'open-archives [path]',
     alias: 'oa',

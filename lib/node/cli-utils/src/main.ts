@@ -21,7 +21,7 @@ interface CommandRunnerOption {
 interface CommandRunnerExecOption {
   cwd?: string
   detached?: boolean
-  shell?: true
+  shell?: boolean
   encoding?: string
 }
 
@@ -52,6 +52,62 @@ class ArgsParser {
       return this.command
     }
   }
+}
+
+export async function execute (
+  args: string[],
+  options?: CommandRunnerExecOption
+): Promise<CommandResult> {
+  const argsParser = new ArgsParser(args)
+
+  // To get error messages on unkown commands
+  if (options == null) {
+    options = {}
+  }
+
+  if (options.encoding === undefined) {
+    options.encoding = 'utf-8'
+  }
+
+  return await new Promise((resolve, reject) => {
+    const command = childProcess.spawn(
+      argsParser.command,
+      argsParser.args,
+      options
+    )
+
+    if (options?.detached != null && options.detached) {
+      command.unref()
+      resolve(new CommandResult({}))
+    }
+
+    let stdout: string = ''
+    let stderr: string = ''
+
+    command.stdout.setEncoding('utf-8')
+    command.stdout.on('data', (data: string) => {
+      log.debug('stdout: %s', [data])
+      stdout = stdout + data
+    })
+
+    command.stderr.setEncoding('utf-8')
+    command.stderr.on('data', (data: string) => {
+      log.debug('stderr: %s', [data])
+      stderr = stderr + data
+    })
+
+    command.on('error', code => {
+      reject(new Error(stderr))
+    })
+
+    command.on('exit', code => {
+      if (code === 0) {
+        resolve(new CommandResult({ stdout, stderr }))
+      } else {
+        reject(new Error(stderr))
+      }
+    })
+  })
 }
 
 /**
