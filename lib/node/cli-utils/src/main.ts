@@ -86,12 +86,14 @@ export async function execute (
 
     command.stdout.setEncoding('utf-8')
     command.stdout.on('data', (data: string) => {
+      data = data.trim()
       log.debug('stdout: %s', [data])
       stdout = stdout + data
     })
 
     command.stderr.setEncoding('utf-8')
     command.stderr.on('data', (data: string) => {
+      data = data.trim()
       log.debug('stderr: %s', [data])
       stderr = stderr + data
     })
